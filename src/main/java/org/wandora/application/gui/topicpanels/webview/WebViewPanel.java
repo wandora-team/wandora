@@ -84,7 +84,6 @@ import org.wandora.application.tools.webview.OpenWebLocationInExternalBrowser;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapListener;
 import org.wandora.utils.Options;
@@ -128,13 +127,10 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
     
     public boolean USE_LOCAL_OPTIONS = true;
     
-    private String title = null;
     private Topic rootTopic = null;
-    private TopicMap tm = null;
     private boolean isUIInitialized = false;
     private Options options = null;
 
-    private Component fxPanelHandle = null;
     private WebView webView = null;
     private WebEngine webEngine = null;
     private String webSource = null;
@@ -143,8 +139,6 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
     private boolean informVisibilityChanges = true;
     
     private BrowserExtractorManager browserExtractorManager = null;
-    
-    private boolean viewBrowser = true;
     
     private static final String failedToOpenMessage = "<h1>Failed to open URL</h1>";
     
@@ -677,11 +671,9 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
                 options = wandora.getOptions();
             }
         }
-        tm = wandora.getTopicMap();
         initComponents();
         Platform.setImplicitExit(false);
         final WandoraJFXPanel fxPanel = new WandoraJFXPanel();
-        fxPanelHandle = fxPanel;
         this.add(fxPanel, BorderLayout.CENTER);
         Platform.runLater(new Runnable() {
             @Override
@@ -877,7 +869,8 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override 
                         public void run() {
-                            title = newValue;
+                        	// Nothing here...
+                            // WAS: title = newValue
                         }
                     });
                 }

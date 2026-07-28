@@ -46,7 +46,6 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.IObox;
 
 /**
@@ -92,7 +91,6 @@ public class DownloadAllOccurrences extends AbstractWandoraTool {
     public void execute(Wandora admin, Context<?> context) {
         Iterator<?> topics = context.getContextObjects();
         File targetPath = null;
-        TopicMap tm = admin.getTopicMap();
 
         if(topics != null && topics.hasNext()) {
             try {

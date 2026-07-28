@@ -237,8 +237,6 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
         QueryContext context=new QueryContext(tm, "en");
 
-        // System.out.println("Query: "+query.debugString());
-
         if(res.isEmpty()){}
         else if(res.size()==1){
             res=query.doQuery(context, res.get(0));
@@ -247,14 +245,14 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
             res=query.from(new Static(res)).doQuery(context, res.get(0));
         }
 
-        ArrayList<String> columns=new ArrayList<>();
+        List<String> columns=new ArrayList<>();
         for(ResultRow row : res){
             for(int i=0;i<row.getNumValues();i++){
                 String l=row.getRole(i);
                 if(!columns.contains(l)) columns.add(l);
             }
         }
-        ArrayList<Object> columnTopicsA=new ArrayList<>();
+        List<Object> columnTopicsA=new ArrayList<>();
         for(int i=0;i<columns.size();i++){
             String l=columns.get(i);
             if(l.startsWith("~")){

@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -278,7 +279,7 @@ public class OCRExtractor extends AbstractExtractor {
             if(w == 0 && p.exitValue() == 0){ // Exited alright
                 FileInputStream is = new FileInputStream(TEMP_PATH + ".txt");
                 try{
-                    text = IOUtils.toString(is);
+                    text = IOUtils.toString(is, Charset.forName("UTF-8"));
                 } finally {
                     is.close();
                 }

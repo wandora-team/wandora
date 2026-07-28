@@ -342,22 +342,25 @@ public class FullIIIFBuilder implements IIIFBuilder {
         
     }
 
+    
     protected Service buildService(Topic t, IIIFExport tool) throws TopicMapException {
-        TopicMap tm=t.getTopicMap();
         Service s=new Service();
-
         try{
-            copyAssociationSI(s, "setProfile", t, DublinCoreMapping.DC_TERMS_NS+"conformsTo", SimpleRDFImport.objectTypeSI);
+            copyAssociationSI(
+            		s, 
+            		"setProfile", 
+            		t, 
+            		DublinCoreMapping.DC_TERMS_NS+"conformsTo", 
+            		SimpleRDFImport.objectTypeSI);
         }
         catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e){
             tool.log(e);
         }
-        
-        
-        s.setId(t.getOneSubjectIdentifier().toExternalForm());
-        
+
+        s.setId(t.getOneSubjectIdentifier().toExternalForm());        
         return s;
     }
+    
     
     @Override
     public String getBuilderName() {

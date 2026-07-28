@@ -482,45 +482,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>DBpedia extractor...</name>
                <class>org.wandora.application.tools.extractors.dbpedia.DbpediaExtractor</class>
             </item>
-            <item>
-               <name>--- UMBEL ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>Search Umbel concepts...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelSearchConcept</class>
-            </item>
-            <item>
-               <name>Get Umbel concept...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetConcept</class>
-            </item>
-            <item>
-               <name>Get Umbel super type...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSuperType</class>
-            </item>
-            <item>
-               <name>Get broader Umbel concepts...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetBroader</class>
-            </item>
-            <item>
-               <name>Get narrower Umbel concepts...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetNarrower</class>
-            </item>
-            <item>
-               <name>Get subclass Umbel concepts...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSubclasses</class>
-            </item>
-            <item>
-               <name>Get superclass Umbel concepts...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSuperclasses</class>
-            </item>
-         </item>
-         <item>
-            <name>Search engines</name>
-            <item>
-               <name>DuckDuckGo extractor...</name>
-               <class>org.wandora.application.tools.extractors.duckduckgo.DuckDuckGoExtractor</class>
-            </item>
          </item>
          <item>
             <name>News</name>
@@ -535,18 +496,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>Atom extractor...</name>
                <class>org.wandora.application.tools.extractors.AtomExtractor</class>
-            </item>
-            <item>
-               <name>--- NEWS ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>New York Times API extractor...</name>
-               <class>org.wandora.application.tools.extractors.nyt.NYTExtractor</class>
-            </item>
-            <item>
-               <name>The Guardian API extractor...</name>
-               <class>org.wandora.application.tools.extractors.guardian.GuardianExtractor</class>
             </item>
          </item>
          <item>
@@ -581,44 +530,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             </item>
          </item>
          <item>
-            <name>Language</name>
-            <item>
-               <name>Stands4 word describer...</name>
-               <class>org.wandora.application.tools.extractors.stands4.Stands4Extractor</class>
-            </item>
-            <item>
-               <name>--- OTHER LANG ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>Sentences to associations...</name>
-               <class>org.wandora.application.tools.extractors.Sentences2Associations</class>
-            </item>
-            <item>
-               <name>VerbOcean extractor...</name>
-               <class>org.wandora.application.tools.extractors.VerbOceanExtractor</class>
-            </item>
-            <item>
-               <name>Moby thesaurus extractor...</name>
-               <class>org.wandora.application.tools.extractors.MobyThesaurusExtractor</class>
-            </item>
-         </item>
-         <item>
-            <name>Wiki</name>
-            <item>
-               <name>Wikipedia extractor...</name>
-               <class>org.wandora.application.tools.extractors.WikipediaExtractor</class>
-            </item>
-            <item>
-               <name>MediaWiki extractor...</name>
-               <class>org.wandora.application.tools.extractors.MediaWikiExtractor</class>
-            </item>
-            <item>
-               <name>MediaWiki content extractor...</name>
-               <class>org.wandora.application.tools.extractors.mediawikiapi.MediaWikiAPIExtractor</class>
-            </item>
-         </item>
-         <item>
             <name>Bibliographical</name>
             <item>
                <name>RIS extractor...</name>
@@ -640,75 +551,12 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>MARCXML batch extractor...</name>
                <class>org.wandora.application.tools.extractors.marcxml.BatchExtractMarcXML</class>
             </item>
-            <item>
-               <name>--- HELMET ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>HelMet extractor...</name>
-               <class>org.wandora.application.tools.extractors.helmet.HelmetJSONExtractor</class>
-            </item>
-            <item>
-               <name>--- BRITISH LIBRARY ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>British Library Million First Steps Book JSON...</name>
-               <class>org.wandora.application.tools.extractors.britishlibrary.MillionFirstStepsBookMetadataJSONExtractor</class>
-            </item>
-            <item>
-               <name>British Library Million First Steps TSV...</name>
-               <class>org.wandora.application.tools.extractors.britishlibrary.MillionFirstStepsBookTSVExtractor</class>
-            </item>
-         </item>
-         <item>
-            <name>Social</name>
-            <item>
-               <name>Reddit extractor...</name>
-               <class>org.wandora.application.tools.extractors.reddit.RedditExtractor</class>
-            </item>
          </item>
          <item>
             <name>Media</name>
             <item>
-               <name>Europeana extractor...</name>
-               <class>org.wandora.application.tools.extractors.europeana.EuropeanaExtractor</class>
-            </item>
-            <item>
-               <name>--- Flickr extractors ---</name>
-               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
-               <name>Flickr profile extractor...</name>
-               <class>org.wandora.application.tools.extractors.flickr.PersonInfoExtractor</class>
-            </item>
-            <item>
-               <name>Flickr photo extractor...</name>
-               <class>org.wandora.application.tools.extractors.flickr.PhotoInfoExtractor</class>
-            </item>
-            <item>
-               <name>Flickr group extractor...</name>
-               <class>org.wandora.application.tools.extractors.flickr.GroupInfoExtractor</class>
-            </item>
-            <item>
-               <name>--- AUDIO DATA/FILES ---</name>
-               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
                <name>MP3 metadata extractor...</name>
                <class>org.wandora.application.tools.extractors.files.SimpleMP3Extractor</class>
-            </item>
-            <item>
-               <name>FreeDB extractor...</name>
-               <class>org.wandora.application.tools.extractors.FreeDBExtractor</class>
-            </item>
-            <item>
-               <name>--- OTHER MEDIA ---</name>
-               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
-               <name>IMDB extractor...</name>
-               <class>org.wandora.application.tools.extractors.IMDBExtractor</class>
             </item>
             <item>
                <name>OCR extractor...</name>

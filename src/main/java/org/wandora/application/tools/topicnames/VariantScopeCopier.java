@@ -129,8 +129,7 @@ public class VariantScopeCopier extends AbstractWandoraTool {
 
             if( OVERWRITE_OLDIES ) log("Overwriting existing names.");
             if( COPY_NULLS ) log("Copying also null names.");
-            
-            int progress = 0;
+
             int processed = 0;
             Topic topic = null;
             String variant = "";
@@ -163,7 +162,6 @@ public class VariantScopeCopier extends AbstractWandoraTool {
                             targetScope.add(targetScopeTopic);
                             targetScope.add(targetTypeTopic);
 
-                            progress++;
                             variant = topic.getVariant(sourceScope);
                             targetVariant = topic.getVariant(targetScope);
                             Set<Set<Topic>> scopes = topic.getVariantScopes();

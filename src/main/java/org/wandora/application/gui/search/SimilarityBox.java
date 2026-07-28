@@ -50,8 +50,7 @@ public class SimilarityBox {
     
     
     public static Collection<Topic> getSimilarTopics(String query, TopicMapSearchOptions options, Iterator<Topic> topicIterator, InterfaceStringMetric stringMetric, float threshold, boolean differenceInsteadOfSimilarity, boolean useNGrams) {
-        List<Topic> selection = new ArrayList<Topic>();
-        int count = 0;
+        List<Topic> selection = new ArrayList<>();
         Topic t = null;
         boolean isSimilar = false;
         float similarity = 0.0f;

@@ -104,7 +104,6 @@ public class MakeOccurrenceFromSubjectIdentifier extends AbstractWandoraTool {
             if(language == null) return;
 
             int progress = 0;
-            int count = 0;
             Pattern siPattern = null;
 
             while(topics.hasNext() && !forceStop()) {
@@ -149,7 +148,6 @@ public class MakeOccurrenceFromSubjectIdentifier extends AbstractWandoraTool {
                             occurrence = topic.getData(type, language);
                             if(occurrence == null || overWrite) {
                                 topic.setData(type, language, sistr);
-                                count++;
                             }
                         }
                     }

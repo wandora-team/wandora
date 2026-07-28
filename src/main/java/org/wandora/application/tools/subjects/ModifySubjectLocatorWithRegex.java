@@ -92,7 +92,6 @@ public class ModifySubjectLocatorWithRegex extends AbstractWandoraTool {
                 Locator subjectLocator = null;
                 String newSubjectLocatorString = null;
                 String subjectLocatorString = null;
-                int progress = 0;
                 int changed = 0;
 
                 ArrayList<Object> dt = new ArrayList<Object>();
@@ -104,7 +103,6 @@ public class ModifySubjectLocatorWithRegex extends AbstractWandoraTool {
                 while(topics.hasNext() && !forceStop()) {
                     try {
                         topic = (Topic) topics.next();
-                        progress++;
                         if(topic != null && !topic.isRemoved()) {
                             subjectLocator = topic.getSubjectLocator();
                             if(subjectLocator != null) {

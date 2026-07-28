@@ -31,6 +31,7 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JCheckBox;
@@ -55,16 +56,14 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
 	private boolean cancelled=true;
     
     private TopicTreeRelation[] allRelations;
-    private ArrayList<JCheckBox> checkboxes;
+    private List<JCheckBox> checkboxes;
     
     private Component parent;
-    private Wandora wandora;
-    
+
     
     
     /** Creates new form TopicTreeConfigPanel */
     public TopicTreeConfigPanel(TopicTreeRelation[] allRelations, Set<String> selectedRelations, String root, String name, Component parent, Wandora wandora) throws TopicMapException {
-        this.wandora = wandora;
         rootButton = new GetTopicButton(wandora);
         initComponents();
         this.parent=parent;
@@ -131,7 +130,6 @@ public class TopicTreeConfigPanel extends javax.swing.JPanel {
         nameLabel = new org.wandora.application.gui.simple.SimpleLabel();
         nameTextField = new org.wandora.application.gui.simple.SimpleField();
         rootLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        rootButton = rootButton;
         relationsScrollPane = new javax.swing.JScrollPane();
         relationsContainerPanel = new javax.swing.JPanel();
         relationsPanel = new javax.swing.JPanel();

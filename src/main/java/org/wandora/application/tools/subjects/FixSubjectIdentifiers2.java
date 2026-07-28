@@ -37,7 +37,6 @@ import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.utils.DataURL;
@@ -83,7 +82,6 @@ public class FixSubjectIdentifiers2 extends AbstractWandoraTool {
     @Override
     public void execute(Wandora admin, Context<?> context)  throws TopicMapException {
         Iterator<?> contextTopics = context.getContextObjects();
-        TopicMap tm = admin.getTopicMap();
         if(contextTopics != null && contextTopics.hasNext()) {
             if(WandoraOptionPane.showConfirmDialog(admin, "Are you sure you want to fix subject identifiers?","Fix subject identifiers?", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){
                 setDefaultLogger();

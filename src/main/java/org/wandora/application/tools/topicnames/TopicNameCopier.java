@@ -86,8 +86,7 @@ public class TopicNameCopier extends AbstractWandoraTool {
             Collection<Set<Topic>> scopes = null;
             Iterator<Set<Topic>> scopeIterator = null;
             Set<Topic> scope = null;
-            int progress = 0;
-            
+
             StringBuilder stringBuffer = new StringBuilder("");
             StringBuilder logString = null;
 
@@ -95,7 +94,6 @@ public class TopicNameCopier extends AbstractWandoraTool {
                 try {
                     topic = (Topic) topics.next();
                     if(topic != null && !topic.isRemoved()) {
-                        progress++;
                         stringBuffer.append(topic.getBaseName());
                         logString = new StringBuilder(""+topic.getBaseName());
                         scopes = topic.getVariantScopes();

@@ -796,11 +796,8 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     
     private void updateClusters(Cluster c1,Cluster c2){
         VNode vin,vjn;
-        VEdge ve;
-        T2<VNode,VNode> vns;
-        Edge e;
         Node in,jn;
-        double m,dx,dy,d2,d,f,dd,f2;
+        double m,dx,dy,d2,d,f,f2;
 
         dx=c2.x-c1.x;
         dy=c2.y-c1.y;
@@ -869,8 +866,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         VEdge ve;
         T2<VNode,VNode> vns;
         Edge e;
-        Node in,jn;
-        double m,dx,dy,d2,d,f,dd;
+        double dx,dy,d2,d,f,dd;
         
 //        t1=System.currentTimeMillis();
         ArrayList<Cluster> clusters=doClustering();

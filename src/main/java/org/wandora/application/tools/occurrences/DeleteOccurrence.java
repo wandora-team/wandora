@@ -119,7 +119,6 @@ public class DeleteOccurrence extends AbstractWandoraTool {
             }
             
             Topic topic = null;
-            int count = 0;
             Topic type = occurrenceType;
             
             List<Topic> allOccurrenceTypes = new ArrayList<>();
@@ -166,7 +165,6 @@ public class DeleteOccurrence extends AbstractWandoraTool {
                                     Topic version=(Topic)iter.next();
                                     topic.removeData(type,version);
                                 }
-                                count++;
                             }
                             catch(Exception e2) {
                                 log(e2);

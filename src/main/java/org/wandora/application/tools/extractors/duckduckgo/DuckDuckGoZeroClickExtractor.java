@@ -25,6 +25,7 @@ package org.wandora.application.tools.extractors.duckduckgo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -100,7 +101,7 @@ public class DuckDuckGoZeroClickExtractor  extends AbstractDuckDuckGoExtractor {
     @Override
     public boolean _extractTopicsFrom(File f, TopicMap tm) throws Exception {
         FileInputStream is = new FileInputStream(f);
-        String query = IOUtils.toString(is);
+        String query = IOUtils.toString(is, Charset.forName("UTF-8"));
         _extractTopicsFrom(query, tm);
         return true;
         

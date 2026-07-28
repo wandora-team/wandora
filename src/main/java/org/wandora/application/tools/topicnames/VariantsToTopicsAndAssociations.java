@@ -108,16 +108,12 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool {
             if(originalRole == null) log("Original role topic has not been specified. Aborting.");
 
             if(associationType != null && variantRole != null && scopeRole != null && originalRole != null) {
-
-                int progress = 0;
                 int associationCount = 0;
-
                 List<T2<Topic,Set<Topic>>> deleteScopes = new ArrayList<>();
                 while(topics.hasNext() && !forceStop()) {
                     try {
                         Topic topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
-                            progress++;
                             Collection<Set<Topic>> scopes = topic.getVariantScopes();
                             if(scopes != null) {
                                 Iterator<Set<Topic>> scopeIterator = scopes.iterator();

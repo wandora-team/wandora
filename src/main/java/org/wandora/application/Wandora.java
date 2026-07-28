@@ -114,8 +114,8 @@ import org.wandora.utils.Delegate;
 import org.wandora.utils.Options;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.logger.Logger;
-import org.wandora.utils.logger.SystemOutLogger;
 import org.wandora.utils.swing.ImagePanel;
 
 
@@ -133,6 +133,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     
     private static final long serialVersionUID = 1L;
 
+    
 	/*
      * If the application makes URL requests and the URL stream is initialized
      * properly, USER_AGENT is a user agent string for Wandora application.
@@ -2315,10 +2316,10 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
      * @param args the command line arguments
      */
     public static void main(String args[]) throws Exception {
+    	Logger.setLogger(Log4j2Logger.getLogger(Wandora.class));
         CMDParamParser cmdparams=new CMDParamParser(args);
         UIConstants.initializeGUI();
         SplashWindow splashWindow = new SplashWindow();
-        Logger.setLogger(new SystemOutLogger());
 
         do {
             Wandora wandoraApplication = new Wandora(cmdparams);

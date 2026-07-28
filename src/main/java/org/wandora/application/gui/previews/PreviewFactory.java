@@ -25,7 +25,6 @@
 package org.wandora.application.gui.previews;
 
 
-import org.wandora.application.Wandora;
 import org.wandora.application.gui.previews.formats.ApplicationC64;
 import org.wandora.application.gui.previews.formats.ApplicationPDF;
 import org.wandora.application.gui.previews.formats.ApplicationXML;
@@ -65,7 +64,6 @@ public class PreviewFactory {
      * test to the PreviewUtils.isOfType method.
     */
     public static PreviewPanel create(final Locator locator) throws Exception {
-        final Wandora wandora = Wandora.getWandora();
         final String urlString = locator.toExternalForm();
         PreviewPanel previewPanel = null;
 

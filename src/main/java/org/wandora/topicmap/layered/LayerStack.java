@@ -140,34 +140,40 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     protected boolean trackDependent;
     protected List<TopicMapListener> topicMapListeners;
     protected List<TopicMapListener> disabledListeners;
-    
-//    private LayerControlPanel controlPanel;
-    
+
     private AmbiguityResolver ambiguityResolver;
     
     protected ContainerTopicMapListener containerListener;
     
     protected boolean useUndo=true;
     
+    
     /** Creates a new instance of LayerStack */
     public LayerStack(String wandoraProjectFilename) {
         this();
+        PackageInput in = null;
         try {
             File f = new File(wandoraProjectFilename);
-            PackageInput in=new ZipPackageInput(f);
+            in=new ZipPackageInput(f);
             TopicMapType type=TopicMapTypeManager.getType(org.wandora.topicmap.layered.LayerStack.class);
-            TopicMap tm=type.unpackageTopicMap(this, in, "", this,null);
-            in.close();
+            type.unpackageTopicMap(this, in, "", this,null);
         }
         catch(Exception e) {
             e.printStackTrace();
         }
+        finally {
+        	if(in != null) {
+        		try { in.close(); } catch(Exception e) {}
+        	}
+        }
     }
+    
+    
     public LayerStack() {
-        layers=new Vector<Layer>();
-        visibleLayers=new Vector<Layer>();
-        layerIndex=new LinkedHashMap<TopicMap,Layer>();
-        topicMapListeners=new ArrayList<TopicMapListener>();
+        layers=new Vector<>();
+        visibleLayers=new Vector<>();
+        layerIndex=new LinkedHashMap<>();
+        topicMapListeners=new ArrayList<>();
         containerListener=new ContainerTopicMapListener(){
             public void layerAdded(Layer l) {
                 notifyLayersChanged();
@@ -208,18 +214,14 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         return this.useUndo;
     }
     
+    
     // Use this to make LayerStack wrap layers in UndoTopicMap
     public void setUseUndo(boolean useUndo) throws UndoException{
-/*        if(useUndo && !this.useUndo){
-            // TODO: wrap all existing layers
-        }
-        else if(!useUndo && this.useUndo){
-            // TODO: unwrap all existing layers
-        }*/
         if(!layers.isEmpty()) throw new UndoException("Can't change undo status with existing layers");
         this.useUndo=useUndo;
     }
 
+    
     // Use this to temporarily disable undo, for example before a very big
     // operation that you don't want to end up in the undo buffer.
     public void setUndoDisabled(boolean value){
@@ -439,14 +441,6 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         return consistencyCheck;
     }
     
-    
-/*    public LayerControlPanel getControlPanel(){
-        if(controlPanel!=null) return controlPanel;
-        
-        controlPanel=new LayerControlPanel(this);
-        controlPanel.resetLayers(layers);
-        return controlPanel;
-    }*/
     
     public void setAmbiguityResolver(AmbiguityResolver resolver){
         this.ambiguityResolver=resolver;
@@ -727,11 +721,11 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         layerIndex.put(l.getTopicMap(),l);
         if(layers.size()==1) selectedLayer=layers.elementAt(0);
         l.getTopicMap().addTopicMapListener(this);
-        if(l.getTopicMap() instanceof ContainerTopicMap)
-            ((ContainerTopicMap)l.getTopicMap()).addContainerListener(containerListener);
+        if(l.getTopicMap() instanceof ContainerTopicMap containerTopicMap) {
+        	containerTopicMap.addContainerListener(containerListener);
+        }
         l.getTopicMap().setParentTopicMap(this);
-        notifyLayersChanged();
-//        visibilityChanged(l);        
+        notifyLayersChanged();      
         fireLayerAdded(l);
     }
     
@@ -747,16 +741,17 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         layerIndex.remove(old.topicMap);
         layerIndex.put(l.getTopicMap(),l);
         old.getTopicMap().removeTopicMapListener(this);
-        if(old.getTopicMap() instanceof ContainerTopicMap)
-            ((ContainerTopicMap)old.getTopicMap()).removeContainerListener(containerListener);
+        if(old.getTopicMap() instanceof ContainerTopicMap containerTopicMap) {
+        	containerTopicMap.removeContainerListener(containerListener);
+        }
         layers.setElementAt(l,pos);
         l.getTopicMap().addTopicMapListener(this);
-        if(l.getTopicMap() instanceof ContainerTopicMap)
-            ((ContainerTopicMap)l.getTopicMap()).addContainerListener(containerListener);
+        if(l.getTopicMap() instanceof ContainerTopicMap containerTopicMap) {
+        	containerTopicMap.addContainerListener(containerListener);
+        }
         l.getTopicMap().setParentTopicMap(this);
         if(selectedLayer==old) selectedLayer=l;
         notifyLayersChanged();
-//        visibilityChanged(l);
         fireLayerChanged(old, l);
     }
     
@@ -770,13 +765,12 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             layerIndex.remove(l);
             if(selectedLayer==l) selectedLayer=(layers.size()>0?layers.elementAt(0):null);
             l.getTopicMap().removeTopicMapListener(this);
-            if(l.getTopicMap() instanceof ContainerTopicMap) {
-                ((ContainerTopicMap)l.getTopicMap()).removeContainerListener(containerListener);
+            if(l.getTopicMap() instanceof ContainerTopicMap containerTopicMap) {
+            	containerTopicMap.removeContainerListener(containerListener);
             }
             l.getTopicMap().setParentTopicMap(null);
             l.getTopicMap().close();
             notifyLayersChanged();
-//            visibilityChanged(l);
             fireLayerRemoved(l);
             return true;
         }
@@ -831,7 +825,6 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
                 sourceLayer = sourceLayers.elementAt(i);
                 targetLayer.getTopicMap().mergeIn(sourceLayer.getTopicMap());
                 removeLayer(sourceLayer);
-//                layers.remove(sourceLayer);
                 sourceLayers.remove(sourceLayer);
             }
             catch (Exception e) {
@@ -853,18 +846,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         if(ambiguityResolver!=null) return ambiguityResolver.resolveAmbiguity(event,msg);
         else return AmbiguityResolution.addToSelected;
     }
-/*    
-    void visibilityChanged(Layer layer){
-        clearTopicIndex();
-        visibleLayers=new Vector<Layer>();
-        for(Layer l : layers){
-            if(l.isVisible()) visibleLayers.add(l);
-        }
-//        if(controlPanel!=null){
-//            controlPanel.resetLayers(layers);
-//        }
-    }
-    */
+
+
     /* ************************* TopicMap functions ************************* */
     
     /**
@@ -872,14 +855,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
      */
     protected Set<Topic> collectTopics(Topic t) throws TopicMapException {
         Set<Topic> collected=new KeyedHashSet<>(new TopicAndLayerKeyMaker());
-        /*
-         if(visibleLayers.size() < 2) {
-            collected.add(t);
-        }
-        else {
-         **/
-            collectTopics(collected,t);
-        //}
+        collectTopics(collected,t);
         return collected;
     }
     
@@ -1044,8 +1020,6 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
                 if(c.size()>1) ambiguity("Multiple possible types in layer (createAssociation)");
                 st=c.iterator().next();
             }
-//            Layer l=getSelectedLayer();
-//            l.getTopicMap().createAssociation(st);
             return new LayeredAssociation(this,lt);
         }
         else{
@@ -1084,25 +1058,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         return null;
     }
 
-
-    /*
-    public Iterator<Topic> getTopics() throws TopicMapException {
-        // TODO: implementation that doesn't get everything in memory at once
-        Set<Topic> processed=new KeyedHashSet<Topic>(new TopicAndLayerKeyMaker());
-        Vector<Topic> ret=new Vector<Topic>();
-        for(Layer l : visibleLayers){
-            Iterator<Topic> c=l.getTopicMap().getTopics();
-            while(c.hasNext()){
-                Topic t=c.next();
-                if(processed.contains(t)) continue;
-                Set<Topic> collected=collectTopics(t);
-                processed.addAll(collected);
-                ret.add(new LayeredTopic(collected,this));
-            }
-        }
-        return ret.iterator();
-    }
-    */
+    
     
     private class TopicsIterator implements TopicIterator {
         public LayeredTopic next=null;
@@ -1206,29 +1162,9 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         return new TopicsIterator();
     }
     
-    /*
-    public Iterator<Association> getAssociations() throws TopicMapException {
-        // TODO: implementation that doesn't get everything in memory at once
-        KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(new TopicAndLayerKeyMaker());
-        HashSet<Association> associations=new HashSet<Association>();
-        for(Layer l : visibleLayers) {
-            Iterator<Association> c=l.getTopicMap().getAssociations();
-            while(c.hasNext()){
-                Association a=c.next();
-                LayeredTopic lt=getLayeredTopic(a.getType(),layeredTopics);
-                LayeredAssociation la=new LayeredAssociation(this,lt);
-                for(Topic role : a.getRoles()){
-                    LayeredTopic lrole=getLayeredTopic(role,layeredTopics);
-                    Topic player=a.getPlayer(role);
-                    LayeredTopic lplayer=getLayeredTopic(player,layeredTopics);
-                    la.addLayeredPlayer(lplayer, lrole);
-                }
-                associations.add(la);
-            }
-        }
-        return associations.iterator();
-    }
-    */
+
+    
+    
     
     private class AssociationsIterator implements Iterator<Association> {
         public TopicsIterator topicsIterator;
@@ -1295,68 +1231,6 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     @Override
     public Iterator<Association> getAssociations() throws TopicMapException {
         return new AssociationsIterator();
-/*        final KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(new TopicAndLayerKeyMaker());
-        final LayerStack layerStack = this;
-        System.out.println("Getting all associations from layerStack!");
-        
-        return new Iterator<Association>() {
-            Iterator<Association> currentIterator = null;
-            int layerIndex = 0;
-            public boolean hasNext() {
-                currentIterator = solveCurrentIterator(currentIterator);
-                if(currentIterator != null) {
-                    return currentIterator.hasNext();
-                }
-                return false;
-            }
-            
-            public Association next() {
-                currentIterator = solveCurrentIterator(currentIterator);
-                if(currentIterator != null) {
-                    if(currentIterator.hasNext()) {
-                        try {
-                            Association a=currentIterator.next();
-                            LayeredTopic lt=getLayeredTopic(a.getType(),layeredTopics);
-                            LayeredAssociation la=new LayeredAssociation(layerStack, lt);
-                            for(Topic role : a.getRoles()){
-                                LayeredTopic lrole=getLayeredTopic(role,layeredTopics);
-                                Topic player=a.getPlayer(role);
-                                LayeredTopic lplayer=getLayeredTopic(player,layeredTopics);
-                                la.addLayeredPlayer(lplayer, lrole);
-                            }
-                            return la;
-                        }
-                        catch(Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                throw new NoSuchElementException();
-            }
-            
-            public Iterator<Association> solveCurrentIterator(Iterator iterator) {
-                while(true){
-                    if(iterator!=null && iterator.hasNext()) return iterator;
-                    
-                    if( layerIndex < visibleLayers.size()) {
-                        try {
-                            iterator = visibleLayers.elementAt(layerIndex).getTopicMap().getAssociations();
-                            layerIndex++;
-                        }
-                        catch(Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    else return null;
-                }
-            }
-            
-            
-            public void remove(){
-                throw new UnsupportedOperationException();
-            }
-        };
-        */
     }
     
     
@@ -1423,26 +1297,6 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
 
         return counter;
-        
-        /*
-        KeyedHashMap<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(new TopicAndLayerKeyMaker());
-        HashSet<Association> associations=new HashSet<Association>();
-        for(Layer l : visibleLayers){
-            Iterator<Association> c=l.getTopicMap().getAssociations();
-            while(c.hasNext()){
-                Association a=c.next();
-                LayeredTopic lt=getLayeredTopic(a.getType(),layeredTopics);
-                LayeredAssociation la=new LayeredAssociation(this,lt);
-                for(Topic role : a.getRoles()){
-                    LayeredTopic lrole=getLayeredTopic(role,layeredTopics);
-                    Topic player=a.getPlayer(role);
-                    LayeredTopic lplayer=getLayeredTopic(player,layeredTopics);
-                    la.addLayeredPlayer(lplayer, lrole);
-                }
-                associations.add(la);
-            }
-        }        
-        return associations.size();*/
     }
     
     @Override
@@ -1529,12 +1383,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             disabledListeners=null;
         }
     }
-    
-/*    public TopicMapListener setTopicMapListener(TopicMapListener listener){
-        TopicMapListener old=topicMapListener;
-        topicMapListener=listener;
-        return old;        
-    }*/
+
     
     @Override
     public boolean resetTopicMapChanged() throws TopicMapException {

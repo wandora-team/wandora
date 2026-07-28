@@ -66,7 +66,7 @@ abstract class AbstractWordExtractor extends AbstractExtractor{
 
     @Override
     public boolean _extractTopicsFrom(URL u, TopicMap t) throws Exception {
-        String str = IOUtils.toString(u.openStream());
+        String str = IOUtils.toString(u.openStream(), Charset.forName("UTF-8"));
         return _extractTopicsFrom(str, t);
     }
 

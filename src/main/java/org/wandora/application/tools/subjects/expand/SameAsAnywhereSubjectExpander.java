@@ -64,7 +64,10 @@ public class SameAsAnywhereSubjectExpander extends SameAsSubjectExpander {
     
     @Override
     protected String getExpandingRequestBase() {
-        String base = WandoraOptionPane.showInputDialog(Wandora.getWandora(), "Enter sameas base URL", "http://127.0.0.1:8898/sameas/", "Enter sameas base URL");
+        String base = WandoraOptionPane.showInputDialog(Wandora.getWandora(), 
+        		"Enter sameas base URL", 
+        		"http://127.0.0.1:8898/sameas/", 
+        		"Enter sameas base URL");
         return base;
     }
 

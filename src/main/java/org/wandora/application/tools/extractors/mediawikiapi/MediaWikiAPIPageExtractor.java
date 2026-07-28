@@ -308,7 +308,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
     private String getArticleBody(String title) throws IOException{
         StringBuilder queryBuilder = new StringBuilder(this.baseURL)
             .append("/index.php?action=raw&title=")
-            .append(URLEncoder.encode(title));
+            .append(URLEncoder.encode(title, "UTF-8"));
 
         HttpResponse<InputStream> resp;
         try {
@@ -320,7 +320,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         }
 
         InputStream body = resp.getBody();
-        String bodyString = IOUtils.toString(body,"UTF-8"); 
+        String bodyString = IOUtils.toString(body, "UTF-8"); 
         
         return bodyString;
     }

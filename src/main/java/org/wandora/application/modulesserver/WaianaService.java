@@ -161,7 +161,7 @@ public class WaianaService extends AbstractTopicWebApp {
                 JSONObject requestJSON = getRequestJSON(request);
                 if(requestJSON != null) {
 
-                    String api_key = WaianaAPIRequestUtils.getAPIKey(requestJSON);
+                    String apiKey = WaianaAPIRequestUtils.getAPIKey(requestJSON);
                     String command = WaianaAPIRequestUtils.getCommand(requestJSON);
 
                     if("show_local_file_list".equalsIgnoreCase(command) || "show_topic_map_list".equalsIgnoreCase(command) || "show_local_topic_map_list".equalsIgnoreCase(command)) {

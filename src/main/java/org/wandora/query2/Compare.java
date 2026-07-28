@@ -25,7 +25,6 @@
  */
 package org.wandora.query2;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 /**
  *
@@ -117,8 +116,6 @@ public class Compare extends WhereDirective implements DirectiveUIHints.Provider
 
         Object v1=null;
         Object v2=null;
-
-        TopicMap tm=context.getTopicMap();
 
         int compare=0;
         boolean cond=false;

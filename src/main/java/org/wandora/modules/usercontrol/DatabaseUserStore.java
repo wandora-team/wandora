@@ -168,9 +168,9 @@ public class DatabaseUserStore extends AbstractModule implements ModifyableUserS
     }
 
     protected void fetchUsers() throws UserStoreException {
-        Map<String,DBUser> newUsers=new LinkedHashMap<String,DBUser>();
+        Map<String,DBUser> newUsers=new LinkedHashMap<>();
         try{
-            List<User> ret=new ArrayList<User>();
+            List<User> ret=new ArrayList<>();
             Rows userRows=database.query("select * from "+tablePrefix+"USERS order by ID");
             Rows roleRows=database.query("select * from "+tablePrefix+"USER_ROLES order by USERID");
             Rows propRows=database.query("select * from "+tablePrefix+"USER_PROPS order by USERID");

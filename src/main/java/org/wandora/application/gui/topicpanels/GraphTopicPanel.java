@@ -40,7 +40,6 @@ import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -231,8 +230,6 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
         if(edges != null) {
             VEdge vedge = null;
             Edge edge = null;
-            Association a = null;
-            
             for(Iterator<VEdge> iter = edges.iterator(); iter.hasNext();) {
                 vedge = iter.next();
                 if(vedge != null) {
@@ -583,7 +580,7 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
                                 if(tm != null) {
                                     boolean identifierIsURL = false;
                                     try {
-                                        URL u = new URI(topicIdentifier).toURL();
+                                        new URI(topicIdentifier).toURL();
                                         identifierIsURL = true;
                                     }
                                     catch(Exception e) {}

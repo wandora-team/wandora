@@ -143,8 +143,6 @@ public class ExcelAdjacencyMatrixExtractor extends AbstractExcelExtractor {
     
     
     public void processRow(Row row, TopicMap tm) {
-        Association a = null;
-
         try {
             Cell firstColumnCell = row.getCell(0);
             if(firstColumnCell != null) {

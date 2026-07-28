@@ -89,13 +89,11 @@ public class VariantNewlineRemover extends AbstractWandoraTool {
             Collection<Set<Topic>> scopes = null;
             Iterator<Set<Topic>> scopeIterator = null;
             Set<Topic> scope = null;
-            int progress = 0;
-            
+
             while(topics.hasNext() && !forceStop()) {
                 try {
                     topic = (Topic) topics.next();
                     if(topic != null && !topic.isRemoved()) {
-                        progress++;
                         scopes = topic.getVariantScopes();
                         if(scopes != null) {
                             scopeIterator = scopes.iterator();

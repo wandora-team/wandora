@@ -28,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,7 +67,7 @@ public class RedditThingExtractor extends AbstractRedditExtractor {
     @Override
     public boolean _extractTopicsFrom(File f, TopicMap tm) throws Exception {
         FileInputStream is = new FileInputStream(f);
-        String fileContent = IOUtils.toString(is);
+        String fileContent = IOUtils.toString(is, Charset.forName("UTF-8"));
         return _extractTopicsFrom(fileContent, tm);
     }
 

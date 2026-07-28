@@ -32,7 +32,7 @@ package org.wandora.utils.logger;
  * @author akikivela
  *
  */
-public class Log4j2Logger {
+public class Log4j2Logger extends Logger {
 
     org.apache.logging.log4j.Logger realLogger = org.apache.logging.log4j.LogManager.getLogger(Log4j2Logger.class);
     

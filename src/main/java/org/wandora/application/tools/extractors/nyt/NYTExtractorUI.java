@@ -57,14 +57,11 @@ public class NYTExtractorUI extends javax.swing.JPanel {
 
     private boolean accepted = false;
     private JDialog dialog = null;
-    private static final String NYT_API_BASE = "http://api.nytimes.com/svc/search/v2/";
-    private static final String NYT_API_EVENT_BASE = "http://api.nytimes.com/svc/events/v2/listings.json";
+    private static final String NYT_API_BASE = "https://api.nytimes.com/svc/search/v2/";
+    private static final String NYT_API_EVENT_BASE = "https://api.nytimes.com/svc/events/v2/listings.json";
 
     /**
-     * Creates
-     * new
-     * form
-     * NYTExtractorUI
+     * Creates new form NYTExtractorUI
      */
     public NYTExtractorUI() {
         initComponents();
@@ -152,7 +149,9 @@ public class NYTExtractorUI extends javax.swing.JPanel {
             ex.setForceUrls(new String[]{extractUrl});
             wt = ex;
             wts.add(wt);
-        } // ***** SEARCH EVENTS *****
+        } 
+        
+        // ***** SEARCH EVENTS *****
         else if (eventSearchPanel.equals(component)) {
             String eventKey = solveAPIKey();
             
@@ -268,14 +267,19 @@ public class NYTExtractorUI extends javax.swing.JPanel {
         return wts.toArray(new WandoraTool[]{});
     }
 
+    
     protected static String urlEncode(String str) {
         try {
             str = URLEncoder.encode(str, "utf-8");
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
         return str;
     }
+    
+    
     // ------------------------------------------------------------ API-KEY ----
+    
+    
+    
     private static String articleapikey = null;
     private static String eventapikey = null;
 

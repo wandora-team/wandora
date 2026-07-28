@@ -348,9 +348,10 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
 
         }
     }
+    
+    
 
     private void parseKeyword(String name, String value, Topic articleTopic, TopicMap tm) throws TopicMapException {
-        
         Topic keywordTypeTopic = getKeywordNameTopic(name, tm);
         Topic keywordTopic = getKeywordTopic(value, tm);
         Topic articleTypeTopic = getArticleTypeTopic(tm);
@@ -358,6 +359,5 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
         Association a = tm.createAssociation(keywordTypeTopic);
         a.addPlayer(keywordTopic, keywordTypeTopic);
         a.addPlayer(articleTopic, articleTypeTopic);
-        
     }
 }

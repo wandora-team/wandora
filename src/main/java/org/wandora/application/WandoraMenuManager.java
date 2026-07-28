@@ -67,7 +67,6 @@ import java.awt.Component;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -309,25 +308,7 @@ import org.wandora.application.tools.subjects.OpenSubjectIdentifier;
 import org.wandora.application.tools.subjects.OpenSubjectLocator;
 import org.wandora.application.tools.subjects.PasteSubjectIdentifiers;
 import org.wandora.application.tools.subjects.RemoveReferencesInSubjectIdentifiers;
-import org.wandora.application.tools.subjects.expand.SameAs270aStoreSubjectExpander;
 import org.wandora.application.tools.subjects.expand.SameAsAnywhereSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsBritishLibraryStoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsDataSouthamptonStoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsDisaster20StoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsEmailStoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsFreebaseStoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsKelleStoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsLATCStoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsLibrisStoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsMusicNetStoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsNoTubeStoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsOrdnanceSurveyStoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsPleiadesStoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsSchemaOrgStoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsTorverDataStoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsVIAFStoreSubjectExpander;
-import org.wandora.application.tools.subjects.expand.SameAsWebIndexStoreSubjectExpander;
 import org.wandora.application.tools.topicnames.AddImplicitDisplayScopeToVariants;
 import org.wandora.application.tools.topicnames.AddImplicitSortScopeToVariants;
 import org.wandora.application.tools.topicnames.AddMissingLanguageScope;
@@ -388,8 +369,6 @@ public class WandoraMenuManager {
     public JMenu generatorMenu = new SimpleMenu("Generate", UIBox.getIcon("gui/icons/generate.png"));
 
     public static Map<Object,JMenu> SLExtractorMenus = new LinkedHashMap<>();
-    //public static JMenu extractWithSLTableMenu = new SimpleMenu("Extract with SL"); // Here the context is default topic context.
-    //public static JMenu extractWithSLTreeMenu = new SimpleMenu("Extract with SL"); // Here the context is default topic context.
     public JMenu extractWithSLTopicMenu = new SimpleMenu("Extract with subject locator"); // Here the context is application.
     
     public JMenu fileMenu = new SimpleMenu("File", (Icon) null);
@@ -421,7 +400,7 @@ public class WandoraMenuManager {
      * Creates a new instance of WandoraMenuManager
      */
     public WandoraMenuManager(Wandora wandora)  throws TopicMapException {
-        this.menuManager = this;
+    	WandoraMenuManager.menuManager = this;
         this.wandora = wandora;
         this.toolManager = wandora.toolManager;
         refreshMenus();
@@ -511,8 +490,8 @@ public class WandoraMenuManager {
     public void refreshExtractMenu() {
         toolManager.getExtractMenu( extractMenu );
         
-        for(Iterator<?> i=SLExtractorMenus.values().iterator(); i.hasNext();) {
-            refreshExtractWithSLMenu( (JMenu) i.next(), null, wandora);
+        for(Iterator<JMenu> i=SLExtractorMenus.values().iterator(); i.hasNext();) {
+            refreshExtractWithSLMenu(i.next(), null, wandora);
         }
         
         refreshExtractWithSLMenu( extractWithSLTopicMenu, new ApplicationTopicContext() , wandora);
@@ -633,18 +612,16 @@ public class WandoraMenuManager {
             if(httpServer.isRunning()){
                 menuStructure.add("Stop server");
                 menuStructure.add(UIBox.getIcon("gui/icons/server_stop.png"));
-                //menuStructure[2]=KeyStroke.getKeyStroke(VK_M, DEF_MASK);
                 menuStructure.add(new HTTPServerTool(HTTPServerTool.STOP_AND_MENU));
             }
             else{
                 menuStructure.add("Start server");
                 menuStructure.add(UIBox.getIcon("gui/icons/server_start.png"));
-                //menuStructure[2]=KeyStroke.getKeyStroke(VK_M, DEF_MASK);
                 menuStructure.add(new HTTPServerTool(HTTPServerTool.START_AND_MENU));
             }
 
             List<ModulesWebApp> webApps=httpServer.getWebApps();
-            Map<String,ModulesWebApp> webAppsMap=new HashMap<>();
+            Map<String,ModulesWebApp> webAppsMap=new LinkedHashMap<>();
             for(ModulesWebApp wa : webApps) {
                 webAppsMap.put(wa.getAppName(), wa);
             }
@@ -767,9 +744,7 @@ public class WandoraMenuManager {
             "Add to topic", new Object[] {
                 "Add class...", new AddClass(new ApplicationTopicContext()),
                 "Add instance...",new AddInstance(new ApplicationTopicContext()),
-//                "Add associations...", new AddAssociations(new ApplicationContext()),
                 "Add association...", new AddSchemalessAssociation(new ApplicationTopicContext()),
-                //"Add occurrence...", new AddOccurrences(new ApplicationContext()),
                 "Add variant name...", new AddVariantName(new ApplicationTopicContext()),
                 "Add occurrence...", new AddSchemalessOccurrence(new ApplicationTopicContext()),
                 "Add subject identifier...", new AddSubjectIdentifier(new ApplicationTopicContext()),
@@ -829,7 +804,6 @@ public class WandoraMenuManager {
                 "---",
                 "Remove references in subject identifiers", new RemoveReferencesInSubjectIdentifiers(new ApplicationTopicContext()),
                 "Modify subject identifiers with a regex...", new ModifySubjectIdentifiersWithRegex(new ApplicationTopicContext()),
-                // "Fix SIs", new SIFixer(new ApplicationContext()),
                 "Fix subject identifiers", new FixSubjectIdentifiers2(new ApplicationTopicContext()),
             },
             "Base name", new Object[] {
@@ -924,10 +898,6 @@ public class WandoraMenuManager {
             "Select",
                 new Object[] {
                 "Select all", KeyStroke.getKeyStroke(VK_A, DEF_MASK), new SelectAll(),
-                /*
-                "Select row(s)", new SelectRows(),
-                "Select column(s)", new SelectColumns(),
-                 **/
                 "Deselect", new ClearSelection(),
                 "Invert selection", new InvertSelection(),
                 "---",
@@ -947,16 +917,7 @@ public class WandoraMenuManager {
             },
             "Selection info...", new SelectionInfo(),
             "---",
-            /*
-            "[Copy topic]", new CopyToClipBoard(clipboardtm),
-            "[Import topic clipboard...]", new ImportClipBoard(clipboardtm),
-            "[Save topic clipboard...]", new SaveClipBoard(clipboardtm),
-            "---",
-             **/
             "Search...", KeyStroke.getKeyStroke(VK_F, DEF_MASK), UIBox.getIcon("gui/icons/find_topics.png"), new Search(),
-            // "Go to...", KeyStroke.getKeyStroke(VK_G, DEF_MASK), UIBox.getIcon("gui/icons/goto2.png"), new OpenTopicWithSX(),
-            // "---",
-            // "Locate topic in tree", new LocateSelectTopicInTree(),
         };
         editMenu.removeAll();
         UIBox.attachMenu( editMenu, menuStructure, wandora );
@@ -1132,9 +1093,7 @@ public class WandoraMenuManager {
                 defaultAddToTopicMenuStruct = new Object[] {
                     "Add class...", new AddClass(),
                     "Add instance...",new AddInstance(),
-                    // "Add associations...", new AddAssociations(),
                     "Add association...", new AddSchemalessAssociation(),
-                    // "Add occurrences...", new AddOccurrences(),
                     "Add variant name...", new AddVariantName(),
                     "Add occurrence...", new AddSchemalessOccurrence(),
                     "Add subject identifier...", new AddSubjectIdentifier(),
@@ -1435,12 +1394,9 @@ public class WandoraMenuManager {
     
     private static Object[] defaultSLMenuStruct = null; 
     public static Object[] getDefaultSLMenuStruct(Wandora admin, Object source) {
-        //System.out.println("Creating extractor menus for " + source.hashCode());
-        //System.out.println("SLExtractor menu number " + SLExtractorMenus.size());
         JMenu extractMenu = (JMenu) SLExtractorMenus.get(source);
         if(source == null || extractMenu == null) {
             extractMenu = new SimpleMenu("Extract with subject locator");
-            //refreshExtractWithSLMenu(extractMenu, null, admin);
             refreshExtractWithSLMenu(extractMenu, null, admin);
             SLExtractorMenus.put(source, extractMenu);
         }
@@ -1455,9 +1411,6 @@ public class WandoraMenuManager {
                 "Make subject locator from a base name...", new MakeSubjectLocatorFromBasename(),
                 "Make subject locator from an occurrence...", new MakeSubjectLocatorFromOccurrence(),
                 "---",
-                // "Find SLs...", new FindSubjectLocator(),
-                // "Find SLs with base names...", new FindSubjectLocatorWithBasename(),
-                // "---",
                 "Modify subject locator with a regex...", new ModifySubjectLocatorWithRegex(),
                 "Remove subject locator...", new DeleteSubjectLocator(),
                 "---",
@@ -1497,31 +1450,9 @@ public class WandoraMenuManager {
                     "Remove subject identifiers with a regex...", new DeleteSubjectIdentifiersWithRegex(),
                     "Remove reference-parts in subject identifiers...", new RemoveReferencesInSubjectIdentifiers(),
                     "Modify subject identifiers with a regex...", new ModifySubjectIdentifiersWithRegex(),
-                    
-                    // "Fix SIs", new SIFixer(),
                     "Fix subject identifiers...", new FixSubjectIdentifiers2(),
                     "Flatten identity...", new FlattenSubjectIdentifiers(),
                     "Expand identity", new Object[] {
-                        "Expand with sameAs.org", new SameAsSubjectExpander(),
-                        "Expand with sameAs.org store", new Object[] {
-                            "Expand with 270a store", new SameAs270aStoreSubjectExpander(),
-                            "Expand with British Library store", new SameAsBritishLibraryStoreSubjectExpander(),
-                            "Expand with Data Southampton store", new SameAsDataSouthamptonStoreSubjectExpander(),
-                            "Expand with Disaster 20 store", new SameAsDisaster20StoreSubjectExpander(),
-                            "Expand with Email store", new SameAsEmailStoreSubjectExpander(),
-                            "Expand with Freebase store", new SameAsFreebaseStoreSubjectExpander(),
-                            "Expand with Kelle store", new SameAsKelleStoreSubjectExpander(),
-                            "Expand with LATC store", new SameAsLATCStoreSubjectExpander(),
-                            "Expand with Libris store", new SameAsLibrisStoreSubjectExpander(),
-                            "Expand with MusicNet store", new SameAsMusicNetStoreSubjectExpander(),
-                            "Expand with NoTube store", new SameAsNoTubeStoreSubjectExpander(),
-                            "Expand with Ordnance Survey store", new SameAsOrdnanceSurveyStoreSubjectExpander(),
-                            "Expand with Pleiades store", new SameAsPleiadesStoreSubjectExpander(),
-                            "Expand with Schema.org store", new SameAsSchemaOrgStoreSubjectExpander(),
-                            "Expand with Torver Data store", new SameAsTorverDataStoreSubjectExpander(),
-                            "Expand with VIAF store", new SameAsVIAFStoreSubjectExpander(),
-                            "Expand with Web Index store", new SameAsWebIndexStoreSubjectExpander(),
-                        },
                         "Expand with sameAs anywhere", new SameAsAnywhereSubjectExpander(),
                     },
                 };
@@ -1618,9 +1549,6 @@ public class WandoraMenuManager {
                     "---",
                     "Make associations from occurrences...", new MakeAssociationWithOccurrence(),
                     "Find associations in occurrences...", new FindAssociationsInOccurrence(),
-                    // "---",
-                    // "Collect binary associations to n-ary association...", new CollectBinaryToNary(),
-                    // "Steal associations...", new StealAssociations(),
                     "---",
                     "Delete associations with type...",new DeleteAssociationsInTopicWithType(),
                     "Delete empty and unary associations...", new DeleteUnaryAssociations(),
@@ -1673,9 +1601,6 @@ public class WandoraMenuManager {
                             "---",
                             "Find associations in occurrences....", new FindAssociationsInOccurrenceSimple(),
                             "Find associations in occurrences using a pattern....", new FindAssociationsInOccurrence(),
-                            // "---",
-                            // "Associate points in polygons occurrence carriers...", new FindPointInPolygonOccurrence(),
-                            // "Associate nearby point occurrence carriers...", new AssociateNearByOccurrenceCarriers(),
                         },
                     "---",
                     "Check URL occurrences...", new URLOccurrenceChecker(),
@@ -1687,7 +1612,6 @@ public class WandoraMenuManager {
                     "---",
                     "Upload URL resource to MediaWiki", new MediawikiOccurrenceUploader(),
                     "Upload content to MediaWiki...", new MediaWikiAPIUploader(),
-                    
                     "---",
                     "Delete occurrences with type...", new DeleteOccurrence(),
                     "Delete all occurrences...", new DeleteFromTopics(DeleteFromTopics.DELETE_TEXTDATAS),
@@ -1839,15 +1763,11 @@ public class WandoraMenuManager {
                     "Copy associations as LTM layout tab text", new CopyAssociations(CopyAssociations.TABTEXT_OUTPUT, CopyAssociations.LTM_LAYOUT),
                     "Copy associations as LTM layout HTML", new CopyAssociations(CopyAssociations.HTML_OUTPUT, CopyAssociations.LTM_LAYOUT),
                 },
-
-                // "Add associations...", new AddAssociations(new ApplicationContext()),
                 "Edit association...", new ModifySchemalessAssociation(),
                 "Delete associations...", new DeleteAssociations(),
-                // "Duplicate associations...",
                 "---",
                 "Change association type...", new ChangeAssociationType(),
                 "Change association role...", new ChangeAssociationRole(),
-                // "Change association roles...", new ChangeAssociationRoles(),
                 "Insert player to associations...", new InsertPlayer(),
                 "Delete players in associations...", new RemovePlayer(),
                 "Merge players in associations...", new MergePlayers(),
@@ -1857,7 +1777,6 @@ public class WandoraMenuManager {
                 "Delete symmetric associations", new DeleteSymmetricAssociation(),
                 "---",
                 "Collect to n-ary association...", new CollectNary(),
-                // "Collect binary to n-ary", new CollectBinaryToNary(),
                 "Split n-ary to binary associations...", new SplitToBinaryAssociations(),
                 "Transpose associations...", new TransposeAssociations(),
                 "---",
@@ -1865,15 +1784,7 @@ public class WandoraMenuManager {
                 "Copy path to the edge of associations", new CopyEdgePath(),
                 "Detect cycle...", new DetectCycles(),
                 "---",
-                "SOM classifier...", new SOMClassifier(new AssociationContext()), 
-                /*
-                 "---",
-                 "Cut associations", new Object[] {
-                    "Copy all associations as tab text", new CopyAssociations(),
-                    "Copy all associations as HTML", new CopyAssociations(CopyAssociations.HTML_OUTPUT),
-                },
-                 **/
-
+                "SOM classifier...", new SOMClassifier(new AssociationContext())
             };
         }
         return associationsPopupStruct;
@@ -1893,7 +1804,6 @@ public class WandoraMenuManager {
             layerTreeMenuStructure = new Object[] {
                 "New layer...", new NewLayer(),
                 "---",
-                //"Rename layer...", new RenameLayer(),
                 "Configure layer...", new ConfigureLayer(),
                 "Delete layer...", new DeleteLayer(),
                 "Clear layer topic map...", new ClearTopicMap(),
@@ -1960,9 +1870,6 @@ public class WandoraMenuManager {
                         "Download subject locators...", new DownloadSubjectLocators(),
                         "Download and change subject locators...", new DownloadSubjectLocators(true),
                         "Convert to data url", new ConvertSubjectLocatorToDataURL(),
-                        // "---",
-                        // "Find SLs...", new FindSubjectLocator(),
-                        // "Find SLs with base names...", new FindSubjectLocatorWithBasename(),
                         "Upload subject locator resources to Mediawiki", new MediawikiSubjectLocatorUploader(),
                     },
                     "Subject identifiers", new Object[] {
@@ -1972,7 +1879,6 @@ public class WandoraMenuManager {
                         "---",
                         "Check subject identifiers...", new CheckSubjectIdentifiers(),
                         "Modify subject identifiers with a regex...", new ModifySubjectIdentifiersWithRegex(),
-                        // "Fix SIs", new SIFixer(),
                         "Fix subject identifiers", new FixSubjectIdentifiers2(),
                         "Remove references in subject identifiers...", new RemoveReferencesInSubjectIdentifiers(),
                         "---",
@@ -2054,9 +1960,6 @@ public class WandoraMenuManager {
                     "---",
                     "Occurrence summary report...", UIBox.getIcon("gui/icons/summary_report.png"), new OccurrenceSummaryReport(),
                 }
-
-                //        "---",
-                //        "Debug tool",new TestTool(),
             };
         }
 
@@ -2153,7 +2056,6 @@ public class WandoraMenuManager {
     public static Object[] getOccurrenceTypeLabelPopupStruct(Topic occurrenceType, Topic topic) {
         return new Object[] {
             "Open topic", new OpenTopic(),
-            // "Open topic in", getOpenInMenu(),
             "---",
             "Edit occurrences", new EditOccurrences(occurrenceType, topic),
             "Duplicate occurrences...", new DuplicateOccurrence(occurrenceType, topic),
@@ -2285,26 +2187,6 @@ public class WandoraMenuManager {
             "Remove with regex...", new DeleteSubjectIdentifiersWithRegex(new SIContext()),
             "Flatten...", new FlattenSubjectIdentifiers(),
             "Expand", new Object[] {
-                "Expand with sameAs.org", new SameAsSubjectExpander(new SIContext()),
-                "Expand with sameAs.org store", new Object[] {
-                    "Expand with 270a store", new SameAs270aStoreSubjectExpander(new SIContext()),
-                    "Expand with British Library store", new SameAsBritishLibraryStoreSubjectExpander(new SIContext()),
-                    "Expand with Data Southampton store", new SameAsDataSouthamptonStoreSubjectExpander(new SIContext()),
-                    "Expand with Disaster 20 store", new SameAsDisaster20StoreSubjectExpander(new SIContext()),
-                    "Expand with Email store", new SameAsEmailStoreSubjectExpander(new SIContext()),
-                    "Expand with Freebase store", new SameAsFreebaseStoreSubjectExpander(new SIContext()),
-                    "Expand with Kelle store", new SameAsKelleStoreSubjectExpander(new SIContext()),
-                    "Expand with LATC store", new SameAsLATCStoreSubjectExpander(new SIContext()),
-                    "Expand with Libris store", new SameAsLibrisStoreSubjectExpander(new SIContext()),
-                    "Expand with MusicNet store", new SameAsMusicNetStoreSubjectExpander(new SIContext()),
-                    "Expand with NoTube store", new SameAsNoTubeStoreSubjectExpander(new SIContext()),
-                    "Expand with Ordnance Survey store", new SameAsOrdnanceSurveyStoreSubjectExpander(new SIContext()),
-                    "Expand with Pleiades store", new SameAsPleiadesStoreSubjectExpander(new SIContext()),
-                    "Expand with Schema.org store", new SameAsSchemaOrgStoreSubjectExpander(new SIContext()),
-                    "Expand with Torver Data store", new SameAsTorverDataStoreSubjectExpander(new SIContext()),
-                    "Expand with VIAF store", new SameAsVIAFStoreSubjectExpander(new SIContext()),
-                    "Expand with Web Index store", new SameAsWebIndexStoreSubjectExpander(new SIContext()),
-                },
                 "Expand with sameAs anywhere", new SameAsAnywhereSubjectExpander(new SIContext()),
             },
             "---",
@@ -2322,26 +2204,6 @@ public class WandoraMenuManager {
             "---",
             "Flatten...", new FlattenSubjectIdentifiers(new ApplicationTopicContext()),
             "Expand", new Object[] {
-                "Expand with sameAs.org", new SameAsSubjectExpander(new ApplicationTopicContext()),
-                "Expand with sameAs.org store", new Object[] {
-                    "Expand with 270a store", new SameAs270aStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with British Library store", new SameAsBritishLibraryStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with Data Southampton store", new SameAsDataSouthamptonStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with Disaster 20 store", new SameAsDisaster20StoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with Email store", new SameAsEmailStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with Freebase store", new SameAsFreebaseStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with Kelle store", new SameAsKelleStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with LATC store", new SameAsLATCStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with Libris store", new SameAsLibrisStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with MusicNet store", new SameAsMusicNetStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with NoTube store", new SameAsNoTubeStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with Ordnance Survey store", new SameAsOrdnanceSurveyStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with Pleiades store", new SameAsPleiadesStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with Schema.org store", new SameAsSchemaOrgStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with Torver Data store", new SameAsTorverDataStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with VIAF store", new SameAsVIAFStoreSubjectExpander(new ApplicationTopicContext()),
-                    "Expand with Web Index store", new SameAsWebIndexStoreSubjectExpander(new ApplicationTopicContext()),
-                },
                 "Expand with sameAs anywhere", new SameAsAnywhereSubjectExpander(new ApplicationTopicContext()),
             }  
         };
@@ -2365,10 +2227,6 @@ public class WandoraMenuManager {
             "Check...", new CheckSubjectLocator(new ApplicationTopicContext()),
             "Download...", new DownloadSubjectLocators(new ApplicationTopicContext()),
             "Download and change...", new DownloadSubjectLocators(new ApplicationTopicContext(), true),
-            //"Move to fileserver", new MoveSubjectLocators(new ApplicationContext()),
-                    // new ContextToolWrapper(
-                    // parent.getToolManager().getConfigurableTool(MoveSubjectLocators.class,"movesl","Move SL to fileserver"),
-                    // new ApplicationContext()),
             "Convert as data url", new ConvertSubjectLocatorToDataURL(new ApplicationTopicContext()),
             "Upload to Mediawiki...", new MediawikiSubjectLocatorUploader(new ApplicationTopicContext()),
             "---",
@@ -2480,13 +2338,8 @@ public class WandoraMenuManager {
     
     public static Object[] getAssociationTableLabelPopupStruct() {
         return new Object[] {
-//            "Add association...", new AddAssociations(new ApplicationContext()),
             "Add association...", new AddSchemalessAssociation(new ApplicationTopicContext()),
             "---",
-            /*
-            "Count associations...", new CountAssociations(),
-            "---",
-             **/
             "Copy", new Object[] {
                 "Copy associations as Wandora layout tab text", new CopyAssociations(new ApplicationAssociationContext()),
                 "Copy associations as Wandora layout HTML", new CopyAssociations(new ApplicationAssociationContext(), CopyAssociations.HTML_OUTPUT),
@@ -2508,32 +2361,11 @@ public class WandoraMenuManager {
     public static Object[] getAssociationTypeLabelPopupStruct() {
         return new Object[] {
             "Open association type topic", new OpenTopic(),
-            /*
-             "---",
-            "Count associations of type...", new CountAssociationsOfType(),
-             
-            "---",
-            "Copy", new Object[] {
-                "Copy association type's base name", new CopyTopics(CopyTopics.INCLUDE_NOTHING),
-                "Copy association type's SIs", new CopyTopics(CopyTopics.INCLUDE_NOTHING),
-                "---",
-                "Copy associations of this type as tab text", 
-                "Copy associations of this type as HTML", 
-                 "---",
-                "Copy all associations of this type as tab text", 
-                "Copy all associations of this type as HTML", 
-                 
-            },
-            "Paste", new Object[] {
-                "Paste tab text associations", new PasteAssociationsOfType(),
-            },
-             ***/
             "---",
             "Duplicate associations of type...", new DuplicateAssociations(),
             "Delete associations of this type...", new DeleteAssociations(),
             "Change association type...", new ChangeAssociationType(),
             "Change association role...", new ChangeAssociationRole(),
-            //"Make players instance of role...", //new AddInstanceToPlayers(),
         };
     }
     

@@ -89,7 +89,6 @@ public class ModifySubjectIdentifiersWithRegex extends AbstractWandoraTool {
                 Topic topic = null;
                 String newSIString = null;
                 String SIString = null;
-                int progress = 0;
                 int changed = 0;
                 Collection<Locator> sis = null;
                 Locator l = null;
@@ -105,7 +104,6 @@ public class ModifySubjectIdentifiersWithRegex extends AbstractWandoraTool {
                 
                 while(topics.hasNext() && !forceStop()) {
                     try {
-                        progress++;
                         topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
                             sis = topic.getSubjectIdentifiers();

@@ -122,7 +122,6 @@ public class OccurrenceScopeCopier extends AbstractWandoraTool {
             if( OVERWRITE_OLDIES ) log("Overwriting existing occurrences.");
             if( COPY_NULLS ) log("Copying also null occurrences.");
             
-            int progress = 0;
             int processed = 0;
             Topic topic = null;
             String occurrence = "";
@@ -147,7 +146,6 @@ public class OccurrenceScopeCopier extends AbstractWandoraTool {
                         catch(Exception e) { }
 
                         if(sourceTypeTopic != null && sourceScopeTopic != null && targetTypeTopic != null && targetScopeTopic != null) {
-                            progress++;
                             occurrence = topic.getData(sourceTypeTopic, sourceScopeTopic);
                             targetOccurrence = topic.getData(targetTypeTopic, targetScopeTopic);
                             if(occurrence != null) {

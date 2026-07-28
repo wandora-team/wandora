@@ -125,7 +125,7 @@ class SimilarityWordConfigurationDialog extends javax.swing.JPanel {
             
         });
         
-        List<String> metricNameList = newConfig.getSTringMetricNames();
+        List<String> metricNameList = newConfig.getStringMetricNames();
         String[] metricNameArray = new String[metricNameList.size()];
         metrics.setModel(new DefaultComboBoxModel<>(metricNameList.toArray(metricNameArray)));
         

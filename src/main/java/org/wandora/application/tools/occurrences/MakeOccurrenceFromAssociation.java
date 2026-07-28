@@ -152,9 +152,7 @@ public class MakeOccurrenceFromAssociation extends AbstractWandoraTool {
             setDefaultLogger();
             setLogTitle("Making occurrences from associations");
             log("Making occurrences from associations");
-            
-           
-            int progress = 0;
+
             Association a = null;
             String occurrenceText = null;
             
@@ -163,7 +161,6 @@ public class MakeOccurrenceFromAssociation extends AbstractWandoraTool {
                 try {
                     a = (Association) associations.next();
                     if(a != null && !a.isRemoved()) {
-                        progress++;
                         associationType = a.getType();
                         topic = a.getPlayer(topicRole);
                         occurrenceTopic = a.getPlayer(occurrenceRole);

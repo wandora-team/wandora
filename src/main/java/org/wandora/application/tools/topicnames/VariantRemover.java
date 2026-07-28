@@ -94,8 +94,7 @@ public class VariantRemover extends AbstractWandoraTool {
                 Set<Topic> scope = null;
                 Locator typeTopicSI = typeTopic.getOneSubjectIdentifier();
                 Locator scopeTopicSI = scopeTopic.getOneSubjectIdentifier();
-                
-                int progress = 0;
+
                 int removed = 0;
                 Topic topic = null;
                 
@@ -103,8 +102,6 @@ public class VariantRemover extends AbstractWandoraTool {
                     try {
                         topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
-                            progress++;
-                            
                             typeTopic = topic.getTopicMap().getTopic(typeTopicSI);
                             scopeTopic = topic.getTopicMap().getTopic(scopeTopicSI);
                             

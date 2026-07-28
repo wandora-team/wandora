@@ -23,68 +23,63 @@
 package org.wandora.application.tools.extractors.word;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-
-import org.apache.commons.collections.bidimap.DualHashBidiMap;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.Jaro;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.JaroWinkler;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
 
+
+
 /**
  *
  * @author Eero Lehtonen
  */
-
-
 class SimilarityWordConfiguration extends WordConfiguration{
     
-    private float THRESHOLD;
+    private float threshold;
 
-    private InterfaceStringMetric STRING_METRIC;
-    private final DualHashBidiMap STRING_METRICS;
+    private InterfaceStringMetric stringMetric;
+    private final LinkedHashMap<String,InterfaceStringMetric> stringMetrics;
+    
+    
     
     SimilarityWordConfiguration() {
-    
         super();
-        
         setAssociateScore(true);
         
-        THRESHOLD = 0.5f;
+        threshold = 0.5f;
         
-        STRING_METRICS = new DualHashBidiMap();
-        STRING_METRICS.put("Levenshtein", new Levenshtein());
-        STRING_METRICS.put("Jaro", new Jaro());
-        STRING_METRICS.put("Jaro Winkler", new JaroWinkler());
+        stringMetrics = new LinkedHashMap<>();
+        stringMetrics.put("Levenshtein", new Levenshtein());
+        stringMetrics.put("Jaro", new Jaro());
+        stringMetrics.put("Jaro Winkler", new JaroWinkler());
         
-        STRING_METRIC = new Levenshtein();
-        
+        stringMetric = new Levenshtein();
     }
     
+    
     protected float getThreshold(){
-        return THRESHOLD;
+        return threshold;
     }
     
     protected void setThreshold(float f){
-        THRESHOLD = f;
+    	threshold = f;
     }
     
     protected void setStringMetric(String s){
-        STRING_METRIC = (InterfaceStringMetric) STRING_METRICS.get(s);
+    	stringMetric = stringMetrics.get(s);
     }
     
     protected InterfaceStringMetric getStringMetric(){
-        return STRING_METRIC;
+        return stringMetric;
     }
     
-    protected String getStringMetricName(){
-        return (String)STRING_METRICS.getKey(STRING_METRIC);
-    }
-    
-    protected List<String> getSTringMetricNames(){
+    protected List<String> getStringMetricNames(){
         List<String> l = new ArrayList<>();
-        l.addAll(STRING_METRICS.keySet());
+        l.addAll(stringMetrics.keySet());
         return l;
     }
     

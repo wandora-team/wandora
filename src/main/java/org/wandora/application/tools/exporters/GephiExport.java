@@ -274,7 +274,6 @@ public class GephiExport extends AbstractExportTool {
 
         //int totalCount = 2*topicMap.getNumTopics() + topicMap.getNumAssociations();
         logger.setProgressMax(100); // For now I have to "fake" the real progress count
-        int count = 0;
 
         println(writer, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         println(writer, "<gephiFile version=\"0.7\">"); // Should this be versionless?
@@ -297,8 +296,6 @@ public class GephiExport extends AbstractExportTool {
         println(writer, "<workspaces>");
 
         println(writer, "<workspace name=\"Default workspace\" status=\"open\">");
-
-
 
         collectNodesAndEdges(topicMap); // 50
         logger.setProgress(50);
@@ -333,18 +330,13 @@ public class GephiExport extends AbstractExportTool {
     
 
     private void collectNodesAndEdges(TopicMap topicMap) throws TopicMapException {
-
         Iterator<Topic> ti = topicMap.getTopics();
-
-        int assosNum = topicMap.getNumAssociations();
 
         // First nodes, then edges
         while(ti.hasNext())
         {
             Topic topic = ti.next();
             DataNode dNode = new DataNode(makeString(topic.getBaseName()), makeString(topic.getOneSubjectIdentifier().toString()));
-
-
             StringBuilder occurences = new StringBuilder("");
 
             if(EXPORT_OCCURRENCES) {

@@ -39,7 +39,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -594,7 +593,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
                                 if(tm != null) {
                                     boolean identifierIsURL = false;
                                     try {
-                                        URL u = new URI(topicIdentifier).toURL();
+                                        new URI(topicIdentifier).toURL();
                                         identifierIsURL = true;
                                     }
                                     catch(Exception e) {}

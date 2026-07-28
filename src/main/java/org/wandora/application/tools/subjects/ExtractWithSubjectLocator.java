@@ -30,6 +30,7 @@ package org.wandora.application.tools.subjects;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -67,15 +68,11 @@ public class ExtractWithSubjectLocator extends AbstractWandoraTool {
             log("Extracting with subject locator urls!");
             if(wandora != null) {
                 Iterator<?> contextTopics = getContext().getContextObjects();
-                int openCount = 0;
-                boolean openAll = false;
-                boolean openNext = true;
-                boolean forceStop = false;
-                ArrayList<String> sls = new ArrayList<String>(); 
+                List<String> sls = new ArrayList<>(); 
                 
                 // ***** Collection urls in context topics *****
                 if(contextTopics == null) return;
-                while(contextTopics.hasNext() && !forceStop) {
+                while(contextTopics.hasNext() && !forceStop()) {
                     Topic t = (Topic) (contextTopics.next());
                     Locator sl = t.getSubjectLocator();
                     if(sl != null) {

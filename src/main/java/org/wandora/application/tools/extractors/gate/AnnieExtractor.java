@@ -272,7 +272,6 @@ public class AnnieExtractor extends AbstractGate {
         // -------------------------------------------------
         // for each document, get the annotations
         Iterator<Document> iter = corpus.iterator();
-        int count = 0;
 
         while(iter.hasNext() && !forceStop()) {
             Document docu = (Document) iter.next();
@@ -282,8 +281,7 @@ public class AnnieExtractor extends AbstractGate {
             for(String annotType : annotTypes) {
                 if(forceStop()) break;
                 if(acceptAnnotationType(annotType)) {
-                    Set<Annotation> annotations = new HashSet<Annotation>(defaultAnnotSet.get(annotType));
-                    ++count;
+                    Set<Annotation> annotations = new HashSet<>(defaultAnnotSet.get(annotType));
 
                     setProgressMax(annotations.size());
                     int c = 0;

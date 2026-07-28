@@ -87,7 +87,7 @@ public abstract class AbstractNYTExtractor extends AbstractExtractor {
     
     public static final String DBPEDIA_RESOURCE_SI = "https://wandora.org/si/nytimes/dbpedia";
     public static final String BYLINE_SI = "https://wandora.org/si/nytimes/byline";    
-    public static final String ARTICLE_SI = "http://api.nytimes.com/svc/search/v1/article";
+    public static final String ARTICLE_SI = "https://api.nytimes.com/svc/search/v1/article";
     public static final String BODY_SI = "https://wandora.org/si/nytimes/body";
     public static final String TEXT_SI = "https://wandora.org/si/nytimes/text";
     public static final String ABSTRACT_SI = "https://wandora.org/si/nytimes/abstract";
@@ -104,7 +104,7 @@ public abstract class AbstractNYTExtractor extends AbstractExtractor {
     public static final String CLASSIFIER_FACET_SI = "https://wandora.org/si/nytimes/facet/classifier";
     public static final String COLUMN_FACET_SI = "https://wandora.org/si/nytimes/facet/column";
     public static final String MATERIAL_TYPE_FACET_SI = "https://wandora.org/si/nytimes/facet/material-type";
-    public static final String NYT_SI = "http://www.nytimes.com";
+    public static final String NYT_SI = "https://www.nytimes.com";
     
     
     
