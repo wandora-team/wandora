@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
    <window>
-      <x>93</x>
-      <y>67</y>
+      <x>328</x>
+      <y>55</y>
       <width>1351</width>
       <height>835</height>
       <horizontalsplitter>250</horizontalsplitter>
@@ -72,7 +72,7 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
          <panel>org.wandora.application.gui.topicpanels.SearchTopicPanel</panel>
          <panel>org.wandora.application.gui.topicpanels.LayerInfoPanel</panel>
          <panel>org.wandora.application.gui.topicpanels.DropExtractor</panel>
-         <panel>org.wandora.application.gui.topicpanels.LlamacppPanel</panel>
+         <panel>org.wandora.application.gui.topicpanels.OllamaPanel</panel>
          <defaultPanel>org.wandora.application.gui.topicpanels.TraditionalTopicPanel</defaultPanel>
       </topicPanels>
       <tabbedTopicPanel>
@@ -1482,9 +1482,7 @@ MERGE test:testctype, test:testatype</query>
 #    https://wandora.org/api/ 
 #</currentScript>
    </rpanel>
-   <llamacpppanel>
-      <currentPrompt># 
-# Welcome to Wandora's LLaMa.cpp topic panel!
-#</currentPrompt>
-   </llamacpppanel>
+   <ollamapanel>
+      <currentPrompt></currentPrompt>
+   </ollamapanel>
 </options>

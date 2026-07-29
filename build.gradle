@@ -80,6 +80,8 @@ dependencies {
     implementation 'org.eclipse.jdt:ecj:3.36.0'
     implementation 'org.eclipse.jetty:jetty-http:11.0.6'
     implementation 'org.eclipse.jetty:jetty-server:11.0.6'
+    
+    implementation 'io.github.ollama4j:ollama4j:1.1.7'
 	
     //implementation 'org.slf4j:slf4j-api:2.0.18'
     implementation 'org.slf4j:slf4j-nop:2.0.18'

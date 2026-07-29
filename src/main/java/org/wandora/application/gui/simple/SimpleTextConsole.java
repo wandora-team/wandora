@@ -33,6 +33,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.text.Document;
 
@@ -66,7 +67,7 @@ public class SimpleTextConsole extends SimpleTextPane {
     
     private SimpleTextConsoleListener consoleListener = null;
     
-    private ArrayList<String> history;
+    private List<String> history;
     private int historyMaxSize = 999;
     private int historyPtr=0;
     private String tempHistory = null;
@@ -256,6 +257,7 @@ public class SimpleTextConsole extends SimpleTextPane {
         inputPos=0;
         return output;
     }
+    
     public String handleInput() {
         String output = null;
         String inputStr = input.toString();

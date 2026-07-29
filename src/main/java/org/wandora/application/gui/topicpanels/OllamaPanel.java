@@ -20,9 +20,7 @@
  * 
  * 
  * 
- * RTopicPanel.java
- *
- * Created on 21.9.2011, 14:44:26
+ * OllamaPanel.java
  */
 
 
@@ -53,6 +51,7 @@ import javax.swing.KeyStroke;
 import javax.swing.text.DefaultEditorKit;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.wandora.application.CancelledException;
 import org.wandora.application.LocatorHistory;
 import org.wandora.application.RefreshListener;
@@ -71,8 +70,7 @@ import org.wandora.application.gui.simple.SimpleTextConsole;
 import org.wandora.application.gui.simple.SimpleTextConsoleListener;
 import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.application.gui.topicstringify.TopicToString;
-import org.wandora.application.tools.r.RBridge;
-import org.wandora.application.tools.r.RBridgeListener;
+import org.wandora.application.tools.ollama.OllamaUtilities;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
@@ -84,6 +82,10 @@ import org.wandora.utils.Options;
 
 //import jsyntaxpane.DefaultSyntaxKit;
 import de.sciss.syntaxpane.DefaultSyntaxKit;
+import io.github.ollama4j.Ollama;
+import io.github.ollama4j.models.request.ThinkMode;
+import io.github.ollama4j.models.response.OllamaAsyncResultStreamer;
+
 
 
 
@@ -95,7 +97,7 @@ import de.sciss.syntaxpane.DefaultSyntaxKit;
  */
 
 
-public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener, TopicPanel, ActionListener, ComponentListener, SimpleTextConsoleListener, RBridgeListener {
+public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, TopicPanel, ActionListener, ComponentListener, SimpleTextConsoleListener {
     private static final long serialVersionUID = 1L;
     
     public boolean USE_LOCAL_OPTIONS = true;
@@ -115,20 +117,25 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
     private static int autorun = 0;
     private static String autorunPromptFile = "";
     private static boolean autoloadFromOccurrence = false;
+    private static boolean shouldOutputInput = true;
+    private static boolean showPromptInConsole = true;
     
     private int currentPromptSource = NO_SOURCE;
     private String currentPromptFile = null;
     private String currentPrompt = null;
     
-    private static final String optionsPrefix = "options.llamacpppanel";
-    private static final String promptPath = "resources/llamacpp/prompts";
-    private static final String modelPath = "resources/llamacpp/models";
+    private static final String optionsPrefix = "options.ollamapanel";
+    private static final String promptPath = "resources/ollama/prompts";
 
     private Options options = null;
     private TopicMap tm;
     private Topic rootTopic;
     private boolean isGuiInitialized = false;
-    private RBridge rBridge = null;
+    
+    private Ollama ollama;
+    private String ollamaModel;
+    private long ollamaPollIntervalMilliseconds;
+    private StringBuilder capturedOutput;
     
     private JDialog optionsDialog = null;
     private JFileChooser fc = null;
@@ -136,7 +143,7 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
     
     private static final String defaultMessage = 
             "# \n"+
-            "# Welcome to Wandora's LLaMa.cpp topic panel!\n"+
+            "# Welcome to Wandora's Ollama topic panel!\n"+
             "#\n";
     
     
@@ -153,8 +160,8 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
     };
     
     
-    /** Creates new form LLaMacppTopicPanel */
-    public LlamacppPanel() {
+    /** Creates new form OllamaTopicPanel */
+    public OllamaPanel() {
     }
 
     
@@ -189,9 +196,6 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
         promptEditor.getActionMap().put("saveOperation", saveOperation);
         promptEditor.getDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
 
-        rBridge = RBridge.getRBridge();
-        rBridge.addRBridgeListener(this);
-
         fc = new JFileChooser();
         fc.setCurrentDirectory(new File(promptPath));
 
@@ -201,6 +205,16 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
         }
         else {
             promptEditor.setText(defaultMessage);
+        }
+        
+        try {
+        	ollama = OllamaUtilities.setUp();
+        	ollamaModel = "gemma4:12b";
+            ollama.pullModel(ollamaModel);
+            ollamaPollIntervalMilliseconds = 500l;
+        }
+        catch(Exception e) {
+        	e.printStackTrace();
         }
     }
     
@@ -249,9 +263,9 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
         jSeparator1 = new javax.swing.JSeparator();
         optionsBtn = new SimpleButton();
         consolePanel = new javax.swing.JPanel();
-        llamacppConsole = new javax.swing.JPanel();
-        llamacppConsoleScrollPane = new javax.swing.JScrollPane();
-        llamacppConsoleTextPane = new SimpleTextConsole(this);
+        ollamaConsole = new javax.swing.JPanel();
+        ollamaConsoleScrollPane = new javax.swing.JScrollPane();
+        ollamaConsoleTextPane = new SimpleTextConsole(this);
 
         optionsPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -281,7 +295,7 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
 
         autorunOptionsPanelInner.setLayout(new java.awt.GridBagLayout());
 
-        optionsLabel.setText("<html>R topic panel autorun options control automated prompt execution.</html>");
+        optionsLabel.setText("<html>Ollama topic panel autorun options control automated prompt execution.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -507,23 +521,23 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
 
         consolePanel.setLayout(new java.awt.GridBagLayout());
 
-        llamacppConsole.setLayout(new java.awt.GridBagLayout());
+        ollamaConsole.setLayout(new java.awt.GridBagLayout());
 
-        llamacppConsoleScrollPane.setViewportView(llamacppConsoleTextPane);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        llamacppConsole.add(llamacppConsoleScrollPane, gridBagConstraints);
+        ollamaConsoleScrollPane.setViewportView(ollamaConsoleTextPane);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        consolePanel.add(llamacppConsole, gridBagConstraints);
+        ollamaConsole.add(ollamaConsoleScrollPane, gridBagConstraints);
 
-        tabPanel.addTab("R console", consolePanel);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        consolePanel.add(ollamaConsole, gridBagConstraints);
+
+        tabPanel.addTab("Ollama console", consolePanel);
 
         add(tabPanel, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
@@ -579,7 +593,7 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
 
     private void autoRunFileBrowseButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_autoRunFileBrowseButtonMouseReleased
         fc.setDialogType(JFileChooser.OPEN_DIALOG);
-        fc.setDialogTitle("Select LLaMa.cpp Prompt");
+        fc.setDialogTitle("Select Ollama Prompt");
         int answer = fc.showDialog(Wandora.getWandora(), "Select");
         if(answer == JFileChooser.APPROVE_OPTION) {
             File f = fc.getSelectedFile();
@@ -621,9 +635,9 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
     private javax.swing.JButton optionsOkButton;
     private javax.swing.JPanel optionsPanel;
     private javax.swing.JTabbedPane optionsTabbedPane;
-    private javax.swing.JPanel llamacppConsole;
-    private javax.swing.JScrollPane llamacppConsoleScrollPane;
-    private javax.swing.JTextPane llamacppConsoleTextPane;
+    private javax.swing.JPanel ollamaConsole;
+    private javax.swing.JScrollPane ollamaConsoleScrollPane;
+    private javax.swing.JTextPane ollamaConsoleTextPane;
     private javax.swing.JEditorPane promptEditor;
     private javax.swing.JPanel runButtonPanel;
     private javax.swing.JButton saveBtn;
@@ -639,7 +653,7 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
         optionsDialog = new JDialog(Wandora.getWandora(), true);
         optionsDialog.setSize(500,270);
         optionsDialog.add(optionsPanel);
-        optionsDialog.setTitle("LLaMa.cpp topic panel options");
+        optionsDialog.setTitle("Ollama topic panel options");
         Wandora.getWandora().centerWindow(optionsDialog);
         optionsDialog.setVisible(true);
     }
@@ -866,7 +880,7 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
     
     @Override
     public String getName() {
-        return "LLaMa.cpp";
+        return "Ollama";
     }
     
     @Override
@@ -945,14 +959,9 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
                 prompt = prompt.replace("\n", "\\n");
                 prompt = prompt.replace("\r", "\\r");
                 prompt = prompt.replace("\t", "\\t");
-                String out = "source(textConnection('" + prompt + "'),print.eval=TRUE)";
-                SimpleTextConsole console = (SimpleTextConsole) llamacppConsoleTextPane;
+                SimpleTextConsole console = (SimpleTextConsole) ollamaConsoleTextPane;
                 tabPanel.setSelectedComponent(consolePanel);
-                console.output(console.handleInput(out));
-                //for(int i=0; i<commands.length; i++) {
-                    //console.output(commands[i]+newline);
-                    //console.output(console.handleInput(commands[i].trim()));
-                //}
+                console.handleInput(prompt);
             }
         }
     }
@@ -1090,22 +1099,72 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
     
     
 
-    @Override
-    public String handleInput(String input) {
-        //System.out.println("HANDLE INPUT: "+input);
-        return rBridge.handleInput(input);
-    }
-
-    
-
-    
-    
-    @Override
-    public void output(String output) {
-        ((SimpleTextConsole) llamacppConsoleTextPane).output(output);
-        ((SimpleTextConsole) llamacppConsoleTextPane).refresh();
+    public String handleInput(final String input) {
+        System.out.println("HANDLE INPUT: "+input);
+        capturedOutput = new StringBuilder("");
         
+        Runnable handleInputRunnable = new Runnable() {
+        	final StringBuilder runnablesCapturedOutput = capturedOutput;
+        	
+			@Override
+			public void run() {
+				Wandora.getWandora().setAnimated(true, this);
+				if(shouldOutputInput) {
+		        	output(input);
+		        	if(!input.endsWith("\n")) {
+		        		output("\n");
+		        	}
+		        }
+		        try {
+		        	OllamaAsyncResultStreamer resultStreamer =
+		                    ollama.generateAsync(ollamaModel, input, false, ThinkMode.ENABLED);
+		        	while (true) {
+		        		try {
+		        			Thread.sleep(ollamaPollIntervalMilliseconds);
+		        		}
+		        		catch(Exception es) {}
+		        		try {
+		        			if (!resultStreamer.isAlive()) break;
+			                String responseTokens = resultStreamer.getResponseStream().poll();
+			                if(responseTokens != null) {
+			                	runnablesCapturedOutput.append(responseTokens);
+			                	output(responseTokens);
+			                }
+		        		}
+		        		catch(Exception e1) {
+		        			output(ExceptionUtils.getStackTrace(e1));
+		        		}
+		            }
+		        	output("\n> ");
+		        }
+		        catch (Exception e2) {
+		        	output(ExceptionUtils.getStackTrace(e2));
+				}
+		        finally {
+		        	Wandora.getWandora().setAnimated(false, this);
+		        }
+			}
+        };
+        
+        new Thread(handleInputRunnable).start();
+
+        System.out.println("EXITING HANDLE INPUT");
+        return "";
     }
+
+    
+
+    
+    
+    
+    public void output(String output) {
+    	System.out.println("OUTPUT: "+output);
+        ((SimpleTextConsole) ollamaConsoleTextPane).output(output);
+        ((SimpleTextConsole) ollamaConsoleTextPane).refresh();
+    }
+
+    
+    
 
     
     
@@ -1204,13 +1263,21 @@ public class LlamacppPanel extends javax.swing.JPanel implements RefreshListener
     
     private void handleComponentEvent(ComponentEvent e) {
         saveCurrentPromptToOptions();
-
-	revalidate();
+        revalidate();
         repaint();
     }
+
+
     
     
     // -------------------------------------------------------------------------
+    
+    
+    
+    
+    
+    
+    
     
     
 }
