@@ -36,6 +36,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -44,6 +45,8 @@ import org.wandora.topicmap.Topic;
  */
 public class ApplicationAssociationContext implements Context<Association> {
     
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ApplicationAssociationContext.class);
+	
     private Object contextSource;
     protected WandoraTool contextOwner = null;
     protected ActionEvent actionEvent = null;
@@ -109,7 +112,7 @@ public class ApplicationAssociationContext implements Context<Association> {
     
     public void log(Exception e) {
         if(contextOwner != null) contextOwner.log(e);
-        else e.printStackTrace();
+        else logger.error(e);
     }
 
 

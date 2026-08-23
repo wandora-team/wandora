@@ -21,9 +21,12 @@ import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.layered.Layer;
+import org.wandora.utils.logger.Log4j2Logger;
 
 public class AbstractContext {
 
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractContext.class);
+	
     private Object contextSource;
     private WandoraTool contextOwner = null;
     private ActionEvent actionEvent = null;
@@ -130,6 +133,6 @@ public class AbstractContext {
     
     public void log(Exception e) {
         if(contextOwner != null) contextOwner.log(e);
-        else e.printStackTrace();
+        else logger.error(e);
     }
 }

@@ -53,6 +53,7 @@ import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import javazoom.jl.player.Player;
 
@@ -62,7 +63,9 @@ import javazoom.jl.player.Player;
  * @author akivela
  */
 public class AudioMP3 extends JPanel implements Runnable, MouseListener, ActionListener, PreviewPanel {
-    private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AudioMP3.class);
+	
+	private static final long serialVersionUID = 1L;
 
 	private static final String OPTIONS_PREFIX = "gui.audioMP3PreviewPanel.";
 
@@ -136,11 +139,21 @@ public class AudioMP3 extends JPanel implements Runnable, MouseListener, ActionL
             isPlaying = true;
             playMP3(audioLocator);
         }
-        catch (MalformedURLException e)  { e.printStackTrace();  }
-        catch (IOException e)  { e.printStackTrace();  }
-        catch (LineUnavailableException e)  { e.printStackTrace();  }
-        catch (UnsupportedAudioFileException e) { e.printStackTrace();  }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (MalformedURLException e)  { 
+        	logger.error(e); 
+    	}
+        catch (IOException e)  { 
+            logger.error(e);
+        }
+        catch (LineUnavailableException e)  { 
+            logger.error(e);
+        }
+        catch (UnsupportedAudioFileException e) { 
+            logger.error(e);
+        }
+        catch (Exception e) { 
+            logger.error(e);
+        }
     }
     
     

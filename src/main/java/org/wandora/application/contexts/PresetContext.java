@@ -38,6 +38,7 @@ import java.util.Iterator;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -45,7 +46,7 @@ import org.wandora.application.WandoraTool;
  * @author akivela
  */
 public class PresetContext<T> implements Context<T> {
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PresetContext.class);
     
     protected WandoraTool contextOwner = null;
     protected ActionEvent actionEvent = null;
@@ -119,7 +120,7 @@ public class PresetContext<T> implements Context<T> {
                         return iterator.next();
                     }
                     catch(Exception e) {
-                        e.printStackTrace();
+                    	logger.error(e);
                     }
                 }
                 return null;

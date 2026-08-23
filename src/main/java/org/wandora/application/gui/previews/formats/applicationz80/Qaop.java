@@ -57,13 +57,15 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import org.wandora.application.gui.UIBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
 
 
 public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener, ComponentListener, MouseListener {
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Qaop.class);
+	
     private static final long serialVersionUID = 1L;
     
 	protected Spectrum spectrum;
@@ -628,7 +630,7 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
             } catch (InterruptedException x) {
                 break;
             } catch (Exception x) {
-                x.printStackTrace();
+            	logger.error(x);
             }
         }
     }
@@ -672,7 +674,8 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
 
 
 class Loader extends Thread {
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Loader.class);
+	
     Qaop qaop;
     String file;
     int kind;
@@ -1022,7 +1025,7 @@ class Loader extends Thread {
                 }
             }
         } catch (Exception x) {
-            x.printStackTrace();
+        	logger.error(x);
         } finally {
             try {
                 pipe.close();
@@ -1290,7 +1293,7 @@ class Loader extends Thread {
             b = save_z80(q);
             return to_data("z80", b);
         } catch (Exception x) {
-            x.printStackTrace();
+        	logger.error(x);
             return null;
         }
     }

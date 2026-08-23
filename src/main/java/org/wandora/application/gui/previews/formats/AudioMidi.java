@@ -61,6 +61,7 @@ import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -69,9 +70,10 @@ import org.wandora.utils.DataURL;
  * @author akivela
  */
 public class AudioMidi implements ActionListener, MetaEventListener, PreviewPanel {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AudioMidi.class);
+	
     private static final String OPTIONS_PREFIX = "gui.audioMidiPreviewPanel.";
-    
-    //Wandora admin;
+
     private Map<String, String> options;
     private String audioLocator;
     private Dimension panelDimensions;
@@ -223,7 +225,7 @@ public class AudioMidi implements ActionListener, MetaEventListener, PreviewPane
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
     

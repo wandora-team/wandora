@@ -66,9 +66,11 @@ import org.wandora.utils.Functional.Fn0;
 import org.wandora.utils.Functional.Fn1;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Option;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 public class PreviewUtils {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PreviewUtils.class);
     
     public static final Icon ICON_ZOOM_IN = UIBox.getIcon(0xf00e);
     public static final Icon ICON_ZOOM_OUT = UIBox.getIcon(0xf010);
@@ -310,7 +312,7 @@ public class PreviewUtils {
     
     public static JPanel previewError(JPanel parent, String msg, Error e) {
         if(e != null) {
-            e.printStackTrace();
+            logger.error(e);
             return previewError(parent, msg, e.toString());
         }
         else {
@@ -320,7 +322,7 @@ public class PreviewUtils {
     
     public static JPanel previewError(JPanel parent, String msg, Exception e) {
         if(e != null) {
-            e.printStackTrace();
+        	logger.error(e);
             return previewError(parent, msg, e.toString());
         }
         else {
@@ -421,7 +423,7 @@ public class PreviewUtils {
                             previewWrapper.forceSetURL(locator);
                         }
                         catch(Exception ex) {
-                            ex.printStackTrace();
+                        	logger.error(ex);
                         }
                     }
                 }

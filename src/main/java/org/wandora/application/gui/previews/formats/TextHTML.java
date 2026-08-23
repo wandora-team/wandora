@@ -73,6 +73,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
@@ -95,7 +96,8 @@ import javafx.util.Callback;
  * @author akivela
  */
 public class TextHTML implements MouseListener, ActionListener, PreviewPanel, HyperlinkListener, ComponentListener {
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TextHTML.class);
+	
     private Wandora wandora;
     private String locator;
     private FXHTML htmlPane;
@@ -490,7 +492,7 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                 try {
                     pane.setPage(e.getURL());
                 } catch (Throwable t) {
-                    t.printStackTrace();
+                    logger.error(e);
                 }
             }
              **/
@@ -695,7 +697,7 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                                 webSource = stringWriter.toString();
                             }
                             catch (Exception ex) {
-                                ex.printStackTrace();
+                            	logger.error(ex);
                             }
                         }
                         else if(newState == Worker.State.CANCELLED) {
@@ -742,24 +744,22 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         
         
         public void close() {
-            // System.out.println("TEST1");
             Thread runner = new Thread() {
                 @Override
                 public void run() {
                     try {
                         if(webEngine != null) {
                             webEngine.load(null);
-                            // System.out.println("TEST2");
                         }
                     }
                     catch(Exception e) {
-                        e.printStackTrace();
+                    	logger.error(e);
                     }
                 }
             };

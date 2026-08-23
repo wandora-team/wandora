@@ -60,6 +60,7 @@ import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.IObox;
 import org.wandora.utils.MimeTypes;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -67,7 +68,7 @@ import org.wandora.utils.MimeTypes;
  * @author akivela
  */
 public class ApplicationZip implements PreviewPanel, ActionListener {
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(ApplicationZip.class);
     
     private final String locator;
     JPanel ui = null;
@@ -216,7 +217,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
             System.out.println("Done");
         }
         catch(Exception ex) {
-            ex.printStackTrace(); 
+        	logger.error(ex);
         } 
     }
     
@@ -510,7 +511,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                     return zipData.get(rowIndex);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
                 return null;
             }
@@ -586,7 +587,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                     throw new RuntimeException(e);
                 }
                 finally {
@@ -631,7 +632,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
                 try {
                 	if(zipInputStream != null) {

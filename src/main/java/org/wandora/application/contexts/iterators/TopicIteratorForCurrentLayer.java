@@ -34,6 +34,7 @@ import java.util.List;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.layered.LayeredTopic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -42,6 +43,7 @@ import org.wandora.topicmap.layered.LayeredTopic;
 public class TopicIteratorForCurrentLayer extends TopicIterator {
     
 
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicIteratorForCurrentLayer.class);
     
 
     @Override
@@ -60,7 +62,7 @@ public class TopicIteratorForCurrentLayer extends TopicIterator {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
                 collection=null;
             }
             if(collection != null) {

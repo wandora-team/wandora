@@ -52,6 +52,7 @@ import org.wandora.application.gui.simple.SimpleTimeSlider;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.MimeTypes;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import de.quippy.javamod.main.JavaModMainBase;
 import de.quippy.javamod.mixer.Mixer;
@@ -65,7 +66,8 @@ import de.quippy.javamod.multimedia.mod.ModContainer;
  * @author akivela
  */
 public abstract class AudioAbstract extends JavaModMainBase implements PreviewPanel, ActionListener {
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AudioAbstract.class);
+	
     private String locator = null;
     private PlayerThread playerThread = null;
     private JPanel ui = null;
@@ -272,9 +274,9 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
                 }
             }
             catch(Exception ex) {
+                logger.error(ex);
                 ui.removeAll();
                 JComponent errorPanel = PreviewUtils.previewError(ui, "Error while starting player", ex);
-                ex.printStackTrace(System.err);
             }
             if(progressThread != null) {
                 progressThread.abort();

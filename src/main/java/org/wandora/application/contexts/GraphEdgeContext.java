@@ -41,6 +41,7 @@ import org.wandora.application.gui.topicpanels.GraphTopicPanel;
 import org.wandora.application.gui.topicpanels.TopicPanel;
 import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 import org.wandora.application.gui.topicpanels.graphpanel.VEdge;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -49,6 +50,8 @@ import org.wandora.application.gui.topicpanels.graphpanel.VEdge;
  */
 public class GraphEdgeContext implements Context<VEdge> {
     
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GraphEdgeContext.class);
+	
     private Object contextSource;
     protected WandoraTool contextOwner = null;
     protected ActionEvent actionEvent = null;
@@ -165,6 +168,6 @@ public class GraphEdgeContext implements Context<VEdge> {
     
     public void log(Exception e) {
         if(contextOwner != null) contextOwner.log(e);
-        else e.printStackTrace();
+        else logger.error(e);
     }
 }

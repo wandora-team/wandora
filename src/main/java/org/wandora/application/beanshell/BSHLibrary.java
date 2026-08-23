@@ -125,7 +125,8 @@ public class BSHLibrary extends Vector<BSHComponent> {
                             this.add((BSHComponent)bshc);
                         }
                     }catch(Exception e){
-                        e.printStackTrace();
+                        logger.error("Failed to read beanshell script.");
+                        logger.error(e);
                     }
                 }
                 else {

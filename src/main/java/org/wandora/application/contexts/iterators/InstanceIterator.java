@@ -32,6 +32,7 @@ import java.util.Iterator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -40,7 +41,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class InstanceIterator extends TopicIterator {
 
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(InstanceIterator.class);
 
 
     @Override
@@ -51,7 +52,7 @@ public class InstanceIterator extends TopicIterator {
                 collection = topicmap.getTopicsOfType(topic);
             }
             catch(TopicMapException tme){
-                tme.printStackTrace(); // TODO EXCEPTION
+                logger.error(tme);
                 collection=null;
             }
             if(collection != null) it = collection.iterator();

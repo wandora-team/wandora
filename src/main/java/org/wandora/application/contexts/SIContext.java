@@ -47,6 +47,7 @@ import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.application.gui.tree.TopicTreePanel;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -54,7 +55,7 @@ import org.wandora.topicmap.Topic;
  * @author akivela
  */
 public class SIContext extends AbstractContext implements Context<Locator> {
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SIContext.class);
 
     
     /** Creates a new instance of SIContext */
@@ -101,7 +102,7 @@ public class SIContext extends AbstractContext implements Context<Locator> {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     

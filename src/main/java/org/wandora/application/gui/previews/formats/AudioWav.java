@@ -28,8 +28,6 @@
 package org.wandora.application.gui.previews.formats;
 
 
-
-
 import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
 
 import java.awt.BorderLayout;
@@ -69,7 +67,7 @@ import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
-
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -77,6 +75,8 @@ import org.wandora.utils.DataURL;
  * @author akivela
  */
 public class AudioWav extends JPanel implements Runnable, MouseListener, ActionListener, PreviewPanel {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AudioWav.class);
+	
     private static final long serialVersionUID = 1L;
 
 	private static final String OPTIONS_PREFIX = "gui.audioSamplePreviewPanel.";
@@ -90,7 +90,7 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
     private long frameLength = 0;
     
     
-    /** Creates a new instance of AudioSample */
+    /** Creates a new instance of AudioWav */
     public AudioWav(String audioLocator) {
         this.audioLocator = audioLocator;
         initialize();
@@ -160,12 +160,21 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
             isPlaying = true;
             playSample(audioLocator);
         }
-        catch (MalformedURLException e)  { e.printStackTrace();  }
-        catch (IOException e)  { e.printStackTrace();  }
-        catch (LineUnavailableException e)  { e.printStackTrace();  }
-        catch (UnsupportedAudioFileException e) { e.printStackTrace();  }
-        
-        catch (Exception e) { e.printStackTrace(); }
+        catch (MalformedURLException e) { 
+            logger.error(e);
+        }
+        catch (IOException e) { 
+        	logger.error(e);
+        }
+        catch (LineUnavailableException e) {
+        	logger.error(e);
+        }
+        catch (UnsupportedAudioFileException e) { 
+        	logger.error(e);
+        }
+        catch (Exception e) { 
+        	logger.error(e);
+        }
         isPlaying = false;
     }
 
@@ -403,7 +412,7 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
             
             while(isRunning) {
@@ -522,7 +531,6 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
                 if(step == 0) step = 1;
                 int o = (channel+1) * h/numberOfChannels - (h/numberOfChannels)/2;
 
-                int y = 0;
                 for(int x=0; x<w; x++) {
                     int xstep = x*step;
                     int max = waveformData[channel][xstep];

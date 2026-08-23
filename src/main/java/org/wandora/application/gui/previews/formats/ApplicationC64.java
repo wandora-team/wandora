@@ -57,6 +57,7 @@ import org.wandora.application.tools.extractors.files.SimpleFileExtractor;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import de.joergjahnke.c64.core.C1541;
 import de.joergjahnke.c64.core.C64;
@@ -72,7 +73,8 @@ import de.joergjahnke.common.vmabstraction.sunvm.SunVMResourceLoader;
  * @author akivela
  */
 public class ApplicationC64 implements ActionListener, PreviewPanel, ComponentListener {
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ApplicationC64.class);
+	
     private String locator = null;
     private String imageData = null; // disk image
     
@@ -569,7 +571,7 @@ public class ApplicationC64 implements ActionListener, PreviewPanel, ComponentLi
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 
@@ -622,7 +624,7 @@ public class ApplicationC64 implements ActionListener, PreviewPanel, ComponentLi
             snapshot.setMimetype("application/x-c64-snaphot");
         }
         catch (Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         c64.resume();
         return snapshot;
@@ -639,7 +641,7 @@ public class ApplicationC64 implements ActionListener, PreviewPanel, ComponentLi
             return screenCaptureDataUrl;
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return null;
     }

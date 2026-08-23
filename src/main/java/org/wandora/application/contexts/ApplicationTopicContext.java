@@ -36,6 +36,7 @@ import java.util.List;
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * ApplicationTopicContext uses application ie. the Wandora as a context source.
@@ -47,6 +48,8 @@ import org.wandora.topicmap.Topic;
 
 public class ApplicationTopicContext implements Context<Topic> {
     
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ApplicationTopicContext.class);
+	
     private Object contextSource;
     protected WandoraTool contextOwner = null;
     protected ActionEvent actionEvent = null;
@@ -109,7 +112,7 @@ public class ApplicationTopicContext implements Context<Topic> {
     
     public void log(Exception e) {
         if(contextOwner != null) contextOwner.log(e);
-        else e.printStackTrace();
+        else logger.error(e);
     }
 
 

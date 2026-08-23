@@ -46,6 +46,7 @@ import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.zmpp.swingui.PanelMachineFactory;
 import org.zmpp.swingui.ZmppPanel;
 import org.zmpp.vm.Machine;
@@ -58,7 +59,8 @@ import org.zmpp.vm.Machine;
  * @author akivela
  */
 public class ApplicationZMachine implements ActionListener, PreviewPanel {
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ApplicationZMachine.class);
+	
     private String locator = null;
     private JPanel ui = null;
     private ZmppPanel gamePanel = null;
@@ -118,7 +120,7 @@ public class ApplicationZMachine implements ActionListener, PreviewPanel {
                     WandoraOptionPane.WARNING_MESSAGE);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         
         // Now we should have a valid game factory. Create ui and start the game.
@@ -134,7 +136,7 @@ public class ApplicationZMachine implements ActionListener, PreviewPanel {
                         WandoraOptionPane.WARNING_MESSAGE);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         else {
@@ -185,7 +187,7 @@ public class ApplicationZMachine implements ActionListener, PreviewPanel {
                 runStory(locator);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         

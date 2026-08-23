@@ -52,13 +52,15 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.Base64;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class ApplicationZ80 implements ActionListener, PreviewPanel, ComponentListener {
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ApplicationZ80.class);
+	
     private String locator = null;
     private Qaop qaop = null;
     private JPanel qaopWrapper = null;
@@ -301,7 +303,7 @@ public class ApplicationZ80 implements ActionListener, PreviewPanel, ComponentLi
             return new DataURL(qaop.save());
         } 
         catch (MalformedURLException ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
         return null;
     }
@@ -317,7 +319,7 @@ public class ApplicationZ80 implements ActionListener, PreviewPanel, ComponentLi
             return screenCaptureDataUrl;
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return null;
     }

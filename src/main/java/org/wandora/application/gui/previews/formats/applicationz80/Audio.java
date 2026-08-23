@@ -16,7 +16,10 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 class Audio {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Audio.class);
 
     byte buf[] = new byte[4096];
     int bufp;
@@ -109,11 +112,11 @@ class Audio {
             l.start();
             line = l;
         } catch (Exception e) {
-            System.out.println(e);
+        	logger.error(e);
         } catch (Error e) {
             // Java on some Linuces throws an error when sound
             // can't start. Thanks for Ricardo Almeida
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
 

@@ -64,6 +64,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 import javax.swing.JViewport;
 
+import org.apache.log4j.LogManager;
 import org.wandora.application.gui.ErrorDialog;
 import org.wandora.application.gui.LayerTree;
 import org.wandora.application.gui.LogoAnimation;
@@ -130,7 +131,9 @@ import org.wandora.utils.swing.ImagePanel;
  * @author  olli, akivela
  */
 public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionListener, MouseListener, TopicMapListener {
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(Wandora.class);
+	
+	
     private static final long serialVersionUID = 1L;
 
     
@@ -317,7 +320,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
             wandoraIcons.add( UIBox.getImage("gui/appicon/icon.gif") );
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error("Wandora failed to load application icons.", e);
         }
 
         try {
@@ -671,7 +674,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error("Wandora failed to refresh topic trees.", e);
         }
     }
     
@@ -1466,7 +1469,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error("Wandora failed to add topic to the history.", e);
         }
     }
     
@@ -1692,7 +1695,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
      */
     public void handleError(Throwable throwable) {
         synchronized(errorHandlerLock){
-            /*debug*/ throwable.printStackTrace();
+        	logger.error("Error handler captured error.", throwable);
             if(!handleErrors) return;
             new ErrorDialog(this, throwable);
         }
@@ -1865,8 +1868,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             }
         }
         catch(Exception e) {
-            System.out.println("Exception '"+ e.toString() +"' thrown while updating layer info!");
-            //e.printStackTrace();
+            logger.info("Exception '{}' thrown while updating layer info!", e.toString());
         }
     }
     
@@ -1902,8 +1904,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             topicLabel.setText(name);
         }
         catch(Exception e) {
-            System.out.println("Exception '"+ e.toString() +"' thrown while updating topic status panel!");
-            //e.printStackTrace();
+            logger.warn("Exception '{}' thrown while updating topic status panel!", e.toString());
         }
     }
     

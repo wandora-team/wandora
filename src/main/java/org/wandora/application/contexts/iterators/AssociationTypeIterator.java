@@ -35,6 +35,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -42,6 +43,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class AssociationTypeIterator extends TopicIterator {
 
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AssociationTypeIterator.class);
 
 
 
@@ -65,7 +67,7 @@ public class AssociationTypeIterator extends TopicIterator {
                 }
             }
             catch(TopicMapException tme){
-                tme.printStackTrace(); // TODO EXCEPTION
+            	logger.error(tme);
             }
         }
         return associationTypeTopics.iterator();
