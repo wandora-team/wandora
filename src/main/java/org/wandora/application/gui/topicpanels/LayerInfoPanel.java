@@ -60,6 +60,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapStatOptions;
 import org.wandora.topicmap.layered.Layer;
 import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -68,6 +69,7 @@ import org.wandora.utils.ClipboardBox;
 
 
 public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LayerInfoPanel.class);
     
     private SimpleButton copyButton = null;
     private SimpleToggleButton trackChangesButton = null;
@@ -233,7 +235,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
                 
                 if(trackChanges) {
@@ -279,7 +281,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
                 infoPanel.add(js, gbc);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         
@@ -341,7 +343,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
                 
                 if(trackChanges) {
@@ -378,7 +380,7 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
                 stats.append("\n");
              }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }

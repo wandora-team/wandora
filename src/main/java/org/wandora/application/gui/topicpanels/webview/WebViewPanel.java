@@ -88,6 +88,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapListener;
 import org.wandora.utils.Options;
 import org.wandora.utils.Tuples.T3;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -115,7 +116,7 @@ import netscape.javascript.JSObject;
 
 
 public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener, RefreshListener, ActionListener, ComponentListener {
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WebViewPanel.class);
 
 	private static final long serialVersionUID = 1L;
 	
@@ -181,7 +182,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
             browserExtractorManager = new BrowserExtractorManager(Wandora.getWandora());
         }
         catch(Exception e) {
-        	e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -425,7 +426,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         
@@ -632,7 +633,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
 
@@ -654,7 +655,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -717,7 +718,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
             browse(u);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -795,7 +796,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
             return executeSynchronizedScript(script);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return null;
     }
@@ -954,7 +955,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
                             webSource = stringWriter.toString();
                         }
                         catch (Exception ex) {
-                            ex.printStackTrace();
+                        	logger.error(ex);
                         }
                         stopLoadingAnimation();
                     }
@@ -1097,7 +1098,7 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
             //System.out.println("--------");
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return new T3<>(content, Integer.valueOf(start), Integer.valueOf(end));
     }

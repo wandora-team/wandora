@@ -24,6 +24,7 @@ package org.wandora.application.gui.topicpanels.dockingpanel.actions;
 
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.action.actions.SimpleButtonAction;
@@ -35,6 +36,8 @@ import bibliothek.gui.dock.action.actions.SimpleButtonAction;
 
 
 public class MaximizeDockableAction extends SimpleButtonAction {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MaximizeDockableAction.class);
+	
     private DockingFramePanel dockingFramePanel = null;
     
     
@@ -64,7 +67,7 @@ public class MaximizeDockableAction extends SimpleButtonAction {
             dockingFramePanel.maximizeDockable(dockable);
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
         }
     }
 }

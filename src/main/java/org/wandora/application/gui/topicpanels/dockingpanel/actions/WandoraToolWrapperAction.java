@@ -31,6 +31,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.navigate.OpenTopic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.action.ActionContentModifier;
@@ -43,6 +44,7 @@ import bibliothek.gui.dock.action.actions.SimpleButtonAction;
 
 
 public class WandoraToolWrapperAction extends SimpleButtonAction {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolWrapperAction.class);
 
     private WandoraTool tool = new OpenTopic();
     
@@ -80,7 +82,7 @@ public class WandoraToolWrapperAction extends SimpleButtonAction {
             }
         }
         catch (TopicMapException ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
     }
     

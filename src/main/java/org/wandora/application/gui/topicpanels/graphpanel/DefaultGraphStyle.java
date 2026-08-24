@@ -42,6 +42,7 @@ import java.util.Map;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -49,6 +50,7 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class DefaultGraphStyle implements GraphStyle {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DefaultGraphStyle.class);
     
     private static Color defaultNodeColor = Color.GRAY;
     private static Color defaultEdgeColor = Color.GRAY;
@@ -103,7 +105,7 @@ public class DefaultGraphStyle implements GraphStyle {
                 Collection<Topic> types=topic.getTypes();
                 if(types.size()==0) nodeColor=Color.GRAY;
                 else nodeColor=model.getTypeColorForTopic(types.iterator().next());
-            }catch(TopicMapException tme){tme.printStackTrace();}
+            }catch(TopicMapException tme){logger.error(tme);}
         }
         return nodeColor;
     }
@@ -145,7 +147,7 @@ public class DefaultGraphStyle implements GraphStyle {
                 c = getTypeTopicColor(t);
             }
             catch(TopicMapException tme) {
-                tme.printStackTrace(); 
+            	logger.error(tme);
                 return Color.GRAY;
             }
         }
@@ -158,8 +160,7 @@ public class DefaultGraphStyle implements GraphStyle {
             return getTopicColor(t);
         }
         catch(Exception tme) {
-            tme.printStackTrace(); 
-            
+        	logger.error(tme);
         }
         return Color.GRAY;
     }
@@ -292,7 +293,7 @@ public class DefaultGraphStyle implements GraphStyle {
             c = c.darker();
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
         return c;
     }
@@ -307,7 +308,7 @@ public class DefaultGraphStyle implements GraphStyle {
             c = c.darker();
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
         return c;
     }

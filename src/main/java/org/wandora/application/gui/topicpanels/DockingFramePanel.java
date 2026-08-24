@@ -88,6 +88,7 @@ import org.wandora.utils.Base64;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.DnDBox;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.dockable.AbstractDockable;
@@ -112,6 +113,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
 
 	private static final long serialVersionUID = 1L;
 
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DockingFramePanel.class);
 
 	private String OPTIONS_PREFIX = "gui.dockingFramePanel.";
     
@@ -685,7 +687,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
 
         JPanel wrapper = new JPanel();
@@ -817,7 +819,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                     }
                 }
                 catch(Exception e) { 
-                    e.printStackTrace(); 
+                	logger.error(e);
                 }
                 WandoraDockable currentWandoraDockable = (WandoraDockable) currentDockable;
                 TopicPanel oldTopicPanel = currentWandoraDockable.getInnerTopicPanel();
@@ -842,7 +844,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             // PASS
         }
         catch(TopicMapException te) {
-            te.printStackTrace();
+        	logger.error(te);
         }
     }
 
@@ -1170,10 +1172,10 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                             processImage(image);
                         }
                         catch(Exception e) {
-                            e.printStackTrace();
+                        	logger.error(e);
                         }
                         catch(Error err) {
-                            err.printStackTrace();
+                        	logger.error(err);
                         }
                     }
                 };
@@ -1190,10 +1192,10 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                                     processFileList(files);
                                 }
                                 catch(Exception e) {
-                                    e.printStackTrace();
+                                	logger.error(e);
                                 }
                                 catch(Error err) {
-                                    err.printStackTrace();
+                                	logger.error(err);
                                 }
                             }
                         };
@@ -1207,10 +1209,10 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             }
         }
         catch(Exception ex){
-            ex.printStackTrace();
+        	logger.error(ex);
         }
         catch(Error err) {
-            err.printStackTrace();
+        	logger.error(err);
         }
 
         this.setBorder(null);
@@ -1243,7 +1245,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         
         // Backup plan if default panel fails.

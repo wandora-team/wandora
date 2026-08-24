@@ -81,6 +81,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import de.sciss.syntaxpane.DefaultSyntaxKit;
 
@@ -96,6 +97,8 @@ import de.sciss.syntaxpane.DefaultSyntaxKit;
 
 public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, TopicPanel, ActionListener, ComponentListener, SimpleTextConsoleListener, RBridgeListener {
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(RTopicPanel.class);
     
     public boolean USE_LOCAL_OPTIONS = true;
     public boolean SAVE_SKETCH_TO_GLOBAL_OPTIONS = true;
@@ -725,7 +728,7 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
                 break; 
             }
@@ -756,7 +759,7 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return o;
@@ -778,7 +781,7 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -983,7 +986,7 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
 
@@ -1002,7 +1005,7 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
                 WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Exception '"+e.getMessage()+"' occurred while restoring R script from file '"+scriptFile.getName()+"'.", "Can't restore R script", WandoraOptionPane.INFORMATION_MESSAGE);
             }
         }
@@ -1036,7 +1039,7 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
             WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Exception '"+e.getMessage()+"' occurred while storing the R script to an occurrence to current topic.", "Can't store R script", WandoraOptionPane.INFORMATION_MESSAGE);
         }
     }

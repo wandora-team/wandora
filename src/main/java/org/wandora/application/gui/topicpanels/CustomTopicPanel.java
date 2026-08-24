@@ -73,6 +73,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -82,6 +83,8 @@ import org.wandora.utils.Options;
  */
 public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements ActionListener, TopicPanel {
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(CustomTopicPanel.class);
 
     public static boolean USE_GLOBAL_OPTIONS = true;
     
@@ -208,7 +211,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
             this.topicSI = topic.getOneSubjectIdentifier().toExternalForm();
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         
         this.wandora = Wandora.getWandora();
@@ -513,13 +516,13 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
             }
         }
         catch(QueryException qe) {
-            qe.printStackTrace();
+        	logger.error(qe);
         }
         catch(TopicMapException tme) {
-            tme.printStackTrace();
+        	logger.error(tme);
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
         return null;
     }
@@ -544,8 +547,8 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
             }
         }
         catch(Exception e){
-            e.printStackTrace();
-            System.out.println("Topic is null or removed!");
+        	logger.error(e);
+            logger.error("Topic is null or removed!");
             panelContainer.setVisible(false);
             removedTopicMessage.setVisible(true);
             return;
@@ -605,8 +608,8 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
             }
         }
         catch(Exception e) {
-            System.out.println("Failed to initialize base or/and sl!");
-            e.printStackTrace();
+            logger.error("Failed to initialize base or/and sl!");
+            logger.error(e);
         }
         
         this.setComponentPopupMenu(this.getViewPopupMenu());
@@ -955,7 +958,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
             return "ScriptException at line "+se.getLineNumber()+" column "+se.getColumnNumber()+"<br>"+se.getMessage();
         }
         catch(Exception e){
-            e.printStackTrace();
+        	logger.error(e);
             return "Exception occurred during execution: "+e.getClass().getName()+" "+e.getMessage();
         }
         return null;        

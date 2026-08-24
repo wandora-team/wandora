@@ -66,6 +66,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -77,6 +78,8 @@ import org.wandora.utils.Options;
 public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel implements ActionListener, TopicPanel {
 
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TraditionalTopicPanel.class);
 
     public static final boolean MAKE_LOCAL_SETTINGS_GLOBAL = false;
 
@@ -125,7 +128,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
 
         Object[] buttonStruct = {
@@ -146,7 +149,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
                             }
                         }
                         catch(Exception ex) {
-                            ex.printStackTrace();
+                        	logger.error(ex);
                         }
                     }
                 }
@@ -167,7 +170,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         this.removeAll();
         initComponents();
@@ -227,7 +230,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
             return topic;
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
             return null;
         }
     }
@@ -365,7 +368,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
                         refresh();
                     }
                     catch(Exception e) {
-                        e.printStackTrace();
+                    	logger.error(e);
                     }
                 }
             });
@@ -415,7 +418,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+        	logger.error(e);
             //System.out.println("Topic is null or removed!");
             containerPanel.setVisible(false);
             removedTopicMessage.setVisible(true);
@@ -443,7 +446,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
             
         if(associationRootPanel.isVisible())        buildAssociationsPanel(associationPanel, associationsNumber, topic, ASSOCIATIONS_WHERE_PLAYER, options, wandora);
@@ -500,8 +503,8 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
             }
         }
         catch(Exception e) {
-            System.out.println("Failed to initialize base or/and sl!");
-            e.printStackTrace();
+            logger.error("Failed to initialize base or/and sl!");
+            logger.error(e);
         }
         this.setComponentPopupMenu(getViewPopupMenu());
         variantRootPanel.setComponentPopupMenu(getNamesMenu());

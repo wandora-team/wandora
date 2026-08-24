@@ -31,6 +31,7 @@ import javax.swing.JPopupMenu;
 
 import org.wandora.application.gui.topicpanels.TopicPanel;
 import org.wandora.application.gui.topicpanels.dockingpanel.WandoraDockable;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.action.ActionContentModifier;
@@ -43,6 +44,7 @@ import bibliothek.gui.dock.action.actions.SimpleButtonAction;
 
 
 public class TopicPanelMenuAction extends SimpleButtonAction {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicPanelMenuAction.class);
 
     private TopicPanel topicPanel = null;
     
@@ -100,7 +102,7 @@ public class TopicPanelMenuAction extends SimpleButtonAction {
             }
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
     }
     

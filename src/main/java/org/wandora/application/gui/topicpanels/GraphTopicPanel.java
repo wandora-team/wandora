@@ -93,6 +93,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -101,6 +102,8 @@ import org.wandora.utils.Options;
  */
 public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, SimpleComponent, Clipboardable, RefreshListener, ActionListener, ComponentListener {
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(GraphTopicPanel.class);
     
     private String OPTIONS_PREFIX = "gui.graphTopicPanel.";
     private String OPTIONS_VIEW_PREFIX = OPTIONS_PREFIX + "view.";
@@ -516,7 +519,7 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
                                     sb.append(TopicToString.toString(t)).append("\n");
                                 }
                                 catch(Exception e) {
-                                    e.printStackTrace();
+                                	logger.error(e);
                                 }
                             }
                         }
@@ -525,7 +528,7 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
                                 sb.append(((OccurrenceNode) n).getOccurrence()).append("\n");
                             }
                             catch(Exception e) {
-                                e.printStackTrace();
+                            	logger.error(e);
                             }
                         }
                     }

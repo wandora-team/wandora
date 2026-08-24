@@ -52,6 +52,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -63,6 +64,8 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
     
     
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TreeTopicPanel.class);
     
     
     private String title = "Tree";
@@ -103,7 +106,7 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
             revalidate();
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -152,7 +155,7 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
                     }
                 }
                 catch(Exception ex) {
-                    ex.printStackTrace();
+                	logger.error(ex);
                 }
             }
             else if("Configure...".equalsIgnoreCase(cmd)) {
@@ -192,7 +195,7 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
             revalidate();
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -311,7 +314,7 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     

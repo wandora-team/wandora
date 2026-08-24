@@ -25,6 +25,7 @@ package org.wandora.application.gui.topicpanels.dockingpanel.actions;
 
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.action.actions.SimpleButtonAction;
@@ -36,6 +37,8 @@ import bibliothek.gui.dock.action.actions.SimpleButtonAction;
 
 
 public class CloseDockableAction extends SimpleButtonAction {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(CloseDockableAction.class);
+	
     private DockingFramePanel dockingFramePanel = null;
     
     
@@ -65,7 +68,7 @@ public class CloseDockableAction extends SimpleButtonAction {
             dockingFramePanel.deleteDockable(dockable);
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
         }
     }
     

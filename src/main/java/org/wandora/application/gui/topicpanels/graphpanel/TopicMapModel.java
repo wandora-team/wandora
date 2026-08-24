@@ -39,6 +39,7 @@ import org.wandora.topicmap.TopicHashMap;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -46,6 +47,7 @@ import org.wandora.utils.Tuples.T2;
  * @author olli
  */
 public class TopicMapModel {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicMapModel.class);
     
     private TopicHashMap<TopicNode> topicIndex;
     private Map<AssociationWrapper, AssociationEdge> associationEdgeIndex;
@@ -101,7 +103,7 @@ public class TopicMapModel {
             else return associationNodeIndex.containsKey(wrapper);
         }
         catch(TopicMapException tme){ 
-            tme.printStackTrace(); 
+        	logger.error(tme);
             return false;
         }
     }
@@ -135,7 +137,7 @@ public class TopicMapModel {
             else return null;
         }
         catch(TopicMapException tme){
-            tme.printStackTrace(); 
+        	logger.error(tme);
             return null;
         }
     }
@@ -155,7 +157,7 @@ public class TopicMapModel {
             }
         }
         catch(TopicMapException tme){
-            tme.printStackTrace(); 
+        	logger.error(tme);
             return null;
         }
     }
@@ -180,7 +182,7 @@ public class TopicMapModel {
             else return null;
         }
         catch(TopicMapException tme){
-            tme.printStackTrace(); 
+        	logger.error(tme);
             return null;
         }
     }
@@ -212,7 +214,7 @@ public class TopicMapModel {
             }
         }
         catch(TopicMapException tme) {
-            tme.printStackTrace(); 
+        	logger.error(tme);
             return null;
         }
     }

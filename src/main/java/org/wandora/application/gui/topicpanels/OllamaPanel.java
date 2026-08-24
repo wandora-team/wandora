@@ -79,6 +79,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 //import jsyntaxpane.DefaultSyntaxKit;
 import de.sciss.syntaxpane.DefaultSyntaxKit;
@@ -99,6 +100,8 @@ import io.github.ollama4j.models.response.OllamaAsyncResultStreamer;
 
 public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, TopicPanel, ActionListener, ComponentListener, SimpleTextConsoleListener {
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(OllamaPanel.class);
     
     public boolean USE_LOCAL_OPTIONS = true;
     public boolean SAVE_SKETCH_TO_GLOBAL_OPTIONS = true;
@@ -214,7 +217,7 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
             ollamaPollIntervalMilliseconds = 500l;
         }
         catch(Exception e) {
-        	e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -735,7 +738,7 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
                 break; 
             }
@@ -766,7 +769,7 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return o;
@@ -788,7 +791,7 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -988,7 +991,7 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
 
@@ -1007,7 +1010,7 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
                 WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Exception '"+e.getMessage()+"' occurred while restoring prompt from file '"+promptFile.getName()+"'.", "Can't restore prompt", WandoraOptionPane.INFORMATION_MESSAGE);
             }
         }
@@ -1041,7 +1044,7 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
             WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Exception '"+e.getMessage()+"' occurred while storing the prompt to an occurrence to current topic.", "Can't store prompt", WandoraOptionPane.INFORMATION_MESSAGE);
         }
     }

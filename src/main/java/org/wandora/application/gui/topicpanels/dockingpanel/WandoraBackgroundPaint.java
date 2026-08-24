@@ -37,6 +37,8 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 import bibliothek.gui.dock.util.BackgroundComponent;
 import bibliothek.gui.dock.util.BackgroundPaint;
 import bibliothek.gui.dock.util.PaintableComponent;
@@ -49,6 +51,8 @@ import bibliothek.gui.dock.util.Transparency;
 
 
 public class WandoraBackgroundPaint implements BackgroundPaint {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraBackgroundPaint.class);
+	
     /* the entire image as it was read from the disk */
     private BufferedImage baseImage;
     /* an image with the same size as the frame */
@@ -92,7 +96,7 @@ public class WandoraBackgroundPaint implements BackgroundPaint {
                         this.baseImage = ImageIO.read(url);
                     }
                     catch (Exception e3) {
-                        e2.printStackTrace();
+                    	logger.error(e2);
                     }
                 }
             }

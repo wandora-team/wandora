@@ -36,12 +36,14 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author olli
  */
 public class AssociationEdge extends AbstractEdge {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AssociationEdge.class);
     
     private Association association;
     private TopicMapModel model;
@@ -67,7 +69,7 @@ public class AssociationEdge extends AbstractEdge {
                      (Node)model.getNodeFor(association.getPlayer(role2)));
         }
         catch(TopicMapException tme){
-            tme.printStackTrace();
+        	logger.error(tme);
         }
     }
     
@@ -90,7 +92,7 @@ public class AssociationEdge extends AbstractEdge {
             return TopicToString.toString(association.getType());
         }
         catch(Exception tme) {
-            tme.printStackTrace();
+        	logger.error(tme);
             return null;
         }
     }

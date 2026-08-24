@@ -49,6 +49,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -60,6 +61,8 @@ public class TreeMapTopicPanel extends javax.swing.JPanel implements RefreshList
 
 
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TreeMapTopicPanel.class);
     
     private Topic topic;
     private String topicSI;
@@ -141,7 +144,7 @@ public class TreeMapTopicPanel extends javax.swing.JPanel implements RefreshList
             this.topicSI = topic.getOneSubjectIdentifier().toExternalForm();
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         doRefresh();
     }
@@ -252,8 +255,8 @@ public class TreeMapTopicPanel extends javax.swing.JPanel implements RefreshList
             }
         }
         catch(Exception e){
-            e.printStackTrace();
-            System.out.println("Topic is null or removed!");
+        	logger.error(e);
+            logger.error("Topic is null or removed!");
             contentPanel.setVisible(false);
             removedTopicMessage.setVisible(true);
             return;

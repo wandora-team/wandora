@@ -74,6 +74,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -88,6 +89,8 @@ import org.wandora.utils.Options;
 public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements ActionListener, ChangeListener, TopicPanel, ComponentListener {
     
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TabbedTopicPanel.class);
 
     public static final boolean MAKE_LOCAL_SETTINGS_GLOBAL = false;
     
@@ -145,7 +148,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
                             }
                         }
                         catch(Exception ex) {
-                            ex.printStackTrace();
+                        	logger.error(ex);
                         }
                     }
                 }
@@ -192,7 +195,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         
         refresh();
@@ -225,7 +228,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -291,7 +294,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
             return topic;
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
             return null;
         }
     }
@@ -478,7 +481,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+        	logger.error(e);
             System.out.println("Topic is null or removed!");
             topicTabbedPane.setVisible(false);
             removedTopicMessage.setVisible(true);
@@ -520,8 +523,8 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
             }           
         }
         catch(Exception e) {
-            System.out.println("Failed to initialize base or/and sl!");
-            e.printStackTrace();
+            logger.error("Failed to initialize base or/and sl!");
+            logger.error(e);
         }
 
         buildAssociationsPanel(associationPanel, null, topic, options, wandora);

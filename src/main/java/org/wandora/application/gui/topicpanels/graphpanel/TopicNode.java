@@ -36,6 +36,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -43,6 +44,7 @@ import org.wandora.utils.Tuples.T2;
  */
 
 public class TopicNode extends AbstractNode {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicNode.class);
     
     private Topic topic;
     private TopicMapModel model;
@@ -108,7 +110,7 @@ public class TopicNode extends AbstractNode {
                 }
             }
             catch(TopicMapException tme){
-                tme.printStackTrace();
+            	logger.error(tme);
             }
         }
         return edges;

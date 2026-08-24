@@ -37,13 +37,14 @@ import java.util.Set;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author olli, akivela
  */
 public class GraphFilter implements NodeFilter, EdgeFilter {
     
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GraphFilter.class);
     
     
     private Set<TopicNode> filteredNodes;
@@ -211,7 +212,7 @@ public class GraphFilter implements NodeFilter, EdgeFilter {
                 }
             } 
             catch(TopicMapException tme){
-                tme.printStackTrace();
+            	logger.error(tme);
             }
         }
         return false;
@@ -233,7 +234,7 @@ public class GraphFilter implements NodeFilter, EdgeFilter {
                     if(filteredEdgeTypes.contains(model.getNodeFor(a.getType()))) return true;
                 }
                 catch(TopicMapException tme){
-                    tme.printStackTrace();
+                	logger.error(tme);
                 }
             }
         }

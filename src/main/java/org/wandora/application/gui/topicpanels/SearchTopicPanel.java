@@ -50,6 +50,7 @@ import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -60,6 +61,8 @@ import org.wandora.utils.Options;
 public class SearchTopicPanel extends javax.swing.JPanel implements ActionListener, TopicPanel {
 
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SearchTopicPanel.class);
 
     private Options options = null;
     
@@ -104,7 +107,7 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
             setCurrentPanel(searchContainerPanel);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     

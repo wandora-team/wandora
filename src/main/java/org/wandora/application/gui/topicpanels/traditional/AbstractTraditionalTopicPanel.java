@@ -113,6 +113,7 @@ import org.wandora.utils.IteratedMap;
 import org.wandora.utils.MSOfficeBox;
 import org.wandora.utils.Options;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -122,7 +123,7 @@ import org.wandora.utils.Textbox;
  * @author akivela
  */
 public abstract class AbstractTraditionalTopicPanel extends JPanel implements Printable, MouseListener, TopicMapListener, RefreshListener  {
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractTraditionalTopicPanel.class);
 
 	private static final long serialVersionUID = 1L;
 	
@@ -389,8 +390,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             }
         }
         catch(Exception e) {
-            System.out.println("Failed to initialize associationss!");
-            e.printStackTrace();
+            logger.error("Failed to initialize associationss!");
+            logger.error(e);
         }
     }
 
@@ -437,8 +438,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             }
         }
         catch(Exception e) {
-            System.out.println("Failed to classes instances!");
-            e.printStackTrace();
+            logger.error("Failed to classes instances!");
+            logger.error(e);
         }
     }
 
@@ -475,8 +476,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             }
         }
         catch(Exception e) {
-            System.out.println("Failed to initialize sis!");
-            e.printStackTrace();
+            logger.error("Failed to initialize sis!");
+            logger.error(e);
         }
     }
 
@@ -521,8 +522,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             }
         }
         catch(Exception e) {
-            System.out.println("Failed to initialize instances!");
-            e.printStackTrace();
+            logger.error("Failed to initialize instances!");
+            logger.error(e);
         }
     }
 
@@ -583,8 +584,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             setParentVisibility(dataPanel, n);
         }
         catch(Exception e) {
-            System.out.println("Failed to initialize occurrences!");
-            e.printStackTrace();
+            logger.error("Failed to initialize occurrences!");
+            logger.error(e);
         }
     }
 
@@ -628,8 +629,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             setParentVisibility(dataPanel, n);
         }
         catch(Exception e) {
-            System.out.println("Failed to initialize occurrences!");
-            e.printStackTrace();
+            logger.error("Failed to initialize occurrences!");
+            logger.error(e);
         }
     }
 
@@ -760,8 +761,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             setParentVisibility(variantPanel, n);
         }
         catch(Exception e) {
-            System.out.println("Failed to initialize names!");
-            e.printStackTrace();
+            logger.error("Failed to initialize names!");
+            logger.error(e);
         }
     }
 
@@ -892,8 +893,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
             setParentVisibility(variantPanel, n);
         }
         catch(Exception e) {
-            System.out.println("Failed to initialize names!");
-            e.printStackTrace();
+            logger.error("Failed to initialize names!");
+            logger.error(e);
         }
     }
 
@@ -963,8 +964,8 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                                 tool.execute(wandora);
                             }
                             catch(TopicMapException tme) {
-                                tme.printStackTrace();
-                            } // TODO EXCEPTION
+                            	logger.error(tme);
+                            }
                         }
                     }
                     );
@@ -1075,7 +1076,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                 setParentVisibility(variantPanel, n);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
 
         }
@@ -1093,14 +1094,14 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                     panel = (JPanel) panel.getParent();
                     if(panel != null) border = panel.getBorder();
                 }
-                if(border != null && border instanceof TitledBorder) {
-                    ((TitledBorder) border).setTitle(title);
-                    ((TitledBorder) border).setTitleFont(UIConstants.h2Font.deriveFont(Font.BOLD));
+                if(border != null && border instanceof TitledBorder titledBorder) {
+                	titledBorder.setTitle(title);
+                	titledBorder.setTitleFont(UIConstants.h2Font.deriveFont(Font.BOLD));
                 }
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
 

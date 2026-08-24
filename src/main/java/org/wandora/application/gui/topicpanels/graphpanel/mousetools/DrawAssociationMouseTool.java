@@ -47,6 +47,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -54,6 +55,8 @@ import org.wandora.utils.Tuples.T2;
  * @author olli
  */
 public class DrawAssociationMouseTool extends MouseTool {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DrawAssociationMouseTool.class);
+	
     private VNode startNode=null;
     private VNode endNode=null;
     
@@ -94,7 +97,7 @@ public class DrawAssociationMouseTool extends MouseTool {
                         }
                     }
                     catch(TopicMapException tme){
-                        tme.printStackTrace();
+                        logger.error(tme);
                     }
                 }
             }

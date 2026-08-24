@@ -60,6 +60,7 @@ import org.wandora.topicmap.TopicMapListener;
 import org.wandora.topicmap.TopicMapReadOnlyException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import bibliothek.gui.Dockable;
 
@@ -69,6 +70,7 @@ import bibliothek.gui.Dockable;
  * @author akivela
  */
 public class TopicPanelManager implements ActionListener {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicPanelManager.class);
 
     private Set<String> topicPanelsSupportingOpenTopic = new LinkedHashSet<>();
     private Map<String,String> topicPanelMap = new LinkedHashMap<>();
@@ -169,7 +171,7 @@ public class TopicPanelManager implements ActionListener {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return baseTopicPanel;
     }
@@ -215,7 +217,7 @@ public class TopicPanelManager implements ActionListener {
             // to instantiate something we shouldn't and something which we
             // might care about. Ideally would catch a bit more specifically.
             
-            //e.printStackTrace();
+            //logger.error(e);
         }
         return topicPanel;
     }
@@ -249,7 +251,7 @@ public class TopicPanelManager implements ActionListener {
             while(className != null);
         }
         catch (Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
 
@@ -338,7 +340,7 @@ public class TopicPanelManager implements ActionListener {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return topicPanelMenu;
@@ -397,7 +399,7 @@ public class TopicPanelManager implements ActionListener {
                 }
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
         }
         else {
@@ -552,7 +554,7 @@ public class TopicPanelManager implements ActionListener {
                 return baseTopicPanel.getTopic();
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return null;
@@ -573,7 +575,7 @@ public class TopicPanelManager implements ActionListener {
                 return baseTopicPanel.getIcon();
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return null;

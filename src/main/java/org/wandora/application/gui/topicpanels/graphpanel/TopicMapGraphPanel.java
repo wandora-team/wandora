@@ -120,6 +120,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapListener;
 import org.wandora.utils.Options;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -131,6 +132,8 @@ import org.wandora.utils.Tuples.T2;
 public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, MouseListener, MouseMotionListener, ComponentListener, MouseWheelListener, TopicMapListener, RefreshListener, KeyListener  {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicMapGraphPanel.class);
 	
 	
 	private String OPTIONS_PREFIX = "gui.graphTopicPanel.";
@@ -1457,7 +1460,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
             popup.addPopupMenuListener(new PopupListener());
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return popup;
     }
@@ -1578,7 +1581,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
             };
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         JPopupMenu popup=UIBox.makePopupMenu(menuStructure, Wandora.getWandora(this));
         popup.addPopupMenuListener(new PopupListener());
@@ -1801,7 +1804,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
                 followNode=null;
             }
             catch(TopicMapException tme) {
-                tme.printStackTrace();
+            	logger.error(tme);
             }
         }
     }
@@ -1974,7 +1977,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
                 }
                 wandora.doRefresh();
             }
-            catch(TopicMapException tme){tme.printStackTrace();}
+            catch(TopicMapException tme){logger.error(tme);}
             catch(Exception ce){}
             return false;
         }
