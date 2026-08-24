@@ -53,6 +53,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapSearchOptions;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.Tuples;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.BlockDistance;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.CosineSimilarity;
@@ -87,7 +88,7 @@ import uk.ac.shef.wit.simmetrics.tokenisers.TokeniserWhitespace;
 public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector {
 
     private static final long serialVersionUID = 1L;
-
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimilarityPanel.class);
 
     public boolean ALLOW_PARTIAL_MATCH = true;
 
@@ -256,7 +257,7 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
             threshold = Float.parseFloat(ts);
         }
         catch(Exception e) {
-            e.printStackTrace();     
+        	logger.error(e);
         }
         return Math.max(0, Math.min( threshold, 100 )) / 100;
     }
@@ -426,7 +427,7 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
             cost = Float.parseFloat(gapCostTextField.getText());
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return cost;
     }
@@ -469,12 +470,12 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         catch(TopicMapException tme) {
             message.setText("Topic map exception!");
             resultPanel.add(message, BorderLayout.CENTER);
-            tme.printStackTrace();
+            logger.error(tme);
         }
         catch(Exception e){
             message.setText("Error!");
             resultPanel.add(message, BorderLayout.CENTER);
-            e.printStackTrace();
+            logger.error(e);
             return;
         }
         revalidate();

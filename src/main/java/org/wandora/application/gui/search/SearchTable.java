@@ -42,6 +42,7 @@ import javax.swing.table.TableColumn;
 import org.wandora.application.Wandora;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.TableSorter;
 
 
@@ -52,6 +53,7 @@ import org.wandora.utils.swing.TableSorter;
 public class SearchTable extends JTable {
     
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SearchTable.class);
     
     private Object[][] data;
     private TableSorter sorter;
@@ -130,7 +132,7 @@ public class SearchTable extends JTable {
                     if(t!=null) wandora.openTopic(t);
                 } 
                 catch(TopicMapException tme){
-                    tme.printStackTrace(); // TODO EXCEPTION
+                	logger.error(tme);
                     dialog.setVisible(false);
                 }
             }

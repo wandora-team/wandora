@@ -44,6 +44,7 @@ import javax.swing.event.ChangeListener;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIConstants;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -52,6 +53,8 @@ import org.wandora.application.gui.UIConstants;
 public class SimpleLabelField extends JPanel implements MouseListener, KeyListener, ActionListener, SimpleComponent {
 
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleLabelField.class);
     
     public final static int LABEL = 1;
     public final static int FIELD = 2;
@@ -160,7 +163,7 @@ public class SimpleLabelField extends JPanel implements MouseListener, KeyListen
                 listener.stateChanged(e);
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
         }
     } 

@@ -41,6 +41,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -53,6 +54,8 @@ import org.wandora.utils.IObox;
 public class SimpleTextConsole extends SimpleTextPane {
 
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleTextConsole.class);
     
     private static final int DEFAULT_FONT_SIZE = 12;
 
@@ -288,7 +291,7 @@ public class SimpleTextConsole extends SimpleTextPane {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -302,7 +305,7 @@ public class SimpleTextConsole extends SimpleTextPane {
             this.setCaretPosition(d.getLength()-inputPos);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -318,7 +321,7 @@ public class SimpleTextConsole extends SimpleTextPane {
                 this.setCaretPosition(d.getLength()-inputPos);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -333,7 +336,7 @@ public class SimpleTextConsole extends SimpleTextPane {
                 input.deleteCharAt(input.length()-inputPos-1);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -347,7 +350,7 @@ public class SimpleTextConsole extends SimpleTextPane {
                 input = new StringBuilder(input.subSequence(0, input.length()-inputPos-1));
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -359,7 +362,7 @@ public class SimpleTextConsole extends SimpleTextPane {
             d.remove(d.getLength()-inputLen, inputLen);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -424,7 +427,7 @@ public class SimpleTextConsole extends SimpleTextPane {
                 IObox.saveFile(file, this.getText());
             }
             catch(Exception e){
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -446,7 +449,7 @@ public class SimpleTextConsole extends SimpleTextPane {
                 IObox.saveFile(file, data.toString());
             }
             catch(Exception e){
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }

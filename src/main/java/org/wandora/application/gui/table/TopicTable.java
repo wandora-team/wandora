@@ -65,6 +65,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 
 
@@ -78,6 +79,7 @@ import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 public class TopicTable extends SimpleTable implements MouseListener, ActionListener, Clipboardable {
 
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicTable.class);
     
     private Wandora wandora = null;
     private MouseEvent mouseEvent;
@@ -302,7 +304,7 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
         }
@@ -325,7 +327,7 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
         }
@@ -485,7 +487,7 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         if(topics.isEmpty()) {
@@ -497,7 +499,7 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return topics.toArray( new Topic[] {} );
@@ -539,7 +541,7 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
                 return getModel().getValueAt(cy, cx);
             }
         }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { logger.error(e); }
         return null;
     }
     
@@ -596,7 +598,7 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
             wandora.doRefresh();
         }
         catch(Exception ce) { 
-            //ce.printStackTrace();
+            // Ignore
         }
     }
     

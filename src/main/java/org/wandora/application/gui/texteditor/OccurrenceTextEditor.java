@@ -52,6 +52,7 @@ import org.wandora.application.tools.occurrences.CreateTopicWithOccurrenceSelect
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -63,6 +64,7 @@ import org.wandora.topicmap.Topic;
 public class OccurrenceTextEditor extends TextEditor {
 
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(OccurrenceTextEditor.class);
     
     protected Topic occurrenceTopic = null;
     protected Topic occurrenceType = null;
@@ -227,7 +229,7 @@ public class OccurrenceTextEditor extends TextEditor {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 }

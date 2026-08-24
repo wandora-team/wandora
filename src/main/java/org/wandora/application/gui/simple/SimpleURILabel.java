@@ -29,6 +29,7 @@ import java.net.URI;
 
 import org.wandora.application.gui.UIBox;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -39,6 +40,8 @@ import org.wandora.utils.DataURL;
 public class SimpleURILabel extends SimpleLabel {
 
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleURILabel.class);
     
     private static BufferedImage invalidURIImage = UIBox.getImage("gui/icons/invalid_uri.png");
     
@@ -72,7 +75,7 @@ public class SimpleURILabel extends SimpleLabel {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return "";
     }

@@ -48,6 +48,7 @@ import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.utils.Base64;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -59,6 +60,8 @@ import org.wandora.utils.DataURL;
 public class SimpleURIField extends SimpleField {
 
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleURIField.class);
     
     private static Color BROKEN_URI_COLOR = new Color(255, 240, 240);
     private static Color DATA_URI_COLOR = Color.WHITE;
@@ -129,7 +132,7 @@ public class SimpleURIField extends SimpleField {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -146,7 +149,7 @@ public class SimpleURIField extends SimpleField {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return "";
     }
@@ -194,7 +197,7 @@ public class SimpleURIField extends SimpleField {
                             e.dropComplete(true);
                         }
                         catch(Exception e) {
-                            e.printStackTrace();
+                        	logger.error(e);
                         }
                     }
                 };
@@ -212,13 +215,13 @@ public class SimpleURIField extends SimpleField {
             }
         }
         catch(IOException ioe) {
-            ioe.printStackTrace();
+        	logger.error(ioe);
         }
         catch(UnsupportedFlavorException ufe) {
-            ufe.printStackTrace();
+        	logger.error(ufe);
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
         this.setBorder(defaultBorder);
     }
@@ -275,7 +278,7 @@ public class SimpleURIField extends SimpleField {
             robot.keyPress(KeyEvent.VK_ENTER); 
         } 
         catch (AWTException e) { 
-            e.printStackTrace(); 
+        	logger.error(e);
         } 
     }
 

@@ -34,6 +34,7 @@ import java.util.Set;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapSearchOptions;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 
@@ -45,7 +46,7 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 
 
 public class SimilarityBox {
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimilarityBox.class);
     
     
     
@@ -139,7 +140,7 @@ public class SimilarityBox {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return selection;
     }

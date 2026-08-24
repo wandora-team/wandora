@@ -35,6 +35,7 @@ import org.wandora.application.Wandora;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -45,6 +46,8 @@ import org.wandora.topicmap.TopicMapException;
 public class TopicLinkBasename extends SimpleLabel {
     
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicLinkBasename.class);
     
     protected Wandora parent;
     protected Locator locator;
@@ -73,7 +76,7 @@ public class TopicLinkBasename extends SimpleLabel {
             }
         }
         catch(TopicMapException tme){
-            tme.printStackTrace(); // TODO EXCEPTION
+        	logger.error(tme);
             this.setText("[Exception retrieving name]");
         }
 

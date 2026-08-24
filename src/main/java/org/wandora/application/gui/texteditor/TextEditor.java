@@ -51,6 +51,7 @@ import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.utils.HTMLEntitiesCoder;
 import org.wandora.utils.Options;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -62,6 +63,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class TextEditor extends javax.swing.JDialog implements ActionListener {
     
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TextEditor.class);
 
 	public static final int MAX_TEXT_SIZE = 999999;
 
@@ -217,7 +219,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         
         this.setVisible(false);
@@ -522,7 +524,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         
     }
@@ -571,7 +573,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
             infoLabel.setText("" + pos + "/" + len);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     

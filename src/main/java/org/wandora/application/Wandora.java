@@ -1695,7 +1695,8 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
      */
     public void handleError(Throwable throwable) {
         synchronized(errorHandlerLock){
-        	logger.error("Error handler captured error.", throwable);
+        	logger.error("Error handler captured error.");
+        	logger.error(throwable);
             if(!handleErrors) return;
             new ErrorDialog(this, throwable);
         }

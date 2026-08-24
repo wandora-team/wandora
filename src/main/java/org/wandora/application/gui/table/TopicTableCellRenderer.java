@@ -42,6 +42,7 @@ import org.wandora.application.gui.TopicGuiWrapper;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -53,6 +54,7 @@ import org.wandora.topicmap.Topic;
  */
 public class TopicTableCellRenderer extends DefaultTableCellRenderer {
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicTableCellRenderer.class);
     
     private Wandora wandora = null;
     private Topic topic;
@@ -104,7 +106,7 @@ public class TopicTableCellRenderer extends DefaultTableCellRenderer {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         
         return c;

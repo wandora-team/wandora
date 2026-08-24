@@ -259,7 +259,7 @@ public class PreviewUtils {
                         WandoraOptionPane.WARNING_MESSAGE);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
             else {

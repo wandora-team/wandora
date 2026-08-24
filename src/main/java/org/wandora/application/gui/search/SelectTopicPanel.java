@@ -41,6 +41,7 @@ import org.wandora.application.gui.simple.SimpleRadioButton;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -52,6 +53,7 @@ import org.wandora.topicmap.TopicMapException;
 public class SelectTopicPanel extends javax.swing.JPanel implements TopicSelector {
     
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SelectTopicPanel.class);
     
     private Wandora wandora;
     private Topic result;
@@ -222,15 +224,15 @@ public class SelectTopicPanel extends javax.swing.JPanel implements TopicSelecto
             else{
                 result=wandora.getTopicMap().getTopicBySubjectLocator(text);
             }
-        }catch(TopicMapException tme){
-            tme.printStackTrace(); // TODO EXCEPTION
+        } catch(TopicMapException tme){
+        	logger.error(tme);
             return;
         }
         if(result==null){
             resultTextArea.setText("Topic not found");
         }
         else{
-            try{
+            try {
                 String resText="Found topic\n"+
                                "Base name: "+result.getBaseName()+"\n"+
                                "Subject identifiers:\n";
@@ -240,8 +242,8 @@ public class SelectTopicPanel extends javax.swing.JPanel implements TopicSelecto
                 }
                 if(result.getSubjectLocator()!=null) resText+="Subject locator: "+result.getSubjectLocator().toExternalForm()+"\n";
                 resultTextArea.setText(resText);
-            }catch(TopicMapException tme){
-                tme.printStackTrace(); // TODO EXCEPTION
+            } catch(TopicMapException tme){
+            	logger.error(tme);
                 resultTextArea.setText("Exception retrieving topic info");
             }
         }

@@ -40,6 +40,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.topicmap.Locator;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -51,6 +52,8 @@ import org.wandora.utils.DataURL;
 public class LocatorTableCellRenderer extends DefaultTableCellRenderer {
     
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(LocatorTableCellRenderer.class);
     
     private LocatorTable locatorTable;
 
@@ -83,7 +86,7 @@ public class LocatorTableCellRenderer extends DefaultTableCellRenderer {
             }
         }
         catch(Exception e){
-            e.printStackTrace(); // TODO EXCEPTION
+        	logger.error(e);
         }
         return c;
     }

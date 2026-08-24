@@ -61,6 +61,7 @@ import org.wandora.application.gui.Clipboardable;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -71,6 +72,8 @@ import org.wandora.utils.ClipboardBox;
 public class SimpleField extends JTextField implements MouseListener, KeyListener, ActionListener, SimpleComponent, Clipboardable, DropTargetListener, DragGestureListener {
     
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleField.class);
     
     protected Border defaultBorder = null;
     protected DropTarget dt;
@@ -200,7 +203,7 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return parts;
     }
@@ -387,16 +390,16 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
             }
         }
         catch(IOException ioe) {
-            ioe.printStackTrace();
+        	logger.error(ioe);
         }
         catch(UnsupportedFlavorException ufe) {
-            ufe.printStackTrace();
+        	logger.error(ufe);
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
         catch(Error err) {
-            err.printStackTrace();
+        	logger.error(err);
         }
         this.setBorder(defaultBorder);
     }
@@ -466,7 +469,7 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -486,7 +489,7 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
             this.getDocument().insertString(selectionStartLoc, txt, null);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     

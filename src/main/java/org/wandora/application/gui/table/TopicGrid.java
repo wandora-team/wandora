@@ -76,6 +76,7 @@ import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 
 /**
@@ -86,7 +87,7 @@ import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 
 public class TopicGrid extends SimpleTable implements Clipboardable, MouseListener, ActionListener {
     private static final long serialVersionUID = 1L;
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicGrid.class);
     
 	public static final int LEFT = 201;
     public static final int UP = 202;
@@ -295,7 +296,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
         }
@@ -732,7 +733,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                         else if(c[1] < o[1]) o = c;
                     }
                     catch(Exception e) {
-                        e.printStackTrace();
+                    	logger.error(e);
                     }
                 }
             }
@@ -841,7 +842,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 return getModel().getValueAt(cy, cx);
             }
         }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { logger.error(e); }
         return null;
     }
     
@@ -1565,7 +1566,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                                             }
                                         }
                                         catch(Exception e) {
-                                            e.printStackTrace();
+                                        	logger.error(e);
                                         }
                                     }
                                     if(hasPlayers) {
@@ -1581,7 +1582,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         else {
@@ -1616,7 +1617,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                                     }
                                 }
                                 catch(Exception e) {
-                                    e.printStackTrace();
+                                	logger.error(e);
                                 }
                             }
                             if(hasPlayers) {
@@ -1627,7 +1628,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                             }
                         }
                         catch(Exception e) {
-                            e.printStackTrace();
+                        	logger.error(e);
                         }
                     }
                 }
@@ -1671,7 +1672,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                                 if(a != null) a.remove();
                             }
                             catch(Exception ex) {}
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                 }
@@ -1709,7 +1710,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                         }
                     }
                     catch(Exception e) {
-                        e.printStackTrace();
+                    	logger.error(e);
                     }
                 }
             }
@@ -1961,8 +1962,8 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 Wandora.getWandora().doRefresh();
                 return true;
             }
-            catch(TopicMapException tme){ tme.printStackTrace(); }
-            catch(Exception ce){ ce.printStackTrace(); }
+            catch(TopicMapException tme){ logger.error(tme); }
+            catch(Exception ce){ logger.error(ce); }
             return false;
         }
         
@@ -1996,7 +1997,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                         data.append("\n");
                     } 
                     catch (TopicMapException ex) {
-                        ex.printStackTrace();
+                    	logger.error(ex);
                     }
                 }
             }
@@ -2013,7 +2014,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 IObox.saveFile(f, data.toString());
             } 
             catch (IOException ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
         }
     }
@@ -2027,14 +2028,14 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
             if(f.exists()) {
                 try {
                     String data = IObox.loadFile(f);
-                    HashMap<T2<Integer,Integer>, Topic> newGridData = parse(data);
+                    Map<T2<Integer,Integer>, Topic> newGridData = parse(data);
                     gridData = newGridData;
                 } 
                 catch (FileNotFoundException ex) {
-                    ex.printStackTrace();
+                	logger.error(ex);
                 } 
                 catch (IOException ex) {
-                    ex.printStackTrace();
+                	logger.error(ex);
                 }
             }
         }
@@ -2049,16 +2050,16 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
             if(f.exists()) {
                 try {
                     String data = IObox.loadFile(f);
-                    HashMap<T2<Integer,Integer>, Topic> newGridData = parse(data);
+                    Map<T2<Integer,Integer>, Topic> newGridData = parse(data);
                     for(T2<Integer,Integer> c : newGridData.keySet()) {
                         gridData.put(c, newGridData.get(c));
                     }
                 } 
                 catch (FileNotFoundException ex) {
-                    ex.printStackTrace();
+                	logger.error(ex);
                 } 
                 catch (IOException ex) {
-                    ex.printStackTrace();
+                	logger.error(ex);
                 }
             }
         }
@@ -2066,9 +2067,9 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
     
     
     
-    public HashMap<T2<Integer,Integer>, Topic> parse(String data) {
+    public Map<T2<Integer,Integer>, Topic> parse(String data) {
         TopicMap tm = wandora.getTopicMap();
-        HashMap<T2<Integer,Integer>, Topic> newGridData = new HashMap<>();
+        Map<T2<Integer,Integer>, Topic> newGridData = new HashMap<>();
 
         StringTokenizer dataLines = new StringTokenizer(data, "\n");
         while(dataLines.hasMoreTokens()) {
@@ -2092,7 +2093,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
         }

@@ -62,6 +62,7 @@ import org.wandora.utils.Base64;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.DnDBox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 
 
@@ -73,11 +74,9 @@ import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
  * @author akivela
  */
 public class LocatorTable extends SimpleTable implements MouseListener, ActionListener, Clipboardable /*, DropTargetListener, DragGestureListener*/ {
-    
-
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(LocatorTable.class);
     
-
     protected Wandora wandora = null;
     protected MouseEvent mouseEvent;
     
@@ -180,7 +179,7 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
             }
         }
         catch(Exception ex) {
-            ex.printStackTrace(); // TODO EXCEPTION
+        	logger.error(ex);
         }
         return null;
     }
@@ -214,7 +213,7 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
         }
@@ -376,7 +375,9 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
                 return getModel().getValueAt(cy, cx);
             }
         }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { 
+        	logger.error(e); 
+    	}
         return null;
     }
     
@@ -407,7 +408,9 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
             int cy = convertRowIndexToModel(row);
             return ((LocatorTableModel) getModel()).getColorAt(cy, cx);
         }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) {
+        	logger.error(e);
+        }
         return null;
     }
     
@@ -554,10 +557,9 @@ public class LocatorTable extends SimpleTable implements MouseListener, ActionLi
                     processDrop(data);
                 }
             }
-            catch(TopicMapException tme){tme.printStackTrace();}
-            catch(UnsupportedFlavorException ufe){ufe.printStackTrace();}
-            catch(IOException ioe){ioe.printStackTrace();}
-//            catch(CancelledException ce){}
+            catch(TopicMapException tme){ logger.error(tme); }
+            catch(UnsupportedFlavorException ufe){ logger.error(ufe); }
+            catch(IOException ioe){ logger.error(ioe); }
             return false;
         }
 

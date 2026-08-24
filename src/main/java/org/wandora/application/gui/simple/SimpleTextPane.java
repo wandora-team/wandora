@@ -77,6 +77,7 @@ import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.MSOfficeBox;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -87,6 +88,8 @@ import org.wandora.utils.Textbox;
 public class SimpleTextPane extends javax.swing.JTextPane implements MouseListener, ActionListener, SimpleComponent, Printable, UndoableEditListener, DropTargetListener, DragGestureListener {
     
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleTextPane.class);
     
     private boolean DROP_FILE_NAMES_INSTEAD_FILE_CONTENT = false;
     public static final int MAX_TEXT_SIZE = 999999;
@@ -207,7 +210,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             document.insertString(0, str, characterAttributes);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -225,7 +228,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return text;
     }
@@ -245,7 +248,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             text = document.getText(selectionStartLoc, d);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return text;
     }
@@ -263,7 +266,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             document.insertString(selectionStartLoc, txt, characterAttributes);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -282,7 +285,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             document.insertString(selectionStartLoc, txt, characterAttributes);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -302,7 +305,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             document.insertString(selectionStartLoc, txt, characterAttributes);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -319,7 +322,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -377,7 +380,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return success;
     }
@@ -410,7 +413,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             }
             findAndSelectNext(findThis, caseSensitive);
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return success;
     }
@@ -527,7 +530,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                 print();
             } 
             catch(java.awt.print.PrinterException pe){
-                pe.printStackTrace();
+            	logger.error(pe);
                 wandora.handleError(pe);
             }
         }
@@ -623,15 +626,12 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                     }
                 }
                 catch(MalformedURLException mfue) {
-                    mfue.printStackTrace();
                     wandora.handleError(mfue);
                 }
                 catch(IOException ioe) {
-                    ioe.printStackTrace();
                     wandora.handleError(ioe);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
                     wandora.handleError(e);
                 }
             }
@@ -664,15 +664,12 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                 }
             }
             catch(MalformedURLException mfue) {
-                mfue.printStackTrace();
                 wandora.handleError(mfue);
             }
             catch(IOException ioe) {
-                ioe.printStackTrace();
                 wandora.handleError(ioe);
             }
             catch(Exception e) {
-                e.printStackTrace();
                 wandora.handleError(e);
             }
         }
@@ -751,10 +748,10 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                                 }
                             }
                             catch(Exception e) {
-                                e.printStackTrace();
+                            	logger.error(e);
                             }
                             catch(Error err) {
-                                err.printStackTrace();
+                            	logger.error(err);
                             }
                         }
                     };
@@ -805,10 +802,10 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                                             load(new File(u));
                                         }
                                         catch(IllegalArgumentException iae){
-                                            iae.printStackTrace();
+                                        	logger.error(iae);
                                         }
                                         catch(Error err) {
-                                            err.printStackTrace();
+                                        	logger.error(err);
                                         }
                                     }
                                 }
@@ -840,16 +837,16 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
             }
         }
         catch(IOException ioe) {
-            ioe.printStackTrace();
+        	logger.error(ioe);
         }
         catch(UnsupportedFlavorException ufe) {
-            ufe.printStackTrace();
+        	logger.error(ufe);
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
         catch(Error err) {
-            err.printStackTrace();
+        	logger.error(err);
         }
         this.setBorder(defaultBorder);
     }

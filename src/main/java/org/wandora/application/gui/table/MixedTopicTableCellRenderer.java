@@ -42,6 +42,7 @@ import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -54,6 +55,8 @@ import org.wandora.topicmap.TopicMapException;
 public class MixedTopicTableCellRenderer extends DefaultTableCellRenderer {
     
     private static final long serialVersionUID = 1L;
+    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(MixedTopicTableCellRenderer.class);
     
     public Object content;
     private Topic topic;
@@ -76,7 +79,7 @@ public class MixedTopicTableCellRenderer extends DefaultTableCellRenderer {
                 return topic.getBaseName();
             }
             catch(TopicMapException tme){
-                tme.printStackTrace(); // TODO EXCEPTION;
+            	logger.error(tme);
                 return "Exception retrieving name";
             }
         }
@@ -147,13 +150,13 @@ public class MixedTopicTableCellRenderer extends DefaultTableCellRenderer {
                     }
                 }
                 catch(TopicMapException tme){
-                    tme.printStackTrace(); // TODO EXCEPTION;
+                	logger.error(tme);
                     label.setText("Exception retrieving name");
                 }
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
 
         return c;

@@ -35,6 +35,7 @@ import javax.swing.JFileChooser;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIConstants;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -47,6 +48,7 @@ public class SimpleFileChooser extends JFileChooser {
 
     private static final long serialVersionUID = 1L;
    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleFileChooser.class);
     
     public SimpleFileChooser() {
         setLookAndFeel();
@@ -69,8 +71,8 @@ public class SimpleFileChooser extends JFileChooser {
             //this.setUI(new SimpleFileChooserUI(this));
             //System.out.println("SET UI: "+this.getUI());
         }
-        catch(Exception e) { e.printStackTrace(); }
-        catch(Error er) { er.printStackTrace(); }
+        catch(Exception e) { logger.error(e); }
+        catch(Error er) { logger.error(er); }
 
     }
     

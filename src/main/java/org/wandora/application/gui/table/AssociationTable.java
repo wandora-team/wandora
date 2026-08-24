@@ -59,6 +59,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -67,8 +68,9 @@ import org.wandora.utils.ClipboardBox;
  */
 public class AssociationTable extends TopicTable {
     
-
 	private static final long serialVersionUID = 1L;
+	
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AssociationTable.class);
 	
 	private Wandora wandora;
     private Association[] associations;
@@ -161,7 +163,7 @@ public class AssociationTable extends TopicTable {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -196,7 +198,7 @@ public class AssociationTable extends TopicTable {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -429,7 +431,7 @@ public class AssociationTable extends TopicTable {
                 }
                 AssociationTable.this.wandora.doRefresh();
             }
-            catch(TopicMapException tme){tme.printStackTrace();}
+            catch(TopicMapException tme){ logger.error(tme); }
             catch(Exception ce){}
             return false;
         }

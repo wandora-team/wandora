@@ -70,6 +70,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
 import org.wandora.utils.Tuples;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -80,6 +81,8 @@ import org.wandora.utils.Tuples;
 public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
     private static final long serialVersionUID = 1L;
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(QueryPanel.class);
     
     private Wandora wandora = null;
     private String SCRIPT_QUERY_OPTION_KEY = "scriptQueries";
@@ -545,7 +548,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
             desktop.browse(new URI("https://wandora.org/wiki/Query_language"));
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }//GEN-LAST:event_scriptLabelMouseReleased
 
@@ -587,8 +590,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         catch(TopicMapException tme) {
             message.setText("Topic map exception!");
             resultPanel.add(message, BorderLayout.CENTER);
-            tme.printStackTrace();
-            //wandora.handleError(tme);
+            logger.error(tme);
         }
         catch(Exception e) {
             message.setText("Error!");
@@ -652,7 +654,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
                 //setContentType("text/javascript");
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         

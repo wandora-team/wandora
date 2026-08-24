@@ -53,6 +53,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -62,6 +63,7 @@ import org.wandora.utils.ClipboardBox;
 
 public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(ClassTable.class);
 
     private Topic topic;
     private Topic[] types;
@@ -268,10 +270,10 @@ public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
             this.setBorder(null);
         }
         catch(UnsupportedFlavorException ufe) {
-            ufe.printStackTrace();
+            logger.error(ufe);
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
         }
     }
     
@@ -318,7 +320,7 @@ public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
                 }
                 Wandora.getWandora().doRefresh();
             }
-            catch(TopicMapException tme){tme.printStackTrace();}
+            catch(TopicMapException tme){logger.error(tme);}
             catch(Exception ce){}
             return false;
         }

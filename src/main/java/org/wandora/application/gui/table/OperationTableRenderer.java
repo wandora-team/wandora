@@ -34,6 +34,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.wandora.application.gui.UIConstants;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -45,6 +46,7 @@ import org.wandora.application.gui.UIConstants;
 public class OperationTableRenderer extends DefaultTableCellRenderer {
     
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(OperationTableRenderer.class);
     
     private OperationTable table;
     private OperationTableModel model;
@@ -69,8 +71,7 @@ public class OperationTableRenderer extends DefaultTableCellRenderer {
             }
         }
         catch(Exception e){
-            e.printStackTrace(); // TODO EXCEPTION;
-            // uriLabel.setText("*** Exception occurred while initializing locator table label!");
+        	logger.error(e);
         }
         
         return c;
