@@ -44,6 +44,7 @@ import org.wandora.application.gui.TopicGuiWrapper;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.topicmap.Topic;
 import org.wandora.utils.GripCollections;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -52,9 +53,8 @@ import org.wandora.utils.GripCollections;
  * @author akivela
  */
 public class TopicTreeTopicRenderer extends DefaultTreeCellRenderer {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicTreeTopicRenderer.class);
 	
 	private TopicTree topicTree;
     private Wandora wandora = Wandora.getWandora();
@@ -125,7 +125,7 @@ public class TopicTreeTopicRenderer extends DefaultTreeCellRenderer {
             }
         }
         catch(Exception e) { 
-            e.printStackTrace(); 
+        	logger.error(e);
         }
         
         return c;
@@ -142,7 +142,7 @@ public class TopicTreeTopicRenderer extends DefaultTreeCellRenderer {
                 icons.put(url.toExternalForm(),icon);
             }
             catch(Exception e){
-                e.printStackTrace();
+            	logger.error(e);
                 icon=null;
             }
         }

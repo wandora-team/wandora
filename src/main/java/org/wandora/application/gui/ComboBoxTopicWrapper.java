@@ -30,6 +30,7 @@ package org.wandora.application.gui;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -37,6 +38,8 @@ import org.wandora.topicmap.TopicMapException;
  * @author  olli
  */
 public class ComboBoxTopicWrapper {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ComboBoxTopicWrapper.class);
+	
     public Topic topic;
     public ComboBoxTopicWrapper(Topic topic){
         this.topic=topic;
@@ -59,7 +62,7 @@ public class ComboBoxTopicWrapper {
             }
         }
         catch(TopicMapException tme){
-            tme.printStackTrace(); // TODO EXCEPTION;
+        	logger.error(tme);
             return "[exception retrieving topic name]";
         }
     }

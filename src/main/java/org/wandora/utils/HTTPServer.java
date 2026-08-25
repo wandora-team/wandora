@@ -44,6 +44,8 @@ import java.util.StringTokenizer;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 /**
  * For the ssl to work you need to create a certificate in command prompt with the
  * keytool utility (should be in jdk bin directory).
@@ -65,6 +67,8 @@ import javax.net.ssl.SSLServerSocketFactory;
  * @author  olli
  */
 public abstract class HTTPServer {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(HTTPServer.class);
+	
     protected int port;
     protected boolean running;
     protected boolean printExceptions;
@@ -258,7 +262,7 @@ public abstract class HTTPServer {
             }
             return ret;
         }catch(UnsupportedEncodingException e){
-            e.printStackTrace();
+            logger.error(e);
             return null;
         }
     }
@@ -375,19 +379,19 @@ public abstract class HTTPServer {
                                 try{
                                     handleRequest(s);
                                 }catch(Exception e){
-                                    if(printExceptions) e.printStackTrace();
+                                    if(printExceptions) logger.error(e);
                                 }
                             }
                         };
                         t.start();
                     }
                     catch(Exception e){
-                        if(printExceptions) e.printStackTrace();
+                        if(printExceptions) logger.error(e);
                     }
                 }
                 if(!serverSocket.isClosed()) serverSocket.close();
             }catch(Exception e){
-                if(printExceptions) e.printStackTrace();
+                if(printExceptions) logger.error(e);
             }
             serverSocket=null;
         }

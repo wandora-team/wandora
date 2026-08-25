@@ -36,6 +36,7 @@ import org.odftoolkit.simple.TextDocument;
 import org.odftoolkit.simple.table.Cell;
 import org.odftoolkit.simple.table.Row;
 import org.odftoolkit.simple.table.Table;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -45,7 +46,7 @@ import org.odftoolkit.simple.table.Table;
  * @author akivela
  */
 public class OpenOfficeBox {
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(OpenOfficeBox.class);
     
     
     
@@ -54,7 +55,7 @@ public class OpenOfficeBox {
             return getText(Document.loadDocument(url.openStream()));
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -65,7 +66,7 @@ public class OpenOfficeBox {
             return getText(Document.loadDocument(file));
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -76,7 +77,7 @@ public class OpenOfficeBox {
             return getText(Document.loadDocument(is));
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -109,7 +110,7 @@ public class OpenOfficeBox {
             return text;
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -122,7 +123,7 @@ public class OpenOfficeBox {
             return text;
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -135,7 +136,7 @@ public class OpenOfficeBox {
             return text;
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -147,7 +148,7 @@ public class OpenOfficeBox {
             return text;
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -177,7 +178,7 @@ public class OpenOfficeBox {
             return stringBuilder.toString();
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }

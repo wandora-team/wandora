@@ -53,12 +53,14 @@ import java.util.zip.GZIPOutputStream;
 import javax.net.ssl.SSLServerSocketFactory;
 
 import org.wandora.utils.Tuples.T4;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author olli
  */
 public class SQLProxyServer extends Thread {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SQLProxyServer.class);
     
     private boolean useSSL=false;
     public static final int defaultPort=8891;
@@ -157,7 +159,7 @@ public class SQLProxyServer extends Thread {
         try{
             server.join();
         }catch(InterruptedException ie){
-            ie.printStackTrace();
+            logger.error(ie);
             return;
         }
     }
@@ -180,7 +182,7 @@ public class SQLProxyServer extends Thread {
             System.out.println("Connection string: " + dbConnectionString);
             System.out.println("User: " + dbUser);
             System.out.println("Password: " + dbPassword);
-            e.printStackTrace();
+            logger.error(e);
             return null;
         }
     }
@@ -204,11 +206,11 @@ public class SQLProxyServer extends Thread {
                     ServerThread t=new ServerThread(s);
                     t.start();
                 }catch(Exception e){
-                    if(printExceptions) e.printStackTrace();
+                    if(printExceptions) logger.error(e);
                 }
             }
         }catch(Exception e){
-            if(printExceptions) e.printStackTrace();
+            if(printExceptions) logger.error(e);
         }
     }
     
@@ -290,7 +292,7 @@ public class SQLProxyServer extends Thread {
         }
         
         public void handleException(Throwable e) throws IOException {
-            e.printStackTrace();
+            logger.error(e);
             outWriter.flush();
             PrintWriter writer=new PrintWriter(outWriter);
             if(sendExceptions) e.printStackTrace(writer);
@@ -429,7 +431,7 @@ public class SQLProxyServer extends Thread {
                 }
                 catch(IOException ioe){
                     if(!ioe.getMessage().equals("Connection reset")){
-                        ioe.printStackTrace();
+                        logger.error(ioe);
                     }
                     running=false;
                 }
@@ -443,14 +445,14 @@ public class SQLProxyServer extends Thread {
                 socket.close();
             }
             catch(IOException ioe){
-                ioe.printStackTrace();
+                logger.error(ioe);
             }
             try{
                 if(stmt!=null) stmt.close();
                 if(connection!=null) connection.close();
             }
             catch(SQLException sqle){
-                sqle.printStackTrace();
+                logger.error(sqle);
             }
         }
         

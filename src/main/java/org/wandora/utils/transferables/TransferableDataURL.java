@@ -32,12 +32,14 @@ import java.nio.ByteBuffer;
 
 import org.wandora.utils.Base64;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class TransferableDataURL implements Transferable {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TransferableDataURL.class);
 
     private DataURL transferableData = null;
 
@@ -79,7 +81,7 @@ public class TransferableDataURL implements Transferable {
                 return flavors;
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         
@@ -117,7 +119,7 @@ public class TransferableDataURL implements Transferable {
                 return c;
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
             return null;
         }

@@ -40,15 +40,15 @@ import javax.swing.ListSelectionModel;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author  olli
  */
 public class TopicSelectList extends javax.swing.JPanel  {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicSelectList.class);
 
 	
 	private Topic[] topics;
@@ -210,6 +210,7 @@ public class TopicSelectList extends javax.swing.JPanel  {
 
 class ListWindow extends JDialog {
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(ListWindow.class);
     
 	public JList<ComboBoxTopicWrapper> l;
     public Vector<ComboBoxTopicWrapper> data;
@@ -235,7 +236,7 @@ class ListWindow extends JDialog {
                     data.add(new ComboBoxTopicWrapper(topics[i]));
                 }
             }catch(TopicMapException tme){
-                tme.printStackTrace(); // TODO EXCEPTION
+                logger.error(tme);
             }
         }
         if(data.size()==0) return;
@@ -266,7 +267,7 @@ class ListWindow extends JDialog {
                         String text=((ComboBoxTopicWrapper)list.getSelectedValue()).topic.getBaseName();
                         s.setText(text);
                     }catch(TopicMapException tme){
-                        tme.printStackTrace(); // TODO EXCEPTION;
+                        logger.error(tme);
                         s.setText("Exception retrieving name");
                     }
                 }
@@ -284,7 +285,7 @@ class ListWindow extends JDialog {
                                 String text=((ComboBoxTopicWrapper)list.getSelectedValue()).topic.getBaseName();
                                 s.setText(text);
                             }catch(TopicMapException tme){
-                                tme.printStackTrace(); // TODO EXCEPTION;
+                                logger.error(tme);
                                 s.setText("Exception retrieving name");
                             }
                         }

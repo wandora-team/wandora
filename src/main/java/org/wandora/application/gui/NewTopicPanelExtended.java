@@ -46,15 +46,15 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  * @author  akivela
  */
 public class NewTopicPanelExtended extends javax.swing.JPanel {
-	
-	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(NewTopicPanelExtended.class);
 	
     
     private boolean accepted = false;
@@ -152,7 +152,7 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         
         try {
@@ -162,7 +162,7 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         
         
@@ -231,7 +231,7 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
             return new GetTopicButton();
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }

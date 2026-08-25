@@ -40,6 +40,8 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 
 
 /**
@@ -48,6 +50,7 @@ import javax.swing.JPanel;
  */
 public class ImagePanel extends JPanel {
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(ImagePanel.class);
     
     private URL url;
     private File file;
@@ -88,7 +91,7 @@ public class ImagePanel extends JPanel {
                     }
                     catch (Exception e3) {
                         //System.out.println("Unable to initialize ImagePanel with "+ imageLocator);
-                        e2.printStackTrace();
+                        logger.error(e3);
                     }
                 }
             }

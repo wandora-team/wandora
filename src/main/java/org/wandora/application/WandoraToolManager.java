@@ -67,6 +67,7 @@ import org.wandora.utils.IObox;
 import org.wandora.utils.Options;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * WandoraToolManager implements Wandora's Tool Manager. Tool Manager is
@@ -78,9 +79,8 @@ import org.wandora.utils.Tuples.T2;
 
 
 public class WandoraToolManager extends AbstractWandoraTool {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolManager.class);
 
 
 	private KeyStroke[] accelerators = new KeyStroke[] {
@@ -135,7 +135,7 @@ public class WandoraToolManager extends AbstractWandoraTool {
         try{
             tool=c.newInstance();
         }catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
             return null;
         }
         configurableTools.put(id,tool);
@@ -223,7 +223,7 @@ public class WandoraToolManager extends AbstractWandoraTool {
                             }
                             catch(Exception ex) {
                                 System.out.println("Rejecting tool. Exception '" + ex.toString() + "' occurred while investigating tool class '" + classFileName + "'.");
-                                //ex.printStackTrace();
+                                //logger.error(ex);
                             }
                         }
                     }
@@ -233,7 +233,7 @@ public class WandoraToolManager extends AbstractWandoraTool {
             return allTools.get(type);
         }
         catch (Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }        
         return null;
     }
@@ -583,7 +583,7 @@ public class WandoraToolManager extends AbstractWandoraTool {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }        
         return importTools;

@@ -29,12 +29,14 @@ import java.net.URI;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class PDFbox {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PDFbox.class);
 
 
 
@@ -53,7 +55,7 @@ public class PDFbox {
             return content;
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }

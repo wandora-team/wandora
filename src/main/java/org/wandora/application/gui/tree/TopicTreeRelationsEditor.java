@@ -38,6 +38,7 @@ import org.wandora.application.Wandora;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.GripCollections;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -46,9 +47,8 @@ import org.wandora.utils.Options;
  * @author  olli
  */
 public class TopicTreeRelationsEditor extends javax.swing.JPanel {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicTreeRelationsEditor.class);
 	
 	private TopicTreeRelation[] relations;
     private boolean cancelled=true;
@@ -157,7 +157,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
                 relationsPanel.add(tatep,gbc);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         addFillerPanel();
@@ -214,7 +214,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
                 v.add(panel.getRelation());
             }
             catch(TopicMapException e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return GripCollections.collectionToArray(v, TopicTreeRelation.class);
@@ -340,7 +340,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
             relationsPanel.add(tatep,gbc);
         }
         catch(TopicMapException tme) {
-            tme.printStackTrace(); // TODO EXCEPTION
+        	logger.error(tme);
         }
         addFillerPanel();
         this.revalidate();

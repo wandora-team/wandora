@@ -31,13 +31,15 @@ import javax.swing.tree.TreePath;
 
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author olli, akivela
  */
 public class TopicGuiWrapper {
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicGuiWrapper.class);
+	
     public static final String PROCESSING_TYPE = "PROCESSING_TYPE";
     
     public Topic topic;
@@ -74,7 +76,7 @@ public class TopicGuiWrapper {
             }
         }
         catch(Exception e){
-            e.printStackTrace(); // TODO EXCEPTION
+        	logger.error(e);
             return "[Exception retrieving name]";
         }
     }
@@ -90,7 +92,7 @@ public class TopicGuiWrapper {
             }
         }
         catch(Exception e){
-            e.printStackTrace(); // TODO EXCEPTION
+            logger.error(e);
             return "[Exception retrieving name]";
         }
     }

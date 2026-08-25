@@ -64,6 +64,7 @@ import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.application.tools.DropExtractor;
 import org.wandora.application.tools.extractors.AbstractExtractor;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -73,8 +74,8 @@ import org.wandora.application.tools.extractors.AbstractExtractor;
  * @author  akivela
  */
 public class DropExtractPanel extends JPanel implements ComponentListener, ActionListener, MouseListener, DropTargetListener, DragGestureListener, WandoraToolLogger {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DropExtractPanel.class);
 	
 	private Wandora wandora = null;
     private WandoraTool tool = null;
@@ -116,7 +117,7 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
             setCurrentPanel(extractorPanel);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -467,10 +468,10 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
                     }
 
                     catch(Exception ex) {
-                        ex.printStackTrace();
+                    	logger.error(ex);
                     }
                     catch(Error err) {
-                        err.printStackTrace();
+                    	logger.error(err);
                     }
                     extractorNameLabel.setForeground(mouseOutColor);
                     iconLabel.setIcon(UIBox.getIcon("gui/drop_extract.gif"));
@@ -481,16 +482,16 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
             e.dropComplete(true);
         }
         catch(IOException ioe) {
-            ioe.printStackTrace();
+        	logger.error(ioe);
         }
         catch(UnsupportedFlavorException ufe) {
-            ufe.printStackTrace();
+        	logger.error(ufe);
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
         catch(Error err) {
-            err.printStackTrace();
+        	logger.error(err);
         }
     }
     

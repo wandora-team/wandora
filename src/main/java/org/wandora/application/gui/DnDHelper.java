@@ -48,6 +48,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -56,6 +57,8 @@ import org.wandora.topicmap.TopicMapException;
  * @author olli, akivela
  */
 public class DnDHelper {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DnDHelper.class);
+	
     public static final DataFlavor associationDataFlavor;
     public static final DataFlavor associationArrayDataFlavor;
     public static final DataFlavor topicDataFlavor;
@@ -70,7 +73,7 @@ public class DnDHelper {
             ta=new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType+";class=\""+Topic[].class.getName()+"\"");
             tg=new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType+";class=\""+Topic[][].class.getName()+"\"");
         }
-        catch(ClassNotFoundException cnfe){cnfe.printStackTrace();}
+        catch(ClassNotFoundException cnfe){ logger.error(cnfe); }
         associationDataFlavor=a;
         associationArrayDataFlavor=aa;
         topicDataFlavor=t;
@@ -127,7 +130,7 @@ public class DnDHelper {
                 }
             }
         }
-        catch(Exception tme){tme.printStackTrace();}
+        catch(Exception tme){ logger.error(tme); }
         DnDHelper.WandoraTransferable ret=new DnDHelper.WandoraTransferable(selected);
         ret.setStringData(str);
         return ret;
@@ -156,7 +159,7 @@ public class DnDHelper {
                 }
             }
         }
-        catch(TopicMapException tme){tme.printStackTrace();}
+        catch(TopicMapException tme){ logger.error(tme); }
         DnDHelper.WandoraTransferable ret=new DnDHelper.WandoraTransferable(selected);
         ret.setStringData(sb.toString());
         return ret;
@@ -210,8 +213,8 @@ public class DnDHelper {
             }
             return topics;
         }
-        catch(UnsupportedFlavorException ufe){ufe.printStackTrace();}
-        catch(IOException ioe){ioe.printStackTrace();}
+        catch(UnsupportedFlavorException ufe){logger.error(ufe);}
+        catch(IOException ioe){logger.error(ioe);}
         return null;
     }
            
@@ -343,8 +346,14 @@ public class DnDHelper {
                         sb.append("\n");
                     }
                 }
-                else if(topic!=null) stringData=topic.getBaseName()+"\n";
-            }catch(TopicMapException tme){tme.printStackTrace();}            
+                else if(topic!=null) {
+                	sb.append(topic.getBaseName());
+                	sb.append("\n");
+                }
+            }
+            catch(TopicMapException tme){ 
+            	logger.error(tme); 
+        	}            
             stringData=sb.toString();
             supportedFlavors=null;
         }
@@ -378,7 +387,7 @@ public class DnDHelper {
                 }
             }
             catch(TopicMapException tme){
-                tme.printStackTrace();
+                logger.error(tme);
             }
             supportedFlavors=null;
         }

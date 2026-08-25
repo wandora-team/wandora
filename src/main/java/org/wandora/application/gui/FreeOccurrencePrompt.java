@@ -40,15 +40,15 @@ import org.wandora.topicmap.SchemaBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author  olli
  */
 public class FreeOccurrencePrompt extends javax.swing.JDialog {
-    
-	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(FreeOccurrencePrompt.class);
 	
 	
     private Topic topic;
@@ -282,7 +282,7 @@ public class FreeOccurrencePrompt extends javax.swing.JDialog {
             typeButton.setTopic(SchemaBox.DEFAULT_OCCURRENCE_SI);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }//GEN-LAST:event_useDefaultButtonMouseReleased
 
@@ -293,7 +293,7 @@ public class FreeOccurrencePrompt extends javax.swing.JDialog {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }//GEN-LAST:event_useLastButtonMouseReleased
     

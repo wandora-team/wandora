@@ -1,4 +1,7 @@
 package org.wandora.utils;
+
+import org.wandora.utils.logger.Log4j2Logger;
+
 /**
  * Encodes and decodes to and from Base64 notation.
  *
@@ -50,7 +53,8 @@ package org.wandora.utils;
  */
 public class Base64
 {
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Base64.class);
+	
 /* ********  P U B L I C   F I E L D S  ******** */   
     
     
@@ -382,7 +386,7 @@ public class Base64
         }   // end try
         catch( Exception e )
         {
-            e.printStackTrace();
+            logger.error(e);
         }   // end catch
         finally
         {
@@ -504,7 +508,7 @@ public class Base64
             }   // end try
             catch( Exception e )
             {
-                e.printStackTrace();
+                logger.error(e);
             }   // end catch
 
 
@@ -824,12 +828,12 @@ public class Base64
         }   // end try
         catch( java.io.IOException e )
         {
-            e.printStackTrace();
+            logger.error(e);
             obj = null;
         }   // end catch
         catch( java.lang.ClassNotFoundException e )
         {
-            e.printStackTrace();
+            logger.error(e);
             obj = null;
         }   // end catch
         

@@ -33,6 +33,7 @@ import javax.swing.tree.TreePath;
 
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -41,7 +42,8 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class MixedTopicGuiWrapper {
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MixedTopicGuiWrapper.class);
+	
     public static final String TOPIC_RENDERS_OPTION_KEY = "gui.topicRenders";
 
     public static final int TOPIC_RENDERS_SL = 100;
@@ -104,7 +106,7 @@ public class MixedTopicGuiWrapper {
             }
         }
         catch(Exception e){
-            e.printStackTrace(); // TODO EXCEPTION
+            logger.error(e);
             return "[Exception retrieving name]";
         }
     }
@@ -166,7 +168,7 @@ public class MixedTopicGuiWrapper {
             }
         }
         catch(Exception e){
-            e.printStackTrace(); // TODO EXCEPTION
+        	logger.error(e);
             return "[Exception retrieving name]";
         }
     }

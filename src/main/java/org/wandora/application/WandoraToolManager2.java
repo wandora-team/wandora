@@ -69,6 +69,7 @@ import org.wandora.application.tools.project.LoadWandoraProject;
 import org.wandora.application.tools.project.MergeWandoraProject;
 import org.wandora.utils.JarClassLoader;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -76,9 +77,8 @@ import org.wandora.utils.Options;
  * @author akivela
  */
 public class WandoraToolManager2 extends AbstractWandoraTool {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolManager2.class);
 
 
 	public static final boolean ADDITIONAL_DEBUG = false;
@@ -271,12 +271,12 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
                     }
                     catch(Exception e) {
                         if(ADDITIONAL_DEBUG) System.out.println("Rejecting tool. Exception '" + e.toString() + "' occurred while investigating class '" + toolClass + "'.");
-                        //e.printStackTrace();
+                        //logger.error(e);
                     }
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         
@@ -359,14 +359,14 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
                             }
                             catch(Exception ex) {
                                 if(ADDITIONAL_DEBUG) System.out.println("Rejecting tool. Exception '" + ex.toString() + "' occurred while investigating '" + classFileName + "'.");
-                                //ex.printStackTrace();
+                                //logger.error(ex);
                             }
                         }
                     }
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         
@@ -418,9 +418,9 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
                     }
                 }
             }catch(MalformedURLException mue){
-                mue.printStackTrace();
+            	logger.error(mue);
             }catch(IOException ioe){
-                ioe.printStackTrace();
+            	logger.error(ioe);
             }
         }
     }

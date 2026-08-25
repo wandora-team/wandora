@@ -49,12 +49,14 @@ import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author olli
  */
 public class SQLProxyClient {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SQLProxyClient.class);
     
     private boolean useSSL=false;
     private Socket socket;
@@ -118,7 +120,9 @@ public class SQLProxyClient {
             try{
                 key=java.net.URLDecoder.decode(key,"UTF-8");
                 value=java.net.URLDecoder.decode(value,"UTF-8");
-            }catch(UnsupportedEncodingException uee){uee.printStackTrace();}
+            }catch(UnsupportedEncodingException uee){
+            	logger.error(uee);
+            }
 
             if(key.equals("compress")){
                 if(value.equalsIgnoreCase("false") || value.equals("0") || value.equalsIgnoreCase("no"))

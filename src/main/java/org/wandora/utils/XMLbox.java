@@ -37,6 +37,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -48,6 +49,7 @@ import org.xml.sax.SAXException;
 
 
 public class XMLbox {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(XMLbox.class);
 
     
     
@@ -73,7 +75,7 @@ public class XMLbox {
     	    Document doc = parser.getDocument();
             return doc;
         } catch( Exception e ) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -423,7 +425,7 @@ public class XMLbox {
             str = HTMLEntitiesCoder.decode(str);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return str;
     }
@@ -436,7 +438,7 @@ public class XMLbox {
             str = xml2Text(doc);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return str;
     }
@@ -511,7 +513,7 @@ public class XMLbox {
             tidyContent = tidyOutput.toString();
         }
         catch(Error er) {
-            er.printStackTrace();
+            logger.error(er);
         }
         return tidyContent;
     }

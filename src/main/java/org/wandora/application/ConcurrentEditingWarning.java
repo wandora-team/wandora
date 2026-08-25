@@ -30,6 +30,7 @@ package org.wandora.application;
 
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -37,8 +38,8 @@ import org.wandora.topicmap.TopicMapException;
  * @author  olli
  */
 public class ConcurrentEditingWarning extends javax.swing.JDialog {
-	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ConcurrentEditingWarning.class);
 	
     
     /** Creates new form ConcurrentEditingWarning */
@@ -56,7 +57,7 @@ public class ConcurrentEditingWarning extends javax.swing.JDialog {
                 buf.append(removed[i].getBaseName()+" ("+removed[i].getSubjectIdentifiers().iterator().next()+")\n");
             }
         }catch(TopicMapException tme){
-            tme.printStackTrace(); // TODO EXCEPTION
+        	logger.error(tme);
         }
         failedTextArea.setText(buf.toString());
         this.setSize(300,400);

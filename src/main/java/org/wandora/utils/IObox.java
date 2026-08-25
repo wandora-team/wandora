@@ -71,6 +71,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import org.wandora.application.Wandora;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -80,6 +81,8 @@ import org.wandora.application.Wandora;
  * @author  akivela
  */
 public class IObox extends java.lang.Object {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(IObox.class);
+	
 
     /** Creates new IObox */
     private IObox() {
@@ -90,11 +93,6 @@ public class IObox extends java.lang.Object {
     
     
     // ------------------------------------------------------------------ IO ---
-    
-    
-    
-    
-    
     // -------------------------------------------------------------------------
     
     
@@ -223,7 +221,7 @@ public class IObox extends java.lang.Object {
             return resource;
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return "";
     }
@@ -466,7 +464,7 @@ public class IObox extends java.lang.Object {
             return getFilesAsHash(fileName, p, new ArrayList<>(), depth, space);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return new LinkedHashSet<>();
     }
@@ -490,7 +488,7 @@ public class IObox extends java.lang.Object {
                                 }
                             }
                             catch (Exception e) {
-                                e.printStackTrace();
+                                logger.error(e);
                             }
                         }
                     }
@@ -508,7 +506,7 @@ public class IObox extends java.lang.Object {
                             }
                         }
                         catch (Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                 }
@@ -539,7 +537,7 @@ public class IObox extends java.lang.Object {
             return countFiles(fileName, p, new ArrayList<>(), depth, space);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return -1;
     }
@@ -578,7 +576,7 @@ public class IObox extends java.lang.Object {
                             }
                         }
                         catch (Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                 }
@@ -607,7 +605,7 @@ public class IObox extends java.lang.Object {
             return findFile(fileName, p, new ArrayList<>(), depth);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -633,7 +631,7 @@ public class IObox extends java.lang.Object {
                             }
                         }
                         catch (Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                 }
@@ -648,7 +646,7 @@ public class IObox extends java.lang.Object {
                         }
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -672,7 +670,7 @@ public class IObox extends java.lang.Object {
             return findFile(fileName, p, new ArrayList<>(), depth);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -698,7 +696,7 @@ public class IObox extends java.lang.Object {
                             }
                         }
                         catch (Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                 }
@@ -713,7 +711,7 @@ public class IObox extends java.lang.Object {
                         }
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -779,7 +777,7 @@ public class IObox extends java.lang.Object {
             return getOldestOrYoungestFile(baseName, p, oldest);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -825,7 +823,7 @@ public class IObox extends java.lang.Object {
                         }
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -971,7 +969,7 @@ public class IObox extends java.lang.Object {
                     }
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
             else {
@@ -991,7 +989,7 @@ public class IObox extends java.lang.Object {
                     return true;
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
                 finally {
                     try { if(in != null) in.close(); }
@@ -1015,7 +1013,7 @@ public class IObox extends java.lang.Object {
                 if(sw.toString().indexOf("Server returned HTTP response code: 401") != -1) return true;
             }
             catch (Exception ex) {
-                ex.printStackTrace();
+                logger.error(ex);
             }
         }
         return false;
@@ -1344,10 +1342,16 @@ public class IObox extends java.lang.Object {
     public static String getFileFromURL(String url){
         if(url.startsWith("file:")){
             url=url.substring("file:".length());
-            while(url.startsWith("//")) url=url.substring(1);
-            try{
+            while(url.startsWith("//")) {
+            	url=url.substring(1);
+            }
+            try {
                 return URLDecoder.decode(url, "UTF-8");
-            }catch(UnsupportedEncodingException uee){uee.printStackTrace();return null;}
+            } 
+            catch(UnsupportedEncodingException uee){
+            	logger.error(uee);
+            	return null;
+        	}
         }
         else return null;
     }

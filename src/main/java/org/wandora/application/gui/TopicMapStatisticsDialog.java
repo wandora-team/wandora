@@ -40,6 +40,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapStatOptions;
 import org.wandora.topicmap.layered.Layer;
 import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -47,10 +48,8 @@ import org.wandora.utils.ClipboardBox;
  * @author  akivela
  */
 public class TopicMapStatisticsDialog extends javax.swing.JDialog {
-
-
 	private static final long serialVersionUID = 1L;
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicMapStatisticsDialog.class);
 	
 	private Wandora wandora = null;
     private TopicMap map = null;
@@ -118,7 +117,7 @@ public class TopicMapStatisticsDialog extends javax.swing.JDialog {
                     statString = map.getStatistics(new TopicMapStatOptions(statOptions[i])).toString();
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
                 stats.append("\t").append(statString).append("\n");
                 statValue = new SimpleLabel(statString);
@@ -135,7 +134,7 @@ public class TopicMapStatisticsDialog extends javax.swing.JDialog {
                 statPanel.add(js, gbc);             
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }

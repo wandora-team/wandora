@@ -41,6 +41,7 @@ import javax.swing.JPopupMenu;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraMenuManager;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -50,8 +51,8 @@ import org.wandora.application.WandoraMenuManager;
  * @author akivela
  */
 public class LogoAnimation extends JPanel implements Runnable, MouseListener {
-	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LogoAnimation.class);
 	
 
     public static final int PASSIVE_SLEEP_TIME = 200000;
@@ -160,7 +161,7 @@ public class LogoAnimation extends JPanel implements Runnable, MouseListener {
             g.drawImage(images[currentImageIndex],0,0,this);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     

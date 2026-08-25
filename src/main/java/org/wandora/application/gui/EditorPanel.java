@@ -47,6 +47,7 @@ import org.wandora.application.gui.topicpanels.TopicPanel;
 import org.wandora.application.tools.ChainExecuter;
 import org.wandora.application.tools.extractors.files.SimpleFileExtractor;
 import org.wandora.utils.DnDBox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.JPanelWithBackground;
 
 
@@ -55,8 +56,8 @@ import org.wandora.utils.swing.JPanelWithBackground;
  * @author  akivela
  */
 public class EditorPanel extends JPanelWithBackground implements DropTargetListener, DragGestureListener {
-    
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(EditorPanel.class);
 	
     private Object dropContext = null;
     protected Wandora parent = null;
@@ -164,10 +165,10 @@ public class EditorPanel extends JPanelWithBackground implements DropTargetListe
                                 acceptFileList(files);
                             }
                             catch(Exception e) {
-                                e.printStackTrace();
+                            	logger.error(e);
                             }
                             catch(Error err) {
-                                err.printStackTrace();
+                            	logger.error(err);
                             }
                         }
                     };
@@ -175,10 +176,10 @@ public class EditorPanel extends JPanelWithBackground implements DropTargetListe
                 }
             }
             catch(Exception ex){
-                ex.printStackTrace();
+            	logger.error(ex);
             }
             catch(Error err) {
-                err.printStackTrace();
+            	logger.error(err);
             }
         }
         this.setBorder(null);

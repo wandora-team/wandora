@@ -35,6 +35,7 @@ import org.wandora.topicmap.SchemaBox;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -43,10 +44,8 @@ import org.wandora.topicmap.TopicMapException;
  * @author  olli
  */
 public class TopicsOfTypeSelector extends javax.swing.JPanel implements TopicSelector, Runnable {
-    
-
 	private static final long serialVersionUID = 1L;
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicsOfTypeSelector.class);
 	
 	private DefaultListModel<ListWrapper> listModel;
     private Topic typeTopic;
@@ -72,7 +71,7 @@ public class TopicsOfTypeSelector extends javax.swing.JPanel implements TopicSel
         if(name==null) {
             try{
                 this.name=typeTopic.getDisplayName("en");
-            }catch(TopicMapException tme){tme.printStackTrace();}
+            }catch(TopicMapException tme){logger.error(tme);}
         }
         else this.name=name;
         this.useSchema=useSchema;
@@ -94,7 +93,7 @@ public class TopicsOfTypeSelector extends javax.swing.JPanel implements TopicSel
                 }
             }
         }
-        catch(TopicMapException tme){tme.printStackTrace();}
+        catch(TopicMapException tme){logger.error(tme);}
         list.setModel(newModel);
     }
 
@@ -133,7 +132,7 @@ public class TopicsOfTypeSelector extends javax.swing.JPanel implements TopicSel
             else temp=typeTopic.getTopicMap().getTopicsOfType(typeTopic);
             topicsOfType=TMBox.sortTopics(temp,null);
             if(topicsOfType.size()<100) forcePopulate=true;
-        }catch(TopicMapException tme){tme.printStackTrace();}
+        }catch(TopicMapException tme){logger.error(tme);}
         while(running){
             long delay=0;
             long t=System.currentTimeMillis();
@@ -277,7 +276,7 @@ public class TopicsOfTypeSelector extends javax.swing.JPanel implements TopicSel
                 String r=t.getBaseName();
                 if(r!=null) return r;
                 else return t.getOneSubjectIdentifier().toExternalForm();
-          }catch(TopicMapException tme){tme.printStackTrace(); return "Exception";}    
+          }catch(TopicMapException tme){logger.error(tme); return "Exception";}    
         }
     }
 }

@@ -57,6 +57,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -66,8 +67,8 @@ import org.wandora.utils.Tuples.T2;
  * @author olli
  */
 public class GetTopicButton extends SimpleButton {
-	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GetTopicButton.class);
 
     protected Topic selectedTopic = null;
     protected String originalSubjectIdentifier = null;
@@ -223,7 +224,7 @@ public class GetTopicButton extends SimpleButton {
             }
         }
         catch(TopicMapException tme){
-            tme.printStackTrace(); // TODO EXCEPTION
+        	logger.error(tme);
         }
     }
     
@@ -400,8 +401,12 @@ public class GetTopicButton extends SimpleButton {
                 revalidate();
                 return true;
             }
-            catch(TopicMapException tme) { tme.printStackTrace(); }
-            catch(Exception ce){}
+            catch(TopicMapException tme) { 
+            	logger.error(tme);
+        	}
+            catch(Exception ce) {
+            	logger.error(ce);
+            }
             return false;
         }
 

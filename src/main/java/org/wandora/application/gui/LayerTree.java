@@ -95,6 +95,7 @@ import org.wandora.topicmap.memory.TopicMapImpl;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
 import org.wandora.utils.Delegate;
 import org.wandora.utils.DnDBox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.DragJTree;
 import org.wandora.utils.swing.SwingTools;
 
@@ -105,10 +106,8 @@ import org.wandora.utils.swing.SwingTools;
  * @author olli
  */
 public class LayerTree extends DragJTree {
-
-	
 	private static final long serialVersionUID = 1L;
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LayerTree.class);
     
     private static Color bgColor=UIConstants.defaultInactiveBackground; // new Color(238,238,238);
     private static Color selectedColor=UIConstants.defaultActiveBackground; // new Color(197,197,197);
@@ -337,7 +336,7 @@ public class LayerTree extends DragJTree {
                 menu=getContextMenuFor(rootStack);
                 try{
                     lastClickedLayer=new Layer(rootStack,"root",null);
-                }catch(TopicMapException tme){tme.printStackTrace();}
+                }catch(TopicMapException tme){ logger.error(tme); }
             }
         }
         if(menu!=null) menu.show((JComponent)source,x,y);
@@ -520,7 +519,7 @@ public class LayerTree extends DragJTree {
                     containerStack.addLayer(layer);
                 }
                 catch(TopicMapException tme){
-                    tme.printStackTrace(); // TODO EXCEPTION
+                	logger.error(tme);
                 }
                 resetLayers();
                 jd.setVisible(false);
@@ -835,7 +834,7 @@ public class LayerTree extends DragJTree {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
 
@@ -875,7 +874,7 @@ public class LayerTree extends DragJTree {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         
@@ -987,7 +986,7 @@ public class LayerTree extends DragJTree {
             
         }
         catch(TopicMapException tme){
-            tme.printStackTrace();
+        	logger.error(tme);
         }
     }
 
@@ -1388,7 +1387,7 @@ public class LayerTree extends DragJTree {
                 changed=topicMap.isTopicMapChanged();
             } 
             catch(TopicMapException tme) {
-                tme.printStackTrace(); // TODO EXCEPTION
+            	logger.error(tme);
             }
 
             if(changed) {
@@ -1598,7 +1597,7 @@ public class LayerTree extends DragJTree {
             });
             w.setVisible(true);        
         }catch(Exception e){
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
 }

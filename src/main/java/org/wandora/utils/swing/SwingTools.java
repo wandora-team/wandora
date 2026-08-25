@@ -35,11 +35,13 @@ import java.awt.EventQueue;
 import javax.swing.SwingUtilities;
 
 import org.wandora.utils.Semaphore;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author olli
  */
 public class SwingTools {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SwingTools.class);
     
     /**
      * Use this to debug access to Swing objects outside event dispatch thread.
@@ -50,7 +52,7 @@ public class SwingTools {
             try{
                 throw new Exception("Not event dispatch thread");
             }catch(Exception e){
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -189,7 +191,7 @@ public class SwingTools {
                         run.run();
                     }
                     catch(Exception e){
-                        e.printStackTrace();
+                        logger.error(e);
                         exception=e;
                     }
                     int v=0;

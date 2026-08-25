@@ -29,6 +29,7 @@ package org.wandora.utils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * <p>
@@ -53,6 +54,8 @@ import org.w3c.dom.NodeList;
  * @author  olli
  */
 public class XMLParamIf implements XMLParamAware {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(XMLParamIf.class);
+	
     private Object object;
     public XMLParamIf(){
     }
@@ -82,7 +85,7 @@ public class XMLParamIf implements XMLParamAware {
                 object=processor.createObject(els);
             }
         }catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 

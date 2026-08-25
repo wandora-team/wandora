@@ -46,6 +46,7 @@ import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleMenuItem;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -53,7 +54,8 @@ import org.wandora.utils.Options;
  * @author akivela
  */
 public class TopicTreeTabManager {
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicTreeTabManager.class);
+	
     private JPopupMenu tabPopupMenu = null;
 
     // how many tabs before and after configurable topic trees
@@ -423,7 +425,7 @@ public class TopicTreeTabManager {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
 

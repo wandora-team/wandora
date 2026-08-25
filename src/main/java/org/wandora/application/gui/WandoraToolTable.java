@@ -51,6 +51,7 @@ import org.wandora.application.WandoraToolManager2;
 import org.wandora.application.WandoraToolManager2.ToolInfo;
 import org.wandora.application.gui.table.TopicTableSorter;
 import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.TableSorter;
 
 
@@ -60,9 +61,8 @@ import org.wandora.utils.swing.TableSorter;
  * @author akivela
  */
 public class WandoraToolTable extends JTable implements MouseListener, ActionListener /*, DragSourceListener , DragGestureListener*/ {
-
-    
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolTable.class);
 
 	private Wandora wandora = null;
     
@@ -147,7 +147,7 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
         }
         catch(Exception e) {
             if(wandora != null) wandora.handleError(e);
-            else e.printStackTrace();
+            else logger.error(e);
         }
         
     }
@@ -240,10 +240,10 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
                 }
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
             catch(Error er) {
-                er.printStackTrace();
+            	logger.error(er);
             }
         }
         
@@ -261,10 +261,10 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
                 }
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
             catch(Error er) {
-                er.printStackTrace();
+            	logger.error(er);
             }
         }
         
@@ -288,10 +288,10 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
                 }
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
             catch(Error er) {
-                er.printStackTrace();
+            	logger.error(er);
             }
         }
         
@@ -313,10 +313,10 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
                 }
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
             catch(Error er) {
-                er.printStackTrace();
+            	logger.error(er);
             }
         }
         
@@ -333,7 +333,7 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
                 }
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
         }
     }
@@ -379,7 +379,7 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
             }
             catch (Exception e) {
                 if(wandora != null) wandora.handleError(e);
-                else e.printStackTrace();
+                else logger.error(e);
             }
             return null;
         }
@@ -394,7 +394,7 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
             }
             catch (Exception e) {
                 if(wandora != null) wandora.handleError(e);
-                e.printStackTrace();
+                logger.error(e);
             }
             return "ERROR";
         }

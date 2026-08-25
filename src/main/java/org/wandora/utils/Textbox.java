@@ -42,6 +42,8 @@ import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.rtf.RTFEditorKit;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 
 
 /**
@@ -52,6 +54,8 @@ import javax.swing.text.rtf.RTFEditorKit;
  * @author akikivela
  */
 public class Textbox {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Textbox.class);
+	
     
     /** Creates a new instance of TextTools */
     public Textbox() {
@@ -194,7 +198,7 @@ public class Textbox {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         
         return sliceList;
@@ -389,8 +393,8 @@ public class Textbox {
              }
         }
         catch (Exception e) { 
-            System.out.println("Catched exception in remove quotes (Textbox)");
-            e.printStackTrace();
+            logger.error("Catched exception in remove quotes (Textbox)");
+            logger.error(e);
         }
         return quoted;
     }
@@ -467,7 +471,7 @@ public class Textbox {
             for (int i=0; i<v.size(); i++) {
                 try {
                     a[i] = (String) v.elementAt(i);
-                } catch (Exception e) { e.printStackTrace(); }
+                } catch (Exception e) { logger.error(e); }
             }
         }
         return a;
@@ -589,7 +593,7 @@ public class Textbox {
             return doc.getText(0,doc.getLength());
         }
         catch(BadLocationException e) {
-            e.printStackTrace();
+            logger.error(e);
             return null;
         }
     }

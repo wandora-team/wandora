@@ -48,6 +48,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.GripCollections;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -57,6 +58,7 @@ import org.wandora.utils.GripCollections;
  * @author olli, akivela
  */
 public class TopicTreeModel implements TreeModel {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicTreeModel.class);
 
     private Map<TopicGuiWrapper, TopicGuiWrapper[]> children;
     private Set<TreeModelListener> listeners;
@@ -76,14 +78,14 @@ public class TopicTreeModel implements TreeModel {
         children=new ConcurrentHashMap<>();
         listeners=new LinkedHashSet<>();
         rootNode=new TopicGuiWrapper(rootTopic);
-        visibleTopics=new LinkedHashSet<Locator>();
+        visibleTopics=new LinkedHashSet<>();
         visibleTopicCount = 0;
         try {
             visibleTopics.addAll(rootTopic.getSubjectIdentifiers());
             visibleTopicCount++;
         }
         catch(TopicMapException tme){
-        	tme.printStackTrace();
+        	logger.error(tme);
     	}
     }
 
@@ -186,7 +188,7 @@ public class TopicTreeModel implements TreeModel {
                         }
                     }
                     catch(Exception tme) {
-                        tme.printStackTrace();
+                    	logger.error(tme);
                     }
                 }
                 if(instancesIcon!=null){
@@ -202,7 +204,7 @@ public class TopicTreeModel implements TreeModel {
                         }
                     }
                     catch(Exception tme) {
-                        tme.printStackTrace();
+                    	logger.error(tme);
                     }
                 }
                 TopicGuiWrapper[] tsa=new TopicGuiWrapper[0];
@@ -219,7 +221,7 @@ public class TopicTreeModel implements TreeModel {
                     //System.out.println("visible topics (locators): "+visibleTopics.size());
                 }
                 catch(Exception tme) {
-                    tme.printStackTrace();
+                    logger.error(tme);
                 }
                 synchronized(waitObject){
                     synchronized(expansionWaiter) {
@@ -243,7 +245,7 @@ public class TopicTreeModel implements TreeModel {
                 waitObject.wait(2000);
             }
             catch(InterruptedException ie){
-            	ie.printStackTrace();
+            	logger.error(ie);
         	}
 
             state[0]|=2;
@@ -266,7 +268,7 @@ public class TopicTreeModel implements TreeModel {
                 getChildren(node);
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
         }
     }
@@ -346,7 +348,7 @@ public class TopicTreeModel implements TreeModel {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }

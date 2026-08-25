@@ -32,19 +32,21 @@ package org.wandora.application;
 import javax.script.ScriptException;
 
 import org.wandora.utils.ScriptManager;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author olli
  */
 public class WandoraScriptManager extends ScriptManager {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraScriptManager.class);
     
     public void showScriptExceptionDialog(String scriptName,ScriptException e){
-        System.out.println("Script: "+scriptName+" Line: "+e.getLineNumber()+" Column: "+e.getColumnNumber());
-        e.printStackTrace();
+    	logger.error("Script: "+scriptName+" Line: "+e.getLineNumber()+" Column: "+e.getColumnNumber());
+        logger.error(e);
         Throwable cause=e.getCause();
         if(cause!=null) {
-            System.out.println("Cause:");
-            cause.printStackTrace();
+        	logger.error("Cause:");
+            logger.error(cause);
         }
     }
 }

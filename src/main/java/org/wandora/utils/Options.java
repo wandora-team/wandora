@@ -39,6 +39,8 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 
 
 
@@ -53,6 +55,7 @@ import java.util.Map;
  * @author  akivela
  */
 public class Options {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Options.class);
     
     private Map<String, String> options;
     private String resource;
@@ -75,7 +78,7 @@ public class Options {
         if(optionsResource.startsWith("http")) {
             //System.out.println("Reading options from URL '" + resource + "'.");
             try { optionsString = IObox.doUrl(new URI(resource).toURL()); }
-            catch (Exception e) { e.printStackTrace(); }
+            catch (Exception e) { logger.error(e); }
         }
         else if(optionsResource.startsWith("file")) {
             try {
@@ -84,14 +87,14 @@ public class Options {
                 optionsString = IObox.loadFile(filename);
                 //System.out.println("optionsString==" +optionsString);
             }
-            catch (Exception e) { e.printStackTrace();  }
+            catch (Exception e) { logger.error(e);  }
         }
         else {
             //System.out.println("Reading options from resource '" + resource + "'.");
             optionsString = IObox.loadResource(resource);
         }
         try { parseOptions(optionsString); }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) { logger.error(e); }
     }
     
     
@@ -170,7 +173,7 @@ public class Options {
                 return options.get(key);
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return null;
@@ -448,18 +451,18 @@ public class Options {
             try {
                 String filename=IObox.getFileFromURL(resource);
 //                String filename = resource.substring(7);
-                try { IObox.moveFile(filename, filename + ".bak"); } catch (Exception e) { e.printStackTrace(); }
+                try { IObox.moveFile(filename, filename + ".bak"); } catch (Exception e) { logger.error(e); }
                 String optionsXML = XMLbox.wrapMap2XML(options);
                 IObox.saveFile(filename, optionsXML);
             }
-            catch (Exception e) { e.printStackTrace(); }
+            catch (Exception e) { logger.error(e); }
         }
         else {
             String path = "./resources/";
             String resourcePath = path + resource;
             String optionsXML = XMLbox.wrapMap2XML(options);
-            try { IObox.moveFile(resourcePath, resourcePath + ".bak"); } catch (Exception e) { e.printStackTrace(); }
-            try { IObox.saveFile(resourcePath, optionsXML); } catch (Exception e) { e.printStackTrace(); }
+            try { IObox.moveFile(resourcePath, resourcePath + ".bak"); } catch (Exception e) { logger.error(e); }
+            try { IObox.saveFile(resourcePath, optionsXML); } catch (Exception e) { logger.error(e); }
         }
     }
 

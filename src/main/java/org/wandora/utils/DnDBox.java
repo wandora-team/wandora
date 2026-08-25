@@ -31,11 +31,14 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 /**
  *
  * @author olli
  */
 public class DnDBox {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DnDBox.class);
 
     // At least Ubuntu uses this data flavor
     public static final DataFlavor uriListFlavor;
@@ -45,7 +48,7 @@ public class DnDBox {
              f = new DataFlavor("text/uri-list; class=java.lang.String");
         }
         catch(ClassNotFoundException cnfe) {
-            cnfe.printStackTrace();
+            logger.error(cnfe);
         }
         uriListFlavor=f;
     }
@@ -99,22 +102,22 @@ public class DnDBox {
                     return files;
                 }
                 catch(Exception ex){
-                    ex.printStackTrace();
+                    logger.error(ex);
                 }
                 return new ArrayList<File>();
             }
         }
         catch(IOException ioe) {
-            ioe.printStackTrace();
+            logger.error(ioe);
         }
         catch(UnsupportedFlavorException ufe) {
-            ufe.printStackTrace();
+            logger.error(ufe);
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
         }
         catch(Error err) {
-            err.printStackTrace();
+            logger.error(err);
         }
         return null;
     }
@@ -131,16 +134,16 @@ public class DnDBox {
             }
         }
         catch(IOException ioe) {
-            ioe.printStackTrace();
+            logger.error(ioe);
         }
         catch(UnsupportedFlavorException ufe) {
-            ufe.printStackTrace();
+            logger.error(ufe);
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
         }
         catch(Error err) {
-            err.printStackTrace();
+            logger.error(err);
         }
         return null;
     }

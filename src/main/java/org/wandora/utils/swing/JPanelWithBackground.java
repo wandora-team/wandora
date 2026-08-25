@@ -42,13 +42,15 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 /**
  *
  * @author akivela
  */
 public class JPanelWithBackground extends JPanel {
-    
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(JPanelWithBackground.class);
     
     private URL url;
     private File file;
@@ -92,7 +94,7 @@ public class JPanelWithBackground extends JPanel {
                     }
                     catch (Exception e3) {
                         //System.out.println("Unable to initialize ImagePanel with "+ imageLocator);
-                        e2.printStackTrace();
+                        logger.error(e3);
                     }
                 }
             }

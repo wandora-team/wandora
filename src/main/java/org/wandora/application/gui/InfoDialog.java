@@ -44,6 +44,7 @@ import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -51,8 +52,8 @@ import org.wandora.utils.ClipboardBox;
  * @author  akivela
  */
 public class InfoDialog extends JDialog implements WandoraToolLogger, ActionListener, MouseListener {
-    
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(InfoDialog.class);
 	
     private Wandora wandora;
     private boolean locked = false;
@@ -242,7 +243,7 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, ActionList
                                 containerPanel.removeAll();
                             }
                             catch(Exception e) {
-                                // e.printStackTrace();
+                            	logger.error(e);
                             }
                             containerPanel.add(waitPanel, BorderLayout.CENTER);
                             String historyString = getHistory();

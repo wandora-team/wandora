@@ -43,6 +43,7 @@ import org.wandora.application.tools.navigate.OpenTopic;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -57,6 +58,8 @@ import org.wandora.utils.Tuples.T2;
  * </p>
  */
 public class LocatorHistory {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LocatorHistory.class);
+	
     private static final int DEFAULT_MAX_SIZE = 999;
     
     private List<T2<Locator,Integer>> history;
@@ -205,7 +208,7 @@ public class LocatorHistory {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
         }
@@ -240,7 +243,7 @@ public class LocatorHistory {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
         }

@@ -37,6 +37,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
 import org.wandora.application.gui.UIBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -45,6 +46,8 @@ import org.wandora.application.gui.UIBox;
 
 
 public class DataURL {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DataURL.class);
+	
     public static String defaultStringEncoding = "utf-8";
     
     private byte[] data = new byte[] { };
@@ -98,7 +101,7 @@ public class DataURL {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
     
@@ -141,7 +144,7 @@ public class DataURL {
                 setData(Files.readAllBytes(file.toPath()));
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -152,7 +155,7 @@ public class DataURL {
                 setData(IOUtils.toByteArray(url.openStream()));
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -200,7 +203,7 @@ public class DataURL {
                     dataURL.append(new String(data,defaultStringEncoding));
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -222,7 +225,7 @@ public class DataURL {
                     dataURL.append(new String(data,defaultStringEncoding));
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -322,7 +325,7 @@ public class DataURL {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return tempFile;
     }

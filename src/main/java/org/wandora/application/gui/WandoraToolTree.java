@@ -65,6 +65,7 @@ import org.wandora.application.WandoraToolSet;
 import org.wandora.application.gui.simple.SimpleTree;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -72,10 +73,8 @@ import org.wandora.utils.Textbox;
  * @author akivela
  */
 public class WandoraToolTree extends SimpleTree implements MouseListener, TreeModelListener, TreeSelectionListener, ActionListener /*, DragSourceListener, DragGestureListener*/ {
-    
-
 	private static final long serialVersionUID = 1L;
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolTree.class);
 	
 	private Wandora wandora;
     private MouseEvent mouseEvent;
@@ -309,10 +308,10 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                 }
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
             catch(Error er) {
-                er.printStackTrace();
+            	logger.error(er);
             }
         }
         
@@ -331,10 +330,10 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                 }
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
             catch(Error er) {
-                er.printStackTrace();
+            	logger.error(er);
             }
         }
         
@@ -407,10 +406,10 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                 }
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
             catch(Error er) {
-                er.printStackTrace();
+            	logger.error(er);
             }
         }
         
@@ -433,10 +432,10 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                 }
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
             catch(Error er) {
-                er.printStackTrace();
+            	logger.error(er);
             }
         }
         
@@ -453,7 +452,7 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                 }
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
         }
         
@@ -532,7 +531,7 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -652,7 +651,7 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
             
             return c;
@@ -760,7 +759,7 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                         scrollPathToVisible(new TreePath(movedNode.getPath()));
                     }
                     catch(Exception e){
-                        e.printStackTrace();
+                    	logger.error(e);
                         return false;
                     }
                     
@@ -768,9 +767,8 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                     return true;
                 }
             }
-            //catch(UnsupportedFlavorException ufe){ufe.printStackTrace();}
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
             return false;
         }

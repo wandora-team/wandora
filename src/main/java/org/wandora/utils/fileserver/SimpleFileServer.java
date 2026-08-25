@@ -41,6 +41,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import javax.net.ssl.SSLServerSocketFactory;
+
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  * For the ssl to work you need to create a certificate in command prompt with the
  * keytool utility (should be in jdk bin directory).
@@ -71,6 +73,7 @@ import javax.net.ssl.SSLServerSocketFactory;
  
  */
 public class SimpleFileServer extends Thread {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleFileServer.class);
 
     private int port;
     private boolean running;
@@ -173,11 +176,11 @@ public class SimpleFileServer extends Thread {
                     Thread t=new ClientThread(s);
                     t.start();
                 }catch(Exception e){
-                    if(printExceptions) e.printStackTrace();
+                    if(printExceptions) logger.error(e);
                 }
             }
         }catch(Exception e){
-            if(printExceptions) e.printStackTrace();
+            if(printExceptions) logger.error(e);
         }
     }
     
@@ -337,7 +340,7 @@ public class SimpleFileServer extends Thread {
                                             }
                                         }
                                         catch(IOException ioe){
-                                            ioe.printStackTrace();
+                                            logger.error(ioe);
                                             break;
                                         }
                                     }
@@ -405,13 +408,13 @@ public class SimpleFileServer extends Thread {
                     parsed=parseLine(in);
                 }
             }catch(Exception e){
-                if(printExceptions) e.printStackTrace();
+                if(printExceptions) logger.error(e);
             }
             finally{
                 try{
                     socket.close();
                 }catch(IOException ioe){
-                    ioe.printStackTrace();
+                    logger.error(ioe);
                 }
             }
         }

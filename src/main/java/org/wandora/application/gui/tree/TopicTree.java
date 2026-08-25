@@ -76,6 +76,7 @@ import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.GripCollections;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -91,10 +92,8 @@ import org.wandora.utils.Tuples.T2;
 
 
 public class TopicTree extends SimpleTree implements Clipboardable, MouseListener, TopicMapListener /*, DragSourceListener, DragGestureListener*/ {
-   
-
 	private static final long serialVersionUID = 1L;
-	
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicTree.class);
 	
 	private boolean needsRefresh;
     private ArrayList<TopicTreeRelation> selectedAs;
@@ -539,7 +538,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
             //this.setSelectionModel(sm);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
          **/
     }
@@ -676,7 +675,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
             }
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
     }
 
@@ -694,7 +693,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
             handlePopupMouseEvent(mouseEvent);
         }
@@ -899,7 +898,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
                         }
                     }
                     catch(TopicMapException tme){
-                        tme.printStackTrace();
+                    	logger.error(tme);
                         return false;
                     }
                     doRefresh();
@@ -925,13 +924,13 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
                         return true;
                     }
                     catch(TopicMapException tme){
-                        tme.printStackTrace();
+                    	logger.error(tme);
                         return false;
                     }
                 }
             }
-            catch(UnsupportedFlavorException ufe){ufe.printStackTrace();}
-            catch(IOException ioe){ioe.printStackTrace();}
+            catch(UnsupportedFlavorException ufe){ logger.error(ufe); }
+            catch(IOException ioe){ logger.error(ioe); }
             return false;
         }
 

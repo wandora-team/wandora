@@ -54,6 +54,7 @@ import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.utils.EasyReplaceExpression;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -63,9 +64,8 @@ import org.wandora.utils.Options;
 
 
 public class RegularExpressionEditor extends javax.swing.JDialog implements ActionListener {
-
-	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RegularExpressionEditor.class);
 
 	
 	public static final String OPTIONS_PREFIX = "regexp.";
@@ -591,7 +591,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return null;
     }
@@ -615,7 +615,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return false;
     }
@@ -664,7 +664,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -786,7 +786,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
                 parsePatterns(s);
             }
             catch (Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -805,7 +805,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
                 parsePatterns(s);
             }
             catch (Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -834,7 +834,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -865,7 +865,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }

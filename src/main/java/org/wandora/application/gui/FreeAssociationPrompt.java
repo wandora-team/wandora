@@ -51,6 +51,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.GripCollections;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 
@@ -59,9 +60,8 @@ import org.wandora.utils.swing.GuiTools;
  * @author  olli
  */
 public class FreeAssociationPrompt extends javax.swing.JDialog {
-
-	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(FreeAssociationPrompt.class);
 	
 	
     private static Topic previousAssociationType = null;
@@ -132,9 +132,12 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
         });
         typeButton.setButtonListener(new GetTopicButton.ButtonListener(){
             public void topicChanged(GetTopicButton button){
-                try{
+                try {
                     prefill(false);
-                }catch(TopicMapException tme){tme.printStackTrace();}
+                }
+                catch(TopicMapException tme){ 
+                	logger.error(tme); 
+            	}
             }
         });
         typeButton.addPopupList(new GetTopicButton.PopupListHandler() {
@@ -337,7 +340,7 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
             }
         }
         catch(TopicMapException tme){
-            tme.printStackTrace();
+        	logger.error(tme);
         }
     }//GEN-LAST:event_okButtonActionPerformed
 
@@ -345,7 +348,7 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
         try{
             addPlayer();
         }catch(TopicMapException tme){
-            tme.printStackTrace();
+        	logger.error(tme);
         }
     }//GEN-LAST:event_addPlayerButtonActionPerformed
 
@@ -363,7 +366,7 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
             }
         }
         catch(TopicMapException tme){
-            tme.printStackTrace();
+        	logger.error(tme);
         }
     }//GEN-LAST:event_useDefaultsButtonMouseReleased
 
@@ -395,7 +398,7 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
             }
         }
         catch(TopicMapException tme){
-            tme.printStackTrace();
+        	logger.error(tme);
         }
     }//GEN-LAST:event_usePrevButtonMouseReleased
     

@@ -45,6 +45,7 @@ import javax.swing.text.DefaultEditorKit;
 
 import org.wandora.application.gui.filechooser.WPRFileChooser;
 import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -55,6 +56,8 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
  * @author akivela
  */
 public class UIConstants {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(UIConstants.class);
+	
     public static boolean ANTIALIASING = true;
     
     
@@ -196,10 +199,10 @@ public class UIConstants {
             
         } 
         catch (UnsupportedLookAndFeelException e) {
-           e.printStackTrace();
+        	logger.error(e);
         }
         catch (Exception e) {
-           e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -254,7 +257,7 @@ public class UIConstants {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         */
     }

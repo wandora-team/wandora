@@ -53,6 +53,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapSearchOptions;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -60,6 +61,8 @@ import org.wandora.utils.Textbox;
  * @author  olli, akivela
  */
 public class GenericVelocityHelper {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GenericVelocityHelper.class);
+	
     
     /** Creates a new instance of GenericVelocityHelper */
     public GenericVelocityHelper() {
@@ -74,7 +77,7 @@ public class GenericVelocityHelper {
             if(players.size() > 0) return players.get(0);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -94,7 +97,7 @@ public class GenericVelocityHelper {
                         if(a.getPlayer(role) != null) players.add(a.getPlayer(role));
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -111,7 +114,7 @@ public class GenericVelocityHelper {
                 players.addAll(getPlayersWithRole(topic, roleSI));
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return players;
@@ -129,7 +132,7 @@ public class GenericVelocityHelper {
                     players.addAll(getPlayersWithRole( topic, roleSI ));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -146,7 +149,7 @@ public class GenericVelocityHelper {
                     players.addAll(getPlayersWithRole( topic, roleSI ));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -163,7 +166,7 @@ public class GenericVelocityHelper {
                 players.addAll(getPlayersWithRoles(topic, roleSIs));
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return players;
@@ -179,7 +182,7 @@ public class GenericVelocityHelper {
                 players.addAll(getPlayersWithRoles(topic, roleSIs));
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return players;
@@ -200,7 +203,7 @@ public class GenericVelocityHelper {
                     }
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -223,7 +226,7 @@ public class GenericVelocityHelper {
                         }
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -239,7 +242,7 @@ public class GenericVelocityHelper {
             if(players.size() > 0) return  players.get(0);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -259,7 +262,7 @@ public class GenericVelocityHelper {
                         if(a.getPlayer(role) != null) players.add(a.getPlayer(role));
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -279,7 +282,7 @@ public class GenericVelocityHelper {
                     if(a.getPlayer(role) != null) players.add(a.getPlayer(role));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -297,7 +300,7 @@ public class GenericVelocityHelper {
                 players.addAll(getPlayers(topic, associationTypeSI, roleSI));
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return players;
@@ -326,7 +329,7 @@ public class GenericVelocityHelper {
                         }
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -344,7 +347,7 @@ public class GenericVelocityHelper {
                 players.addAll(getPlayers(topic, associationTypeSI, roleSI, hasRole, hasPlayer));
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return players;
@@ -391,7 +394,7 @@ public class GenericVelocityHelper {
                         }
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -457,7 +460,7 @@ public class GenericVelocityHelper {
                             }
                         }
                         catch (Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                 }
@@ -494,7 +497,7 @@ public class GenericVelocityHelper {
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return selectedTypes;
@@ -530,7 +533,7 @@ public class GenericVelocityHelper {
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return locators;
@@ -544,7 +547,7 @@ public class GenericVelocityHelper {
                 if(urlExists(sl)) return sl;
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return null;
@@ -558,7 +561,7 @@ public class GenericVelocityHelper {
                 newss.add(s.replaceAll(regex, replacement));
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return newss;
@@ -573,7 +576,7 @@ public class GenericVelocityHelper {
                 if(s != null) newss.add(s);
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return newss;
@@ -681,7 +684,7 @@ public class GenericVelocityHelper {
                     temp3.addAll(topicmap.getTopicsOfType(t));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
             for(Topic t : temp3) {
@@ -692,7 +695,7 @@ public class GenericVelocityHelper {
                     }
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -722,7 +725,7 @@ public class GenericVelocityHelper {
                     temp3.addAll(getPlayers(t, associationTypeSI, roleSI, hasRole, hasPlayer));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
             for(Topic t : temp3) {
@@ -733,7 +736,7 @@ public class GenericVelocityHelper {
                     }
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -800,7 +803,7 @@ public class GenericVelocityHelper {
                         }
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -870,7 +873,7 @@ public class GenericVelocityHelper {
                 try{
                     if(a!=null && TMBox.associationVisible(a)) ret.add(a);
                 }catch(Exception e){
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -959,7 +962,7 @@ public class GenericVelocityHelper {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         if(v != null && v.size() > 0 && associationTypeTopic != null && role != null && playerPattern != null) {
             for(Topic t : v) {
@@ -1092,7 +1095,7 @@ public class GenericVelocityHelper {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -1121,7 +1124,7 @@ public class GenericVelocityHelper {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -1145,7 +1148,7 @@ public class GenericVelocityHelper {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return new ArrayList<Topic>();
     }
@@ -1157,7 +1160,7 @@ public class GenericVelocityHelper {
             return topicmap.search(query, new TopicMapSearchOptions(true, false, false, false, false));
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return new ArrayList<Topic>();
     }
@@ -1185,7 +1188,7 @@ public class GenericVelocityHelper {
     
     public static String encodeURL(String s, String enc) {
         try { if(s != null && enc != null) { return java.net.URLEncoder.encode(s, enc); } }
-        catch (Exception e) { e.printStackTrace(); return s; }
+        catch (Exception e) { logger.error(e); return s; }
         return "";
     }
     
@@ -1195,7 +1198,7 @@ public class GenericVelocityHelper {
     
     public static String decodeURL(String s, String enc) {
         try { if(s != null) { return java.net.URLDecoder.decode(s, enc); } }
-        catch (Exception e) { e.printStackTrace(); return s; }
+        catch (Exception e) { logger.error(e); return s; }
         return "";
     }
     
@@ -1295,7 +1298,7 @@ public class GenericVelocityHelper {
                         shouldCapitalize = false;
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -1414,7 +1417,7 @@ public class GenericVelocityHelper {
                     if(iter.hasNext()) sb.append(delimiter);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -1434,7 +1437,7 @@ public class GenericVelocityHelper {
     public static String changeStringEncoding(String s, String sourceenc, String targetenc) {
         if(s != null && targetenc != null && sourceenc != null) {
             try { return new String( s.getBytes(sourceenc), targetenc ); }
-            catch (Exception e) { e.printStackTrace(); }
+            catch (Exception e) { logger.error(e); }
         }
         return s;
     }

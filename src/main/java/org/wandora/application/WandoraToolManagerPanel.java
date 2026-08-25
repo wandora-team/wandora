@@ -41,16 +41,15 @@ import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author  olli
  */
 public class WandoraToolManagerPanel extends javax.swing.JPanel {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolManagerPanel.class);
 
-	
 	public static class WandoraToolListWrapper {
         public T2<WandoraTool,String> tool;
         public WandoraToolListWrapper(T2<WandoraTool,String> tool){
@@ -60,6 +59,7 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
             return tool.e2;
         }
     }
+	
     public static class ComboboxWrapper{
         public WandoraTool tool;
         public ComboboxWrapper(WandoraTool tool){
@@ -78,7 +78,7 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
     private JDialog renameDialog;
     private boolean renameCancelled;
     
-    /** Creates new form AdminToolManagerPanel */
+    /** Creates new form WandoraToolManagerPanel */
     public WandoraToolManagerPanel(WandoraToolManager manager, JDialog parent, Wandora admin) {
         this.admin = admin;
         this.manager = manager;
@@ -568,18 +568,19 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
 
     private void configureButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureButtonActionPerformed
     	WandoraToolListWrapper wrapper=(WandoraToolListWrapper)toolList.getSelectedValue();
-        if(wrapper==null){
+        if(wrapper==null) {
             configureButton.setEnabled(false);
             return;
         }
         WandoraTool tool=wrapper.tool.e1;
         int counter=toolList.getSelectedIndex();
         if(tool.isConfigurable()) {
-            try{
+            try {
                 String type=getCurrentType();
                 tool.configure(manager.getAdmin(),manager.getAdmin().getOptions(),"tools."+type+".item"+counter+".options.");
-            }catch(TopicMapException tme){
-                tme.printStackTrace(); // TODO EXCEPTION
+            }
+            catch(TopicMapException tme) {
+            	logger.error(tme);
             }
         }
     }//GEN-LAST:event_configureButtonActionPerformed

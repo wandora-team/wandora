@@ -53,6 +53,7 @@ import org.wandora.modules.usercontrol.User;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.memory.TopicMapImpl;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -78,7 +79,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 public class WaianaService extends AbstractTopicWebApp {
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WaianaService.class);
     
     private WaianaStorage storage = null;
     private boolean allowURLParameterUsage = true;
@@ -248,7 +249,7 @@ public class WaianaService extends AbstractTopicWebApp {
         }
         catch(Exception e) {
             responseJSON = createReply(1, "Exception '"+e.toString()+"' occurred while processing the maiana api request.");
-            e.printStackTrace();
+            logger.error(e);
         }
         if(responseJSON == null || !responseJSON.has("code")) {
             responseJSON = createReply(1, "The response JSON has not been set successfully.");
@@ -290,7 +291,7 @@ public class WaianaService extends AbstractTopicWebApp {
             catch (JSONException ex) {
                 // This exception is not logged because the user may user URL 
                 // parameters instead of JSON data.
-                ex.printStackTrace();
+            	logger.error(ex);
             }
         }
         return null;
@@ -319,7 +320,7 @@ public class WaianaService extends AbstractTopicWebApp {
                 return json.getJSONObject("parameters");
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
             return null;
         }
@@ -372,7 +373,7 @@ public class WaianaService extends AbstractTopicWebApp {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
             return null;
         }
@@ -384,7 +385,7 @@ public class WaianaService extends AbstractTopicWebApp {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
             return defaultValue;
         }
@@ -467,7 +468,7 @@ public class WaianaService extends AbstractTopicWebApp {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         
@@ -482,7 +483,7 @@ public class WaianaService extends AbstractTopicWebApp {
                 IObox.saveFile(basePath+"/"+storageFilename, outStr);
             } 
             catch (Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
         }
         
@@ -544,7 +545,7 @@ public class WaianaService extends AbstractTopicWebApp {
                             IObox.deleteFile(basePath+"/"+topicMapsPath+"/"+shortName+".xtm");
                         } 
                         catch (Exception ex) {
-                            ex.printStackTrace();
+                        	logger.error(ex);
                         }
                     }
                     if(saveAlwaysAfterChange) saveData();
@@ -792,7 +793,7 @@ public class WaianaService extends AbstractTopicWebApp {
             reply.put("msg", msg);
             reply.put("data", data);
         }
-        catch(Exception e) { e.printStackTrace(); }
+        catch(Exception e) { logger.error(e); }
         return reply;
     }
 
@@ -802,7 +803,7 @@ public class WaianaService extends AbstractTopicWebApp {
             reply.put("code", code);
             reply.put("msg", msg);
         }
-        catch(Exception e) { e.printStackTrace(); }
+        catch(Exception e) { logger.error(e); }
         return reply;
     }
     
@@ -822,7 +823,7 @@ public class WaianaService extends AbstractTopicWebApp {
             out.close();
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     

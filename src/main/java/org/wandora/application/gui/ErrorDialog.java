@@ -46,6 +46,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -54,10 +55,8 @@ import org.wandora.application.gui.simple.SimpleTabbedPane;
 
 
 public class ErrorDialog extends javax.swing.JDialog {
-
-	
 	private static final long serialVersionUID = 1L;
-	
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ErrorDialog.class);
 	
     private int button=-1;
     

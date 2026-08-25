@@ -68,6 +68,7 @@ import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Options;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -79,6 +80,8 @@ import org.wandora.utils.Textbox;
  * @author  akivela
  */
 public class Shortcuts implements ActionListener {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Shortcuts.class);
+	
     public static final String OPTIONS_PREFIX = "shortcuts.";
     
     private List<String> shortcuts;
@@ -167,8 +170,7 @@ public class Shortcuts implements ActionListener {
                     t=topicMap.getTopic(si);
                 }
                 catch(TopicMapException tme) {
-                    tme.printStackTrace();
-                    //admin.handleError(tme);
+                	logger.error(tme);
                 }
 
                 if(t != null) {
@@ -221,7 +223,7 @@ public class Shortcuts implements ActionListener {
                 }
                 catch(Exception e) {
                     if(wandora != null) wandora.handleError(e);
-                    else e.printStackTrace();
+                    else logger.error(e);
                     return;
                 }
                 if(wandora != null) saveShortcuts(wandora.options);
@@ -266,7 +268,7 @@ public class Shortcuts implements ActionListener {
         catch (Exception e) {
             System.out.println("Exception occurred '" + e.toString() + "' while loading shortcuts from '" + filename + "'!");
             if(wandora != null) wandora.handleError(e);
-            else e.printStackTrace();
+            else logger.error(e);
         }
     }
     
@@ -357,7 +359,6 @@ public class Shortcuts implements ActionListener {
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
                 wandora.handleError(e);
             }
         }
@@ -648,7 +649,6 @@ public class Shortcuts implements ActionListener {
                     wandora.shortcutsChanged();
                 }
                 catch(TopicMapException tme) {
-                    tme.printStackTrace();
                     wandora.handleError(tme);
                 }
             }

@@ -44,6 +44,7 @@ import org.wandora.topicmap.layered.Layer;
 import org.wandora.topicmap.layered.LayeredTopic;
 import org.wandora.utils.Tuples.T2;
 import org.wandora.utils.Tuples.T3;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -60,6 +61,7 @@ import org.wandora.utils.Tuples.T3;
  **/
 
 public class TopicHilights {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicHilights.class);
     
     private Map<String, Color> hilighted = new LinkedHashMap<>();
     private Wandora wandora = null;
@@ -115,8 +117,8 @@ public class TopicHilights {
             else return (Color) hilighted.get(si);
         }
         catch (Exception e) {
-            System.out.println("Exception occurred while getting topic hilight color!");
-            e.printStackTrace();
+            logger.error("Exception occurred while getting topic hilight color!");
+            logger.error(e);
         }
         return null;
     }
@@ -232,8 +234,8 @@ public class TopicHilights {
             else return (Color) hilightedTopics.get(topic);
         }
         catch(Exception e) {
-            System.out.println("Exception occurred while getting topic hilight color!");
-            e.printStackTrace();
+            logger.error("Exception occurred while getting topic hilight color!");
+            logger.error(e);
         }
         return null;
     }
@@ -252,8 +254,8 @@ public class TopicHilights {
             }
         }
         catch(Exception e) {
-            System.out.println("Exception occurred while getting topic hilight color!");
-            e.printStackTrace();
+            logger.error("Exception occurred while getting topic hilight color!");
+            logger.error(e);
         }
         return null;
     }
@@ -273,7 +275,7 @@ public class TopicHilights {
                     hilightedTopics.remove(topic);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
         }

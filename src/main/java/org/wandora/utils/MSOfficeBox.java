@@ -46,6 +46,7 @@ import org.apache.poi.hwpf.usermodel.Paragraph;
 import org.apache.poi.hwpf.usermodel.Range;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -60,7 +61,9 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 
 public class MSOfficeBox {
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MSOfficeBox.class);
+	
+			
     /**
      * Creates a new instance of MSOfficeBox
      */
@@ -79,7 +82,7 @@ public class MSOfficeBox {
             return getWordTextOld(new HWPFDocument(is));
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -177,7 +180,7 @@ public class MSOfficeBox {
             return extractor.getText();
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         finally {
             if(extractor != null ) {
@@ -200,7 +203,7 @@ public class MSOfficeBox {
             return getText(url.openStream());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -215,7 +218,7 @@ public class MSOfficeBox {
             return text;
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         finally {
             if(extractor != null ) {
@@ -233,7 +236,7 @@ public class MSOfficeBox {
             return extractor.getText();
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -246,7 +249,7 @@ public class MSOfficeBox {
             return extractor.getText();
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }

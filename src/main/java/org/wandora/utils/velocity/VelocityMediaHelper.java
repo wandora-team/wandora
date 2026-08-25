@@ -34,12 +34,13 @@ import java.util.Iterator;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author  olli
  */
 public class VelocityMediaHelper {
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(VelocityMediaHelper.class);
     
     /** Creates a new instance of VelocityMediaHelper */
     public VelocityMediaHelper() {
@@ -113,7 +114,7 @@ public class VelocityMediaHelper {
                 if(image != null) return image.getSubjectLocator().toExternalForm();
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return null;

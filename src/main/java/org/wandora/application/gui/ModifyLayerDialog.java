@@ -39,6 +39,7 @@ import org.wandora.topicmap.TopicMapTypeManager;
 import org.wandora.topicmap.layered.ContainerTopicMap;
 import org.wandora.topicmap.layered.Layer;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 /**
@@ -46,9 +47,8 @@ import org.wandora.utils.swing.GuiTools;
  * @author  olli
  */
 public class ModifyLayerDialog extends javax.swing.JDialog {
-	
 	private static final long serialVersionUID = 1L;
-	
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ModifyLayerDialog.class);
     
     private TopicMapConfigurationPanel modifyPanel;
     private TopicMapType modifyType;
@@ -210,7 +210,7 @@ public class ModifyLayerDialog extends javax.swing.JDialog {
             }
         }
         catch(TopicMapException tme){
-            tme.printStackTrace(); // TODO EXCEPTION
+            logger.error(tme);
         }
         
     }//GEN-LAST:event_modifyOKButtonActionPerformed

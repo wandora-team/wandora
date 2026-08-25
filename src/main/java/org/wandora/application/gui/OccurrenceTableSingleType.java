@@ -91,6 +91,7 @@ import org.wandora.utils.IObox;
 import org.wandora.utils.MSOfficeBox;
 import org.wandora.utils.Options;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -99,9 +100,8 @@ import org.wandora.utils.Textbox;
  * @author  olli, akivela
  */
 public class OccurrenceTableSingleType extends SimpleTable implements OccurrenceTable{
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(OccurrenceTableSingleType.class);
 
 	
 	public String tableType = VIEW_SCHEMA;
@@ -138,7 +138,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         
         this.type = type;
@@ -231,7 +231,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                 setRowHeight(row, rowHeight+2);
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -322,7 +322,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -345,7 +345,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -364,7 +364,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             if(wandora != null) wandora.handleError(e);
         }
     }
@@ -544,7 +544,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                         catch(Exception e) {
                             if(occurrence.length() > 80) occurrence = occurrence.substring(0, 80)+"...";
                             errorMessage = "Exception '"+e.getMessage()+"' occurred while starting external browser for occurrence. Check if the occurrence text is a valid URL.";
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                 }
@@ -601,7 +601,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                         }
                         catch(Exception e) {
                             WandoraOptionPane.showMessageDialog(wandora, "Exception '"+e.getMessage()+"' occurred while downloading URL '"+occurrence+"'.", "Error downloading URL", WandoraOptionPane.ERROR_MESSAGE);
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                 }
@@ -715,7 +715,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             return dataModel.getValueAt(cy, cx);
         }
         catch (Exception e) { 
-            e.printStackTrace(); 
+            logger.error(e); 
         }
         return null;
     }
@@ -819,7 +819,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                     System.out.println("Warning: Malformed data-url found.");
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
                 isDataOccurrence = true;
                 viewedOccurrenceText = viewedOccurrenceText.substring(0, Math.max(5, viewedOccurrenceText.indexOf(',')));
@@ -933,7 +933,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                         }
                     }
                     catch(Exception ex) {
-                        ex.printStackTrace();
+                    	logger.error(ex);
                     }
                 }
             }
@@ -1140,7 +1140,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
             
             if(occurrenceText == null) {
@@ -1273,7 +1273,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                             }
                         }
                         catch(Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                     else if(transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
@@ -1284,14 +1284,14 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                             }
                         }
                         catch(Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                     
                     wandora.doRefresh();
                 }
             }
-            catch(TopicMapException tme){tme.printStackTrace();}
+            catch(TopicMapException tme){ logger.error(tme); }
             catch(Exception ce){}
             return false;
         }

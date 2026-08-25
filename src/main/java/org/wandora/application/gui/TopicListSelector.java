@@ -34,17 +34,16 @@ import javax.swing.DefaultListModel;
 
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author  olli
  */
 public class TopicListSelector extends javax.swing.JPanel implements TopicSelector {
-
-
 	private static final long serialVersionUID = 1L;
-	
-	
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicListSelector.class);
+		
 	private DefaultListModel<TopicListWrapper> listModel;
     private String name;
     
@@ -127,14 +126,21 @@ public class TopicListSelector extends javax.swing.JPanel implements TopicSelect
 
     private static class TopicListWrapper{
         public Topic t;
-        public TopicListWrapper(Topic t){this.t=t;};
+        
+        public TopicListWrapper(Topic t) {
+        	this.t=t;
+    	}
+        
         @Override
-        public String toString(){
-            try{
+        public String toString() {
+            try {
                 String r=t.getBaseName();
                 if(r!=null) return r;
                 else return t.getOneSubjectIdentifier().toExternalForm();
-          }catch(TopicMapException tme){tme.printStackTrace(); return "Exception";}    
+          } catch(TopicMapException tme) {
+        	  logger.error(tme); 
+        	  return "Exception";
+    	  }    
         }
     }
     

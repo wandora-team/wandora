@@ -43,6 +43,7 @@ import org.wandora.topicmap.TopicMapConfigurationPanel;
 import org.wandora.topicmap.database2.DatabaseConfiguration;
 import org.wandora.utils.Options;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 /**
@@ -50,8 +51,8 @@ import org.wandora.utils.swing.GuiTools;
  * @author  olli
  */
 public class DatabaseConfigurationPanel extends javax.swing.JPanel {
-	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DatabaseConfigurationPanel.class);
 	
     public final static String GENERIC_TYPE = "Generic";
     
@@ -565,7 +566,7 @@ public class DatabaseConfigurationPanel extends javax.swing.JPanel {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }//GEN-LAST:event_proposeNameForLayer
 

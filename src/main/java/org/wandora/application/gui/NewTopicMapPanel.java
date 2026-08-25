@@ -37,6 +37,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapType;
 import org.wandora.utils.Delegate;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -44,8 +45,8 @@ import org.wandora.utils.Options;
  * @author  olli
  */
 public class NewTopicMapPanel extends javax.swing.JPanel {
-	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(NewTopicMapPanel.class);
 	
     
     private Wandora wandora;
@@ -84,8 +85,8 @@ public class NewTopicMapPanel extends javax.swing.JPanel {
                     }
                 }
                 catch(Exception e) {
-                    System.out.println("Warning: Can't create topic map layer type with class name '"+layerTypeClassName+"'.");
-                    e.printStackTrace();
+                    logger.error("Warning: Can't create topic map layer type with class name '"+layerTypeClassName+"'.");
+                    logger.error(e);
                 }
                 i++;
             }

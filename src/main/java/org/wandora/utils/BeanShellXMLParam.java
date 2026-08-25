@@ -33,6 +33,7 @@ import java.util.Map;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import bsh.EvalError;
 import bsh.Interpreter;
@@ -41,6 +42,7 @@ import bsh.Interpreter;
  * @author  olli
  */
 public class BeanShellXMLParam implements XMLParamAware {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(BeanShellXMLParam.class);
     
     protected Interpreter interpreter;
     protected String getID;
@@ -77,7 +79,7 @@ public class BeanShellXMLParam implements XMLParamAware {
         try{
             return interpreter.get(id);
         }catch(EvalError ee){
-            ee.printStackTrace();
+            logger.error(ee);
             return null;
         }
     }
@@ -113,7 +115,7 @@ public class BeanShellXMLParam implements XMLParamAware {
                 }
             }
         }catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }
     }
     

@@ -26,6 +26,8 @@ package org.wandora.utils;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -43,17 +45,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class JsonMapper extends ObjectMapper {
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(JsonMapper.class);
+    
 
     public JsonMapper(){
         super();
     }
 
     public String writeValue(Object value){
-        try{
+        try {
             StringWriter sw=new StringWriter();
             writeValue(sw,value);
             return sw.toString();
-        }catch(IOException ioe){ioe.printStackTrace();}
+        } 
+        catch(IOException ioe) {
+        	logger.error(ioe);
+        }
         return null;
     }
     

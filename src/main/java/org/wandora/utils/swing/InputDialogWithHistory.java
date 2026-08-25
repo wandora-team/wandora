@@ -35,6 +35,7 @@ import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleComboBox;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -43,8 +44,8 @@ import org.wandora.utils.Textbox;
  * @author  akivela
  */
 public class InputDialogWithHistory extends javax.swing.JDialog {
-    
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(InputDialogWithHistory.class);
     
     public static int HISTORYMAXSIZE = 40;
     public java.awt.Frame parent = null;
@@ -82,7 +83,7 @@ public class InputDialogWithHistory extends javax.swing.JDialog {
             if(this.options.getItemCount() > HISTORYMAXSIZE) this.options.removeItemAt(1);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return sel;
     }

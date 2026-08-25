@@ -110,6 +110,7 @@ import org.wandora.utils.DataURL;
 import org.wandora.utils.HttpAuthorizer;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.ImagePanel;
 
 
@@ -123,6 +124,7 @@ import org.wandora.utils.swing.ImagePanel;
  * @author  akivela
  */
 public class UIBox {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(UIBox.class);
 
     /** Creates a new instance of UIBox */
     public UIBox() {
@@ -233,7 +235,7 @@ public class UIBox {
                                 menuItem.addActionListener(new WandoraToolActionListener(w, t));                               
                             }
                             catch (Exception e) {
-                                e.printStackTrace();
+                            	logger.error(e);
                             }
                         }
                     }
@@ -371,7 +373,7 @@ public class UIBox {
                                 menuItem.addActionListener(new WandoraToolActionListener(w, t));                               
                             }
                             catch (Exception e) {
-                                e.printStackTrace();
+                            	logger.error(e);
                             }
                         }
                     }
@@ -503,7 +505,7 @@ public class UIBox {
                                 menuItem.addActionListener(new WandoraToolActionListener(w, t));                               
                             }
                             catch (Exception e) {
-                                e.printStackTrace();
+                                logger.error(e);
                             }
                         }
                     }
@@ -632,7 +634,7 @@ public class UIBox {
                                 menuItem.addActionListener(new WandoraToolActionListener(w, t));                               
                             }
                             catch (Exception e) {
-                                e.printStackTrace();
+                                logger.error(e);
                             }
                         }
                     }
@@ -764,7 +766,7 @@ public class UIBox {
                             }
                         }
                         catch (Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                     else if(struct[i] instanceof Image) {
@@ -897,7 +899,7 @@ public class UIBox {
                                 button.addActionListener(new WandoraToolActionListener(w, t));
                             }
                             catch (Exception e) {
-                                e.printStackTrace();
+                                logger.error(e);
                             }
                         }
                     }
@@ -1054,7 +1056,7 @@ public class UIBox {
                 if(icon != null) return icon;
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         else {
@@ -1068,7 +1070,7 @@ public class UIBox {
                 return icon;
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return null;
@@ -1083,7 +1085,7 @@ public class UIBox {
                 if(icon != null) return icon;
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         else {
@@ -1097,7 +1099,7 @@ public class UIBox {
                 return icon;
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return null;
@@ -1148,7 +1150,7 @@ public class UIBox {
             }
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
         }
         return null;
     }
@@ -1178,7 +1180,7 @@ public class UIBox {
             }
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
         }
         return null;
     }
@@ -1224,7 +1226,7 @@ public class UIBox {
                     return image;
                 }
                 catch (Exception e1) {
-                    //e1.printStackTrace();
+                    //logger.error(e1);
                     try {
                         String fname = imageName;
                         if(fname.startsWith("file:")) {
@@ -1236,8 +1238,8 @@ public class UIBox {
                         return image;
                     }
                     catch (Exception e2) {
-                        //e2.printStackTrace();
-                        System.out.println("'"+e2.getMessage()+"' occurred while reading image '" + imageName + "'!");
+                        //logger.error(e2);
+                        logger.error("'"+e2.getMessage()+"' occurred while reading image '" + imageName + "'!");
                     }
                 }
             }
@@ -1401,7 +1403,7 @@ public class UIBox {
             }
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
         }
         return null;
     }
@@ -1432,7 +1434,7 @@ public class UIBox {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -1471,7 +1473,7 @@ public class UIBox {
             return getParentComponentByClass(Class.forName(componentClassName), root, maxDepth);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -1563,7 +1565,7 @@ public class UIBox {
                     return imageComponent;
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -1627,7 +1629,7 @@ public class UIBox {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
     

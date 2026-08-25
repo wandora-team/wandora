@@ -338,6 +338,7 @@ import org.wandora.application.tools.undoredo.Undo;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import bibliothek.gui.Dockable;
 
@@ -358,6 +359,7 @@ import bibliothek.gui.Dockable;
  * @author akivela
  */
 public class WandoraMenuManager {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraMenuManager.class);
 
     public JMenu importToLayerMenu = new SimpleMenu("Merge to layer", UIBox.getIcon("gui/icons/layers_importto.png"));
     public JMenu exportLayerMenu = new SimpleMenu("Export layer", UIBox.getIcon("gui/icons/layers_export.png"));
@@ -1044,7 +1046,7 @@ public class WandoraMenuManager {
             }
             catch(Exception e) {
                 if(admin != null) admin.handleError(e);
-                else e.printStackTrace();
+                else logger.error(e);
             }
         }
         return defaultNewTopicMenuStruct;
@@ -1078,7 +1080,7 @@ public class WandoraMenuManager {
             }
             catch(Exception e) {
                 if(admin != null) admin.handleError(e);
-                else e.printStackTrace();
+                else logger.error(e);
             }
         }
         return defaultDeleteTopicMenuStruct;
@@ -1101,7 +1103,7 @@ public class WandoraMenuManager {
             }
             catch(Exception e) {
                 if(admin != null) admin.handleError(e);
-                else e.printStackTrace();
+                else logger.error(e);
             }
         }
         return defaultAddToTopicMenuStruct;
@@ -1135,7 +1137,7 @@ public class WandoraMenuManager {
             }
             catch(Exception e) {
                 if(admin != null) admin.handleError(e);
-                else e.printStackTrace();
+                else logger.error(e);
             }
         }
         return defaultDeleteFromTopicMenuStruct;
@@ -1245,7 +1247,7 @@ public class WandoraMenuManager {
         }
         catch(Exception e) {
             if(admin != null) admin.handleError(e);
-            else e.printStackTrace();
+            else logger.error(e);
         }
         return menuStruct;
     }
@@ -1283,7 +1285,7 @@ public class WandoraMenuManager {
             }
             catch(Exception e) {
                 if(admin != null) admin.handleError(e);
-                else e.printStackTrace();
+                else logger.error(e);
             }
         }
         return defaultCopyAlsoMenuStruct;
@@ -1313,7 +1315,7 @@ public class WandoraMenuManager {
             }
             catch(Exception e) {
                 if(admin != null) admin.handleError(e);
-                else e.printStackTrace();
+                else logger.error(e);
             }
         }
         return defaultCopyMenuStruct;
@@ -1341,7 +1343,7 @@ public class WandoraMenuManager {
             }
             catch(Exception e) {
                 if(wandora != null) wandora.handleError(e);
-                else e.printStackTrace();
+                else logger.error(e);
             }
         }
         return defaultCopyToLayerMenuStruct;
@@ -1361,7 +1363,7 @@ public class WandoraMenuManager {
         }
         catch(Exception e) {
             if(admin != null) admin.handleError(e);
-            else e.printStackTrace();
+            else logger.error(e);
         }
         return menuStruct;
     }
@@ -1384,7 +1386,7 @@ public class WandoraMenuManager {
             }
             catch(Exception e) {
                 if(admin != null) admin.handleError(e);
-                else e.printStackTrace();
+                else logger.error(e);
             }
         }
         return defaultPasteAlsoMenuStruct;
@@ -1424,7 +1426,7 @@ public class WandoraMenuManager {
         }
         catch(Exception e) {
             if(admin != null) admin.handleError(e);
-            else e.printStackTrace();
+            else logger.error(e);
         }
         return defaultSLMenuStruct;
     }
@@ -1459,7 +1461,7 @@ public class WandoraMenuManager {
             }
             catch(Exception e) {
                 if(admin != null) admin.handleError(e);
-                else e.printStackTrace();
+                else logger.error(e);
             }
         }
         return defaultSIMenuStruct;
@@ -1485,7 +1487,7 @@ public class WandoraMenuManager {
             }
             catch(Exception e) {
                 if(admin != null) admin.handleError(e);
-                else e.printStackTrace();
+                else logger.error(e);
             }
         }
         return defaultBasenameMenuStruct;
@@ -1526,7 +1528,7 @@ public class WandoraMenuManager {
             }
             catch(Exception e) {
                 if(admin != null) admin.handleError(e);
-                else e.printStackTrace();
+                else logger.error(e);
             }
         }
         return defaultVariantNameMenu;
@@ -1557,7 +1559,7 @@ public class WandoraMenuManager {
             }
             catch(Exception e) {
                 if(admin != null) admin.handleError(e);
-                else e.printStackTrace();
+                else logger.error(e);
             }
         }
         return defaultAssociationMenuStruct;
@@ -1619,7 +1621,7 @@ public class WandoraMenuManager {
             }
             catch(Exception e) {
                 if(admin != null) admin.handleError(e);
-                else e.printStackTrace();
+                else logger.error(e);
             }
         }
         return defaultOccurrenceMenuStruct;
@@ -1690,7 +1692,7 @@ public class WandoraMenuManager {
         }
         catch(Exception e) {
             if(admin != null) admin.handleError(e);
-            else e.printStackTrace();
+            else logger.error(e);
         }
         return topicMenuStruct;
     }
