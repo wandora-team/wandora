@@ -78,6 +78,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Tuples;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -86,8 +87,8 @@ import org.wandora.utils.Tuples.T2;
 
 
 public class SimbergExport extends AbstractExportTool {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimbergExport.class);
 
 	
 	@Override
@@ -208,7 +209,7 @@ public class SimbergExport extends AbstractExportTool {
         try{
             return d.doQuery(new QueryContext(tm, lang), context!=null?new ResultRow(context):new ResultRow());
         }catch(QueryException qe){
-            qe.printStackTrace();
+        	logger.error(qe);
             return null;
         }
     }
@@ -252,7 +253,7 @@ public class SimbergExport extends AbstractExportTool {
         if(rows.isEmpty()) return null;
         try{
             return (Topic)rows.get(0).getValue(role);
-        }catch(QueryException qe){ qe.printStackTrace(); return null;}
+        }catch(QueryException qe){ logger.error(qe); return null;}
     }
     public static List<Topic> getTopicResults(List<ResultRow> rows,String role) {
         List<Topic> ret=new ArrayList<>();
@@ -263,7 +264,7 @@ public class SimbergExport extends AbstractExportTool {
                 else o=row.getActiveValue();
                 if(o==null || !(o instanceof Topic)) continue;
                 else ret.add((Topic)o);
-            }catch(QueryException qe){ qe.printStackTrace(); }
+            }catch(QueryException qe){ logger.error(qe); }
         }
         return ret;
     }

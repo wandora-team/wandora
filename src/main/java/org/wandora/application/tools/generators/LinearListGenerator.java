@@ -42,6 +42,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 
@@ -50,8 +51,8 @@ import org.wandora.utils.swing.GuiTools;
  * @author akivela
  */
 public class LinearListGenerator extends AbstractGenerator {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LinearListGenerator.class);
 
 	public static String LIST_GRAPH_SI = "https://wandora.org/si/linear-list/";
     
@@ -223,7 +224,7 @@ public class LinearListGenerator extends AbstractGenerator {
                 t.addType(listGraphInstanceTopic);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return t;

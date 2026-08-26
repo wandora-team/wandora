@@ -25,6 +25,7 @@ package org.wandora.application.tools.docking;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import bibliothek.gui.Dockable;
 
@@ -35,8 +36,8 @@ import bibliothek.gui.Dockable;
 
 
 public class SelectDockable extends AbstractDockingTool {
-	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SelectDockable.class);
 
 
     private Dockable dockable = null;
@@ -66,7 +67,7 @@ public class SelectDockable extends AbstractDockingTool {
                 dockingPanel.selectDockable(dockable);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }    

@@ -37,6 +37,7 @@ import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -47,8 +48,8 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class DeleteUnaryAssociations extends DeleteAssociationsInTopic {
-    
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DeleteUnaryAssociations.class);
 	
 	
     public static final boolean LOOK_AT_ASSOCIATION_TYPES_TOO = true;
@@ -75,7 +76,7 @@ public class DeleteUnaryAssociations extends DeleteAssociationsInTopic {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return false;
     }

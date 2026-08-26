@@ -61,10 +61,7 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener, TopicPanel {
-    
-    
     private static final long serialVersionUID = 1L;
-    
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(TreeTopicPanel.class);
     
     

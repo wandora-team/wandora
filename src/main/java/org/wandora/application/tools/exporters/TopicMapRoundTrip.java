@@ -41,6 +41,7 @@ import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -48,9 +49,8 @@ import org.wandora.utils.IObox;
  * @author akivela
  */
 public class TopicMapRoundTrip extends AbstractWandoraTool {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicMapRoundTrip.class);
 
 
 	@Override
@@ -113,20 +113,20 @@ public class TopicMapRoundTrip extends AbstractWandoraTool {
                 catch(FileNotFoundException fnfe) {
                     log("Topic map file not found.");
                     log(fnfe);
-                    fnfe.printStackTrace();
+                    logger.error(fnfe);
                 }
                 catch(IOException ioe) {
                     log("Exception occurred while accessing file.");
                     log(ioe);
-                    ioe.printStackTrace();
+                    logger.error(ioe);
                 }
                 catch(TopicMapException tme) {
                     log("Topic map error.");
                     log(tme);
-                    tme.printStackTrace();
+                    logger.error(tme);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             long endtime = System.currentTimeMillis();

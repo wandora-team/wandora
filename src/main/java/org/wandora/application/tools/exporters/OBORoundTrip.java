@@ -42,6 +42,7 @@ import org.wandora.application.tools.importers.OBOImport;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -49,8 +50,8 @@ import org.wandora.utils.IObox;
  * @author akivela
  */
 public class OBORoundTrip extends AbstractWandoraTool {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(OBORoundTrip.class);
 
 
 	@Override
@@ -168,7 +169,7 @@ public class OBORoundTrip extends AbstractWandoraTool {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             long endtime = System.currentTimeMillis();

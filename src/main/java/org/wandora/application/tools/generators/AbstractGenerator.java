@@ -38,6 +38,7 @@ import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -45,8 +46,8 @@ import org.wandora.topicmap.XTMPSI;
  * @author akivela
  */
 public abstract class AbstractGenerator extends AbstractWandoraTool {
-    
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractGenerator.class);
 	
 	/** Creates a new instance of AbstractGenerator */
     public AbstractGenerator() {
@@ -71,7 +72,7 @@ public abstract class AbstractGenerator extends AbstractWandoraTool {
         }
         catch(Exception e) {
             log(e);
-            e.printStackTrace();
+            logger.error(e);
         }
         return topic;
     }
@@ -90,7 +91,7 @@ public abstract class AbstractGenerator extends AbstractWandoraTool {
         }
         catch(Exception e) {
             log(e);
-            e.printStackTrace();
+            logger.error(e);
         }
         return topic;
     }
@@ -110,7 +111,7 @@ public abstract class AbstractGenerator extends AbstractWandoraTool {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
 

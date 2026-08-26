@@ -43,6 +43,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 
@@ -53,8 +54,8 @@ import org.wandora.utils.swing.GuiTools;
  * @author akivela
  */
 public class TilingGenerator extends AbstractGenerator {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TilingGenerator.class);
 
 	public static String globalSiPattern = "";
     public static String globalBasenamePattern = "";
@@ -223,7 +224,7 @@ public class TilingGenerator extends AbstractGenerator {
                                 a.addPlayer(node2, role2);
                             }
                             catch(Exception e) {
-                                e.printStackTrace();
+                            	logger.error(e);
                             }
                         }
                         setProgress(progress++);
@@ -290,7 +291,7 @@ public class TilingGenerator extends AbstractGenerator {
                     t.addType(graphTopic);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             return t;
@@ -308,7 +309,7 @@ public class TilingGenerator extends AbstractGenerator {
                     atype = topicmap.getTopic(atypeStr);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             if(atype == null) {
@@ -330,7 +331,7 @@ public class TilingGenerator extends AbstractGenerator {
                     role = topicmap.getTopic(roleStr);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             if(role == null) {
@@ -352,7 +353,7 @@ public class TilingGenerator extends AbstractGenerator {
                     role = topicmap.getTopic(roleStr);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             if(role == null) {

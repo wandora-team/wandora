@@ -49,6 +49,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Options;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -60,8 +61,8 @@ import org.wandora.utils.Tuples.T2;
  * @author  akivela
  */
 public class LSystemGraphGeneratorDialog extends javax.swing.JDialog {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LSystemGraphGeneratorDialog.class);
 
 	public static final int L_SYSTEM = 11;
     public static final int RAW_RESULT = 12;
@@ -856,7 +857,7 @@ private void lSystemComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//G
                 desktop.browse(new URI("https://wandora.org/wiki/L-system_generator"));
             }
             catch(Exception e){
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }//GEN-LAST:event_infoButtonActionPerformed

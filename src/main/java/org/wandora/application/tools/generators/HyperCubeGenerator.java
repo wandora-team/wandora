@@ -43,6 +43,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 
@@ -52,8 +53,8 @@ import org.wandora.utils.swing.GuiTools;
  * @author akivela
  */
 public class HyperCubeGenerator extends AbstractGenerator {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(HyperCubeGenerator.class);
 
 	public static String HYPERCUBE_GRAPH_SI = "https://wandora.org/si/hypercube/";
     
@@ -213,7 +214,7 @@ public class HyperCubeGenerator extends AbstractGenerator {
                 t.addType(graphInstanceTopic);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return t;

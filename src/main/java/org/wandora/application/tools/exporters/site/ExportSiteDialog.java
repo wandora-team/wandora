@@ -41,6 +41,7 @@ import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -59,9 +60,8 @@ import org.wandora.application.gui.simple.SimpleTabbedPane;
 
 
 public class ExportSiteDialog extends javax.swing.JDialog {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ExportSiteDialog.class);
 
 	private Wandora wandora;
     public boolean accept = false;
@@ -417,7 +417,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
 
@@ -450,7 +450,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         chooser.setDialogTitle(title);

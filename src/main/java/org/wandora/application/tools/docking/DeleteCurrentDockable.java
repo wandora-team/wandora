@@ -26,6 +26,7 @@ package org.wandora.application.tools.docking;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -34,9 +35,8 @@ import org.wandora.application.gui.topicpanels.DockingFramePanel;
 
 
 public class DeleteCurrentDockable extends AbstractDockingTool {
-	
 	private static final long serialVersionUID = 1L;
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DeleteCurrentDockable.class);
 
 
     /** Creates a new instance of DeleteCurrentDockable */
@@ -58,7 +58,7 @@ public class DeleteCurrentDockable extends AbstractDockingTool {
                 dockingPanel.deleteCurrentDockable();
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }    

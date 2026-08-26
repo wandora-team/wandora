@@ -37,7 +37,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -66,6 +66,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.layered.Layer;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -80,20 +81,18 @@ import org.wandora.utils.Tuples.T2;
 
 
 public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractWandoraTool.class);
 
-	private Exception toolException;
-    private WandoraToolLogger lastLogger = null;
-    private WandoraToolLogger logger = null;
+    private WandoraToolLogger lastToolLogger = null;
+    private WandoraToolLogger toolLogger = null;
     private boolean internalForceStop;
     
-    private Wandora runAdmin = null;
+    private Wandora runWandora = null;
     private Context<?> runContext = null;
     
     private static final Set<Class<? extends AbstractWandoraTool>> toolLocks = new LinkedHashSet<>();
-    private static final Map<Thread,T2<Class<? extends AbstractWandoraTool>,Long>> toolThreads = new HashMap<>();
+    private static final Map<Thread,T2<Class<? extends AbstractWandoraTool>,Long>> toolThreads = new LinkedHashMap<>();
 
     
     
@@ -107,7 +106,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     // -------------------------------------------------------------------------
     
     
-    /* *
+    /**
      * This is first entry point to execute the tool. Use this entry point when
      * you wish to execute the tool from your own code. Method just fills the 
      * event slot with null and calls the event triggered execute.
@@ -149,7 +148,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
                 return;
             }
@@ -172,7 +171,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
                 return;
             }
@@ -183,7 +182,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -198,8 +197,10 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
             }
         }
         
-        runAdmin = wandora;
-        if(runContext == null) { runContext = new LayeredTopicContext(); }
+        this.runWandora = wandora;
+        if(runContext == null) { 
+        	runContext = new LayeredTopicContext(); 
+    	}
         
         // TODO: runContext is overwritten if the same instance of a tool  
         // is executed again.
@@ -227,22 +228,26 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      */
     @Override
     public void run() {
-        toolException = null;
         try {
-            if(runAdmin != null) {
-                runAdmin.setAnimated(true, this);
+            if(runWandora != null) {
+                runWandora.setAnimated(true, this);
             }
-            execute(runAdmin, runContext);
+            execute(runWandora, runContext);
         }
         catch(Exception e) {
-            if(runAdmin != null) {
-                runAdmin.displayException(ErrorMessages.getMessage(e, this), e);
+            if(runWandora != null) {
+                runWandora.displayException(ErrorMessages.getMessage(e, this), e);
             }
-            toolException = e;
+            else {
+            	logger.error(e);
+            }
         }
         catch(Error er) {
-            if(runAdmin != null) {
-                runAdmin.displayException(ErrorMessages.getMessage(er, this), er);
+            if(runWandora != null) {
+                runWandora.displayException(ErrorMessages.getMessage(er, this), er);
+            }
+            else {
+            	logger.error(er);
             }
         }
         if(!allowMultipleInvocations()) {
@@ -256,19 +261,19 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
                     toolThreads.remove(Thread.currentThread());
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
                 
         try {
-            if(runAdmin != null) {
+            if(runWandora != null) {
                 if(requiresRefresh()) {
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
                             try {
-                                runAdmin.doRefresh();
+                                runWandora.doRefresh();
                             }
                             catch(Exception e) {
                                 // SKIPPING
@@ -282,20 +287,20 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
             }
         }
         catch(Exception e) {
-            System.out.println("Refresh failed in AbstractAdminTool!");
-            e.printStackTrace();
+            logger.error("Refresh failed in AbstractWandoraTool!");
+            logger.error(e);
         }
         
-        if(runAdmin != null) {
-            runAdmin.setAnimated(false, this);
+        if(runWandora != null) {
+            runWandora.setAnimated(false, this);
         }
-        if(logger != null && logger.getState() == EXECUTE) {
-            System.out.println("Warning! Logger still running when leaving tool! Closing logger!");
-            logger.setState(CLOSE);
+        if(toolLogger != null && toolLogger.getState() == EXECUTE) {
+        	logger.warn("Warning! Logger still running when leaving tool! Closing logger!");
+            toolLogger.setState(CLOSE);
         }
-        if(logger != null) {
-            lastLogger = logger;
-            logger = null;
+        if(toolLogger != null) {
+            lastToolLogger = toolLogger;
+            toolLogger = null;
         }
     }
     
@@ -395,7 +400,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -409,7 +414,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -438,7 +443,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -456,7 +461,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -479,7 +484,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -526,7 +531,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     }
     
     /**
-     * AdminToolManager views tool descriptions while user browses available
+     * WandoraToolManager views tool descriptions while user browses available
      * tools and build user customizable GUI elements such as Tools menu.
      * By default description equals the tool name.
      * All tools should override this method.
@@ -569,7 +574,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     
     
     /**
-     * <code>WandoraWandoraTool</code> should be GUI independent allowing tool
+     * <code>WandoraTool</code> should be GUI independent allowing tool
      * to be inserted into various type of GUI elements such as menus.
      * This method is used to wrap tool into <code>SimpleMenuItem</code>.
      */
@@ -708,20 +713,25 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
         setToolLogger(getDefaultLogger());
         setLogTitle(getName());
     }
+    
     public WandoraToolLogger getDefaultLogger() {
-        if(logger != null) return logger;
-        if(runAdmin != null) {
-            InfoDialog infoDialog = new InfoDialog(runAdmin);
+        if(toolLogger != null) {
+        	return toolLogger;
+        }
+        if(runWandora != null) {
+            InfoDialog infoDialog = new InfoDialog(runWandora);
             infoDialog.setState(InfoDialog.EXECUTE);
             return infoDialog;
         }
         return null;
     }
+    
     public WandoraToolLogger getCurrentLogger() {
-        return logger;
+        return toolLogger;
     }
+    
     public WandoraToolLogger getLastLogger() {
-        return lastLogger;
+        return lastToolLogger;
     }
 
     
@@ -730,11 +740,13 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
         log(message);
         setState(WandoraToolLogger.WAIT);
     }
+    
     public void singleLog(Exception e) {
         setDefaultLogger();
         log(e);
         setState(WandoraToolLogger.WAIT);
     }
+    
     public void singleLog(String message, Exception e) {
         setDefaultLogger();
         log(message, e);
@@ -746,8 +758,8 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     
     
     @Override
-    public void setToolLogger(WandoraToolLogger logger) {
-        this.logger = logger;
+    public void setToolLogger(WandoraToolLogger toolLogger) {
+        this.toolLogger = toolLogger;
     }
     
     
@@ -756,117 +768,117 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     
     @Override
     public void hlog(String message) {
-        if(logger != null) {
-            logger.hlog(message);
+        if(toolLogger != null) {
+            toolLogger.hlog(message);
         }
-        else if(runAdmin != null) {
-            WandoraOptionPane.showMessageDialog(runAdmin, message);
+        else if(runWandora != null) {
+            WandoraOptionPane.showMessageDialog(runWandora, message);
         }
-        else System.out.println(message);
+        else logger.info(message);
     }
     
     
     @Override
     public void log(String message) {
-        if(logger != null) {
-            logger.log(message);
+        if(toolLogger != null) {
+            toolLogger.log(message);
         }
-        else if(runAdmin != null) {
-            WandoraOptionPane.showMessageDialog(runAdmin, message);
+        else if(runWandora != null) {
+            WandoraOptionPane.showMessageDialog(runWandora, message);
         }
-        else System.out.println(message);
+        else logger.info(message);
     }
     
     
     @Override
     public void log(String message, Exception e) {
-        if(logger != null) {
-            logger.log(message, e);
+        if(toolLogger != null) {
+            toolLogger.log(message, e);
         }
-        else if(runAdmin != null) {
+        else if(runWandora != null) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
-            WandoraOptionPane.showMessageDialog(runAdmin, message + "\n" + sw.toString(), WandoraOptionPane.ERROR_MESSAGE);
+            WandoraOptionPane.showMessageDialog(runWandora, message + "\n" + sw.toString(), WandoraOptionPane.ERROR_MESSAGE);
             internalForceStop = true;
         }
         else {
-            System.out.println(message);
-            e.printStackTrace();
+            logger.error(message);
+            logger.error(e);
         }
     }
     
     
     @Override
     public void log(Exception e) {
-        if(logger != null) {
-            logger.log(e);
+        if(toolLogger != null) {
+            toolLogger.log(e);
         }
-        else if(runAdmin != null) {
+        else if(runWandora != null) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
-            WandoraOptionPane.showMessageDialog(runAdmin, sw.toString(), WandoraOptionPane.ERROR_MESSAGE);
+            WandoraOptionPane.showMessageDialog(runWandora, sw.toString(), WandoraOptionPane.ERROR_MESSAGE);
             internalForceStop = true;
         }
         else {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
     
     
     @Override
     public void log(Error e) {
-        if(logger != null) {
-            logger.log(e);
+        if(toolLogger != null) {
+            toolLogger.log(e);
         }
-        else if(runAdmin != null) {
+        else if(runWandora != null) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
-            WandoraOptionPane.showMessageDialog(runAdmin, sw.toString(), WandoraOptionPane.ERROR_MESSAGE);
+            WandoraOptionPane.showMessageDialog(runWandora, sw.toString(), WandoraOptionPane.ERROR_MESSAGE);
             internalForceStop = true;
         }
         else {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
     
     
     @Override
     public void setProgress(int n) {
-        if(logger != null) logger.setProgress(n);
+        if(toolLogger != null) toolLogger.setProgress(n);
     }
     
     
     @Override
     public void setProgressMax(int maxn) {
-        if(logger != null) {
-            logger.setProgressMax(maxn);
+        if(toolLogger != null) {
+            toolLogger.setProgressMax(maxn);
         }
     }
     
     
     @Override
     public void setLogTitle(String title) {
-        if(logger != null) {
-            logger.setLogTitle(title);
+        if(toolLogger != null) {
+            toolLogger.setLogTitle(title);
         }
-        else System.out.println(title);
+        else logger.info(title);
     }
     
     @Override
     public void lockLog(boolean lock) {
-        if(logger != null) {
-            logger.lockLog(lock);
+        if(toolLogger != null) {
+            toolLogger.lockLog(lock);
         }
     }
     
     
     @Override
     public String getHistory() {
-        if(logger != null) {
-            return logger.getHistory();
+        if(toolLogger != null) {
+            return toolLogger.getHistory();
         }
         else {
             return "";
@@ -875,14 +887,14 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     
     @Override
     public void setState(int state) {
-        if(logger != null) {
-            logger.setState(state);
+        if(toolLogger != null) {
+            toolLogger.setState(state);
         }
     }
     @Override
     public int getState() {
-        if(logger != null) {
-            return logger.getState();
+        if(toolLogger != null) {
+            return toolLogger.getState();
         }
         else {
             return 0;
@@ -891,8 +903,8 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     
     @Override
     public boolean forceStop() {
-        if(logger != null) {
-            return logger.forceStop();
+        if(toolLogger != null) {
+            return toolLogger.forceStop();
         }
         else {
             return internalForceStop;
@@ -901,7 +913,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     
     public boolean forceStop(ConfirmResult result) {
         if(result == notoall || result == cancel) return true;
-        if(logger != null) return logger.forceStop();
+        if(toolLogger != null) return toolLogger.forceStop();
         else return internalForceStop;
     }
     
@@ -913,7 +925,6 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     
     public TopicMap solveContextTopicMap(Wandora wandora, Context<?> context) {
         if(context != null) {
-            //System.out.println("context-source: " + context.getContextSource());
             Object contextSource = context.getContextSource();
             if(contextSource != null) {
                 if(contextSource instanceof TopicMap) {
@@ -984,7 +995,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
             return t.getBaseName();
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return "[error]";
     }
@@ -999,10 +1010,10 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     
     
     protected void addUndoMarker(String label) {
-        if(runAdmin != null) {
+        if(runWandora != null) {
             String cn = this.getClass().getName();
             if(!"org.wandora.application.tools.Undo".equals(cn) && !"org.wandora.application.tools.Redo".equals(cn)) {
-                runAdmin.addUndoMarker(label);
+                runWandora.addUndoMarker(label);
             }
         }
     }

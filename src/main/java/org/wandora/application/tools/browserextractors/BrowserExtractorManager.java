@@ -41,6 +41,7 @@ import org.wandora.application.WandoraToolSet;
 import org.wandora.application.WandoraToolType;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -50,6 +51,7 @@ import org.wandora.utils.IObox;
 
 
 public class BrowserExtractorManager {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(BrowserExtractorManager.class);
     private static boolean USE_TOOL_MANAGER = true;
     private Map<String,BrowserPluginExtractor> browserTools = null;
     private Wandora wandora;
@@ -73,10 +75,10 @@ public class BrowserExtractorManager {
                 }
             }
             catch(TopicMapException tme){
-                tme.printStackTrace();
+            	logger.error(tme);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         // System.out.println("methods size: "+methods.size());
@@ -93,13 +95,13 @@ public class BrowserExtractorManager {
                 return tool.doBrowserExtract(request, wandora);
             }
             catch(TopicMapException tme){
-                tme.printStackTrace();
+            	logger.error(tme);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
             catch(Error er) {
-                er.printStackTrace();
+            	logger.error(er);
             }
         }            
         return BrowserPluginExtractor.RETURN_ERROR+"Method not found";
@@ -190,8 +192,8 @@ public class BrowserExtractorManager {
                                 tools.put(extractor.getBrowserExtractorName(), extractor);
                             }
                             catch(Exception ex) {
-                                //System.out.println("Rejecting tool. Exception '" + ex.toString() + "' occurred while investigating tool class '" + classFileName + "'.");
-                                //ex.printStackTrace();
+                                //logger.error("Rejecting tool. Exception '" + ex.toString() + "' occurred while investigating tool class '" + classFileName + "'.");
+                                //logger.error(ex);
                             }
                         }
                     }
@@ -199,7 +201,7 @@ public class BrowserExtractorManager {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }        
         return tools;
     }

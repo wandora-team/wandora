@@ -40,6 +40,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 
@@ -49,8 +50,8 @@ import org.wandora.utils.swing.GuiTools;
  * @author akivela
  */
 public class TreeGraphGenerator extends AbstractGenerator {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TreeGraphGenerator.class);
 
 	public static String TREE_GRAPH_SI = "https://wandora.org/si/tree-graph/";
     
@@ -239,7 +240,7 @@ public class TreeGraphGenerator extends AbstractGenerator {
                 t.addType(treeGraphInstanceTopic);
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }

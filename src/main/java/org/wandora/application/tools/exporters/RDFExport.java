@@ -54,6 +54,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -63,9 +64,8 @@ import org.wandora.utils.XMLbox;
  * @author olli
  */
 public class RDFExport extends AbstractExportTool {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RDFExport.class);
 	
 	
 	public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
@@ -127,7 +127,7 @@ public class RDFExport extends AbstractExportTool {
                 setState(WAIT);
             }
             catch(Exception e){
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }

@@ -35,6 +35,7 @@ import org.wandora.application.gui.topicpanels.DockingFramePanel;
 import org.wandora.application.gui.topicpanels.TopicPanel;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -51,10 +52,8 @@ import org.wandora.topicmap.Topic;
 
 
 public class AddDockable extends AbstractDockingTool {
-
-	
 	private static final long serialVersionUID = 1L;
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AddDockable.class);
 
     private Class<?> dockableClass = null;
     private Icon dockableIcon = null;
@@ -110,7 +109,7 @@ public class AddDockable extends AbstractDockingTool {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             if(dockableIcon == null) {
@@ -145,7 +144,7 @@ public class AddDockable extends AbstractDockingTool {
                 dockingPanel.addDockable(dockableClass.getDeclaredConstructor().newInstance(), t);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         else {
