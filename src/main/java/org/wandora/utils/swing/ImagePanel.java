@@ -108,6 +108,11 @@ public class ImagePanel extends JPanel {
     
     
     
+    public Dimension getImageDimension() {
+    	return imageDimensions;
+    }
+    
+    
   
     @Override
     public void paint(Graphics g) {

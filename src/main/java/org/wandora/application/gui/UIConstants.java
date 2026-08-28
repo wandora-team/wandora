@@ -77,6 +77,7 @@ public class UIConstants {
     public static Font menuFont = new Font("SansSerif", Font.PLAIN, 12);
     public static Font tabFont = new Font("SansSerif", Font.PLAIN, 12);
     public static Font miniButtonLabel = new Font("SansSerif", Font.BOLD, 7);
+    public static Font wandoraVersionInfoFont = new Font("SansSerif", Font.BOLD, 8);
     
     public static Font h3Font = new Font("SansSerif", Font.PLAIN, 14);
     public static Font h2Font = new Font("SansSerif", Font.PLAIN, 16);
@@ -110,6 +111,7 @@ public class UIConstants {
     
     
     public static final Color wandoraBlueColor = new Color(53,56,87);
+    public static final Color wandoraBlueColorAlt = new Color(54,75,106);
     
     
     

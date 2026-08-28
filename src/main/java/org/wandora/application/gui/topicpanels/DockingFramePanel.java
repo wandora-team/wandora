@@ -62,6 +62,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolManager;
 import org.wandora.application.gui.UIBox;
+import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.simple.SimpleMenu;
 import org.wandora.application.gui.simple.SimpleScrollPane;
@@ -118,7 +119,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
 	private String OPTIONS_PREFIX = "gui.dockingFramePanel.";
     
 
-    private HashMap<Dockable,TopicPanel> dockedTopicPanels;
+    private Map<Dockable,TopicPanel> dockedTopicPanels;
     private Dockable currentDockable = null;
     private WandoraSplitDockStation station = null;
     private WandoraDockController control = null;
@@ -130,7 +131,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     
     private DropTarget dropTarget = null;
     
-    private HashMap<TopicPanel,TopicPanel> chainedTopicPanels = null;
+    private Map<TopicPanel,TopicPanel> chainedTopicPanels = null;
     
     private Topic openedTopic = null;
     
@@ -181,6 +182,14 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             g.setColor(Color.WHITE);
             g.fillRect(0, 0, w, h);
             g.drawImage(backgroundImage, x, y, this);
+            
+            String versionInfoText = wandora.getWandoraVersionInfo();
+            g.setColor(UIConstants.wandoraBlueColorAlt);
+            g.setFont(UIConstants.wandoraVersionInfoFont);
+            int viWidth = g.getFontMetrics().stringWidth(versionInfoText);
+            int vix = x + backgroundImageWidth / 2 - viWidth / 2 + 5;
+            int viy = y + backgroundImageHeight - 35;
+            g.drawString(versionInfoText, vix, viy);
         }
     }
     
@@ -558,7 +567,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     
     
     public Map<Dockable,TopicPanel> getDockedTopicPanels() {
-        return (Map<Dockable,TopicPanel>) dockedTopicPanels.clone();
+        return new HashMap<>(dockedTopicPanels);
     }
     
     

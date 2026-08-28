@@ -4,6 +4,7 @@
  *
  * https://wandora.org
  */
+import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
   id 'java'
@@ -19,8 +20,13 @@ repositories {
   }
 }
 
+def getDate() {
+  return new Date().format('yyyy.MM.dd')
+}
+
+
 group = 'org.wandora'
-version = '2026-07-15'
+version = getDate()
 
 
 dependencies {
@@ -131,8 +137,22 @@ tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
 }
 
+task createVersion(type: Copy) {
+  from 'resources'
+  into 'resources'
+  include '*.template'
+  rename { String filename ->
+    filename.replace(".template", "")
+  }
+  filter(ReplaceTokens, tokens: [VERSION: version])
+}
+
 jar {
   processResources.exclude('*')
+  manifest {
+    attributes 'Implementation-Title': 'Wandora', 'Implementation-Version': version
+  }
+  dependsOn createVersion
 }
 
 test {
@@ -153,11 +173,11 @@ startScripts {
 }
 
 
-
 application {
   mainClass = 'org.wandora.application.Wandora'
   executableDir = 'bin'
 }
+
 
 distributions {
   main {
@@ -168,6 +188,7 @@ distributions {
       from('resources') {
         into 'resources'
       }
+      exclude('version.properties.template')
     }
   }
 }

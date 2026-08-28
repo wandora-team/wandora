@@ -47,12 +47,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URLConnection;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -64,7 +67,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 import javax.swing.JViewport;
 
-import org.apache.log4j.LogManager;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.LocalDate;
 import org.wandora.application.gui.ErrorDialog;
 import org.wandora.application.gui.LayerTree;
 import org.wandora.application.gui.LogoAnimation;
@@ -118,6 +122,7 @@ import org.wandora.utils.Tuples.T2;
 import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.logger.Logger;
 import org.wandora.utils.swing.ImagePanel;
+import org.wandora.utils.swing.WandoraStartupImagePanel;
 
 
 
@@ -136,6 +141,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
 	
     private static final long serialVersionUID = 1L;
 
+    private static final String COPYRIGHT_CHARACTER = "\u00a9";
     
 	/*
      * If the application makes URL requests and the URL stream is initialized
@@ -288,11 +294,9 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
      */
     private boolean skipTopicMapListenerEvents = false;
 
-
-    
-    
     private TabbedTopicSelector topicSelector = null;
     
+    private Properties versionProperties = new Properties();
     
     
     
@@ -322,12 +326,17 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         catch(Exception e) {
             logger.error("Wandora failed to load application icons.", e);
         }
+        
+        try (FileInputStream input = new FileInputStream("resources/version.properties")) {
+        	versionProperties.load(input);
+        } 
+        catch (Exception e) {
+        	logger.error(e);
+        }
 
         try {
             topicMapListeners=new LinkedHashSet<>();
             refreshListeners=new LinkedHashSet<>();
-	    
-	    //JPopupMenu.setDefaultLightWeightPopupEnabled(false);
             initComponents();
             initializeWandora();
         }
@@ -941,7 +950,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         contentScrollPane = new org.wandora.application.gui.simple.SimpleScrollPane();
         editorPanel = new TopicEditorPanel(this, this);
         startupPanel = new javax.swing.JPanel();
-        titlePanel = new ImagePanel("gui/startup_image.gif");
+        titlePanel = new WandoraStartupImagePanel();
         infoBar = new javax.swing.JToolBar();
         infobarPanel = new javax.swing.JPanel();
         numberOfTopicAssociationsLabel = new SimpleLabel();
@@ -1416,6 +1425,12 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     private javax.swing.JLabel topicDistributionLabel;
     public javax.swing.JLabel topicLabel;
     // End of variables declaration//GEN-END:variables
+    
+    
+    
+    public String getVersion() {
+    	return versionProperties.getProperty("version");
+    }
     
     
     /**
@@ -2022,6 +2037,24 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     
+    
+    public String getWandoraVersionInfo() {
+    	String version = versionProperties.getProperty("version");
+    	if (StringUtils.isBlank(version)) {
+    		version = "UNKNOWN";
+    	}
+    	String yearNow = ""+LocalDate.now().getYear();
+    	return COPYRIGHT_CHARACTER+" WANDORA TEAM 2002-"+yearNow+". BUILD "+version+".";
+    }
+    
+    
+    
+    public String getVersionLicenseInfo() {
+    	String version = versionProperties.getProperty("version");
+    	String yearNow = ""+LocalDate.now().getYear();
+    	
+    	return "COPYRIGHT"+COPYRIGHT_CHARACTER+" WANDORA TEAM 2002-"+yearNow+". BUILD "+version+".";
+    }
     
     
     

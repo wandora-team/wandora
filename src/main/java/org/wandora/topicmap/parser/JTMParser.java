@@ -97,10 +97,8 @@ public class JTMParser {
     
 
     public void parse(File file) {
-        try {
-            FileInputStream fis = new FileInputStream(file);
+        try(FileInputStream fis = new FileInputStream(file)) {
             parse(fis, "UTF-8");
-            fis.close();
         }
         catch(Exception e) {
             logger.log(e);
