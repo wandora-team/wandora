@@ -1483,6 +1483,6 @@ MERGE test:testctype, test:testatype</query>
 #</currentScript>
    </rpanel>
    <ollamapanel>
-      <currentPrompt></currentPrompt>
+      <currentPrompt>What is Turku?</currentPrompt>
    </ollamapanel>
 </options>
