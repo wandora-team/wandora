@@ -183,7 +183,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             g.fillRect(0, 0, w, h);
             g.drawImage(backgroundImage, x, y, this);
             
-            String versionInfoText = wandora.getWandoraVersionInfo();
+            String versionInfoText = Wandora.getVersionInfo();
             g.setColor(UIConstants.wandoraBlueColorAlt);
             g.setFont(UIConstants.wandoraVersionInfoFont);
             int viWidth = g.getFontMetrics().stringWidth(versionInfoText);

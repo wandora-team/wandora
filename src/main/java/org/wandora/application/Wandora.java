@@ -296,7 +296,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
 
     private TabbedTopicSelector topicSelector = null;
     
-    private Properties versionProperties = new Properties();
+    private static Properties versionProperties = new Properties();
     
     
     
@@ -327,12 +327,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
             logger.error("Wandora failed to load application icons.", e);
         }
         
-        try (FileInputStream input = new FileInputStream("resources/version.properties")) {
-        	versionProperties.load(input);
-        } 
-        catch (Exception e) {
-        	logger.error(e);
-        }
+        loadVersionProperties();
 
         try {
             topicMapListeners=new LinkedHashSet<>();
@@ -1428,10 +1423,54 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     
     
     
-    public String getVersion() {
+    // --- VERSION ---
+    
+    public static void loadVersionProperties() {
+    	if (versionProperties.isEmpty()) {
+	        try (FileInputStream input = new FileInputStream("resources/version.properties")) {
+	        	versionProperties.load(input);
+	        } 
+	        catch (Exception e) {
+	        	logger.error(e);
+	        }
+    	}
+    }
+    
+
+    public static String getVersion() {
+    	loadVersionProperties();
     	return versionProperties.getProperty("version");
     }
     
+    
+    
+    public static String getVersionInfo() {
+    	loadVersionProperties();
+    	String version = versionProperties.getProperty("version");
+    	if (StringUtils.isBlank(version)) {
+    		version = "UNKNOWN";
+    	}
+    	String yearNow = ""+LocalDate.now().getYear();
+    	return COPYRIGHT_CHARACTER+" WANDORA TEAM 2004-"+yearNow+". BUILD "+version+".";
+    }
+    
+    
+    
+    public static String[] getVersionLicenseInfo() {
+    	loadVersionProperties();
+    	String version = versionProperties.getProperty("version");
+    	String yearNow = ""+LocalDate.now().getYear();
+    	
+    	return new String[] {
+    			"COPYRIGHT "+COPYRIGHT_CHARACTER+" WANDORA TEAM 2004-"+yearNow+". BUILD "+version+".",
+    			"THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE AND/OR MODIFY IT",
+    			"UNDER THE TERMS OF THE GNU GENERAL PUBLIC LICENSE AS",
+    			"PUBLISHED BY THE FREE SOFTWARE FOUNDATION."
+    	};
+    }
+    
+    
+    // ----------
     
     /**
      * Returns the <code>options</code> object containing all application options.
@@ -2037,25 +2076,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     
-    
-    public String getWandoraVersionInfo() {
-    	String version = versionProperties.getProperty("version");
-    	if (StringUtils.isBlank(version)) {
-    		version = "UNKNOWN";
-    	}
-    	String yearNow = ""+LocalDate.now().getYear();
-    	return COPYRIGHT_CHARACTER+" WANDORA TEAM 2002-"+yearNow+". BUILD "+version+".";
-    }
-    
-    
-    
-    public String getVersionLicenseInfo() {
-    	String version = versionProperties.getProperty("version");
-    	String yearNow = ""+LocalDate.now().getYear();
-    	
-    	return "COPYRIGHT"+COPYRIGHT_CHARACTER+" WANDORA TEAM 2002-"+yearNow+". BUILD "+version+".";
-    }
-    
+
     
     
     
@@ -2361,7 +2382,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             initializeWandoraApplication(wandoraApplication, cmdparams);
             
             if(splashWindow.isVisible()) {
-                splashWindow.setVisible(false);
+                // splashWindow.setVisible(false);
             }
             wandoraApplication.setVisible(true);
             exitCode = WAIT_FOR_APPLICATION;

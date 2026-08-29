@@ -5,6 +5,7 @@ build-auto/*
 dist/*
 dist-old/*
 temp/*
+logs/*
  
 # netbeans ignore personal stuff
 nbproject/private/

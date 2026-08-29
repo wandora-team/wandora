@@ -21,7 +21,7 @@ repositories {
 }
 
 def getDate() {
-  return new Date().format('yyyy.MM.dd')
+  return new Date().format('yyyy-MM-dd')
 }
 
 
@@ -145,6 +145,9 @@ task createVersion(type: Copy) {
     filename.replace(".template", "")
   }
   filter(ReplaceTokens, tokens: [VERSION: version])
+  doLast {
+    println "[INFO] Version file created. Ok."
+  }
 }
 
 jar {
@@ -161,6 +164,7 @@ test {
 
 run {
   classpath += files('resources')
+  dependsOn createVersion
 }
 
 startScripts {
@@ -188,7 +192,7 @@ distributions {
       from('resources') {
         into 'resources'
       }
-      exclude('version.properties.template')
+      // exclude('version.properties.template')
     }
   }
 }

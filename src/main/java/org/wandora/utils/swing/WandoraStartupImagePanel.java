@@ -25,7 +25,7 @@ public class WandoraStartupImagePanel extends ImagePanel {
 	        int x = (this.getSize().width - imageDimensions.width) / 2;
 	        int y = (this.getSize().height - imageDimensions.height) / 2;
 	        
-	        String versionInfoText = Wandora.getWandora().getWandoraVersionInfo();
+	        String versionInfoText = Wandora.getVersionInfo();
 	        g.setColor(UIConstants.wandoraBlueColorAlt);
 	        g.setFont(UIConstants.wandoraVersionInfoFont);
 	        int viWidth = g.getFontMetrics().stringWidth(versionInfoText);

@@ -31,6 +31,7 @@ import java.awt.Dimension;
 
 import javax.swing.Icon;
 
+import org.joda.time.LocalDate;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -75,9 +76,10 @@ public class AboutCredits extends AbstractWandoraTool {
             aboutDialog.getContentPane().setLayout(new java.awt.BorderLayout(20,0));
             ImagePanel titleLabel = new ImagePanel("gui/label_about_wandora.png");
             aboutDialog.getContentPane().add(titleLabel,java.awt.BorderLayout.NORTH);
-
+            int yearNow = LocalDate.now().getYear();
+            
             String text =
-                    "Copyright (C) 2004-2026 Wandora Team\n"+
+                    "Copyright \u00a9 2004-"+yearNow+" Wandora Team\n"+
                     " \n"+
                     "Wandora Team would like to thank Olli Lyytinen, \n" +
                     "Eero Lehtonen, Elias Tertsunen, Niko Laitinen, \n"+

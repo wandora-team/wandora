@@ -31,6 +31,7 @@ import java.awt.Dimension;
 
 import javax.swing.Icon;
 
+import org.joda.time.LocalDate;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -74,10 +75,12 @@ public class AboutWandora extends AbstractWandoraTool {
             aboutDialog.getContentPane().setLayout(new java.awt.BorderLayout(20,0));
             ImagePanel titleLabel = new ImagePanel("gui/label_about_wandora.png");
             aboutDialog.getContentPane().add(titleLabel,java.awt.BorderLayout.NORTH);
+            int yearNow = LocalDate.now().getYear();
 
             String text =
+            		"Build "+Wandora.getVersion()+"\n"+
                     "Wandora is a general purpose knowledge editor application.\n"+
-                    "Copyright (C) 2004-2026 Wandora Team\n \n"+
+                    "Copyright (C) 2004-"+yearNow+" Wandora Team\n \n"+
 
                     "This program is free software: you can redistribute it\n" +
                     "and/or modify it under the terms of the GNU General Public\n"+

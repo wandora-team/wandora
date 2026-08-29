@@ -29,10 +29,15 @@ package org.wandora.application.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Toolkit;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JWindow;
+
+import org.wandora.application.Wandora;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -41,12 +46,13 @@ import javax.swing.JWindow;
  * @author akivela
  */
 public class SplashWindow extends JWindow {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SplashWindow.class);
 
 	
 	protected JLabel splashLabel = null;
+    protected JPanel splashPanel = null;
+    
     
     
     /** Creates a new instance of SplashWindow */
@@ -55,9 +61,16 @@ public class SplashWindow extends JWindow {
         this.setSize(450, 186);
         this.setPreferredSize(this.getSize());
         
+        this.splashPanel = new SplashPanel();
+        this.splashPanel.setLayout(new BorderLayout());
+        this.splashPanel.setSize(450, 186);
+        this.splashPanel.setPreferredSize(this.getSize());
+        
         this.splashLabel = new JLabel();
         this.splashLabel.setIcon(UIBox.getIcon("gui/splash.gif"));
-        this.add(splashLabel);
+        this.splashPanel.add(splashLabel);
+        
+        this.add(splashPanel);
         
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation((dim.width - this.getWidth()) / 2, (dim.height - this.getHeight()) / 2);
@@ -66,4 +79,29 @@ public class SplashWindow extends JWindow {
         this.setVisible(true);
     }
     
+    
+    
+    public class SplashPanel extends JPanel {
+	    private static final long serialVersionUID = 1L;
+
+		@Override
+	    public void paint(Graphics g) {
+			super.paint(g);
+	        
+	        try {
+	            String[] texts = Wandora.getVersionLicenseInfo();
+	            g.setColor(UIConstants.wandoraBlueColorAlt);
+	            g.setFont(UIConstants.wandoraVersionInfoFont);
+	            for (int i=0; i<texts.length; i++) {
+		            int viWidth = g.getFontMetrics().stringWidth(texts[i]);
+		            int vix = this.getWidth() / 2 - viWidth / 2;
+		            int viy = this.getHeight() - 50 + 10 * i;
+		            g.drawString(texts[i], vix, viy);
+	            }
+	        }
+	        catch(Exception e) {
+	        	logger.error(e);
+	        }
+	    }
+    }    
 }
