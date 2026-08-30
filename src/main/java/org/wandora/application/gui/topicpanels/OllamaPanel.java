@@ -836,7 +836,7 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
 
     @Override
     public Icon getIcon() {
-        return UIBox.getIcon("gui/icons/topic_panel_llamacpp.png");
+        return UIBox.getIcon("gui/icons/topic_panel_ollama.png");
     }
 
     

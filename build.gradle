@@ -137,17 +137,21 @@ tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
 }
 
+task deleteOldVersion(type: Delete) {
+  delete 'resources/version.properties'
+}
+
 task createVersion(type: Copy) {
-  from 'resources'
-  into 'resources'
-  include '*.template'
-  rename { String filename ->
-    filename.replace(".template", "")
-  }
-  filter(ReplaceTokens, tokens: [VERSION: version])
   doLast {
-    println "[INFO] Version file created. Ok."
+    from 'resources'
+    into 'resources'
+    include '*.template'
+    rename { String filename ->
+      filename.replace(".template", "")
+    }
+    filter(ReplaceTokens, tokens: [VERSION: version])
   }
+  dependsOn deleteOldVersion
 }
 
 jar {
