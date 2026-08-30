@@ -142,15 +142,13 @@ task deleteOldVersion(type: Delete) {
 }
 
 task createVersion(type: Copy) {
-  doLast {
-    from 'resources'
-    into 'resources'
-    include '*.template'
-    rename { String filename ->
-      filename.replace(".template", "")
-    }
-    filter(ReplaceTokens, tokens: [VERSION: version])
+  from 'resources'
+  into 'resources'
+  include '*.template'
+  rename { String filename ->
+    filename.replace(".template", "")
   }
+  filter(ReplaceTokens, tokens: [VERSION: version])
   dependsOn deleteOldVersion
 }
 
@@ -168,7 +166,6 @@ test {
 
 run {
   classpath += files('resources')
-  dependsOn createVersion
 }
 
 startScripts {
