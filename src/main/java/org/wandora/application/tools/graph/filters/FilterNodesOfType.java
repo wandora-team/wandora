@@ -46,6 +46,7 @@ import org.wandora.application.tools.graph.AbstractGraphTool;
 import org.wandora.application.tools.graph.CloseTopicNodesOfType;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -55,6 +56,7 @@ import org.wandora.topicmap.TopicMapException;
 public class FilterNodesOfType extends AbstractGraphTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(FilterNodesOfType.class);
 
 	private Topic type;
     private GraphFilter filter;
@@ -78,7 +80,7 @@ public class FilterNodesOfType extends AbstractGraphTool {
             return "Filter nodes of type "+TopicToString.toString(type);
         }
         catch(Exception tme){
-            tme.printStackTrace(); 
+        	logger.error(tme);
             return "";
         }
     }
@@ -113,7 +115,7 @@ public class FilterNodesOfType extends AbstractGraphTool {
                 }
             } 
             catch(TopicMapException tme) {
-                tme.printStackTrace();
+            	logger.error(tme);
             }
         }        
         return tools;
@@ -139,7 +141,7 @@ public class FilterNodesOfType extends AbstractGraphTool {
                     }
                 }
                 catch(TopicMapException tme){
-                    tme.printStackTrace();
+                	logger.error(tme);
                 }
             }
         }

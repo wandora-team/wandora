@@ -38,6 +38,7 @@ import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -49,9 +50,8 @@ import org.wandora.topicmap.Topic;
 
 
 public class AudioScrobblerExtractorSelector extends JDialog {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AudioScrobblerExtractorSelector.class);
 	
 	public static String BASE_URL = "http://ws.audioscrobbler.com/1.0/";
     private Wandora wandora = null;
@@ -333,7 +333,7 @@ public class AudioScrobblerExtractorSelector extends JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return sb.toString();
@@ -367,7 +367,7 @@ public class AudioScrobblerExtractorSelector extends JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return sb.toString();

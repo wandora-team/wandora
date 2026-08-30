@@ -39,6 +39,7 @@ import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -55,6 +56,7 @@ public class PasteBinOccurrenceDownloader extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PasteBinOccurrenceDownloader.class);
 
 	private static final String URL_PREFIX = "http://pastebin.com/";
     private static final String RAW_PREFIX = "http://pastebin.com/raw.php?i=";
@@ -176,7 +178,7 @@ public class PasteBinOccurrenceDownloader extends AbstractWandoraTool {
         }
         catch(Exception e) {
             log("Exception '"+e.getMessage()+"' occurred while downloading URL '"+purl+"'.");
-            e.printStackTrace();
+            logger.error(e);
         }
         return false;
     }

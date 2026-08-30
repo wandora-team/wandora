@@ -42,12 +42,14 @@ import org.wandora.topicmap.TopicMapType;
 import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.topicmap.packageio.PackageOutput;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author olli
  */
 public class MemoryTopicMapType implements TopicMapType {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MemoryTopicMapType.class);
     
     
     /** Creates a new instance of MemoryTopicMapType */
@@ -73,7 +75,7 @@ public class MemoryTopicMapType implements TopicMapType {
 	                tm.importXTM(minimapStream);
             	}
             	catch(Exception e) {
-                    e.printStackTrace();
+            		logger.error(e);
                 }
             }
             else if(load!=null && load.length()>0) {
@@ -81,7 +83,7 @@ public class MemoryTopicMapType implements TopicMapType {
                     tm.importXTM(load);
                 }
                 catch(Exception ioe) {
-                    ioe.printStackTrace();
+                	logger.error(ioe);
                 }
             }
         }

@@ -56,11 +56,13 @@ import org.wandora.topicmap.TopicMapReadOnlyException;
 import org.wandora.topicmap.TopicMapSearchOptions;
 import org.wandora.topicmap.TopicMapStatData;
 import org.wandora.topicmap.TopicMapStatOptions;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author  olli, ak
  */
 public class TopicMapImpl extends TopicMap {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicMapImpl.class);
     
 //    private TopicMapListener topicMapListener;
     private List<TopicMapListener> topicMapListeners;
@@ -116,7 +118,7 @@ public class TopicMapImpl extends TopicMap {
             importTopicMap(topicmapFile);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -556,8 +558,8 @@ public class TopicMapImpl extends TopicMap {
                 _copyTopicIn(t,true,false,copied);
             }
             catch (Exception e) {
-                System.out.println("Unable to copy topic (" + t + ").");
-                e.printStackTrace();
+                logger.error("Unable to copy topic (" + t + ").");
+                logger.error(e);
             }
         }
         Set<Topic> endpoints=new LinkedHashSet<>();
@@ -580,8 +582,8 @@ public class TopicMapImpl extends TopicMap {
                 endpoints.add(minTopic);
             }
             catch (Exception e) {
-                System.out.println("Unable to copy association.");
-                e.printStackTrace();
+                logger.error("Unable to copy association.");
+                logger.error(e);
             }
         }
         // System.out.println("merged "+tcount+" topics and "+acount+" associations");
@@ -888,7 +890,7 @@ public class TopicMapImpl extends TopicMap {
                                
             }
             catch (Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return searchResult;

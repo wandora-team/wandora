@@ -52,6 +52,7 @@ import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleScrollPane;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -61,6 +62,7 @@ import org.wandora.utils.IObox;
 public class MaianaImportPanel extends javax.swing.JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MaianaImportPanel.class);
 	
 	private boolean autoLoadList = false;
     private boolean wasAccepted = false;
@@ -661,7 +663,7 @@ public class MaianaImportPanel extends javax.swing.JPanel {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         if(requiresListRefresh) {
             setTopicMapsList();

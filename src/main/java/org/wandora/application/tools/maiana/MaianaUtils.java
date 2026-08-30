@@ -41,6 +41,7 @@ import org.json.JSONObject;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -48,6 +49,7 @@ import org.wandora.utils.IObox;
  */
 
 public class MaianaUtils {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MaianaUtils.class);
 
     private static String apiKey = "";
     private static String apiEndPoint = null;
@@ -279,7 +281,7 @@ public class MaianaUtils {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
  

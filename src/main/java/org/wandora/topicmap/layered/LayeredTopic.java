@@ -51,6 +51,7 @@ import org.wandora.utils.Delegate;
 import org.wandora.utils.KeyedHashMap;
 import org.wandora.utils.Tuples.T2;
 import org.wandora.utils.Tuples.T3;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  * <p>
  * A LayeredTopic is a collection of topics in different layers that together
@@ -82,6 +83,7 @@ import org.wandora.utils.Tuples.T3;
  * @author olli
  */
 public class LayeredTopic extends Topic {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LayeredTopic.class);
 
     /**
      * Comparator used to order the topics LayeredTopic consists of. Topics
@@ -91,7 +93,7 @@ public class LayeredTopic extends Topic {
     class LayerOrderComparator implements Comparator<Topic>{
         private String getMinSI(Topic t){
             String min=null;
-            try{
+            try {
                 for(Locator l : t.getSubjectIdentifiers()){
                     String s=l.toExternalForm();
                     if(min==null) min=s;
@@ -99,8 +101,9 @@ public class LayeredTopic extends Topic {
                 }
                 if(min==null) min="";
                 return min;
-            }catch(TopicMapException tme){
-                tme.printStackTrace();
+            }
+            catch(TopicMapException tme){
+            	logger.error(tme);
                 return "";
             }            
         }
@@ -1349,7 +1352,7 @@ public class LayeredTopic extends Topic {
                 }
             }
             catch(TopicMapException tme){
-                tme.printStackTrace(); // TODO EXCEPTION
+            	logger.error(tme);
             }
             return min;
         }

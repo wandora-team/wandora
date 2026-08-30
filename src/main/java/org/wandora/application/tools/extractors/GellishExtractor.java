@@ -45,14 +45,15 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author akivela
  */
 public class GellishExtractor extends AbstractExtractor {
 
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GellishExtractor.class);
 
 	public String locatorPrefix = "https://wandora.org/si/gellish/";
 
@@ -387,7 +388,7 @@ public class GellishExtractor extends AbstractExtractor {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return false;
     }

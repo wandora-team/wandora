@@ -55,12 +55,14 @@ import org.wandora.topicmap.layered.LayerStack;
 import org.wandora.topicmap.layered.LayeredTopic;
 import org.wandora.utils.GripCollections;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  * TMBox contains various topic map related tools and utility methods.
  *
  * @author  olli
  */
 public class TMBox {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TMBox.class);
     
     public static final String WANDORACLASS_SI = "https://wandora.org/si/core/wandora-class";
     public static final String ASSOCIATIONTYPE_SI = "https://wandora.org/si/core/association-type";
@@ -94,7 +96,7 @@ public class TMBox {
                     languageSIs.add( languageTopic.getOneSubjectIdentifier().toExternalForm() );
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             return (String []) languageSIs.toArray(new String[] { } );
@@ -131,7 +133,7 @@ public class TMBox {
                     variantNameVersionSIs.add( variantNameVersionTopic.getOneSubjectIdentifier().toExternalForm() );
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);;
                 }
             }
             return (String []) variantNameVersionSIs.toArray(new String[] { } );
@@ -818,7 +820,7 @@ public class TMBox {
             try{
                 children=getSubCategories(t);
             }catch(TopicMapException tme){
-                tme.printStackTrace(); // TODO EXCEPTION
+                logger.error(tme);
                 children=new ArrayList<>();
             }
             children=sortTopics(children,lang);
@@ -1258,7 +1260,9 @@ public class TMBox {
                 }
                 if(d1==null) d1=t1.getData(dataType,langIndep);
                 if(d2==null) d2=t2.getData(dataType,langIndep);
-            }catch(TopicMapException tme){tme.printStackTrace();}
+            } catch(TopicMapException tme){
+            	logger.error(tme);
+        	}
             int r;
             if(d1!=null && d2!=null) r=d1.compareTo(d2);
             else if(d1==null && d2!=null) r=1;
@@ -1308,8 +1312,8 @@ public class TMBox {
             try{
                 n1=getTopicName(t1);
                 n2=getTopicName(t2);
-            }catch(TopicMapException tme){
-                tme.printStackTrace(); // TODO EXCEPTION
+            } catch(TopicMapException tme){
+                logger.error(tme);
             }
             int c=n1.compareTo(n2);
             if(c==0) c=(t1.hashCode()<t2.hashCode()?-1:(t1.hashCode()==t2.hashCode()?0:1));
@@ -1350,7 +1354,7 @@ public class TMBox {
                 else return l1.compareTo(l2);
             }
             catch(TopicMapException tme){
-                tme.printStackTrace();
+                logger.error(tme);
                 return 0;
             }
         }
@@ -1371,7 +1375,7 @@ public class TMBox {
                 else return l1.compareTo(l2);
             }
             catch(TopicMapException tme){
-                tme.printStackTrace();
+                logger.error(tme);
                 return 0;
             }
         }
@@ -1435,7 +1439,7 @@ public class TMBox {
                     return topicComparator.compare(p1,p2);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                     return 0;
                 }
             }
@@ -1501,7 +1505,10 @@ public class TMBox {
                         else return 1;
                     }
                     else return c;
-                }catch(TopicMapException tme){tme.printStackTrace();return 0;} // TODO EXCEPTION
+                } catch(TopicMapException tme){
+                	logger.error(tme);
+                	return 0;
+            	}
             }
         }    
     }
@@ -1546,7 +1553,7 @@ public class TMBox {
                     ret=min;
                 }
                 catch(TopicMapException tme){
-                    tme.printStackTrace();
+                    logger.error(tme);
                     ret="";
                 }
                 nameMap.put(t,ret);
@@ -1591,7 +1598,7 @@ public class TMBox {
                     }
                 }
                 catch(TopicMapException tme){
-                    tme.printStackTrace();
+                    logger.error(tme);
                     ret="";
                 }
                 nameMap.put(a,ret);

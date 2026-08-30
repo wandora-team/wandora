@@ -39,15 +39,15 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class BatchExtractMarcXML extends AbstractWandoraTool {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(BatchExtractMarcXML.class);
 
 
 	@Override
@@ -118,7 +118,7 @@ public class BatchExtractMarcXML extends AbstractWandoraTool {
                     map.exportXTM(exportFileName, this.getCurrentLogger());
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
             long endtime = System.currentTimeMillis();

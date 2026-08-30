@@ -30,6 +30,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author Eero Lehtonen
@@ -37,6 +39,7 @@ import java.util.Map;
 
 
 class TimeSource extends AbstractIoTSource implements IoTSource {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TimeSource.class);
 
     private static final String HOST = "wandora.org";
     private static final String PATH = "/si/iot/source/time";
@@ -59,7 +62,7 @@ class TimeSource extends AbstractIoTSource implements IoTSource {
             }
         } 
         catch (Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
         return Long.toString(System.currentTimeMillis()); // Default
     }

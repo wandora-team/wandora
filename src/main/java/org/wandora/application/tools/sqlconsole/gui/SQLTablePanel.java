@@ -56,6 +56,7 @@ import org.wandora.application.tools.sqlconsole.data.utils.SQLPattern;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.Delegate;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -64,6 +65,7 @@ import org.wandora.utils.Textbox;
 public class SQLTablePanel extends JPanel implements MouseListener, ActionListener, Scrollable {
     
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SQLTablePanel.class);
 	
 	private static Color PATTERN_BACKGROUND = new Color(250, 245, 245);
     private static Color PATTERN_FOREGROUND = new Color(10, 0, 0);
@@ -74,7 +76,6 @@ public class SQLTablePanel extends JPanel implements MouseListener, ActionListen
     private boolean tableChanged;
     private JTableHeader header;
     private MouseEvent mouseEvent;
-    //private Kirjava kirjava;
     private JPopupMenu headerPopup;
     
     private String componentid;
@@ -203,66 +204,7 @@ public class SQLTablePanel extends JPanel implements MouseListener, ActionListen
         if(headerListener!=null) headerListener.invoke(header);
         if(headerVisible) add(header, BorderLayout.PAGE_START);
         add(guiTable, BorderLayout.CENTER);
-//        setBorder(new javax.swing.border.EtchedBorder());
-
         JPopupMenu popup = UIBox.makePopupMenu(popupStruct, this);
-        
-        /*
-        if(componentid!=null){
-            HashMap<String,JMenu> subMenus=new HashMap();
-            final KirjavaTablePanel thisf=this;
-            BSHLibrary bshLibrary = kirjava.getBSHLibrary();
-            if(bshLibrary != null) {
-                popup.add(new JSeparator());
-                Vector<BSHComponent> components = bshLibrary.getComponentsByName(componentid+".table");
-                for(BSHComponent bshc : components) {
-                    Object o=bshc.makeNew(kirjava);
-                    Collection<TableContextMenuTool> tools=null;
-                    if(o instanceof Collection) tools=(Collection<TableContextMenuTool>)o;
-                    else if(o instanceof TableContextMenuTool) {tools=new Vector(); tools.add((TableContextMenuTool)o);}
-                    for(TableContextMenuTool tool_ : tools){
-                        final TableContextMenuTool tool=tool_;                        
-                        String[] labels=tool.getLabel().split("/");
-                        JMenu menu=null;
-                        String path="";
-                        for(int i=0;i<labels.length-1;i++){
-                            path+=labels[i];
-                            JMenu m=subMenus.get(path);
-                            if(m==null){
-                                m=new JMenu();
-                                m.setFont(Kirjava.menuFont);
-                                m.setText(labels[i]);
-                                subMenus.put(path,m);
-                                if(menu==null) popup.add(m);
-                                else menu.add(m);
-                            }
-                            menu=m;
-                        }
-                        String label=labels[labels.length-1];
-
-                        if(label.equals("---")){
-                            if(menu==null) popup.add(new JSeparator());
-                            else menu.add(new JSeparator());
-                        }
-                        else{
-                            JMenuItem menuItem=new JMenuItem();
-                            menuItem.setFont(kirjava.menuFont);
-                            menuItem.setText(label);
-                            menuItem.setActionCommand(label);
-                            menuItem.addActionListener(new ActionListener(){
-                                public void actionPerformed(ActionEvent actionEvent){
-                                    tool.actionPerformed(kirjava,thisf);
-                                }
-                            });
-                            if(menu==null) popup.add(menuItem);
-                            else menu.add(menuItem);
-                        }
-                    }
-                }
-            }
-        }
-        */
-        
         guiTable.setComponentPopupMenu(popup);
         tableChanged = false;
         
@@ -280,7 +222,6 @@ public class SQLTablePanel extends JPanel implements MouseListener, ActionListen
                 column.setHeaderValue(columnNames[column.getModelIndex()]);
             }
         }
-        //if(kirjava != null) kirjava.refresh();
     }
     
     
@@ -306,7 +247,7 @@ public class SQLTablePanel extends JPanel implements MouseListener, ActionListen
                 return colData;
             }
             catch (Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return null;
@@ -586,14 +527,7 @@ public class SQLTablePanel extends JPanel implements MouseListener, ActionListen
                 String message = "Taulussa on " + rowsCounter + " rivi�!";
                 JOptionPane.showMessageDialog(this, message, "Taulussa rivej�", JOptionPane.INFORMATION_MESSAGE);
             }
-            /*
-            else if("Lis�� rivi...".equalsIgnoreCase(command)) {
-                addRows();
-            }
-            else if("Poista rivi...".equalsIgnoreCase(command)) {
-                deleteRows();
-            }
-            */
+
             
             // ------ valinnat ------
             else if("Valitse kaikki".equalsIgnoreCase(command)) {
@@ -627,7 +561,7 @@ public class SQLTablePanel extends JPanel implements MouseListener, ActionListen
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         
     }    
@@ -665,20 +599,10 @@ public class SQLTablePanel extends JPanel implements MouseListener, ActionListen
         this.mouseEvent = mouseEvent;
     }
     
-    
-    
-    
-    
-    // --- Kirjava component! --------------------------------------------------
-    
-    
-    
+
     
     // -------------------------------------------------------------------------
 
-    
-    
-   
    
    
     public Dimension getPreferredScrollableViewportSize(){

@@ -33,11 +33,14 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author olli
  */
 public class TopicHashMap<K> implements Map<Topic,K> {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicHashMap.class);
     
     public Map<Locator,Topic> siMap;
     public Map<String,Topic> bnMap;
@@ -76,7 +79,7 @@ public class TopicHashMap<K> implements Map<Topic,K> {
     }
     private Topic findInternalKey(Topic t){
         Topic r=null;
-        try{
+        try {
             if(t.getBaseName()!=null) {
                 r=bnMap.get(t.getBaseName());
                 if(r!=null) return r;
@@ -89,7 +92,9 @@ public class TopicHashMap<K> implements Map<Topic,K> {
                 r=slMap.get(t.getSubjectLocator());
                 if(r!=null) return r;
             }        
-        }catch(TopicMapException tme){tme.printStackTrace();}
+        } catch(TopicMapException tme){
+        	logger.error(tme);
+    	}
         return null;
     }
 
@@ -116,7 +121,7 @@ public class TopicHashMap<K> implements Map<Topic,K> {
             }
         }
         
-        try{
+        try {
             if(t.getBaseName()!=null) bnMap.put(t.getBaseName(),t);
             for(Locator l : t.getSubjectIdentifiers()){
                 siMap.put(l,t);
@@ -124,7 +129,9 @@ public class TopicHashMap<K> implements Map<Topic,K> {
             if(t.getSubjectLocator()!=null) slMap.put(t.getSubjectLocator(),t);
             valueMap.put(t,value);
             return oldValue;
-        }catch(TopicMapException tme){tme.printStackTrace();}
+        } catch(TopicMapException tme){
+        	logger.error(tme);
+    	}
         return null;
     }
 
@@ -143,13 +150,15 @@ public class TopicHashMap<K> implements Map<Topic,K> {
         Topic t=findInternalKey(key);
         if(t==null) return null;
         else {
-            try{
+            try {
                 if(t.getBaseName()!=null) bnMap.remove(t.getBaseName());
                 for(Locator l : t.getSubjectIdentifiers()){
                     siMap.remove(l);
                 }
                 if(t.getSubjectLocator()!=null) slMap.remove(t.getSubjectLocator());
-            }catch(TopicMapException tme){tme.printStackTrace();}
+            } catch(TopicMapException tme) {
+            	logger.error(tme);
+        	}
             
             return valueMap.remove(t);
         }

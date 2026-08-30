@@ -34,6 +34,7 @@ import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.table.OperationTable;
 import org.wandora.topicmap.layered.LayerStack;
 import org.wandora.topicmap.undowrapper.UndoOperation;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -45,6 +46,7 @@ public class UndoRedoOptions extends javax.swing.JPanel {
 
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(UndoRedoOptions.class);
 	
 	private Wandora wandora = null;
     private JDialog dialog = null;
@@ -236,7 +238,7 @@ public class UndoRedoOptions extends javax.swing.JPanel {
                 wandora.undo();
             }
             catch(Exception e) {
-                //e.printStackTrace();
+            	logger.error(e);
                 WandoraOptionPane.showMessageDialog(wandora, e.getMessage(), "Undo exception");
             }
             wandora.doRefresh();
@@ -250,7 +252,7 @@ public class UndoRedoOptions extends javax.swing.JPanel {
                 wandora.redo();
             }
             catch(Exception e) {
-                //e.printStackTrace();
+            	logger.error(e);
                 WandoraOptionPane.showMessageDialog(wandora, e.getMessage(), "Redo exception");
             }
             wandora.doRefresh();

@@ -32,6 +32,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -39,7 +40,7 @@ import org.wandora.utils.Tuples.T2;
  * @author  akivela
  */
 public class RowTable implements TableView {
-       
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RowTable.class);
     
     
     private Row[] rows;
@@ -282,7 +283,7 @@ public class RowTable implements TableView {
                         if(part != null && part.length() > 0) {
                             int p = currentPart;
                             try { p = Integer.parseInt(importOrder.substring(currentPart, currentPart+1)); }
-                            catch(Exception e) { e.printStackTrace(); }
+                            catch(Exception e) { logger.error(e); }
                             //Logger.println("column " + p + " part " + part);
                             row.setColumn(p, part);
                         }
@@ -299,7 +300,7 @@ public class RowTable implements TableView {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
  

@@ -40,11 +40,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author olli
  */
 public class BibtexParser {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(BibtexParser.class);
     
     private ArrayList<BibtexEntry> entries;
     
@@ -71,7 +73,7 @@ public class BibtexParser {
                     BibtexEntry e=readEntryBlock(reader,type);
                     if(e!=null) entries.add(e);
                 }catch(BibtexParseException bpe){
-                    bpe.printStackTrace();
+                	logger.error(bpe);
                 }
             }
         }

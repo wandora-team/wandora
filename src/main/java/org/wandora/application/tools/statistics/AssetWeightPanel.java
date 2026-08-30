@@ -57,6 +57,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -70,6 +71,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
 
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AssetWeightPanel.class);
 
 	private JDialog assetWeightDialog = null;
     private Wandora app = null;
@@ -733,7 +735,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
         }
         catch(Exception e) {
             app.handleError(e);
-            e.printStackTrace();
+            logger.error(e);
         }
     }//GEN-LAST:event_addFollowWeightTypeButtonMouseReleased
 
@@ -748,7 +750,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
         }
         catch(Exception e) {
             app.handleError(e);
-            e.printStackTrace();
+            logger.error(e);
         }
     }//GEN-LAST:event_addPartialWeightTypeButtonMouseReleased
 
@@ -762,7 +764,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
             this.assetWeightTabbedPane.setSelectedComponent(resultsPanel);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }//GEN-LAST:event_calculateButtonMouseReleased
 
@@ -778,7 +780,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }//GEN-LAST:event_normalizeButtonMouseReleased
 
@@ -811,7 +813,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
                     sb.append("\n");
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -919,7 +921,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 
@@ -1200,7 +1202,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
             return Double.parseDouble(initialPartialWeightTextField.getText());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return initialPartialWeightOfATopic;
     }
@@ -1212,7 +1214,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
             return Double.parseDouble(partialWeightOfClassTextField.getText());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return partialWeightOfClass;
     }
@@ -1223,7 +1225,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
             return Double.parseDouble(partialWeightOfinstanceTextField.getText());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return partialWeightOfInstance;
     }
@@ -1234,7 +1236,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
             return Double.parseDouble(defaultPartialWeightOfAssociationTextField.getText());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return defaultPartialWeightOfAssociation;
     }
@@ -1246,7 +1248,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
             return Double.parseDouble(defaultPartialWeightOfOccurrenceTextField.getText());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return defaultPartialWeightOfOccurrence;
     }
@@ -1262,7 +1264,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
             return Double.parseDouble(defaultFollowWeightOfAssociationTextField.getText());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return defaultFollowWeightOfAssociation;
     }
@@ -1274,7 +1276,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
             return Double.parseDouble(followWeightOfClassTextField.getText());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return followWeightOfClass;
     }
@@ -1285,7 +1287,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
             return Double.parseDouble(followWeightOfInstanceTextField.getText());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return followWeightOfInstance;
     }
@@ -1297,7 +1299,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
             return Double.parseDouble(coefficientTextField.getText());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return coefficient;
     }
@@ -1403,7 +1405,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
                         sb.append("\n");
                     }
                     catch(Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -1474,7 +1476,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
                 }
             }
             catch (Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
         }
 
@@ -1514,7 +1516,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
             return null;
         }
@@ -1543,7 +1545,7 @@ public class AssetWeightPanel extends javax.swing.JPanel {
                 return "";
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
             return "ERROR";
         }

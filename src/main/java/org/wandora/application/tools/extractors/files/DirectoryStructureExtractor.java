@@ -44,6 +44,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
         
 
@@ -52,9 +53,8 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class DirectoryStructureExtractor extends AbstractExtractor {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DirectoryStructureExtractor.class);
 
 	
 	private String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
@@ -220,7 +220,7 @@ public class DirectoryStructureExtractor extends AbstractExtractor {
             }
             catch (Exception e) {
                 log(e);
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return false;

@@ -66,6 +66,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Base64;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -79,7 +80,7 @@ import org.xml.sax.XMLReader;
 public abstract class AbstractUClassifier extends AbstractExtractor {
     
 	private static final long serialVersionUID = 1L;
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractUClassifier.class);
 
 
 
@@ -347,7 +348,7 @@ public abstract class AbstractUClassifier extends AbstractExtractor {
             str = URLEncoder.encode(str, defaultEncoding);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return str;
     }
@@ -376,7 +377,7 @@ public abstract class AbstractUClassifier extends AbstractExtractor {
         }
 
         catch(TransformerException ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
             return null;
         }
     }

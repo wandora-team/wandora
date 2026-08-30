@@ -48,6 +48,7 @@ import javax.swing.JOptionPane;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.tools.sqlconsole.data.utils.SQLPattern;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -59,6 +60,7 @@ import org.wandora.application.tools.sqlconsole.data.utils.SQLPattern;
 public class PatternEditor extends javax.swing.JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PatternEditor.class);
 
 	public static final String DEFAULT_PATTERN_NAME = "käyttäjän lauseke";
     
@@ -466,7 +468,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
     
@@ -585,7 +587,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
                 parsePatterns(s);
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -604,7 +606,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
                 parsePatterns(s);
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -632,7 +634,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }

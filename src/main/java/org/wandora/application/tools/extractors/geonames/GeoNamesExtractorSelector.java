@@ -47,6 +47,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.utils.Tuples;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -55,9 +56,8 @@ import org.wandora.utils.Tuples;
  * @author  akivela
  */
 public class GeoNamesExtractorSelector extends javax.swing.JDialog {
-
-    
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GeoNamesExtractorSelector.class);
 	
 	
 	public static String BASE_URL = "http://api.geonames.org/";
@@ -519,7 +519,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         String contextStr= sb.toString();
@@ -565,7 +565,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return null;
@@ -612,7 +612,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return null;
@@ -670,7 +670,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return sb.toString();

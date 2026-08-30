@@ -54,6 +54,7 @@ import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -63,8 +64,8 @@ import com.mashape.unirest.http.JsonNode;
  * @author Eero Lehtonen
  */
 public class RedditExtractorUI extends javax.swing.JPanel {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RedditExtractorUI.class);
 
     private boolean accepted = false;
     private JDialog dialog = null;
@@ -153,7 +154,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             }  
         } 
         catch (JSONException jse) {
-            jse.printStackTrace();
+        	logger.error(jse);
         }
 
         return wts.toArray(new WandoraTool[]{});
@@ -387,7 +388,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }

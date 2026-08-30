@@ -49,7 +49,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLConnection;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -120,7 +119,6 @@ import org.wandora.utils.Options;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.Tuples.T2;
 import org.wandora.utils.logger.Log4j2Logger;
-import org.wandora.utils.logger.Logger;
 import org.wandora.utils.swing.ImagePanel;
 import org.wandora.utils.swing.WandoraStartupImagePanel;
 
@@ -307,11 +305,19 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     
     
     public Wandora(CMDParamParser cmdparams) {
+    	logger.info("*****************************************");
+    	logger.info("*****      Wandora application      *****");
+    	logger.info("*****************************************");
+    	logger.info("Starting up.");
+    	
         Wandora.wandora = this;
         if(cmdparams != null && cmdparams.isSet("options")) {
-            this.options = new Options(cmdparams.get("options"));
+        	String optionsFilename = cmdparams.get("options");
+        	logger.info("Reading options from '{}'.", optionsFilename);
+            this.options = new Options(optionsFilename);
         }
         else {
+        	logger.info("Reading options from 'conf/options.xml'.");
             this.options = new Options("conf/options.xml");
         }
         
@@ -327,9 +333,11 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
             logger.error("Wandora failed to load application icons.", e);
         }
         
+        logger.info("Reading version properties.");
         loadVersionProperties();
 
         try {
+        	logger.info("Initializing ui.");
             topicMapListeners=new LinkedHashSet<>();
             refreshListeners=new LinkedHashSet<>();
             initComponents();
@@ -344,8 +352,6 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     public WandoraModulesServer getHTTPServer(){
         if(httpServer==null) {
             try {
-                // httpServer=new WandoraHttpServer(this);
-                // httpServer=new WandoraWebAppServer(this);
                 httpServer=new WandoraModulesServer(this);
                 httpServer.setStatusComponent(serverButton,"gui/icons/server_start.png","gui/icons/server_stop.png","gui/icons/server_hit.png");
             }
@@ -2372,7 +2378,6 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
      * @param args the command line arguments
      */
     public static void main(String args[]) throws Exception {
-    	Logger.setLogger(Log4j2Logger.getLogger(Wandora.class));
         CMDParamParser cmdparams=new CMDParamParser(args);
         UIConstants.initializeGUI();
         SplashWindow splashWindow = new SplashWindow();
@@ -2382,7 +2387,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             initializeWandoraApplication(wandoraApplication, cmdparams);
             
             if(splashWindow.isVisible()) {
-                // splashWindow.setVisible(false);
+                splashWindow.setVisible(false);
             }
             wandoraApplication.setVisible(true);
             exitCode = WAIT_FOR_APPLICATION;
@@ -2393,8 +2398,14 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             while(exitCode == WAIT_FOR_APPLICATION);
             wandoraApplication.setVisible(false);
             wandoraApplication.dispose();
+            
+            if(exitCode == RESTART_APPLICATION) {
+            	logger.info("Restarting application.");
+            }
         }
         while(exitCode == RESTART_APPLICATION);
+        
+        logger.info("Exiting. Bye.");
         
         System.exit(0);
     }

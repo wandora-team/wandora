@@ -37,6 +37,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.HTMLEntitiesCoder;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -45,8 +46,8 @@ import org.wandora.utils.IObox;
  * @author Eero Lehtonen
  */
 public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(NYTArticleSearchExtractor.class);
 	
 	private static String defaultLang = "en";
     private static String currentURL = null;
@@ -108,7 +109,7 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
                         try {
                             parseResult(result, tm);
                         } catch (JSONException | TopicMapException e) {
-                            e.printStackTrace();
+                            logger.error(e);
                             log(e);
                         }
                     }

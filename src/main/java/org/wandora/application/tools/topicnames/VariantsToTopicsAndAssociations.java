@@ -40,6 +40,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -52,6 +53,7 @@ import org.wandora.utils.Tuples.T2;
 public class VariantsToTopicsAndAssociations extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(VariantsToTopicsAndAssociations.class);
 
 
 	public VariantsToTopicsAndAssociations() {
@@ -138,7 +140,6 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool {
                                                     associationCount++;
                                                 }
                                                 catch(Exception e) {
-                                                    e.printStackTrace();
                                                     log(e);
                                                 }
                                             }
@@ -148,7 +149,6 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool {
                                         }
                                     }
                                     catch(Exception e) {
-                                        e.printStackTrace();
                                         log(e);
                                     }
                                 }
@@ -166,7 +166,7 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool {
                             deleteScope.e1.removeVariant(deleteScope.e2);
                         }
                         catch(Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                     log("Ready.");

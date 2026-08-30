@@ -47,6 +47,7 @@ import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * <p>
@@ -59,6 +60,7 @@ import org.wandora.utils.IObox;
 public class DownloadAllOccurrences extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DownloadAllOccurrences.class);
 
 	public boolean changeOccurrence = false;
     public boolean overWriteAll = false;
@@ -221,7 +223,7 @@ public class DownloadAllOccurrences extends AbstractWandoraTool {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return currentDirectory;
     }

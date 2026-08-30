@@ -49,6 +49,7 @@ import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
 import org.wandora.modules.servlet.ModulesServlet.HttpMethod;
 import org.wandora.modules.usercontrol.User;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -173,6 +174,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 public class ImageResizeAction extends CachedAction {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ImageResizeAction.class);
     
     protected boolean exceptionOnImageRead=false;
     
@@ -492,7 +494,7 @@ public class ImageResizeAction extends CachedAction {
                         errorImage=ImageIO.read(new URI(error).toURL());
                     }
                     catch(Exception ioe) {
-                        ioe.printStackTrace();
+                    	logger.error(ioe);
                     }
                 }
                 return errorImage;
@@ -620,7 +622,7 @@ public class ImageResizeAction extends CachedAction {
                         watermarkImage=ImageIO.read(new URI(watermark).toURL());
                     }
                     catch(Exception e) {
-                        e.printStackTrace();
+                    	logger.error(e);
                     }
                 }
                 if(watermarkMode.equals("lowerright")){
@@ -631,7 +633,7 @@ public class ImageResizeAction extends CachedAction {
                             g2.drawImage(watermarkImage,x,y,null);
                         }
                         catch(Exception e) {
-                            e.printStackTrace();
+                        	logger.error(e);
                         }
                     }
                 }

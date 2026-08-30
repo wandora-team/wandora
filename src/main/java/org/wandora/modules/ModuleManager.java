@@ -48,6 +48,7 @@ import org.wandora.utils.ListenerList;
 import org.wandora.utils.ScriptManager;
 import org.wandora.utils.Tuples;
 import org.wandora.utils.Tuples.T3;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * <p>
@@ -94,6 +95,8 @@ import org.wandora.utils.Tuples.T3;
  * @author olli
  */
 public class ModuleManager {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ModuleManager.class);
+	
     /**
      * A list containing all the modules this manager takes care of.
      */
@@ -553,7 +556,7 @@ public class ModuleManager {
             try{
                 module.init(this, params);
             }catch(ModuleException me){
-                me.printStackTrace();
+                logger.error(me);
             }
             log=((LoggingModule)module).getLog("ModuleManager");
         }

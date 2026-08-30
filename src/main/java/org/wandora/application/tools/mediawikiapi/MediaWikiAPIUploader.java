@@ -35,6 +35,7 @@ import org.wandora.application.tools.GenericOptionsDialog;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author Eero
@@ -44,6 +45,7 @@ import org.wandora.topicmap.TopicMapException;
 public class MediaWikiAPIUploader extends MediaWikiAPIHandler {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MediaWikiAPIUploader.class);
 
 	private static final String DEFAULT_TYPE_SI  
             = "https://wandora.org/si/mediawiki/api/content/";
@@ -81,7 +83,7 @@ public class MediaWikiAPIUploader extends MediaWikiAPIHandler {
     private Wandora wandora;
     private Context<?> context;
     
-    private WandoraToolLogger logger;
+    private WandoraToolLogger toolLogger;
     
     private MediaWikiAPIConfig conf;
     
@@ -223,7 +225,7 @@ public class MediaWikiAPIUploader extends MediaWikiAPIHandler {
                         log("Processing " + ct.getBaseName()); 
                     } catch (Exception e) {
                         log(e.getMessage());
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                     
                     content = occurrence.get(ctScope);
@@ -270,7 +272,7 @@ public class MediaWikiAPIUploader extends MediaWikiAPIHandler {
         this.context = c;
         
         setDefaultLogger();
-        logger = getDefaultLogger();
+        toolLogger = getDefaultLogger();
         Topic contentType;
         Topic contentScope;
         

@@ -41,6 +41,7 @@ import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -48,9 +49,8 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 public class DiscogsExtractorUI extends javax.swing.JPanel {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DiscogsExtractorUI.class);
 	
 	
 	private boolean accepted = false;
@@ -198,7 +198,7 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return sb.toString();

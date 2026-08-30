@@ -38,6 +38,7 @@ import java.util.List;
 import org.wandora.topicmap.layered.ContainerTopicMap;
 import org.wandora.topicmap.layered.Layer;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * This class is a collection of static helpers for accessing
@@ -47,7 +48,7 @@ import org.wandora.utils.DataURL;
  * @author akivela
  */
 public class TopicTools {
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicTools.class);
     
     
     
@@ -71,7 +72,7 @@ public class TopicTools {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -99,7 +100,7 @@ public class TopicTools {
                             if(a.getPlayer(role) != null) players.add(a.getPlayer(role));
                         }
                         catch (Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                 }
@@ -128,7 +129,7 @@ public class TopicTools {
                     players.addAll(getPlayersWithRole(topic, roleSI));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -153,7 +154,7 @@ public class TopicTools {
                     players.addAll(getPlayersWithRole( topic, roleSI ));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -179,7 +180,7 @@ public class TopicTools {
                     players.addAll(getPlayersWithRole( topic, roleSI ));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -206,7 +207,7 @@ public class TopicTools {
                     players.addAll(getPlayersWithRoles(topic, roleSIs));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -233,7 +234,7 @@ public class TopicTools {
                     players.addAll(getPlayersWithRoles(topic, roleSIs));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -266,7 +267,7 @@ public class TopicTools {
                         }
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -290,7 +291,7 @@ public class TopicTools {
             if(!players.isEmpty()) return players.get(0);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -320,7 +321,7 @@ public class TopicTools {
                         if(a.getPlayer(role) != null) players.add(a.getPlayer(role));
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -350,7 +351,7 @@ public class TopicTools {
                     if(a.getPlayer(role) != null) players.add(a.getPlayer(role));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -377,7 +378,7 @@ public class TopicTools {
                     players.addAll(getPlayers(topic, associationTypeSI, roleSI));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -420,7 +421,7 @@ public class TopicTools {
                         }
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -457,7 +458,7 @@ public class TopicTools {
                     }
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -490,7 +491,7 @@ public class TopicTools {
                 players.addAll(getPlayers(topic, associationTypeSI, roleSI, hasRole, hasPlayer));
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return players;
@@ -549,7 +550,7 @@ public class TopicTools {
                         }
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -630,7 +631,7 @@ public class TopicTools {
                             }
                         }
                         catch (Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                 }
@@ -676,7 +677,7 @@ public class TopicTools {
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return selectedTypes;
@@ -736,7 +737,7 @@ public class TopicTools {
                     }
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -808,7 +809,7 @@ public class TopicTools {
                 else break;
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return base;
@@ -855,7 +856,7 @@ public class TopicTools {
                 else break;
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return pathTopics;
@@ -915,7 +916,7 @@ public class TopicTools {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
     
@@ -1055,7 +1056,7 @@ public class TopicTools {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return name;
     }
@@ -1110,7 +1111,7 @@ public class TopicTools {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return triplets.toArray( new String[] {} );
     }
@@ -1160,7 +1161,7 @@ public class TopicTools {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return tuples.toArray( new String[] {} );
     }
@@ -1189,7 +1190,7 @@ public class TopicTools {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return triplet.toArray( new String[] {} );
     }

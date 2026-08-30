@@ -66,6 +66,7 @@ import org.wandora.utils.Delegate;
 import org.wandora.utils.KeyedHashMap;
 import org.wandora.utils.KeyedHashSet;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -102,6 +103,8 @@ import org.wandora.utils.Tuples.T2;
  * @author olli
  */
 public class LayerStack extends ContainerTopicMap implements TopicMapListener {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LayerStack.class);
+	
     protected boolean useTopicIndex=true;
     protected Object indexLock=new Object();
     
@@ -159,7 +162,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             type.unpackageTopicMap(this, in, "", this,null);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         finally {
         	if(in != null) {
@@ -828,7 +831,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
                 sourceLayers.remove(sourceLayer);
             }
             catch (Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -1143,7 +1146,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
                         layerIndex++;
                     }
                     catch(Exception e) {
-                        e.printStackTrace();
+                    	logger.error(e);
                     }
                 }
                 else return null;
@@ -1420,7 +1423,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
                 return lname+"//"+min;
             }
             catch(TopicMapException tme){
-                tme.printStackTrace(); // TODO EXCEPTION
+            	logger.error(tme);
                 return lname;
             }
         }

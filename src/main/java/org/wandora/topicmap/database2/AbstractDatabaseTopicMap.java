@@ -41,6 +41,7 @@ import java.util.NoSuchElementException;
 
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -50,6 +51,7 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public abstract class AbstractDatabaseTopicMap extends TopicMap {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractDatabaseTopicMap.class);
     
     private int queryCounter=1;
 
@@ -121,7 +123,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             }
         }
         catch(SQLException sqle){
-            sqle.printStackTrace();
+            logger.error(sqle);
             unconnected=true;
         }
     }
@@ -218,7 +220,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             return false;
         } 
         catch(SQLException sqle){
-//            sqle.printStackTrace();
+//            logger.error(sqle);
             return true;
         }
     }
@@ -270,7 +272,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             }
             catch (SQLException sqle) {
                 System.out.println("SQL exception occurred while acquiring connection:");
-                sqle.printStackTrace();
+                logger.error(sqle);
                 System.out.println("Trying to open new connection!");
                 connection=createConnection(true);
                 isDBReadOnly=testReadOnly();
@@ -304,7 +306,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             System.out.println("Connection string: " + dbConnectionString);
             System.out.println("User: " + dbUser);
             System.out.println("Password: " + dbPassword);
-            e.printStackTrace();
+            logger.error(e);
             return null;
         }
     }
@@ -325,7 +327,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                 connection.close();
             }
             catch(SQLException sqle) {
-                sqle.printStackTrace();
+                logger.error(sqle);
             }
         }
     }
@@ -371,7 +373,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                 stmt.executeUpdate(query);
             }
             catch(SQLException sqle) {
-                sqle.printStackTrace();
+                logger.error(sqle);
                 throw new TopicMapException(sqle);
             }
             finally {
@@ -441,12 +443,12 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             catch(SQLException sqle) {
                 try {
                     if(rs != null) rs.close();
-                } catch(Exception e) { e.printStackTrace(); }
+                } catch(Exception e) { logger.error(e); }
                 try {
                     if(stmt != null) stmt.close();
-                } catch(Exception e) { e.printStackTrace(); }
+                } catch(Exception e) { logger.error(e); }
 
-                sqle.printStackTrace();
+                logger.error(sqle);
                 throw new TopicMapSQLException(sqle);
             }
         }
@@ -460,7 +462,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             updateQueue.commit();
         }
         catch(TopicMapException | SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         int count = 0;
         
@@ -481,18 +483,18 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                     return count;
                 }
                 catch(SQLException sqle) {
-                    sqle.printStackTrace();
+                    logger.error(sqle);
                 }
                 finally {
                     if(rs != null) {
                         try {
                             rs.close();
-                        } catch(Exception e) { e.printStackTrace(); }
+                        } catch(Exception e) { logger.error(e); }
                     }
                     if(stmt != null) {
                         try {
                             stmt.close();
-                        } catch(Exception e) { e.printStackTrace(); }
+                        } catch(Exception e) { logger.error(e); }
                     }
                 }
             }
@@ -548,7 +550,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                         rowIndex = 0;
                     }
                     catch(Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                         hasNext = false;
                     }
                 }
@@ -678,7 +680,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                             queryQueue.clear();
                         }
                         catch(SQLException sqle) {
-                            sqle.printStackTrace();
+                            logger.error(sqle);
                             connection.rollback();
                             try {
                                 Thread.sleep(100);

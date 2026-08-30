@@ -69,6 +69,7 @@ import org.wandora.utils.MimeTypes;
 import org.wandora.utils.OpenOfficeBox;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import eu.medsea.mimeutil.MimeType;
 import eu.medsea.mimeutil.MimeUtil;
@@ -79,9 +80,8 @@ import eu.medsea.mimeutil.MimeUtil;
  * @author akivela
  */
 public class SimpleDocumentExtractor extends AbstractExtractor implements BrowserPluginExtractor {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleDocumentExtractor.class);
 	
 	
 	protected static String TOPIC_SI = "https://wandora.org/si/topic";
@@ -205,7 +205,7 @@ public class SimpleDocumentExtractor extends AbstractExtractor implements Browse
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
         wandora.doRefresh();

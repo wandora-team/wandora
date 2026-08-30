@@ -53,6 +53,7 @@ import org.wandora.topicmap.TopicMapReadOnlyException;
 import org.wandora.topicmap.TopicRemovedException;
 import org.wandora.utils.Tuples;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -60,6 +61,7 @@ import org.wandora.utils.Tuples.T2;
  * @author  olli
  */
 public class TopicImpl extends Topic {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicImpl.class);
     
     private TopicMapImpl topicMap;
     
@@ -632,7 +634,7 @@ public class TopicImpl extends Topic {
                         return false;
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
         }
@@ -1123,7 +1125,7 @@ public class TopicImpl extends Topic {
                 else return l1.compareTo(l2);
             }
             catch(TopicMapException tme){
-                tme.printStackTrace();
+            	logger.error(tme);
                 return 0;
             }
         }

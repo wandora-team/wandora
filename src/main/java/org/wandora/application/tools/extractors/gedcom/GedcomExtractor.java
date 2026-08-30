@@ -48,6 +48,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -61,8 +62,8 @@ import org.wandora.topicmap.XTMPSI;
  */
 
 public class GedcomExtractor extends AbstractExtractor {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GedcomExtractor.class);
 
 	public static final boolean DEBUG = true;
 
@@ -837,7 +838,7 @@ public class GedcomExtractor extends AbstractExtractor {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return false;
 	}

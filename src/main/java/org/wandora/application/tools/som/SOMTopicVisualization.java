@@ -36,6 +36,7 @@ import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleScrollPane;
 import org.wandora.topicmap.Topic;
 import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -46,6 +47,7 @@ import org.wandora.utils.ClipboardBox;
 public class SOMTopicVisualization extends javax.swing.JDialog {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SOMTopicVisualization.class);
 
 	SOMMap map = null;
 
@@ -117,7 +119,7 @@ public class SOMTopicVisualization extends javax.swing.JDialog {
                     sb.append("\n");
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }

@@ -33,6 +33,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -42,9 +43,8 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public abstract class AbstractGuardianExtractor extends AbstractExtractor {
-  
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractGuardianExtractor.class);
 	
 	
 	@Override
@@ -158,7 +158,7 @@ public abstract class AbstractGuardianExtractor extends AbstractExtractor {
             Topic fieldTopicType = getFieldTopicType(tm);
             makeSubclassOf(tm, t, fieldTopicType);
         } catch (TopicMapException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return t;
     }
@@ -169,7 +169,7 @@ public abstract class AbstractGuardianExtractor extends AbstractExtractor {
         try {
             t = getOrCreateTopic(tm, FIELD_BASE_SI+siExt+"/" + siEnd,id + " (The Guardian API / Field)");
         } catch (TopicMapException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return t;
     }
@@ -182,7 +182,7 @@ public abstract class AbstractGuardianExtractor extends AbstractExtractor {
             Topic tagTopicType = getTagTopicType(tm);
             t.addType(tagTopicType);
         } catch (TopicMapException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return t;
     }
@@ -193,7 +193,7 @@ public abstract class AbstractGuardianExtractor extends AbstractExtractor {
         try {
             t = getOrCreateTopic(tm, TAG_BASE_SI+siExt+"/" + siEnd,id + " (The Guardian API / Tag)");
         } catch (TopicMapException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return t;
     }

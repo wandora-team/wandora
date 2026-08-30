@@ -54,6 +54,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -61,8 +62,8 @@ import org.wandora.utils.XMLbox;
  * @author akivela
  */
 public class SimpleFileExtractor extends AbstractExtractor implements BrowserPluginExtractor {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleFileExtractor.class);
 	
 	
 	protected static String TOPIC_SI = "https://wandora.org/si/topic";
@@ -185,7 +186,7 @@ public class SimpleFileExtractor extends AbstractExtractor implements BrowserPlu
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
         wandora.doRefresh();

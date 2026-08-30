@@ -55,6 +55,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -68,8 +69,8 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class PropertyTableExtractor extends AbstractExtractor {
-   
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PropertyTableExtractor.class);
 	
 	private URL basePath = null;
     public static String SI_PREFIX = "https://wandora.org/si/table";
@@ -123,7 +124,7 @@ public class PropertyTableExtractor extends AbstractExtractor {
         try {
             basePath = new URI(request.getSource()).toURL();
         }
-        catch(Exception e) { e.printStackTrace(); }
+        catch(Exception e) { logger.error(e); }
         String s = super.doBrowserExtract(request, wandora);
         basePath = null;
         return s;

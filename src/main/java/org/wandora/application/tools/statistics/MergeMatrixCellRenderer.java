@@ -31,6 +31,8 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 /**
  *
  * @author
@@ -41,6 +43,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class MergeMatrixCellRenderer extends DefaultTableCellRenderer {
     
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MergeMatrixCellRenderer.class);
 
 	public MergeMatrixCellRenderer() {
         
@@ -66,8 +69,7 @@ public class MergeMatrixCellRenderer extends DefaultTableCellRenderer {
             this.setValue(value);
         }
         catch(Exception e){
-            e.printStackTrace(); // TODO EXCEPTION;
-            // uriLabel.setText("*** Exception occurred while initializing locator table label!");
+        	logger.error(e);
         }
         
         return this;

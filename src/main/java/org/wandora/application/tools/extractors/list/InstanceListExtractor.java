@@ -59,6 +59,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
 /**
@@ -87,9 +88,8 @@ import org.wandora.utils.IObox;
  * @author akivela
  */
 public class InstanceListExtractor extends AbstractExtractor implements BrowserPluginExtractor {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(InstanceListExtractor.class);
 	
 	private URL basePath = null;
     private static int listCounter = 0;
@@ -136,7 +136,7 @@ public class InstanceListExtractor extends AbstractExtractor implements BrowserP
         try {
             basePath = new URI(request.getSource()).toURL();
         }
-        catch(Exception e) { e.printStackTrace(); }
+        catch(Exception e) { logger.error(e); }
         String s = super.doBrowserExtract(request, wandora);
         basePath = null;
         return s;
@@ -294,7 +294,7 @@ public class InstanceListExtractor extends AbstractExtractor implements BrowserP
                 ExtractHelper.makeSubclassOf(listRoot, wandoraClass, tm);
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         
@@ -423,7 +423,7 @@ public class InstanceListExtractor extends AbstractExtractor implements BrowserP
                 t.addType(listRoot);
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
             return t;
         }

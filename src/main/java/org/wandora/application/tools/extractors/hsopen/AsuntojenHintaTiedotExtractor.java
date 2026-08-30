@@ -33,6 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -41,7 +42,7 @@ import org.wandora.utils.IObox;
 
 
 public class AsuntojenHintaTiedotExtractor {
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AsuntojenHintaTiedotExtractor.class);
     
     public AsuntojenHintaTiedotExtractor() {
         
@@ -77,7 +78,7 @@ public class AsuntojenHintaTiedotExtractor {
                     z++;
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
 
                 try {
@@ -191,7 +192,7 @@ public class AsuntojenHintaTiedotExtractor {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         
@@ -199,7 +200,7 @@ public class AsuntojenHintaTiedotExtractor {
             IObox.saveFile(saveFile, sb.toString());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         
     }
@@ -317,7 +318,7 @@ public class AsuntojenHintaTiedotExtractor {
             IObox.saveFile(outputFile, sb.toString());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
 
     }

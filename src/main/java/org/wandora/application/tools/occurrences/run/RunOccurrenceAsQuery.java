@@ -36,6 +36,7 @@ import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.query2.QueryRunner;
 import org.wandora.topicmap.Topic;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -47,6 +48,7 @@ public class RunOccurrenceAsQuery extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RunOccurrenceAsQuery.class);
 
 	public RunOccurrenceAsQuery() {}
     public RunOccurrenceAsQuery(Context<?> preferredContext) {
@@ -104,7 +106,7 @@ public class RunOccurrenceAsQuery extends AbstractWandoraTool {
             }
             catch(Exception e) {
                 wandora.handleError(e);
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }

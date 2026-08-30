@@ -36,6 +36,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  * <p>
  * The abstract Topic class. Each topic implementation should extend this class.
@@ -56,6 +58,7 @@ import java.util.Set;
  * @author  olli
  */
 public abstract class Topic {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Topic.class);
     
     /**
      * Gets the topic ID. Topic id is unique in the topic map. It cannot be changed
@@ -300,7 +303,7 @@ public abstract class Topic {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         if(name==null || name.trim().length()==0) name="[unnamed]";
         return name;
@@ -360,7 +363,7 @@ public abstract class Topic {
             return getDisplayName();
         }
         catch(TopicMapException tme){
-            tme.printStackTrace();
+        	logger.error(tme);
             return "<Exception>";
         }
     }

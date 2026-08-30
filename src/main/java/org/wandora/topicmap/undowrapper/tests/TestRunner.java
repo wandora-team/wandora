@@ -9,6 +9,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -18,6 +19,7 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class TestRunner extends AbstractWandoraTool {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TestRunner.class);
     
     private static final long serialVersionUID = 1L;
     
@@ -72,7 +74,7 @@ public class TestRunner extends AbstractWandoraTool {
                     e.printStackTrace(pwriter);
                     pwriter.flush();
                 } catch(IOException ioe){
-                    ioe.printStackTrace();
+                	logger.error(ioe);
                 }
             }
         }
@@ -85,7 +87,7 @@ public class TestRunner extends AbstractWandoraTool {
             this.output.flush();
         }
         catch(IOException ioe){
-            ioe.printStackTrace();
+        	logger.error(ioe);
         }
     }
     

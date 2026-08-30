@@ -37,6 +37,7 @@ import org.wandora.application.gui.topicpanels.TraditionalTopicPanel;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -45,6 +46,7 @@ import org.wandora.topicmap.TopicMapException;
 public class OpenTopicInNew extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(OpenTopicInNew.class);
 
 	public final static int ASK_USER = 100;
     public final static int SOLVE_USING_CONTEXT = 102;
@@ -117,7 +119,7 @@ public class OpenTopicInNew extends AbstractWandoraTool {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 

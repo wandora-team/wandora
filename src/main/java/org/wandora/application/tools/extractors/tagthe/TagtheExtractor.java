@@ -37,6 +37,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.IObox;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -48,9 +49,8 @@ import org.xml.sax.XMLReader;
  * @author akivela
  */
 public class TagtheExtractor extends AbstractTagtheExtractor {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TagtheExtractor.class);
 
 
 
@@ -101,7 +101,7 @@ public class TagtheExtractor extends AbstractTagtheExtractor {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
                 content = data;
                 //contentType = "text/raw";
             }

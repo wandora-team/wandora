@@ -40,6 +40,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -58,6 +59,7 @@ public class FixSubjectIdentifiers2 extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(FixSubjectIdentifiers2.class);
 
 	boolean quiet = false;
 
@@ -150,13 +152,13 @@ public class FixSubjectIdentifiers2 extends AbstractWandoraTool {
                                                         topic.addSubjectIdentifier(new Locator(encodedsistr));
                                                     }
                                                     catch(Exception e) {
-                                                        e.printStackTrace();
+                                                    	logger.error(e);
                                                     }
                                                     try {
                                                         topic.removeSubjectIdentifier(subjectIdentifier);
                                                     }
                                                     catch(Exception e) {
-                                                        e.printStackTrace();
+                                                    	logger.error(e);
                                                     }
                                                     log("Fixed subject identifier " + encodedsistr);
                                                     fixCount++;

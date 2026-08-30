@@ -28,7 +28,6 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -52,6 +51,7 @@ import org.wandora.application.gui.simple.SimpleTextArea;
 import org.wandora.application.gui.simple.SimpleToggleButton;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -62,6 +62,7 @@ import org.wandora.topicmap.TopicMap;
 public class PingerPanel extends javax.swing.JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PingerPanel.class);
 
 	private static final String PANEL_TITLE = "IoT pinger";
     
@@ -185,34 +186,7 @@ public class PingerPanel extends javax.swing.JPanel {
         setTimeFieldsEnabled(expires && !running);
     }
     
-    
-    /**
-     * Logging helper passed to PingerWorker
-     */
-    protected interface Logger {
-        void log(Exception e);
-        void log(String s);
-    }
-    
-    
-    private Logger logger = new Logger() {
-
-        @Override
-        public void log(Exception e) {
-            this.log(e.getMessage());
-        }
-
-        @Override
-        public void log(String s) {
-            logArea.append("[" + df.format(new Date()) + "] " + s + "\n");
-            try {
-                logArea.setCaretPosition(logArea.getLineStartOffset(logArea.getLineCount() - 1));
-            }
-            catch(Exception e) {
-                // IGNORE
-            }
-        }
-    };
+  
     
     
     private long getExpiry() {
@@ -236,7 +210,7 @@ public class PingerPanel extends javax.swing.JPanel {
             );
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
                 
         return expCal.getTimeInMillis();

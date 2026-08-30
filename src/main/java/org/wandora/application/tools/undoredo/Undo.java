@@ -32,6 +32,7 @@ import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.undowrapper.UndoException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -44,6 +45,7 @@ import org.wandora.topicmap.undowrapper.UndoException;
 public class Undo extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Undo.class);
 
 	@Override
     public Icon getIcon() {
@@ -73,7 +75,7 @@ public class Undo extends AbstractWandoraTool {
                         ue.getMessage());
                 }
                 else {
-                    ue.printStackTrace();
+                	logger.error(ue);
                     WandoraOptionPane.showMessageDialog(wandora, 
                         "Undo exception occurred. In order to undo you need to change topic maps, topics or associations.", 
                         "Undo exception occurred");

@@ -60,6 +60,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -68,8 +69,8 @@ import org.wandora.utils.Textbox;
  * @author akivela
  */
 public class SimplePDFExtractor extends AbstractExtractor {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimplePDFExtractor.class);
 
 	protected static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     
@@ -149,7 +150,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
                         content = IObox.doUrl(new URI(url).toURL());
                     }
                     catch(Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
 
@@ -182,7 +183,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
 
@@ -419,12 +420,12 @@ public class SimplePDFExtractor extends AbstractExtractor {
             doc.close();
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             try {
                 if(doc != null) doc.close();
             }
             catch(Exception ix) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }

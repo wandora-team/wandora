@@ -42,6 +42,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * Extractor takes text as input and transforms sentences to associations where
@@ -51,9 +52,8 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class Sentences2Associations  extends AbstractExtractor {
 
-
 	private static final long serialVersionUID = 1L;
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Sentences2Associations.class);
 
 
 	public static boolean ADD_SOURCE_AS_PLAYER = true;
@@ -123,7 +123,7 @@ public class Sentences2Associations  extends AbstractExtractor {
         try {
             basePath = new URI(request.getSource()).toURL();
         }
-        catch(Exception e) { e.printStackTrace(); }
+        catch(Exception e) { logger.error(e); }
         String s = super.doBrowserExtract(request, wandora);
         basePath = null;
         return s;

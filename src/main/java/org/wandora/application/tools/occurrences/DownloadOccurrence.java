@@ -43,6 +43,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -54,6 +55,7 @@ import org.wandora.utils.IObox;
 public class DownloadOccurrence extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DownloadOccurrence.class);
 
 	public static final int TARGET_FILE = 1;
     public static final int TARGET_OCCURRENCE = 2;
@@ -278,7 +280,7 @@ public class DownloadOccurrence extends AbstractWandoraTool {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return currentDirectory;
     }
@@ -302,7 +304,7 @@ public class DownloadOccurrence extends AbstractWandoraTool {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return currentFile;
     }

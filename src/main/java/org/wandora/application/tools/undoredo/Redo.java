@@ -32,6 +32,7 @@ import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.undowrapper.UndoException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -44,6 +45,7 @@ public class Redo extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Redo.class);
 
 	@Override
     public Icon getIcon() {
@@ -73,7 +75,7 @@ public class Redo extends AbstractWandoraTool {
                         ue.getMessage());
                 }
                 else {
-                    ue.printStackTrace();
+                	logger.error(ue);
                     WandoraOptionPane.showMessageDialog(wandora, 
                         "Redo exception occurred. In order to redo you need to undo something first.", 
                         "Redo exception occurred");

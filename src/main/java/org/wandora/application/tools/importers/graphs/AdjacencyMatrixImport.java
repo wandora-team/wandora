@@ -43,6 +43,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -53,6 +54,7 @@ public class AdjacencyMatrixImport extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AdjacencyMatrixImport.class);
 
 	public final static String SI_PREFIX = "https://wandora.org/si/topic/";
 
@@ -149,7 +151,7 @@ public class AdjacencyMatrixImport extends AbstractWandoraTool {
         }
         catch(Exception e) {
             log(e);
-            e.printStackTrace();
+            logger.error(e);
         }
         return topic;
     }

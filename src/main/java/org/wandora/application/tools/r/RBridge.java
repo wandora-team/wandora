@@ -36,6 +36,7 @@ import java.util.Vector;
 import org.rosuda.JRI.RMainLoopCallbacks;
 import org.rosuda.JRI.Rengine;
 import org.wandora.application.Wandora;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -44,6 +45,7 @@ import org.wandora.application.Wandora;
 
 
 public class RBridge {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RBridge.class);
     
     private static RBridge rBridge = null;
     
@@ -277,7 +279,7 @@ public class RBridge {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }

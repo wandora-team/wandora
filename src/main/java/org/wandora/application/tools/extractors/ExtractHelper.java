@@ -44,12 +44,15 @@ import org.wandora.utils.MSOfficeBox;
 import org.wandora.utils.PDFbox;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class ExtractHelper {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ExtractHelper.class);
+	
     public static final String TOPIC_SI = "https://wandora.org/si/topic";
     public static final String SOURCE_SI = "https://wandora.org/si/source";
     public static final String DOCUMENT_SI = "https://wandora.org/si/document";
@@ -233,7 +236,7 @@ public class ExtractHelper {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return content;
     }
@@ -268,7 +271,7 @@ public class ExtractHelper {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         if(content == null) {
@@ -280,7 +283,7 @@ public class ExtractHelper {
                 content = getContent(url);
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return content;
@@ -351,7 +354,7 @@ public class ExtractHelper {
         }
         catch(Exception e) {
             callback.clearMasterSubject();
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
     }
@@ -442,7 +445,7 @@ public class ExtractHelper {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             tdata = data;
             //contentType = "text/raw";
         }

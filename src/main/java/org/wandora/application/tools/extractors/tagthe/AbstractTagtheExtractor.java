@@ -55,6 +55,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -63,9 +64,8 @@ import org.wandora.utils.Textbox;
  * @author akivela
  */
 public abstract class AbstractTagtheExtractor extends AbstractExtractor {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractTagtheExtractor.class);
 
 	protected String defaultEncoding = "UTF-8";
 
@@ -289,7 +289,7 @@ public abstract class AbstractTagtheExtractor extends AbstractExtractor {
         }
 
         catch(TransformerException ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
             return null;
         }
     }

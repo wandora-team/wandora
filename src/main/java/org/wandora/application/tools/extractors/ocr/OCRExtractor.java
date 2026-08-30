@@ -53,6 +53,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.language.LanguageBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -64,8 +65,8 @@ import org.wandora.utils.language.LanguageBox;
 
 
 public class OCRExtractor extends AbstractExtractor {
-    
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(OCRExtractor.class);
 	
 	protected String SOURCE_SI         = "https://wandora.org/si/source";
     protected String DOCUMENT_SI       = "https://wandora.org/si/document";
@@ -140,7 +141,7 @@ public class OCRExtractor extends AbstractExtractor {
             }
             
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
         
@@ -207,7 +208,7 @@ public class OCRExtractor extends AbstractExtractor {
                 fos.close();
             }
         } catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
         } finally {
             is.close();
         }
@@ -229,7 +230,7 @@ public class OCRExtractor extends AbstractExtractor {
             documentTopic.addSubjectIdentifier(new Locator(si));
             success = processFile(f,t, documentTopic);
         } catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }  finally {
             f.delete();
         }

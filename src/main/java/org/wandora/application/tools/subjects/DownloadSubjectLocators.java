@@ -44,6 +44,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.IObox;
 import org.wandora.utils.MimeTypes;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -56,6 +57,7 @@ import org.wandora.utils.MimeTypes;
 public class DownloadSubjectLocators extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DownloadSubjectLocators.class);
 
 	private boolean changeSubjectLocator = false;
     private boolean overWriteAll = false;
@@ -228,7 +230,7 @@ public class DownloadSubjectLocators extends AbstractWandoraTool {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return currentDirectory;
     }

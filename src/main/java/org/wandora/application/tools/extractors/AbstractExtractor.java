@@ -59,6 +59,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -66,9 +67,9 @@ import org.wandora.utils.XMLbox;
  * @author  akivela
  */
 public abstract class AbstractExtractor extends AbstractWandoraTool implements DropExtractor, BrowserPluginExtractor {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractExtractor.class);
+	
 
 	public final static String STRING_EXTRACTOR_NOT_SUPPORTED_MESSAGE = "String extractor not supported";
 
@@ -558,7 +559,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements D
                                     }
                                 }
                                 catch (Exception e) {
-                                    e.printStackTrace();
+                                    logger.error(e);
                                 }
                             }
                         }
@@ -954,7 +955,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements D
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
     }

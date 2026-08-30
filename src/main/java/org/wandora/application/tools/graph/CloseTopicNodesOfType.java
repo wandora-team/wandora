@@ -45,6 +45,7 @@ import org.wandora.application.gui.topicpanels.graphpanel.VModel;
 import org.wandora.application.gui.topicpanels.graphpanel.VNode;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -54,6 +55,7 @@ public class CloseTopicNodesOfType extends AbstractGraphTool {
     
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(CloseTopicNodesOfType.class);
 
 	private Topic type;
     private GraphFilter filter;
@@ -77,7 +79,7 @@ public class CloseTopicNodesOfType extends AbstractGraphTool {
     public String getName(){
         try{
             return "Hide nodes of type "+type.getBaseName();
-        }catch(TopicMapException tme){tme.printStackTrace(); return "";}
+        }catch(TopicMapException tme){logger.error(tme); return "";}
     }
     
     public static void hideTopicsOfType(Topic type,VModel model){
@@ -90,7 +92,7 @@ public class CloseTopicNodesOfType extends AbstractGraphTool {
                     if(tn.getTopic().isOfType(type)) remove.add(vnode);
                 }
             }
-        }catch(TopicMapException tme){tme.printStackTrace();}
+        }catch(TopicMapException tme){logger.error(tme);}
         for(VNode vnode : remove){
             model.removeNode(vnode);
         }        
@@ -130,7 +132,7 @@ public class CloseTopicNodesOfType extends AbstractGraphTool {
                 for(Topic type : tn.getTopic().getTypes()){
                     tools.add(new CloseTopicNodesOfType(gp,type,nodeFilter));
                 }
-            }catch(TopicMapException tme){tme.printStackTrace();}
+            }catch(TopicMapException tme){logger.error(tme);}
         }        
         return tools;
     }

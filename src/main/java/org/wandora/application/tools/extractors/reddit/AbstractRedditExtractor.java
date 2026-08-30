@@ -46,6 +46,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -58,9 +59,8 @@ import com.mashape.unirest.request.body.MultipartBody;
  * @author akivela
  */
 public abstract class AbstractRedditExtractor extends AbstractExtractor {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractRedditExtractor.class);
 
 	private static final String ERROR_MSG = "Reddit API error occurred:";
     private static final String ERROR_RESPONSE_MSG = "API response follows:";
@@ -500,7 +500,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
                         child = children.getJSONObject(i);
                     } 
                     catch(JSONException jse) {
-                        jse.printStackTrace();
+                    	logger.error(jse);
                         continue;
                     }
                     parseThing(child, tm, thingTypes);
@@ -516,7 +516,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             catch(JSONException jsee) {
                 log("The message JSON was invalid.");
             }
-            jse.printStackTrace();
+            logger.error(jse);
         } 
         catch (TopicMapException tme){
             log(tme.getMessage());
@@ -685,7 +685,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             }
         }
         catch (Exception e) {
-          e.printStackTrace();
+        	logger.error(e);
         }
         
         if(CRAWL_SETTINGS.get("linkComment")) {
@@ -954,7 +954,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     */
     protected void logParseCallbackError(Exception e, String body) {
         if(e != null) {
-            e.printStackTrace();
+            logger.error(e);
             log(ERROR_MSG);
             log(e.getMessage());
             if(body != null) {
@@ -969,7 +969,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     */
     protected void logParseCallbackRunError(Exception e) {
         if(e != null) {
-            e.printStackTrace();
+            logger.error(e);
             if(e instanceof JSONException) {
                 log("Exception occurred while processing JSON data in Reddit extractor. Details follow.");
                 log(e.getMessage());

@@ -33,6 +33,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -41,9 +42,8 @@ import org.wandora.utils.IObox;
 
 
 public class DiscogsLabelExtractor extends AbstractDiscogsExtractor {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DiscogsLabelExtractor.class);
 	
 	
 	private static String defaultLang = "en";
@@ -87,7 +87,7 @@ public class DiscogsLabelExtractor extends AbstractDiscogsExtractor {
             parseLabel(json, tm);
    
         } catch (Exception e){
-           e.printStackTrace();
+           logger.error(e);
         }
         return true;
     }

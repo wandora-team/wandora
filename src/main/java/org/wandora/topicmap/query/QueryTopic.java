@@ -37,12 +37,14 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapReadOnlyException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author olli
  */
 public class QueryTopic extends Topic {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(QueryTopic.class);
 
     protected Locator si;
     protected List<Locator> sis;
@@ -101,14 +103,15 @@ public class QueryTopic extends Topic {
         if(t==null) return ret;
         Directive query=tm.getQueries().get(type);
         if(query==null) return ret;
-        try{
+        try {
             List<ResultRow> res=query.doQuery(new QueryContext(tm.getLayerStack(),null), new ResultRow(t));
             ret.addAll(makeAssociations(res,type));
         
             tm.cacheAssociations(si, type, ret);
             return ret;
-        }catch(QueryException qe){
-            qe.printStackTrace();
+        }
+        catch(QueryException qe){
+        	logger.error(qe);
             return new ArrayList<QueryAssociation>();
         }
     }

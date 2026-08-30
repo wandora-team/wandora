@@ -77,6 +77,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.MSOfficeBox;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import net.fortuna.mstor.model.MStorStore;
 
@@ -87,9 +88,8 @@ import net.fortuna.mstor.model.MStorStore;
  * @author akivela
  */
 public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPluginExtractor {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleEmailExtractor.class);
 	
 	
 	private List<String> visitedEmailFolders = null;
@@ -118,7 +118,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
             _extractTopicsFromStream(request.getSource(), in, tm);
         }
         catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
         wandora.doRefresh();
@@ -646,7 +646,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
             }
             catch(Exception e) {
                 log("Warning: Exception occurred while processing 'received-date' field of an email.");
-                e.printStackTrace();
+                logger.error(e);
             }
             
             try {
@@ -662,7 +662,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
             }
             catch(Exception e) {
                 log("Warning: Exception occurred while processing 'sent-date' field of an email.");
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         catch(Exception e) {

@@ -92,6 +92,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -99,8 +100,8 @@ import org.wandora.utils.Tuples.T2;
  */
 
 public class SparqlExtractor extends AbstractExtractor {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SparqlExtractor.class);
 
 	public static String DEFAULT_SI_ENCODING = "UTF-8";
 
@@ -525,7 +526,7 @@ public class SparqlExtractor extends AbstractExtractor {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return topic;
     }

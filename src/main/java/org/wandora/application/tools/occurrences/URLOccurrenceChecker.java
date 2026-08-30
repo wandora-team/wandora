@@ -39,6 +39,7 @@ import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * Performs a test to given occurrences. Test checks if the occurrence is an URL,
@@ -49,6 +50,7 @@ import org.wandora.utils.IObox;
 public class URLOccurrenceChecker extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(URLOccurrenceChecker.class);
 
 	String urlExists = "EXISTS\t'<locator/>'";
     String urlDoesntExists = "MISSING\t'<locator/>'";
@@ -216,7 +218,7 @@ public class URLOccurrenceChecker extends AbstractWandoraTool {
                     return url;
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }

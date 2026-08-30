@@ -41,6 +41,7 @@ import org.wandora.topicmap.TopicMapLogger;
 import org.wandora.topicmap.TopicMapSearchOptions;
 import org.wandora.topicmap.TopicMapStatData;
 import org.wandora.topicmap.TopicMapStatOptions;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -51,6 +52,7 @@ import org.wandora.topicmap.TopicMapStatOptions;
 
 
 public class UndoTopicMap extends TopicMap {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(UndoTopicMap.class);
 
     private TopicMap wrapped;
     private UndoBuffer undoBuffer;
@@ -88,7 +90,7 @@ public class UndoTopicMap extends TopicMap {
     }
     
     public void handleUndoException(UndoException ue){
-        ue.printStackTrace();
+        logger.error(ue);
     }
     
     void addUndoOperation(UndoOperation op){

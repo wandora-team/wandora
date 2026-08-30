@@ -30,8 +30,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-class StreamGobbler extends Thread {
+import org.wandora.utils.logger.Log4j2Logger;
 
+class StreamGobbler extends Thread {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(StreamGobbler.class);
+	
+	
     InputStream is;
     StringBuilder outputMessage = new StringBuilder();
 
@@ -53,7 +57,7 @@ class StreamGobbler extends Thread {
                 outputMessage.append(line).append("\n");
             }
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+        	logger.error(ioe);
         }
     }
 }

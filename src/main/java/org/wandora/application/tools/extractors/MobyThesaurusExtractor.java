@@ -43,6 +43,7 @@ import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicTools;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * <p>
@@ -74,8 +75,8 @@ import org.wandora.topicmap.TopicTools;
  */
 public class MobyThesaurusExtractor extends AbstractExtractor {
     
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MobyThesaurusExtractor.class);
 	
 	public String locatorPrefix = "https://wandora.org/si/moby/";
     public boolean ANTISYMMETRIC_ASSOCIATIONS = true;
@@ -274,7 +275,7 @@ public class MobyThesaurusExtractor extends AbstractExtractor {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return false;
     }

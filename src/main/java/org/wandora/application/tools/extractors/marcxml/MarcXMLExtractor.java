@@ -54,6 +54,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -67,8 +68,8 @@ import org.xml.sax.XMLReader;
  */
 
 public class MarcXMLExtractor extends AbstractExtractor {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MarcXMLExtractor.class);
 
 	public static boolean TRIM_DATAS = false;
 
@@ -610,7 +611,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                                                 si = si.replaceAll("___"+subfieldCode+"@"+fieldCode+"___", URLEncoder.encode(data_subfield, defaultEncoding));
                                             }
                                             catch(Exception e) {
-                                                e.printStackTrace();
+                                                logger.error(e);
                                             }
                                         }
                                         updatedSubjectIdentifiers.add(si);
@@ -619,7 +620,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                                 subjectIdentifiers = updatedSubjectIdentifiers;
                             }
                             catch(Exception e) {
-                                e.printStackTrace();
+                                logger.error(e);
                             }
                         }
 
@@ -634,7 +635,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                                                 n = n.replaceAll("___"+subfieldCode+"@"+fieldCode+"___", data_subfield);
                                             }
                                             catch(Exception e) {
-                                                e.printStackTrace();
+                                                logger.error(e);
                                             }
                                         }
                                         updatedBasenames.add(n);
@@ -643,7 +644,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                                 basenames = updatedBasenames;
                             }
                             catch(Exception e) {
-                                e.printStackTrace();
+                                logger.error(e);
                             }
                         }
 

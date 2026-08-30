@@ -54,6 +54,7 @@ import org.wandora.topicmap.TopicMapSearchOptions;
 import org.wandora.topicmap.TopicMapStatData;
 import org.wandora.topicmap.TopicMapStatOptions;
 import org.wandora.topicmap.TopicTools;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -62,6 +63,8 @@ import org.wandora.topicmap.TopicTools;
  * @author olli, akivela
  */
 public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DatabaseTopicMap.class);
+	
     
     protected boolean changed;
     
@@ -534,7 +537,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
                     return buildTopic(row);
                 }
                 catch(TopicMapException tme) {
-                    tme.printStackTrace(); // TODO EXCEPTION
+                	logger.error(tme);
                     return null;
                 }
             }
@@ -587,7 +590,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
                     return buildAssociation(row);
                 }
                 catch(TopicMapException tme) {
-                    tme.printStackTrace(); // TODO EXCEPTION
+                	logger.error(tme);
                     return null;
                 }
             }
@@ -1096,7 +1099,9 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
                 }
             }
         }
-        catch(Exception e){e.printStackTrace();}
+        catch(Exception e){
+        	logger.error(e);
+    	}
         
         System.out.println("Search ends with " + searchResult.size() + " hits.");
         return searchResult;

@@ -45,6 +45,7 @@ import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -52,8 +53,8 @@ import org.wandora.topicmap.Topic;
  * @author  akivela
  */
 public class Stands4Selector extends JDialog {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Stands4Selector.class);
 
 	public static String defaultLanguage = "en";
     
@@ -307,7 +308,7 @@ public class Stands4Selector extends JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return sb.toString();
@@ -342,7 +343,7 @@ public class Stands4Selector extends JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return sb.toString();
@@ -372,7 +373,7 @@ public class Stands4Selector extends JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return "";

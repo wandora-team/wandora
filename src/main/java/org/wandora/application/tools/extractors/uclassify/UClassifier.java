@@ -40,6 +40,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -51,7 +52,8 @@ import org.wandora.utils.Options;
 public class UClassifier extends AbstractUClassifier {
     
 	private static final long serialVersionUID = 1L;
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(UClassifier.class);
+	
 	
 	protected static final String OPTIONS_KEY = "uclassify";
     
@@ -157,7 +159,7 @@ public class UClassifier extends AbstractUClassifier {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
             defaultClassifiers = classifiers.toArray( new String[] {} );
         }

@@ -38,15 +38,15 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.HTMLEntitiesCoder;
 import org.wandora.utils.IObox;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author Eero
  */
 public class NYTEventSearchExtractor extends AbstractNYTExtractor {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(NYTEventSearchExtractor.class);
 
 	private static String defaultLang = "en";
     private static String currentURL = null;
@@ -92,7 +92,7 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return true;
     }

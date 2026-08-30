@@ -49,6 +49,7 @@ import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleScrollPane;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.application.gui.simple.SimpleTextPane;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.TextLineNumber;
 
 /**
@@ -56,8 +57,8 @@ import org.wandora.utils.swing.TextLineNumber;
  * @author akivela
  */
 public class SparqlExtractorUI extends javax.swing.JPanel {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SparqlExtractorUI.class);
 
 	public static final String WIKIDATA_ENDPOINT = "https://query.wikidata.org/sparql";
     public static final String EUROPEAN_OPEN_DATA_ENDPOINT = "http://open-data.europa.eu/sparqlep";
@@ -296,7 +297,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return query;
     }
@@ -1158,7 +1159,7 @@ public class SparqlExtractorUI extends javax.swing.JPanel {
             desktop.browse(new URI(url));
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
             

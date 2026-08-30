@@ -41,6 +41,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -52,6 +53,8 @@ import org.wandora.utils.IObox;
  * @author akivela
  */
 public class OBO {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(OBO.class);
+	
     public static final String optionPrefix = "obo.";
     
     public static boolean COLLATE_SIMILAR_SYNONYMS = true;
@@ -1352,7 +1355,7 @@ public class OBO {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }

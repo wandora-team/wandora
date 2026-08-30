@@ -36,6 +36,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -47,6 +48,7 @@ import org.wandora.topicmap.Topic;
 public class WikipediaExtractorSelector extends javax.swing.JDialog {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WikipediaExtractorSelector.class);
 	
 	private boolean accepted = false;
     private Wandora wandora = null;
@@ -227,7 +229,7 @@ public class WikipediaExtractorSelector extends javax.swing.JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return sb.toString();

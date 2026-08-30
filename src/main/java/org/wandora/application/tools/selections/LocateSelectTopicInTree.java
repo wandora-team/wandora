@@ -34,6 +34,7 @@ import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -45,6 +46,7 @@ public class LocateSelectTopicInTree extends AbstractWandoraTool {
 
 	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LocateSelectTopicInTree.class);
 
 	/** Creates a new instance of LocateSelectTopicInTree */
     public LocateSelectTopicInTree() {
@@ -66,7 +68,7 @@ public class LocateSelectTopicInTree extends AbstractWandoraTool {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }

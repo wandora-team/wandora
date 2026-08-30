@@ -39,14 +39,15 @@ import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTextPane;
 import org.wandora.topicmap.TopicMapConfigurationPanel;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author  olli
  */
 public class QueryTopicMapConfiguration extends TopicMapConfigurationPanel {
-    
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(QueryTopicMapConfiguration.class);
     
     private QueryTopicMap.QueryInfo currentItem;
     private Wandora wandora;
@@ -344,7 +345,7 @@ public class QueryTopicMapConfiguration extends TopicMapConfigurationPanel {
             return "ScriptException at line "+se.getLineNumber()+" column "+se.getColumnNumber()+"<br>"+se.getMessage();
         }
         catch(Exception e){
-            e.printStackTrace();
+        	logger.error(e);
             return "Exception occurred during execution: "+e.getClass().getName()+" "+e.getMessage();
         }
         return null;        

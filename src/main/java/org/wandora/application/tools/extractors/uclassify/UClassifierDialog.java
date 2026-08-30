@@ -49,6 +49,7 @@ import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -60,6 +61,7 @@ import org.wandora.utils.IObox;
 public class UClassifierDialog extends javax.swing.JDialog {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(UClassifierDialog.class);
 
 	private Wandora wandora = null;
     private WandoraTool parentTool = null;
@@ -158,7 +160,7 @@ public class UClassifierDialog extends javax.swing.JDialog {
             d = Double.parseDouble(thresholdTextField.getText());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return d;
     }

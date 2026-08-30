@@ -33,6 +33,7 @@ import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.VariantNameEditor;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -42,6 +43,7 @@ public class AddVariantName extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AddVariantName.class);
 
 
 	public AddVariantName() {
@@ -85,7 +87,7 @@ public class AddVariantName extends AbstractWandoraTool {
                         }
                     }
                     catch(Exception e) {
-                        e.printStackTrace();
+                    	logger.error(e);
                     }
                 }
             }

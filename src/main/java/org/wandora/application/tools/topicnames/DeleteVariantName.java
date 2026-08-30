@@ -29,6 +29,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -37,6 +38,8 @@ import org.wandora.topicmap.Topic;
 public class DeleteVariantName extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DeleteVariantName.class);
+	
 	private Topic t = null;
     private Set<Topic> scope = null;
 
@@ -67,7 +70,7 @@ public class DeleteVariantName extends AbstractWandoraTool {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
 }

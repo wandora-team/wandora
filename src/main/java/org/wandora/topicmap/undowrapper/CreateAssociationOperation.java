@@ -33,6 +33,7 @@ import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -41,6 +42,7 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class CreateAssociationOperation  extends UndoOperation {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(CreateAssociationOperation.class);
 
     private TopicMap tm;
     private Locator type;
@@ -137,7 +139,7 @@ public class CreateAssociationOperation  extends UndoOperation {
             associationAlreadyExists = (oa!=null);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -153,7 +155,7 @@ public class CreateAssociationOperation  extends UndoOperation {
             associationAlreadyExists = (oa!=null);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     

@@ -53,6 +53,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -66,8 +67,8 @@ import org.xml.sax.XMLReader;
  */
 public class RSSExtractor extends AbstractExtractor {
     
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RSSExtractor.class);
 
 	
 	/** Creates a new instance of RSSExtractor */
@@ -133,7 +134,7 @@ public class RSSExtractor extends AbstractExtractor {
                                     _extractTopicsFrom(new URI(rssfeed).toURL(), wandora.getTopicMap());
                                 }
                                 catch(Exception e) {
-                                    e.printStackTrace();
+                                    logger.error(e);
                                 }
                             }
                         }
@@ -158,7 +159,7 @@ public class RSSExtractor extends AbstractExtractor {
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
     }

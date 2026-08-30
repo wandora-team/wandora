@@ -34,11 +34,12 @@ import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 public class RedditExtractor extends AbstractWandoraTool{
-    
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RedditExtractor.class);
 	
 	private RedditExtractorUI ui = null;
 
@@ -120,7 +121,7 @@ public class RedditExtractor extends AbstractWandoraTool{
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
             singleLog(e);
         } 
         finally {

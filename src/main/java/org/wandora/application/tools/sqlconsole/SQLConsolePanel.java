@@ -45,6 +45,7 @@ import org.wandora.application.tools.sqlconsole.data.TableView;
 import org.wandora.application.tools.sqlconsole.gui.SQLTablePanel;
 import org.wandora.utils.Delegate;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -53,8 +54,9 @@ import org.wandora.utils.Options;
 public class SQLConsolePanel extends javax.swing.JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SQLConsolePanel.class);
 
-	private Map<String,StoredQuery> storedQueries=new TreeMap<String,StoredQuery>();
+	private Map<String,StoredQuery> storedQueries=new TreeMap<>();
     private Connection connection;
     private int resultMaxRows;
     private Options options;
@@ -187,7 +189,7 @@ public class SQLConsolePanel extends javax.swing.JPanel {
                     System.out.println("count == " + count);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                     hasNext = true;
                 }
             }

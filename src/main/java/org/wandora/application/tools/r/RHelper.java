@@ -40,6 +40,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -50,7 +51,7 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class RHelper {
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RHelper.class);
     
     
     private static final String IGRAPH_SI = "https://wandora.org/si/R/igraph";
@@ -126,7 +127,7 @@ public class RHelper {
             return new Graph(labels.size(),labels.toArray(new String[labels.size()]),colors.toArray(new String[colors.size()]),iedges);
         }
         catch(TopicMapException tme){
-            tme.printStackTrace();
+        	logger.error(tme);
             return null;
         }
     }

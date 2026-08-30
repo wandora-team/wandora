@@ -42,6 +42,7 @@ import org.wandora.application.gui.topicpanels.graphpanel.VModel;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.graph.AbstractGraphTool;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -53,6 +54,7 @@ import org.wandora.topicmap.Topic;
 public class ReleaseEdges extends AbstractGraphTool  {
     
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ReleaseEdges.class);
 	
 	public static final int FILTER_EDGES_WITH_TYPE = 1;
     public static final int FILTER_INSTANCE_EDGES = 2;
@@ -94,7 +96,7 @@ public class ReleaseEdges extends AbstractGraphTool  {
             }
         }
         catch(Exception tme){
-            tme.printStackTrace(); 
+        	logger.error(tme);
         }
         return "";
     }
@@ -137,7 +139,9 @@ public class ReleaseEdges extends AbstractGraphTool  {
                             tools.add(new ReleaseEdges(FILTER_EDGES_WITH_TYPE, t, graphFilter));
                         }
                     }
-                    catch(Exception tme){tme.printStackTrace();}
+                    catch(Exception tme){
+                    	logger.error(tme);
+                    }
                 }
             }
         }

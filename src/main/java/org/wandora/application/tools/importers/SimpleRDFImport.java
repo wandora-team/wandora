@@ -54,6 +54,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapReadOnlyException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -68,6 +69,7 @@ import org.wandora.topicmap.XTMPSI;
 public class SimpleRDFImport extends AbstractImportTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleRDFImport.class);
 
 	public static final String anonSIPrefix="https://wandora.org/si/rdf/anon/";
 
@@ -290,7 +292,7 @@ public class SimpleRDFImport extends AbstractImportTool {
                 handleStatement(stmt,map,subjectType,predicateType,objectType);
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
             counter++;
             setProgress((counter/1000) % 100);
@@ -340,7 +342,7 @@ public class SimpleRDFImport extends AbstractImportTool {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return topic;
     }

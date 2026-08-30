@@ -30,6 +30,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.json.JSONObject;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -38,6 +39,7 @@ import org.json.JSONObject;
 
 
 public class JSONBox {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(JSONBox.class);
     
     
     public JSONBox() {
@@ -63,7 +65,7 @@ public class JSONBox {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return json;
     }

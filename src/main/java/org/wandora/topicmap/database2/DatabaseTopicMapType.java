@@ -50,6 +50,7 @@ import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.topicmap.packageio.PackageOutput;
 import org.wandora.utils.Options;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -57,7 +58,7 @@ import org.wandora.utils.Tuples.T2;
  * @author olli
  */
 public class DatabaseTopicMapType implements TopicMapType {
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DatabaseTopicMapType.class);
     
     
     /** Creates a new instance of DatabaseTopicMapType */
@@ -90,7 +91,7 @@ public class DatabaseTopicMapType implements TopicMapType {
                     );
                 }
                 catch(java.sql.SQLException sqle) {
-                    sqle.printStackTrace();
+                	logger.error(sqle);
                 }
             }
         }

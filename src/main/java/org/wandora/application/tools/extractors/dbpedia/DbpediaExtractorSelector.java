@@ -44,15 +44,15 @@ import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.application.gui.simple.SimpleTextArea;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class DbpediaExtractorSelector extends JDialog {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DbpediaExtractorSelector.class);
 	
 	
 	public static String webServiceBase = "https://dbpedia.org/data/";
@@ -278,7 +278,7 @@ public class DbpediaExtractorSelector extends JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return sb.toString();

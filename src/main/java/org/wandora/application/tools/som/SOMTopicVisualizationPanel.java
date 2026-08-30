@@ -37,6 +37,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.Tuples.T3;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -48,6 +49,7 @@ public class SOMTopicVisualizationPanel extends JPanel implements Runnable, Acti
 
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SOMTopicVisualizationPanel.class);
 
 	public static final String SI_PREFIX = "https://wandora.org/si/som/";
     
@@ -309,7 +311,7 @@ public class SOMTopicVisualizationPanel extends JPanel implements Runnable, Acti
                     catch(Exception e) { /* WAKEUP */ }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }

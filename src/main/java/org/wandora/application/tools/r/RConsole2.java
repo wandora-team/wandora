@@ -43,6 +43,7 @@ import org.wandora.application.gui.simple.SimpleScrollPane;
 import org.wandora.application.gui.simple.SimpleTextConsole;
 import org.wandora.application.gui.simple.SimpleTextConsoleListener;
 import org.wandora.application.tools.ExecBrowser;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 
@@ -55,9 +56,8 @@ import org.wandora.utils.swing.GuiTools;
 
 
 public class RConsole2 extends javax.swing.JPanel implements ActionListener, SimpleTextConsoleListener, RBridgeListener {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RConsole2.class);
 
 	private SimpleTextConsole simpleTextConsole = null;
     
@@ -122,7 +122,7 @@ public class RConsole2 extends javax.swing.JPanel implements ActionListener, Sim
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 

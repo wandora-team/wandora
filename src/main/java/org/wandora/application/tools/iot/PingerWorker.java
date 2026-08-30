@@ -36,13 +36,13 @@ import java.util.Iterator;
 import org.apache.commons.io.IOUtils;
 import org.wandora.application.Wandora;
 import org.wandora.application.tools.extractors.ExtractHelper;
-import org.wandora.application.tools.iot.PingerPanel.Logger;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Logger;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;

@@ -48,6 +48,7 @@ import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapReadOnlyException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -56,9 +57,8 @@ import org.wandora.topicmap.TopicMapReadOnlyException;
  */
 public class XSLImport extends AbstractImportTool {
 
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(XSLImport.class);
 
 	String forceXSL = null;
     String forceXML = null;
@@ -215,7 +215,7 @@ public class XSLImport extends AbstractImportTool {
                 return sourceURL.openStream();
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         try {
@@ -223,7 +223,7 @@ public class XSLImport extends AbstractImportTool {
             return new FileInputStream(sourceFile);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }

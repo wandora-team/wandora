@@ -42,6 +42,7 @@ import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -50,8 +51,8 @@ import org.wandora.topicmap.Topic;
  * @author akivela
  */
 public class BigHugeThesaurusSelector extends javax.swing.JDialog {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(BigHugeThesaurusSelector.class);
 
 	public static String defaultLanguage = "en";
 
@@ -264,7 +265,7 @@ public class BigHugeThesaurusSelector extends javax.swing.JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return sb.toString();
@@ -299,7 +300,7 @@ public class BigHugeThesaurusSelector extends javax.swing.JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return sb.toString();
@@ -329,7 +330,7 @@ public class BigHugeThesaurusSelector extends javax.swing.JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return "";

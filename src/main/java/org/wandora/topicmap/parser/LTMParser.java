@@ -61,6 +61,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapLogger;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -71,6 +72,7 @@ import org.wandora.utils.Options;
  * @author akivela
  */
 public class LTMParser {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LTMParser.class);
     
     public static final String OPTIONS_BASE_KEY = "topicmap.ltm";
     public static final String OPTIONS_KEY_ALLOW_SPECIAL_CHARS_IN_QNAMES = OPTIONS_BASE_KEY+"allowSpecialCharsInQNames";
@@ -142,7 +144,7 @@ public class LTMParser {
 
     private BufferedReader in = null;
 
-    private TopicMapLogger logger = null;
+    private TopicMapLogger topicMapLogger = null;
 
     public static boolean debug = false;
     private boolean proceed = true;
@@ -153,10 +155,10 @@ public class LTMParser {
 
 
 
-    public LTMParser(TopicMap tm, TopicMapLogger logger) {
+    public LTMParser(TopicMap tm, TopicMapLogger topicMapLogger) {
         this.topicMap = tm;
-        if(logger != null) this.logger = logger;
-        else this.logger = topicMap;
+        if(topicMapLogger != null) this.topicMapLogger = topicMapLogger;
+        else this.topicMapLogger = topicMap;
         
         Wandora w = Wandora.getWandora();
         if(w != null) {
@@ -265,7 +267,7 @@ public class LTMParser {
         
         postProcess();
         
-        if(logger.forceStop()) {
+        if(topicMapLogger.forceStop()) {
             log("User has stopped LTM import!");
         }
     }
@@ -359,7 +361,7 @@ public class LTMParser {
         int n=0;
 
         eatMeaningless();
-        while(proceed && !logger.forceStop()) {
+        while(proceed && !topicMapLogger.forceStop()) {
             try {
                 if(previousFailed != NONE) {
                     syncParse();
@@ -403,15 +405,15 @@ public class LTMParser {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
                 if(--exceptionLimit < 0) {
-                    logger.log("Too many errors occurred while parsing the LTM file. Aborting...");
+                    topicMapLogger.log("Too many errors occurred while parsing the LTM file. Aborting...");
                     proceed = false;
                 }
                 if(proceed) syncParse();
             }
             eatMeaningless();
-            if(n++ % 1000 == 0) logger.hlog("Importing LTM topic map. Imported " + numberOfTopics + " topics, " + numberOfAssociations + " associations and " + numberOfOccurrences +" occurrences.");
+            if(n++ % 1000 == 0) topicMapLogger.hlog("Importing LTM topic map. Imported " + numberOfTopics + " topics, " + numberOfAssociations + " associations and " + numberOfOccurrences +" occurrences.");
         }
         log("Found total " + numberOfTopics + " topics, " + numberOfAssociations + " associations and " + numberOfOccurrences +" occurrences.");
         log("Real number of topics, associations and occurrences in topic map may be smaller due to merges.");
@@ -430,7 +432,7 @@ public class LTMParser {
             log("Warning: Unrecognized element: \"" + unrecognized + "\" near line number "+lineCounter+", after topic number "+numberOfTopics+" and association number " + numberOfAssociations);
         }
         catch (Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
 
@@ -464,7 +466,7 @@ public class LTMParser {
                 }
             }
             catch(Exception e) {
-                logger.log(e);
+                topicMapLogger.log(e);
             }
         }
     }
@@ -583,20 +585,20 @@ public class LTMParser {
                     }
                     if(basename.displayname != null) {
                         topic.setDisplayName(XTMPSI.getLang(null), basename.displayname); // LANG INDEPENDENT DISPLAYNAME
-                        // logger.log("found displayname name '" + basename.sortname+"'");
+                        // topicMapLogger.log("found displayname name '" + basename.sortname+"'");
                     }
                     if(basename.sortname != null) {
                         Set<Topic> nameScope=new LinkedHashSet<>();
                         nameScope.add(getOrCreateTopic(XTMPSI.getLang(null)));
                         nameScope.add(getOrCreateTopic(XTMPSI.SORT)); 
                         topic.setVariant(nameScope, basename.sortname);
-                        // logger.log("found sort name '" + basename.sortname+"'");
+                        // topicMapLogger.log("found sort name '" + basename.sortname+"'");
                     }
                     if(basename.variantNames != null) {
                         for(Iterator<VariantName> variants = basename.variantNames.iterator(); variants.hasNext(); ) {
                             VariantName variant = variants.next();
                             if(variant != null) {
-                                //logger.log("found variant '" + variant.name+"' with scope '"+variant.scope+"'.");
+                                //topicMapLogger.log("found variant '" + variant.name+"' with scope '"+variant.scope+"'.");
                                 if(variant.name != null && variant.scope != null && variant.scope.size() > 0) {
                                     if(topic.getVariant(variant.scope) != null || OVERWRITE_VARIANTS) {
                                         topic.setVariant(variant.scope, variant.name);
@@ -621,7 +623,7 @@ public class LTMParser {
                         }
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                    	logger.error(e);
                     }
                 }
             }
@@ -681,7 +683,7 @@ public class LTMParser {
 
         while(eat('=')) {
             basename = parseString();
-            //logger.log("Basename '"+ basename +"' found for topic!");
+            //topicMapLogger.log("Basename '"+ basename +"' found for topic!");
             if(TRIM_BASENAMES) basename = basename.trim();
             if(eat(';')) {
                 sortname = parseString();
@@ -691,7 +693,7 @@ public class LTMParser {
             }
 
             List<Topic> scopes = parseScope();
-            //if(scopes != null) logger.log("    Found scope for base name "+scopes);
+            //if(scopes != null) topicMapLogger.log("    Found scope for base name "+scopes);
 
             if(eat('~')) {
                 LTMQName reifyId = parseQName();
@@ -713,13 +715,13 @@ public class LTMParser {
                     }
                     if(n > 0) basename = basename + " " + n;
                 }
-                //logger.log("  Basename '"+ basename +"'");
+                //topicMapLogger.log("  Basename '"+ basename +"'");
             }
             if(basename != null || !variantNames.isEmpty()) {
                 basenames.add( new Basename(basename, variantNames, displayname, sortname) );
             }
         }
-        //logger.log("Found total "+basenames.size()+" basenames for topic!");
+        //topicMapLogger.log("Found total "+basenames.size()+" basenames for topic!");
         return basenames;
     }
 
@@ -794,7 +796,7 @@ public class LTMParser {
             if(members.size() > 0) {
                 associationType = getOrCreateTopic(associationTypeName);
                 if(associationType != null) {
-                    //logger.log("Association type is: "+associationType+ " ---- "+associationTypeName.qname);
+                    //topicMapLogger.log("Association type is: "+associationType+ " ---- "+associationTypeName.qname);
                     association = topicMap.createAssociation(associationType);
                     if(association != null) {
                         HashMap<Topic,Topic> players=new LinkedHashMap<Topic,Topic>();
@@ -803,7 +805,7 @@ public class LTMParser {
                             //if(member != null) association.addPlayer(member.role,member.player);
                             if(member != null && member.role != null && member.player != null) {
                                 players.put(member.role, member.player);
-                                //logger.log("  Adding association: "+associationType+" player '"+member.player+"' with role '"+member.role+"'." );
+                                //topicMapLogger.log("  Adding association: "+associationType+" player '"+member.player+"' with role '"+member.role+"'." );
                             }
                         }
                         association.addPlayers(players);
@@ -815,7 +817,7 @@ public class LTMParser {
                         i.next();
                         c++;
                     }
-                    logger.log("A-count: "+c);
+                    topicMapLogger.log("A-count: "+c);
                     *
                     */
                 }
@@ -845,7 +847,7 @@ public class LTMParser {
             if(eat(':')) role = parseQTopic();
 
             if(role == null && !REJECT_ROLELESS_MEMBERS) {
-                //logger.log("role == "+role);
+                //topicMapLogger.log("role == "+role);
                 Collection<Topic> types = player.getTypes();
                 if(types != null && types.size() > 0 && PREFER_CLASS_AS_ROLE) {
                     role = types.iterator().next();
@@ -921,7 +923,7 @@ public class LTMParser {
         if(occurrenceTopic != null && occurrenceType != null) {
             if(resource != null) {
                 if(scope != null && scope.size() > 0) {
-                    //logger.log("Occurrence found");
+                    //topicMapLogger.log("Occurrence found");
                     Topic scopeTopic = null;
                     if(NEW_OCCURRENCE_FOR_EACH_SCOPE) {
                         for(Iterator<Topic> iter = scope.iterator(); iter.hasNext(); ) {
@@ -929,9 +931,9 @@ public class LTMParser {
                             if(scopeTopic != null) {
                                 // System.out.println("CREATING OCCURRENCE: " +occurrenceType + " --- " + scopeTopic + " --- " + resource);
                                 occurrenceTopic.setData(occurrenceType, scopeTopic, resource);
-                                //logger.log("  Occurrence type: "+ occurrenceType);
-                                //logger.log("  Occurrence scope: "+ scopeTopic);
-                                //logger.log("  Occurrence resource: "+ resource);
+                                //topicMapLogger.log("  Occurrence type: "+ occurrenceType);
+                                //topicMapLogger.log("  Occurrence scope: "+ scopeTopic);
+                                //topicMapLogger.log("  Occurrence resource: "+ resource);
                                 occurrenceSucceed = true;
                             }
                         }
@@ -973,7 +975,7 @@ public class LTMParser {
                                 data = data.substring(0, unicodeLocation) + ((char) unicodeNumber) + data.substring(unicodeLocation+6);
                             }
                             catch(Exception e) {
-                                e.printStackTrace();
+                            	logger.error(e);
                             }
                         }
                     }
@@ -1574,22 +1576,22 @@ public class LTMParser {
     
 
     protected void debug(String msg) {
-        if(debug && logger != null) {
-            logger.log(msg);
+        if(debug && topicMapLogger != null) {
+            topicMapLogger.log(msg);
         }
     }
     
     
     protected void log(String msg) {
-        if(logger != null) {
-            logger.log(msg);
+        if(topicMapLogger != null) {
+            topicMapLogger.log(msg);
         }
     }
 
 
     protected void log(Exception e) {
-        if(logger != null) {
-            logger.log(e);
+        if(topicMapLogger != null) {
+            topicMapLogger.log(e);
         }
     }
 

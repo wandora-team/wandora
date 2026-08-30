@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * This helper class reads dynamically all available similarity measures in 
@@ -45,6 +46,8 @@ import org.wandora.utils.IObox;
 
 
 public class TopicSimilarityHelper {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicSimilarityHelper.class);
+	
     public static final String DEFAULT_SIMILARITY_PATH = "org/wandora/topicmap/similarity";
     private static boolean ADDITIONAL_DEBUG = true;
     
@@ -95,11 +98,15 @@ public class TopicSimilarityHelper {
 
                                 Class<?> measureResourceClass=Class.forName(className);
                                 if(!TopicSimilarity.class.isAssignableFrom(measureResourceClass)) {
-                                    if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + measureResourceClass.getSimpleName() + "'. Does not implement TopicSimilarity interface!");
+                                    if(ADDITIONAL_DEBUG) {
+                                    	System.out.println("Rejecting '" + measureResourceClass.getSimpleName() + "'. Does not implement TopicSimilarity interface!");
+                                    }
                                     continue;
                                 }
                                 if(measureResourceClass.isInterface()) {
-                                    if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + measureResourceClass.getSimpleName() + "'. Is interface!");
+                                    if(ADDITIONAL_DEBUG) {
+                                    	System.out.println("Rejecting '" + measureResourceClass.getSimpleName() + "'. Is interface!");
+                                    }
                                     continue;
                                 }
                                 try {
@@ -116,15 +123,16 @@ public class TopicSimilarityHelper {
                                 }
                             }
                             catch(Exception ex) {
-                                if(ADDITIONAL_DEBUG) System.out.println("Rejecting similarity. Exception '" + ex.toString() + "' occurred while investigating '" + classFileName + "'.");
-                                //ex.printStackTrace();
+                                if(ADDITIONAL_DEBUG) {
+                                	System.out.println("Rejecting similarity. Exception '" + ex.toString() + "' occurred while investigating '" + classFileName + "'.");
+                                }
                             }
                         }
                     }
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return measures;

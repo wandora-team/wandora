@@ -31,12 +31,15 @@ import org.json.JSONObject;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author anttirt
  */
 public class FlickrGroup {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(FlickrGroup.class);
+	
     public String Name;
     public String ID;
     
@@ -57,10 +60,10 @@ public class FlickrGroup {
             ret.addSubjectIdentifier(new Locator(FlickrUtils.searchString(obj, "group.url")));
         }
         catch(JSONException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         catch(FlickrExtractor.RequestFailure e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return ret;
     }

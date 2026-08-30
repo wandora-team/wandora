@@ -197,11 +197,8 @@ public class IObox extends java.lang.Object {
                 reading = false;
             }
         }
-        // System.out.println("loadBFile bytes read: " + ((byteChunks.size()-1) * chunkSize + bytesRead) + "!");
-        
         btable = new byte[(byteChunks.size()-1) * chunkSize + bytesRead];
         for(int i=0; i<byteChunks.size()-1 ; i++) {
-            // if (debug) System.out.println("loadBFile 1: " + i + "!");
             btabletemp = byteChunks.get(i);
             System.arraycopy(btabletemp, 0, btable, i*chunkSize, chunkSize);
         }
@@ -233,14 +230,14 @@ public class IObox extends java.lang.Object {
         File pf = new File(fname);
         if (pf.exists()) {
             pf.delete();
-            System.out.println("Deleting previously existing file '" + fname + "' before save file operation!");
+            logger.info("Deleting previously existing file '" + fname + "' before save file operation!");
         }
 
         FileOutputStream os = new FileOutputStream(fname);
         os.write(data);
         os.flush();
         os.close();
-        System.out.println("Saving a file '" + fname + "'");  
+        logger.info("Saving a file '" + fname + "'");  
     }
     
     
@@ -255,7 +252,7 @@ public class IObox extends java.lang.Object {
         File pf = new File(fname);
         if (pf.exists()) {
             pf.delete();
-            System.out.println("Deleting previously existing file '" + fname + "' before save file operation!");
+            logger.info("Deleting previously existing file '" + fname + "' before save file operation!");
         }
         FileOutputStream os = new FileOutputStream(fname);
         btable = new byte[chunkSize];
@@ -286,14 +283,14 @@ public class IObox extends java.lang.Object {
         File pf = new File(fname);
         if (pf.exists()) {
             pf.delete();
-            System.out.println("Deleting previously existing file '" + fname + "' before save file operation!");
+            logger.info("Deleting previously existing file '" + fname + "' before save file operation!");
         }
 
         FileWriter pfr = new FileWriter(fname);
         pfr.write(data, 0, data.length());
         pfr.flush();
         pfr.close();
-        System.out.println("Saving a file '" + fname + "'");
+        logger.info("Saving a file '" + fname + "'");
     }
 
     
@@ -309,14 +306,14 @@ public class IObox extends java.lang.Object {
     public static void saveFile(File pf, String data) throws IOException {
         if (pf.exists()) {
             pf.delete();
-            System.out.println("Deleting previously existing file '" + pf.getName() + "' before save file operation!");
+            logger.info("Deleting previously existing file '" + pf.getName() + "' before save file operation!");
         }
 
         FileWriter pfr = new FileWriter(pf);
         pfr.write(data, 0, data.length());
         pfr.flush();
         pfr.close();
-        System.out.println("Saving a file '" + pf.getAbsolutePath() + "'");
+        logger.info("Saving a file '" + pf.getAbsolutePath() + "'");
     }
     
     /**
@@ -329,10 +326,10 @@ public class IObox extends java.lang.Object {
         File pf = new File(fname);
         if (pf.exists()) {
             pf.delete();
-            System.out.println("Deleting file '" + fname + "'");
+            logger.info("Deleting file '" + fname + "'");
         }
         else {
-            System.out.println("File '" + fname + "' can not be deleted. File does not exist!");
+        	logger.info("File '" + fname + "' can not be deleted. File does not exist!");
             throw new FileNotFoundException();
         }
     }
@@ -369,10 +366,10 @@ public class IObox extends java.lang.Object {
             if(target.exists()) deleteFile(target.getAbsolutePath());
             if(createTargetPath) createPathFor(target.getParentFile());
             source.renameTo(target);
-            System.out.println("Renaming file '" + sourcefile + "' to '" + targetfile + "'!");
+            logger.info("Renaming file '" + sourcefile + "' to '" + targetfile + "'!");
         }
         else {
-            System.out.println("File '" + sourcefile + "' can not be renamed to '" + targetfile + "'. File does not exist!");
+        	logger.info("File '" + sourcefile + "' can not be renamed to '" + targetfile + "'. File does not exist!");
             throw new FileNotFoundException();
         }
     }
@@ -396,10 +393,10 @@ public class IObox extends java.lang.Object {
             if(createTargetPath) createPathFor(target.getParentFile());
             //InputStream in, OutputStream out
             moveData(new FileInputStream(source), new FileOutputStream(target));
-            System.out.println("Copying file '" + sourcefile + "' to '" + targetfile + "'!");
+            logger.info("Copying file '" + sourcefile + "' to '" + targetfile + "'!");
         }
         else {
-            System.out.println("File '" + sourcefile + "' can not be renamed to '" + targetfile + "'. File does not exist!");
+        	logger.info("File '" + sourcefile + "' can not be renamed to '" + targetfile + "'. File does not exist!");
             throw new FileNotFoundException();
         }
     }
@@ -512,11 +509,11 @@ public class IObox extends java.lang.Object {
                 }
             }
             else {
-                System.out.println("Maximum file number exceeded! Accepting no more files in getFiles!");
+            	logger.info("Maximum file number exceeded! Accepting no more files in getFiles!");
             }
         }
         else {
-            //System.out.println("Maximum browse depth exceeded!");
+            //logger.info("Maximum browse depth exceeded!");
         }
         return files;
     }
@@ -554,16 +551,16 @@ public class IObox extends java.lang.Object {
                     if(file.isDirectory()) {
                         if(!visited.contains(fileName)) {
                             visited.add(fileName);
-                            //System.out.println("a dir found: " + fileName); 
+                            logger.debug("a dir found: " + fileName); 
                             String[] directoryFiles = file.list();
                             for(int i=0; i<directoryFiles.length; i++) {
-                                //System.out.println(" trying: " + File.separator + directoryFiles[i]);
+                            	logger.debug(" trying: " + File.separator + directoryFiles[i]);
                                 fileCount = fileCount + countFiles(fileName + File.separator + directoryFiles[i], fileMask, visited, depth-1, space-fileCount);
                             }
                         }
                     }
                     else {
-                        //System.out.println("a file found: " + fileName);
+                        logger.debug("a file found: " + fileName);
                         try {
                             if(fileMask == null) {
                                 fileCount++;

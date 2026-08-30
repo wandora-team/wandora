@@ -55,6 +55,7 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.tools.PictureView;
 import org.wandora.utils.Delegate;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import jakarta.mail.Address;
 import jakarta.mail.BodyPart;
@@ -73,9 +74,8 @@ import jakarta.mail.internet.MimeMultipart;
  * @author  olli
  */
 public class EmailExtractorPanel extends javax.swing.JPanel {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(EmailExtractorPanel.class);
 	
 	private DefaultTableModel tableModel;
     private List<BufferedImage> fullImages;
@@ -370,7 +370,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                     }
                     else msgs[i].setFlag(Flags.Flag.DELETED,true);
                 }catch(Exception e){
-                    e.printStackTrace();
+                    logger.error(e);
                     msgs[i].setFlag(Flags.Flag.DELETED,true);
                 }
             }
@@ -709,7 +709,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                     });
                     
                 }catch(Exception e){
-                    e.printStackTrace();
+                    logger.error(e);
                     messageLabel.setText("Error: "+e.getMessage());
                 }
             }
@@ -722,7 +722,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
         /*        try{
             deleteSelected();
         }catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }*/
     }//GEN-LAST:event_okButtonActionPerformed
 
@@ -753,7 +753,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                     return;
                 }
             }catch(IOException ioe){
-                ioe.printStackTrace();
+            	logger.error(ioe);
                 WandoraOptionPane.showMessageDialog(this,"Error saving image: "+ioe.getMessage(), WandoraOptionPane.ERROR_MESSAGE);
             }
         }

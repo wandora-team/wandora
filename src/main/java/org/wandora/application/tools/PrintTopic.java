@@ -96,6 +96,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -106,6 +107,7 @@ import org.wandora.utils.IObox;
 public class PrintTopic extends AbstractWandoraTool implements ActionListener, KeyListener {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PrintTopic.class);
 	
 	private static final int NO_SORT = 0;
     private static final int SORT_DESC = -1;
@@ -952,7 +954,7 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
                 try{
                     print();
                 }catch(java.awt.print.PrinterException pe){
-                    pe.printStackTrace();
+                    logger.error(pe);
                 }
             }
             else if(c.startsWith("Close")) {

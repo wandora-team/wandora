@@ -34,13 +34,15 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.memory.TopicMapImpl;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author olli
  */
-public class MergeOperation extends UndoOperation{
+public class MergeOperation extends UndoOperation {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MergeOperation.class);
 
     protected TopicMap tm;
     protected TopicMap tmcopy;
@@ -238,7 +240,7 @@ public class MergeOperation extends UndoOperation{
             t.setSubjectLocator(null);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
     */

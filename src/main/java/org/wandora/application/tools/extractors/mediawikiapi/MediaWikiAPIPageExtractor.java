@@ -43,6 +43,7 @@ import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -57,8 +58,8 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 
 
 public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MediaWikiAPIPageExtractor.class);
 	
 	private int nExtracted;
     private String baseURL;
@@ -68,7 +69,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
     
     
     private int progress;
-    private WandoraToolLogger logger;
+    private WandoraToolLogger toolLogger;
     
     
     
@@ -178,7 +179,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
             
             
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
             log(e.getMessage());
             return false;
         }
@@ -216,7 +217,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
     private JSONObject parse(JSONObject body, TopicMap tm)
             throws JSONException, TopicMapException, IOException{
         
-        logger = getDefaultLogger();
+        toolLogger = getDefaultLogger();
         progress = 0;
 
         if(body.has("error")){
@@ -238,8 +239,8 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         
         JSONObject page;
         
-        logger.setProgressMax(pages.length());
-        logger.setProgress(0);
+        toolLogger.setProgressMax(pages.length());
+        toolLogger.setProgress(0);
         for (int i = 0; i < pages.length(); i++) {
             if(forceStop()) break;
             page = pages.getJSONObject(i);
@@ -371,7 +372,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
             }
             
         } catch (JSONException jse) {
-            jse.printStackTrace();
+            logger.error(jse);
             log(jse.getMessage());
         }
                 
@@ -425,7 +426,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
             }
             
         } catch (JSONException jse) {
-            jse.printStackTrace();
+        	logger.error(jse);
             log(jse.getMessage());
         }
                 

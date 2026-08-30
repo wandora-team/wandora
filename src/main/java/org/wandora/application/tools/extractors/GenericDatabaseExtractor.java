@@ -58,6 +58,7 @@ import org.wandora.topicmap.XTMPSI;
 import org.wandora.topicmap.database2.DatabaseTopicMap;
 import org.wandora.topicmap.layered.LayerStack;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -72,9 +73,9 @@ import org.wandora.utils.Tuples.T2;
  */
 public class GenericDatabaseExtractor extends AbstractWandoraTool {
     
-
 	private static final long serialVersionUID = 1L;
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GenericDatabaseExtractor.class);
+	
 	/** Creates a new instance of GenericDatabaseExtractor */
     public GenericDatabaseExtractor() {
     }
@@ -152,7 +153,9 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
         finally{
             try{
                 if(con!=null) con.close();
-            }catch(SQLException sqle){sqle.printStackTrace();}
+            }catch(SQLException sqle){
+            	logger.error(sqle);
+            }
         }
     }    
     
