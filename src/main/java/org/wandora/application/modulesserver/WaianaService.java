@@ -181,7 +181,7 @@ public class WaianaService extends AbstractTopicWebApp {
                         boolean isEditable = WaianaAPIRequestUtils.getIsEditable(requestJSON);
                         boolean isSchema = WaianaAPIRequestUtils.getIsSchema(requestJSON);
 
-                        responseJSON = storage.putTopicMap(user, name, shortName, isPublic, isDownloadable, isEditable, isSchema, data, request.getRequestURL());
+                        responseJSON = storage.putTopicMap(user, name, shortName, isPublic, isDownloadable, isEditable, isSchema, data, new StringBuilder(request.getRequestURL().toString()));
                     }
                     else if("delete_local_file".equalsIgnoreCase(command) || "delete_topic_map".equalsIgnoreCase(command)) {
                         responseJSON = storage.deleteTopicMap(user, WaianaAPIRequestUtils.getShortName(requestJSON));
@@ -228,7 +228,7 @@ public class WaianaService extends AbstractTopicWebApp {
                             if(request.getParameter("isSchema") != null) {
                                 Boolean.parseBoolean(request.getParameter("isSchema"));
                             }
-                            responseJSON = storage.putTopicMap(user, name, shortName, isPublic, isDownloadable, isEditable, isSchema, data, request.getRequestURL());
+                            responseJSON = storage.putTopicMap(user, name, shortName, isPublic, isDownloadable, isEditable, isSchema, data, new StringBuilder(request.getRequestURL().toString()));
                         }
                         else if("delete_local_file".equalsIgnoreCase(command) || "delete_topic_map".equalsIgnoreCase(command)) {
                             String shortName = request.getParameter("shortName");
@@ -492,7 +492,7 @@ public class WaianaService extends AbstractTopicWebApp {
         
         
         
-        public JSONObject putTopicMap(User user, String name, String shortName, boolean isPublic, boolean isDownloadable, boolean isEditable, boolean isSchema, String topicMapData, StringBuffer url) {
+        public JSONObject putTopicMap(User user, String name, String shortName, boolean isPublic, boolean isDownloadable, boolean isEditable, boolean isSchema, String topicMapData, StringBuilder stringBuilder) {
             shortName = sanitizeShortName(shortName);
             
             JSONObject dataEntry = data.get(shortName);
@@ -525,7 +525,7 @@ public class WaianaService extends AbstractTopicWebApp {
 
                 if(saveAlwaysAfterChange) saveData();
 
-                return createReply(0, "Successfully created topic map '"+name+"'", url+"?command=stream&shortName="+shortName);
+                return createReply(0, "Successfully created topic map '"+name+"'", stringBuilder+"?command=stream&shortName="+shortName);
             }
             else {
                 return createReply(1, "Waiana storage already contains a topic map with a short name '"+shortName+"' and you have no sufficient rights to update it.");

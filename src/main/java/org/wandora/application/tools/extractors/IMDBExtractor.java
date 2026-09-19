@@ -717,7 +717,7 @@ public class IMDBExtractor extends AbstractExtractor {
         int counter=0;
         String line=null;
         String type="";
-        StringBuffer collected=new StringBuffer();
+        StringBuilder collected=new StringBuilder();
         String name=null;
         boolean bgfound=false;
         while( (line=in.readLine())!=null ){
@@ -753,7 +753,7 @@ public class IMDBExtractor extends AbstractExtractor {
                         bgfound=true;
                     }
                 }
-                collected=new StringBuffer();
+                collected=new StringBuilder();
                 type="";
             }
             else{
@@ -766,7 +766,7 @@ public class IMDBExtractor extends AbstractExtractor {
                 name=null;
                 bgfound=false;
                 type="";
-                collected=new StringBuffer();
+                collected=new StringBuilder();
             }
             
         }
@@ -778,7 +778,7 @@ public class IMDBExtractor extends AbstractExtractor {
         int counter=0;
         String line=null;
         String type="";
-        StringBuffer collected=new StringBuffer();
+        StringBuilder collected=new StringBuilder();
         String name=null;
         boolean plfound=false;
         while( (line=in.readLine())!=null ){
@@ -804,7 +804,7 @@ public class IMDBExtractor extends AbstractExtractor {
                         plfound=true;                            
                     }
                 }
-                collected=new StringBuffer();
+                collected=new StringBuilder();
                 type="";
             }
             else{
@@ -817,7 +817,7 @@ public class IMDBExtractor extends AbstractExtractor {
                 name=null;
                 plfound=false;
                 type="";
-                collected=new StringBuffer();
+                collected=new StringBuilder();
             }
             
         }

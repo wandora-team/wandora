@@ -276,7 +276,7 @@ public class BigHugeThesaurusSelector extends javax.swing.JDialog {
 
 
     public String getContextAsSIs(String delim) {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         if(context != null) {
             try {
                 Iterator<?> contextObjects = context.getContextObjects();

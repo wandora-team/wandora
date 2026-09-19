@@ -75,7 +75,7 @@ public class DeleteTopicsExceptSelected extends AbstractWandoraTool {
         if(answer == WandoraOptionPane.YES_OPTION) {
 
             setDefaultLogger();
-            TopicMap contextTopicMap = wandora.getTopicMap(); // solveContextTopicMap(wandora, context);
+            TopicMap contextTopicMap = wandora.getTopicMap();
             Iterator<Topic> allTopics = contextTopicMap.getTopics();
 
             Topic atopic = null;

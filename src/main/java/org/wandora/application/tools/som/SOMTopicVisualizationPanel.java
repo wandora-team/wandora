@@ -370,7 +370,7 @@ public class SOMTopicVisualizationPanel extends JPanel implements Runnable, Acti
         
         
         else if(COPY_CELL_TOPICS_VECTORS.equalsIgnoreCase(c)) {
-            StringBuffer sb = new StringBuffer("");
+            StringBuilder sb = new StringBuilder("");
             boolean noSelection = true;
             for(int i=0; i<mapSize; i++) {
                 for(int j=0; j<mapSize; j++) {
@@ -589,7 +589,7 @@ public class SOMTopicVisualizationPanel extends JPanel implements Runnable, Acti
     
     
     
-    public void getTopicVectorAsString(StringBuffer sb, int x, int y) {
+    public void getTopicVectorAsString(StringBuilder sb, int x, int y) {
         SOMVector v = null;
         T3<Topic, Integer, Integer> location = null;
         synchronized(topicLocations) {

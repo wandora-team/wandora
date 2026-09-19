@@ -673,7 +673,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
     
     
     public String patterns2String() {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         String key;
         for(Enumeration<String> keys=patterns.keys(); keys.hasMoreElements();) {
             try {

@@ -535,7 +535,7 @@ public class HTMLEntitiesCoder {
      * form "&#xxx;" where xxx is the character code.
      */
     public static String encode(String text,boolean trytable){
-        StringBuffer buf=new StringBuffer(text);
+        StringBuilder buf=new StringBuilder(text);
         int ptr=0;
         while(ptr<buf.length()){
             char c=buf.charAt(ptr);
@@ -574,7 +574,7 @@ public class HTMLEntitiesCoder {
      * Decodes html entities in the text.
      */
     public static String decode(String htmlText){
-        StringBuffer buf=new StringBuffer(htmlText);
+        StringBuilder buf=new StringBuilder(htmlText);
         int ind=-1;
         int ptr=0;
         while( (ind=buf.indexOf("&",ptr))!= -1 ){

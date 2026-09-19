@@ -201,7 +201,7 @@ public class WikipediaExtractorSelector extends javax.swing.JDialog {
     }
     
     public String getContextAsString() {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         if(context != null) {
             try {
                 Iterator<?> contextObjects = context.getContextObjects();

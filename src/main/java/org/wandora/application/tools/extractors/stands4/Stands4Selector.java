@@ -319,7 +319,7 @@ public class Stands4Selector extends JDialog {
     
 
     public String getContextAsSIs(String delim) {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         if(context != null) {
             try {
                 Iterator<?> contextObjects = context.getContextObjects();
@@ -328,8 +328,7 @@ public class Stands4Selector extends JDialog {
                 while(contextObjects.hasNext()) {
                     str = null;
                     o = contextObjects.next();
-                    if(o instanceof Topic) {
-                        Topic t = (Topic) o;
+                    if(o instanceof Topic t) {
                         Collection<Locator> identifiers = t.getSubjectIdentifiers();
                         for( Iterator<Locator> iter = identifiers.iterator() ; iter.hasNext(); ) {
                             Locator identifier = iter.next();

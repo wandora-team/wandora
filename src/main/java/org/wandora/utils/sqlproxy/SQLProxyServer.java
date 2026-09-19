@@ -255,7 +255,7 @@ public class SQLProxyServer extends Thread {
         public String readQuery() throws IOException {
             int c=-1;
             boolean escape=false;
-            StringBuffer buf=new StringBuffer();
+            StringBuilder buf=new StringBuilder();
             while( (c=inReader.read())!=-1 ){
                 if(!escape && c=='\\') escape=true;
                 else {
@@ -382,7 +382,7 @@ public class SQLProxyServer extends Thread {
                                 ResultSet rs=stmt.getResultSet();
 
                                 ResultSetMetaData rsmd=rs.getMetaData();
-                                StringBuffer metaData=new StringBuffer();
+                                StringBuilder metaData=new StringBuilder();
                                 int columnCount=rsmd.getColumnCount();
                                 int[] types=new int[columnCount];
                                 for(int i=0;i<columnCount;i++){

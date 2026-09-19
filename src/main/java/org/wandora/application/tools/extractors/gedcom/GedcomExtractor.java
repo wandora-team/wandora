@@ -577,7 +577,7 @@ public class GedcomExtractor extends AbstractExtractor {
 	
 	
 	private String getText(Gedcom.Node node) {
-		StringBuffer note = new StringBuffer(node.value == null ? "" : node.value);
+	    StringBuilder note = new StringBuilder(node.value == null ? "" : node.value);
 		Iterator<Gedcom.Node> childIterator = node.children.iterator();
 		while (childIterator.hasNext()) {
 			Gedcom.Node child = (Gedcom.Node) childIterator.next();

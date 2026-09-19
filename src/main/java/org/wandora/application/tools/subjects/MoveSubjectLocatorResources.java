@@ -149,12 +149,13 @@ public class MoveSubjectLocatorResources extends AbstractWandoraTool {
         options.put(prefix+"prefix",filePrefix);
     }    
     
-    public static String cleanFileName(String name){
-        StringBuffer sb=new StringBuffer(name);
-        for(int i=0;i<sb.length();i++){
-            char c=sb.charAt(i);
-            if("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-.~".indexOf(c)==-1){
-                sb.setCharAt(i,'_');
+
+    public static String cleanFileName(String name) {
+        StringBuilder sb = new StringBuilder(name);
+        for (int i = 0; i < sb.length(); i++) {
+            char c = sb.charAt(i);
+            if ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-.~".indexOf(c) == -1) {
+                sb.setCharAt(i, '_');
             }
         }
         return sb.toString();

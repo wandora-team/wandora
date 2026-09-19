@@ -709,7 +709,7 @@ public class JTMParser {
         if(str == null || str.length()==0) return str;
         else {
             System.out.println("Fixing "+str);
-            StringBuffer sb = new StringBuffer("");
+            StringBuilder sb = new StringBuilder("");
             int length = str.length();
             int c0 = -1;
             int c1 = -1;

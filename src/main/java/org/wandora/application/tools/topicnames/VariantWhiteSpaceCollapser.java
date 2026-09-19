@@ -81,7 +81,7 @@ public class VariantWhiteSpaceCollapser extends AbstractWandoraTool {
 
             Topic topic = null;
             String variant = null;
-            StringBuffer newVariant = null;
+            StringBuilder newVariant = null;
             
             Collection<Set<Topic>> scopes = null;
             Iterator<Set<Topic>> scopeIterator = null;
@@ -96,10 +96,10 @@ public class VariantWhiteSpaceCollapser extends AbstractWandoraTool {
                             scopeIterator = scopes.iterator();
                             while(scopeIterator.hasNext()) {
                                 try {
-                                    scope = (Set<Topic>) scopeIterator.next();
+                                    scope = scopeIterator.next();
                                     variant = topic.getVariant(scope);
                                     if(variant != null) {
-                                        newVariant = new StringBuffer();
+                                        newVariant = new StringBuilder();
                                         char ch = 0;
                                         boolean isFirst = true;
                                         boolean hasChanged = false;

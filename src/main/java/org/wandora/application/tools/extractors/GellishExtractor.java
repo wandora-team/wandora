@@ -359,7 +359,7 @@ public class GellishExtractor extends AbstractExtractor {
     
     protected String removeSpacesIn(String str) {
         if(str == null) return null;
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         char ch = 0;
         for(int i=0; i<str.length(); i++) {
             ch = str.charAt(i);

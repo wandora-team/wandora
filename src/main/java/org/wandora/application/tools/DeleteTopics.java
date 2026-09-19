@@ -105,8 +105,8 @@ public class DeleteTopics extends AbstractWandoraTool {
             while(topics.hasNext() && shouldContinue && !forceStop()) {
                 topic = (Topic) topics.next();
                 if(topic != null && !topic.isRemoved()) {
-                    if(topic instanceof LayeredTopic) {
-                        ltopic = ((LayeredTopic) topic).getTopicForSelectedLayer();
+                    if(topic instanceof LayeredTopic layeredTopic) {
+                        ltopic = layeredTopic.getTopicForSelectedLayer();
                         if(ltopic == null || ltopic.isRemoved()) {
                             int answer = WandoraOptionPane.showConfirmDialog(wandora, 
                                     "Topic '"+getTopicName(topic)+"' doesn't exist in selected layer. "+

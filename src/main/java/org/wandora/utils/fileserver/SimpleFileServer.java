@@ -39,6 +39,7 @@ import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.SSLServerSocketFactory;
 
@@ -206,8 +207,8 @@ public class SimpleFileServer extends Thread {
         String line=readLine(in);
         if(line==null) return null;
 
-        ArrayList<String> parsed=new ArrayList<String>();
-        StringBuffer item=new StringBuffer();
+        List<String> parsed=new ArrayList<>();
+        StringBuilder item=new StringBuilder();
         int pos=0;
         boolean escape=false;
         while(pos<line.length()){
@@ -219,7 +220,7 @@ public class SimpleFileServer extends Thread {
             }
             else{
                 parsed.add(item.toString());
-                item=new StringBuffer();
+                item=new StringBuilder();
             }
         }
         if(item.length()>0) parsed.add(item.toString());

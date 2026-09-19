@@ -296,7 +296,7 @@ public class HistogramPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void copyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyButtonActionPerformed
-        StringBuffer sb=new StringBuffer();
+        StringBuilder sb=new StringBuilder();
         for(int i=0;i<dataSize;i++){
             sb.append(i+"\t"+data[i]+"\n");
         }

@@ -290,7 +290,7 @@ public class AudioScrobblerExtractorSelector extends JDialog {
     }
     
     public String getContextArtistsAsString() {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
 
         Topic albumType=null;
         Topic artistType=null;
@@ -341,7 +341,7 @@ public class AudioScrobblerExtractorSelector extends JDialog {
     
     
     public String getContextAsString() {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         if(context != null) {
             try {
                 Iterator<?> contextObjects = context.getContextObjects();

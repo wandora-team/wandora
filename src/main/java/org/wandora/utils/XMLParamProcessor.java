@@ -328,7 +328,7 @@ public class XMLParamProcessor {
         if(type==Node.TEXT_NODE) return n.getNodeValue();
         else if(type==Node.CDATA_SECTION_NODE) return n.getNodeValue();
         else if(type==Node.ELEMENT_NODE){
-            StringBuffer buf=new StringBuffer();
+            StringBuilder buf=new StringBuilder();
             NodeList nl=n.getChildNodes();
             for(int i=0;i<nl.getLength();i++){
                 buf.append(getNodeContents(nl.item(i)));
@@ -341,7 +341,7 @@ public class XMLParamProcessor {
     public static String getElementContents(Element e){
         return getNodeContents(e);
 /*        NodeList nl=e.getChildNodes();
-        StringBuffer s=new StringBuffer();
+        StringBuilder s=new StringBuilder();
         for(int i=0;i<nl.getLength();i++){
             Node n=nl.item(i);
             String v=n.getNodeValue();

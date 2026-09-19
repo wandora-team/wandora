@@ -87,14 +87,14 @@ public class TopicNameCopier extends AbstractWandoraTool {
             Iterator<Set<Topic>> scopeIterator = null;
             Set<Topic> scope = null;
 
-            StringBuilder stringBuffer = new StringBuilder("");
+            StringBuilder stringBuilder = new StringBuilder("");
             StringBuilder logString = null;
 
             while(topics.hasNext() && !forceStop()) {
                 try {
                     topic = (Topic) topics.next();
                     if(topic != null && !topic.isRemoved()) {
-                        stringBuffer.append(topic.getBaseName());
+                        stringBuilder.append(topic.getBaseName());
                         logString = new StringBuilder(""+topic.getBaseName());
                         scopes = topic.getVariantScopes();
                         int count = 0;
@@ -106,21 +106,21 @@ public class TopicNameCopier extends AbstractWandoraTool {
                                     variant = topic.getVariant(scope);
                                     if(variant != null) {
                                         count++;
-                                        stringBuffer.append("\n\t").append(variant);
+                                        stringBuilder.append("\n\t").append(variant);
                                         logString.append("\n\t").append(variant);
                                         Iterator<Topic> scopeIter = scope.iterator();
                                         Topic scopeTopic = null;
                                         while(scopeIter.hasNext()) {
                                             scopeTopic = scopeIter.next();
                                             try {
-                                                stringBuffer.append("\n\t\t").append(scopeTopic.getOneSubjectIdentifier().toExternalForm());
+                                                stringBuilder.append("\n\t\t").append(scopeTopic.getOneSubjectIdentifier().toExternalForm());
                                                 logString.append("\n\t\t").append(scopeTopic.getOneSubjectIdentifier().toExternalForm());
                                             }
                                             catch(Exception e) {
                                                 log(e);
                                             }
                                         }
-                                        stringBuffer.append("\n");
+                                        stringBuilder.append("\n");
                                         logString.append("\n");
                                     }
                                 }
@@ -130,18 +130,18 @@ public class TopicNameCopier extends AbstractWandoraTool {
                             }
                         }
                         if(count == 0) {
-                            stringBuffer.append("\n\t[NO VARIANTS]");
+                            stringBuilder.append("\n\t[NO VARIANTS]");
                             logString.append("\n\t[NO VARIANTS]");
                         }
                     }
-                    stringBuffer.append("\n");
+                    stringBuilder.append("\n");
                     log(logString.toString());
                 }
                 catch(Exception e) {
                     log(e);
                 }
             }
-            ClipboardBox.setClipboard(stringBuffer.toString());
+            ClipboardBox.setClipboard(stringBuilder.toString());
             log("OK");
             setState(WAIT);
         }

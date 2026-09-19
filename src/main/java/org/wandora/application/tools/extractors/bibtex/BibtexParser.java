@@ -35,6 +35,7 @@ import java.io.InputStreamReader;
 import java.io.PushbackReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,13 +49,13 @@ import org.wandora.utils.logger.Log4j2Logger;
 public class BibtexParser {
 	private static final Log4j2Logger logger = Log4j2Logger.getLogger(BibtexParser.class);
     
-    private ArrayList<BibtexEntry> entries;
+    private List<BibtexEntry> entries;
     
     /** Creates a new instance of BibtexParser */
     public BibtexParser() {
     }
     
-    public ArrayList<BibtexEntry> getEntries(){
+    public List<BibtexEntry> getEntries(){
         return entries;
     }
     
@@ -83,8 +84,6 @@ public class BibtexParser {
     private BibtexEntry readEntryBlock(PushbackReader reader,String type) throws IOException,BibtexParseException {
         BibtexEntry entry=new BibtexEntry();
         entry.setType(type);
-        StringBuffer key=null;
-        StringBuffer value=null;
         boolean first=true;
         
         while( true ){
@@ -110,12 +109,12 @@ public class BibtexParser {
         }
         
         if(key.equals("author") || key.equals("editor")) {
-            ArrayList<Object> values=readElementValue(reader,true);            
+            List<Object> values=readElementValue(reader,true);            
             if(values!=null && values.size()>0) return t2(key,(Object)values);
             else return null;
         }
         else {
-            ArrayList<Object> values=readElementValue(reader,false);
+            List<Object> values=readElementValue(reader,false);
             if(values!=null && values.size()>0) return t2(key,values.get(0));
             else return null;
         }
@@ -168,19 +167,19 @@ public class BibtexParser {
         }
     }
     
-    private ArrayList<Object> readElementValue(PushbackReader reader,boolean people) throws IOException,BibtexParseException{
+    private List<Object> readElementValue(PushbackReader reader,boolean people) throws IOException,BibtexParseException{
         int c;
         int openBraces=0;
         int openQuotes=0;
-        ArrayList<Object> parsed=new ArrayList<Object>();
-        StringBuffer read1=new StringBuffer();
-        StringBuffer read2=null;
-        StringBuffer read=read1;
+        List<Object> parsed=new ArrayList<Object>();
+        StringBuilder read1=new StringBuilder();
+        StringBuilder read2=null;
+        StringBuilder read=read1;
         while( (c=reader.read())!=-1 ){
             if(c=='{') {
                 if(people && read==read1 && openBraces+openQuotes==1 && 
                         read1.toString().trim().length()>0 && Character.isWhitespace(read1.charAt(read1.length()-1))){
-                    read2=new StringBuffer();
+                    read2=new StringBuilder();
                     read=read2;
                 }
                 openBraces++;
@@ -245,7 +244,7 @@ public class BibtexParser {
                         }
                         Object o=makeValueObject(r1,r2,true);
                         if(o!=null) parsed.add(o);
-                        read1=new StringBuffer();
+                        read1=new StringBuilder();
                         read2=null;
                         read=read1;
                     }
@@ -262,7 +261,7 @@ public class BibtexParser {
     
     private String readEscapeCommand(PushbackReader reader) throws IOException {
         int c;
-        StringBuffer read=new StringBuffer();
+        StringBuilder read=new StringBuilder();
         while( (c=reader.read())!=-1 ){
             if(Character.isLetterOrDigit((char)c)){
                 read.append((char)c);
@@ -278,7 +277,7 @@ public class BibtexParser {
     
     private String readUntil(PushbackReader reader,String chars) throws IOException,BibtexParseException {
         int c;
-        StringBuffer read=new StringBuffer();
+        StringBuilder read=new StringBuilder();
         while( (c=reader.read())!=-1 ){
             read.append((char)c);
             if(chars.indexOf((char)c)!=-1) break;

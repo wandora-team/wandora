@@ -221,7 +221,7 @@ public class PatchDiffParser {
     protected String readQuotedString() throws IOException,ParseException {
         int r=reader.read();
         if(r!='"') throw new ParseException("Expecting \"",line);
-        StringBuffer read=new StringBuffer();
+        StringBuilder read=new StringBuilder();
         boolean escape=false;
         while(true){
             r=reader.read();

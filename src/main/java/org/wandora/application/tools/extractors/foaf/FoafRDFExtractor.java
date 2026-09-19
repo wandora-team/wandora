@@ -30,12 +30,13 @@ package org.wandora.application.tools.extractors.foaf;
 
 
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.StringBufferInputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.Icon;
 
@@ -70,8 +71,6 @@ public class FoafRDFExtractor extends AbstractExtractor {
 	private static final long serialVersionUID = 1L;
 	private static final Log4j2Logger logger = Log4j2Logger.getLogger(FoafRDFExtractor.class);
 	
-	
-	private String defaultEncoding = "UTF-8";
     public static String defaultLanguage = "en";
     
     
@@ -145,7 +144,7 @@ public class FoafRDFExtractor extends AbstractExtractor {
     
     public boolean _extractTopicsFrom(String in, TopicMap tm) throws Exception {        
         try {           
-            importFoafRDF(new StringBufferInputStream(in), tm);
+            importFoafRDF(new ByteArrayInputStream(in.getBytes(StandardCharsets.UTF_8)), tm);
         }
         catch(Exception e){
             log("Exception when handling request",e);
@@ -205,7 +204,7 @@ public class FoafRDFExtractor extends AbstractExtractor {
         Property predicate = stmt.getPredicate();   // get the predicate
         RDFNode object     = stmt.getObject();      // get the object
 
-        System.out.println("statement:\n  "+subject+"\n   "+predicate+"\n    "+object);
+        logger.info("statement:\n  {}\n   {}\n    {}", subject, predicate, object);
         
         Topic subjectTopic = getOrCreateTopic(map, subject.toString());
         Topic predicateTopic = getOrCreateTopic(map, predicate.toString());

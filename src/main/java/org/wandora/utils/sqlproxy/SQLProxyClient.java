@@ -187,7 +187,7 @@ public class SQLProxyClient {
     private String readLine() throws IOException {
         int c=-1;
         boolean escape=false;
-        StringBuffer buf=new StringBuffer();
+        StringBuilder buf=new StringBuilder();
         while( (c=inReader.read())!=-1 ){
             if(!escape && c=='\\') escape=true;
             else {
@@ -204,7 +204,7 @@ public class SQLProxyClient {
         int c=inReader.read();
         if(c=='"'){
             boolean escape=false;
-            StringBuffer buf=new StringBuffer();
+            StringBuilder buf=new StringBuilder();
             while( (c=inReader.read())!=-1 ){
                 if(!escape && c=='\\') escape=true;
                 else {
@@ -232,7 +232,7 @@ public class SQLProxyClient {
     }
     
     private T2<Integer,Boolean> readInteger() throws IOException,SQLProxyException {
-        StringBuffer buf=new StringBuffer();
+        StringBuilder buf=new StringBuilder();
         boolean eol=false;
         int c=-1;
         while( (c=inReader.read())!=-1 ){
@@ -259,7 +259,7 @@ public class SQLProxyClient {
     }
     
     private T2<Double,Boolean> readDouble() throws IOException,SQLProxyException {
-        StringBuffer buf=new StringBuffer();
+        StringBuilder buf=new StringBuilder();
         boolean eol=false;
         int c=-1;
         while( (c=inReader.read())!=-1 ){

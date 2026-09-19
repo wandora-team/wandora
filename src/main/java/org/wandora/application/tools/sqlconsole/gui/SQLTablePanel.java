@@ -350,7 +350,7 @@ public class SQLTablePanel extends JPanel implements MouseListener, ActionListen
         int[] rows = guiTable.getSelectedRows();
         String cellContent;
         if(cols.length > 0 && rows.length > 0) {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for(int j=0; j<rows.length; j++) {
                 for(int i=0; i<cols.length; i++) {
                     cellContent = getValueAt(rows[j],cols[i]);

@@ -1206,7 +1206,7 @@ public class GenericVelocityHelper {
     public static String populateLinks(String text, String linkTemplate) {
         if(text != null && text.length()>0) {
             String DELIMITERS = " \n\t',.\"";
-            StringBuffer newText = new StringBuffer(1000);
+            StringBuilder newText = new StringBuilder(1000);
             String searchword;
             String link;
             String substring;
@@ -1308,7 +1308,7 @@ public class GenericVelocityHelper {
     
 
     public static String capitalizeFirsts(String word) {
-        StringBuffer newWord = new StringBuffer();
+        StringBuilder newWord = new StringBuilder();
         boolean shouldCapitalize = true;
         if (word != null) {
             for (int i=0; i<word.length(); i++) {

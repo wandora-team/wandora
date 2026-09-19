@@ -201,7 +201,7 @@ public class Sentences2Associations  extends AbstractExtractor {
     public void _extractTopicsFromStream(String locator, InputStream inputStream, TopicMap tm) {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuffer word = null;
+            StringBuilder word = null;
             Topic wordTopic = null;
             Topic orderTopic = null;
             Topic roleTopic = null;
@@ -211,7 +211,7 @@ public class Sentences2Associations  extends AbstractExtractor {
 
             log("Prosessing word stream!");
             int c = reader.read();
-            word = new StringBuffer("");
+            word = new StringBuilder("");
             ArrayList<String> words = new ArrayList<>();
 
 
@@ -230,7 +230,7 @@ public class Sentences2Associations  extends AbstractExtractor {
                             log("Found word '"+wordStr+"'.");
                             words.add(wordStr);
                         }
-                        word = new StringBuffer("");
+                        word = new StringBuilder("");
                     }
                 }
                 if(isSentenceDelimiter(c)) {

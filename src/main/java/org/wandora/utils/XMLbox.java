@@ -446,7 +446,7 @@ public class XMLbox {
     
     
     public static String xml2Text(org.w3c.dom.Document doc) {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         xml2Text(doc.getDocumentElement(), sb);
         return sb.toString().trim();
     }
@@ -454,7 +454,7 @@ public class XMLbox {
     
     
     
-    private static void xml2Text(Node node, StringBuffer sb) {
+    private static void xml2Text(Node node, StringBuilder sb) {
         NodeList nodes = node.getChildNodes();
         int numOfNodes = nodes.getLength();
         for( int nnum=0; nnum<numOfNodes; nnum++ ) {
@@ -473,7 +473,7 @@ public class XMLbox {
     
         
     private static String textValue( Element e ) {
-        StringBuffer text = new StringBuffer("");
+        StringBuilder text = new StringBuilder("");
         NodeList nl = e.getChildNodes();
         for( int i=0;i<nl.getLength();i++ ) {
             Node n = nl.item(i);

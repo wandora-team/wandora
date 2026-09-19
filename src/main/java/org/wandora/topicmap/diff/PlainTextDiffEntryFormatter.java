@@ -100,7 +100,7 @@ public class PlainTextDiffEntryFormatter implements DiffEntryFormatter {
                 VariantChanged vc=(VariantChanged)d;
                 String v=vc.name;
                 String oldv=vc.oldname;
-                StringBuffer scopeString=new StringBuffer("{");
+                StringBuilder scopeString=new StringBuilder("{");
                 if(vc.scope!=null) {
                     for(Topic t : vc.scope) {
                         if(scopeString.length()>1) scopeString.append(", ");
