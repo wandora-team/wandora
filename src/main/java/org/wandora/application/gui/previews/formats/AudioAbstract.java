@@ -204,8 +204,8 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
                 if(currentMixer != null && currentMixer.isSeekSupported()) {
                     if(currentMixer.isNotSeeking() && currentMixer.isNotPausingNorPaused()) {
                         currentMixer.setMillisecondPosition(mouseValue*1000);
-                        // System.out.println("newPosition: "+mouseValue*1000);
-                        // System.out.println("newPosition2: "+currentMixer.getMillisecondPosition());
+                        // logger.debug("newPosition: "+mouseValue*1000);
+                        // logger.debug("newPosition2: "+currentMixer.getMillisecondPosition());
                     }
                 }
             }
@@ -340,8 +340,8 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
                 suffix = MimeTypes.getExtension(mimetype);
             }
             
-            //System.out.println("mimetype: "+mimetype);
-            //System.out.println("suffix: "+suffix);
+            //logger.debug("mimetype: "+mimetype);
+            //logger.debug("suffix: "+suffix);
             
             if(suffix == null) suffix = "tmp";
             if(!suffix.startsWith(".")) suffix = "."+suffix;
@@ -349,7 +349,7 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
                     
             File tempFile = new File(tmpdir + File.separator + prefix + suffix);
             
-            //System.out.println("tempFile: "+tempFile.getAbsolutePath());
+            //logger.debug("tempFile: "+tempFile.getAbsolutePath());
             
             if(!tempFile.exists()) {
                 tempFile.deleteOnExit();

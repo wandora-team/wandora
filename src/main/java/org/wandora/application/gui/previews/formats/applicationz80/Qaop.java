@@ -587,7 +587,7 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
 
     public void showStatus(String s, boolean log) {
         if (log) {
-            System.out.println(s);
+            logger.info(s);
         }
         try {
             // TODO
@@ -720,7 +720,7 @@ class Loader extends Thread {
         } catch (InterruptedIOException x) {
             throw new InterruptedException();
         } catch (Exception x) {
-            System.out.println(x);
+            logger.error(x);
             if (q.dl_msg == null) {
                 String m;
                 if (x instanceof FileNotFoundException) {
@@ -1158,7 +1158,7 @@ class Loader extends Thread {
 
         try {
             cpu.pc(get16());
-            System.out.println("Is it 128K .SNA?");
+            logger.info("Is it 128K .SNA?");
         } catch (EOFException e) {
             int sp = cpu.sp();
             cpu.pc(spectrum.mem16(sp));
@@ -1200,7 +1200,7 @@ class Loader extends Thread {
         cpu.pc(get16());
         int hm = get8();
         if (hm > 1) {
-            System.out.println("Unsupported model: #" + hm);
+            logger.warn("Unsupported model: #{}", hm);
         }
         get8();
         if (get8() == 0xFF && spectrum.if1rom != null) {

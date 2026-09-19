@@ -197,7 +197,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                 String fileName = zipEntry.getName();
                 File newFile = new File(savePath + File.separator + fileName);
 
-                System.out.println("file unzip : "+ newFile.getAbsoluteFile());
+                logger.info("file unzip : "+ newFile.getAbsoluteFile());
 
                 //create all non exists folders
                 //else you will hit FileNotFoundException for compressed folder
@@ -214,7 +214,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
             zipInputStream.closeEntry();
             zipInputStream.close();
 
-            System.out.println("Done");
+            logger.info("Done");
         }
         catch(Exception ex) {
         	logger.error(ex);
@@ -292,7 +292,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("actionPerformed: "+e.getActionCommand());
+            logger.debug("actionPerformed: "+e.getActionCommand());
             String command = e.getActionCommand();
             if(command != null) {
                 if("Save to file...".equalsIgnoreCase(command)) {

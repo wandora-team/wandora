@@ -102,9 +102,8 @@ class Audio {
     Audio() {
         try {
             mul = FREQ;
-            AudioFormat fmt
-                    = new AudioFormat(FREQ, 16, 1, true, false);
-            System.out.println(fmt);
+            AudioFormat fmt = new AudioFormat(FREQ, 16, 1, true, false);
+            logger.info(fmt.toString());
             SourceDataLine l = (SourceDataLine) AudioSystem.getLine(
                     new DataLine.Info(SourceDataLine.class, fmt)
             );

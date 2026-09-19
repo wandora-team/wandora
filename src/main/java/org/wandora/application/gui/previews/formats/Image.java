@@ -68,6 +68,7 @@ import org.wandora.application.gui.previews.PreviewUtils;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -79,6 +80,7 @@ import org.wandora.utils.Options;
  */
 public class Image extends JPanel implements Runnable, MouseListener, KeyListener, ActionListener, Printable, PreviewPanel {
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(Image.class);
     
 	private static final String OPTIONS_PREFIX = "gui.imagePreviewPanel.";
     private static final double ZOOMFACTOR = 1.1;
@@ -232,7 +234,6 @@ public class Image extends JPanel implements Runnable, MouseListener, KeyListene
     public void paint(Graphics g) {
         super.paint(g);
         if(scaledImage != null && panelDimensions != null) {
-            //System.out.println(" image x =" + imageDimensions.width + ", y=" + imageDimensions.height );
             g.drawImage(scaledImage,0,0,scaledImage.getWidth(), scaledImage.getHeight(), this);
         }
     }
@@ -439,7 +440,7 @@ public class Image extends JPanel implements Runnable, MouseListener, KeyListene
                 ImageIO.write(image, format, imageFile);
             }
             catch(Exception e) {
-                System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + imageFile.getPath() + "'.");
+                logger.error("Exception '" + e.toString() + "' occurred while saving file '" + imageFile.getPath() + "'.");
             }
         }
     }
@@ -473,7 +474,7 @@ public class Image extends JPanel implements Runnable, MouseListener, KeyListene
             try {
                 printJob.print();
             } catch(PrinterException pe) {
-                System.out.println("Error printing: " + pe);
+                logger.error("Error printing: " + pe);
             }
         }
     }

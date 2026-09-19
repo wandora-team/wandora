@@ -272,7 +272,7 @@ public class ApplicationC64 implements ActionListener, PreviewPanel, ComponentLi
         if(c64 == null) return;
         if(c64canvas == null) return;
         
-        System.out.println("ApplicationC64 action '"+c+"'.");
+        logger.info("ApplicationC64 action '"+c+"'.");
         
         
         if("Open subject locator in ext".equalsIgnoreCase(c)) {
@@ -547,7 +547,7 @@ public class ApplicationC64 implements ActionListener, PreviewPanel, ComponentLi
                     imageData = data;
                     File tmpFile = dataUrl.createTempFile();
                     if(tmpFile != null) {
-                        System.out.println("disk attached: "+tmpFile.getAbsolutePath());
+                        logger.info("disk attached: "+tmpFile.getAbsolutePath());
                         EmulatorUtils.attachImage(c64, c64.getActiveDrive(), tmpFile.getAbsolutePath());
                         //attachedImages.put(Integer.valueOf(c64.getActiveDrive()), tmpFile.getAbsolutePath());
                     }

@@ -221,7 +221,7 @@ public class ApplicationZMachine implements ActionListener, PreviewPanel {
     @Override
     public void stop() {
         if(machine != null) {
-            System.out.println("Stopping machine!");
+            logger.info("Stopping machine!");
             /*
             Input in = machine.getInput();
             if(in != null) {
