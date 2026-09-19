@@ -97,9 +97,8 @@ public class GraphAllNodesContext implements Context<VNode> {
         if(contextSource == null) return null;
         
         List<VNode> contextNodes = new ArrayList<>();
-        if(contextSource instanceof Wandora) {
+        if(contextSource instanceof Wandora w) {
             try {
-                Wandora w = (Wandora) contextSource;
                 TopicPanel currentTopicPanel = w.getTopicPanel();
                 if(currentTopicPanel  instanceof GraphTopicPanel) {
                     contextNodes.addAll( ((GraphTopicPanel) currentTopicPanel).getGraphPanel().getModel().getNodes() );
@@ -109,11 +108,11 @@ public class GraphAllNodesContext implements Context<VNode> {
                 log(e);
             }
         }
-        else if(contextSource instanceof GraphTopicPanel) {
-            contextNodes.addAll( ((GraphTopicPanel) contextSource).getGraphPanel().getModel().getNodes() );
+        else if(contextSource instanceof GraphTopicPanel gtp) {
+            contextNodes.addAll( gtp.getGraphPanel().getModel().getNodes() );
         }
-        else if(contextSource instanceof TopicMapGraphPanel) {
-            contextNodes.addAll( ((TopicMapGraphPanel) contextSource).getModel().getNodes() );
+        else if(contextSource instanceof TopicMapGraphPanel tmgp) {
+            contextNodes.addAll( tmgp.getModel().getNodes() );
         }
         return contextNodes.iterator();
     }

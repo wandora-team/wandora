@@ -51,9 +51,8 @@ public class TopicMapStatisticsDialog extends javax.swing.JDialog {
 	private static final long serialVersionUID = 1L;
 	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicMapStatisticsDialog.class);
 	
-	private Wandora wandora = null;
     private TopicMap map = null;
-    private StringBuffer stats = null;
+    private StringBuilder stats = null;
     
     
     
@@ -62,7 +61,6 @@ public class TopicMapStatisticsDialog extends javax.swing.JDialog {
      */
     public TopicMapStatisticsDialog(Wandora w, Layer layer) {
         super(w, true);
-        this.wandora = w;
         this.map = layer.getTopicMap();
         initComponents();
         initStatistics();
@@ -74,7 +72,6 @@ public class TopicMapStatisticsDialog extends javax.swing.JDialog {
     
     public TopicMapStatisticsDialog(Wandora w, TopicMap map, String name) {
         super(w, true);
-        this.wandora = w;
         this.map = map;
         initComponents();
         initStatistics();
@@ -88,15 +85,15 @@ public class TopicMapStatisticsDialog extends javax.swing.JDialog {
     private void initStatistics() {
         int[] statOptions = TopicMapStatOptions.getAvailableOptions();
         int bagCount = 0;
-        stats = new StringBuffer();
+        stats = new StringBuilder();
         GridBagConstraints gbc = null;
         SimpleLabel statDescription = null;
         SimpleLabel statValue = null;
         String statDescriptionString = null;
         String statString = null;
         gbc=new GridBagConstraints();
-        Insets rowInsets = new Insets(0, 9,0, 9);
-        gbc.insets = new Insets(9, 9,0, 9);
+        Insets rowInsets = new Insets(0, 9, 0, 9);
+        gbc.insets = new Insets(9, 9, 0, 9);
         
         for(int i=0; i<statOptions.length; i++) {
             try {

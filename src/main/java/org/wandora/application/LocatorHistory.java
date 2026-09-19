@@ -78,7 +78,7 @@ public class LocatorHistory {
     }
     
     
-    /** Creates a new instance of History */
+    /** Creates a new instance of LocatorHistory */
     public LocatorHistory(int max) {
         maxsize = max;
         clear();

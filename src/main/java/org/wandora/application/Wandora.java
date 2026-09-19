@@ -782,8 +782,6 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         menuManager.refreshGeneratorMenu();
         menuManager.refreshExportMenu();
         menuManager.refreshExtractMenu();
-        // this.validateTree(); // TRIGGERS EXCEPTION IN JAVA 1.7
-        //repaint();
         refresh();
     }
     
@@ -1330,14 +1328,6 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         catch(Exception ce){
             return;
         }
-        /* // note that manager.isUnsaved always returned false, uncomment this when unsaved tracking works
-        if(manager.isUnsaved()){
-            if(WandoraOptionPane.showConfirmDialog(this,"Unsaved changes exist. Are you sure you want to exit?","Unsaved changes",WandoraOptionPane.YES_NO_OPTION)
-                ==WandoraOptionPane.YES_OPTION){
-                doExit();
-            }
-        }
-        else*/
         doExit();
     }
 
@@ -1775,7 +1765,6 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
      * Refreshes the main window and main panels.
      */
     public void refresh() {
-        //System.out.println("Wandora - refresh");
         Dimension d = super.getSize();
         Point l = super.getLocation();
 
@@ -1929,7 +1918,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             }
         }
         catch(Exception e) {
-            logger.info("Exception '{}' thrown while updating layer info!", e.toString());
+            logger.error("Exception '{}' thrown while updating layer info!", e.toString());
         }
     }
     
@@ -1949,7 +1938,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             }
         }
         catch(Exception e) {
-            System.out.println("Exception '"+ e.toString() +"' thrown while updating topic distribution info!");
+        	logger.error("Exception '{}' thrown while updating topic distribution info!", e.toString());
         }
     }
     
@@ -1965,7 +1954,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             topicLabel.setText(name);
         }
         catch(Exception e) {
-            logger.warn("Exception '{}' thrown while updating topic status panel!", e.toString());
+            logger.error("Exception '{}' thrown while updating topic status panel!", e.toString());
         }
     }
     

@@ -63,12 +63,12 @@ import org.wandora.utils.logger.Log4j2Logger;
 public class TopicHilights {
 	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicHilights.class);
     
-    private Map<String, Color> hilighted = new LinkedHashMap<>();
     private Wandora wandora = null;
+    private Map<String, Color> hilighted = new LinkedHashMap<>();
     private Map<Topic, Color> hilightedTopics = new LinkedHashMap<>();
     
-    public static Color removedTopicColor = new Color(0xa00000);
-    
+    public static final Color removedTopicColor = new Color(0xa00000);
+    public static final Color notActiveLayerColor = new Color(0x800000);
     
     
     
@@ -89,6 +89,7 @@ public class TopicHilights {
         Topic t = wandora.getTopicMap().getTopic(si);
         if(t != null) hilightedTopics.put(t, color);
     }
+    
     public void add(Topic topic, Color color) throws TopicMapException {
         if(topic != null) {
             remove(topic);
@@ -98,6 +99,7 @@ public class TopicHilights {
             }
         }
     }
+    
     public void add(Topic[] topics, Color color) throws TopicMapException  {
         if(topics != null && topics.length > 0) {
             for(int i=0; i<topics.length; i++) {
@@ -114,7 +116,7 @@ public class TopicHilights {
     public Color get(String si) {
         try {
             if(si == null) return null;
-            else return (Color) hilighted.get(si);
+            else return hilighted.get(si);
         }
         catch (Exception e) {
             logger.error("Exception occurred while getting topic hilight color!");
@@ -231,7 +233,7 @@ public class TopicHilights {
         try {
             if(topic == null) return null;
             else if(topic.isRemoved()) return removedTopicColor;
-            else return (Color) hilightedTopics.get(topic);
+            else return hilightedTopics.get(topic);
         }
         catch(Exception e) {
             logger.error("Exception occurred while getting topic hilight color!");
@@ -241,9 +243,9 @@ public class TopicHilights {
     }
     
     
+
     
-//    public Color notActiveLayerColor = new Color(0xfff6f6);
-    public static Color notActiveLayerColor = new Color(0x800000);
+
     public Color getLayerColor(Topic topic) {
         try {
             if(topic == null || !(topic.getTopicMap() instanceof ContainerTopicMap)) return null;
@@ -270,7 +272,7 @@ public class TopicHilights {
         if(topic != null) {
             for(Iterator<Locator> i = topic.getSubjectIdentifiers().iterator(); i.hasNext();) {
                 try {
-                    String si = ((Locator) i.next()).toExternalForm();
+                    String si = i.next().toExternalForm();
                     hilighted.remove(si);
                     hilightedTopics.remove(topic);
                 }

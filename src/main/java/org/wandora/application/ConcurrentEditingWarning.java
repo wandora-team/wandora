@@ -46,17 +46,27 @@ public class ConcurrentEditingWarning extends javax.swing.JDialog {
     public ConcurrentEditingWarning(java.awt.Frame parent, boolean modal,Topic[] failed,Topic[] removed) {
         super(parent, modal);
         initComponents();
-        StringBuffer buf=new StringBuffer();
-        if(failed.length>0) buf.append("Edited:\n");
-        try{
-            for(int i=0;i<failed.length;i++){
-                buf.append(failed[i].getBaseName()+" ("+failed[i].getSubjectIdentifiers().iterator().next()+")\n");
+        StringBuilder buf=new StringBuilder();
+        if (failed.length>0) {
+        	buf.append("Edited:\n");
+        }
+        try {
+            for (int i = 0; i < failed.length; i++) {
+                buf.append(failed[i].getBaseName())
+                    .append(" (")
+                    .append(failed[i].getSubjectIdentifiers().iterator().next())
+                    .append(")\n");
             }
-            if(removed.length>0) buf.append("Removed:\n");
+            if(removed.length>0) {
+            	buf.append("Removed:\n");
+            }
             for(int i=0;i<removed.length;i++){
-                buf.append(removed[i].getBaseName()+" ("+removed[i].getSubjectIdentifiers().iterator().next()+")\n");
+                buf.append(removed[i].getBaseName())
+                    .append(" (")
+                    .append(removed[i].getSubjectIdentifiers().iterator().next())
+                    .append(")\n");
             }
-        }catch(TopicMapException tme){
+        } catch(TopicMapException tme){
         	logger.error(tme);
         }
         failedTextArea.setText(buf.toString());

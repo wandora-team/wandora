@@ -37,6 +37,7 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.border.Border;
 
@@ -109,11 +110,11 @@ public class EditorPanel extends JPanelWithBackground implements DropTargetListe
     }
     
     private void acceptFileList(java.util.List<File> files) throws Exception {
-        ArrayList<WandoraTool> importTools = new ArrayList<>();
+        List<WandoraTool> importTools = new ArrayList<>();
         boolean yesToAll = false;
         
         for(File file : files) {
-            ArrayList<WandoraTool> importToolsForFile = WandoraToolManager.getImportTools(file, orders);
+            List<WandoraTool> importToolsForFile = WandoraToolManager.getImportTools(file, orders);
             if(importToolsForFile != null && !importToolsForFile.isEmpty()) {
                 importTools.addAll(importToolsForFile);
             }
@@ -141,7 +142,6 @@ public class EditorPanel extends JPanelWithBackground implements DropTargetListe
                 }               
             }
         }
-        //System.out.println("drop context == " + dropContext);
         ActionEvent fakeEvent = new ActionEvent(dropContext != null ? dropContext : parent, 0, "merge");
         ChainExecuter chainExecuter = new ChainExecuter(importTools);
         chainExecuter.execute(parent, fakeEvent);
@@ -151,9 +151,9 @@ public class EditorPanel extends JPanelWithBackground implements DropTargetListe
     
     @Override
     public void drop(java.awt.dnd.DropTargetDropEvent e) {
-        final java.util.List<File> files = DnDBox.acceptFileList(e);
+        final List<File> files = DnDBox.acceptFileList(e);
         if(files==null) {
-            System.out.println("Drop rejected! Wrong data flavor!");
+            logger.warn("Drop rejected! Wrong data flavor!");
             e.rejectDrop();
         }
         else {

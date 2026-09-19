@@ -28,8 +28,9 @@
 
 package org.wandora.application;
 
-import java.util.HashSet;
+
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 
@@ -50,7 +51,7 @@ public class WandoraToolType {
     public static final String GENERATOR_TYPE = "generator";
     
     
-    private Set<String> types = new HashSet<String>();
+    private Set<String> types = new LinkedHashSet<>();
     
     
     public WandoraToolType(String type) {

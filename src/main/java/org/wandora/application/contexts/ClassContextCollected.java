@@ -70,7 +70,7 @@ public class ClassContextCollected extends LayeredTopicContext {
 
         while(topics.hasNext()) {
             try {
-                topic = (Topic) topics.next();
+                topic = topics.next();
                 if(topic == null) continue;
                 if(removeDuplicates) {
                     classTopics = topic.getTypes();

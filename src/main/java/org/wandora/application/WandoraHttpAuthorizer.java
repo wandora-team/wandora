@@ -55,7 +55,7 @@ public class WandoraHttpAuthorizer extends HttpAuthorizer {
     
     
     /**
-     * Creates a new instance of HttpAuthorizer
+     * Creates a new instance of WandoraHttpAuthorizer
      */
     public WandoraHttpAuthorizer(Wandora admin) {
         this.admin = admin;

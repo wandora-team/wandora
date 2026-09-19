@@ -115,14 +115,18 @@ public abstract class TopicIterator implements Iterator<Topic> {
             nextUncached = solveNext();
         }
         while(cache.contains(nextUncached) && nextUncached != null);
-        if(nextUncached != null) cache.add(nextUncached);
+        if(nextUncached != null) {
+        	cache.add(nextUncached);
+        }
         return nextUncached;
     }
 
 
     private Topic solveNext() {
         Iterator<Topic> iterator = solveIterator();
-        if(iterator != null && iterator.hasNext()) return iterator.next();
+        if(iterator != null && iterator.hasNext()) {
+        	return iterator.next();
+        }
         else return null;
     }
 
@@ -131,8 +135,10 @@ public abstract class TopicIterator implements Iterator<Topic> {
     private Iterator<Topic> solveIterator() {
         while(iterator == null || !iterator.hasNext()) {
             if(source != null && source.hasNext()) {
-                topic = (Topic) source.next();
-                while(topic == null && source.hasNext()) topic = (Topic) source.next();
+                topic = source.next();
+                while(topic == null && source.hasNext()) {
+                	topic = source.next();
+                }
                 iterator = solveIteratorForTopic(topic, topicmap, iterator);
             }
             else {

@@ -195,8 +195,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
     
     
     public SimpleMenuItem getToolMenuItem(Wandora wandora, String instanceName);
-    //public WandoraButton getToolButton(Wandora admin);
-    //public WandoraButton getToolButton(Wandora admin, int styleHints);
+
     
     
     /**

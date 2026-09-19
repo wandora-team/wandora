@@ -27,10 +27,10 @@ package org.wandora.topicmap.parser;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 import org.wandora.application.Wandora;
@@ -214,10 +214,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
                         if(sisSize < 2) {
                             // create permanent subject identifier before temporary can be removed.
                             String permanentSI = "https://wandora.org/si/xtm2/permanent/" + System.currentTimeMillis() + "-" + Math.round(Math.random()*999999);
-                            // System.out.println("adding si "+permanentSI);
                             t.addSubjectIdentifier(new Locator( permanentSI ));
                         }
-                        // System.out.println("Removing si "+si.toExternalForm());
                         t.removeSubjectIdentifier(si);
                     }
                 }
@@ -279,7 +277,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
             }
 
             if(parsedTopic.types!=null){
-                ArrayList<Topic> types=processTopicRefs(parsedTopic.types);
+                List<Topic> types=processTopicRefs(parsedTopic.types);
                 for(Topic type : types){
                     t.addType(type);
                 }
@@ -301,16 +299,14 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
 
             for(ParsedName name : parsedTopic.names){
 
-                ArrayList<Topic> scope=processTopicRefs(name.scope);
+                List<Topic> scope=processTopicRefs(name.scope);
                 if(name.type!=null) {
                     logger.log("Warning, name has type, moving to scope");
-//                    if(name.scope==null) name.scope=new ArrayList<Topic>();
-                    if(scope==null) scope=new ArrayList<Topic>();
+                    if(scope==null) scope=new ArrayList<>();
                     scope.add(getOrCreateTopicRef(name.type));
                 }
 
                 if(name.value!=null && name.value.length()>0){
-//                    if(name.scope==null || name.scope.size()==0){
                     if(scope==null || scope.isEmpty()){
                         if(ENSURE_UNIQUE_BASENAMES) {
                             int i = 2;
@@ -322,16 +318,13 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
                         t.setBaseName(name.value);
                     }
                     else {
-//                        t.setVariant(new HashSet<Topic>(name.scope), name.value);
                         t.setVariant(new LinkedHashSet<Topic>(scope), name.value);
                     }
                 }
 
                 for(ParsedVariant v : name.variants) {
-                    HashSet<Topic> s=new LinkedHashSet<Topic>();
-//                    if(name.scope!=null) s.addAll(name.scope);
+                    Set<Topic> s=new LinkedHashSet<>();
                     if(name.scope!=null) s.addAll(scope);
-//                    if(v.scope!=null) s.addAll(v.scope);
                     if(v.scope!=null) s.addAll(processTopicRefs(v.scope));
                     t.setVariant(s,v.data);
                 }
@@ -368,7 +361,6 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
                         t2.setSubjectLocator(tm.createLocator(o.ref));
                         Topic orole=getOrCreateTopic("https://wandora.org/si/compatibility/occurrencerolereference");
                         Topic trole=getOrCreateTopic("https://wandora.org/si/compatibility/occurrenceroletopic");
-    //                    Association a=tm.createAssociation(o.type);
                         Association a=tm.createAssociation(getOrCreateTopicRef(o.type));
                         a.addPlayer(t,trole);
                         a.addPlayer(t2,orole);
@@ -386,10 +378,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
                     }
                     else {
                         if(o.scope.size()>1) logger.log("Warning, variant scope has more than one topic, ignoring all but one.");
-//                        version=o.scope.get(0);
                         version=getOrCreateTopicRef(o.scope.get(0));
                     }
-//                    t.setData(o.type, version, o.data);
                     t.setData(getOrCreateTopicRef(o.type), version, o.data);
                 }
             }
@@ -483,27 +473,21 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         return href;
     }
     
-    
-//    protected ArrayList<Topic> parsedScope;
-    protected ArrayList<String> parsedScope;
+
+    protected List<String> parsedScope;
     protected void startScope(){
         stateStack.push(state);
         state=STATE_SCOPE;
-//        parsedScope=new ArrayList<Topic>();
-        parsedScope=new ArrayList<String>();
+        parsedScope=new ArrayList<>();
     }
     
     
     protected void handleScope(String uri, String localName, String qName, Attributes atts){
         if(qName.equals(E_TOPICREF)){
-//            try{
                 String href=handleHRef(qName,atts);
                 if(href!=null){
-//                    Topic t=getOrCreateTopicRef(href);
-//                    if(t!=null) parsedScope.add(t);
                     parsedScope.add(href);
                 }
-//            }catch(TopicMapException tme){logger.log(tme);}
         }
         else logger.log("Expecting "+E_TOPICREF+", got "+qName);
     }
@@ -521,26 +505,20 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     
     
     
-//    protected ArrayList<Topic> parsedInstances;
-    protected ArrayList<String> parsedInstances;
+    protected List<String> parsedInstances;
     protected void startInstanceOf(){
         stateStack.push(state);
         state=STATE_INSTANCEOF;
-//        parsedInstances=new ArrayList<Topic>();
-        parsedInstances=new ArrayList<String>();
+        parsedInstances=new ArrayList<>();
     }
     
     
     protected void handleInstanceOf(String uri, String localName, String qName, Attributes atts){
         if(qName.equals(E_TOPICREF)){
-//            try{
                 String href=handleHRef(qName,atts);
                 if(href!=null){
-//                    Topic t=getOrCreateTopicRef(href);
-//                    if(t!=null) parsedInstances.add(t);
                     parsedInstances.add(href);
                 }
-//            }catch(TopicMapException tme){logger.log(tme);}
         }
         else logger.log("Expecting "+E_TOPICREF+", got "+qName);        
     }
@@ -554,7 +532,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     }
     
     
-//    protected Topic parsedType;
+
     protected String parsedType;
     protected void startType(){
         stateStack.push(state);
@@ -568,10 +546,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
             if(parsedType!=null) logger.log("Encountered another topicRef in type, overwriting previous.");
             String href=handleHRef(qName,atts);
             if(href!=null){
-//                try{
-//                    parsedType=getOrCreateTopicRef(href);
-                    parsedType=href;
-//                }catch(TopicMapException tme){logger.log(tme);}
+                parsedType=href;
             }
         }
         else logger.log("Expecting "+E_TOPICREF+", got "+qName);                
@@ -674,10 +649,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         else if(parsedAssociation.roles.isEmpty()) logger.log("No players in association");
         else {
             try {
-//                Association a=tm.createAssociation(parsedAssociation.type);
                 Association a=tm.createAssociation(getOrCreateTopicRef(parsedAssociation.type));
                 for(ParsedRole r : parsedAssociation.roles) {
-//                    a.addPlayer(r.topic,r.type);
                     a.addPlayer(getOrCreateTopicRef(r.topic),getOrCreateTopicRef(r.type));
                 }
             }
@@ -701,11 +674,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
         else if(qName.equals(E_TOPICREF)){
             String href=handleHRef(qName,atts);
             if(href!=null){
-//                try{
-//                    Topic t=getOrCreateTopicRef(href);
-//                    if(t!=null) parsedRole.topic=t;
-                    parsedRole.topic=href;
-//                } catch(TopicMapException tme){logger.log(tme);}
+                 parsedRole.topic=href;
             }
         }
         else logger.log("Expecting one of "+E_TYPE+", "+E_TOPICREF+", got "+qName);
@@ -722,28 +691,25 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     
     protected static class ParsedTopic{
         public String id;
-        public ArrayList<String> itemIdentities;
-        public ArrayList<String> subjectLocators;
-        public ArrayList<String> subjectIdentifiers;
-//        public ArrayList<Topic> types;
-        public ArrayList<String> types;
-        public ArrayList<ParsedName> names;
-        public ArrayList<ParsedOccurrence> occurrences;
+        public List<String> itemIdentities;
+        public List<String> subjectLocators;
+        public List<String> subjectIdentifiers;
+        public List<String> types;
+        public List<ParsedName> names;
+        public List<ParsedOccurrence> occurrences;
         public ParsedTopic(){
-            itemIdentities=new ArrayList<String>();
-            subjectLocators=new ArrayList<String>();
-            subjectIdentifiers=new ArrayList<String>();
-            names=new ArrayList<ParsedName>();
-            occurrences=new ArrayList<ParsedOccurrence>();
+            itemIdentities=new ArrayList<>();
+            subjectLocators=new ArrayList<>();
+            subjectIdentifiers=new ArrayList<>();
+            names=new ArrayList<>();
+            occurrences=new ArrayList<>();
         }
     }
 
     
     protected static class ParsedAssociation{
-        public ArrayList<ParsedRole> roles;
-//        public ArrayList<Topic> scope;
-        public ArrayList<String> scope;
-//        public Topic type;
+        public List<ParsedRole> roles;
+        public List<String> scope;
         public String type;
         public ParsedAssociation(){
             roles=new ArrayList<ParsedRole>();
@@ -752,12 +718,10 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
 
     
     protected static class ParsedName{
-//        public Topic type;
         public String type;
-//        public ArrayList<Topic> scope;
-        public ArrayList<String> scope;
+        public List<String> scope;
         public String value;
-        public ArrayList<ParsedVariant> variants;
+        public List<ParsedVariant> variants;
         public ParsedName(){
             variants=new ArrayList<ParsedVariant>();
         }
@@ -765,10 +729,8 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     
     
     protected static class ParsedOccurrence{
-//        public Topic type;
         public String type;
-//        public ArrayList<Topic> scope;
-        public ArrayList<String> scope;
+        public List<String> scope;
         public String ref;
         public String data;
         public ParsedOccurrence(){
@@ -777,8 +739,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     
     
     protected static class ParsedVariant{
-//        public ArrayList<Topic> scope;
-        public ArrayList<String> scope;
+        public List<String> scope;
         public String data;
         public ParsedVariant(){
         }
@@ -786,9 +747,7 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     
     
     protected static class ParsedRole {
-//        public Topic type;
         public String type;
-//        public Topic topic;
         public String topic;
         public ParsedRole(){
         }
@@ -796,9 +755,9 @@ public class XTMParser2 implements org.xml.sax.ContentHandler, org.xml.sax.Error
     
     //////////////////////////////
     
-    protected ArrayList<Topic> processTopicRefs(ArrayList<String> hrefs) throws TopicMapException {
+    protected List<Topic> processTopicRefs(List<String> hrefs) throws TopicMapException {
         if(hrefs==null) return null;
-        ArrayList<Topic> ret=new ArrayList<Topic>();
+        List<Topic> ret=new ArrayList<>();
         for(String href : hrefs) {
             ret.add(getOrCreateTopicRef(href));
         }

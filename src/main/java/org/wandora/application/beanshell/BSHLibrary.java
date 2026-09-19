@@ -33,7 +33,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -73,7 +73,7 @@ public class BSHLibrary extends Vector<BSHComponent> {
     
     /** Creates a new instance of BSHLibrary */
     public BSHLibrary(String bshDir) {
-        componentCache = new HashMap<>();
+        componentCache = new LinkedHashMap<>();
         interpreter = new Interpreter();
         readBSHScripts(new File(bshDir));
     }
@@ -87,7 +87,7 @@ public class BSHLibrary extends Vector<BSHComponent> {
     
     public Vector<BSHComponent> getComponentsByName(String name) {
         if(useCache && componentCache.get(name) != null) {
-            return (Vector<BSHComponent>) componentCache.get(name);
+            return componentCache.get(name);
         }
         else {
             Vector<BSHComponent> components = new Vector<>();
@@ -105,8 +105,12 @@ public class BSHLibrary extends Vector<BSHComponent> {
     
     
     public void readBSHScripts(File file) {
-        if(!file.exists()) logger.info("Beanshell directory "+file.getAbsolutePath()+" does not exists.");
-        if(!file.isDirectory()) logger.info("Beanshell directory "+file.getAbsolutePath()+" is not a directory.");
+        if(!file.exists()) {
+        	logger.info("Beanshell directory {} does not exists.", file.getAbsolutePath());
+        }
+        if(!file.isDirectory()) {
+        	logger.info("Beanshell directory {} is not a directory.", file.getAbsolutePath());
+        }
         if(file.exists() && file.isDirectory()) {
             File[] files=file.listFiles(RegexFileChooser.ioFileFilter(RegexFileChooser.suffixChooser("bsh","Beanshell scripts")));
             for(File f: files){
@@ -116,10 +120,10 @@ public class BSHLibrary extends Vector<BSHComponent> {
                         Object bshc=interpreter.eval(reader);
                         reader.close();
                         if(bshc==null) {
-                            logger.info("Beanshell script "+f.getAbsolutePath()+" returned null.");
+                            logger.info("Beanshell script {} returned null.", f.getAbsolutePath());
                         }
                         else if(!(bshc instanceof BSHComponent)){
-                            logger.info("Beanshell script "+f.getAbsolutePath()+" returned object which is not instanceof BSHComponent.");
+                            logger.info("Beanshell script {} returned object which is not instanceof BSHComponent.", f.getAbsolutePath());
                         }
                         else{
                             this.add((BSHComponent)bshc);

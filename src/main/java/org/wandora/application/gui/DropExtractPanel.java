@@ -110,7 +110,6 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
             tabbedPane.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
-                    // System.out.println("Tab: " + tabbedPane.getSelectedIndex());
                     setCurrentPanel(tabbedPane.getSelectedComponent());
                 }
             });
@@ -155,7 +154,6 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
         this.tool = tool;
         if(tool != null) {
             extractorNameLabel.setText(toolName);
-            //extractorNameLabel.setToolTipText(Textbox.makeHTMLParagraph(tool.getDescription(), 40));
         }
         wandora.options.put("dropExtractor.currentTool", toolName);
     }
@@ -675,7 +673,6 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
                     size = c.getSize();
                 }
                 if(!size.equals(getSize())) {
-                    //System.out.println("new size treemapcomponent: "+size);
                     setPreferredSize(size);
                     setMinimumSize(size);
                     setSize(size);

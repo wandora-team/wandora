@@ -105,20 +105,14 @@ public class GraphNodeContext implements Context<VNode> {
             try {
                 Wandora wandora = (Wandora) contextSource;
                 TopicPanel currentTopicPanel = wandora.getTopicPanel();
-                if(currentTopicPanel != null && currentTopicPanel instanceof DockingFramePanel) {
-                    currentTopicPanel = ((DockingFramePanel) currentTopicPanel).getCurrentTopicPanel();
+                if(currentTopicPanel != null && currentTopicPanel instanceof DockingFramePanel dfp) {
+                    currentTopicPanel = dfp.getCurrentTopicPanel();
                 }
-                if(currentTopicPanel != null && currentTopicPanel instanceof GraphTopicPanel) {
-                    contextNodes.addAll( ((GraphTopicPanel) currentTopicPanel).getGraphPanel().getSelectedNodes() );
-                    if(contextNodes.isEmpty()) {
-                        //contextNodes.add( ((GraphTopicPanel) currentTopicPanel).getGraphPanel().getMouseOverNode() );
-                    }
+                if(currentTopicPanel != null && currentTopicPanel instanceof GraphTopicPanel gtp) {
+                    contextNodes.addAll( gtp.getGraphPanel().getSelectedNodes() );
                 }
-                if(currentTopicPanel != null && currentTopicPanel instanceof TopicMapGraphPanel) {
-                    contextNodes.addAll( ((TopicMapGraphPanel) currentTopicPanel).getSelectedNodes() );
-                    if(contextNodes.isEmpty()) {
-                        //contextNodes.add( ((TopicMapGraphPanel) currentTopicPanel).getMouseOverNode() );
-                    }
+                if(currentTopicPanel != null && currentTopicPanel instanceof TopicMapGraphPanel tmgp) {
+                    contextNodes.addAll( tmgp.getSelectedNodes() );
                 }
             }
             catch (Exception e) {
@@ -126,17 +120,11 @@ public class GraphNodeContext implements Context<VNode> {
             }
         }
 
-        else if(contextSource instanceof GraphTopicPanel) {
-            contextNodes.addAll( ((GraphTopicPanel) contextSource).getGraphPanel().getSelectedNodes() );
-            if(contextNodes.isEmpty()) {
-                //contextNodes.add( ((GraphTopicPanel) contextSource).getGraphPanel().getMouseOverNode() );
-            }
+        else if(contextSource instanceof GraphTopicPanel gtp) {
+            contextNodes.addAll( gtp.getGraphPanel().getSelectedNodes() );
         }
-        else if(contextSource instanceof TopicMapGraphPanel) {
-            contextNodes.addAll( ((TopicMapGraphPanel) contextSource).getSelectedNodes() );
-            if(contextNodes.isEmpty()) {
-                //contextNodes.add( ((TopicMapGraphPanel) contextSource).getMouseOverNode() );
-            }
+        else if(contextSource instanceof TopicMapGraphPanel tmgp) {
+            contextNodes.addAll( tmgp.getSelectedNodes() );
         }
         return contextNodes.iterator();
     }

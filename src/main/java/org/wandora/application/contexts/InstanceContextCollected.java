@@ -74,7 +74,7 @@ public class InstanceContextCollected extends LayeredTopicContext {
         }
         while(topics.hasNext()) {
             try {
-                topic = (Topic) topics.next();
+                topic = topics.next();
                 if(topic == null) continue;
                 if(gatherStyle == GATHER_TOPICS_FROM_OWNER_TOPICMAP) {
                     topicmap = topic.getTopicMap();

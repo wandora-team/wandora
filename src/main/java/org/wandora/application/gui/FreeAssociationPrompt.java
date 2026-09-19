@@ -33,6 +33,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -65,7 +66,7 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
 	
 	
     private static Topic previousAssociationType = null;
-    private static ArrayList<Topic> previousRoles = null;
+    private static List<Topic> previousRoles = null;
 
 
     
@@ -410,9 +411,9 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
 //                if(player.isOfType(cls)){
                 if(SchemaBox.isInstanceOf(player,cls)){
                     if(players.size()==1 || classes.size()==1) return 1;
-                    Vector<Topic> np=new Vector<Topic>(players);
+                    Vector<Topic> np=new Vector<>(players);
                     np.remove(player);
-                    Vector<Topic> nc=new Vector<Topic>(classes);
+                    Vector<Topic> nc=new Vector<>(classes);
                     nc.remove(cls);
                     int f=fitRoles(np,nc);
                     if(f==Math.min(np.size(),nc.size())) return f+1;
@@ -424,13 +425,13 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
     }
     
     public Vector<Topic> suggestAssociationType(Vector<Topic> players,boolean strict) throws TopicMapException {
-        TopicHashMap<Integer> results=new TopicHashMap<Integer>();
+        TopicHashMap<Integer> results=new TopicHashMap<>();
         for(Topic player : players){
             Collection<Topic> types=SchemaBox.getAssociationTypesFor(player);
             for(Topic type : types){
                 int score=0;
                 Collection<Topic> roles=SchemaBox.getAssociationTypeRoles(type);
-                Vector<Topic> roleClasses=new Vector<Topic>();
+                Vector<Topic> roleClasses=new Vector<>();
                 for(Topic role : roles){
                     Topic roleClass=SchemaBox.getRoleClass(role);
                     roleClasses.add(roleClass);
@@ -467,10 +468,10 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
     
     public Vector<Topic> suggestAssociationRole(Topic associationType, Topic player, boolean strict) throws TopicMapException{
         Collection<Topic> roles=SchemaBox.getAssociationTypeRoles(associationType);
-        Vector<Topic> ofType=new Vector<Topic>();
-        Vector<Topic> ofTypeUsed=new Vector<Topic>();
-        Vector<Topic> notType=new Vector<Topic>();
-        Vector<Topic> notTypeUsed=new Vector<Topic>();
+        Vector<Topic> ofType=new Vector<>();
+        Vector<Topic> ofTypeUsed=new Vector<>();
+        Vector<Topic> notType=new Vector<>();
+        Vector<Topic> notTypeUsed=new Vector<>();
         for(Topic role : roles){
             Topic cls=SchemaBox.getRoleClass(role);
             boolean used=false;
@@ -511,7 +512,7 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
     
     public void fillWith(Association association) throws TopicMapException {
         typeButton.setTopic(association.getType());
-        ArrayList<Topic> roles=new ArrayList<Topic>(association.getRoles());
+        List<Topic> roles=new ArrayList<>(association.getRoles());
         for(T2<GetTopicButton,Topic> player : fixedPlayers){
             for(int i=0;i<roles.size();i++){
                 Topic r=roles.get(i);
@@ -523,7 +524,9 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
                 }
             }
         }
-        if(players==null || players.size()>0) players=new Vector<T2<GetTopicButton,GetTopicButton>>();
+        if(players==null || players.size()>0) {
+        	players=new Vector<T2<GetTopicButton,GetTopicButton>>();
+        }
         
         for(Topic r : roles){
             Topic p=association.getPlayer(r);
@@ -539,7 +542,7 @@ public class FreeAssociationPrompt extends javax.swing.JDialog {
         Topic type=null;
         Vector<Topic> suggested;
         if(typeButton.getTopic()==null || overwrite){
-            Vector<Topic> players=new Vector<Topic>();
+            Vector<Topic> players=new Vector<>();
             for(T2<GetTopicButton,Topic> player : fixedPlayers){
                 players.add(player.e2);
             }

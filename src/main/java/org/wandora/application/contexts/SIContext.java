@@ -122,18 +122,17 @@ public class SIContext extends AbstractContext implements Context<Locator> {
         if(contextSource == null) return null;
         
         List<Locator> contextLocators = new ArrayList<>();
-        if(contextSource instanceof LocatorTable) {
+        if(contextSource instanceof LocatorTable lt) {
             try {
-                Locator[] selection = ((LocatorTable) contextSource).getSelectedLocators();
+                Locator[] selection = lt.getSelectedLocators();
                 contextLocators.addAll(Arrays.asList(selection));
             }
             catch (Exception e) {
                 log(e);
             }
         }
-        else if(contextSource instanceof Wandora) {
+        else if(contextSource instanceof Wandora w) {
             try {
-                Wandora w = (Wandora) contextSource;
                 Topic currentTopic = w.getOpenTopic();
                 if(currentTopic != null) {
                     digSIs(contextLocators, currentTopic);
@@ -143,68 +142,45 @@ public class SIContext extends AbstractContext implements Context<Locator> {
                 log(e);
             }
         }
-        else if(contextSource instanceof TopicLinkBasename) {
+        else if(contextSource instanceof TopicLinkBasename tlbn) {
             try {
-                digSIs(contextLocators, ((TopicLinkBasename) contextSource).getTopic());
+                digSIs(contextLocators, tlbn.getTopic());
             }
             catch (Exception e) {
                 log(e);
             }
         }
-        else if(contextSource instanceof Topic) {
-            digSIs(contextLocators, (Topic) contextSource );
+        else if(contextSource instanceof Topic t) {
+            digSIs(contextLocators, t );
         }
-        else if(contextSource instanceof Topic[]) {
-            Topic[] topicArray = (Topic[]) contextSource;
+        else if(contextSource instanceof Topic[] topicArray) {
             for(int i=0; i<topicArray.length; i++) {
                 digSIs(contextLocators, topicArray[i] );
             }
         }
-        else if(contextSource instanceof GraphTopicPanel) {
-            digSIs(contextLocators, ((GraphTopicPanel) contextSource).getContextTopics() );
+        else if(contextSource instanceof GraphTopicPanel gtp) {
+            digSIs(contextLocators, gtp.getContextTopics() );
         }
-        else if(contextSource instanceof TopicTable) {
-            Topic[] topicArray = ((TopicTable) contextSource).getSelectedTopics();
+        else if(contextSource instanceof TopicTable tt) {
+            Topic[] topicArray = tt.getSelectedTopics();
             for(int i=0; i<topicArray.length; i++) {
                 digSIs(contextLocators, topicArray[i] );
             }
         }
-        else if(contextSource instanceof JTableHeader) {
-            if(((JTableHeader) contextSource).getTable() instanceof TopicTable) {
-                TopicTable topicTable = (TopicTable) ((JTableHeader) contextSource).getTable();
+        else if(contextSource instanceof JTableHeader th) {
+            if(th.getTable() instanceof TopicTable topicTable) {
                 digSIs(contextLocators, topicTable.getSelectedHeaderTopic() );
             }
         }
         
-        else if(contextSource instanceof TopicTreePanel) {
-            digSIs(contextLocators, ((TopicTreePanel) contextSource).getSelection() );
+        else if(contextSource instanceof TopicTreePanel ttp) {
+            digSIs(contextLocators, ttp.getSelection() );
         }
-        else if(contextSource instanceof TopicTree) {
-            TopicTree tree = (TopicTree) contextSource;
-            if( tree.getSelection() instanceof Topic ) {
-                digSIs(contextLocators, tree.getSelection() );
-            }
-        }
-        /*
-        else if(contextSource instanceof LayerStatusPanel) {
-            try {
-                Iterator i = ((LayerStatusPanel) contextSource).getLayer().getTopicMap().getTopics();
-                return i;
-            }
-            catch(Exception e) {
-                log(e);
+        else if(contextSource instanceof TopicTree tree) {
+            if( tree.getSelection() instanceof Topic t) {
+                digSIs(contextLocators, t );
             }
         }
-        else if(contextSource instanceof TopicMap) {
-            TopicMap topicmap = (TopicMap) contextSource;
-            try {
-                digSIs(contextLocators, topicmap.getTopics());
-            }
-            catch(TopicMapException tme){
-                log(tme);
-            }
-        }
-         **/
         return contextLocators.iterator();
     }
     
@@ -224,7 +200,6 @@ public class SIContext extends AbstractContext implements Context<Locator> {
                 contextSource instanceof TopicTable ||
                 contextSource instanceof TopicTreePanel ||
                 contextSource instanceof TopicTree ||
-                // contextSource instanceof LayerStatusPanel ||
                 contextSource instanceof JTableHeader && ((JTableHeader) contextSource).getTable() instanceof TopicTable)) {
                     return true;
         }

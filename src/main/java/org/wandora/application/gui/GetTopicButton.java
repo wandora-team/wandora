@@ -170,27 +170,39 @@ public class GetTopicButton extends SimpleButton {
     
     
     public String getTopicSI() throws TopicMapException {
-        if(selectedTopic==null) return originalSubjectIdentifier;
-        else return selectedTopic.getOneSubjectIdentifier().toExternalForm();
+        if(selectedTopic==null) {
+        	return originalSubjectIdentifier;
+        }
+        else {
+        	return selectedTopic.getOneSubjectIdentifier().toExternalForm();
+        }
     }
     
     
     public void setTopic(Topic t) throws TopicMapException {
         selectedTopic=t;
         updateText();
-        if(listener!=null) listener.topicChanged(this);
+        if(listener!=null) {
+        	listener.topicChanged(this);
+        }
     }
     
     
     public void setTopic(String si) throws TopicMapException {
         originalSubjectIdentifier = si;
-        if(si==null) setTopic((Topic)null);
-        else setTopic(wandora.getTopicMap().getTopic(si));
+        if(si==null) {
+        	setTopic((Topic)null);
+        }
+        else {
+        	setTopic(wandora.getTopicMap().getTopic(si));
+        }
     }
     
     
     public void updateText() throws TopicMapException {
-        if(selectedTopic==null) this.setText("<No topic>");
+        if(selectedTopic==null) {
+        	this.setText("<No topic>");
+        }
         else {
             String text = TopicToString.toString(selectedTopic);
             this.setText(text);
@@ -207,7 +219,9 @@ public class GetTopicButton extends SimpleButton {
     @Override
     public java.awt.Dimension getMinimumSize(){
         java.awt.Dimension d=super.getPreferredSize();
-        if(d==null) return null;
+        if(d==null) {
+        	return null;
+        }
         return new java.awt.Dimension(30,d.height);
     }
 
@@ -215,12 +229,18 @@ public class GetTopicButton extends SimpleButton {
     protected void pressed() {
         try{
             T2<Topic,Boolean> t=null;
-            if(buttonHandler!=null) t=buttonHandler.pressed(this);
-            else t=defaultPressHandler();
+            if(buttonHandler!=null) {
+            	t=buttonHandler.pressed(this);
+            }
+            else {
+            	t=defaultPressHandler();
+            }
             if(!t.e2) {
                 selectedTopic=t.e1;
                 updateText();
-                if(listener!=null) listener.topicChanged(this);
+                if(listener!=null) {
+                    listener.topicChanged(this);
+                }
             }
         }
         catch(TopicMapException tme){

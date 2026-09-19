@@ -137,30 +137,34 @@ public class TopicSelectList extends javax.swing.JPanel  {
     
     
     
-    private void showList(){
-        if(listWindow!=null){
+    private void showList() {
+        if (listWindow != null) {
             listWindow.setVisible(false);
             listWindow.dispose();
         }
-        listWindow=new ListWindow(topics,field.getText(),this,owner);
-        if(!listWindow.isVisible()){
+        listWindow = new ListWindow(topics, field.getText(), this, owner);
+        if (!listWindow.isVisible()) {
             listWindow.dispose();
-            listWindow=null;
+            listWindow = null;
         }
     }
     
-    public void hideList(){
-        if(listWindow!=null){
+
+    public void hideList() {
+        if (listWindow != null) {
             listWindow.setVisible(false);
             listWindow.dispose();
-            listWindow=null;
+            listWindow = null;
         }
     }
-    
-    public void setText(String text){
+
+
+    public void setText(String text) {
         field.setText(text);
     }
-    public JTextField getField(){
+
+
+    public JTextField getField() {
         return field;
     }
     

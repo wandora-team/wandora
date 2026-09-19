@@ -72,13 +72,13 @@ public class RoleContextCollected extends AbstractContext implements Context<Top
 
         while(associations.hasNext()) {
             try {
-                association = (Association) associations.next();
+                association = associations.next();
                 if(association == null) continue;
                 roleTopics = association.getRoles();
                 if(roleTopics != null && roleTopics.size() > 0) {
                     for(Iterator<Topic> roleIterator = roleTopics.iterator(); roleIterator.hasNext(); ) {
                         try {
-                            roleTopic = (Topic) roleIterator.next();
+                            roleTopic = roleIterator.next();
                             if(removeDuplicates) {
                                 if( !contextTopics.contains(roleTopic) ) {
                                     contextTopics.add( roleTopic );

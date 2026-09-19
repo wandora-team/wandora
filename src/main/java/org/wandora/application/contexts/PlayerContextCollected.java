@@ -73,13 +73,13 @@ public class PlayerContextCollected extends AbstractContext implements Context<T
 
         while(associations.hasNext()) {
             try {
-                association = (Association) associations.next();
+                association = associations.next();
                 if(association == null) continue;
                 roleTopics = association.getRoles();
                 if(roleTopics != null && roleTopics.size() > 0) {
                     for(Iterator<Topic> roleIterator = roleTopics.iterator(); roleIterator.hasNext(); ) {
                         try {
-                            roleTopic = (Topic) roleIterator.next();
+                            roleTopic = roleIterator.next();
                             playerTopic = association.getPlayer(roleTopic);
                             if(playerTopic == null) continue;
                             if(removeDuplicates) {

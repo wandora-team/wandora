@@ -247,7 +247,6 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, ActionList
                             }
                             containerPanel.add(waitPanel, BorderLayout.CENTER);
                             String historyString = getHistory();
-                            //history = new StringBuffer();
                             logTextPane.setText(historyString);
                             logTextPane.setCaretPosition(logTextPane.getDocument().getLength());
                             containerPanel.revalidate();
@@ -264,7 +263,6 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, ActionList
                         try {
                             setVisible(false);
                             logTextPane.setText("");
-                            //history = new StringBuffer();
                             forceStop = false;
                         }
                         catch(Exception e) {}

@@ -49,8 +49,8 @@ public class AbstractContext {
         
         // *** IF CONTEXT WAS WANDORA THEN TRY TO SOLVE WANDORA'S FOCUS OWNER ***
         else {
-            if( proposedContextSource instanceof Wandora ) {
-                Object wandoraRegisteredContext = ((Wandora) proposedContextSource).getFocusOwner();
+            if( proposedContextSource instanceof Wandora wandoraContextSource) {
+                Object wandoraRegisteredContext = wandoraContextSource.getFocusOwner();
                 if( isContextSource(wandoraRegisteredContext) ) {
                     proposedContextSource = wandoraRegisteredContext;
                 }

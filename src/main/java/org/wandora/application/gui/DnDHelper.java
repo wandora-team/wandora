@@ -123,8 +123,8 @@ public class DnDHelper {
                 for(int x=0; x<objects[y].length; x++) {
                     o = objects[y][x];
                     if(o != null) {
-                        if(o instanceof Topic) {
-                            selected.add((Topic) o);
+                        if(o instanceof Topic t) {
+                            selected.add(t);
                         }
                     }
                 }

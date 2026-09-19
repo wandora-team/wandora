@@ -94,9 +94,8 @@ public class LayeredTopicContext extends AbstractContext implements Context<Topi
         List<Topic> contextTopics = new ArrayList<>();
         
         // ***** Wandora *****
-        if(contextSource instanceof Wandora) {
+        if(contextSource instanceof Wandora wandora) {
             try {
-                Wandora wandora = (Wandora) contextSource;
                 Topic currentTopic = wandora.getOpenTopic();
                 if(currentTopic != null) {
                     contextTopics.add(currentTopic);
@@ -108,9 +107,9 @@ public class LayeredTopicContext extends AbstractContext implements Context<Topi
         }
         
         // ***** TopicLinkBasename *****
-        else if(contextSource instanceof TopicLinkBasename) {
+        else if(contextSource instanceof TopicLinkBasename tlbn) {
             try {
-                contextTopics.add( ((TopicLinkBasename) contextSource).getTopic() );
+                contextTopics.add( tlbn.getTopic() );
             }
             catch (Exception e) {
                 log(e);
@@ -118,72 +117,68 @@ public class LayeredTopicContext extends AbstractContext implements Context<Topi
         }
         
         // ***** Topic *****
-        else if(contextSource instanceof Topic) {
-            contextTopics.add( (Topic) contextSource );
+        else if(contextSource instanceof Topic t) {
+            contextTopics.add( t );
         }
         
         // ***** Topic[] *****
-        else if(contextSource instanceof Topic[]) {
-            Topic[] topicArray = (Topic[]) contextSource;
+        else if(contextSource instanceof Topic[] topicArray) {
             contextTopics.addAll(Arrays.asList(topicArray));
         }
         
         // ***** GraphTopicPanel *****
-        else if(contextSource instanceof GraphTopicPanel) {
-            contextTopics.addAll( ((GraphTopicPanel) contextSource).getContextTopics() );
+        else if(contextSource instanceof GraphTopicPanel gtp) {
+            contextTopics.addAll( gtp.getContextTopics() );
         }
         
         // ***** WebViewPanel *****
-        else if(contextSource instanceof WebViewPanel) {
+        else if(contextSource instanceof WebViewPanel wvp) {
             try {
-                contextTopics.add( ((WebViewPanel) contextSource).getTopic());
+                contextTopics.add( wvp.getTopic());
             }
             catch(Exception e) { /*Ignore*/ }
         }
         
         // ***** TopicTable *****
-        else if(contextSource instanceof TopicTable) {
-            Topic[] topicArray = ((TopicTable) contextSource).getSelectedTopics();
+        else if(contextSource instanceof TopicTable tt) {
+            Topic[] topicArray = tt.getSelectedTopics();
             contextTopics.addAll(Arrays.asList(topicArray));
         }
         
         // ***** TopicGrid *****
-        else if(contextSource instanceof TopicGrid) {
-            Topic[] topicArray = ((TopicGrid) contextSource).getSelectedTopics();
+        else if(contextSource instanceof TopicGrid tg) {
+            Topic[] topicArray = tg.getSelectedTopics();
             contextTopics.addAll(Arrays.asList(topicArray));
         }
         
         // ***** MixedTopicTable *****
-        else if(contextSource instanceof MixedTopicTable) {
-            Topic[] topicArray = ((MixedTopicTable) contextSource).getSelectedTopics();
+        else if(contextSource instanceof MixedTopicTable mtt) {
+            Topic[] topicArray = mtt.getSelectedTopics();
             contextTopics.addAll(Arrays.asList(topicArray));
         }
 
         // ***** JTableHeader *****
-        else if(contextSource instanceof JTableHeader) {
-            if(((JTableHeader) contextSource).getTable() instanceof TopicTable) {
-                TopicTable topicTable = (TopicTable) ((JTableHeader) contextSource).getTable();
+        else if(contextSource instanceof JTableHeader th) {
+            if(th.getTable() instanceof TopicTable topicTable) {
                 contextTopics.add( topicTable.getSelectedHeaderTopic() );
             }
         }
         
         // ***** TopicTreePanel *****
-        else if(contextSource instanceof TopicTreePanel) {
-            contextTopics.add(((TopicTreePanel) contextSource).getSelection() );
+        else if(contextSource instanceof TopicTreePanel ttp) {
+            contextTopics.add(ttp.getSelection() );
         }
         
         // ***** TopicTree *****
-        else if(contextSource instanceof TopicTree) {
-            TopicTree tree = (TopicTree) contextSource;
-            if( tree.getSelection() instanceof Topic ) {
-                contextTopics.add( tree.getSelection() );
+        else if(contextSource instanceof TopicTree tree) {
+            if( tree.getSelection() instanceof Topic t ) {
+                contextTopics.add( t );
             }
         }
         
         // ***** LayerTree *****
-        else if(contextSource instanceof LayerTree) {
+        else if(contextSource instanceof LayerTree layerTree) {
             TopicMap atm = getWandora().getTopicMap();
-            LayerTree layerTree=(LayerTree)contextSource;
             Layer l=layerTree.getLastClickedLayer();
             TopicMap tm = null;
             if(l==null) {
@@ -196,7 +191,7 @@ public class LayeredTopicContext extends AbstractContext implements Context<Topi
                 Iterator<Topic> topics = tm.getTopics();
                 Topic t = null;
                 while(topics.hasNext()) {
-                    t = (Topic) topics.next();
+                    t = topics.next();
                     if(t != null && !t.isRemoved()) {
                         Topic t2 = atm.getTopic(t.getOneSubjectIdentifier());
                         if(t2 != null && !t2.isRemoved()) {
@@ -211,14 +206,14 @@ public class LayeredTopicContext extends AbstractContext implements Context<Topi
         }
         
         // ***** Layer *****
-        else if(contextSource instanceof Layer){
-            TopicMap topicmap = ((Layer)contextSource).getTopicMap();
+        else if(contextSource instanceof Layer layer){
+            TopicMap topicmap = layer.getTopicMap();
             try {
                 TopicMap tm = getWandora().getTopicMap();
                 Iterator<Topic> topics = topicmap.getTopics();
                 Topic t = null;
                 while(topics.hasNext()) {
-                    t = (Topic) topics.next();
+                    t = topics.next();
                     if(t != null && !t.isRemoved()) {
                         Topic t2 = tm.getTopic(t.getOneSubjectIdentifier());
                         if(t2 != null && !t2.isRemoved()) {
@@ -234,8 +229,8 @@ public class LayeredTopicContext extends AbstractContext implements Context<Topi
         
         
         // ***** SITable *****
-        else if(contextSource instanceof SITable) {
-            Locator[] locators = ((SITable) contextSource).getSelectedLocators();
+        else if(contextSource instanceof SITable siTable) {
+            Locator[] locators = siTable.getSelectedLocators();
             TopicMap topicmap = getWandora().getTopicMap();           
             Topic t = null;
             for(int i=0; i<locators.length; i++) {
@@ -252,8 +247,7 @@ public class LayeredTopicContext extends AbstractContext implements Context<Topi
         }
         
         // ***** TopicMap *****
-        else if(contextSource instanceof TopicMap) {
-            TopicMap topicmap = (TopicMap) contextSource;
+        else if(contextSource instanceof TopicMap topicmap) {
             try {
                 TopicMap tm = getWandora().getTopicMap();
                 Iterator<Topic> topics = topicmap.getTopics();
@@ -274,14 +268,12 @@ public class LayeredTopicContext extends AbstractContext implements Context<Topi
         }
         
         // ***** OccurrenceTable *****
-        else if(contextSource instanceof OccurrenceTable) {
-            OccurrenceTable otable = (OccurrenceTable) contextSource;
+        else if(contextSource instanceof OccurrenceTable otable) {
             contextTopics.add(otable.getTopic());
         }
         
         // ***** OccurrenceTextEditor *****
-        else if(contextSource instanceof OccurrenceTextEditor) {
-            OccurrenceTextEditor editor = (OccurrenceTextEditor) contextSource;
+        else if(contextSource instanceof OccurrenceTextEditor editor) {
             contextTopics.add(editor.getOccurrenceTopic());
         }
         return contextTopics.iterator();

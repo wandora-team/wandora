@@ -99,35 +99,28 @@ public class GraphEdgeContext implements Context<VEdge> {
         if(contextSource == null) return null;
         
         List<VEdge> contextEdges = new ArrayList<>();
-        if(contextSource instanceof Wandora) {
+        if(contextSource instanceof Wandora w) {
             try {
-                Wandora w = (Wandora) contextSource;
                 TopicPanel currentTopicPanel = w.getTopicPanel();
-                if(currentTopicPanel != null && currentTopicPanel instanceof DockingFramePanel) {
-                    currentTopicPanel = ((DockingFramePanel) currentTopicPanel).getCurrentTopicPanel();
+                if(currentTopicPanel != null && currentTopicPanel instanceof DockingFramePanel dfp) {
+                    currentTopicPanel = dfp.getCurrentTopicPanel();
                 }
-                if(currentTopicPanel != null && currentTopicPanel instanceof GraphTopicPanel) {
-                    contextEdges.addAll( ((GraphTopicPanel) currentTopicPanel).getGraphPanel().getSelectedEdges() );
-                    if(contextEdges.isEmpty()) {
-                        //contextEdges.add( ((GraphTopicPanel) currentTopicPanel).getGraphPanel().getMouseOverEdge() );
-                    }
+                if(currentTopicPanel != null && currentTopicPanel instanceof GraphTopicPanel gtp) {
+                    contextEdges.addAll( gtp.getGraphPanel().getSelectedEdges() );
                 }
-                if(currentTopicPanel != null && currentTopicPanel instanceof TopicMapGraphPanel) {
-                    contextEdges.addAll( ((TopicMapGraphPanel) currentTopicPanel).getSelectedEdges() );
-                    if(contextEdges.isEmpty()) {
-                        //contextEdges.add( ((TopicMapGraphPanel) currentTopicPanel).getMouseOverEdge() );
-                    }
+                if(currentTopicPanel != null && currentTopicPanel instanceof TopicMapGraphPanel tmgp) {
+                    contextEdges.addAll( tmgp.getSelectedEdges() );
                 }
             }
             catch (Exception e) {
                 log(e);
             }
         }
-        else if(contextSource instanceof GraphTopicPanel) {
-            contextEdges.addAll( ((GraphTopicPanel) contextSource).getGraphPanel().getSelectedEdges() );
+        else if(contextSource instanceof GraphTopicPanel gtp) {
+            contextEdges.addAll( gtp.getGraphPanel().getSelectedEdges() );
         }
-        else if(contextSource instanceof TopicMapGraphPanel) {
-            contextEdges.addAll( ((TopicMapGraphPanel) contextSource).getSelectedEdges() );
+        else if(contextSource instanceof TopicMapGraphPanel tmgp) {
+            contextEdges.addAll( tmgp.getSelectedEdges() );
         }
         return contextEdges.iterator();
     }
