@@ -33,6 +33,7 @@ import java.util.List;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
@@ -46,55 +47,59 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
 
 
 public class AssociationStringSimilarity implements TopicSimilarity {
-
-    public static final String TOPIC_DELIMITER = "***"; 
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AssociationStringSimilarity.class);
+    
+    public static final String TOPIC_DELIMITER = "***";
     private InterfaceStringMetric stringMetric = null;
-    
-    
+
+
     public AssociationStringSimilarity() {
         stringMetric = new Levenshtein();
     }
+
 
     @Override
     public String getName() {
         return "Association string similarity";
     }
-    
+
+
     @Override
     public double similarity(Topic t1, Topic t2) {
         double similarity = 0;
         double overAllSimilarity = 1;
         double bestSimilarity = 0;
-        
+
         try {
             Collection<String> as1 = getAssociationsAsStrings(t1);
             Collection<String> as2 = getAssociationsAsStrings(t2);
-            if(as1.isEmpty() || as2.isEmpty()) return 0;
-            
-            for(String s1 : as1) {
+            if (as1.isEmpty() || as2.isEmpty())
+                return 0;
+
+            for (String s1 : as1) {
                 bestSimilarity = 0;
-                for(String s2 : as2) {
+                for (String s2 : as2) {
                     similarity = stringMetric.getSimilarity(s1, s2);
-                    if(similarity > bestSimilarity) {
+                    if (similarity > bestSimilarity) {
                         bestSimilarity = similarity;
                     }
                 }
                 overAllSimilarity = overAllSimilarity * bestSimilarity;
-                //overAllSimilarity = overAllSimilarity / 2;
             }
         }
-        catch(Exception e) {}
+        catch (Exception e) {
+            logger.error(e);
+        }
         return overAllSimilarity;
     }
-    
-    
-    
-    
+
+
+
     public Collection<String> getAssociationsAsStrings(Topic t) throws TopicMapException {
         Collection<Association> as = t.getAssociations();
-        ArrayList<String> asStr = new ArrayList<>();
-        
-        for(Association a : as) {
+        List<String> asStr = new ArrayList<>();
+
+        for (Association a : as) {
             StringBuilder sb = new StringBuilder("");
             sb.append(getAsString(a.getType()));
             sb.append(TOPIC_DELIMITER);
@@ -102,11 +107,11 @@ public class AssociationStringSimilarity implements TopicSimilarity {
             List<Topic> sortedRoles = new ArrayList<>();
             sortedRoles.addAll(roles);
             Collections.sort(sortedRoles, new TopicStringComparator());
-            
+
             boolean found = false;
-            for(Topic r : sortedRoles) {
+            for (Topic r : sortedRoles) {
                 Topic p = a.getPlayer(r);
-                if(!found && p.mergesWithTopic(t)) {
+                if (!found && p.mergesWithTopic(t)) {
                     found = true;
                     continue;
                 }
@@ -118,40 +123,39 @@ public class AssociationStringSimilarity implements TopicSimilarity {
             asStr.add(sb.toString());
         }
         Collections.sort(asStr);
-        
+
         return asStr;
     }
-    
-    
-    
-    
-    
+
+
+
     public String getAsString(Topic t) throws TopicMapException {
-        if(t == null) return null;
+        if (t == null)
+            return null;
         else {
             return t.getOneSubjectIdentifier().toExternalForm();
         }
     }
-    
-    
-    
+
+
+
     private class TopicStringComparator implements Comparator<Topic> {
 
         @Override
         public int compare(Topic t1, Topic t2) {
             try {
-                if(t1 != null && t2 != null) {
+                if (t1 != null && t2 != null) {
                     String s1 = getAsString(t1);
                     String s2 = getAsString(t2);
                     return s1.compareTo(s2);
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 // EXCEPTION
             }
             return 0;
         }
     }
-    
-    
+
+
 }

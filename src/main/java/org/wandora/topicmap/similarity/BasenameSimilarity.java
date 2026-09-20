@@ -23,6 +23,7 @@
 package org.wandora.topicmap.similarity;
 
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
@@ -34,38 +35,48 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
 
 
 public class BasenameSimilarity implements TopicSimilarity {
-
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(BasenameSimilarity.class);
+    
     private InterfaceStringMetric stringMetric = null;
-    
-    
+
+
     public BasenameSimilarity() {
         stringMetric = new Levenshtein();
     }
-    
+
+
     public BasenameSimilarity(InterfaceStringMetric metric) {
         stringMetric = metric;
     }
-    
+
+
     @Override
     public String getName() {
         return "Basename similarity";
     }
-    
+
+
     @Override
     public double similarity(Topic t1, Topic t2) {
         try {
             String n1 = t1.getBaseName();
             String n2 = t2.getBaseName();
-            if(n1 == null && n2 == null) return 1;
-            if(n1 == null && "".equals(n2)) return 0;
-            if("".equals(n1) && n2 == null) return 0;
-            
-            if(n1.equals(n2)) return 1;
-            
+            if (n1 == null && n2 == null)
+                return 1;
+            if (n1 == null && "".equals(n2))
+                return 0;
+            if ("".equals(n1) && n2 == null)
+                return 0;
+
+            if (n1.equals(n2))
+                return 1;
+
             return stringMetric.getSimilarity(n2, n1);
         }
-        catch(Exception e) {}
+        catch (Exception e) {
+            logger.error(e);
+        }
         return 0;
     }
-    
+
 }

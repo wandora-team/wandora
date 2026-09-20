@@ -26,6 +26,7 @@ package org.wandora.topicmap.similarity;
 import java.util.Set;
 
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
@@ -38,38 +39,44 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
 
 
 public class HighestVariantNameSimilarity implements TopicSimilarity {
-
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(HighestVariantNameSimilarity.class);
+    
     private InterfaceStringMetric stringMetric = null;
-    
-    
+
+
     public HighestVariantNameSimilarity() {
         stringMetric = new Levenshtein();
     }
-    
+
+
     public HighestVariantNameSimilarity(InterfaceStringMetric metric) {
         stringMetric = metric;
     }
-    
+
+
     @Override
     public String getName() {
         return "Highest variant name similarity";
     }
-    
+
+
     @Override
     public double similarity(Topic t1, Topic t2) {
         double highestSimilarity = -1;
         double similarity = -1;
         try {
-            for(Set<Topic> s1 : t1.getVariantScopes()) {
-                for(Set<Topic> s2 : t2.getVariantScopes()) {
+            for (Set<Topic> s1 : t1.getVariantScopes()) {
+                for (Set<Topic> s2 : t2.getVariantScopes()) {
                     similarity = stringMetric.getSimilarity(t1.getVariant(s1), t2.getVariant(s2));
-                    if(similarity > highestSimilarity) {
+                    if (similarity > highestSimilarity) {
                         highestSimilarity = similarity;
                     }
                 }
             }
         }
-        catch(Exception e) {}
+        catch (Exception e) {
+            logger.error(e);
+        }
         return highestSimilarity;
     }
 }

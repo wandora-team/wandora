@@ -54,207 +54,248 @@ import org.wandora.topicmap.TopicMapStatOptions;
 
 
 public class T2WTopicMap extends TopicMap {
-    
-    public static final String TOPIC_NAME_SI="http://psi.topicmaps.org/iso13250/model/topic-name";
-    public static final String TYPE_STRING_SI="http://www.w3.org/TR/xmlschema-2/#string";
-    
+
+    public static final String TOPIC_NAME_SI = "http://psi.topicmaps.org/iso13250/model/topic-name";
+    public static final String TYPE_STRING_SI = "http://www.w3.org/TR/xmlschema-2/#string";
+
 
     protected org.tmapi.core.TopicMap tm;
     protected TypeInstanceIndex typeIndex;
     protected LiteralIndex literalIndex;
     protected ScopedIndex scopedIndex;
 
-    
-    public T2WTopicMap(org.tmapi.core.TopicMap tm){
-        this.tm=tm;
-        typeIndex=tm.getIndex(TypeInstanceIndex.class);
-        literalIndex=tm.getIndex(LiteralIndex.class);
-        scopedIndex=tm.getIndex(ScopedIndex.class);
+
+    public T2WTopicMap(org.tmapi.core.TopicMap tm) {
+        this.tm = tm;
+        typeIndex = tm.getIndex(TypeInstanceIndex.class);
+        literalIndex = tm.getIndex(LiteralIndex.class);
+        scopedIndex = tm.getIndex(ScopedIndex.class);
     }
-    
-    
+
+
     @Override
     public void close() {
     }
-    
-    public TypeInstanceIndex getTypeIndex(){
+
+
+    public TypeInstanceIndex getTypeIndex() {
         return typeIndex;
     }
-    
-    public LiteralIndex getLiteralIndex(){
+
+
+    public LiteralIndex getLiteralIndex() {
         return literalIndex;
     }
-    
-    public ScopedIndex getScopedIndex(){
+
+
+    public ScopedIndex getScopedIndex() {
         return scopedIndex;
     }
-    
-    public Collection<Topic> wrapTopics(Collection<org.tmapi.core.Topic> ts){
-        ArrayList<Topic> ret=new ArrayList<Topic>();
-        for(org.tmapi.core.Topic t : ts){
-            ret.add(new T2WTopic(this,t));
+
+
+    public Collection<Topic> wrapTopics(Collection<org.tmapi.core.Topic> ts) {
+        List<Topic> ret = new ArrayList<>();
+        for (org.tmapi.core.Topic t : ts) {
+            ret.add(new T2WTopic(this, t));
         }
         return ret;
     }
-    
-    public Collection<Association> wrapAssociations(Collection<org.tmapi.core.Association> as){
-        ArrayList<Association> ret=new ArrayList<Association>();
-        for(org.tmapi.core.Association a : as){
-            ret.add(new T2WAssociation(this,a));
+
+
+    public Collection<Association> wrapAssociations(Collection<org.tmapi.core.Association> as) {
+        List<Association> ret = new ArrayList<>();
+        for (org.tmapi.core.Association a : as) {
+            ret.add(new T2WAssociation(this, a));
         }
         return ret;
     }
-    
+
+
     public Collection<Locator> wrapLocators(Collection<org.tmapi.core.Locator> ls) throws TopicMapException {
-        ArrayList<Locator> ret=new ArrayList<Locator>();
-        for(org.tmapi.core.Locator l : ls){
+        List<Locator> ret = new ArrayList<>();
+        for (org.tmapi.core.Locator l : ls) {
             ret.add(createLocator(l.toExternalForm()));
         }
         return ret;
     }
-        
+
+
     @Override
     public Topic getTopic(Locator si) throws TopicMapException {
-        org.tmapi.core.Topic t=tm.getTopicBySubjectIdentifier(tm.createLocator(si.toExternalForm()));
-        if(t==null) return null;
-        return new T2WTopic(this,t);
+        org.tmapi.core.Topic t = tm.getTopicBySubjectIdentifier(tm.createLocator(si.toExternalForm()));
+        if (t == null)
+            return null;
+        return new T2WTopic(this, t);
     }
+
 
     @Override
     public Topic getTopicBySubjectLocator(Locator sl) throws TopicMapException {
-        org.tmapi.core.Topic t=tm.getTopicBySubjectLocator(tm.createLocator(sl.toExternalForm()));
-        if(t==null) return null;
-        return new T2WTopic(this,t);
+        org.tmapi.core.Topic t = tm.getTopicBySubjectLocator(tm.createLocator(sl.toExternalForm()));
+        if (t == null)
+            return null;
+        return new T2WTopic(this, t);
     }
+
 
     @Override
     public Topic createTopic(String id) throws TopicMapException {
         throw new UnsupportedOperationException("Editing not supported");
     }
-    
+
+
     @Override
     public Topic createTopic() throws TopicMapException {
         throw new UnsupportedOperationException("Editing not supported");
     }
+
 
     @Override
     public Association createAssociation(Topic type) throws TopicMapException {
         throw new UnsupportedOperationException("Editing not supported");
     }
 
+
     @Override
     public Collection<Topic> getTopicsOfType(Topic type) throws TopicMapException {
-        Collection<org.tmapi.core.Topic> ts=typeIndex.getTopics(((T2WTopic)type).getWrapped());
+        Collection<org.tmapi.core.Topic> ts = typeIndex.getTopics(((T2WTopic) type).getWrapped());
         return wrapTopics(ts);
     }
 
+
     @Override
     public Topic getTopicWithBaseName(String name) throws TopicMapException {
-        Collection<org.tmapi.core.Name> ns=literalIndex.getNames(name);
-        
-        for(org.tmapi.core.Name n : ns){
-            org.tmapi.core.Topic type=n.getType();
-            
-            for(org.tmapi.core.Locator l : type.getSubjectIdentifiers()){
-                if(l.toExternalForm().equals(TOPIC_NAME_SI)){
-                    return new T2WTopic(this,n.getParent());
+        Collection<org.tmapi.core.Name> ns = literalIndex.getNames(name);
+
+        for (org.tmapi.core.Name n : ns) {
+            org.tmapi.core.Topic type = n.getType();
+
+            for (org.tmapi.core.Locator l : type.getSubjectIdentifiers()) {
+                if (l.toExternalForm().equals(TOPIC_NAME_SI)) {
+                    return new T2WTopic(this, n.getParent());
                 }
             }
         }
         return null;
     }
 
+
     @Override
     public Iterator<Topic> getTopics() throws TopicMapException {
-        final Iterator<org.tmapi.core.Topic> iter=tm.getTopics().iterator();
-        return new Iterator<Topic>(){
+        final Iterator<org.tmapi.core.Topic> iter = tm.getTopics().iterator();
+        return new Iterator<Topic>() {
             @Override
             public boolean hasNext() {
                 return iter.hasNext();
             }
+
+
             @Override
             public Topic next() {
-                return new T2WTopic(T2WTopicMap.this,iter.next());
+                return new T2WTopic(T2WTopicMap.this, iter.next());
             }
+
+
             @Override
-            public void remove() { throw new UnsupportedOperationException(); }
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
         };
     }
 
+
     @Override
     public Topic[] getTopics(String[] sis) throws TopicMapException {
-        ArrayList<Topic> ret=new ArrayList<Topic>();
-        for(String si : sis){
+        List<Topic> ret = new ArrayList<>();
+        for (String si : sis) {
             ret.add(getTopic(si));
         }
         return ret.toArray(new Topic[ret.size()]);
     }
 
+
     @Override
     public Iterator<Association> getAssociations() throws TopicMapException {
-        final Iterator<org.tmapi.core.Association> iter=tm.getAssociations().iterator();
-        return new Iterator<Association>(){
+        final Iterator<org.tmapi.core.Association> iter = tm.getAssociations().iterator();
+        return new Iterator<Association>() {
             @Override
             public boolean hasNext() {
                 return iter.hasNext();
             }
+
+
             @Override
             public Association next() {
-                return new T2WAssociation(T2WTopicMap.this,iter.next());
+                return new T2WAssociation(T2WTopicMap.this, iter.next());
             }
+
+
             @Override
-            public void remove() { throw new UnsupportedOperationException(); }
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
         };
     }
 
+
     @Override
     public Collection<Association> getAssociationsOfType(Topic type) throws TopicMapException {
-        Collection<org.tmapi.core.Association> as=typeIndex.getAssociations(((T2WTopic)type).getWrapped());
+        Collection<org.tmapi.core.Association> as = typeIndex.getAssociations(((T2WTopic) type).getWrapped());
         return wrapAssociations(as);
     }
+
 
     @Override
     public int getNumTopics() throws TopicMapException {
         return tm.getTopics().size();
     }
 
+
     @Override
     public int getNumAssociations() throws TopicMapException {
         return tm.getAssociations().size();
     }
+
 
     @Override
     public Topic copyTopicIn(Topic t, boolean deep) throws TopicMapException {
         throw new UnsupportedOperationException("Editing not supported");
     }
 
+
     @Override
     public Association copyAssociationIn(Association a) throws TopicMapException {
         throw new UnsupportedOperationException("Editing not supported");
     }
+
 
     @Override
     public void copyTopicAssociationsIn(Topic t) throws TopicMapException {
         throw new UnsupportedOperationException("Editing not supported");
     }
 
+
     @Override
     public void setTrackDependent(boolean v) throws TopicMapException {
     }
+
 
     @Override
     public boolean trackingDependent() throws TopicMapException {
         return true;
     }
 
+
     @Override
     public void addTopicMapListener(TopicMapListener listener) {
         // topic map isn't edited so no method of the listener ever need be called
     }
 
+
     @Override
     public void removeTopicMapListener(TopicMapListener listener) {
     }
+
 
     @Override
     public List<TopicMapListener> getTopicMapListeners() {
@@ -262,42 +303,50 @@ public class T2WTopicMap extends TopicMap {
         // this should really return the list
     }
 
+
     @Override
     public void disableAllListeners() {
     }
+
 
     @Override
     public void enableAllListeners() {
         // listeners aren't used anyway because editing isn't supported
     }
 
+
     @Override
     public boolean isTopicMapChanged() throws TopicMapException {
         return false; // no editing, never changed
     }
+
 
     @Override
     public boolean resetTopicMapChanged() throws TopicMapException {
         return false;
     }
 
+
     @Override
     public Collection<Topic> search(String query, TopicMapSearchOptions options) throws TopicMapException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 
     @Override
     public TopicMapStatData getStatistics(TopicMapStatOptions options) throws TopicMapException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+
     @Override
     public void clearTopicMap() throws TopicMapException {
         throw new UnsupportedOperationException("Editing not supported");
     }
 
+
     @Override
     public void clearTopicMapIndexes() throws TopicMapException {
     }
-    
+
 }

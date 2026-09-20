@@ -25,6 +25,7 @@ package org.wandora.topicmap.similarity;
 import java.util.Hashtable;
 
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
@@ -36,38 +37,42 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
 
 
 public class HighestOccurrenceSimilarity implements TopicSimilarity {
-
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(HighestOccurrenceSimilarity.class);
+    
     private InterfaceStringMetric stringMetric = null;
-    
-    
+
+
     public HighestOccurrenceSimilarity() {
         stringMetric = new Levenshtein();
     }
-    
+
+
     public HighestOccurrenceSimilarity(InterfaceStringMetric metric) {
         stringMetric = metric;
     }
-    
+
+
     @Override
     public String getName() {
         return "Highest occurrence similarity";
     }
-    
+
+
     @Override
     public double similarity(Topic t1, Topic t2) {
         double highestSimilarity = -1;
         double similarity = -1;
         try {
-            for(Topic type1 : t1.getDataTypes()) {
+            for (Topic type1 : t1.getDataTypes()) {
                 Hashtable<Topic, String> o1s = t1.getData(type1);
-                for(Topic o1sk : o1s.keySet()) {
+                for (Topic o1sk : o1s.keySet()) {
                     String o1 = o1s.get(o1sk);
-                    for(Topic type2 : t2.getDataTypes()) {
+                    for (Topic type2 : t2.getDataTypes()) {
                         Hashtable<Topic, String> o2s = t2.getData(type2);
-                        for(Topic o2sk : o2s.keySet()) {
+                        for (Topic o2sk : o2s.keySet()) {
                             String o2 = o2s.get(o2sk);
                             similarity = stringMetric.getSimilarity(o1, o2);
-                            if(similarity > highestSimilarity) {
+                            if (similarity > highestSimilarity) {
                                 highestSimilarity = similarity;
                             }
                         }
@@ -75,8 +80,10 @@ public class HighestOccurrenceSimilarity implements TopicSimilarity {
                 }
             }
         }
-        catch(Exception e) {}
+        catch (Exception e) {
+            logger.error(e);
+        }
         return highestSimilarity;
     }
-    
+
 }

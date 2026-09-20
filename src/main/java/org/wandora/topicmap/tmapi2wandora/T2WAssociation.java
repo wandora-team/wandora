@@ -20,8 +20,9 @@
  *
  */
 package org.wandora.topicmap.tmapi2wandora;
+
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,6 +30,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+
 /**
  *
  * @author olli
@@ -39,30 +41,34 @@ public class T2WAssociation implements Association {
 
     protected T2WTopicMap tm;
     protected org.tmapi.core.Association a;
-    
-    public T2WAssociation(T2WTopicMap tm,org.tmapi.core.Association a){
-        this.tm=tm;
-        this.a=a;
+
+    public T2WAssociation(T2WTopicMap tm, org.tmapi.core.Association a) {
+        this.tm = tm;
+        this.a = a;
     }
-    
+
+
     @Override
     public Topic getType() throws TopicMapException {
-        return new T2WTopic(tm,a.getType());
+        return new T2WTopic(tm, a.getType());
     }
+
 
     @Override
     public void setType(Topic t) throws TopicMapException {
         throw new UnsupportedOperationException("Editing not supported");
     }
 
+
     @Override
     public Topic getPlayer(Topic role) throws TopicMapException {
-        org.tmapi.core.Topic _role=((T2WTopic)role).getWrapped();
-        Set<org.tmapi.core.Role> rs=a.getRoles(_role);
-        if(rs.isEmpty()) return null;
-        if(rs.size()==1){
-            org.tmapi.core.Topic _player=rs.iterator().next().getPlayer();
-            return new T2WTopic(tm,_player);
+        org.tmapi.core.Topic _role = ((T2WTopic) role).getWrapped();
+        Set<org.tmapi.core.Role> rs = a.getRoles(_role);
+        if (rs.isEmpty())
+            return null;
+        if (rs.size() == 1) {
+            org.tmapi.core.Topic _player = rs.iterator().next().getPlayer();
+            return new T2WTopic(tm, _player);
         }
         else {
             // The association has several players with the same role type.
@@ -72,52 +78,60 @@ public class T2WAssociation implements Association {
         }
     }
 
+
     @Override
     public void addPlayer(Topic player, Topic role) throws TopicMapException {
         throw new UnsupportedOperationException("Editing not supported");
     }
+
 
     @Override
     public void addPlayers(Map<Topic, Topic> players) throws TopicMapException {
         throw new UnsupportedOperationException("Editing not supported");
     }
 
+
     @Override
     public void removePlayer(Topic role) throws TopicMapException {
         throw new UnsupportedOperationException("Editing not supported");
     }
+
 
     @Override
     public Collection<Topic> getRoles() throws TopicMapException {
         // See the comment in getPlayer about duplicate role types.
         // We ignore completely those role types here which complicates this
         // method a little bit.
-        
-        HashSet<org.tmapi.core.Topic> _roles=new HashSet<org.tmapi.core.Topic>();
-        HashSet<org.tmapi.core.Topic> _ret=new HashSet<org.tmapi.core.Topic>();
-        for(org.tmapi.core.Role r : a.getRoles()) {
-            if(!_roles.add(r.getType())){
+
+        Set<org.tmapi.core.Topic> _roles = new LinkedHashSet<org.tmapi.core.Topic>();
+        Set<org.tmapi.core.Topic> _ret = new LinkedHashSet<org.tmapi.core.Topic>();
+        for (org.tmapi.core.Role r : a.getRoles()) {
+            if (!_roles.add(r.getType())) {
                 _ret.remove(r.getType()); // if the role was already there then ignore it completely
             }
-            else _ret.add(r.getType());
+            else
+                _ret.add(r.getType());
         }
-        
+
         return tm.wrapTopics(_ret);
     }
+
 
     @Override
     public TopicMap getTopicMap() {
         return tm;
     }
 
+
     @Override
     public void remove() throws TopicMapException {
         throw new UnsupportedOperationException("Editing not supported");
     }
 
+
     @Override
     public boolean isRemoved() throws TopicMapException {
         return false;
     }
-    
+
 }

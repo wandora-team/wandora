@@ -24,6 +24,7 @@
 package org.wandora.topicmap.similarity;
 
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -45,6 +46,7 @@ import org.wandora.topicmap.Topic;
 public interface TopicSimilarity {
     
     public double similarity(Topic t1, Topic t2);
+
     public String getName();
-    
+
 }

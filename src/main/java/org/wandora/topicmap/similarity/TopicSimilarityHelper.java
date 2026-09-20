@@ -28,8 +28,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.wandora.utils.IObox;
 import org.wandora.utils.logger.Log4j2Logger;
@@ -46,96 +46,93 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 public class TopicSimilarityHelper {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicSimilarityHelper.class);
-	
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicSimilarityHelper.class);
+
     public static final String DEFAULT_SIMILARITY_PATH = "org/wandora/topicmap/similarity";
-    private static boolean ADDITIONAL_DEBUG = true;
-    
-    
+
+
     private static List<String> similarityPaths = new ArrayList<>();
-    
-    
+
+
     public static void addSimilarityMeasuresPath(String path) {
-        if(!similarityPaths.contains(path)) {
+        if (!similarityPaths.contains(path)) {
             similarityPaths.add(path);
         }
     }
+
+
     public static List<String> getSimilarityMeasuresPath() {
         return similarityPaths;
     }
+
+
     public static void resetSimilarityMeasuresPath() {
         similarityPaths = new ArrayList<>();
     }
-    
-    
-    
-    public static List<TopicSimilarity> getTopicSimilarityMeasures() {
-        List<TopicSimilarity> measures=new ArrayList<>();
 
-        if(!similarityPaths.contains(DEFAULT_SIMILARITY_PATH)) {
+
+
+    public static List<TopicSimilarity> getTopicSimilarityMeasures() {
+        List<TopicSimilarity> measures = new ArrayList<>();
+
+        if (!similarityPaths.contains(DEFAULT_SIMILARITY_PATH)) {
             similarityPaths.add(DEFAULT_SIMILARITY_PATH);
         }
-        for(String path : similarityPaths) {
+        for (String path : similarityPaths) {
             try {
                 String classPath = path.replace('/', '.');
                 Enumeration<URL> measureResources = ClassLoader.getSystemResources(path);
 
-                while(measureResources.hasMoreElements()) {
+                while (measureResources.hasMoreElements()) {
                     URL measureResourceBaseUrl = measureResources.nextElement();
-                    if(measureResourceBaseUrl.toExternalForm().startsWith("file:")) {
+                    if (measureResourceBaseUrl.toExternalForm().startsWith("file:")) {
                         String baseDir = IObox.getFileFromURL(measureResourceBaseUrl);
-                        // String baseDir = URLDecoder.decode(toolBaseUrl.toExternalForm().substring(6), "UTF-8");
-                        if(!baseDir.startsWith("/") && !baseDir.startsWith("\\") && baseDir.charAt(1)!=':') 
-                            baseDir="/"+baseDir;
-                        //System.out.println("Basedir: " + baseDir);
-                        HashSet<String> measureResourceFileNames = IObox.getFilesAsHash(baseDir, ".*\\.class", 1, 1000);
-                        for(String classFileName : measureResourceFileNames) {
+                        if (!baseDir.startsWith("/") && !baseDir.startsWith("\\") && baseDir.charAt(1) != ':')
+                            baseDir = "/" + baseDir;
+                        Set<String> measureResourceFileNames = IObox.getFilesAsHash(baseDir, ".*\\.class", 1, 1000);
+                        for (String classFileName : measureResourceFileNames) {
                             try {
                                 File classFile = new File(classFileName);
                                 String className = classPath + "." + classFile.getName().replaceFirst("\\.class", "");
-                                if(className.indexOf("$")>-1) continue;
-                                TopicSimilarity measureResource=null;
-
-                                Class<?> measureResourceClass=Class.forName(className);
-                                if(!TopicSimilarity.class.isAssignableFrom(measureResourceClass)) {
-                                    if(ADDITIONAL_DEBUG) {
-                                    	System.out.println("Rejecting '" + measureResourceClass.getSimpleName() + "'. Does not implement TopicSimilarity interface!");
-                                    }
+                                if (className.indexOf("$") > -1) {
                                     continue;
                                 }
-                                if(measureResourceClass.isInterface()) {
-                                    if(ADDITIONAL_DEBUG) {
-                                    	System.out.println("Rejecting '" + measureResourceClass.getSimpleName() + "'. Is interface!");
-                                    }
+                                TopicSimilarity measureResource = null;
+
+                                Class<?> measureResourceClass = Class.forName(className);
+                                if (!TopicSimilarity.class.isAssignableFrom(measureResourceClass)) {
+                                    logger.warn("Rejecting '" + measureResourceClass.getSimpleName()+ "'. Does not implement TopicSimilarity interface!");
+                                    continue;
+                                }
+                                if (measureResourceClass.isInterface()) {
+                                    logger.warn("Rejecting '" + measureResourceClass.getSimpleName()+ "'. Is interface!");
                                     continue;
                                 }
                                 try {
                                     measureResourceClass.getConstructor();
                                 }
-                                catch(NoSuchMethodException nsme){
-                                    if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + measureResourceClass.getSimpleName() + "'. No constructor!");
+                                catch (NoSuchMethodException nsme) {
+                                    logger.warn("Rejecting '" + measureResourceClass.getSimpleName()+ "'. No constructor!");
                                     continue;
                                 }
-                                measureResource=(TopicSimilarity)Class.forName(className).getDeclaredConstructor().newInstance();
+                                measureResource = (TopicSimilarity) Class.forName(className).getDeclaredConstructor().newInstance();
 
-                                if(measureResource != null) {
+                                if (measureResource != null) {
                                     measures.add(measureResource);
                                 }
                             }
-                            catch(Exception ex) {
-                                if(ADDITIONAL_DEBUG) {
-                                	System.out.println("Rejecting similarity. Exception '" + ex.toString() + "' occurred while investigating '" + classFileName + "'.");
-                                }
+                            catch (Exception ex) {
+                                logger.warn("Rejecting similarity. Exception '" + ex.toString() + "' occurred while investigating '" + classFileName + "'.");
                             }
                         }
                     }
                 }
             }
-            catch(Exception e) {
-            	logger.error(e);
+            catch (Exception e) {
+                logger.error(e);
             }
         }
         return measures;
     }
-    
+
 }

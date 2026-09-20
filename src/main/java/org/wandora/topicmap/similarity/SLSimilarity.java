@@ -24,6 +24,7 @@ package org.wandora.topicmap.similarity;
 
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
@@ -37,32 +38,40 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
 
 
 public class SLSimilarity implements TopicSimilarity {
-
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SLSimilarity.class);
+    
     private InterfaceStringMetric stringMetric = null;
-    
-    
+
+
     public SLSimilarity() {
         stringMetric = new Levenshtein();
     }
-    
+
+
     public SLSimilarity(InterfaceStringMetric metric) {
         stringMetric = metric;
     }
-    
+
+
     @Override
     public String getName() {
         return "Subject locator similarity";
     }
-    
+
+
     @Override
     public double similarity(Topic t1, Topic t2) {
         try {
             Locator l1 = t1.getSubjectLocator();
             Locator l2 = t2.getSubjectLocator();
-            if(l1 == null || l2 == null) return 0;
+            if (l1 == null || l2 == null) {
+                return 0;
+            }
             return stringMetric.getSimilarity(l1.toExternalForm(), l2.toExternalForm());
         }
-        catch(Exception e) {}
+        catch (Exception e) {
+            logger.error(e);
+        }
         return 0;
     }
 }

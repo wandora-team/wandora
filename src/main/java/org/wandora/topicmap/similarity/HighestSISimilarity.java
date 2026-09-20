@@ -26,6 +26,7 @@ package org.wandora.topicmap.similarity;
 
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
@@ -37,38 +38,44 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
 
 
 public class HighestSISimilarity implements TopicSimilarity {
-
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(HighestSISimilarity.class);
+    
     private InterfaceStringMetric stringMetric = null;
-    
-    
+
+
     public HighestSISimilarity() {
         stringMetric = new Levenshtein();
     }
-    
+
+
     public HighestSISimilarity(InterfaceStringMetric metric) {
         stringMetric = metric;
     }
-    
+
+
     @Override
     public String getName() {
         return "Highest subject identifier similarity";
     }
-    
+
+
     @Override
     public double similarity(Topic t1, Topic t2) {
         double highestSimilarity = -1;
         double similarity = -1;
         try {
-            for(Locator l1 : t1.getSubjectIdentifiers()) {
-                for(Locator l2 : t2.getSubjectIdentifiers()) {
+            for (Locator l1 : t1.getSubjectIdentifiers()) {
+                for (Locator l2 : t2.getSubjectIdentifiers()) {
                     similarity = stringMetric.getSimilarity(l1.toExternalForm(), l2.toExternalForm());
-                    if(similarity > highestSimilarity) {
+                    if (similarity > highestSimilarity) {
                         highestSimilarity = similarity;
                     }
                 }
             }
         }
-        catch(Exception e) {}
+        catch (Exception e) {
+            logger.error(e);
+        }
         return highestSimilarity;
     }
 }
