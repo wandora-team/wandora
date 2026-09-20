@@ -28,6 +28,7 @@
 
 
 package org.wandora.topicmap.memory;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,240 +45,266 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapReadOnlyException;
 
 /**
- * TODO: maybe we should check for duplicate associations when modifying association and throw an exception if found
+ * TODO: maybe we should check for duplicate associations when modifying association and throw 
+ * an exception if found
  *
  * @author  olli
  */
 public class AssociationImpl implements Association {
     private TopicMapImpl topicMap;
     private Topic type;
-    private Map<Topic,Topic> players;
+    private Map<Topic, Topic> players;
     private boolean removed;
-    
-    
+
+
     /** Creates a new instance of AssociationImpl */
-    public AssociationImpl(TopicMapImpl topicMap, Topic type)  throws TopicMapException {
-        this.topicMap=topicMap;
-        players=Collections.synchronizedMap(new LinkedHashMap<>());
+    public AssociationImpl(TopicMapImpl topicMap, Topic type) throws TopicMapException {
+        this.topicMap = topicMap;
+        players = Collections.synchronizedMap(new LinkedHashMap<>());
         setType(type);
-        removed=false;
+        removed = false;
     }
-    
-    
+
+
     @Override
     public Topic getPlayer(Topic role) {
         return players.get(role);
     }
-    
-    
+
+
     @Override
     public Collection<Topic> getRoles() {
         return players.keySet();
     }
-    
-    
+
+
     @Override
     public TopicMap getTopicMap() {
         return topicMap;
     }
-    
-    
+
+
     @Override
     public Topic getType() {
         return type;
     }
-    
-    
+
+
     @Override
     public void setType(Topic t) throws TopicMapException {
-        if(removed) throw new TopicMapException();
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        
-        topicMap.setAssociationType(this,t,type);
-        Topic oldType=type;
-        if(type!=null) ((TopicImpl)type).removedFromAssociationType(this);
-        boolean changed=( (type!=null || t!=null) && ( type==null || t==null || !type.equals(t) ) );
-        type=t;
-        if(t!=null) {
-            ((TopicImpl)t).addedAsAssociationType(this);
+        if (removed)
+            throw new TopicMapException();
+        if (topicMap.isReadOnly())
+            throw new TopicMapReadOnlyException();
+
+        topicMap.setAssociationType(this, t, type);
+        Topic oldType = type;
+        if (type != null)
+            ((TopicImpl) type).removedFromAssociationType(this);
+        boolean changed = ((type != null || t != null) && (type == null || t == null || !type.equals(t)));
+        type = t;
+        if (t != null) {
+            ((TopicImpl) t).addedAsAssociationType(this);
         }
-        Iterator<Map.Entry<Topic,Topic>> iter=players.entrySet().iterator();
-        while(iter.hasNext()) {
-            Map.Entry<Topic,Topic> e=iter.next();
-            ((TopicImpl)e.getValue()).associationTypeChanged(this,t,oldType,(Topic)e.getKey());
+        Iterator<Map.Entry<Topic, Topic>> iter = players.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<Topic, Topic> e = iter.next();
+            ((TopicImpl) e.getValue()).associationTypeChanged(this, t, oldType, (Topic) e.getKey());
         }
-        if(changed) {
-            topicMap.associationTypeChanged(this,t,oldType);
-            if(topicMap.getConsistencyCheck()) checkRedundancy();
+        if (changed) {
+            topicMap.associationTypeChanged(this, t, oldType);
+            if (topicMap.getConsistencyCheck())
+                checkRedundancy();
         }
     }
-    
-    
+
+
     @Override
-    public void addPlayer(Topic player, Topic role)  throws TopicMapException {
-        if(removed) throw new TopicMapException();
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        
-        if(role == null || player == null) return;
-        TopicImpl oldPlayer=null;
-        if(players.containsKey(role)) {
-            oldPlayer=(TopicImpl)players.get(role);
-            if(oldPlayer.equals(player)) return; // don't need to do anything
-            
+    public void addPlayer(Topic player, Topic role) throws TopicMapException {
+        if (removed)
+            throw new TopicMapException();
+        if (topicMap.isReadOnly())
+            throw new TopicMapReadOnlyException();
+
+        if (role == null || player == null)
+            return;
+        TopicImpl oldPlayer = null;
+        if (players.containsKey(role)) {
+            oldPlayer = (TopicImpl) players.get(role);
+            if (oldPlayer.equals(player))
+                return; // don't need to do anything
+
             players.remove(role);
             oldPlayer.removeFromAssociation(this, role, players.values().contains(oldPlayer));
-            ((TopicImpl)player).addInAssociation(this,role);
+            ((TopicImpl) player).addInAssociation(this, role);
         }
         else {
-            ((TopicImpl)player).addInAssociation(this,role);
-            ((TopicImpl)role).addedAsRoleType(this);
+            ((TopicImpl) player).addInAssociation(this, role);
+            ((TopicImpl) role).addedAsRoleType(this);
         }
 
-        players.put(role,player);
-        if(oldPlayer==null || !oldPlayer.equals(player)) {
-            topicMap.associationPlayerChanged(this,role,player,oldPlayer);
-            if(topicMap.getConsistencyCheck()) {
+        players.put(role, player);
+        if (oldPlayer == null || !oldPlayer.equals(player)) {
+            topicMap.associationPlayerChanged(this, role, player, oldPlayer);
+            if (topicMap.getConsistencyCheck()) {
                 checkRedundancy();
             }
         }
     }
-    
-    
-    @Override
-    public void addPlayers(Map<Topic,Topic> newPlayers) throws TopicMapException {
-        if(removed) throw new TopicMapException();
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
 
-        for(Map.Entry<Topic,Topic> e : newPlayers.entrySet()) {
-            TopicImpl role=(TopicImpl)e.getKey();
-            TopicImpl player=(TopicImpl)e.getValue();
-            TopicImpl oldPlayer=null;
-            if(players.containsKey(role)) {
-                oldPlayer=(TopicImpl)players.get(role);
-                if(oldPlayer.equals(player)) continue;
-                
+
+    @Override
+    public void addPlayers(Map<Topic, Topic> newPlayers) throws TopicMapException {
+        if (removed)
+            throw new TopicMapException();
+        if (topicMap.isReadOnly())
+            throw new TopicMapReadOnlyException();
+
+        for (Map.Entry<Topic, Topic> e : newPlayers.entrySet()) {
+            TopicImpl role = (TopicImpl) e.getKey();
+            TopicImpl player = (TopicImpl) e.getValue();
+            TopicImpl oldPlayer = null;
+            if (players.containsKey(role)) {
+                oldPlayer = (TopicImpl) players.get(role);
+                if (oldPlayer.equals(player))
+                    continue;
+
                 players.remove(role);
                 oldPlayer.removeFromAssociation(this, role, players.values().contains(oldPlayer));
-                player.addInAssociation(this,role);
+                player.addInAssociation(this, role);
             }
             else {
-                player.addInAssociation(this,role);
-                role.addedAsRoleType(this);                
+                player.addInAssociation(this, role);
+                role.addedAsRoleType(this);
             }
-            
-            players.put(role,player);
-            if(oldPlayer==null || !oldPlayer.equals(player)) {
-                topicMap.associationPlayerChanged(this,role,player,oldPlayer);
+
+            players.put(role, player);
+            if (oldPlayer == null || !oldPlayer.equals(player)) {
+                topicMap.associationPlayerChanged(this, role, player, oldPlayer);
             }
         }
-        if(topicMap.getConsistencyCheck()) {
-        	checkRedundancy();
+        if (topicMap.getConsistencyCheck()) {
+            checkRedundancy();
         }
     }
-    
-    
+
+
     @Override
-    public void removePlayer(Topic role)  throws TopicMapException {
-        if(removed) throw new TopicMapException();
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        
-        TopicImpl t=(TopicImpl)players.get(role);
-        if(t!=null) {
-            players.remove(role);        
-            t.removeFromAssociation(this,role,players.values().contains(t));
-            ((TopicImpl)role).removedFromRoleType(this);
-            topicMap.associationPlayerChanged(this,role,null,t);
-            if(!removed) {
-                if(topicMap.getConsistencyCheck()) {
-                	checkRedundancy();
+    public void removePlayer(Topic role) throws TopicMapException {
+        if (removed)
+            throw new TopicMapException();
+        if (topicMap.isReadOnly())
+            throw new TopicMapReadOnlyException();
+
+        TopicImpl t = (TopicImpl) players.get(role);
+        if (t != null) {
+            players.remove(role);
+            t.removeFromAssociation(this, role, players.values().contains(t));
+            ((TopicImpl) role).removedFromRoleType(this);
+            topicMap.associationPlayerChanged(this, role, null, t);
+            if (!removed) {
+                if (topicMap.getConsistencyCheck()) {
+                    checkRedundancy();
                 }
             }
         }
     }
-    
-    
-    @Override
-    public void remove()  throws TopicMapException {
-        if(removed) throw new TopicMapException();
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
 
-        removed=true;
+
+    @Override
+    public void remove() throws TopicMapException {
+        if (removed)
+            throw new TopicMapException();
+        if (topicMap.isReadOnly())
+            throw new TopicMapReadOnlyException();
+
+        removed = true;
         topicMap.associationRemoved(this);
-        
+
         ArrayList<Topic> roles = new ArrayList<>(players.keySet());
-        for(Topic role : roles) {
-            TopicImpl t=(TopicImpl)players.get(role);
-            if(t!=null) {
-                players.remove(role);        
-                t.removeFromAssociation(this,role,players.values().contains(t));
-                ((TopicImpl)role).removedFromRoleType(this);
-                topicMap.associationPlayerChanged(this,role,null,t);
+        for (Topic role : roles) {
+            TopicImpl t = (TopicImpl) players.get(role);
+            if (t != null) {
+                players.remove(role);
+                t.removeFromAssociation(this, role, players.values().contains(t));
+                ((TopicImpl) role).removedFromRoleType(this);
+                topicMap.associationPlayerChanged(this, role, null, t);
             }
         }
-        
+
         // set type null
         topicMap.setAssociationType(this, null, type);
-        Topic oldType=type;
-        if(type != null) ((TopicImpl)type).removedFromAssociationType(this);
+        Topic oldType = type;
+        if (type != null)
+            ((TopicImpl) type).removedFromAssociationType(this);
         type = null;
-        if(oldType != null) {
+        if (oldType != null) {
             topicMap.associationTypeChanged(this, null, oldType);
         }
     }
-    
-    
+
+
     @Override
-    public boolean isRemoved(){
+    public boolean isRemoved() {
         return removed;
     }
-    
-    
+
+
     void checkRedundancy() throws TopicMapException {
-        if(removed) throw new TopicMapException();
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        
-        if(players.isEmpty()) return;
-        if(type==null) return;
-        Collection<Association> smallest=null;
-        for(Topic role : players.keySet()) {
+        if (removed)
+            throw new TopicMapException();
+        if (topicMap.isReadOnly())
+            throw new TopicMapReadOnlyException();
+
+        if (players.isEmpty())
+            return;
+        if (type == null)
+            return;
+        Collection<Association> smallest = null;
+        for (Topic role : players.keySet()) {
             Topic player = players.get(role);
-            Collection<Association> c = player.getAssociations(type,role);
-            if(smallest==null || c.size()<smallest.size()) {
-                smallest=c;
+            Collection<Association> c = player.getAssociations(type, role);
+            if (smallest == null || c.size() < smallest.size()) {
+                smallest = c;
             }
         }
         Set<Association> delete = new HashSet<Association>();
-        if(smallest != null) {
-	        for(Association a : smallest) {
-	            if(a==this) continue;
-	            if(a instanceof AssociationImpl aImpl) {
-		            if(aImpl._equals(this)) {
-		                delete.add(a);
-		            }
-	            }
-	        }
+        if (smallest != null) {
+            for (Association a : smallest) {
+                if (a == this)
+                    continue;
+                if (a instanceof AssociationImpl aImpl) {
+                    if (aImpl._equals(this)) {
+                        delete.add(a);
+                    }
+                }
+            }
         }
-        for(Association a : delete) { 
-            topicMap.duplicateAssociationRemoved(this,a);
+        for (Association a : delete) {
+            topicMap.duplicateAssociationRemoved(this, a);
             a.remove();
         }
     }
-    
-    
+
+
     int _hashCode() {
-        return players.hashCode()+type.hashCode();
+        return players.hashCode() + type.hashCode();
     }
-    
-    
+
+
     boolean _equals(AssociationImpl a) {
-        if(a == null) return false;
-        if((players == null && a.players != null) || (players != null && a.players == null)) return false;
-        if(players != null && a.players != null && players.size() != a.players.size()) return false;
-        if(type != a.type) return false;
-        
-        if(players != null && a.players != null) {
-            for(Topic r : players.keySet()) {
-                if(players.get(r) != a.players.get(r)) {
+        if (a == null)
+            return false;
+        if ((players == null && a.players != null) || (players != null && a.players == null))
+            return false;
+        if (players != null && a.players != null && players.size() != a.players.size())
+            return false;
+        if (type != a.type)
+            return false;
+
+        if (players != null && a.players != null) {
+            for (Topic r : players.keySet()) {
+                if (players.get(r) != a.players.get(r)) {
                     return false;
                 }
             }
