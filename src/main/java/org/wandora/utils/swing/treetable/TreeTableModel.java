@@ -22,7 +22,9 @@
  */
 
 package org.wandora.utils.swing.treetable;
+
 import javax.swing.tree.TreeModel;
+
 /**
  *
  * @author olli

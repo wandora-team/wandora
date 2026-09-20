@@ -27,6 +27,7 @@
  */
 
 package org.wandora.utils.fileserver;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,112 +37,119 @@ import java.util.Map;
 
 /**
  *
- * This is an implementation of VirtualFileSystem. It must be initialized with
- * a set of mount points. At least one for root directory and any number for other
- * directories. Nested directories are not supported (directories inside directories),
- * only subdirectories at root level. All files in the mounted directories show as
- * virtual files but directories in them are not visible or accessible (unless
- * separately mounted as virtual directories).
+ * This is an implementation of VirtualFileSystem. It must be initialized with a
+ * set of mount points. At least one for root directory and any number for other
+ * directories. Nested directories are not supported (directories inside
+ * directories), only subdirectories at root level. All files in the mounted
+ * directories show as virtual files but directories in them are not visible or
+ * accessible (unless separately mounted as virtual directories).
  *
- * @author  olli
+ * @author olli
  */
-public class SimpleVirtualFileSystem implements VirtualFileSystem/*,XMLParamAware*/ {
-    
-    private Map<String,String> directories;
-    private Map<String,String> urls;
-    
+public class SimpleVirtualFileSystem implements VirtualFileSystem/* ,XMLParamAware */ {
+
+    private Map<String, String> directories;
+    private Map<String, String> urls;
+
     /** Creates a new instance of SimpleVirtualFileSystem */
-    public SimpleVirtualFileSystem(String dir,String loc,String url) {
+    public SimpleVirtualFileSystem(String dir, String loc, String url) {
         this();
-        addDirectory(dir,loc,url);
+        addDirectory(dir, loc, url);
     }
+
+
     public SimpleVirtualFileSystem() {
-        directories=new HashMap<>();
-        urls=new HashMap<>();
+        directories = new HashMap<>();
+        urls = new HashMap<>();
     }
-    
-    public String cleanFileName(String f){
-        f=f.replaceAll("[ \\\\/\\\"\\\'+&]","_");
+
+
+    public String cleanFileName(String f) {
+        f = f.replaceAll("[ \\\\/\\\"\\\'+&]", "_");
         return f;
     }
-    
+
+
     public java.io.File getRealFileFor(String file) {
-        int ind=file.indexOf("/");
-        if(ind==0) {
-            if(file.length()>1) file=file.substring(1);
-            else file="";
-            ind=file.indexOf("/");
+        int ind = file.indexOf("/");
+        if (ind == 0) {
+            if (file.length() > 1)
+                file = file.substring(1);
+            else
+                file = "";
+            ind = file.indexOf("/");
         }
-        if(file.startsWith("..")) return null;
-        String dir="/";
-        if(ind>0){
-            dir=file.substring(0,ind).trim();
+        if (file.startsWith(".."))
+            return null;
+        String dir = "/";
+        if (ind > 0) {
+            dir = file.substring(0, ind).trim();
         }
-        String f=file.substring(ind+1);
-        if(f.indexOf("/")!=-1) return null;
-        String real=(String)directories.get(dir);
-        if(real==null) return null;
-        real+=cleanFileName(f);
+        String f = file.substring(ind + 1);
+        if (f.indexOf("/") != -1)
+            return null;
+        String real = (String) directories.get(dir);
+        if (real == null)
+            return null;
+        real += cleanFileName(f);
         return new File(real);
     }
-    
+
+
     public String getURLFor(String file) {
-        int ind=file.indexOf("/");
-        String dir="/";
-        if(ind>0){
-            dir=file.substring(0,ind).trim();
+        int ind = file.indexOf("/");
+        String dir = "/";
+        if (ind > 0) {
+            dir = file.substring(0, ind).trim();
         }
-        String f=file.substring(ind+1);
-        if(f.indexOf("/")!=-1) return null;
-        String url=(String)urls.get(dir);
-        if(url==null) return null;
-        url+=cleanFileName(f);
+        String f = file.substring(ind + 1);
+        if (f.indexOf("/") != -1)
+            return null;
+        String url = (String) urls.get(dir);
+        if (url == null)
+            return null;
+        url += cleanFileName(f);
         return url;
     }
-    
+
+
     public String[] listDirectories(String dir) {
-        if(dir.equals("/")){
-            List<String> v=new ArrayList<>();
-            Iterator<Map.Entry<String,String>> iter=directories.entrySet().iterator();
-            while(iter.hasNext()){
-                Map.Entry<String,String> e=iter.next();
-                String d=e.getKey();
-                if(!d.equals("/")){
+        if (dir.equals("/")) {
+            List<String> v = new ArrayList<>();
+            Iterator<Map.Entry<String, String>> iter = directories.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry<String, String> e = iter.next();
+                String d = e.getKey();
+                if (!d.equals("/")) {
                     v.add(d);
                 }
             }
-            return (String[])v.toArray(new String[0]);
+            return (String[]) v.toArray(new String[0]);
         }
-        else return new String[0];
+        else
+            return new String[0];
     }
-    
+
+
     public String[] listFiles(String dir) {
-        File f=getRealFileFor(dir);
-        if(f==null || !f.isDirectory()) return null;
-        File[] files=f.listFiles();
-        List<String> v=new ArrayList<>();
-        for(int i=0;i<files.length;i++){
-            if(!files[i].isDirectory()){
+        File f = getRealFileFor(dir);
+        if (f == null || !f.isDirectory())
+            return null;
+        File[] files = f.listFiles();
+        List<String> v = new ArrayList<>();
+        for (int i = 0; i < files.length; i++) {
+            if (!files[i].isDirectory()) {
                 v.add(files[i].getName());
             }
         }
-        return (String[])v.toArray(new String[0]);
+        return (String[]) v.toArray(new String[0]);
     }
-    
-    public void addDirectory(String dir,String loc,String url){
-        directories.put(dir,loc);
-        if(url!=null) urls.put(dir,url);
+
+
+    public void addDirectory(String dir, String loc, String url) {
+        directories.put(dir, loc);
+        if (url != null)
+            urls.put(dir, url);
     }
- /*   
-    public void xmlParamInitialize(Element element, XMLParamProcessor processor) {
-        NodeList nl=element.getElementsByTagName("directory");
-        for(int i=0;i<nl.getLength();i++){
-            Element e=(Element)nl.item(i);
-            String dir=e.getAttribute("dir");
-            String loc=e.getAttribute("loc");
-            String url=e.getAttribute("url");
-            addDirectory(dir,loc,url);
-        }
-    }
-*/
+
 }

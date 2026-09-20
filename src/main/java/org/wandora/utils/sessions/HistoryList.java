@@ -27,7 +27,7 @@
  */
 
 package org.wandora.utils.sessions;
- 
+
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,31 +36,34 @@ import java.util.List;
 
 /**
  *
- * @author  marko
+ * @author marko
  */
 public class HistoryList {
-    
+
     private int currentIndex = -1;
-    
+
     private List<Object> list = new ArrayList<>();
-    
+
     private int maxSize = 0;
-    
+
     /** Creates new HistoryList */
     public HistoryList(int maxS) {
         maxSize = maxS;
     }
-    
+
+
     public Boolean add(Object obj, Boolean rmDuplicate) {
         if (rmDuplicate == Boolean.TRUE) {
-            if ((!list.isEmpty()) && (list.lastIndexOf(obj) == list.size()-1)) return (Boolean.FALSE);            
+            if ((!list.isEmpty()) && (list.lastIndexOf(obj) == list.size() - 1))
+                return (Boolean.FALSE);
         }
         this.add(obj);
         return (Boolean.TRUE);
     }
-    
+
+
     public void add(Object obj) {
-        if (list.size() >= maxSize){
+        if (list.size() >= maxSize) {
             Iterator<Object> listItr = list.iterator();
             int ind = list.size() - maxSize;
             while ((ind > 0) && (listItr.hasNext())) {
@@ -71,77 +74,103 @@ public class HistoryList {
         // if adding in the middle of the list and we are following
         // different branch than old then remove old branch
         if ((currentIndex < this.lastIndex()) &&
-        (obj != this.getObjectAt(currentIndex+1))) {
-            this.removeFrom(currentIndex+1);
+                (obj != this.getObjectAt(currentIndex + 1))) {
+            this.removeFrom(currentIndex + 1);
         }
         list.add(obj);
         currentIndex++;
-        if (currentIndex >= list.size()) currentIndex = list.size()-1;
-        System.out.println("adding object "+currentIndex);
+        if (currentIndex >= list.size())
+            currentIndex = list.size() - 1;
+        System.out.println("adding object " + currentIndex);
     }
-    
+
+
     public void clear() {
         list.clear();
     }
-    
+
+
     public void removeFrom(int index) {
         if (list.size() > 0) {
-            while (list.size()-1 >= index) {
-                list.remove(list.size()-1);
+            while (list.size() - 1 >= index) {
+                list.remove(list.size() - 1);
             }
-            
-            if (currentIndex >= list.size()) currentIndex = list.size()-1;
+
+            if (currentIndex >= list.size()) {
+                currentIndex = list.size() - 1;
+            }
         }
     }
-    
+
+
     public int lastIndex() {
-        return(list.size()-1);
+        return (list.size() - 1);
     }
-    
+
+
     public int getCurrentIndex() {
-        return(currentIndex);
+        return (currentIndex);
     }
-    
+
+
     public Object getCurrentObject() {
-        return(list.get(currentIndex));
+        return (list.get(currentIndex));
     }
-    
+
+
     public Object getObjectAt(int index) {
-        if ((index > 0) && (index < list.size())) return(list.get(index));
-        return(null);
+        if ((index > 0) && (index < list.size())) {
+            return (list.get(index));
+        }
+        return (null);
     }
-    
+
+
     public List<Object> getNewest(int size) {
-        if (size > list.size()) return(list);
-        if (size > 0) return(list.subList(list.size()-size,list.size()));
-        return(null);
+        if (size > list.size()) {
+            return (list);
+        }
+        if (size > 0) {
+            return (list.subList(list.size() - size, list.size()));
+        }
+        return (null);
     }
-    
+
+
     public List<Object> getRange(int start, int end) {
-        if (start < 0) start = 0;
-        if (end > list.size()) end = list.size();
-        return(list.subList(start,end));
+        if (start < 0)
+            start = 0;
+        if (end > list.size())
+            end = list.size();
+        return (list.subList(start, end));
     }
-    
-    
+
+
     public boolean isEmpty() {
         return list.isEmpty();
     }
-    
+
+
     public void moveBack() {
-        if (currentIndex > 0) currentIndex--;
-        System.out.println("Index:"+currentIndex);
+        if (currentIndex > 0)
+            currentIndex--;
+        System.out.println("Index:" + currentIndex);
     }
-    
+
+
     public void moveForward() {
-        if (currentIndex < list.size()-1) currentIndex++;
+        if (currentIndex < list.size() - 1)
+            currentIndex++;
     }
-    
+
+
     public void moveTo(int index) {
-        if ((index >= 0) && (index < list.size())) currentIndex = index;
+        if ((index >= 0) && (index < list.size()))
+            currentIndex = index;
     }
-    
+
+
     public void moveToEnd() {
-        currentIndex = list.size()-1;
+        currentIndex = list.size() - 1;
     }
 }

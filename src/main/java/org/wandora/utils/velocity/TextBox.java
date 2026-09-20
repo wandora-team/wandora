@@ -33,38 +33,46 @@ import java.util.Properties;
 
 /**
  *
- * @author  olli
+ * @author olli
  */
 public class TextBox {
-    
-    public static final String PROP_SHORTNAMELENGTH="textbox.shortnamelength";
-    
+
+    public static final String PROP_SHORTNAMELENGTH = "textbox.shortnamelength";
+
     private int shortNameLength;
-    
-    public TextBox(){
+
+    public TextBox() {
         this(new Properties());
     }
-    
+
+
     /** Creates a new instance of TextBox */
     public TextBox(Properties properties) {
-        shortNameLength=30;
-        if(properties.getProperty(PROP_SHORTNAMELENGTH)!=null)
-            shortNameLength=Integer.parseInt(properties.getProperty(PROP_SHORTNAMELENGTH));
+        shortNameLength = 30;
+        if (properties.getProperty(PROP_SHORTNAMELENGTH) != null)
+            shortNameLength = Integer.parseInt(properties.getProperty(PROP_SHORTNAMELENGTH));
     }
-    
-    
-    public String shortenName(String name){
-        if(name.length()<=shortNameLength) return name;
-        else return name.substring(0,shortNameLength/2-2)+"..."+name.substring(name.length()-shortNameLength/2-2);
+
+
+    public String shortenName(String name) {
+        if (name.length() <= shortNameLength)
+            return name;
+        else
+            return name.substring(0, shortNameLength / 2 - 2) 
+                    + "..."
+                    + name.substring(name.length() - shortNameLength / 2 - 2);
     }
-    
-    public String charToStr(int c){
-        return Character.valueOf((char)c).toString();
+
+
+    public String charToStr(int c) {
+        return Character.valueOf((char) c).toString();
     }
-    public String repeat(String s,int times){
-        String r="";
-        for(int i=0;i<times;i++){
-            r+=s;
+
+
+    public String repeat(String s, int times) {
+        String r = "";
+        for (int i = 0; i < times; i++) {
+            r += s;
         }
         return r;
     }

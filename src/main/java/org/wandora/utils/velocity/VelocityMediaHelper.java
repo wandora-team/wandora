@@ -35,62 +35,67 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.logger.Log4j2Logger;
+
 /**
  *
- * @author  olli
+ * @author olli
  */
 public class VelocityMediaHelper {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(VelocityMediaHelper.class);
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(VelocityMediaHelper.class);
+
     /** Creates a new instance of VelocityMediaHelper */
     public VelocityMediaHelper() {
     }
-    
-        
+
+
     public static String getTopicVideoThumbnail(Topic t) throws TopicMapException {
-        Topic vwork=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/videowork");
-        Topic occ=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/videooccurrence");
-        Topic mocc=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/mediaoccurrence");
-        Topic tn=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/thumbnail");
-        Iterator<Association> iter=t.getAssociations(occ,vwork).iterator();
-        String found=null;
-        while(iter.hasNext()){
-            Association a=iter.next();
-            Topic image=a.getPlayer(occ);
-            if(image==null) continue;
-            Iterator<Association> iter2=image.getAssociations(tn,mocc).iterator();
-            while(iter2.hasNext()){
-                Association a2=iter2.next();
-                Topic tnimage=a2.getPlayer(tn);
-                if(tnimage==null) continue;
-                if(tnimage.getSubjectLocator()!=null) {
+        Topic vwork = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/videowork");
+        Topic occ = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/videooccurrence");
+        Topic mocc = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/mediaoccurrence");
+        Topic tn = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/thumbnail");
+        Iterator<Association> iter = t.getAssociations(occ, vwork).iterator();
+        String found = null;
+        while (iter.hasNext()) {
+            Association a = iter.next();
+            Topic image = a.getPlayer(occ);
+            if (image == null)
+                continue;
+            Iterator<Association> iter2 = image.getAssociations(tn, mocc).iterator();
+            while (iter2.hasNext()) {
+                Association a2 = iter2.next();
+                Topic tnimage = a2.getPlayer(tn);
+                if (tnimage == null)
+                    continue;
+                if (tnimage.getSubjectLocator() != null) {
                     return tnimage.getSubjectLocator().toExternalForm();
                 }
             }
         }
-        return found;        
+        return found;
     }
-    
-    
+
+
     public static String getOccurrenceVideoThumbnail(Topic t) throws TopicMapException {
-        Topic mocc=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/mediaoccurrence");
-        Topic tn=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/thumbnail");
-        Iterator<Association> iter2=t.getAssociations(tn,mocc).iterator();
-        while(iter2.hasNext()){
-            Association a2=iter2.next();
-            Topic tnimage=a2.getPlayer(tn);
-            if(tnimage==null) continue;
-            if(tnimage.getSubjectLocator()!=null) {
+        Topic mocc = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/mediaoccurrence");
+        Topic tn = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/thumbnail");
+        Iterator<Association> iter2 = t.getAssociations(tn, mocc).iterator();
+        while (iter2.hasNext()) {
+            Association a2 = iter2.next();
+            Topic tnimage = a2.getPlayer(tn);
+            if (tnimage == null)
+                continue;
+            if (tnimage.getSubjectLocator() != null) {
                 return tnimage.getSubjectLocator().toExternalForm();
             }
         }
-        return null;        
+        return null;
     }
-    
-    
+
+
     public static String getVideoPreview(Topic t){
         return null;
-/*        Topic occ=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/videooccurrence");
+        /*
+        Topic occ=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/videooccurrence");
         Topic preview=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/videopreview");
         Iterator iter=t.getAssociations(preview,occ).iterator();
         String found=null;
@@ -100,10 +105,12 @@ public class VelocityMediaHelper {
             if(tnimage==null) continue;
             if(tnimage.getSubjectLocator()!=null) return tnimage.getSubjectLocator().toExternalForm();
         }
-        return found;                */
+        return found;
+        */
     }
      
-/*    public static String getTopicImageThumbnail(Topic t){
+    /*    
+    public static String getTopicImageThumbnail(Topic t){
         Topic occ=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/imageoccurrence");
         Topic tn=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/thumbnail");
         Iterator iter=t.getAssociations().iterator();
@@ -118,31 +125,34 @@ public class VelocityMediaHelper {
             }
         }
         return null;
-    }*/
-    
+    }
+    */
+        
     
     public static String getTopicImageThumbnail(Topic t) throws TopicMapException {
-        Topic vwork=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/visualwork");
-        Topic occ=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/imageoccurrence");
-        Topic mocc=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/mediaoccurrence");
-        Topic tn=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/thumbnail");
-        Iterator<Association> iter=t.getAssociations(occ,vwork).iterator();
-        String found=null;
-        while(iter.hasNext()){
-            Association a=iter.next();
-            Topic image=a.getPlayer(occ);
-            if(image==null) continue;
-            Iterator<Association> iter2=image.getAssociations(tn,mocc).iterator();
-            while(iter2.hasNext()){
-                Association a2=iter2.next();
-                Topic tnimage=a2.getPlayer(tn);
-                if(tnimage==null) continue;
-                if(tnimage.getSubjectLocator()!=null) {
+        Topic vwork = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/visualwork");
+        Topic occ = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/imageoccurrence");
+        Topic mocc = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/mediaoccurrence");
+        Topic tn = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/thumbnail");
+        Iterator<Association> iter = t.getAssociations(occ, vwork).iterator();
+        String found = null;
+        while (iter.hasNext()) {
+            Association a = iter.next();
+            Topic image = a.getPlayer(occ);
+            if (image == null)
+                continue;
+            Iterator<Association> iter2 = image.getAssociations(tn, mocc).iterator();
+            while (iter2.hasNext()) {
+                Association a2 = iter2.next();
+                Topic tnimage = a2.getPlayer(tn);
+                if (tnimage == null)
+                    continue;
+                if (tnimage.getSubjectLocator() != null) {
                     return tnimage.getSubjectLocator().toExternalForm();
                 }
             }
-            if(found==null && image.getSubjectLocator()!=null) {
-                found=image.getSubjectLocator().toExternalForm();
+            if (found == null && image.getSubjectLocator() != null) {
+                found = image.getSubjectLocator().toExternalForm();
             }
         }
         return found;
@@ -150,27 +160,29 @@ public class VelocityMediaHelper {
     
     
     public static String getTopicTVImage(Topic t) throws TopicMapException {
-        Topic vwork=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/visualwork");
-        Topic occ=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/imageoccurrence");
-        Topic mocc=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/mediaoccurrence");
-        Topic tn=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/tvimage");
-        Iterator<Association> iter=t.getAssociations(occ,vwork).iterator();
-        String found=null;
-        while(iter.hasNext()){
-            Association a=iter.next();
-            Topic image=a.getPlayer(occ);
-            if(image==null) continue;
-            Iterator<Association> iter2=image.getAssociations(tn,mocc).iterator();
-            while(iter2.hasNext()){
-                Association a2=iter2.next();
-                Topic tnimage=a2.getPlayer(tn);
-                if(tnimage==null) continue;
-                if(tnimage.getSubjectLocator()!=null) {
+        Topic vwork = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/visualwork");
+        Topic occ = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/imageoccurrence");
+        Topic mocc = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/mediaoccurrence");
+        Topic tn = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/tvimage");
+        Iterator<Association> iter = t.getAssociations(occ, vwork).iterator();
+        String found = null;
+        while (iter.hasNext()) {
+            Association a = iter.next();
+            Topic image = a.getPlayer(occ);
+            if (image == null)
+                continue;
+            Iterator<Association> iter2 = image.getAssociations(tn, mocc).iterator();
+            while (iter2.hasNext()) {
+                Association a2 = iter2.next();
+                Topic tnimage = a2.getPlayer(tn);
+                if (tnimage == null)
+                    continue;
+                if (tnimage.getSubjectLocator() != null) {
                     return tnimage.getSubjectLocator().toExternalForm();
                 }
             }
-            if(found==null && image.getSubjectLocator()!=null) {
-                found=image.getSubjectLocator().toExternalForm();
+            if (found == null && image.getSubjectLocator() != null) {
+                found = image.getSubjectLocator().toExternalForm();
             }
         }
         return found;
@@ -178,30 +190,34 @@ public class VelocityMediaHelper {
     
     
     public static String getTopicImage(Topic t) throws TopicMapException {
-        Topic vwork=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/visualwork");
-        Topic occ=t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/imageoccurrence");
-        Iterator<Association> iter=t.getAssociations(occ,vwork).iterator();
-        while(iter.hasNext()){
-            Association a=iter.next();
-            Topic image=a.getPlayer(occ);
-            if(image==null) continue;
-            if(image.getSubjectLocator()!=null) {
+        Topic vwork = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/visualwork");
+        Topic occ = t.getTopicMap().getTopic("http://www.gripstudios.com/wandora/common/imageoccurrence");
+        Iterator<Association> iter = t.getAssociations(occ, vwork).iterator();
+        while (iter.hasNext()) {
+            Association a = iter.next();
+            Topic image = a.getPlayer(occ);
+            if (image == null)
+                continue;
+            if (image.getSubjectLocator() != null) {
                 return image.getSubjectLocator().toExternalForm();
             }
         }
         return null;
     }
-
+    
     
     public String trimNonAlphaNums(String word) {
-        if(word == null || word.length() < 1) return "";
-        
-        int i=0;
-        int j=word.length()-1;
-        for(; i<word.length() && !Character.isJavaIdentifierPart(word.charAt(i)); i++);
-        for(; j>i+1 && !Character.isJavaIdentifierPart(word.charAt(j)); j--);
-        
-        return word.substring(i,j+1);
+        if (word == null || word.length() < 1)
+            return "";
+    
+        int i = 0;
+        int j = word.length() - 1;
+        for (; i < word.length() && !Character.isJavaIdentifierPart(word.charAt(i)); i++)
+            ;
+        for (; j > i + 1 && !Character.isJavaIdentifierPart(word.charAt(j)); j--)
+            ;
+    
+        return word.substring(i, j + 1);
     }
     
     
@@ -209,49 +225,49 @@ public class VelocityMediaHelper {
         try {
             return java.net.URLEncoder.encode(s, StandardCharsets.UTF_8.name());
         }
-        catch(Exception e) {
+        catch (Exception e) {
             return s;
         }
     }
     
     
     public String populateLinks(String text, String linkTemplate) {
-        if(text != null && text.length()>0) {
+        if (text != null && text.length() > 0) {
             String DELIMITERS = " \n\t',.\"";
             StringBuilder newText = new StringBuilder("");
             String searchword;
             String link;
             String substring;
-            int index=0;
+            int index = 0;
             int wordStart;
             int wordEnd;
-            while(index < text.length()) {
-                while(index < text.length() && DELIMITERS.indexOf(text.charAt(index)) != -1) {
+            while (index < text.length()) {
+                while (index < text.length() && DELIMITERS.indexOf(text.charAt(index)) != -1) {
                     newText.append(text.charAt(index));
                     index++;
                 }
-                
+    
                 // pass html/xml tags
-                while(index < text.length() && text.charAt(index) == '<') {
-                   while(index < text.length() && text.charAt(index) != '>') {
+                while (index < text.length() && text.charAt(index) == '<') {
+                    while (index < text.length() && text.charAt(index) != '>') {
                         newText.append(text.charAt(index));
                         index++;
-                   }
-                   newText.append(text.charAt(index));
-                   index++;
-                }
-                // potential word found
-                wordStart=index;
-                while(index < text.length() && DELIMITERS.indexOf(text.charAt(index)) == -1 && text.charAt(index) != '<') {
+                    }
+                    newText.append(text.charAt(index));
                     index++;
                 }
-                
-                if(index > wordStart) {
+                // potential word found
+                wordStart = index;
+                while (index < text.length() && DELIMITERS.indexOf(text.charAt(index)) == -1 && text.charAt(index) != '<') {
+                    index++;
+                }
+    
+                if (index > wordStart) {
                     substring = text.substring(wordStart, index);
-//                    try { substring = encodeHTML(substring); } catch (Exception e) {}
-                    if(index-wordStart > 3) {
+    //                    try { substring = encodeHTML(substring); } catch (Exception e) {}
+                    if (index - wordStart > 3) {
                         searchword = trimNonAlphaNums(substring);
-                        if(searchword.length() > 3) {
+                        if (searchword.length() > 3) {
                             link = linkTemplate.replaceAll("%searchw%", encodeURL(searchword));
                             link = link.replaceAll("%word%", substring);
                             newText.append(link);
@@ -264,23 +280,24 @@ public class VelocityMediaHelper {
                         newText.append(substring);
                     }
                 }
-                
+    
             }
             text = newText.toString();
         }
         return text;
     }
     
-
+    
     public static class TreeNode {
         public Topic content;
         public boolean openChildren;
         public boolean closeChildren;
-        public TreeNode(Topic content,boolean openChildren,boolean closeChildren){
-            this.content=content;
-            this.openChildren=openChildren;
-            this.closeChildren=closeChildren;
+    
+        public TreeNode(Topic content, boolean openChildren, boolean closeChildren) {
+            this.content = content;
+            this.openChildren = openChildren;
+            this.closeChildren = closeChildren;
         }
     }
-    
+
 }

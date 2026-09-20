@@ -30,41 +30,41 @@ package org.wandora.utils.sessions;
 
 /**
  *
- * @author  marko
+ * @author marko
  */
 public class SessionObject {
 
     private HistoryList history = null;
-    
+
     private String name = null;
-    
+
     private String id = null;
-    
-    
-    
+
+
+
     /** Creates new SessionObject */
     public SessionObject(HistoryList sessionHistory, String topicName, String sessionID) {
         history = sessionHistory;
         name = topicName;
         id = sessionID;
     }
-    
-    
+
+
 
     public HistoryList getHistory() {
         return history;
     }
-    
-    
-    
+
+
+
     public String getID() {
         return id;
     }
 
-    
-    
+
+
     public String getName() {
         return name;
     }
-    
+
 }

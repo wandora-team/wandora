@@ -28,6 +28,7 @@
  */
 
 package org.wandora.utils.fileserver;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,7 +42,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 /**
  *
- * You can use a SimpleFileServer with this class.  Make a new instance of this
+ * You can use a SimpleFileServer with this class. Make a new instance of this
  * class, then use connect method to get a socket and connect to a file server.
  * After that you can use methods to upload files.
  *
@@ -50,101 +51,127 @@ import javax.net.ssl.SSLSocketFactory;
  * @author olli
  */
 public class SimpleFileServerClient {
-    
-    private String serverResponse=null;
-    
+
+    private String serverResponse = null;
+
     /** Creates a new instance of SimpleFileServerClient */
     public SimpleFileServerClient() {
     }
-    
-    public String getLastServerResponse(){return serverResponse;}
-    
-    public Socket connect(String host,int port,boolean useSSL) throws IOException {
-        Socket s=null;
-        if(!useSSL){
-            s=new Socket(host,port);
+
+
+    public String getLastServerResponse() {
+        return serverResponse;
+    }
+
+
+    public Socket connect(String host, int port, boolean useSSL) throws IOException {
+        Socket s = null;
+        if (!useSSL) {
+            s = new Socket(host, port);
         }
-        else{
-            s=SSLSocketFactory.getDefault().createSocket(host,port);
+        else {
+            s = SSLSocketFactory.getDefault().createSocket(host, port);
         }
         return s;
     }
-    
+
+
     public String readLine(InputStream in) throws IOException {
         return SimpleFileServer.readLine(in);
     }
-    
-    public boolean login(InputStream in,Writer out,String user,String pass) throws IOException {
-        if(user!=null) out.write("login "+user+":"+pass+"\n");
-        else out.write("login\n");
+
+
+    public boolean login(InputStream in, Writer out, String user, String pass) throws IOException {
+        if (user != null)
+            out.write("login " + user + ":" + pass + "\n");
+        else
+            out.write("login\n");
         out.flush();
-        serverResponse=readLine(in);
-        if(serverResponse.startsWith("OK")) return true;
-        else return false;
+        serverResponse = readLine(in);
+        if (serverResponse.startsWith("OK"))
+            return true;
+        else
+            return false;
     }
-    
+
+
     public void logout(Writer out) throws IOException {
         out.write("logout\n");
         out.flush();
     }
-    
-    public boolean sendFile(InputStream in,Writer out,OutputStream outStream,String filename,File f) throws IOException {
-        return sendFile(in,out,outStream,filename,f.length(),new FileInputStream(f));
+
+
+    public boolean sendFile(InputStream in, Writer out, OutputStream outStream, String filename, File f) throws IOException {
+        return sendFile(in, out, outStream, filename, f.length(), new FileInputStream(f));
     }
-    public boolean sendFile(InputStream in,Writer out,OutputStream outStream,String filename,InputStream f) throws IOException {
-        byte[] buf=new byte[32768];
-        int pos=0;
-        int read=0;
-        
-        while( (read=f.read(buf,pos,buf.length-pos))!=-1 ){
-            pos+=read;
-            if(pos==buf.length){
-                byte[] newbuf=new byte[buf.length*2];
-                System.arraycopy(buf,0,newbuf,0,buf.length);
-                buf=newbuf;
+
+
+    public boolean sendFile(InputStream in, Writer out, OutputStream outStream, String filename, InputStream f) throws IOException {
+        byte[] buf = new byte[32768];
+        int pos = 0;
+        int read = 0;
+
+        while ((read = f.read(buf, pos, buf.length - pos)) != -1) {
+            pos += read;
+            if (pos == buf.length) {
+                byte[] newbuf = new byte[buf.length * 2];
+                System.arraycopy(buf, 0, newbuf, 0, buf.length);
+                buf = newbuf;
             }
         }
-        return sendFile(in,out,outStream,filename,pos,new ByteArrayInputStream(buf,0,pos));
+        return sendFile(in, out, outStream, filename, pos, new ByteArrayInputStream(buf, 0, pos));
     }
-    
-    public boolean sendFile(InputStream in,Writer out,OutputStream outStream,String filename,long length,InputStream f) throws IOException {
-        out.write("put "+filename+" "+length+"\n");
+
+
+    public boolean sendFile(InputStream in, Writer out, OutputStream outStream, String filename, long length, InputStream f) throws IOException {
+        out.write("put " + filename + " " + length + "\n");
         out.flush();
-        serverResponse=readLine(in);
-        if(!serverResponse.startsWith("OK")) return false;
-        byte[] buf=new byte[4096];
-        int read=0;
-        while( (read=f.read(buf))!=-1 ){
-            outStream.write(buf,0,read);
+        serverResponse = readLine(in);
+        if (!serverResponse.startsWith("OK"))
+            return false;
+        byte[] buf = new byte[4096];
+        int read = 0;
+        while ((read = f.read(buf)) != -1) {
+            outStream.write(buf, 0, read);
         }
         outStream.flush();
-        serverResponse=readLine(in);
-        if(!serverResponse.startsWith("OK")) return false;
-        else return true;
+        serverResponse = readLine(in);
+        if (!serverResponse.startsWith("OK"))
+            return false;
+        else
+            return true;
     }
-    
-    public String getURLFor(InputStream in,Writer out,String file) throws IOException {
-        out.write("geturlfor "+file+"\n");
+
+
+    public String getURLFor(InputStream in, Writer out, String file) throws IOException {
+        out.write("geturlfor " + file + "\n");
         out.flush();
-        serverResponse=readLine(in);
-        if(!serverResponse.startsWith("OK")) return null;
-        String res=readLine(in);
-        if(res.equals("null")) return "";
-        else return res;
+        serverResponse = readLine(in);
+        if (!serverResponse.startsWith("OK"))
+            return null;
+        String res = readLine(in);
+        if (res.equals("null"))
+            return "";
+        else
+            return res;
     }
-    
-    public static int FILE_EXISTS=0;
-    public static int FILE_NOTEXISTS=1;
-    public static int INVALIDFILE=2;
-    public int fileExists(InputStream in,Writer out,String file) throws IOException {
-        out.write("fileexists "+file+"\n");
+
+    public static int FILE_EXISTS = 0;
+    public static int FILE_NOTEXISTS = 1;
+    public static int INVALIDFILE = 2;
+
+    public int fileExists(InputStream in, Writer out, String file) throws IOException {
+        out.write("fileexists " + file + "\n");
         out.flush();
-        serverResponse=readLine(in);
-        if(!serverResponse.startsWith("OK")) return INVALIDFILE;
-        String res=readLine(in);
-        if(res.equalsIgnoreCase("true")) return FILE_EXISTS;
-        else return FILE_NOTEXISTS;
+        serverResponse = readLine(in);
+        if (!serverResponse.startsWith("OK"))
+            return INVALIDFILE;
+        String res = readLine(in);
+        if (res.equalsIgnoreCase("true"))
+            return FILE_EXISTS;
+        else
+            return FILE_NOTEXISTS;
     }
-    
+
 
 }

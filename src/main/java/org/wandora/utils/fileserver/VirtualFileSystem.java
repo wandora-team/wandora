@@ -28,36 +28,41 @@
  */
 
 package org.wandora.utils.fileserver;
+
 import java.io.File;
+
 /**
  *
  * A virtual file system is like a file system with directories which contain
  * other directories and files. Usually it is somehow mapped to a real file
  * system but with restrictions so that only certain files can be accessed
- * through it for security reasons. A simple way to do this is to mount
- * one directory as the root directory and then using everything inside that
- * as the file system.
+ * through it for security reasons. A simple way to do this is to mount one
+ * directory as the root directory and then using everything inside that as the
+ * file system.
  *
- * @author  olli
+ * @author olli
  */
 public interface VirtualFileSystem {
-   
+
     /**
-     * Returns an URL that can be used to access the given virtual file.
-     * If the file system does not support this kind of operation, returns null.
+     * Returns an URL that can be used to access the given virtual file. If the file
+     * system does not support this kind of operation, returns null.
      */
     public String getURLFor(String file);
+
     /**
      * Gets the real File for a virtual file name.
      */
     public File getRealFileFor(String file);
+
     /**
      * Lists all virtual directories inside the given virtual directory.
      */
     public String[] listDirectories(String dir);
+
     /**
-     * Lists all virtual files in the given virual directory.
+     * Lists all virtual files in the given virtual directory.
      */
     public String[] listFiles(String dir);
-    
+
 }

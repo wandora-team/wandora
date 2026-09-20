@@ -30,24 +30,27 @@ package org.wandora.utils.logger;
 
 
 import java.io.PrintStream;
+
 /**
  *
- * @author  olli
+ * @author olli
  */
 public class SystemOutLogger extends Logger {
     protected PrintStream stream;
-    
+
     /** Creates a new instance of SimpleLogger */
     public SystemOutLogger() {
         this(System.out);
     }
-    
+
+
     public SystemOutLogger(PrintStream stream) {
-        this.stream=stream;
+        this.stream = stream;
     }
-    
+
+
     public void writelog(String level, String s) {
-        stream.println(level+" "+s);
+        stream.println(level + " " + s);
     }
-    
+
 }

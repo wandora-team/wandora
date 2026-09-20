@@ -28,6 +28,7 @@
  */
 
 package org.wandora.utils.fileserver;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -44,6 +45,7 @@ import java.util.List;
 import javax.net.ssl.SSLServerSocketFactory;
 
 import org.wandora.utils.logger.Log4j2Logger;
+
 /**
  * For the ssl to work you need to create a certificate in command prompt with the
  * keytool utility (should be in jdk bin directory).
@@ -74,7 +76,7 @@ import org.wandora.utils.logger.Log4j2Logger;
  
  */
 public class SimpleFileServer extends Thread {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleFileServer.class);
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleFileServer.class);
 
     private int port;
     private boolean running;
@@ -82,339 +84,373 @@ public class SimpleFileServer extends Thread {
     private boolean useSSL;
     private String requiredCredentials;
     private VirtualFileSystem fileSystem;
-    private String lf="\r\n";
-    
+    private String lf = "\r\n";
+
     /** Creates a new instance of SimpleFileServer */
-    public SimpleFileServer(int port,VirtualFileSystem fileSystem) {
-        this(port,fileSystem,false,null);
+    public SimpleFileServer(int port, VirtualFileSystem fileSystem) {
+        this(port, fileSystem, false, null);
     }
-    public SimpleFileServer(String port,VirtualFileSystem fileSystem,String useSSL,String credentials) {
-        this(Integer.parseInt(port),fileSystem,Boolean.parseBoolean(useSSL),credentials);
+
+
+    public SimpleFileServer(String port, VirtualFileSystem fileSystem, String useSSL, String credentials) {
+        this(Integer.parseInt(port), fileSystem, Boolean.parseBoolean(useSSL), credentials);
     }
-    public SimpleFileServer(int port,VirtualFileSystem fileSystem,boolean useSSL,String credentials) {
-        this.port=port;
-        this.fileSystem=fileSystem;
-        this.useSSL=useSSL;
-        this.requiredCredentials=credentials;
+
+
+    public SimpleFileServer(int port, VirtualFileSystem fileSystem, boolean useSSL, String credentials) {
+        this.port = port;
+        this.fileSystem = fileSystem;
+        this.useSSL = useSSL;
+        this.requiredCredentials = credentials;
     }
-    
-    public void setRequiredCredentials(String credentials){
-        requiredCredentials=credentials;
+
+
+    public void setRequiredCredentials(String credentials) {
+        requiredCredentials = credentials;
     }
-    public void setUseSSL(boolean value){
-        useSSL=value;
+
+
+    public void setUseSSL(boolean value) {
+        useSSL = value;
     }
-    
+
+
     public static void main(String[] args) throws Exception {
-        String user="admin";
-        String password="n1mda";
-        String mountPoint=".";
-        String httpServer="http://localhost/";
-        int port=8898;
-        
-        for(int i=0;i<args.length;i++){
-            if(args[i].equals("-P")){
-                port=Integer.parseInt(args[i+1]);
+        String user = "admin";
+        String password = "n1mda";
+        String mountPoint = ".";
+        String httpServer = "http://localhost/";
+        int port = 8898;
+
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-P")) {
+                port = Integer.parseInt(args[i + 1]);
                 i++;
             }
-            else if(args[i].equals("-u")){
-                user=args[i+1];
+            else if (args[i].equals("-u")) {
+                user = args[i + 1];
                 i++;
             }
-            else if(args[i].equals("-p")){
-                password=args[i+1];
+            else if (args[i].equals("-p")) {
+                password = args[i + 1];
                 i++;
             }
-            else if(args[i].equals("-m")){
-                mountPoint=args[i+1];
+            else if (args[i].equals("-m")) {
+                mountPoint = args[i + 1];
                 i++;
             }
-            else if(args[i].equals("-s")){
-                httpServer=args[i+1];
+            else if (args[i].equals("-s")) {
+                httpServer = args[i + 1];
                 i++;
             }
         }
-        
-        
-        mountPoint=mountPoint.replace("\\","/");
-        if(!mountPoint.endsWith("/")) mountPoint+="/";
-        
-/*        SimpleVirtualFileSystem fs=new SimpleVirtualFileSystem();
-        fs.addDirectory("/",mountPoint,httpServer);
-        SimpleFileServer sfs=new SimpleFileServer(port,fs);
-        sfs.setRequiredCredentials(user+":"+password);
-        sfs.start();*/
-        SimpleFileServer sfs=new SimpleFileServer(port,new SimpleVirtualFileSystem("/",mountPoint,httpServer),false,user+":"+password);
+
+
+        mountPoint = mountPoint.replace("\\", "/");
+        if (!mountPoint.endsWith("/"))
+            mountPoint += "/";
+
+        SimpleFileServer sfs = new SimpleFileServer(port, new SimpleVirtualFileSystem("/", mountPoint, httpServer),
+                false, user + ":" + password);
         sfs.start();
-        System.out.println("Server running at port "+port);
+        logger.info("Server running at port " + port);
     }
-    
+
+
     @Override
-    public void start(){
-        running=true;
+    public void start() {
+        running = true;
         super.start();
     }
-    
-    public void stopServer(){
-        running=false;
+
+
+    public void stopServer() {
+        running = false;
         this.interrupt();
     }
-    
+
+
     @Override
-    public void run(){
-        try{
+    public void run() {
+        try {
             ServerSocket ss;
-            if(!useSSL){
-                ss=new ServerSocket(port);
+            if (!useSSL) {
+                ss = new ServerSocket(port);
             }
-            else{
-                ss=SSLServerSocketFactory.getDefault().createServerSocket(port);
+            else {
+                ss = SSLServerSocketFactory.getDefault().createServerSocket(port);
             }
 
-            while(running){
-                try{
-                    final Socket s=ss.accept();
-                    Thread t=new ClientThread(s);
+            while (running) {
+                try {
+                    final Socket s = ss.accept();
+                    Thread t = new ClientThread(s);
                     t.start();
-                }catch(Exception e){
-                    if(printExceptions) logger.error(e);
+                }
+                catch (Exception e) {
+                    if (printExceptions)
+                        logger.error(e);
                 }
             }
-        }catch(Exception e){
-            if(printExceptions) logger.error(e);
+        }
+        catch (Exception e) {
+            if (printExceptions) {
+                logger.error(e);
+            }
         }
     }
-    
+
+
     public static String readLine(InputStream in) throws IOException {
-        StringBuilder buf=new StringBuilder();
-        int c=0;
-        while(true){
-            c=in.read();
-            if(c==-1) break;
-            if( (char)c == '\r' ) continue;
-            if( (char)c == '\n' ) break;
-            buf.append((char)c);
-            if(buf.length()>8192){
+        StringBuilder buf = new StringBuilder();
+        int c = 0;
+        while (true) {
+            c = in.read();
+            if (c == -1)
+                break;
+            if ((char) c == '\r')
+                continue;
+            if ((char) c == '\n')
+                break;
+            buf.append((char) c);
+            if (buf.length() > 8192) {
                 throw new IOException("Line buffer exeeded");
             }
         }
-        if(c==-1 && buf.length()==0) return null;
+        if (c == -1 && buf.length() == 0) {
+            return null;
+        }
         return buf.toString();
     }
-    
-    public static String[] parseLine(InputStream in) throws IOException {
-       
-        String line=readLine(in);
-        if(line==null) return null;
 
-        List<String> parsed=new ArrayList<>();
-        StringBuilder item=new StringBuilder();
-        int pos=0;
-        boolean escape=false;
-        while(pos<line.length()){
-            char c=line.charAt(pos++);
-            if(c=='\\') escape=true;
-            else if(escape==true || c!=' ') {
+
+    public static String[] parseLine(InputStream in) throws IOException {
+
+        String line = readLine(in);
+        if (line == null)
+            return null;
+
+        List<String> parsed = new ArrayList<>();
+        StringBuilder item = new StringBuilder();
+        int pos = 0;
+        boolean escape = false;
+        while (pos < line.length()) {
+            char c = line.charAt(pos++);
+            if (c == '\\')
+                escape = true;
+            else if (escape == true || c != ' ') {
                 item.append(c);
-                escape=false;
+                escape = false;
             }
-            else{
+            else {
                 parsed.add(item.toString());
-                item=new StringBuilder();
+                item = new StringBuilder();
             }
         }
-        if(item.length()>0) parsed.add(item.toString());
+        if (item.length() > 0)
+            parsed.add(item.toString());
         return parsed.toArray(new String[parsed.size()]);
     }
-    
+
     private class ClientThread extends Thread {
         private Socket socket;
-        public ClientThread(Socket socket){
-            this.socket=socket;
+
+        public ClientThread(Socket socket) {
+            this.socket = socket;
         }
+
+
         @Override
-        public void run(){
-            boolean loggedin=false;
-            int logintries=0;
-            try{
-                OutputStream outStream=socket.getOutputStream();
-                Writer out=new OutputStreamWriter(outStream);
-                InputStream in=socket.getInputStream();
-                String[] parsed=parseLine(in);
-                while(parsed!=null){
-                    if(parsed.length>0){
-                        if(!loggedin){
-                            if(parsed[0].equals("login")){
-                                if(requiredCredentials==null || 
-                                  (parsed.length>=2 && requiredCredentials.equals(parsed[1])) ){
-                                    loggedin=true;
-                                    out.write("OK login ok"+lf);
+        public void run() {
+            boolean loggedin = false;
+            int logintries = 0;
+            try {
+                OutputStream outStream = socket.getOutputStream();
+                Writer out = new OutputStreamWriter(outStream);
+                InputStream in = socket.getInputStream();
+                String[] parsed = parseLine(in);
+                while (parsed != null) {
+                    if (parsed.length > 0) {
+                        if (!loggedin) {
+                            if (parsed[0].equals("login")) {
+                                if (requiredCredentials == null ||
+                                        (parsed.length >= 2 && requiredCredentials.equals(parsed[1]))) {
+                                    loggedin = true;
+                                    out.write("OK login ok" + lf);
                                     out.flush();
                                 }
                                 else {
                                     logintries++;
-                                    if(logintries>=3) 
-                                        try{
+                                    if (logintries >= 3)
+                                        try {
                                             Thread.sleep(5000);
                                         }
-                                        catch(InterruptedException ie){}
-                                    out.write("ERR invalid user name or password"+lf);
+                                        catch (InterruptedException ie) {
+                                        }
+                                    out.write("ERR invalid user name or password" + lf);
                                     out.flush();
                                 }
                             }
-                            else if(parsed[0].equals("logout")){
-                                out.write("OK terminating connection"+lf);
+                            else if (parsed[0].equals("logout")) {
+                                out.write("OK terminating connection" + lf);
                                 out.flush();
                                 break;
                             }
-                            else{
-                                out.write("ERR invalid command"+lf);
+                            else {
+                                out.write("ERR invalid command" + lf);
                                 out.flush();
                             }
                         }
-                        else{
-                            if(parsed[0].equals("listfiles")){
-                                if(parsed.length>=2){
-                                    String[] files=fileSystem.listFiles(parsed[1]);
-                                    out.write("OK sending file list"+lf);
-                                    out.write(files.length+lf);
-                                    for(int i=0;i<files.length;i++){
-                                        out.write(files[i]+lf);
+                        else {
+                            if (parsed[0].equals("listfiles")) {
+                                if (parsed.length >= 2) {
+                                    String[] files = fileSystem.listFiles(parsed[1]);
+                                    out.write("OK sending file list" + lf);
+                                    out.write(files.length + lf);
+                                    for (int i = 0; i < files.length; i++) {
+                                        out.write(files[i] + lf);
                                     }
                                     out.flush();
                                 }
                                 else {
-                                    out.write("ERR directory not given"+lf);
+                                    out.write("ERR directory not given" + lf);
                                     out.flush();
                                 }
                             }
-                            else if(parsed[0].equals("listdirs")){
-                                if(parsed.length>=2){
-                                    String[] files=fileSystem.listDirectories(parsed[1]);
-                                    out.write("OK sending dir list"+lf);
-                                    out.write(files.length+lf);
-                                    for(int i=0;i<files.length;i++){
-                                        out.write(files[i]+lf);
+                            else if (parsed[0].equals("listdirs")) {
+                                if (parsed.length >= 2) {
+                                    String[] files = fileSystem.listDirectories(parsed[1]);
+                                    out.write("OK sending dir list" + lf);
+                                    out.write(files.length + lf);
+                                    for (int i = 0; i < files.length; i++) {
+                                        out.write(files[i] + lf);
                                     }
                                     out.flush();
                                 }
                                 else {
-                                    out.write("ERR directory not given"+lf);
-                                    out.flush();
-                                }                            
-                            }
-                            else if(parsed[0].equals("fileexists")){
-                                if(parsed.length>=2){
-                                    File f=fileSystem.getRealFileFor(parsed[1]);
-                                    if(f!=null){
-                                        out.write("OK"+lf);
-                                        out.write(""+f.exists()+lf);
-                                        out.flush();
-                                    }
-                                    else{
-                                        out.write("ERR invalid filename"+lf);
-                                        out.flush();
-                                    }
-                                }
-                                else{
-                                    out.write("ERR file not given"+lf);
+                                    out.write("ERR directory not given" + lf);
                                     out.flush();
                                 }
                             }
-                            else if(parsed[0].equals("get")){
-                                if(parsed.length>=2){
-                                    File f=fileSystem.getRealFileFor(parsed[1]);
-                                    if(!f.exists()){
+                            else if (parsed[0].equals("fileexists")) {
+                                if (parsed.length >= 2) {
+                                    File f = fileSystem.getRealFileFor(parsed[1]);
+                                    if (f != null) {
+                                        out.write("OK" + lf);
+                                        out.write("" + f.exists() + lf);
+                                        out.flush();
+                                    }
+                                    else {
+                                        out.write("ERR invalid filename" + lf);
+                                        out.flush();
+                                    }
+                                }
+                                else {
+                                    out.write("ERR file not given" + lf);
+                                    out.flush();
+                                }
+                            }
+                            else if (parsed[0].equals("get")) {
+                                if (parsed.length >= 2) {
+                                    File f = fileSystem.getRealFileFor(parsed[1]);
+                                    if (!f.exists()) {
                                         out.write("ERR file does not exist");
                                         out.flush();
                                     }
-                                    else{
-                                        long size=f.length();
-                                        out.write("OK sending file"+lf);
-                                        out.write(size+lf);
+                                    else {
+                                        long size = f.length();
+                                        out.write("OK sending file" + lf);
+                                        out.write(size + lf);
                                         out.flush();
-                                        byte[] buf=new byte[4096];
-                                        try(InputStream fin=new FileInputStream(f)) {
-                                            int read=0;
-                                            while( (read=fin.read(buf))!=-1 ){
-                                                outStream.write(buf,0,read);
+                                        byte[] buf = new byte[4096];
+                                        try (InputStream fin = new FileInputStream(f)) {
+                                            int read = 0;
+                                            while ((read = fin.read(buf)) != -1) {
+                                                outStream.write(buf, 0, read);
                                             }
                                         }
-                                        catch(IOException ioe){
+                                        catch (IOException ioe) {
                                             logger.error(ioe);
                                             break;
                                         }
                                     }
                                 }
-                                else{
-                                    out.write("ERR file not given"+lf);
+                                else {
+                                    out.write("ERR file not given" + lf);
                                     out.flush();
                                 }
                             }
-                            else if(parsed[0].equals("put")){
-                                if(parsed.length>=3){
-                                    File f=fileSystem.getRealFileFor(parsed[1]);
-                                    if(f==null){
-                                        out.write("ERR invalid file name"+lf);
+                            else if (parsed[0].equals("put")) {
+                                if (parsed.length >= 3) {
+                                    File f = fileSystem.getRealFileFor(parsed[1]);
+                                    if (f == null) {
+                                        out.write("ERR invalid file name" + lf);
                                         out.flush();
                                     }
-                                    else{
-                                        out.write("OK ready to receive file"+lf);
+                                    else {
+                                        out.write("OK ready to receive file" + lf);
                                         out.flush();
-                                        long size=Long.parseLong(parsed[2]);
-                                        OutputStream fout=new FileOutputStream(f);
-                                        byte[] buf=new byte[4096];
-                                        long read=0;
-                                        int bread=0;
-                                        while(read<size){
-                                            if(size-read>buf.length) bread=in.read(buf);
-                                            else bread=in.read(buf,0,(int)(size-read));
-                                            read+=bread;
-                                            fout.write(buf,0,bread);
+                                        long size = Long.parseLong(parsed[2]);
+                                        OutputStream fout = new FileOutputStream(f);
+                                        byte[] buf = new byte[4096];
+                                        long read = 0;
+                                        int bread = 0;
+                                        while (read < size) {
+                                            if (size - read > buf.length)
+                                                bread = in.read(buf);
+                                            else
+                                                bread = in.read(buf, 0, (int) (size - read));
+                                            read += bread;
+                                            fout.write(buf, 0, bread);
                                         }
                                         fout.close();
-                                        out.write("OK file received"+lf);
+                                        out.write("OK file received" + lf);
                                         out.flush();
                                     }
                                 }
-                                else{
-                                    out.write("ERR file and/or size not given"+lf);
+                                else {
+                                    out.write("ERR file and/or size not given" + lf);
                                     out.flush();
                                 }
                             }
-                            else if(parsed[0].equals("geturlfor")){
-                                if(parsed.length>=2){
-                                    String url=fileSystem.getURLFor(parsed[1]);
-                                    out.write("OK"+lf);
-                                    if(url==null) out.write("null"+lf);
-                                    else out.write(url+lf);
+                            else if (parsed[0].equals("geturlfor")) {
+                                if (parsed.length >= 2) {
+                                    String url = fileSystem.getURLFor(parsed[1]);
+                                    out.write("OK" + lf);
+                                    if (url == null)
+                                        out.write("null" + lf);
+                                    else
+                                        out.write(url + lf);
                                     out.flush();
                                 }
-                                else{
-                                    out.write("ERR file not given"+lf);
+                                else {
+                                    out.write("ERR file not given" + lf);
                                     out.flush();
                                 }
                             }
-                            else if(parsed[0].equals("logout")){
-                                out.write("OK terminating connection"+lf);
+                            else if (parsed[0].equals("logout")) {
+                                out.write("OK terminating connection" + lf);
                                 out.flush();
                                 break;
                             }
-                            else{
-                                out.write("ERR invalid command"+lf);
+                            else {
+                                out.write("ERR invalid command" + lf);
                                 out.flush();
                             }
                         }
                     }
-                    parsed=parseLine(in);
+                    parsed = parseLine(in);
                 }
-            }catch(Exception e){
-                if(printExceptions) logger.error(e);
             }
-            finally{
-                try{
+            catch (Exception e) {
+                if (printExceptions)
+                    logger.error(e);
+            }
+            finally {
+                try {
                     socket.close();
-                }catch(IOException ioe){
+                }
+                catch (IOException ioe) {
                     logger.error(ioe);
                 }
             }

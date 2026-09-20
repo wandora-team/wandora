@@ -34,36 +34,44 @@ import java.awt.Component;
 import java.awt.Window;
 
 import javax.swing.JViewport;
+
 /**
  *
  * @author olli
  */
 public class GuiTools {
-    
+
     /** Creates a new instance of GuiTools */
     private GuiTools() {
         // Private
     }
- 
-    public static void centerWindow(Window wnd,Component parent){
-        int x=parent.getLocation().x+parent.getWidth()/2-wnd.getWidth()/2;
-        int y=parent.getLocation().y+parent.getHeight()/2-wnd.getHeight()/2;
-        if(x<0) x=0;
-        if(y<0) y=0;
-        wnd.setLocation(x,y);        
+
+
+    public static void centerWindow(Window wnd, Component parent) {
+        int x = parent.getLocation().x + parent.getWidth() / 2 - wnd.getWidth() / 2;
+        int y = parent.getLocation().y + parent.getHeight() / 2 - wnd.getHeight() / 2;
+        if (x < 0)
+            x = 0;
+        if (y < 0)
+            y = 0;
+        wnd.setLocation(x, y);
     }
-    
-    public static Window getWindow(Component c){
-        while(!(c instanceof Window) && c!=null){
-            c=c.getParent();
+
+
+    public static Window getWindow(Component c) {
+        while (!(c instanceof Window) && c != null) {
+            c = c.getParent();
         }
-        return (Window)c;
+        return (Window) c;
     }
-    
-    public static JViewport getViewport(Component c){
-        c=c.getParent();
-        if(c==null) return null;
-        if(c instanceof JViewport) return (JViewport)c;
+
+
+    public static JViewport getViewport(Component c) {
+        c = c.getParent();
+        if (c == null)
+            return null;
+        if (c instanceof JViewport)
+            return (JViewport) c;
         return getViewport(c);
     }
 }

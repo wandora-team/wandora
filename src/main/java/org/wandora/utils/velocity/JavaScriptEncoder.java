@@ -30,18 +30,21 @@ package org.wandora.utils.velocity;
 
 /**
  *
- * @author  olli
+ * @author olli
  */
 public class JavaScriptEncoder {
-    
+
     /** Creates a new instance of JavaScriptEncoder */
     public JavaScriptEncoder() {
     }
-    
-    public String encode(String s){
-/*        s=s.replaceAll("\\\\", "\\\\");
-        s=s.replaceAll("\"", "\\\"");
-        s=s.replaceAll("\'", "\\\'");*/
+
+
+    public String encode(String s) {
+        /*
+         * s=s.replaceAll("\\\\", "\\\\"); 
+         * s=s.replaceAll("\"", "\\\"");
+         * s=s.replaceAll("\'", "\\\'");
+         */
         return s;
     }
 }

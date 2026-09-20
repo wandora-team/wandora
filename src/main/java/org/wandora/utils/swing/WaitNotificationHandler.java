@@ -30,37 +30,48 @@
  */
 
 package org.wandora.utils.swing;
+
 import org.wandora.utils.Delegate;
+
 /**
  *
  * @author olli
  */
 public class WaitNotificationHandler {
-    
-    private Delegate<Delegate.Void,Boolean> listener=null;
-    
+
+    private Delegate<Delegate.Void, Boolean> listener = null;
+
     /** Creates a new instance of WaitNotificationHandler */
     public WaitNotificationHandler() {
     }
-    public WaitNotificationHandler(Delegate<Delegate.Void,Boolean> l) {
+
+
+    public WaitNotificationHandler(Delegate<Delegate.Void, Boolean> l) {
         setListener(l);
     }
-    
-    private int counter=0;
-    
-    public void showNotification(){
+
+    private int counter = 0;
+
+    public void showNotification() {
         counter++;
-        if(listener!=null) listener.invoke(isNotificationVisible());
+        if (listener != null)
+            listener.invoke(isNotificationVisible());
     }
-    public void hideNotification(){
+
+
+    public void hideNotification() {
         counter--;
-        if(listener!=null) listener.invoke(isNotificationVisible());
+        if (listener != null)
+            listener.invoke(isNotificationVisible());
     }
-    public boolean isNotificationVisible(){
-        return counter>0;
+
+
+    public boolean isNotificationVisible() {
+        return counter > 0;
     }
-    
-    public void setListener(Delegate<Delegate.Void,Boolean> l){
-        this.listener=l;
+
+
+    public void setListener(Delegate<Delegate.Void, Boolean> l) {
+        this.listener = l;
     }
 }

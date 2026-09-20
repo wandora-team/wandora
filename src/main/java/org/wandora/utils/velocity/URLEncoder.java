@@ -30,25 +30,29 @@ package org.wandora.utils.velocity;
 
 /**
  *
- * @author  olli
+ * @author olli
  */
 public class URLEncoder {
     private String encoding;
-    
+
     /** Creates a new instance of URLEncoder */
     public URLEncoder() {
         this("UTF-8");
     }
+
+
     public URLEncoder(String encoding) {
-        this.encoding=encoding;
+        this.encoding = encoding;
     }
-    
-    public String encode(String s){
-        try{
-            return java.net.URLEncoder.encode(s,encoding);
-        }catch(Exception e){
+
+
+    public String encode(String s) {
+        try {
+            return java.net.URLEncoder.encode(s, encoding);
+        }
+        catch (Exception e) {
             return s;
         }
     }
-    
+
 }

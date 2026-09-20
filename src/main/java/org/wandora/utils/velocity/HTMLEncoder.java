@@ -33,14 +33,15 @@ package org.wandora.utils.velocity;
  * @author olli
  */
 public class HTMLEncoder {
-    
+
     /** Creates a new instance of HTMLEncoder */
     public HTMLEncoder() {
     }
-    
-    public String encode(String s){
-        s=s.replaceAll("&","&amp;");
-        s=s.replaceAll("<","&lt;");
+
+
+    public String encode(String s) {
+        s = s.replaceAll("&", "&amp;");
+        s = s.replaceAll("<", "&lt;");
         return s;
     }
 }

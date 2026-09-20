@@ -46,56 +46,54 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
- * @author  akivela
+ * @author akivela
  */
 public class ImagePanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(ImagePanel.class);
-    
+
     private URL url;
     private File file;
     private BufferedImage image;
     private Dimension imageDimensions;
 
-    
-    
+
+
     /** Creates a new instance of ImagePanel */
     public ImagePanel(String imageLocator) {
         setImage(imageLocator);
     }
+
+
     public ImagePanel(String imageLocator, Color bgcolor) {
         setImage(imageLocator);
         this.setBackground(bgcolor);
     }
-    
-    
+
+
     public void setImage(String imageLocator) {
-        if(imageLocator != null) {
+        if (imageLocator != null) {
             image = null;
             try {
                 this.url = new URI(imageLocator).toURL();
                 this.image = ImageIO.read(url);
-                //System.out.println("ImagePanel initialized with URL "+ imageLocator);
             }
             catch (Exception e) {
                 try {
                     this.file = new File(imageLocator);
                     this.image = ImageIO.read(file);
-                    //System.out.println("ImagePanel initialized with FILE "+ imageLocator);
                 }
                 catch (Exception e2) {
                     try {
                         this.url = ClassLoader.getSystemResource(imageLocator);
                         this.image = ImageIO.read(url);
-                        //System.out.println("ImagePanel initialized with URL (System Resource) "+ imageLocator);
                     }
                     catch (Exception e3) {
-                        //System.out.println("Unable to initialize ImagePanel with "+ imageLocator);
                         logger.error(e3);
                     }
                 }
             }
-            if(image != null) {
+            if (image != null) {
                 imageDimensions = new Dimension(image.getWidth(), image.getHeight());
                 this.setPreferredSize(imageDimensions);
                 this.setMaximumSize(imageDimensions);
@@ -105,27 +103,28 @@ public class ImagePanel extends JPanel {
         }
         this.revalidate();
     }
-    
-    
-    
+
+
+
     public Dimension getImageDimension() {
-    	return imageDimensions;
+        return imageDimensions;
     }
-    
-    
-  
+
+
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if(image != null) {
-            //System.out.println(" image x =" + imageDimensions.width + ", y=" + imageDimensions.height );
+        if (image != null) {
             int x = (this.getSize().width - imageDimensions.width) / 2;
             int y = (this.getSize().height - imageDimensions.height) / 2;
-            if(x < 0) x = 0;
-            if(y < 0) y = 0;
-            g.drawImage(image,x ,y ,this);
+            if (x < 0)
+                x = 0;
+            if (y < 0)
+                y = 0;
+            g.drawImage(image, x, y, this);
         }
     }
-    
-    
+
+
 }

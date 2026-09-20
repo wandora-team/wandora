@@ -43,9 +43,9 @@ import java.util.StringTokenizer;
 
 
 public class MultiLineLabel extends Canvas {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     public static final int LEFT = 0;
     public final int CENTER = 1;
     public final int RIGHT = 2;
@@ -59,14 +59,14 @@ public class MultiLineLabel extends Canvas {
     protected int[] line_widths;
     protected int max_width;
     protected int alignment = LEFT;
-    private List<String []> history;
+    private List<String[]> history;
     private int historyMaxSize = 1000;
-    
+
 
 
     protected void newLabel(String label) {
-        if(lines != null) {
-            if(history.size() > historyMaxSize) {
+        if (lines != null) {
+            if (history.size() > historyMaxSize) {
                 history.remove(0);
             }
             history.add(lines);
@@ -75,22 +75,26 @@ public class MultiLineLabel extends Canvas {
         num_lines = t.countTokens();
         lines = new String[num_lines];
         line_widths = new int[num_lines];
-        for(int i=0; i<num_lines;i++) lines[i] = t.nextToken();
+        for (int i = 0; i < num_lines; i++)
+            lines[i] = t.nextToken();
     }
 
 
     protected void measure() {
         FontMetrics fm = this.getFontMetrics(this.getFont());
-        if(fm == null) return;
+        if (fm == null)
+            return;
 
         line_height = fm.getHeight();
         line_ascent = fm.getAscent();
         max_width = 0;
-        for(int i=0; i<num_lines; i++) {
-          line_widths[i] = fm.stringWidth(lines[i]);
-          if(line_widths[i] > max_width) max_width = line_widths[i];
+        for (int i = 0; i < num_lines; i++) {
+            line_widths[i] = fm.stringWidth(lines[i]);
+            if (line_widths[i] > max_width)
+                max_width = line_widths[i];
         }
     }
+
 
     public MultiLineLabel(String label, int margin_width, int margin_height, int alignment) {
         history = new ArrayList<>();
@@ -100,28 +104,33 @@ public class MultiLineLabel extends Canvas {
         this.alignment = alignment;
     }
 
+
     public MultiLineLabel(String label, int margin_width, int margin_height) {
         this(label, margin_width, margin_height, LEFT);
     }
 
+
     public MultiLineLabel(String label, int alignment) {
-        this(label,10,10,alignment);
+        this(label, 10, 10, alignment);
     }
 
+
     public MultiLineLabel(String label) {
-        this(label,10,10,LEFT);
+        this(label, 10, 10, LEFT);
     }
 
 
     public void setText(String text) {
         setLabel(text);
     }
-    
+
+
     public void setLabel(String label) {
         newLabel(label);
         measure();
         repaint();
     }
+
 
     @Override
     public void setFont(Font f) {
@@ -130,87 +139,126 @@ public class MultiLineLabel extends Canvas {
         repaint();
     }
 
+
     @Override
     public void setForeground(Color c) {
         super.setForeground(c);
         repaint();
     }
 
-    public void setAlignment(int a) { alignment = a; repaint(); }
-    public void setMarginWidth(int mw) { margin_width = mw; repaint(); }
-    public void setMarginHeight(int mh) { margin_height = mh; repaint(); }
-    public int getAlignment() { return alignment; }
-    public int getMarginWidth() { return margin_width; }
-    public int getMarginHeight() { return margin_height; }
+
+    public void setAlignment(int a) {
+        alignment = a;
+        repaint();
+    }
+
+
+    public void setMarginWidth(int mw) {
+        margin_width = mw;
+        repaint();
+    }
+
+
+    public void setMarginHeight(int mh) {
+        margin_height = mh;
+        repaint();
+    }
+
+
+    public int getAlignment() {
+        return alignment;
+    }
+
+
+    public int getMarginWidth() {
+        return margin_width;
+    }
+
+
+    public int getMarginHeight() {
+        return margin_height;
+    }
 
 
     @Override
-    public void addNotify() { super.addNotify(); measure(); }
+    public void addNotify() {
+        super.addNotify();
+        measure();
+    }
+
 
     @Override
     public Dimension getPreferredSize() {
         Dimension superPreferred = super.getPreferredSize();
-		Dimension thiPreferred = new Dimension(max_width + 2*margin_width, num_lines*line_height + 2*margin_height);
+        Dimension thiPreferred = new Dimension(max_width + 2 * margin_width,
+                num_lines * line_height + 2 * margin_height);
         int px = superPreferred.width > thiPreferred.width ? superPreferred.width : thiPreferred.width;
         int py = superPreferred.height > thiPreferred.height ? superPreferred.height : thiPreferred.height;
         return new Dimension(px, py);
     }
 
+
     @Override
     public Dimension getMinimumSize() {
-        return new Dimension(max_width, num_lines*line_height);
+        return new Dimension(max_width, num_lines * line_height);
     }
+
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if(g instanceof Graphics2D) {
+        if (g instanceof Graphics2D) {
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
         }
         try {
-            int x,y;
-            Dimension d = this.getSize();   // size();
+            int x, y;
+            Dimension d = this.getSize(); // size();
             y = line_ascent + (d.height - num_lines * line_height) / 2;
 
-            for(int i=0; i<num_lines; i++, y+=line_height) {
-              switch(alignment) {
-                case LEFT: x=margin_width; break;
+            for (int i = 0; i < num_lines; i++, y += line_height) {
+                switch (alignment) {
+                case LEFT:
+                    x = margin_width;
+                    break;
                 case CENTER:
-                default: x=(d.width - line_widths[i])/2; break;
-                case RIGHT: x=d.width - margin_width -line_widths[i]; break;
-              }
-              g.drawString(lines[i],x,y);
+                default:
+                    x = (d.width - line_widths[i]) / 2;
+                    break;
+                case RIGHT:
+                    x = d.width - margin_width - line_widths[i];
+                    break;
+                }
+                g.drawString(lines[i], x, y);
             }
         }
-        catch(Exception e) {
-            
+        catch (Exception e) {
+
         }
     }
-    
-    
-    
-    
+
+
+
     public void setHistoryMaxSize(int maxSize) {
         historyMaxSize = maxSize;
-        if(history.size() > historyMaxSize) {
-            for(int i=historyMaxSize-history.size(); i>0; i--) {
+        if (history.size() > historyMaxSize) {
+            for (int i = historyMaxSize - history.size(); i > 0; i--) {
                 history.remove(0);
             }
         }
     }
-    
-    
+
+
     public String getHistoryAsString() {
         StringBuilder sb = new StringBuilder("");
-        for(int i=0; i<history.size(); i++) {
+        for (int i = 0; i < history.size(); i++) {
             String[] historyStrings = history.get(i);
-            for(int j=0; j<historyStrings.length; j++) {
+            for (int j = 0; j < historyStrings.length; j++) {
                 sb.append(historyStrings[j]).append(" ");
             }
             sb.append("\n");
         }
         return sb.toString();
     }
-    
+
 }

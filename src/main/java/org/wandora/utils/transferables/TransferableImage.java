@@ -37,37 +37,37 @@ public class TransferableImage implements Transferable {
     private Image transferableImage = null;
     private String transferableString = null;
 
-    
-    public TransferableImage( Image transferableImage ) {
+
+    public TransferableImage(Image transferableImage) {
         this.transferableImage = transferableImage;
     }
-    
-    
-    public TransferableImage( Image transferableImage, String transferableString ) {
+
+
+    public TransferableImage(Image transferableImage, String transferableString) {
         this.transferableImage = transferableImage;
         this.transferableString = transferableString;
     }
-    
-    
+
+
 
     @Override
-    public Object getTransferData( DataFlavor flavor ) throws UnsupportedFlavorException, IOException {
-        if(flavor.equals( DataFlavor.imageFlavor ) && transferableImage != null) {
+    public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+        if (flavor.equals(DataFlavor.imageFlavor) && transferableImage != null) {
             return transferableImage;
         }
-        else if(flavor.equals( DataFlavor.stringFlavor ) && transferableString != null) {
+        else if (flavor.equals(DataFlavor.stringFlavor) && transferableString != null) {
             return transferableString;
         }
         else {
-            throw new UnsupportedFlavorException( flavor );
+            throw new UnsupportedFlavorException(flavor);
         }
     }
 
-    
+
     @Override
     public DataFlavor[] getTransferDataFlavors() {
         DataFlavor[] flavors = null;
-        if(transferableString != null) {
+        if (transferableString != null) {
             flavors = new DataFlavor[2];
             flavors[0] = DataFlavor.imageFlavor;
             flavors[1] = DataFlavor.stringFlavor;
@@ -79,12 +79,12 @@ public class TransferableImage implements Transferable {
         return flavors;
     }
 
-    
+
     @Override
-    public boolean isDataFlavorSupported( DataFlavor flavor ) {
+    public boolean isDataFlavorSupported(DataFlavor flavor) {
         DataFlavor[] flavors = getTransferDataFlavors();
-        for( int i = 0; i < flavors.length; i++) {
-            if( flavor.equals( flavors[ i ] )) {
+        for (int i = 0; i < flavors.length; i++) {
+            if (flavor.equals(flavors[i])) {
                 return true;
             }
         }

@@ -29,21 +29,21 @@
 package org.wandora.utils.velocity;
 
 /**
- * Use this class in velocity when you need to make new instances of some class in
- * the template.
+ * Use this class in velocity when you need to make new instances of some class
+ * in the template.
  *
- * @author  olli
+ * @author olli
  */
 public class InstanceMaker {
-    
+
     private Class<?> c;
-    
+
     /** Creates a new instance of InstanceMaker */
     public InstanceMaker(String cls) throws Exception {
-        c=Class.forName(cls);
+        c = Class.forName(cls);
     }
-    
-    
+
+
     public Object make() throws Exception {
         return c.getDeclaredConstructor().newInstance();
     }
