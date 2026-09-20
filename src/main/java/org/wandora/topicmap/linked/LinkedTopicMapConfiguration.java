@@ -26,6 +26,7 @@
  */
 
 package org.wandora.topicmap.linked;
+
 import org.wandora.application.Wandora;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapConfigurationPanel;
@@ -39,55 +40,66 @@ import org.wandora.topicmap.layered.Layer;
 public class LinkedTopicMapConfiguration extends TopicMapConfigurationPanel {
 
     private static final long serialVersionUID = 1L;
-    
-	protected Wandora wandora;
+
+    protected Wandora wandora;
     protected TopicMap tm;
+
     /** Creates new form LinketTopicMapConfiguration */
     public LinkedTopicMapConfiguration(Wandora wandora) {
-        this(wandora,null);
+        this(wandora, null);
     }
-    public LinkedTopicMapConfiguration(Wandora wandora,TopicMap tm) {
-        this.wandora=wandora;
-        this.tm=tm;
+
+
+    public LinkedTopicMapConfiguration(Wandora wandora, TopicMap tm) {
+        this.wandora = wandora;
+        this.tm = tm;
         initComponents();
         fillComboBox();
     }
-    
-    protected void fillComboBox(){
+
+
+    protected void fillComboBox() {
         linkedMapComboBox.removeAllItems();
-        fillComboBox(wandora.getTopicMap(),"");
+        fillComboBox(wandora.getTopicMap(), "");
     }
-    protected void fillComboBox(ContainerTopicMap container,String prefix){
-        for(Layer l : container.getLayers()){
-            if(tm!=l.getTopicMap())
-                linkedMapComboBox.addItem(prefix+l.getName());
-            if(l.getTopicMap() instanceof ContainerTopicMap){
-                fillComboBox((ContainerTopicMap)l.getTopicMap(),prefix+"  ");
+
+
+    protected void fillComboBox(ContainerTopicMap container, String prefix) {
+        for (Layer l : container.getLayers()) {
+            if (tm != l.getTopicMap())
+                linkedMapComboBox.addItem(prefix + l.getName());
+            if (l.getTopicMap() instanceof ContainerTopicMap) {
+                fillComboBox((ContainerTopicMap) l.getTopicMap(), prefix + "  ");
             }
         }
     }
-    
-    public String getSelectedLayerName(){
-        Object o=linkedMapComboBox.getSelectedItem();
-        if(o==null) return null;
+
+
+    public String getSelectedLayerName() {
+        Object o = linkedMapComboBox.getSelectedItem();
+        if (o == null)
+            return null;
         return o.toString().trim();
     }
-    
-    public void setSelectedLayer(String name){
-        int size=linkedMapComboBox.getModel().getSize();
-        for(int i=0;i<size;i++){
-            Object o=linkedMapComboBox.getModel().getElementAt(i);
-            if(o.toString().trim().equals(name)) {
+
+
+    public void setSelectedLayer(String name) {
+        int size = linkedMapComboBox.getModel().getSize();
+        for (int i = 0; i < size; i++) {
+            Object o = linkedMapComboBox.getModel().getElementAt(i);
+            if (o.toString().trim().equals(name)) {
                 linkedMapComboBox.setSelectedIndex(i);
                 return;
             }
         }
     }
 
+
     @Override
     public Object getParameters() {
         return getSelectedLayerName();
     }
+
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -123,13 +135,11 @@ public class LinkedTopicMapConfiguration extends TopicMapConfigurationPanel {
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1, Short.MAX_VALUE)
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 1, Short.MAX_VALUE));
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1, Short.MAX_VALUE)
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 1, Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

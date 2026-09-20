@@ -21,8 +21,9 @@
  */
 
 package org.wandora.topicmap.linked;
+
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.wandora.topicmap.Association;
@@ -39,87 +40,116 @@ public class LinkedAssociation implements Association {
 
     protected Association wrappedAssociation;
     protected LinkedTopicMap topicMap;
-    
-    public LinkedAssociation(Association wrappedAssociation,LinkedTopicMap topicMap){
-        this.wrappedAssociation=wrappedAssociation;
-        this.topicMap=topicMap;
+
+    public LinkedAssociation(Association wrappedAssociation, LinkedTopicMap topicMap) {
+        this.wrappedAssociation = wrappedAssociation;
+        this.topicMap = topicMap;
     }
-    
+
+
     public Association getWrappedAssociation() {
         return wrappedAssociation;
     }
-    
+
+
     @Override
     public void addPlayer(Topic player, Topic role) throws TopicMapException {
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        wrappedAssociation.addPlayer(topicMap.getUnlinkedTopic(player),topicMap.getUnlinkedTopic(role));
+        if (topicMap.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
+        wrappedAssociation.addPlayer(topicMap.getUnlinkedTopic(player), topicMap.getUnlinkedTopic(role));
     }
+
 
     @Override
     public void addPlayers(Map<Topic, Topic> players) throws TopicMapException {
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
-        Map<Topic,Topic> unwrapped=new HashMap<Topic,Topic>();
-        for(Map.Entry<Topic,Topic> e : players.entrySet()){
-            unwrapped.put(topicMap.getUnlinkedTopic(e.getKey()),topicMap.getUnlinkedTopic(e.getValue()));
+        if (topicMap.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
+        Map<Topic, Topic> unwrapped = new LinkedHashMap<>();
+        for (Map.Entry<Topic, Topic> e : players.entrySet()) {
+            unwrapped.put(topicMap.getUnlinkedTopic(e.getKey()), topicMap.getUnlinkedTopic(e.getValue()));
         }
         wrappedAssociation.addPlayers(unwrapped);
     }
+
 
     @Override
     public Topic getPlayer(Topic role) throws TopicMapException {
         return topicMap.getLinkedTopic(wrappedAssociation.getPlayer(topicMap.getUnlinkedTopic(role)));
     }
 
+
     @Override
     public Collection<Topic> getRoles() throws TopicMapException {
         return topicMap.getLinkedTopics(wrappedAssociation.getRoles());
     }
+
 
     @Override
     public TopicMap getTopicMap() {
         return topicMap;
     }
 
+
     @Override
     public Topic getType() throws TopicMapException {
         return topicMap.getLinkedTopic(wrappedAssociation.getType());
     }
+
 
     @Override
     public boolean isRemoved() throws TopicMapException {
         return wrappedAssociation.isRemoved();
     }
 
+
     @Override
     public void remove() throws TopicMapException {
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        if (topicMap.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
         wrappedAssociation.remove();
     }
 
+
     @Override
     public void removePlayer(Topic role) throws TopicMapException {
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        if (topicMap.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
         wrappedAssociation.removePlayer(topicMap.getUnlinkedTopic(role));
     }
 
+
     @Override
     public void setType(Topic t) throws TopicMapException {
-        if(topicMap.isReadOnly()) throw new TopicMapReadOnlyException();
+        if (topicMap.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
         wrappedAssociation.setType(topicMap.getUnlinkedTopic(t));
     }
 
+
     @Override
-    public int hashCode(){
-        return wrappedAssociation.hashCode()+topicMap.hashCode();
+    public int hashCode() {
+        return wrappedAssociation.hashCode() + topicMap.hashCode();
     }
-    
+
+
     @Override
-    public boolean equals(Object o){
-        if(!o.getClass().equals(this.getClass())) return false;
-        LinkedAssociation lt=(LinkedAssociation)o;
-        if(lt.topicMap!=topicMap) return false;
-        if(!lt.wrappedAssociation.equals(wrappedAssociation)) return false;
+    public boolean equals(Object o) {
+        if (!o.getClass().equals(this.getClass())) {
+            return false;
+        }
+        LinkedAssociation lt = (LinkedAssociation) o;
+        if (lt.topicMap != topicMap) {
+            return false;
+        }
+        if (!lt.wrappedAssociation.equals(wrappedAssociation)) {
+            return false;
+        }
         return true;
     }
-    
+
 }
