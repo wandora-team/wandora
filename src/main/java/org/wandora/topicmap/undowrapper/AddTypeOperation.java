@@ -38,51 +38,63 @@ public class AddTypeOperation extends UndoOperation {
     protected TopicMap tm;
     protected Locator si;
     protected Locator typeSi;
-    protected boolean dummy=false;
+    protected boolean dummy = false;
 
-    public AddTypeOperation(Topic t,Topic type) throws TopicMapException, UndoException {
-        if(t.isOfType(type)){
-            dummy=true;
+    public AddTypeOperation(Topic t, Topic type) throws TopicMapException, UndoException {
+        if (t.isOfType(type)) {
+            dummy = true;
             return;
         }
 
-        tm=t.getTopicMap();
-        si=t.getOneSubjectIdentifier();
-        if(si==null) throw new UndoException("Topic doesn't have a subject identifier");
-        typeSi=type.getOneSubjectIdentifier();
-        if(typeSi==null) throw new UndoException("Type topic doesn't have a subject identifier");
+        tm = t.getTopicMap();
+        si = t.getOneSubjectIdentifier();
+        if (si == null)
+            throw new UndoException("Topic doesn't have a subject identifier");
+        typeSi = type.getOneSubjectIdentifier();
+        if (typeSi == null)
+            throw new UndoException("Type topic doesn't have a subject identifier");
     }
+
 
     @Override
     public String getLabel() {
         return "add type";
     }
 
+
     @Override
     public void redo() throws UndoException {
-        if(dummy) return;
-        try{
-            Topic t=tm.getTopic(si);
-            if(t==null) throw new UndoException();
-            Topic type=tm.getTopic(typeSi);
-            if(type==null) throw new UndoException();
+        if (dummy)
+            return;
+        try {
+            Topic t = tm.getTopic(si);
+            if (t == null)
+                throw new UndoException();
+            Topic type = tm.getTopic(typeSi);
+            if (type == null)
+                throw new UndoException();
             t.addType(type);
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new UndoException(tme);
         }
     }
 
+
     @Override
     public void undo() throws UndoException {
-        if(dummy) return;
+        if (dummy)
+            return;
         try {
-            Topic t=tm.getTopic(si);
-            if(t==null) throw new UndoException();
-            Topic type=tm.getTopic(typeSi);
-            if(type==null) throw new UndoException();
+            Topic t = tm.getTopic(si);
+            if (t == null)
+                throw new UndoException();
+            Topic type = tm.getTopic(typeSi);
+            if (type == null)
+                throw new UndoException();
             t.removeType(type);
-        } 
-        catch(TopicMapException tme) {
+        }
+        catch (TopicMapException tme) {
             throw new UndoException(tme);
         }
     }

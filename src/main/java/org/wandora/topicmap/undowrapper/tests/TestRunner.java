@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -19,43 +20,47 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 public class TestRunner extends AbstractWandoraTool {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TestRunner.class);
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TestRunner.class);
+
     private static final long serialVersionUID = 1L;
-    
-	private ArrayList<Test> tests;
+
+    private List<Test> tests;
     private Writer output;
-    
-    public TestRunner(){
-        this.tests=new ArrayList<Test>();
-        this.output=null;
+
+    public TestRunner() {
+        this.tests = new ArrayList<Test>();
+        this.output = null;
     }
-    
-    public void addTest(Test test){
+
+
+    public void addTest(Test test) {
         this.tests.add(test);
     }
-    
-    public void setOutput(Writer out){
-        this.output=out;
+
+
+    public void setOutput(Writer out) {
+        this.output = out;
     }
-    
-    
-    public void setupTests(int count){
-        for(int i=0;i<count;i++){
+
+
+    public void setupTests(int count) {
+        for (int i = 0; i < count; i++) {
             this.addTest(new RandomTest());
         }
     }
-    
-    public void runTests(){
-        if(this.output==null) output=new PrintWriter(System.out);
-        
-        int passed=0;
-        int failed=0;
-        
-        for(Test t : tests){
+
+
+    public void runTests() {
+        if (this.output == null)
+            output = new PrintWriter(System.out);
+
+        int passed = 0;
+        int failed = 0;
+
+        for (Test t : tests) {
             try {
                 t.run();
-                if(!t.isPassed()){
+                if (!t.isPassed()) {
                     failed++;
                     this.output.write("FAILED ");
                 }
@@ -63,56 +68,60 @@ public class TestRunner extends AbstractWandoraTool {
                     this.output.write("PASSED ");
                     passed++;
                 }
-                this.output.write(t.getLabel()+"\n");
+                this.output.write(t.getLabel() + "\n");
                 t.getMessages(output);
                 this.output.flush();
-            } 
-            catch(Exception e){
+            }
+            catch (Exception e) {
                 try {
-                    this.output.write("FAILED "+t.getLabel()+"\n");
-                    PrintWriter pwriter=new PrintWriter(this.output);
+                    this.output.write("FAILED " + t.getLabel() + "\n");
+                    PrintWriter pwriter = new PrintWriter(this.output);
                     e.printStackTrace(pwriter);
                     pwriter.flush();
-                } catch(IOException ioe){
-                	logger.error(ioe);
+                }
+                catch (IOException ioe) {
+                    logger.error(ioe);
                 }
             }
         }
 
         try {
-            if(failed==0) this.output.write("PASSED ALL "+passed+" tests\n");
+            if (failed == 0)
+                this.output.write("PASSED ALL " + passed + " tests\n");
             else {
-                this.output.write("PASSED "+passed+" tests\nFAILED "+failed+" tests\n");
+                this.output.write("PASSED " + passed + " tests\nFAILED " + failed + " tests\n");
             }
             this.output.flush();
         }
-        catch(IOException ioe){
-        	logger.error(ioe);
+        catch (IOException ioe) {
+            logger.error(ioe);
         }
     }
-    
-    
-    
+
+
+
     @Override
     public String getName() {
         return "Undo/redo tests";
     }
 
+
     @Override
     public String getDescription() {
         return "Runs some undo and redo test cases";
     }
-    
+
+
     @Override
     public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         this.setupTests(200);
         this.runTests();
     }
 
-    
-    
+
+
     public static void main(String args[]) throws Exception {
-        TestRunner test=new TestRunner();
+        TestRunner test = new TestRunner();
         test.setupTests(200);
         test.runTests();
     }

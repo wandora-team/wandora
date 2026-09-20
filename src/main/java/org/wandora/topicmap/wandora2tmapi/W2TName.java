@@ -22,7 +22,7 @@
 package org.wandora.topicmap.wandora2tmapi;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.tmapi.core.Locator;
@@ -38,168 +38,195 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
-
-
 public class W2TName implements Name {
-    
+
     protected W2TTopic t;
     protected W2TTopicMap tm;
-    
-    public W2TName(W2TTopicMap tm,W2TTopic t){
-        this.tm=tm;
-        this.t=t;
+
+    public W2TName(W2TTopicMap tm, W2TTopic t) {
+        this.tm = tm;
+        this.t = t;
     }
+
 
     @Override
     public Topic getParent() {
         return t;
     }
 
+
     @Override
     public String getValue() {
-        try{
+        try {
             return t.t.getBaseName();
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
+
 
     @Override
     public void setValue(String string) throws ModelConstraintException {
-        try{
+        try {
             t.getWrapped().setBaseName(string);
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
+
 
     @Override
     public Set<Variant> getVariants() {
-        try{
-            Set<Set<org.wandora.topicmap.Topic>> scopes=t.t.getVariantScopes();
-            
-            HashSet<Variant> ret=new HashSet<Variant>();
-            
-            for(Set<org.wandora.topicmap.Topic> scope : scopes){
-                ret.add(new W2TVariant(this,scope));
+        try {
+            Set<Set<org.wandora.topicmap.Topic>> scopes = t.t.getVariantScopes();
+
+            Set<Variant> ret = new LinkedHashSet<>();
+
+            for (Set<org.wandora.topicmap.Topic> scope : scopes) {
+                ret.add(new W2TVariant(this, scope));
             }
-            
+
             return ret;
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
 
+
     @Override
     public Variant createVariant(String string, Topic... scope) throws ModelConstraintException {
-        return createVariant(string,tm.createLocator(W2TTopicMap.TYPE_STRING_SI),scope);
+        return createVariant(string, tm.createLocator(W2TTopicMap.TYPE_STRING_SI), scope);
     }
+
 
     @Override
     public Variant createVariant(String string, Collection<Topic> scope) throws ModelConstraintException {
-        return createVariant(string,tm.createLocator(W2TTopicMap.TYPE_STRING_SI),scope.toArray(new Topic[0]));
+        return createVariant(string, tm.createLocator(W2TTopicMap.TYPE_STRING_SI), scope.toArray(new Topic[0]));
     }
+
 
     @Override
     public Variant createVariant(Locator lctr, Topic... scope) throws ModelConstraintException {
         throw new UnsupportedOperationException("Only string variants are supported");
     }
 
+
     @Override
     public Variant createVariant(Locator lctr, Collection<Topic> scope) throws ModelConstraintException {
         throw new UnsupportedOperationException("Only string variants are supported");
     }
 
+
     @Override
     public Variant createVariant(String string, Locator datatype, Topic... scope) throws ModelConstraintException {
-        
-        org.wandora.topicmap.Topic _t=t.getWrapped();
-        
-        HashSet<org.wandora.topicmap.Topic>_scope=new HashSet<>();
-        for(Topic s : scope){
-            _scope.add(((W2TTopic)s).getWrapped());
+
+        org.wandora.topicmap.Topic _t = t.getWrapped();
+
+        Set<org.wandora.topicmap.Topic> _scope = new LinkedHashSet<>();
+        for (Topic s : scope) {
+            _scope.add(((W2TTopic) s).getWrapped());
         }
-        
-        try{
+
+        try {
             _t.setVariant(_scope, string);
             return new W2TVariant(this, _scope);
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
 
+
     @Override
-    public Variant createVariant(String string, Locator datatype, Collection<Topic> scope) throws ModelConstraintException {
-        return createVariant(string,datatype,scope.toArray(new Topic[0]));
+    public Variant createVariant(String string, Locator datatype, Collection<Topic> scope)
+            throws ModelConstraintException {
+        return createVariant(string, datatype, scope.toArray(new Topic[0]));
     }
+
 
     @Override
     public Topic getType() {
         return tm.getTopicBySubjectIdentifier(W2TTopicMap.TOPIC_NAME_SI);
     }
 
+
     @Override
     public void setType(Topic topic) {
         throw new UnsupportedOperationException("Name type cannot be changed");
     }
+
 
     @Override
     public TopicMap getTopicMap() {
         return tm;
     }
 
+
     @Override
     public String getId() {
         return null;
     }
 
+
     @Override
     public Set<Locator> getItemIdentifiers() {
-        return new HashSet<Locator>();
+        return new LinkedHashSet<Locator>();
     }
+
 
     @Override
     public void addItemIdentifier(Locator lctr) throws ModelConstraintException {
         throw new UnsupportedOperationException("Item identifiers not supported");
     }
 
+
     @Override
     public void removeItemIdentifier(Locator lctr) {
     }
+
 
     @Override
     public void remove() {
         // This doesn't actually remove variants from the wandora model.
         // See the notes about variants and null base names in W2TTopic.java
-        try{
+        try {
             t.getWrapped().setBaseName(null);
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
 
+
     @Override
     public Set<Topic> getScope() {
-        return new HashSet<Topic>();
+        return new LinkedHashSet<Topic>();
     }
+
 
     @Override
     public void addTheme(Topic topic) throws ModelConstraintException {
         throw new UnsupportedOperationException("Scope not supported in names");
     }
 
+
     @Override
     public void removeTheme(Topic topic) {
     }
+
 
     @Override
     public Topic getReifier() {
         return null;
     }
 
+
     @Override
     public void setReifier(Topic topic) throws ModelConstraintException {
         throw new UnsupportedOperationException("Reification not supported");
     }
-    
+
 }

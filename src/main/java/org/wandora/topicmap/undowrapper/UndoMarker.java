@@ -28,47 +28,54 @@ package org.wandora.topicmap.undowrapper;
 
 
 public class UndoMarker extends UndoOperation {
-    
+
     protected String undoLabel;
     protected String redoLabel;
-    
+
     public UndoMarker(String label) {
-        this(label,label);
+        this(label, label);
     }
-    
-    public UndoMarker(String undoLabel,String redoLabel){
-        this.undoLabel=undoLabel;
-        this.redoLabel=redoLabel;
-        this.isMarker=true;
+
+
+    public UndoMarker(String undoLabel, String redoLabel) {
+        this.undoLabel = undoLabel;
+        this.redoLabel = redoLabel;
+        this.isMarker = true;
     }
+
 
     @Override
     public void undo() throws UndoException {
     }
 
+
     @Override
     public void redo() throws UndoException {
     }
+
 
     @Override
     public String getLabel() {
         return undoLabel;
     }
 
+
     @Override
     public String getRedoLabel() {
         return redoLabel;
     }
 
+
     @Override
     public String getUndoLabel() {
         return undoLabel;
     }
-    
+
+
     @Override
     public UndoOperation combineWith(UndoOperation previous) {
         return null;
     }
-    
-    
+
+
 }

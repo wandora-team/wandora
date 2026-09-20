@@ -21,7 +21,8 @@
  */
 package org.wandora.topicmap.wandora2tmapi;
 
-import java.util.HashSet;
+
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.tmapi.core.Association;
@@ -43,145 +44,173 @@ public class W2TAssociation implements Association {
 
     protected W2TTopicMap tm;
     protected org.wandora.topicmap.Association a;
-    
-    public W2TAssociation(W2TTopicMap tm,org.wandora.topicmap.Association a){
-        this.tm=tm;
-        this.a=a;
+
+    public W2TAssociation(W2TTopicMap tm, org.wandora.topicmap.Association a) {
+        this.tm = tm;
+        this.a = a;
     }
-    
-    public org.wandora.topicmap.Association getWrapped(){
+
+
+    public org.wandora.topicmap.Association getWrapped() {
         return a;
     }
-    
+
+
     @Override
     public TopicMap getParent() {
         return tm;
     }
 
+
     @Override
     public Set<Role> getRoles() {
-        try{
-            HashSet<Role> ret=new HashSet<Role>();
-            for(org.wandora.topicmap.Topic role : a.getRoles() ){
-                org.wandora.topicmap.Topic player=a.getPlayer(role);
-                ret.add(new W2TRole(this, new W2TTopic(tm,role), new W2TTopic(tm,player)));
+        try {
+            Set<Role> ret = new LinkedHashSet<>();
+            for (org.wandora.topicmap.Topic role : a.getRoles()) {
+                org.wandora.topicmap.Topic player = a.getPlayer(role);
+                ret.add(new W2TRole(this, new W2TTopic(tm, role), new W2TTopic(tm, player)));
             }
             return ret;
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
+
 
     @Override
     public Set<Topic> getRoleTypes() {
-        try{
+        try {
             return tm.wrapTopics(a.getRoles());
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
+
 
     @Override
     public Set<Role> getRoles(Topic type) {
-        try{
-            org.wandora.topicmap.Topic player=a.getPlayer(((W2TTopic)type).t);
-            HashSet<Role> ret=new HashSet<Role>();
-            if(player!=null) ret.add(new W2TRole(this, (W2TTopic)type, new W2TTopic(tm,player)));
+        try {
+            org.wandora.topicmap.Topic player = a.getPlayer(((W2TTopic) type).t);
+            Set<Role> ret = new LinkedHashSet<>();
+            if (player != null)
+                ret.add(new W2TRole(this, (W2TTopic) type, new W2TTopic(tm, player)));
             return ret;
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
 
+
     @Override
     public Role createRole(Topic type, Topic player) throws ModelConstraintException {
-        try{
-            if(a.getPlayer(((W2TTopic)type).getWrapped())!=null)
-                throw new UnsupportedOperationException("Multiple players with same role in an association are not supported");
-            
-            a.addPlayer(((W2TTopic)player).getWrapped(), ((W2TTopic)type).getWrapped());
-            return new W2TRole(this,(W2TTopic)type,(W2TTopic)player);
-        }catch(TopicMapException tme){
+        try {
+            if (a.getPlayer(((W2TTopic) type).getWrapped()) != null)
+                throw new UnsupportedOperationException(
+                        "Multiple players with same role in an association are not supported");
+
+            a.addPlayer(((W2TTopic) player).getWrapped(), ((W2TTopic) type).getWrapped());
+            return new W2TRole(this, (W2TTopic) type, (W2TTopic) player);
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
+
 
     @Override
     public Topic getReifier() {
         return null;
     }
 
+
     @Override
     public void setReifier(Topic topic) throws ModelConstraintException {
         throw new UnsupportedOperationException("Reification not supported");
     }
+
 
     @Override
     public TopicMap getTopicMap() {
         return tm;
     }
 
+
     @Override
     public String getId() {
         return null;
     }
 
+
     @Override
     public Set<Locator> getItemIdentifiers() {
-        return new HashSet<Locator>();
+        return new LinkedHashSet<Locator>();
     }
+
 
     @Override
     public void addItemIdentifier(Locator lctr) throws ModelConstraintException {
         throw new UnsupportedOperationException("Item identifiers not supported");
     }
 
+
     @Override
     public void removeItemIdentifier(Locator lctr) {
         // There will never be any item identifiers so nothing needs to be done
     }
 
+
     @Override
     public void remove() {
-        try{
+        try {
             a.remove();
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
+
 
     @Override
     public Topic getType() {
-        try{
-            return new W2TTopic(tm,a.getType());
-        }catch(TopicMapException tme){
+        try {
+            return new W2TTopic(tm, a.getType());
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
+
 
     @Override
     public void setType(Topic topic) {
-        try{
-            a.setType(((W2TTopic)topic).getWrapped());
-        }catch(TopicMapException tme){
+        try {
+            a.setType(((W2TTopic) topic).getWrapped());
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
 
+
     @Override
     public Set<Topic> getScope() {
-        return new HashSet<Topic>();
+        return new LinkedHashSet<Topic>();
     }
+
 
     @Override
     public void addTheme(Topic topic) throws ModelConstraintException {
         throw new UnsupportedOperationException("Scoped associations not supported");
     }
 
+
     @Override
     public void removeTheme(Topic topic) {
         // there is no themes in the scope so nothing needs to be done
     }
 
-    
+
 }

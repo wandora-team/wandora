@@ -21,7 +21,7 @@
  */
 package org.wandora.topicmap.wandora2tmapi;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.tmapi.core.Association;
@@ -37,103 +37,117 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
-
-
 public class W2TRole implements Role {
 
     protected W2TAssociation association;
     protected W2TTopic type;
     protected W2TTopic player;
-    
-    public W2TRole(W2TAssociation association,W2TTopic type,W2TTopic player){
-        this.association=association;
-        this.type=type;
-        this.player=player;
+
+    public W2TRole(W2TAssociation association, W2TTopic type, W2TTopic player) {
+        this.association = association;
+        this.type = type;
+        this.player = player;
     }
-    
+
+
     @Override
     public Association getParent() {
         return association;
     }
+
 
     @Override
     public Topic getPlayer() {
         return player;
     }
 
+
     @Override
     public void setPlayer(Topic topic) {
-        org.wandora.topicmap.Association _a=association.getWrapped();
-        org.wandora.topicmap.Topic _type=type.getWrapped();
-        try{
+        org.wandora.topicmap.Association _a = association.getWrapped();
+        org.wandora.topicmap.Topic _type = type.getWrapped();
+        try {
             // this replaces the old player
-            _a.addPlayer(_type, ((W2TTopic)topic).getWrapped());
-            player=(W2TTopic)topic;
-        }catch(TopicMapException tme){
+            _a.addPlayer(_type, ((W2TTopic) topic).getWrapped());
+            player = (W2TTopic) topic;
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
+
 
     @Override
     public Topic getReifier() {
         return null;
     }
 
+
     @Override
     public void setReifier(Topic topic) throws ModelConstraintException {
         throw new UnsupportedOperationException("Reification not supported");
     }
+
 
     @Override
     public TopicMap getTopicMap() {
         return type.tm;
     }
 
+
     @Override
     public String getId() {
         return null;
     }
 
+
     @Override
     public Set<Locator> getItemIdentifiers() {
-        return new HashSet<Locator>();
+        return new LinkedHashSet<Locator>();
     }
+
 
     @Override
     public void addItemIdentifier(Locator lctr) throws ModelConstraintException {
         throw new UnsupportedOperationException("Item identifiers not supported");
     }
 
+
     @Override
     public void removeItemIdentifier(Locator lctr) {
     }
 
+
     @Override
     public void remove() {
-        org.wandora.topicmap.Association _a=association.getWrapped();
-        org.wandora.topicmap.Topic _type=type.getWrapped();
-        try{
+        org.wandora.topicmap.Association _a = association.getWrapped();
+        org.wandora.topicmap.Topic _type = type.getWrapped();
+        try {
             _a.removePlayer(_type);
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
+
 
     @Override
     public Topic getType() {
         return type;
     }
 
+
     @Override
     public void setType(Topic topic) {
-        org.wandora.topicmap.Association _a=association.getWrapped();
-        try{
-            _a.setType(((W2TTopic)topic).getWrapped());
-            type=(W2TTopic)topic;
-        }catch(TopicMapException tme){
+        org.wandora.topicmap.Association _a = association.getWrapped();
+        try {
+            _a.setType(((W2TTopic) topic).getWrapped());
+            type = (W2TTopic) topic;
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
-        
+
     }
-    
+
 }

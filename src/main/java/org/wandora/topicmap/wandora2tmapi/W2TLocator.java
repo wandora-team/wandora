@@ -28,47 +28,53 @@ import org.tmapi.core.MalformedIRIException;
  *
  * @author olli
  */
-
-
 public class W2TLocator implements Locator {
-    
+
     protected org.wandora.topicmap.Locator l;
-    
-    public W2TLocator(org.wandora.topicmap.Locator l){
-        this.l=l;
+
+    public W2TLocator(org.wandora.topicmap.Locator l) {
+        this.l = l;
     }
-    
-    public W2TLocator(String reference){
+
+
+    public W2TLocator(String reference) {
         this(new org.wandora.topicmap.Locator(reference));
     }
+
 
     @Override
     public String getReference() {
         return l.getReference();
     }
 
+
     @Override
     public String toExternalForm() {
         return l.toExternalForm();
     }
 
+
     @Override
     public Locator resolve(String string) throws MalformedIRIException {
-        if(string.startsWith("#")) return new W2TLocator(new org.wandora.topicmap.Locator(l.getNotation(),l.getReference()+string));
-        else return new W2TLocator(string);
+        if (string.startsWith("#"))
+            return new W2TLocator(new org.wandora.topicmap.Locator(l.getNotation(), l.getReference() + string));
+        else
+            return new W2TLocator(string);
     }
-    
+
     // hashCode and equals implementations specified by tmapi
+
 
     @Override
     public int hashCode() {
         return this.getReference().hashCode();
     }
 
+
     @Override
     public boolean equals(Object other) {
-        return (other instanceof Locator && this.getReference().equals(((Locator)other).getReference()));
+        return (other instanceof Locator && this.getReference().equals(((Locator) other).getReference()));
     }
-    
-    
+
+
 }

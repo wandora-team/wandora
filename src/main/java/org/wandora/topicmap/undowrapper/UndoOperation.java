@@ -32,45 +32,64 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class UndoOperation {
 
-    private static final AtomicInteger operationCounter=new AtomicInteger(0);
-    
+    private static final AtomicInteger operationCounter = new AtomicInteger(0);
+
     protected int operationNumber;
     protected boolean isMarker;
-    
+
     public UndoOperation() {
-        isMarker=false;
-        operationNumber=operationCounter.getAndIncrement();
+        isMarker = false;
+        operationNumber = operationCounter.getAndIncrement();
     }
-    
-    public int getOperationNumber(){
+
+
+    public int getOperationNumber() {
         return operationNumber;
     }
-    
-    public boolean isMarker(){
+
+
+    public boolean isMarker() {
         return isMarker;
     }
-    
+
+
     public boolean canUndo() {
         return isMarker;
     }
-    
-    public boolean canRedo(){
-        return isMarker;        
-    }
-    
-    public abstract void undo() throws UndoException;
-    public abstract void redo() throws UndoException;
-    
-    public abstract String getLabel();
-    
-    public String getUndoLabel(){return getLabel();}
-    public String getRedoLabel(){return getLabel();}
 
-    public String getDescription() {return getLabel();}
-    
+
+    public boolean canRedo() {
+        return isMarker;
+    }
+
+
+    public abstract void undo() throws UndoException;
+
+    public abstract void redo() throws UndoException;
+
+    public abstract String getLabel();
+
+
+    public String getUndoLabel() {
+        return getLabel();
+    }
+
+
+    public String getRedoLabel() {
+        return getLabel();
+    }
+
+
+    public String getDescription() {
+        return getLabel();
+    }
+
+
     // In some cases we might want to combine several operations into one.
     // Override this and make it return the combination of first doing
     // the previous edit and then this edit in single operation. That
     // operation will then replace these two operations in the buffer.
-    public UndoOperation combineWith(UndoOperation previous){return null;}
+    public UndoOperation combineWith(UndoOperation previous) {
+        return null;
+    }
 }

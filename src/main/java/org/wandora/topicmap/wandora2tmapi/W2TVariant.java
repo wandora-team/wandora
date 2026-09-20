@@ -21,7 +21,8 @@
  */
 package org.wandora.topicmap.wandora2tmapi;
 
-import java.util.HashSet;
+
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.tmapi.core.Locator;
@@ -43,131 +44,153 @@ public class W2TVariant extends AbstractDatatypeAware implements Variant {
     protected W2TName name;
     protected W2TTopic t;
     protected Set<org.wandora.topicmap.Topic> scope;
-    
-    public W2TVariant(W2TName name,Set<org.wandora.topicmap.Topic> scope){
-        this.name=name;
-        this.t=name.t;
-        this.scope=scope;
+
+    public W2TVariant(W2TName name, Set<org.wandora.topicmap.Topic> scope) {
+        this.name = name;
+        this.t = name.t;
+        this.scope = scope;
     }
-    
+
+
     @Override
     public Name getParent() {
         return name;
     }
+
 
     @Override
     public Set<Topic> getScope() {
         return t.tm.wrapTopics(scope);
     }
 
+
     @Override
     public Topic getReifier() {
         return null;
     }
+
 
     @Override
     public void setReifier(Topic topic) throws ModelConstraintException {
         throw new UnsupportedOperationException("Reification not supported");
     }
 
+
     @Override
     public TopicMap getTopicMap() {
         return t.getTopicMap();
     }
+
 
     @Override
     public String getId() {
         return null;
     }
 
+
     @Override
     public Set<Locator> getItemIdentifiers() {
-        return new HashSet<Locator>();
+        return new LinkedHashSet<Locator>();
     }
+
 
     @Override
     public void addItemIdentifier(Locator lctr) throws ModelConstraintException {
         throw new UnsupportedOperationException("Item identfiers not supported");
     }
 
+
     @Override
     public void removeItemIdentifier(Locator lctr) {
         throw new UnsupportedOperationException("Item identifiers not supported");
     }
 
+
     @Override
     public void remove() {
-        try{
+        try {
             t.getWrapped().removeVariant(scope);
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new RuntimeException(tme);
         }
     }
+
 
     @Override
     public void addTheme(Topic topic) throws ModelConstraintException {
-        try{
-            org.wandora.topicmap.Topic _topic=((W2TTopic)topic).getWrapped();
-            boolean found=false;
-            for(org.wandora.topicmap.Topic s : scope){
-                if(s.mergesWithTopic(_topic)) {
-                    found=true;
+        try {
+            org.wandora.topicmap.Topic _topic = ((W2TTopic) topic).getWrapped();
+            boolean found = false;
+            for (org.wandora.topicmap.Topic s : scope) {
+                if (s.mergesWithTopic(_topic)) {
+                    found = true;
                     break;
                 }
             }
-            if(found) return;
-            
-            HashSet<org.wandora.topicmap.Topic> newScope=new HashSet<>(scope);
+            if (found)
+                return;
+
+            Set<org.wandora.topicmap.Topic> newScope = new LinkedHashSet<>(scope);
             newScope.add(_topic);
-            
-            String value=t.getWrapped().getVariant(scope);
+
+            String value = t.getWrapped().getVariant(scope);
             t.getWrapped().removeVariant(scope);
             t.getWrapped().setVariant(newScope, value);
-            scope=newScope;
-        }catch(TopicMapException tme){
+            scope = newScope;
+        }
+        catch (TopicMapException tme) {
             throw new RuntimeException(tme);
         }
     }
+
 
     @Override
     public void removeTheme(Topic topic) {
-        try{
-            HashSet<org.wandora.topicmap.Topic> newScope=new HashSet<>(scope);
-            org.wandora.topicmap.Topic _topic=((W2TTopic)topic).getWrapped();
-            boolean found=false;
-            for(org.wandora.topicmap.Topic s : scope){
-                if(s.mergesWithTopic(_topic)) {
-                    found=true;
+        try {
+            Set<org.wandora.topicmap.Topic> newScope = new LinkedHashSet<>(scope);
+            org.wandora.topicmap.Topic _topic = ((W2TTopic) topic).getWrapped();
+            boolean found = false;
+            for (org.wandora.topicmap.Topic s : scope) {
+                if (s.mergesWithTopic(_topic)) {
+                    found = true;
                 }
-                else newScope.add(s);
+                else
+                    newScope.add(s);
             }
-            if(!found) return;
-            
-            String value=t.getWrapped().getVariant(scope);
+            if (!found)
+                return;
+
+            String value = t.getWrapped().getVariant(scope);
             t.getWrapped().removeVariant(scope);
             t.getWrapped().setVariant(newScope, value);
-            scope=newScope;
-        }catch(TopicMapException tme){
+            scope = newScope;
+        }
+        catch (TopicMapException tme) {
             throw new RuntimeException(tme);
         }
     }
 
+
     @Override
     public String getValue() {
-        try{
+        try {
             return t.t.getVariant(scope);
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new RuntimeException(tme);
         }
     }
-    
+
+
     @Override
-    public void setValue(String s){
+    public void setValue(String s) {
         try {
             t.t.setVariant(scope, s);
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new RuntimeException(tme);
         }
     }
-    
+
 }

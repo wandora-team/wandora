@@ -39,23 +39,26 @@ public class AddSubjectIdentifierOperation extends UndoOperation {
     protected Locator si;
     protected Locator newSI;
     protected MergeOperation merge;
-    protected boolean dummy=false;
+    protected boolean dummy = false;
 
-    
+
     public AddSubjectIdentifierOperation(Topic t, Locator newSI) throws TopicMapException, UndoException {
-        this.tm=t.getTopicMap();
-        if(t.getSubjectIdentifiers().contains(newSI)) dummy=true;
+        this.tm = t.getTopicMap();
+        if (t.getSubjectIdentifiers().contains(newSI))
+            dummy = true;
         else {
-            si=t.getOneSubjectIdentifier();
-            if(si==null) throw new UndoException("Topic doesn't have a subject identifier");
-            this.newSI=newSI;
+            si = t.getOneSubjectIdentifier();
+            if (si == null)
+                throw new UndoException("Topic doesn't have a subject identifier");
+            this.newSI = newSI;
 
-            Topic t2=tm.getTopic(newSI);
-            if(t2!=null && !t2.mergesWithTopic(t)) {
-                merge=new MergeOperation(t, t2);
+            Topic t2 = tm.getTopic(newSI);
+            if (t2 != null && !t2.mergesWithTopic(t)) {
+                merge = new MergeOperation(t, t2);
             }
         }
     }
+
 
     @Override
     public String getLabel() {
@@ -65,35 +68,40 @@ public class AddSubjectIdentifierOperation extends UndoOperation {
 
     @Override
     public void undo() throws UndoException {
-        if(dummy) return;
-        try{
+        if (dummy)
+            return;
+        try {
             Topic t = tm.getTopic(si);
-            if(t==null) throw new UndoException();
-            
-            if(merge!=null) {
+            if (t == null)
+                throw new UndoException();
+
+            if (merge != null) {
                 merge.undo();
             }
-            else t.removeSubjectIdentifier(newSI);
+            else
+                t.removeSubjectIdentifier(newSI);
         }
-        catch(TopicMapException tme) {
+        catch (TopicMapException tme) {
             throw new UndoException(tme);
         }
     }
+
 
     @Override
     public void redo() throws UndoException {
-        if(dummy) return;
+        if (dummy)
+            return;
         try {
-            Topic t=tm.getTopic(si);
-            if(t==null) throw new UndoException();
+            Topic t = tm.getTopic(si);
+            if (t == null)
+                throw new UndoException();
             t.addSubjectIdentifier(newSI);
         }
-        catch(TopicMapException tme) {
+        catch (TopicMapException tme) {
             throw new UndoException(tme);
         }
     }
 
-    
 
 
 }

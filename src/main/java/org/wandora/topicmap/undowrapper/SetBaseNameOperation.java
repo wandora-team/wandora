@@ -40,20 +40,22 @@ public class SetBaseNameOperation extends UndoOperation {
     protected String newName;
     protected MergeOperation merge;
 
-    public SetBaseNameOperation(Topic t,String newName) throws TopicMapException, UndoException {
-        this.tm=t.getTopicMap();
-        si=t.getOneSubjectIdentifier();
-        if(si==null) throw new UndoException("Topic doesn't have a subject identifier");
-        oldName=t.getBaseName();
-        this.newName=newName;
+    public SetBaseNameOperation(Topic t, String newName) throws TopicMapException, UndoException {
+        this.tm = t.getTopicMap();
+        si = t.getOneSubjectIdentifier();
+        if (si == null)
+            throw new UndoException("Topic doesn't have a subject identifier");
+        oldName = t.getBaseName();
+        this.newName = newName;
 
-        if(newName!=null){
-            Topic t2=t.getTopicMap().getTopicWithBaseName(newName);
-            if(t2!=null && !t2.mergesWithTopic(t)){
-                merge=new MergeOperation(t, t2);
+        if (newName != null) {
+            Topic t2 = t.getTopicMap().getTopicWithBaseName(newName);
+            if (t2 != null && !t2.mergesWithTopic(t)) {
+                merge = new MergeOperation(t, t2);
             }
         }
     }
+
 
     @Override
     public String getLabel() {
@@ -63,42 +65,39 @@ public class SetBaseNameOperation extends UndoOperation {
 
     @Override
     public void undo() throws UndoException {
-        try{
-            if(merge!=null) {
+        try {
+            if (merge != null) {
                 merge.undo();
             }
             else {
-                Topic t=tm.getTopic(si);
-                if(t==null) throw new UndoException();
-                if(oldName!=null){
-                    Topic t2=tm.getTopicWithBaseName(oldName);
-                    if(t2!=null && !t2.mergesWithTopic(t)) throw new UndoException();
+                Topic t = tm.getTopic(si);
+                if (t == null)
+                    throw new UndoException();
+                if (oldName != null) {
+                    Topic t2 = tm.getTopicWithBaseName(oldName);
+                    if (t2 != null && !t2.mergesWithTopic(t))
+                        throw new UndoException();
                 }
                 t.setBaseName(oldName);
             }
         }
-        catch(TopicMapException tme){
+        catch (TopicMapException tme) {
             throw new UndoException(tme);
         }
     }
 
-    
-    
-    
+
+
     @Override
     public void redo() throws UndoException {
         try {
-            Topic t=tm.getTopic(si);
-            if(t==null) throw new UndoException();
-            /*
-            if(newName!=null){
-                Topic t2=tm.getTopicWithBaseName(newName);
-                if(t2!=null) throw new UndoException();
-            }
-            */
+            Topic t = tm.getTopic(si);
+            if (t == null)
+                throw new UndoException();
+
             t.setBaseName(newName);
         }
-        catch(TopicMapException tme) {
+        catch (TopicMapException tme) {
             throw new UndoException(tme);
         }
     }

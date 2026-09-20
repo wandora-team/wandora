@@ -21,7 +21,8 @@
  */
 package org.wandora.topicmap.wandora2tmapi;
 
-import java.util.HashSet;
+
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.tmapi.core.Locator;
@@ -36,103 +37,116 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
-
-
 public class W2TOccurrence extends AbstractDatatypeAware implements Occurrence {
 
     protected W2TTopic t;
     protected W2TTopic type;
     protected W2TTopic language;
-    
-    public W2TOccurrence(W2TTopic t,W2TTopic type,W2TTopic language){
-        this.t=t;
-        this.type=type;
-        this.language=language;
+
+    public W2TOccurrence(W2TTopic t, W2TTopic type, W2TTopic language) {
+        this.t = t;
+        this.type = type;
+        this.language = language;
     }
-    
-    
+
+
     @Override
     public Topic getParent() {
         return t;
     }
+
 
     @Override
     public Topic getType() {
         return type;
     }
 
+
     @Override
     public void setType(Topic topic) {
-        org.wandora.topicmap.Topic _topic=((W2TTopic)topic).getWrapped();
-        org.wandora.topicmap.Topic _t=t.getWrapped();
-        org.wandora.topicmap.Topic _type=type.getWrapped();
-        org.wandora.topicmap.Topic _language=(language==null?null:language.getWrapped());
-        
-        try{
-            String value=_t.getData(_type,_language);
+        org.wandora.topicmap.Topic _topic = ((W2TTopic) topic).getWrapped();
+        org.wandora.topicmap.Topic _t = t.getWrapped();
+        org.wandora.topicmap.Topic _type = type.getWrapped();
+        org.wandora.topicmap.Topic _language = (language == null ? null : language.getWrapped());
+
+        try {
+            String value = _t.getData(_type, _language);
             _t.removeData(_type, _language);
             _t.setData(_topic, _language, value);
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
-        
-        this.type=(W2TTopic)topic;
+
+        this.type = (W2TTopic) topic;
     }
+
 
     @Override
     public TopicMap getTopicMap() {
         return t.tm;
     }
 
+
     @Override
     public String getId() {
         return null;
     }
 
+
     @Override
     public Set<Locator> getItemIdentifiers() {
-        return new HashSet<Locator>();
+        return new LinkedHashSet<Locator>();
     }
+
 
     @Override
     public void addItemIdentifier(Locator lctr) throws ModelConstraintException {
         throw new UnsupportedOperationException("Item identifiers not supported");
     }
 
+
     @Override
     public void removeItemIdentifier(Locator lctr) {
         throw new UnsupportedOperationException("Item identifiers not supported");
     }
 
+
     @Override
     public void remove() {
-        org.wandora.topicmap.Topic _t=t.getWrapped();
-        org.wandora.topicmap.Topic _type=type.getWrapped();
-        org.wandora.topicmap.Topic _language=(language==null?null:language.getWrapped());
-        
-        try{
+        org.wandora.topicmap.Topic _t = t.getWrapped();
+        org.wandora.topicmap.Topic _type = type.getWrapped();
+        org.wandora.topicmap.Topic _language = (language == null ? null : language.getWrapped());
+
+        try {
             _t.removeData(_type, _language);
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
+
 
     @Override
     public Topic getReifier() {
         return null;
     }
 
+
     @Override
     public void setReifier(Topic topic) throws ModelConstraintException {
         throw new UnsupportedOperationException("Reification not supported");
     }
 
+
     @Override
     public Set<Topic> getScope() {
-        HashSet<Topic> ret=new HashSet<Topic>();
-        if(language!=null) ret.add(language);
+        Set<Topic> ret = new LinkedHashSet<>();
+        if (language != null)
+            ret.add(language);
         return ret;
     }
+
 
     /*
      Add Theme actually replaces the language topic instead of adding it. Remove
@@ -144,51 +158,59 @@ public class W2TOccurrence extends AbstractDatatypeAware implements Occurrence {
     */
     @Override
     public void addTheme(Topic theme) throws ModelConstraintException {
-        
-        org.wandora.topicmap.Topic _theme=((W2TTopic)theme).getWrapped();
-        org.wandora.topicmap.Topic _t=t.getWrapped();
-        org.wandora.topicmap.Topic _type=type.getWrapped();
-        org.wandora.topicmap.Topic _language=(language==null?null:language.getWrapped());
-        
-        try{
-            String value=_t.getData(_type,_language);
+
+        org.wandora.topicmap.Topic _theme = ((W2TTopic) theme).getWrapped();
+        org.wandora.topicmap.Topic _t = t.getWrapped();
+        org.wandora.topicmap.Topic _type = type.getWrapped();
+        org.wandora.topicmap.Topic _language = (language == null ? null : language.getWrapped());
+
+        try {
+            String value = _t.getData(_type, _language);
             _t.removeData(_type, _language);
             _t.setData(_type, _theme, value);
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
-        
-        this.language=(W2TTopic)theme;
-        
+
+        this.language = (W2TTopic) theme;
+
     }
+
 
     @Override
     public void removeTheme(Topic topic) {
-        try{
-            if(this.language!=null && this.language.getWrapped().mergesWithTopic(((W2TTopic)topic).getWrapped())){
+        try {
+            if (this.language != null && this.language.getWrapped().mergesWithTopic(((W2TTopic) topic).getWrapped())) {
                 throw new UnsupportedOperationException("Occurrences must have one theme topic");
             }
             // else do nothing, the topic isn't in the scope in the first place
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
 
+
     @Override
     public String getValue() {
-        try{
-            return t.t.getData(type.t, language!=null?language.t:null);
-        }catch(TopicMapException tme){
+        try {
+            return t.t.getData(type.t, language != null ? language.t : null);
+        }
+        catch (TopicMapException tme) {
             throw new TMAPIRuntimeException(tme);
         }
     }
+
+
     @Override
-    public void setValue(String s){
+    public void setValue(String s) {
         try {
-            t.t.setData(type.t, language!=null?language.t:null, s);
-        }catch(TopicMapException tme){
+            t.t.setData(type.t, language != null ? language.t : null, s);
+        }
+        catch (TopicMapException tme) {
             throw new RuntimeException(tme);
         }
     }
-    
+
 }

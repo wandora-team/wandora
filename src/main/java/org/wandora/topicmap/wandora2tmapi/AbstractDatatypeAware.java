@@ -36,80 +36,95 @@ import org.tmapi.core.ModelConstraintException;
 
 public abstract class AbstractDatatypeAware implements DatatypeAware {
 
-    
+
     @Override
     public Locator getDatatype() {
         return new W2TLocator(W2TTopicMap.TYPE_STRING_SI);
     }
 
+
     @Override
     public abstract String getValue();
+
     @Override
     public abstract void setValue(String s);
+
 
     @Override
     public void setValue(Locator lctr) throws ModelConstraintException {
         setValue(lctr.toString());
     }
 
+
     @Override
     public void setValue(String string, Locator lctr) throws ModelConstraintException {
         setValue(string);
     }
+
 
     @Override
     public void setValue(BigDecimal bd) throws ModelConstraintException {
         setValue(bd.toString());
     }
 
+
     @Override
     public void setValue(BigInteger bi) throws ModelConstraintException {
         setValue(bi.toString());
     }
+
 
     @Override
     public void setValue(long l) {
         setValue(Long.toString(l));
     }
 
+
     @Override
     public void setValue(float f) {
         setValue(Float.toString(f));
     }
+
 
     @Override
     public void setValue(int i) {
         setValue(Integer.toString(i));
     }
 
+
     @Override
     public int intValue() {
         return Integer.parseInt(getValue());
     }
+
 
     @Override
     public BigInteger integerValue() {
         return new BigInteger(getValue());
     }
 
+
     @Override
     public float floatValue() {
         return Float.parseFloat(getValue());
     }
+
 
     @Override
     public BigDecimal decimalValue() {
         return new BigDecimal(getValue());
     }
 
+
     @Override
     public long longValue() {
         return Long.parseLong(getValue());
     }
 
+
     @Override
     public Locator locatorValue() {
         throw new IllegalArgumentException();
     }
-    
+
 }

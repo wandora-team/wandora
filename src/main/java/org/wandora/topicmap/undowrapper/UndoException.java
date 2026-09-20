@@ -29,17 +29,23 @@ package org.wandora.topicmap.undowrapper;
 
 public class UndoException extends Exception {
     private static final long serialVersionUID = 1L;
-    
-	public UndoException(){
-        
+
+    public UndoException() {
+
     }
-    public UndoException(String message){
+
+
+    public UndoException(String message) {
         super(message);
     }
-    public UndoException(Throwable t){
+
+
+    public UndoException(Throwable t) {
         super(t);
     }
-    public UndoException(String message,Throwable t){
+
+
+    public UndoException(String message, Throwable t) {
         super(message, t);
     }
 }

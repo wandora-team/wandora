@@ -41,25 +41,28 @@ public class SetSubjectLocatorOperation extends UndoOperation {
     protected Locator oldSL;
     protected Locator newSL;
     protected MergeOperation merge;
-    protected boolean nop=false;
-    
-    public SetSubjectLocatorOperation(Topic t,Locator newSL) throws TopicMapException, UndoException {
-        if(t.getSubjectLocator()!=null && newSL!=null && t.getSubjectLocator().equals(newSL)){
-            nop=true;
+    protected boolean nop = false;
+
+    public SetSubjectLocatorOperation(Topic t, Locator newSL) throws TopicMapException, UndoException {
+        if (t.getSubjectLocator() != null && newSL != null && t.getSubjectLocator().equals(newSL)) {
+            nop = true;
             return;
         }
-        
-        this.tm=t.getTopicMap();
-        si=t.getOneSubjectIdentifier();
-        if(si==null) throw new UndoException("Topic doesn't have a subject identifier");
-        oldSL=t.getSubjectLocator();
-        this.newSL=newSL;
 
-        if(newSL!=null){
-            Topic t2=t.getTopicMap().getTopicBySubjectLocator(newSL);
-            if(t2!=null) merge=new MergeOperation(t, t2);
+        this.tm = t.getTopicMap();
+        si = t.getOneSubjectIdentifier();
+        if (si == null)
+            throw new UndoException("Topic doesn't have a subject identifier");
+        oldSL = t.getSubjectLocator();
+        this.newSL = newSL;
+
+        if (newSL != null) {
+            Topic t2 = t.getTopicMap().getTopicBySubjectLocator(newSL);
+            if (t2 != null)
+                merge = new MergeOperation(t, t2);
         }
     }
+
 
     @Override
     public String getLabel() {
@@ -69,41 +72,54 @@ public class SetSubjectLocatorOperation extends UndoOperation {
 
     @Override
     public void undo() throws UndoException {
-        if(nop) return;
-        try{
-            if(merge!=null){
+        if (nop)
+            return;
+        try {
+            if (merge != null) {
                 merge.undo();
             }
             else {
-                Topic t=tm.getTopic(si);
-                if(t==null) throw new UndoException();
-                if(oldSL!=null){
-                    Topic t2=tm.getTopicBySubjectLocator(oldSL);
-                    if(t2!=null && !t2.mergesWithTopic(t)) throw new UndoException();
+                Topic t = tm.getTopic(si);
+                if (t == null)
+                    throw new UndoException();
+                if (oldSL != null) {
+                    Topic t2 = tm.getTopicBySubjectLocator(oldSL);
+                    if (t2 != null && !t2.mergesWithTopic(t))
+                        throw new UndoException();
                 }
                 t.setSubjectLocator(oldSL);
             }
-        }catch(TopicMapException tme){throw new UndoException(tme);}
+        }
+        catch (TopicMapException tme) {
+            throw new UndoException(tme);
+        }
     }
+
 
     @Override
     public void redo() throws UndoException {
-        if(nop) return;
-        try{
-            Topic t=tm.getTopic(si);
-            if(t==null) throw new UndoException();
-            
-            if(newSL!=null && merge==null){
+        if (nop)
+            return;
+        try {
+            Topic t = tm.getTopic(si);
+            if (t == null)
+                throw new UndoException();
+
+            if (newSL != null && merge == null) {
                 // t2 existing is fine if this was supposed to be a merge,
                 // otherwise something's wrong
-                Topic t2=tm.getTopicBySubjectLocator(newSL);
-                if(t2!=null) throw new UndoException();
+                Topic t2 = tm.getTopicBySubjectLocator(newSL);
+                if (t2 != null)
+                    throw new UndoException();
             }
             // this may result in a merge but that's fine, the topicmap itself
             // will handle that correctly.
             t.setSubjectLocator(newSL);
-        }catch(TopicMapException tme){throw new UndoException(tme);}
+        }
+        catch (TopicMapException tme) {
+            throw new UndoException(tme);
+        }
     }
 
-    
+
 }

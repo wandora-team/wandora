@@ -31,19 +31,23 @@ package org.wandora.topicmap.undowrapper;
 
 public class NoOperation extends UndoOperation {
 
-    public NoOperation(){}
-    
+    public NoOperation() {
+    }
+
+
     @Override
     public void undo() throws UndoException {
     }
+
 
     @Override
     public void redo() throws UndoException {
     }
 
+
     @Override
     public String getLabel() {
         return "no operation";
     }
-    
+
 }
