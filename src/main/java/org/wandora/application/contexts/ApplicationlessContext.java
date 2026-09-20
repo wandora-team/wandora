@@ -41,30 +41,30 @@ import org.wandora.topicmap.Topic;
  * @author akivela
  */
 public class ApplicationlessContext extends LayeredTopicContext {
-    
 
-    
+
+
     /**
      * Creates a new instance of ApplicationlessContext
      */
     public ApplicationlessContext() {
     }
-    
-    
+
+
     @Override
     public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
         super.initialize(wandora, actionEvent, contextOwner);
-        
+
         Object proposedContextSource = UIBox.getActionsRealSource(actionEvent);
-        setContextSource( proposedContextSource );
+        setContextSource(proposedContextSource);
     }
-    
-    
+
+
     @Override
     public Iterator<Topic> getContextObjects() {
         Object contextSource = getContextSource();
-        if(contextSource != null && !(contextSource instanceof Wandora)) {
-            return getContextObjects( getContextSource() );
+        if (contextSource != null && !(contextSource instanceof Wandora)) {
+            return getContextObjects(getContextSource());
         }
         else {
             return null;

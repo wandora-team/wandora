@@ -40,7 +40,7 @@ import org.wandora.topicmap.Topic;
  */
 public class InstanceContext extends LayeredTopicContext {
 
-    
+
     @Override
     public Iterator<Topic> getContextObjects() {
         InstanceIterator instanceIterator = new InstanceIterator();

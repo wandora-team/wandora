@@ -42,62 +42,65 @@ import org.wandora.topicmap.Topic;
  */
 public class PlayerContextCollected extends AbstractContext implements Context<Topic> {
 
-	public boolean removeDuplicates = true;
+    public boolean removeDuplicates = true;
 
-    
+
     /**
      * Creates a new instance of PlayerContextCollected
      */
     public PlayerContextCollected() {
     }
-    
-    
-    
+
+
+
     @Override
     public Iterator<Topic> getContextObjects() {
-    	AssociationContext associationContext = new AssociationContext();
-    	associationContext.initialize(getWandora(), getContextEvent(), getContextOwner());
-        return getPlayersOf( associationContext.getContextObjects() );
+        AssociationContext associationContext = new AssociationContext();
+        associationContext.initialize(getWandora(), getContextEvent(), getContextOwner());
+        return getPlayersOf(associationContext.getContextObjects());
     }
-    
-    
-    
+
+
+
     public Iterator<Topic> getPlayersOf(Iterator<Association> associations) {
-        if(associations == null) return null;
+        if (associations == null)
+            return null;
         List<Topic> contextTopics = new ArrayList<>();
-        
+
         Association association = null;
         Collection<Topic> roleTopics = null;
         Topic playerTopic = null;
         Topic roleTopic = null;
 
-        while(associations.hasNext()) {
+        while (associations.hasNext()) {
             try {
                 association = associations.next();
-                if(association == null) continue;
+                if (association == null)
+                    continue;
                 roleTopics = association.getRoles();
-                if(roleTopics != null && roleTopics.size() > 0) {
-                    for(Iterator<Topic> roleIterator = roleTopics.iterator(); roleIterator.hasNext(); ) {
+                if (roleTopics != null && roleTopics.size() > 0) {
+                    for (Iterator<Topic> roleIterator = roleTopics.iterator(); roleIterator.hasNext();) {
                         try {
                             roleTopic = roleIterator.next();
                             playerTopic = association.getPlayer(roleTopic);
-                            if(playerTopic == null) continue;
-                            if(removeDuplicates) {
-                                if( !contextTopics.contains(playerTopic) ) {
-                                    contextTopics.add( playerTopic );
+                            if (playerTopic == null)
+                                continue;
+                            if (removeDuplicates) {
+                                if (!contextTopics.contains(playerTopic)) {
+                                    contextTopics.add(playerTopic);
                                 }
                             }
                             else {
-                                contextTopics.add( playerTopic );
+                                contextTopics.add(playerTopic);
                             }
                         }
-                        catch(Exception e) {
+                        catch (Exception e) {
                             log(e);
                         }
                     }
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 log(e);
             }
         }

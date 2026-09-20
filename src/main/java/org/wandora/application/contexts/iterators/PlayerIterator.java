@@ -43,7 +43,7 @@ import org.wandora.utils.logger.Log4j2Logger;
  */
 public class PlayerIterator extends TopicIterator {
 
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PlayerIterator.class);
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(PlayerIterator.class);
 
 
     @Override
@@ -55,30 +55,30 @@ public class PlayerIterator extends TopicIterator {
         Collection<Topic> roleTopics = null;
         Topic roleTopic = null;
         Topic playerTopic = null;
-        
-        if(topic != null) {
-            try{
+
+        if (topic != null) {
+            try {
                 associations = topic.getAssociations();
-                if(associations != null) {
+                if (associations != null) {
                     associationIterator = associations.iterator();
-                    while(associationIterator.hasNext()) {
+                    while (associationIterator.hasNext()) {
                         association = associationIterator.next();
-                        if(association == null) continue;
+                        if (association == null)
+                            continue;
                         roleTopics = association.getRoles();
-                        if(roleTopics != null && roleTopics.size() > 0) {
-                            for(Iterator<Topic> roleIterator = roleTopics.iterator(); roleIterator.hasNext(); ) {
+                        if (roleTopics != null && roleTopics.size() > 0) {
+                            for (Iterator<Topic> roleIterator = roleTopics.iterator(); roleIterator.hasNext();) {
                                 roleTopic = (Topic) roleIterator.next();
                                 playerTopic = association.getPlayer(roleTopic);
-                                if(playerTopic != null) {
-                                    playerTopics.add( playerTopic );
+                                if (playerTopic != null) {
+                                    playerTopics.add(playerTopic);
                                 }
                             }
                         }
                     }
                 }
-            }
-            catch(TopicMapException tme){
-            	logger.error(tme);
+            } catch (TopicMapException tme) {
+                logger.error(tme);
             }
         }
         return playerTopics.iterator();

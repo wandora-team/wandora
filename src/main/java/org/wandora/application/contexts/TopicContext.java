@@ -39,13 +39,13 @@ import org.wandora.topicmap.Topic;
  */
 public class TopicContext extends LayeredTopicContext {
 
-    
-    
+
+
     @Override
     public Iterator<Topic> getContextObjects() {
         TopicIteratorForCurrentLayer iterator = new TopicIteratorForCurrentLayer();
         iterator.initialize(super.getContextObjects(), getWandora());
         return iterator;
     }
-    
+
 }

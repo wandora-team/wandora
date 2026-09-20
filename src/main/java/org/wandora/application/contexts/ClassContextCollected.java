@@ -42,54 +42,56 @@ import org.wandora.topicmap.Topic;
  * @author akivela
  */
 public class ClassContextCollected extends LayeredTopicContext {
-    
-    public boolean removeDuplicates = true;  
-    
-    
+
+    public boolean removeDuplicates = true;
+
+
     /**
      * Creates a new instance of ClassContextCollected
      */
     public ClassContextCollected() {
     }
-    
-    
-    
+
+
+
     @Override
     public Iterator<Topic> getContextObjects() {
-        return getClassesOf( super.getContextObjects() );
+        return getClassesOf(super.getContextObjects());
     }
-    
-    
-    
+
+
+
     public Iterator<Topic> getClassesOf(Iterator<Topic> topics) {
-        if(topics == null) return null;
+        if (topics == null)
+            return null;
         List<Topic> contextTopics = new ArrayList<>();
         Collection<Topic> classTopics = null;
         Topic topic = null;
         Topic classTopic = null;
 
-        while(topics.hasNext()) {
+        while (topics.hasNext()) {
             try {
                 topic = topics.next();
-                if(topic == null) continue;
-                if(removeDuplicates) {
+                if (topic == null)
+                    continue;
+                if (removeDuplicates) {
                     classTopics = topic.getTypes();
-                    for(Iterator<Topic> classIterator = classTopics.iterator(); classIterator.hasNext(); ) {
+                    for (Iterator<Topic> classIterator = classTopics.iterator(); classIterator.hasNext();) {
                         classTopic = classIterator.next();
-                        if(classTopic != null && !contextTopics.contains(classTopic)) {
+                        if (classTopic != null && !contextTopics.contains(classTopic)) {
                             contextTopics.add(classTopic);
                         }
                     }
                 }
                 else {
-                    contextTopics.addAll( topic.getTypes() );
+                    contextTopics.addAll(topic.getTypes());
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 log(e);
             }
         }
         return contextTopics.iterator();
     }
-    
+
 }

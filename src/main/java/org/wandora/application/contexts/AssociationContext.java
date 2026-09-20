@@ -41,69 +41,72 @@ import org.wandora.topicmap.Topic;
 
 
 
-
 /**
  *
  * @author akivela
  */
 public class AssociationContext extends AbstractContext implements Context<Association> {
-    
 
-    public boolean removeDuplicates = true; 
-    
 
-    
-    
+    public boolean removeDuplicates = true;
+
+
+
     @Override
     public Iterator<Association> getContextObjects() {
         Object contextSource = getContextSource();
-        if(contextSource instanceof AssociationTable associationTable) {
+        if (contextSource instanceof AssociationTable associationTable) {
             return associationTable.getSelectedAssociations().iterator();
         }
-        else if(contextSource instanceof AssociationTypeLinkBasename associationTypeLinkBasename) {
+        else if (contextSource instanceof AssociationTypeLinkBasename associationTypeLinkBasename) {
             return associationTypeLinkBasename.getAssociationTable().getAllAssociations().iterator();
         }
-        else if(contextSource instanceof GraphTopicPanel graphTopicPanel) {
+        else if (contextSource instanceof GraphTopicPanel graphTopicPanel) {
             return graphTopicPanel.getContextAssociations().iterator();
         }
         else {
-        	LayeredTopicContext topicContext = new LayeredTopicContext(getWandora(), getContextEvent(), getContextOwner());
-            return getAssociationsOf( topicContext.getContextObjects() );
+            LayeredTopicContext topicContext = new LayeredTopicContext(
+                    getWandora(), 
+                    getContextEvent(),
+                    getContextOwner());
+            return getAssociationsOf(topicContext.getContextObjects());
         }
     }
-    
-    
-    
+
+
+
     public Iterator<Association> getAssociationsOf(Iterator<Topic> topics) {
-        if(topics == null) return null;
+        if (topics == null)
+            return null;
         List<Association> contextAssociations = new ArrayList<>();
         Collection<Association> associations = null;
         Topic topic = null;
         Association association = null;
 
-        while(topics.hasNext()) {
+        while (topics.hasNext()) {
             try {
                 topic = (Topic) topics.next();
-                if(topic == null) continue;
-                if(removeDuplicates) {
+                if (topic == null)
+                    continue;
+                if (removeDuplicates) {
                     associations = topic.getAssociations();
-                    for(Iterator<Association> associationIterator = associations.iterator(); associationIterator.hasNext(); ) {
+                    for (Iterator<Association> associationIterator = associations.iterator(); associationIterator.hasNext();) {
                         association = associationIterator.next();
-                        if(association != null && !contextAssociations.contains(association)) {
+                        if (association != null && !contextAssociations.contains(association)) {
                             contextAssociations.add(association);
                         }
                     }
                 }
                 else {
-                    contextAssociations.addAll( topic.getAssociations() );
+                    contextAssociations.addAll(topic.getAssociations());
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 log(e);
             }
         }
         return contextAssociations.iterator();
     }
 
-    
+
 }

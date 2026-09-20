@@ -35,8 +35,9 @@ import org.wandora.utils.CMDParamParser;
  * @author olli
  */
 public interface AppConfig {
-    
+
     public void initialize(CMDParamParser params);
+
     public Object getObject(String key);
-    
+
 }

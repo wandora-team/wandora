@@ -49,70 +49,74 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author akivela
  */
 public class GraphNodeContext implements Context<VNode> {
-    
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GraphNodeContext.class);
-	
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(GraphNodeContext.class);
+
     private Object contextSource;
     protected WandoraTool contextOwner = null;
     protected ActionEvent actionEvent = null;
     protected Wandora wandora = null;
-    
-    
+
+
     /** Creates a new instance of GraphNodeContext */
     public GraphNodeContext() {
     }
+
+
     public GraphNodeContext(TopicMapGraphPanel gp) {
-        
+
     }
-    
+
+
     @Override
     public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
         this.wandora = wandora;
         this.actionEvent = actionEvent;
         this.contextOwner = contextOwner;
-        
+
         Object proposedContextSource = UIBox.getActionsRealSource(actionEvent);
-        if( !isContextSource(proposedContextSource) ) {
+        if (!isContextSource(proposedContextSource)) {
             proposedContextSource = wandora.getFocusOwner();
-            if( !isContextSource(proposedContextSource) ) {
+            if (!isContextSource(proposedContextSource)) {
                 proposedContextSource = wandora;
             }
         }
-        setContextSource( proposedContextSource );
+        setContextSource(proposedContextSource);
     }
-    
-    
-    
+
+
+
     @Override
     public ActionEvent getContextEvent() {
         return actionEvent;
     }
-    
-    
-    
+
+
+
     @Override
     public Iterator<VNode> getContextObjects() {
-        return getContextObjects( getContextSource() );
+        return getContextObjects(getContextSource());
     }
-    
-    
-    
+
+
+
     public Iterator<VNode> getContextObjects(Object contextSource) {
-        if(contextSource == null) return null;
+        if (contextSource == null)
+            return null;
 
         List<VNode> contextNodes = new ArrayList<>();
-        if(contextSource instanceof Wandora) {
+        if (contextSource instanceof Wandora) {
             try {
                 Wandora wandora = (Wandora) contextSource;
                 TopicPanel currentTopicPanel = wandora.getTopicPanel();
-                if(currentTopicPanel != null && currentTopicPanel instanceof DockingFramePanel dfp) {
+                if (currentTopicPanel != null && currentTopicPanel instanceof DockingFramePanel dfp) {
                     currentTopicPanel = dfp.getCurrentTopicPanel();
                 }
-                if(currentTopicPanel != null && currentTopicPanel instanceof GraphTopicPanel gtp) {
-                    contextNodes.addAll( gtp.getGraphPanel().getSelectedNodes() );
+                if (currentTopicPanel != null && currentTopicPanel instanceof GraphTopicPanel gtp) {
+                    contextNodes.addAll(gtp.getGraphPanel().getSelectedNodes());
                 }
-                if(currentTopicPanel != null && currentTopicPanel instanceof TopicMapGraphPanel tmgp) {
-                    contextNodes.addAll( tmgp.getSelectedNodes() );
+                if (currentTopicPanel != null && currentTopicPanel instanceof TopicMapGraphPanel tmgp) {
+                    contextNodes.addAll(tmgp.getSelectedNodes());
                 }
             }
             catch (Exception e) {
@@ -120,51 +124,51 @@ public class GraphNodeContext implements Context<VNode> {
             }
         }
 
-        else if(contextSource instanceof GraphTopicPanel gtp) {
-            contextNodes.addAll( gtp.getGraphPanel().getSelectedNodes() );
+        else if (contextSource instanceof GraphTopicPanel gtp) {
+            contextNodes.addAll(gtp.getGraphPanel().getSelectedNodes());
         }
-        else if(contextSource instanceof TopicMapGraphPanel tmgp) {
-            contextNodes.addAll( tmgp.getSelectedNodes() );
+        else if (contextSource instanceof TopicMapGraphPanel tmgp) {
+            contextNodes.addAll(tmgp.getSelectedNodes());
         }
         return contextNodes.iterator();
     }
-    
-    
+
+
 
     @Override
     public void setContextSource(Object proposedContextSource) {
-        if(isContextSource(proposedContextSource)) {
+        if (isContextSource(proposedContextSource)) {
             contextSource = proposedContextSource;
         }
         else {
             contextSource = null;
         }
     }
-    
-    
+
+
     public boolean isContextSource(Object contextSource) {
-        if(contextSource != null && (
-                contextSource instanceof Wandora ||
-                contextSource instanceof GraphTopicPanel) ) {
-                    return true;
+        if (contextSource != null && (contextSource instanceof Wandora || contextSource instanceof GraphTopicPanel)) {
+            return true;
         }
         return false;
     }
-    
-    
-    
+
+
+
     @Override
     public Object getContextSource() {
         return contextSource;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public void log(Exception e) {
-        if(contextOwner != null) contextOwner.log(e);
-        else logger.error(e);
+        if (contextOwner != null)
+            contextOwner.log(e);
+        else
+            logger.error(e);
     }
 }

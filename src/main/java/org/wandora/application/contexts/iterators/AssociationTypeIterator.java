@@ -43,7 +43,7 @@ import org.wandora.utils.logger.Log4j2Logger;
  */
 public class AssociationTypeIterator extends TopicIterator {
 
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AssociationTypeIterator.class);
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AssociationTypeIterator.class);
 
 
 
@@ -53,21 +53,21 @@ public class AssociationTypeIterator extends TopicIterator {
         Collection<Association> associations = null;
         Association association = null;
         Iterator<Association> associationIterator = null;
-        
-        if(topic != null) {
-            try{
+
+        if (topic != null) {
+            try {
                 associations = topic.getAssociations();
-                if(associations != null) {
+                if (associations != null) {
                     associationIterator = associations.iterator();
-                    while(associationIterator.hasNext()) {
+                    while (associationIterator.hasNext()) {
                         association = associationIterator.next();
-                        if(association == null) continue;
+                        if (association == null)
+                            continue;
                         associationTypeTopics.add(association.getType());
                     }
                 }
-            }
-            catch(TopicMapException tme){
-            	logger.error(tme);
+            } catch (TopicMapException tme) {
+                logger.error(tme);
             }
         }
         return associationTypeTopics.iterator();

@@ -47,112 +47,113 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author akivela
  */
 public class GraphAllNodesContext implements Context<VNode> {
-    
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GraphAllNodesContext.class);
-	
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(GraphAllNodesContext.class);
+
     private Object contextSource;
     protected WandoraTool contextOwner = null;
     protected ActionEvent actionEvent = null;
     protected Wandora wandora = null;
-    
-    
+
+
     /** Creates a new instance of GraphAllNodesContext */
     public GraphAllNodesContext() {
     }
-    
-    
+
+
     @Override
     public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
         this.wandora = wandora;
         this.actionEvent = actionEvent;
         this.contextOwner = contextOwner;
-        
+
         Object proposedContextSource = UIBox.getActionsRealSource(actionEvent);
-        if( !isContextSource(proposedContextSource) ) {
+        if (!isContextSource(proposedContextSource)) {
             proposedContextSource = wandora.getFocusOwner();
-            if( !isContextSource(proposedContextSource) ) {
+            if (!isContextSource(proposedContextSource)) {
                 proposedContextSource = wandora;
             }
         }
-        setContextSource( proposedContextSource );
+        setContextSource(proposedContextSource);
     }
-    
-    
-    
+
+
+
     @Override
     public ActionEvent getContextEvent() {
         return actionEvent;
     }
-    
-    
-    
+
+
+
     @Override
     public Iterator<VNode> getContextObjects() {
-        return getContextObjects( getContextSource() );
+        return getContextObjects(getContextSource());
     }
-    
-    
-    
+
+
+
     public Iterator<VNode> getContextObjects(Object contextSource) {
-        if(contextSource == null) return null;
-        
+        if (contextSource == null)
+            return null;
+
         List<VNode> contextNodes = new ArrayList<>();
-        if(contextSource instanceof Wandora w) {
+        if (contextSource instanceof Wandora w) {
             try {
                 TopicPanel currentTopicPanel = w.getTopicPanel();
-                if(currentTopicPanel  instanceof GraphTopicPanel) {
-                    contextNodes.addAll( ((GraphTopicPanel) currentTopicPanel).getGraphPanel().getModel().getNodes() );
+                if (currentTopicPanel instanceof GraphTopicPanel) {
+                    contextNodes.addAll(((GraphTopicPanel) currentTopicPanel).getGraphPanel().getModel().getNodes());
                 }
             }
             catch (Exception e) {
                 log(e);
             }
         }
-        else if(contextSource instanceof GraphTopicPanel gtp) {
-            contextNodes.addAll( gtp.getGraphPanel().getModel().getNodes() );
+        else if (contextSource instanceof GraphTopicPanel gtp) {
+            contextNodes.addAll(gtp.getGraphPanel().getModel().getNodes());
         }
-        else if(contextSource instanceof TopicMapGraphPanel tmgp) {
-            contextNodes.addAll( tmgp.getModel().getNodes() );
+        else if (contextSource instanceof TopicMapGraphPanel tmgp) {
+            contextNodes.addAll(tmgp.getModel().getNodes());
         }
         return contextNodes.iterator();
     }
-    
-    
+
+
 
     @Override
     public void setContextSource(Object proposedContextSource) {
-        if(isContextSource(proposedContextSource)) {
+        if (isContextSource(proposedContextSource)) {
             contextSource = proposedContextSource;
         }
         else {
             contextSource = null;
         }
     }
-    
-    
+
+
     public boolean isContextSource(Object contextSource) {
-        if(contextSource != null && (
-                contextSource instanceof Wandora ||
-                contextSource instanceof GraphTopicPanel) ) {
-                    return true;
+        if (contextSource != null && (contextSource instanceof Wandora || contextSource instanceof GraphTopicPanel)) {
+            return true;
         }
         return false;
     }
-    
-    
-    
+
+
+
     @Override
     public Object getContextSource() {
         return contextSource;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public void log(Exception e) {
-        if(contextOwner != null) contextOwner.log(e);
-        else logger.error(e);
+        if (contextOwner != null)
+            contextOwner.log(e);
+        else
+            logger.error(e);
     }
 }

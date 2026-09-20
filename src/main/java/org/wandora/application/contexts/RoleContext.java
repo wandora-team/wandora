@@ -40,12 +40,12 @@ import org.wandora.topicmap.Topic;
  */
 public class RoleContext extends LayeredTopicContext {
 
-    
+
     @Override
     public Iterator<Topic> getContextObjects() {
         RoleIterator iterator = new RoleIterator();
         iterator.initialize(super.getContextObjects(), getWandora());
         return iterator;
     }
-    
+
 }

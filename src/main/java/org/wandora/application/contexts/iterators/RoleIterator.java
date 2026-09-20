@@ -44,7 +44,7 @@ import org.wandora.utils.logger.Log4j2Logger;
 public class RoleIterator extends TopicIterator {
 
 
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RoleIterator.class);
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(RoleIterator.class);
 
 
 
@@ -57,19 +57,21 @@ public class RoleIterator extends TopicIterator {
         Collection<Topic> roleTopics = null;
         Topic roleTopic = null;
 
-        if(topic != null) {
-            try{
+        if (topic != null) {
+            try {
                 associations = topic.getAssociations();
-                if(associations != null) {
+                if (associations != null) {
                     associationIterator = associations.iterator();
-                    while(associationIterator.hasNext()) {
+                    while (associationIterator.hasNext()) {
                         association = associationIterator.next();
-                        if(association == null) continue;
+                        if (association == null) {
+                            continue;
+                        }
                         roleTopics = association.getRoles();
-                        if(roleTopics != null && roleTopics.size() > 0) {
-                            for(Iterator<Topic> roleIterator = roleTopics.iterator(); roleIterator.hasNext(); ) {
+                        if (roleTopics != null && roleTopics.size() > 0) {
+                            for (Iterator<Topic> roleIterator = roleTopics.iterator(); roleIterator.hasNext();) {
                                 roleTopic = (Topic) roleIterator.next();
-                                if(roleTopic != null) {
+                                if (roleTopic != null) {
                                     allRoleTopics.add(roleTopic);
                                 }
                             }
@@ -77,12 +79,12 @@ public class RoleIterator extends TopicIterator {
                     }
                 }
             }
-            catch(TopicMapException tme) {
-            	logger.error(tme);
+            catch (TopicMapException tme) {
+                logger.error(tme);
             }
         }
         return allRoleTopics.iterator();
     }
 
-    
+
 }

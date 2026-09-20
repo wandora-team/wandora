@@ -39,7 +39,7 @@ import org.wandora.topicmap.Topic;
  */
 public class PlayerContext extends LayeredTopicContext {
 
-    
+
     @Override
     public Iterator<Topic> getContextObjects() {
         PlayerIterator iterator = new PlayerIterator();

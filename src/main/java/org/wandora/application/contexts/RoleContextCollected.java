@@ -41,63 +41,65 @@ import org.wandora.topicmap.Topic;
  * @author akivela
  */
 public class RoleContextCollected extends AbstractContext implements Context<Topic> {
-    
-	public boolean removeDuplicates = true;
-	
 
-    
+    public boolean removeDuplicates = true;
+
+
+
     /**
      * Creates a new instance of RoleContextCollected
      */
     public RoleContextCollected() {
     }
 
-    
+
     @Override
     public Iterator<Topic> getContextObjects() {
-    	AssociationContext associationContext = new AssociationContext();
-    	associationContext.initialize(getWandora(), getContextEvent(), getContextOwner());
-        return getRolesOf( associationContext.getContextObjects() );
+        AssociationContext associationContext = new AssociationContext();
+        associationContext.initialize(getWandora(), getContextEvent(), getContextOwner());
+        return getRolesOf(associationContext.getContextObjects());
     }
-    
 
-    
+
+
     public Iterator<Topic> getRolesOf(Iterator<Association> associations) {
-        if(associations == null) return null;
+        if (associations == null)
+            return null;
         List<Topic> contextTopics = new ArrayList<>();
-        
+
         Association association = null;
         Collection<Topic> roleTopics = null;
         Topic roleTopic = null;
 
-        while(associations.hasNext()) {
+        while (associations.hasNext()) {
             try {
                 association = associations.next();
-                if(association == null) continue;
+                if (association == null)
+                    continue;
                 roleTopics = association.getRoles();
-                if(roleTopics != null && roleTopics.size() > 0) {
-                    for(Iterator<Topic> roleIterator = roleTopics.iterator(); roleIterator.hasNext(); ) {
+                if (roleTopics != null && roleTopics.size() > 0) {
+                    for (Iterator<Topic> roleIterator = roleTopics.iterator(); roleIterator.hasNext();) {
                         try {
                             roleTopic = roleIterator.next();
-                            if(removeDuplicates) {
-                                if( !contextTopics.contains(roleTopic) ) {
-                                    contextTopics.add( roleTopic );
+                            if (removeDuplicates) {
+                                if (!contextTopics.contains(roleTopic)) {
+                                    contextTopics.add(roleTopic);
                                 }
                             }
                             else {
-                                contextTopics.add( roleTopic );
+                                contextTopics.add(roleTopic);
                             }
                         }
-                        catch(Exception e) {
+                        catch (Exception e) {
                             log(e);
                         }
                     }
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 log(e);
             }
         }
         return contextTopics.iterator();
-    }    
+    }
 }

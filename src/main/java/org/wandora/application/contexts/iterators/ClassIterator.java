@@ -41,22 +41,22 @@ import org.wandora.utils.logger.Log4j2Logger;
  */
 public class ClassIterator extends TopicIterator {
 
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ClassIterator.class);
-	
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(ClassIterator.class);
+
 
     @Override
     public Iterator<Topic> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<Topic> oldIterator) {
         Iterator<Topic> it = oldIterator;
-        if(topic != null) {
-            try{
+        if (topic != null) {
+            try {
                 collection = topic.getTypes();
+            } catch (TopicMapException tme) {
+                logger.error(tme);
             }
-            catch(TopicMapException tme){
-            	logger.error(tme);
-            }
-            if(collection != null) it = collection.iterator();
+            if (collection != null)
+                it = collection.iterator();
         }
         return it;
     }
-    
+
 }

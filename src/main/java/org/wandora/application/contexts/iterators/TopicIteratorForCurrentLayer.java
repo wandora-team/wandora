@@ -41,31 +41,30 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author akivela
  */
 public class TopicIteratorForCurrentLayer extends TopicIterator {
-    
 
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicIteratorForCurrentLayer.class);
-    
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicIteratorForCurrentLayer.class);
+
 
     @Override
     public Iterator<Topic> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<Topic> oldIterator) {
         Iterator<Topic> it = oldIterator;
-        if(topic != null && topicmap != null) {
+        if (topic != null && topicmap != null) {
             try {
-                if(topic instanceof LayeredTopic layeredTopic) {
+                if (topic instanceof LayeredTopic layeredTopic) {
                     collection = layeredTopic.getTopicsForSelectedLayer();
                 }
                 else {
                     List<Topic> list = new ArrayList<>();
                     list.add(topic);
                     collection = list;
-                    //collection = null;
                 }
             }
-            catch(Exception e) {
-            	logger.error(e);
-                collection=null;
+            catch (Exception e) {
+                logger.error(e);
+                collection = null;
             }
-            if(collection != null) {
+            if (collection != null) {
                 it = collection.iterator();
             }
         }

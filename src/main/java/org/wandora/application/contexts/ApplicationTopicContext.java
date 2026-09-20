@@ -47,29 +47,28 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 public class ApplicationTopicContext implements Context<Topic> {
-    
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ApplicationTopicContext.class);
-	
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(ApplicationTopicContext.class);
+
     private Object contextSource;
     protected WandoraTool contextOwner = null;
     protected ActionEvent actionEvent = null;
-    protected Wandora wandora = null;  
+    protected Wandora wandora = null;
 
-    
+
     /** Creates a new instance of ApplicationContext */
     public ApplicationTopicContext() {
     }
 
-    
-    
-    
+
+
     @Override
     public Iterator<Topic> getContextObjects() {
         List<Topic> contextTopics = new ArrayList<>();
         try {
             Wandora w = (Wandora) contextSource;
             Topic currentTopic = w.getOpenTopic();
-            if(currentTopic != null) {
+            if (currentTopic != null) {
                 contextTopics.add(currentTopic);
             }
         }
@@ -78,41 +77,45 @@ public class ApplicationTopicContext implements Context<Topic> {
         }
         return contextTopics.iterator();
     }
-    
-    
+
+
     @Override
     public ActionEvent getContextEvent() {
         return actionEvent;
     }
-    
-    
+
+
     @Override
     public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
         this.wandora = wandora;
         this.actionEvent = actionEvent;
         this.contextOwner = contextOwner;
-        
-        setContextSource( wandora );
+
+        setContextSource(wandora);
     }
-    
-    
+
+
     @Override
     public void setContextSource(Object proposedContextSource) {
         contextSource = proposedContextSource;
     }
-    
+
+
     @Override
     public Object getContextSource() {
         return contextSource;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
+
+
     public void log(Exception e) {
-        if(contextOwner != null) contextOwner.log(e);
-        else logger.error(e);
+        if (contextOwner != null)
+            contextOwner.log(e);
+        else
+            logger.error(e);
     }
 
 

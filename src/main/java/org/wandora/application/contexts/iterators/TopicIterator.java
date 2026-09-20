@@ -44,25 +44,25 @@ public abstract class TopicIterator implements Iterator<Topic> {
 
     Iterator<Topic> source = null;
     TopicMap topicmap = null;
-    Topic topic = null;       
+    Topic topic = null;
     Topic next = null;
     Iterator<Topic> iterator = null;
     Collection<Topic> collection = null;
     Collection<Topic> cache = null;
 
     boolean removeDuplicates = true;
-            
+
 
 
     public TopicIterator() {
     }
 
-    
+
     public void initialize(Iterator<Topic> source, Wandora wandora) {
         this.source = source;
         this.topicmap = wandora.getTopicMap();
 
-        if(removeDuplicates) {
+        if (removeDuplicates) {
             cache = new ArrayList<>();
             next = solveNextUncached();
         }
@@ -70,36 +70,37 @@ public abstract class TopicIterator implements Iterator<Topic> {
             next = solveNext();
         }
     }
-    
-    
-    
-    
-    
+
+
+
     @Override
     public boolean hasNext() {
-        if(next != null) return true;
-        else return false;
+        if (next != null)
+            return true;
+        else
+            return false;
     }
+
 
     @Override
     public Topic next() {
-    	Topic current = next;
+        Topic current = next;
         next = removeDuplicates ? solveNextUncached() : solveNext();
         return current;
     }
 
+
     @Override
     public void remove() throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();            
+        throw new UnsupportedOperationException();
     }
 
-    
-    
-    
+
+
     public void removeDuplicates(boolean should) {
         this.removeDuplicates = should;
     }
-    
+
 
 
     // -------------------------------------------------------------------------
@@ -108,15 +109,14 @@ public abstract class TopicIterator implements Iterator<Topic> {
 
 
 
-
     private Topic solveNextUncached() {
-    	Topic nextUncached = null;
+        Topic nextUncached = null;
         do {
             nextUncached = solveNext();
         }
-        while(cache.contains(nextUncached) && nextUncached != null);
-        if(nextUncached != null) {
-        	cache.add(nextUncached);
+        while (cache.contains(nextUncached) && nextUncached != null);
+        if (nextUncached != null) {
+            cache.add(nextUncached);
         }
         return nextUncached;
     }
@@ -124,20 +124,21 @@ public abstract class TopicIterator implements Iterator<Topic> {
 
     private Topic solveNext() {
         Iterator<Topic> iterator = solveIterator();
-        if(iterator != null && iterator.hasNext()) {
-        	return iterator.next();
+        if (iterator != null && iterator.hasNext()) {
+            return iterator.next();
         }
-        else return null;
+        else
+            return null;
     }
 
 
 
     private Iterator<Topic> solveIterator() {
-        while(iterator == null || !iterator.hasNext()) {
-            if(source != null && source.hasNext()) {
+        while (iterator == null || !iterator.hasNext()) {
+            if (source != null && source.hasNext()) {
                 topic = source.next();
-                while(topic == null && source.hasNext()) {
-                	topic = source.next();
+                while (topic == null && source.hasNext()) {
+                    topic = source.next();
                 }
                 iterator = solveIteratorForTopic(topic, topicmap, iterator);
             }
@@ -153,8 +154,8 @@ public abstract class TopicIterator implements Iterator<Topic> {
     // -------------------------------------------------------------------------
     // ----------- Overwrite next method in your own topic element iterator! ---
     // -------------------------------------------------------------------------
-    
-    
+
+
     public Iterator<Topic> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<Topic> oldIterator) {
         Iterator<Topic> it = oldIterator;
         return it;
@@ -162,7 +163,3 @@ public abstract class TopicIterator implements Iterator<Topic> {
 
 
 }
-
-    
-    
-

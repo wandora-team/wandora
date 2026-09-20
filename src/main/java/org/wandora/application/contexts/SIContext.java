@@ -55,74 +55,75 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author akivela
  */
 public class SIContext extends AbstractContext implements Context<Locator> {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SIContext.class);
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SIContext.class);
 
-    
+
     /** Creates a new instance of SIContext */
     public SIContext() {
     }
+
+
     public SIContext(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
         initialize(wandora, actionEvent, contextOwner);
     }
-    
-    
-    
-    
+
+
+
     @Override
     public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
         super.initialize(wandora, actionEvent, contextOwner);
-        
+
         Object proposedContextSource = UIBox.getActionsRealSource(actionEvent);
-        if( !isContextSource(proposedContextSource) ) {
+        if (!isContextSource(proposedContextSource)) {
             proposedContextSource = wandora.getFocusOwner();
-            if( !isContextSource(proposedContextSource) ) {
+            if (!isContextSource(proposedContextSource)) {
                 proposedContextSource = wandora;
             }
         }
-        setContextSource( proposedContextSource );
+        setContextSource(proposedContextSource);
     }
-    
-    
-    
-    
+
+
+
     @Override
     public Iterator<Locator> getContextObjects() {
-        return getContextObjects( getContextSource() );
+        return getContextObjects(getContextSource());
     }
-    
-    
-    
-    
+
+
+
     public void digSIs(List<Locator> locators, Topic topic) {
-        if(topic == null) return;
+        if (topic == null)
+            return;
         try {
             Collection<Locator> sis = topic.getSubjectIdentifiers();
-            for(Iterator<Locator> i=sis.iterator(); i.hasNext(); ) {
+            for (Iterator<Locator> i = sis.iterator(); i.hasNext();) {
                 locators.add(i.next());
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
-    
-    
+
+
+
     public void digSIs(List<Locator> locators, Collection<Topic> topics) {
-        if(topics == null) return;
-        for(Iterator<Topic> i=topics.iterator(); i.hasNext(); ) {
+        if (topics == null)
+            return;
+        for (Iterator<Topic> i = topics.iterator(); i.hasNext();) {
             digSIs(locators, (Topic) i.next());
         }
     }
-    
-    
-    
-    
+
+
+
     public Iterator<Locator> getContextObjects(Object contextSource) {
-        if(contextSource == null) return null;
-        
+        if (contextSource == null)
+            return null;
+
         List<Locator> contextLocators = new ArrayList<>();
-        if(contextSource instanceof LocatorTable lt) {
+        if (contextSource instanceof LocatorTable lt) {
             try {
                 Locator[] selection = lt.getSelectedLocators();
                 contextLocators.addAll(Arrays.asList(selection));
@@ -131,10 +132,10 @@ public class SIContext extends AbstractContext implements Context<Locator> {
                 log(e);
             }
         }
-        else if(contextSource instanceof Wandora w) {
+        else if (contextSource instanceof Wandora w) {
             try {
                 Topic currentTopic = w.getOpenTopic();
-                if(currentTopic != null) {
+                if (currentTopic != null) {
                     digSIs(contextLocators, currentTopic);
                 }
             }
@@ -142,7 +143,7 @@ public class SIContext extends AbstractContext implements Context<Locator> {
                 log(e);
             }
         }
-        else if(contextSource instanceof TopicLinkBasename tlbn) {
+        else if (contextSource instanceof TopicLinkBasename tlbn) {
             try {
                 digSIs(contextLocators, tlbn.getTopic());
             }
@@ -150,41 +151,39 @@ public class SIContext extends AbstractContext implements Context<Locator> {
                 log(e);
             }
         }
-        else if(contextSource instanceof Topic t) {
-            digSIs(contextLocators, t );
+        else if (contextSource instanceof Topic t) {
+            digSIs(contextLocators, t);
         }
-        else if(contextSource instanceof Topic[] topicArray) {
-            for(int i=0; i<topicArray.length; i++) {
-                digSIs(contextLocators, topicArray[i] );
+        else if (contextSource instanceof Topic[] topicArray) {
+            for (int i = 0; i < topicArray.length; i++) {
+                digSIs(contextLocators, topicArray[i]);
             }
         }
-        else if(contextSource instanceof GraphTopicPanel gtp) {
-            digSIs(contextLocators, gtp.getContextTopics() );
+        else if (contextSource instanceof GraphTopicPanel gtp) {
+            digSIs(contextLocators, gtp.getContextTopics());
         }
-        else if(contextSource instanceof TopicTable tt) {
+        else if (contextSource instanceof TopicTable tt) {
             Topic[] topicArray = tt.getSelectedTopics();
-            for(int i=0; i<topicArray.length; i++) {
-                digSIs(contextLocators, topicArray[i] );
+            for (int i = 0; i < topicArray.length; i++) {
+                digSIs(contextLocators, topicArray[i]);
             }
         }
-        else if(contextSource instanceof JTableHeader th) {
-            if(th.getTable() instanceof TopicTable topicTable) {
-                digSIs(contextLocators, topicTable.getSelectedHeaderTopic() );
+        else if (contextSource instanceof JTableHeader th) {
+            if (th.getTable() instanceof TopicTable topicTable) {
+                digSIs(contextLocators, topicTable.getSelectedHeaderTopic());
             }
         }
-        
-        else if(contextSource instanceof TopicTreePanel ttp) {
-            digSIs(contextLocators, ttp.getSelection() );
+
+        else if (contextSource instanceof TopicTreePanel ttp) {
+            digSIs(contextLocators, ttp.getSelection());
         }
-        else if(contextSource instanceof TopicTree tree) {
-            if( tree.getSelection() instanceof Topic t) {
-                digSIs(contextLocators, t );
+        else if (contextSource instanceof TopicTree tree) {
+            if (tree.getSelection() instanceof Topic t) {
+                digSIs(contextLocators, t);
             }
         }
         return contextLocators.iterator();
     }
-    
-    
 
 
     

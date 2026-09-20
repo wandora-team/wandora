@@ -47,59 +47,59 @@ public class InstanceContextCollected extends LayeredTopicContext {
     public static final int GATHER_TOPICS_FROM_LAYERSTACK = 1;
     public static final int GATHER_TOPICS_FROM_OWNER_TOPICMAP = 2;
 
-    
+
     public int gatherStyle = GATHER_TOPICS_FROM_LAYERSTACK;
     public boolean removeDuplicates = true;
-    
-    
-    
+
+
+
     @Override
     public Iterator<Topic> getContextObjects() {
-        return collectInstancesOf( super.getContextObjects() );
+        return collectInstancesOf(super.getContextObjects());
     }
-    
-    
-    
-    
-    
+
+
+
     public Iterator<Topic> collectInstancesOf(Iterator<Topic> topics) {
-        if(topics == null) return null;
+        if (topics == null)
+            return null;
         List<Topic> contextTopics = new ArrayList<>();
         Collection<Topic> instanceTopics = null;
         Topic topic = null;
         Topic instance = null;
         TopicMap topicmap = null;
-        if(gatherStyle == GATHER_TOPICS_FROM_LAYERSTACK) {
+        if (gatherStyle == GATHER_TOPICS_FROM_LAYERSTACK) {
             topicmap = getWandora().getTopicMap();
         }
-        while(topics.hasNext()) {
+        while (topics.hasNext()) {
             try {
                 topic = topics.next();
-                if(topic == null) continue;
-                if(gatherStyle == GATHER_TOPICS_FROM_OWNER_TOPICMAP) {
+                if (topic == null)
+                    continue;
+                if (gatherStyle == GATHER_TOPICS_FROM_OWNER_TOPICMAP) {
                     topicmap = topic.getTopicMap();
                 }
-                if(topicmap != null) {
-	                if(removeDuplicates) {
-	                    instanceTopics = topicmap.getTopicsOfType(topic);
-	                    for(Iterator<Topic> instanceIterator = instanceTopics.iterator(); instanceIterator.hasNext(); ) {
-	                        instance = instanceIterator.next();
-	                        if(instance != null && !contextTopics.contains(instance)) {
-	                            contextTopics.add(instance);
-	                        }
-	                    }
-	                }
-	                else {
-	                    contextTopics.addAll( topicmap.getTopicsOfType(topic) );
-	                }
+                if (topicmap != null) {
+                    if (removeDuplicates) {
+                        instanceTopics = topicmap.getTopicsOfType(topic);
+                        for (Iterator<Topic> instanceIterator = instanceTopics.iterator(); instanceIterator.hasNext();) {
+                            instance = instanceIterator.next();
+                            if (instance != null && !contextTopics.contains(instance)) {
+                                contextTopics.add(instance);
+                            }
+                        }
+                    }
+                    else {
+                        contextTopics.addAll(topicmap.getTopicsOfType(topic));
+                    }
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 log(e);
             }
         }
         return contextTopics.iterator();
     }
 
-        
+
 }

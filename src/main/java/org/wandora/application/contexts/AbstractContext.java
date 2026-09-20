@@ -25,62 +25,58 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 public class AbstractContext {
 
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractContext.class);
-	
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractContext.class);
+
     private Object contextSource;
     private WandoraTool contextOwner = null;
     private ActionEvent actionEvent = null;
     private Wandora wandora = null;
-    
-    
+
+
 
     public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
         this.wandora = wandora;
         this.actionEvent = actionEvent;
         this.contextOwner = contextOwner;
-        
+
         Object proposedContextSource = UIBox.getActionsRealSource(actionEvent);
-        if( !isContextSource(proposedContextSource) ) {
+        if (!isContextSource(proposedContextSource)) {
             proposedContextSource = wandora.getFocusOwner();
-            if( !isContextSource(proposedContextSource) ) {
+            if (!isContextSource(proposedContextSource)) {
                 proposedContextSource = wandora;
             }
         }
-        
+
         // *** IF CONTEXT WAS WANDORA THEN TRY TO SOLVE WANDORA'S FOCUS OWNER ***
         else {
-            if( proposedContextSource instanceof Wandora wandoraContextSource) {
+            if (proposedContextSource instanceof Wandora wandoraContextSource) {
                 Object wandoraRegisteredContext = wandoraContextSource.getFocusOwner();
-                if( isContextSource(wandoraRegisteredContext) ) {
+                if (isContextSource(wandoraRegisteredContext)) {
                     proposedContextSource = wandoraRegisteredContext;
                 }
             }
         }
-        
-        setContextSource( proposedContextSource );
+
+        setContextSource(proposedContextSource);
     }
-    
-	
+
 
 
     public void setContextSource(Object proposedContextSource) {
-        if(isContextSource(proposedContextSource)) {
+        if (isContextSource(proposedContextSource)) {
             contextSource = proposedContextSource;
         }
         else {
             contextSource = null;
         }
     }
-    
-    
 
-    
-    
+
+
     public Object getContextSource() {
         return contextSource;
     }
-    
-    
+
     
     
     public boolean isContextSource(Object contextSource) {
@@ -107,32 +103,33 @@ public class AbstractContext {
         return false;
     }
     
-    
-    
-    
+
+
     public WandoraTool getContextOwner() {
-    	return this.contextOwner;
+        return this.contextOwner;
     }
-    
-    
-    
+
+
+
     public ActionEvent getContextEvent() {
-    	return this.actionEvent;
+        return this.actionEvent;
     }
-    
-    
-    
+
+
+
     public Wandora getWandora() {
-    	return this.wandora;
+        return this.wandora;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public void log(Exception e) {
-        if(contextOwner != null) contextOwner.log(e);
-        else logger.error(e);
+        if (contextOwner != null)
+            contextOwner.log(e);
+        else
+            logger.error(e);
     }
 }

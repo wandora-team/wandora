@@ -39,12 +39,12 @@ import org.wandora.topicmap.Topic;
  */
 public class AssociationTypeContext extends LayeredTopicContext {
 
-   
+
     @Override
     public Iterator<Topic> getContextObjects() {
         AssociationTypeIterator iterator = new AssociationTypeIterator();
         iterator.initialize(super.getContextObjects(), getWandora());
         return iterator;
     }
-    
+
 }
