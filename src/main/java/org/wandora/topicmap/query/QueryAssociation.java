@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.wandora.topicmap.query;
+
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
@@ -37,49 +38,59 @@ public class QueryAssociation implements Association {
 
     protected QueryTopicMap tm;
     protected Topic type;
-    protected Hashtable<Topic,Topic> players;
-    
-    public QueryAssociation(Topic type,Hashtable<Topic,Topic> players,QueryTopicMap tm){
-        this.type=type;
-        this.players=players;
-        this.tm=tm;
+    protected Hashtable<Topic, Topic> players;
+
+    public QueryAssociation(Topic type, Hashtable<Topic, Topic> players, QueryTopicMap tm) {
+        this.type = type;
+        this.players = players;
+        this.tm = tm;
     }
-    
+
+
     public Topic getPlayer(Topic role) throws TopicMapException {
         return players.get(role);
     }
+
 
     public Collection<Topic> getRoles() throws TopicMapException {
         return players.keySet();
     }
 
+
     public TopicMap getTopicMap() {
         return tm;
     }
 
+
     public Topic getType() throws TopicMapException {
         return type;
     }
-    
+
+
     public void addPlayer(Topic player, Topic role) throws TopicMapException {
         throw new TopicMapReadOnlyException();
     }
+
 
     public void addPlayers(Map<Topic, Topic> players) throws TopicMapException {
         throw new TopicMapReadOnlyException();
     }
 
+
     public boolean isRemoved() throws TopicMapException {
         return false;
     }
+
 
     public void remove() throws TopicMapException {
         throw new TopicMapReadOnlyException();
     }
 
+
     public void removePlayer(Topic role) throws TopicMapException {
         throw new TopicMapReadOnlyException();
     }
+
 
     public void setType(Topic t) throws TopicMapException {
         throw new TopicMapReadOnlyException();

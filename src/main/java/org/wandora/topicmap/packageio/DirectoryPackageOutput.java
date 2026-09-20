@@ -36,16 +36,16 @@ public class DirectoryPackageOutput implements PackageOutput {
 
     private String directory = null;
     private OutputStream out;
-    
-    
+
+
     public DirectoryPackageOutput(String directory) {
         this.directory = directory;
     }
-    
-    
+
+
     @Override
     public void nextEntry(String name) throws IOException {
-        if(out != null) {
+        if (out != null) {
             out.flush();
             out.close();
         }
@@ -54,51 +54,53 @@ public class DirectoryPackageOutput implements PackageOutput {
         IObox.createPathFor(file.getParentFile());
         out = new FileOutputStream(file);
     }
-    
-    
+
+
     @Override
     public void nextEntry(String path, String name) throws IOException {
         nextEntry(joinPath(path, name));
     }
-    
-    
-    
+
+
+
     @Override
     public void removeEntry(String name) throws IOException {
         String entryName = this.directory + getSeparator() + name;
         File file = new File(entryName);
-        if(file.exists()) {
+        if (file.exists()) {
             deleteRecursive(file);
         }
     }
-    
-    
+
+
     @Override
     public void removeEntry(String path, String name) throws IOException {
         removeEntry(joinPath(path, name));
     }
 
-    private boolean deleteRecursive(File path) throws FileNotFoundException{
-        if(!path.exists()) return false;
+
+    private boolean deleteRecursive(File path) throws FileNotFoundException {
+        if (!path.exists())
+            return false;
         boolean ret = true;
-        if(path.isDirectory()){
-            for (File f : path.listFiles()){
+        if (path.isDirectory()) {
+            for (File f : path.listFiles()) {
                 ret = ret && deleteRecursive(f);
             }
         }
         return ret && path.delete();
     }
-    
-    
-    
-    
+
+
+
     @Override
     public void close() throws IOException {
-        if(out != null) {
+        if (out != null) {
             out.flush();
             out.close();
         }
     }
+
 
     @Override
     public OutputStream getOutputStream() throws IOException {
@@ -107,35 +109,38 @@ public class DirectoryPackageOutput implements PackageOutput {
             public void write(int b) throws IOException {
                 out.write(b);
             }
+
+
             @Override
-            public void write(byte[] b,int off,int len) throws IOException {
-                out.write(b,off,len);
+            public void write(byte[] b, int off, int len) throws IOException {
+                out.write(b, off, len);
             }
+
+
             @Override
             public void write(byte[] b) throws IOException {
                 out.write(b);
             }
         };
     }
-    
-    
-    
-    
+
+
+
     @Override
     public String getSeparator() {
         return File.separator;
     }
-    
-    
-        
+
+
+
     @Override
     public String joinPath(String path, String name) {
-        if(path != null && path.length()>0) {
+        if (path != null && path.length() > 0) {
             return path + getSeparator() + name;
         }
         else {
             return name;
         }
     }
-    
+
 }

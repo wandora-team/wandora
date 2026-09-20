@@ -28,8 +28,10 @@
  */
 
 package org.wandora.topicmap.packageio;
+
 import java.io.IOException;
 import java.io.OutputStream;
+
 /**
  * A package is a collection of data consisting of entries. Each entry has a name
  * and data. Data is written with OutputStream to allow binary entries. A new entry
@@ -41,8 +43,8 @@ import java.io.OutputStream;
  * @author olli
  */
 public interface PackageOutput {
-    
-    
+
+
     /**
      * Start a new entry in the package with the given name.
      * 
@@ -50,9 +52,9 @@ public interface PackageOutput {
      * @throws java.io.IOException
      */
     public void nextEntry(String name) throws IOException;
-    
-    
-    
+
+
+
     /**
      * Start a new entry in the package with the given path and name.
      * 
@@ -61,18 +63,18 @@ public interface PackageOutput {
      * @throws java.io.IOException
      */
     public void nextEntry(String path, String name) throws IOException;
-    
-    
-    
+
+
+
     /**
      * Closes the package.
      * 
      * @throws java.io.IOException
      */
     public void close() throws IOException;
-    
-    
-    
+
+
+
     /**
      * Gets the output stream for current entry.
      * 
@@ -80,8 +82,8 @@ public interface PackageOutput {
      * @throws java.io.IOException
      */
     public OutputStream getOutputStream() throws IOException;
-    
-    
+
+
     /**
      * Ensure entry will be removed.
      * 
@@ -89,9 +91,9 @@ public interface PackageOutput {
      * @throws java.io.IOException
      */
     public void removeEntry(String name) throws IOException;
-    
-    
-    
+
+
+
     /**
      * Ensure entry will be removed.
      * 
@@ -100,18 +102,18 @@ public interface PackageOutput {
      * @throws java.io.IOException
      */
     public void removeEntry(String path, String name) throws IOException;
-    
-    
-    
+
+
+
     /**
      * Returns file separator used by the PackageOutput.
      * 
      * @return 
      */
     public String getSeparator();
-    
-    
-    
+
+
+
     /**
      * Joins path and name.
      * 

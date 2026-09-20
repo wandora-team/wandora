@@ -52,7 +52,7 @@ import java.util.Collection;
  * @author olli
  */
 public interface PackageInput {
-    
+
     /**
      * Moves to the entry that has the given name.
      * 
@@ -61,8 +61,8 @@ public interface PackageInput {
      * @throws java.io.IOException
      */
     public boolean gotoEntry(String name) throws IOException;
-    
-    
+
+
     /**
      * Moves to the entry that has the given path and name.
      * 
@@ -72,8 +72,8 @@ public interface PackageInput {
      * @throws java.io.IOException
      */
     public boolean gotoEntry(String path, String name) throws IOException;
-    
- 
+
+
     /**
      * Moves to next entry and returns it's name.
      * 
@@ -81,8 +81,8 @@ public interface PackageInput {
      * @throws java.io.IOException
      */
     public String gotoNextEntry() throws IOException;
-    
-    
+
+
     /**
      * Gets input stream for current entry.
      * 
@@ -90,17 +90,17 @@ public interface PackageInput {
      * @throws java.io.IOException
      */
     public InputStream getInputStream() throws IOException;
-    
-    
+
+
     /**
      * Closes the package.
      * 
      * @throws java.io.IOException
      */
     public void close() throws IOException;
-    
-    
-    
+
+
+
     /**
      * Get list of entries in the package.
      * 
@@ -108,19 +108,18 @@ public interface PackageInput {
      * @throws java.io.IOException
      */
     public Collection<String> getEntries() throws IOException;
-    
-    
-    
-    
+
+
+
     /**
      * Returns file separator used by the PackageInput.
      * 
      * @return 
      */
     public String getSeparator();
-    
-    
-    
+
+
+
     /**
      * Joins path and name, and returns joined resource name. Usually
      * Package input adds a separator string between the path and the name.
@@ -132,7 +131,7 @@ public interface PackageInput {
      * @return 
      */
     public String joinPath(String path, String name);
-    
-    
-    
+
+
+
 }

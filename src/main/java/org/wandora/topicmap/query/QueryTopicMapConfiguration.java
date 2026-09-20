@@ -48,74 +48,81 @@ import org.wandora.utils.logger.Log4j2Logger;
 public class QueryTopicMapConfiguration extends TopicMapConfigurationPanel {
     private static final long serialVersionUID = 1L;
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(QueryTopicMapConfiguration.class);
-    
+
     private QueryTopicMap.QueryInfo currentItem;
     private Wandora wandora;
     private javax.swing.DefaultListModel<QueryTopicMap.QueryInfo> listModel;
     private javax.swing.JDialog editDialog;
-    
+
     /** Creates new form QueryTopicMapConfiguration */
-    public QueryTopicMapConfiguration(Collection<QueryTopicMap.QueryInfo> queryInfos,Wandora wandora) {
+    public QueryTopicMapConfiguration(Collection<QueryTopicMap.QueryInfo> queryInfos, Wandora wandora) {
         this(wandora);
         fillData(queryInfos);
     }
-    
+
+
     public QueryTopicMapConfiguration(Wandora wandora) {
-        this.wandora=wandora;
-        this.listModel=new javax.swing.DefaultListModel<>();
+        this.wandora = wandora;
+        this.listModel = new javax.swing.DefaultListModel<>();
         initComponents();
     }
-    
-    public void fillData(Collection<QueryTopicMap.QueryInfo> queryInfos){
-        currentItem=null;
-        
+
+
+    public void fillData(Collection<QueryTopicMap.QueryInfo> queryInfos) {
+        currentItem = null;
+
         listModel.removeAllElements();
-        for(QueryTopicMap.QueryInfo info : queryInfos){
+        for (QueryTopicMap.QueryInfo info : queryInfos) {
             listModel.addElement(info);
         }
     }
-    
-    public void saveCurrent(){
-        if(currentItem==null) return;
-        currentItem.name=nameTextField.getText();
-        currentItem.type=typeTextField.getText();
-        currentItem.engine=engineComboBox.getSelectedItem().toString();
-        currentItem.script=scriptTextPane.getText();
+
+
+    public void saveCurrent() {
+        if (currentItem == null)
+            return;
+        currentItem.name = nameTextField.getText();
+        currentItem.type = typeTextField.getText();
+        currentItem.engine = engineComboBox.getSelectedItem().toString();
+        currentItem.script = scriptTextPane.getText();
     }
-    
-    private void openEditDialog(QueryTopicMap.QueryInfo info){
-        editDialog=new javax.swing.JDialog(wandora,"Edit query",true);
-        
-        currentItem=info;
-        List<String> engines=WandoraScriptManager.getAvailableEngines();
+
+
+    private void openEditDialog(QueryTopicMap.QueryInfo info) {
+        editDialog = new javax.swing.JDialog(wandora, "Edit query", true);
+
+        currentItem = info;
+        List<String> engines = WandoraScriptManager.getAvailableEngines();
         engineComboBox.removeAllItems();
-        for(int i=0;i<engines.size();i++){
-            String e=engines.get(i);
+        for (int i = 0; i < engines.size(); i++) {
+            String e = engines.get(i);
             engineComboBox.addItem(e);
-        }   
+        }
         nameTextField.setText(currentItem.name);
         typeTextField.setText(currentItem.type);
         engineComboBox.setSelectedItem(currentItem.engine);
         scriptTextPane.setText(currentItem.script);
-        
+
         editDialog.getContentPane().add(editPanel);
         editDialog.setSize(400, 500);
         org.wandora.utils.swing.GuiTools.centerWindow(editDialog, wandora);
-        
+
         editDialog.setVisible(true);
     }
+
 
     @Override
     public Object getParameters() {
         saveCurrent();
-        QueryTopicMapParams ret=new QueryTopicMapParams(wandora);
-        for(int i=0;i<listModel.size();i++){
-            QueryTopicMap.QueryInfo info=(QueryTopicMap.QueryInfo)listModel.get(i);
+        QueryTopicMapParams ret = new QueryTopicMapParams(wandora);
+        for (int i = 0; i < listModel.size(); i++) {
+            QueryTopicMap.QueryInfo info = listModel.get(i);
             ret.queryInfos.add(info);
         }
         return ret;
     }
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -326,70 +333,85 @@ public class QueryTopicMapConfiguration extends TopicMapConfigurationPanel {
         add(jScrollPane2, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-    private String checkScript(String engineString,String script){
-        WandoraScriptManager sm=new WandoraScriptManager();
-        ScriptEngine engine=sm.getScriptEngine(engineString);
-        if(engine==null){
+
+    private String checkScript(String engineString, String script) {
+        WandoraScriptManager sm = new WandoraScriptManager();
+        ScriptEngine engine = sm.getScriptEngine(engineString);
+        if (engine == null) {
             return "Couldn't find script engine";
         }
-        try{
-            Object o=engine.eval(script);
-            if(o==null){
+        try {
+            Object o = engine.eval(script);
+            if (o == null) {
                 return "Script returned null.";
             }
-            else if(!(o instanceof org.wandora.query2.Directive)){
-                return "Script didn't return an instance of Directive.<br>"+
-                       "Class of return value is "+o.getClass().getName();
+            else if (!(o instanceof org.wandora.query2.Directive)) {
+                return "Script didn't return an instance of Directive.<br>" +
+                        "Class of return value is " + o.getClass().getName();
             }
-        }catch(ScriptException se){
-            return "ScriptException at line "+se.getLineNumber()+" column "+se.getColumnNumber()+"<br>"+se.getMessage();
         }
-        catch(Exception e){
-        	logger.error(e);
-            return "Exception occurred during execution: "+e.getClass().getName()+" "+e.getMessage();
+        catch (ScriptException se) {
+            return "ScriptException at line " + se.getLineNumber() + " column " + se.getColumnNumber() + "<br>"
+                    + se.getMessage();
         }
-        return null;        
+        catch (Exception e) {
+            logger.error(e);
+            return "Exception occurred during execution: " + e.getClass().getName() + " " + e.getMessage();
+        }
+        return null;
     }
-    
+
+
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         listModel.addElement(new QueryTopicMap.QueryInfo("New query"));
     }//GEN-LAST:event_addButtonActionPerformed
 
+
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        int s=queryList.getSelectedIndex();
-        if(s!=-1) listModel.remove(s);
+        int s = queryList.getSelectedIndex();
+        if (s != -1)
+            listModel.remove(s);
     }//GEN-LAST:event_deleteButtonActionPerformed
 
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        String message=checkScript(engineComboBox.getSelectedItem().toString(),scriptTextPane.getText());
-        if(message!=null){
-            int c=WandoraOptionPane.showConfirmDialog(wandora, "Unabled to evaluate script. Do you want continue?<br><br>"+message,"Error in query");
-            if(c!=WandoraOptionPane.YES_OPTION) return;
+        String message = checkScript(engineComboBox.getSelectedItem().toString(), scriptTextPane.getText());
+        if (message != null) {
+            int c = WandoraOptionPane.showConfirmDialog(wandora,
+                    "Unabled to evaluate script. Do you want continue?<br><br>" + message, "Error in query");
+            if (c != WandoraOptionPane.YES_OPTION)
+                return;
         }
-        
+
         saveCurrent();
         editDialog.setVisible(false);
         queryList.repaint();
     }//GEN-LAST:event_okButtonActionPerformed
 
+
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         editDialog.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        Object o=queryList.getSelectedValue();
-        if(o!=null) openEditDialog((QueryTopicMap.QueryInfo)o);
+        Object o = queryList.getSelectedValue();
+        if (o != null)
+            openEditDialog((QueryTopicMap.QueryInfo) o);
     }//GEN-LAST:event_editButtonActionPerformed
 
+
     private void checkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkButtonActionPerformed
-        String m=checkScript(engineComboBox.getSelectedItem().toString(),scriptTextPane.getText());
-        if(m!=null){
-            WandoraOptionPane.showMessageDialog(wandora, m, "Error in query", WandoraOptionPane.ERROR_MESSAGE);        
+        String m = checkScript(engineComboBox.getSelectedItem().toString(), scriptTextPane.getText());
+        if (m != null) {
+            WandoraOptionPane.showMessageDialog(wandora, m, "Error in query", WandoraOptionPane.ERROR_MESSAGE);
         }
-        else WandoraOptionPane.showMessageDialog(wandora, "No errors", "No errors", WandoraOptionPane.INFORMATION_MESSAGE);        
+        else
+            WandoraOptionPane.showMessageDialog(wandora, "No errors", "No errors",
+                    WandoraOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_checkButtonActionPerformed
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton cancelButton;
@@ -411,17 +433,20 @@ public class QueryTopicMapConfiguration extends TopicMapConfigurationPanel {
     private javax.swing.JTextPane scriptTextPane;
     private javax.swing.JTextField typeTextField;
     // End of variables declaration//GEN-END:variables
-    
+
     public static class QueryTopicMapParams {
         public Wandora wandora;
         public ArrayList<QueryTopicMap.QueryInfo> queryInfos;
-        public QueryTopicMapParams(Wandora wandora){
-            this(wandora,new ArrayList<QueryTopicMap.QueryInfo>());
+
+        public QueryTopicMapParams(Wandora wandora) {
+            this(wandora, new ArrayList<QueryTopicMap.QueryInfo>());
         }
-        public QueryTopicMapParams(Wandora wandora,ArrayList<QueryTopicMap.QueryInfo> queryInfos){
-            this.wandora=wandora;
-            this.queryInfos=queryInfos;
+
+
+        public QueryTopicMapParams(Wandora wandora, ArrayList<QueryTopicMap.QueryInfo> queryInfos) {
+            this.wandora = wandora;
+            this.queryInfos = queryInfos;
         }
     }
-    
+
 }

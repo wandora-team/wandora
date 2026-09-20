@@ -55,72 +55,81 @@ import java.util.zip.ZipInputStream;
  * @author olli
  */
 public class ZipPackageInput implements PackageInput {
-    
+
     private URL url;
     private ZipInputStream zis;
-    private List<String> entries=null;
-    private List<String> passedEntries=null;
-    private int currentEntry=-1;
+    private List<String> entries = null;
+    private List<String> passedEntries = null;
+    private int currentEntry = -1;
 
-    
-    
+
+
     /** Creates a new instance of ZipPackageInput */
     public ZipPackageInput(File file) throws IOException {
         this(file.toURI().toURL());
     }
+
+
     public ZipPackageInput(String file) throws IOException {
         this(new File(file).toURI().toURL());
     }
-    
+
+
     public ZipPackageInput(URL url) throws IOException {
-        this.url=url;
+        this.url = url;
     }
+
 
     private void openStream() throws IOException {
-        if(zis!=null) zis.close();
-        zis=new ZipInputStream(url.openStream());
-        currentEntry=-1;
-        passedEntries=new ArrayList<String>();
+        if (zis != null)
+            zis.close();
+        zis = new ZipInputStream(url.openStream());
+        currentEntry = -1;
+        passedEntries = new ArrayList<String>();
     }
-    
-    
 
-    
+
+
     /**
      * Moves to the entry with the specified name. Returns true if that entry was
      * found, false otherwise.
      */
     @Override
     public boolean gotoEntry(String name) throws IOException {
-        if(zis==null) currentEntry=-1;
-        boolean findFromStart=false;
-        if(entries!=null) {
-            int ind=entries.indexOf(name);
-            if(ind==-1) return false;
-            if(ind<=currentEntry) findFromStart=true;
+        if (zis == null)
+            currentEntry = -1;
+        boolean findFromStart = false;
+        if (entries != null) {
+            int ind = entries.indexOf(name);
+            if (ind == -1)
+                return false;
+            if (ind <= currentEntry)
+                findFromStart = true;
         }
-        else if(passedEntries!=null && passedEntries.contains(name)) {
-            findFromStart=true;
+        else if (passedEntries != null && passedEntries.contains(name)) {
+            findFromStart = true;
         }
-        if( (findFromStart && currentEntry>=0) || zis==null) {
+        if ((findFromStart && currentEntry >= 0) || zis == null) {
             openStream();
         }
-        String e=null;
-        while(true) {
-            e=gotoNextEntry();
-            if(e==null) return false;
-            if(e.equals(name)) return true;
+        String e = null;
+        while (true) {
+            e = gotoNextEntry();
+            if (e == null)
+                return false;
+            if (e.equals(name))
+                return true;
         }
     }
-    
-    
+
+
     @Override
     public boolean gotoEntry(String path, String name) throws IOException {
         return gotoEntry(joinPath(path, name));
     }
-    
-    
-    
+
+
+
     /**
      * Goes to next entry in the file.
      * 
@@ -128,20 +137,20 @@ public class ZipPackageInput implements PackageInput {
      * @throws java.io.IOException
      */
     @Override
-    public String gotoNextEntry() throws IOException{
-        if(zis==null) {
+    public String gotoNextEntry() throws IOException {
+        if (zis == null) {
             openStream();
         }
         currentEntry++;
-        ZipEntry e=zis.getNextEntry();
-        if(e==null) {
+        ZipEntry e = zis.getNextEntry();
+        if (e == null) {
             return null;
         }
         passedEntries.add(e.getName());
         return e.getName();
     }
-    
-    
+
+
     /**
      * Gets the input stream for current entry.
      * 
@@ -150,30 +159,38 @@ public class ZipPackageInput implements PackageInput {
      */
     @Override
     public InputStream getInputStream() throws IOException {
-        return new InputStream(){
+        return new InputStream() {
             @Override
             public int available() throws IOException {
                 return zis.available();
             }
+
+
             public int read() throws IOException {
                 return zis.read();
             }
+
+
             @Override
             public int read(byte[] b) throws IOException {
                 return zis.read(b);
             }
+
+
             @Override
-            public int read(byte[] b,int off,int len) throws IOException {
-                return zis.read(b,off,len);
+            public int read(byte[] b, int off, int len) throws IOException {
+                return zis.read(b, off, len);
             }
+
+
             @Override
             public long skip(long n) throws IOException {
                 return zis.skip(n);
             }
         };
     }
-    
-    
+
+
     /**
      * Gets the names of all entries in the file. This requires scanning
      * of the entire file and then reopening the file after the entries
@@ -181,44 +198,46 @@ public class ZipPackageInput implements PackageInput {
      */
     @Override
     public Collection<String> getEntries() throws IOException {
-        if(entries!=null) return entries;
-        if(zis!=null) openStream();
-        ZipEntry e=null;
-        entries=new ArrayList<String>();
-        while( (e=zis.getNextEntry())!=null ){
+        if (entries != null)
+            return entries;
+        if (zis != null)
+            openStream();
+        ZipEntry e = null;
+        entries = new ArrayList<String>();
+        while ((e = zis.getNextEntry()) != null) {
             entries.add(e.getName());
         }
         zis.close();
-        zis=null;
+        zis = null;
         return entries;
     }
 
-    
+
     /**
      * Closes the file.
      */
     @Override
     public void close() throws IOException {
         zis.close();
-        zis=null;
+        zis = null;
     }
 
-    
-    
-    
+
+
     @Override
     public String getSeparator() {
         return "/";
     }
-    
+
+
     @Override
     public String joinPath(String path, String name) {
-        if(path != null && path.length()>0) {
+        if (path != null && path.length() > 0) {
             return path + getSeparator() + name;
         }
         else {
             return name;
         }
     }
-    
+
 }

@@ -50,145 +50,155 @@ import org.wandora.utils.Options;
  */
 public class QueryTopicMapType implements TopicMapType {
 
-    
-    public QueryTopicMapType(){
+
+    public QueryTopicMapType() {
     }
-    
-    
+
+
     @Override
     public TopicMap createTopicMap(Object params) throws TopicMapException {
-        QueryTopicMapConfiguration.QueryTopicMapParams p=(QueryTopicMapConfiguration.QueryTopicMapParams)params;
-        QueryTopicMap qtm=new QueryTopicMap(p.wandora);
+        QueryTopicMapConfiguration.QueryTopicMapParams p = (QueryTopicMapConfiguration.QueryTopicMapParams) params;
+        QueryTopicMap qtm = new QueryTopicMap(p.wandora);
         qtm.setQueries(p.queryInfos);
         return qtm;
     }
-    
-    
+
+
     @Override
-    public TopicMap modifyTopicMap(TopicMap tm,Object params) throws TopicMapException {
-        QueryTopicMap qtm=(QueryTopicMap)createTopicMap(params);
+    public TopicMap modifyTopicMap(TopicMap tm, Object params) throws TopicMapException {
+        QueryTopicMap qtm = (QueryTopicMap) createTopicMap(params);
         qtm.addTopicMapListeners(tm.getTopicMapListeners());
-        qtm.addContainerListeners(((QueryTopicMap)tm).getContainerListeners());
-        qtm.setLayerStack(((QueryTopicMap)tm).getLayerStack());
+        qtm.addContainerListeners(((QueryTopicMap) tm).getContainerListeners());
+        qtm.setLayerStack(((QueryTopicMap) tm).getLayerStack());
         return qtm;
     }
 
-    
+
     @Override
     public TopicMapConfigurationPanel getConfigurationPanel(Wandora wandora, Options options) {
         return new QueryTopicMapConfiguration(wandora);
-        //return new QueryConfigPanel(wandora);
     }
 
-    
+
     @Override
     public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora wandora, Options options, TopicMap tm) {
-        QueryTopicMap qtm=(QueryTopicMap)tm;
-        return new QueryTopicMapConfiguration(qtm.getOriginalQueries(),wandora);
+        QueryTopicMap qtm = (QueryTopicMap) tm;
+        return new QueryTopicMapConfiguration(qtm.getOriginalQueries(), wandora);
     }
 
-    
+
     @Override
     public JMenuItem[] getTopicMapMenu(TopicMap tm, Wandora wandora) {
         return null;
     }
 
-    
+
     @Override
     public String getTypeName() {
         return "Query";
     }
-    
-    @Override
-    public String toString(){return getTypeName();}
 
-    
-    
-    @Override
-    public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger) throws IOException, TopicMapException {
-        QueryTopicMap qtm=(QueryTopicMap)tm;
-        Options options=new Options();
-        Collection<QueryTopicMap.QueryInfo> queries=qtm.getOriginalQueries();
 
-        int counter=1;
-        if(queries!=null){
-            for(QueryTopicMap.QueryInfo info : queries){
-                options.put("query"+counter+".engine",info.engine);
-                options.put("query"+counter+".type",info.type);
-                options.put("query"+counter+".script",info.script);
-                options.put("query"+counter+".name",info.name);
+    @Override
+    public String toString() {
+        return getTypeName();
+    }
+
+
+
+    @Override
+    public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger)
+            throws IOException, TopicMapException {
+        QueryTopicMap qtm = (QueryTopicMap) tm;
+        Options options = new Options();
+        Collection<QueryTopicMap.QueryInfo> queries = qtm.getOriginalQueries();
+
+        int counter = 1;
+        if (queries != null) {
+            for (QueryTopicMap.QueryInfo info : queries) {
+                options.put("query" + counter + ".engine", info.engine);
+                options.put("query" + counter + ".type", info.type);
+                options.put("query" + counter + ".script", info.script);
+                options.put("query" + counter + ".name", info.name);
 
                 counter++;
             }
         }
-        
+
         out.nextEntry(path, "queries.xml");
         options.save(new java.io.OutputStreamWriter(out.getOutputStream()));
-        
-        LayerStack ls=((QueryTopicMap)tm).getLayerStack();
-        LayeredTopicMapType lttype=new LayeredTopicMapType();
+
+        LayerStack ls = ((QueryTopicMap) tm).getLayerStack();
+        LayeredTopicMapType lttype = new LayeredTopicMapType();
         lttype.packageTopicMap(ls, out, path, logger);
     }
 
-    
-    
+
+
     @Override
-    public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger,Wandora wandora) throws IOException, TopicMapException {
+    public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger, Wandora wandora)
+            throws IOException, TopicMapException {
         in.gotoEntry(path, "queries.xml");
-        List<QueryTopicMap.QueryInfo> queries = new ArrayList<QueryTopicMap.QueryInfo>();
+        List<QueryTopicMap.QueryInfo> queries = new ArrayList<>();
         Options options = new Options();
         options.parseOptions(new BufferedReader(new InputStreamReader(in.getInputStream())));
         int counter = 1;
-        while(true){
-            String engine=options.get("query"+counter+".engine");
-            String type=options.get("query"+counter+".type");
-            String script=options.get("query"+counter+".script");
-            String name=options.get("query"+counter+".name");
-            if(engine==null || type==null || script==null) break;
-            
-            queries.add(new QueryTopicMap.QueryInfo(name,type,script,engine));
+        while (true) {
+            String engine = options.get("query" + counter + ".engine");
+            String type = options.get("query" + counter + ".type");
+            String script = options.get("query" + counter + ".script");
+            String name = options.get("query" + counter + ".name");
+            if (engine == null || type == null || script == null)
+                break;
+
+            queries.add(new QueryTopicMap.QueryInfo(name, type, script, engine));
 
             counter++;
         }
-        QueryTopicMap qtm=new QueryTopicMap(wandora);
+        QueryTopicMap qtm = new QueryTopicMap(wandora);
         qtm.setQueries(queries);
-        
-        LayeredTopicMapType lttype=new LayeredTopicMapType();
-        LayerStack ls=(LayerStack)lttype.unpackageTopicMap(in, path, logger, wandora);
+
+        LayeredTopicMapType lttype = new LayeredTopicMapType();
+        LayerStack ls = (LayerStack) lttype.unpackageTopicMap(in, path, logger, wandora);
         qtm.setLayerStack(ls);
-        
+
         return qtm;
     }
 
-    
-    
+
+
     @Override
-    public TopicMap unpackageTopicMap(TopicMap tm, PackageInput in, String path, TopicMapLogger logger,Wandora wandora) throws IOException, TopicMapException {
-        return unpackageTopicMap(in,path,logger,wandora);
+    public TopicMap unpackageTopicMap(TopicMap tm, PackageInput in, String path, TopicMapLogger logger, Wandora wandora)
+            throws IOException, TopicMapException {
+        return unpackageTopicMap(in, path, logger, wandora);
     }
-    
-    
-    
-    
+
+
+
     public static class QueryConfigPanel extends TopicMapConfigurationPanel {
         private static final long serialVersionUID = 1L;
-        
-		public Object param;
-        public QueryConfigPanel() { }
-        public QueryConfigPanel(Object param) { 
-            super();
-            this.param=param;
+
+        public Object param;
+
+        public QueryConfigPanel() {
         }
-        
+
+
+        public QueryConfigPanel(Object param) {
+            super();
+            this.param = param;
+        }
+
+
         @Override
         public Object getParameters() {
             return param;
         }
     }
-    
-    
+
+
     @Override
-    public Icon getTypeIcon(){
+    public Icon getTypeIcon() {
         return UIBox.getIcon("gui/icons/layerinfo/layer_type_query.png");
     }
 
