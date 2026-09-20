@@ -27,6 +27,7 @@
  */
 
 package org.wandora.topicmap.layered;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -103,11 +104,11 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author olli
  */
 public class LayerStack extends ContainerTopicMap implements TopicMapListener {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LayerStack.class);
-	
-    protected boolean useTopicIndex=true;
-    protected Object indexLock=new Object();
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(LayerStack.class);
+
+    protected boolean useTopicIndex = true;
+    protected Object indexLock = new Object();
+
     /**
      * Maps subject identifiers to layered topics for fast access in makeLayered.
      * Contains topics that have recently been used in makeLayered topic. Each
@@ -120,8 +121,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
      * significant changes in topic map, such as adding layers or changing
      * visibility of layers.
      */
-    protected Map<Locator,LayeredTopic> topicIndex;
-    
+    protected Map<Locator, LayeredTopic> topicIndex;
+
     /**
      * All layers in the layer stack.
      */
@@ -129,8 +130,8 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     /**
      * Maps the topic maps of each layer to the layer itself.
      */
-    protected Map<TopicMap,Layer> layerIndex;
-    
+    protected Map<TopicMap, Layer> layerIndex;
+
     /**
      * The selected layer.
      */
@@ -145,256 +146,312 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
     protected List<TopicMapListener> disabledListeners;
 
     private AmbiguityResolver ambiguityResolver;
-    
+
     protected ContainerTopicMapListener containerListener;
-    
-    protected boolean useUndo=true;
-    
-    
+
+    protected boolean useUndo = true;
+
+
     /** Creates a new instance of LayerStack */
     public LayerStack(String wandoraProjectFilename) {
         this();
         PackageInput in = null;
         try {
             File f = new File(wandoraProjectFilename);
-            in=new ZipPackageInput(f);
-            TopicMapType type=TopicMapTypeManager.getType(org.wandora.topicmap.layered.LayerStack.class);
-            type.unpackageTopicMap(this, in, "", this,null);
+            in = new ZipPackageInput(f);
+            TopicMapType type = TopicMapTypeManager.getType(org.wandora.topicmap.layered.LayerStack.class);
+            type.unpackageTopicMap(this, in, "", this, null);
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
         finally {
-        	if(in != null) {
-        		try { in.close(); } catch(Exception e) {}
-        	}
+            if (in != null) {
+                try {
+                    in.close();
+                }
+                catch (Exception e) {
+                }
+            }
         }
     }
-    
-    
+
+
     public LayerStack() {
-        layers=new Vector<>();
-        visibleLayers=new Vector<>();
-        layerIndex=new LinkedHashMap<>();
-        topicMapListeners=new ArrayList<>();
-        containerListener=new ContainerTopicMapListener(){
+        layers = new Vector<>();
+        visibleLayers = new Vector<>();
+        layerIndex = new LinkedHashMap<>();
+        topicMapListeners = new ArrayList<>();
+        containerListener = new ContainerTopicMapListener() {
             public void layerAdded(Layer l) {
                 notifyLayersChanged();
                 fireLayerAdded(l);
             }
+
+
             public void layerChanged(Layer oldLayer, Layer newLayer) {
                 notifyLayersChanged();
-                fireLayerChanged(oldLayer,newLayer);
+                fireLayerChanged(oldLayer, newLayer);
             }
+
+
             public void layerRemoved(Layer l) {
                 notifyLayersChanged();
                 fireLayerRemoved(l);
             }
+
+
             public void layerStructureChanged() {
                 notifyLayersChanged();
                 fireLayerStructureChanged();
             }
+
+
             public void layerVisibilityChanged(Layer l) {
                 notifyLayersChanged();
                 fireLayerVisibilityChanged(l);
             }
         };
     }
-    
-    
+
+
     @Override
     public void close() {
-        for(int i=layers.size()-1;i>=0; i--) {
+        for (int i = layers.size() - 1; i >= 0; i--) {
             Layer layer = layers.elementAt(i);
             layer.topicMap.close();
-            log("Closing layer "+layer.getName());
+            log("Closing layer " + layer.getName());
         }
     }
-    
 
 
-    public boolean isUseUndo(){
+
+    public boolean isUseUndo() {
         return this.useUndo;
     }
-    
-    
+
+
     // Use this to make LayerStack wrap layers in UndoTopicMap
-    public void setUseUndo(boolean useUndo) throws UndoException{
-        if(!layers.isEmpty()) throw new UndoException("Can't change undo status with existing layers");
-        this.useUndo=useUndo;
+    public void setUseUndo(boolean useUndo) throws UndoException {
+        if (!layers.isEmpty()) {
+            throw new UndoException("Can't change undo status with existing layers");
+        }
+        this.useUndo = useUndo;
     }
 
-    
+
     // Use this to temporarily disable undo, for example before a very big
     // operation that you don't want to end up in the undo buffer.
-    public void setUndoDisabled(boolean value){
-        for(Layer l : layers){
-            TopicMap tm=l.getTopicMap();
-            if(tm instanceof UndoTopicMap) {
-                ((UndoTopicMap)tm).setUndoDisabled(value);
+    public void setUndoDisabled(boolean value) {
+        for (Layer l : layers) {
+            TopicMap tm = l.getTopicMap();
+            if (tm instanceof UndoTopicMap) {
+                ((UndoTopicMap) tm).setUndoDisabled(value);
             }
         }
     }
-    
+
+
     public void undo() throws UndoException {
-        if(!this.useUndo) throw new UndoException("Undo is not in use.");
-        UndoBuffer buf=getNextUndo();
-        if(buf==null) throw new UndoException("Nothing to undo.");
+        if (!this.useUndo) {
+            throw new UndoException("Undo is not in use.");
+        }
+        UndoBuffer buf = getNextUndo();
+        if (buf == null) {
+            throw new UndoException("Nothing to undo.");
+        }
         buf.undo();
     }
-    
+
+
     public void redo() throws UndoException {
-        if(!this.useUndo) throw new UndoException("Undo is not in use.");
-        UndoBuffer buf=getNextRedo();
-        if(buf==null) throw new UndoException("Nothing to redo.");
-        buf.redo();        
+        if (!this.useUndo) {
+            throw new UndoException("Undo is not in use.");
+        }
+        UndoBuffer buf = getNextRedo();
+        if (buf == null) {
+            throw new UndoException("Nothing to redo.");
+        }
+        buf.redo();
     }
 
-    private UndoBuffer getNextUndo(){
-        T2<Integer,UndoBuffer> nextUndoBuffer = getNextUndo(this);
+
+    private UndoBuffer getNextUndo() {
+        T2<Integer, UndoBuffer> nextUndoBuffer = getNextUndo(this);
         return nextUndoBuffer.e2;
     }
-    
-    public static T2<Integer,UndoBuffer> getNextUndo(LayerStack lst) {
-        UndoBuffer ret=null;
-        int biggest=Integer.MIN_VALUE;
-        for(Layer l : lst.getLayers()) {
-            TopicMap tm=l.getTopicMap();
-            if(tm instanceof LayerStack) {
-                T2<Integer,UndoBuffer> subBuffer = getNextUndo((LayerStack) tm);
-                if(subBuffer.e1>biggest){
-                    biggest=subBuffer.e1;
-                    ret=subBuffer.e2;
+
+
+    public static T2<Integer, UndoBuffer> getNextUndo(LayerStack lst) {
+        UndoBuffer ret = null;
+        int biggest = Integer.MIN_VALUE;
+        for (Layer l : lst.getLayers()) {
+            TopicMap tm = l.getTopicMap();
+            if (tm instanceof LayerStack) {
+                T2<Integer, UndoBuffer> subBuffer = getNextUndo((LayerStack) tm);
+                if (subBuffer.e1 > biggest) {
+                    biggest = subBuffer.e1;
+                    ret = subBuffer.e2;
                 }
             }
-            if(tm instanceof UndoTopicMap) {
-                UndoBuffer buf=((UndoTopicMap)tm).getUndoBuffer();
-                int num=buf.getUndoOperationNumber();
-                if(num>biggest){
-                    biggest=num;
-                    ret=buf;
+            if (tm instanceof UndoTopicMap) {
+                UndoBuffer buf = ((UndoTopicMap) tm).getUndoBuffer();
+                int num = buf.getUndoOperationNumber();
+                if (num > biggest) {
+                    biggest = num;
+                    ret = buf;
                 }
             }
         }
         return new T2<>(Integer.valueOf(biggest), ret);
     }
-    
-    
-    
-    private UndoBuffer getNextRedo(){
-        T2<Integer,UndoBuffer> nextRedoBuffer = getNextRedo(this);
-        return nextRedoBuffer.e2;      
+
+
+
+    private UndoBuffer getNextRedo() {
+        T2<Integer, UndoBuffer> nextRedoBuffer = getNextRedo(this);
+        return nextRedoBuffer.e2;
     }
-    
-    public static T2<Integer,UndoBuffer> getNextRedo(LayerStack lst) {
-        UndoBuffer ret=null;
-        int smallest=Integer.MAX_VALUE;
-        for(Layer l : lst.getLayers()){
-            TopicMap tm=l.getTopicMap();
-            if(tm instanceof LayerStack) {
-                T2<Integer,UndoBuffer> subBuffer = getNextRedo((LayerStack) tm);
-                if(subBuffer.e1<smallest){
-                    smallest=subBuffer.e1;
-                    ret=subBuffer.e2;
+
+
+    public static T2<Integer, UndoBuffer> getNextRedo(LayerStack lst) {
+        UndoBuffer ret = null;
+        int smallest = Integer.MAX_VALUE;
+        for (Layer l : lst.getLayers()) {
+            TopicMap tm = l.getTopicMap();
+            if (tm instanceof LayerStack) {
+                T2<Integer, UndoBuffer> subBuffer = getNextRedo((LayerStack) tm);
+                if (subBuffer.e1 < smallest) {
+                    smallest = subBuffer.e1;
+                    ret = subBuffer.e2;
                 }
             }
-            if(tm instanceof UndoTopicMap) {
-                UndoBuffer buf=((UndoTopicMap)tm).getUndoBuffer();
-                int num=buf.getRedoOperationNumber();
-                if(num<smallest){
-                    smallest=num;
-                    ret=buf;
+            if (tm instanceof UndoTopicMap) {
+                UndoBuffer buf = ((UndoTopicMap) tm).getUndoBuffer();
+                int num = buf.getRedoOperationNumber();
+                if (num < smallest) {
+                    smallest = num;
+                    ret = buf;
                 }
             }
         }
         return new T2<>(Integer.valueOf(smallest), ret);
     }
-    
-    public boolean canUndo(){
-        if(!this.useUndo) return false;
-        UndoBuffer buf=getNextUndo();
-        if(buf==null) return false;
-        else return true;
+
+
+    public boolean canUndo() {
+        if (!this.useUndo) {
+            return false;
+        }
+        UndoBuffer buf = getNextUndo();
+        if (buf == null) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
-    
-    public boolean canRedo(){
-        if(!this.useUndo) return false;
-        UndoBuffer buf=getNextRedo();
-        if(buf==null) return false;
-        else return true;
+
+
+    public boolean canRedo() {
+        if (!this.useUndo) {
+            return false;
+        }
+        UndoBuffer buf = getNextRedo();
+        if (buf == null) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
-    
+
+
     public void addUndoMarker(String label) {
-        if(!this.useUndo) return;
+        if (!this.useUndo) {
+            return;
+        }
         TopicMap tm = getSelectedLayer().getTopicMap();
-        if(tm != null && tm instanceof UndoTopicMap) {
-            UndoBuffer buf=((UndoTopicMap)tm).getUndoBuffer();
+        if (tm != null && tm instanceof UndoTopicMap) {
+            UndoBuffer buf = ((UndoTopicMap) tm).getUndoBuffer();
             buf.addMarker(label);
         }
     }
-    
+
+
     public void clearUndoBuffers() {
-        if(!this.useUndo) return;
-        for(Layer l : layers){
-            TopicMap tm=l.getTopicMap();
-            if(tm instanceof UndoTopicMap) {
-                UndoBuffer buf=((UndoTopicMap)tm).getUndoBuffer();
+        if (!this.useUndo) {
+            return;
+        }
+        for (Layer l : layers) {
+            TopicMap tm = l.getTopicMap();
+            if (tm instanceof UndoTopicMap) {
+                UndoBuffer buf = ((UndoTopicMap) tm).getUndoBuffer();
                 buf.clear();
             }
         }
     }
-    
+
+
     public List<UndoOperation> getUndoOperations() {
         List<UndoOperation> ops = new ArrayList<>();
-        if(this.useUndo) {
-            for(Layer l : layers){
-                TopicMap tm=l.getTopicMap();
-                if(tm instanceof UndoTopicMap) {
-                    UndoBuffer buf=((UndoTopicMap)tm).getUndoBuffer();
+        if (this.useUndo) {
+            for (Layer l : layers) {
+                TopicMap tm = l.getTopicMap();
+                if (tm instanceof UndoTopicMap) {
+                    UndoBuffer buf = ((UndoTopicMap) tm).getUndoBuffer();
                     ops.addAll(buf.getOperations());
                 }
             }
             Collections.sort(ops, new Comparator<UndoOperation>() {
                 public int compare(UndoOperation o1, UndoOperation o2) {
-                	if(o1 == null || o2 == null) {
-                		return 0;
-                	}
+                    if (o1 == null || o2 == null) {
+                        return 0;
+                    }
                     int oo1i = o1.getOperationNumber();
                     int oo2i = o2.getOperationNumber();
-                    return (oo1i>oo2i ? -1 : (oo1i==oo2i ? 0 : 1));
+                    return (oo1i > oo2i ? -1 : (oo1i == oo2i ? 0 : 1));
                 }
             });
         }
         return ops;
     }
-    
-    
+
+
     @Override
     public void clearTopicMap() throws TopicMapException {
-        if(isSelectedReadOnly()) throw new TopicMapReadOnlyException();
+        if (isSelectedReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
         getSelectedLayer().getTopicMap().clearTopicMap();
         clearTopicIndex();
     }
-    
+
+
     @Override
     public void clearTopicMapIndexes() throws TopicMapException {
         clearTopicIndex();
         Layer layer = null;
-        for(int i=layers.size()-1;i>=0; i--) {
+        for (int i = layers.size() - 1; i >= 0; i--) {
             layer = layers.elementAt(i);
             layer.topicMap.clearTopicMapIndexes();
         }
     }
-    
+
+
     /**
      * Clears topicIndex.
      */
-    public void clearTopicIndex(){
-        if(!useTopicIndex) return;
-        synchronized(indexLock){
-            topicIndex=new LinkedHashMap<Locator,LayeredTopic>();
+    public void clearTopicIndex() {
+        if (!useTopicIndex) {
+            return;
+        }
+        synchronized (indexLock) {
+            topicIndex = new LinkedHashMap<Locator, LayeredTopic>();
         }
     }
+
+
     /**
      * Removes topic from topicIndex. Each subject identifier of the topic
      * is removed. It is assumed that each subject identifier of a topic is
@@ -404,372 +461,431 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
      * will have to manually remove the old subject identifiers from the index.
      */
     void removeTopicFromIndex(Locator l) throws TopicMapException {
-        if(!useTopicIndex) return;
-        if(l==null) return;
-        synchronized(indexLock){
-            LayeredTopic lt=topicIndex.get(l);
-            if(lt!=null){
-                for(Locator lo : lt.getSubjectIdentifiers()){
+        if (!useTopicIndex) {
+            return;
+        }
+        if (l == null) {
+            return;
+        }
+        synchronized (indexLock) {
+            LayeredTopic lt = topicIndex.get(l);
+            if (lt != null) {
+                for (Locator lo : lt.getSubjectIdentifiers()) {
                     topicIndex.remove(lo);
                 }
             }
             topicIndex.remove(l); // remove the one used as parameter (not in the topic necessarily anymore)
         }
     }
+
+
     /**
      * Adds a topic to topicIndex. Each subject identifier of the topic is
      * mapped to the layered topic itself.
      */
     void addTopicToIndex(LayeredTopic lt) throws TopicMapException {
-        synchronized(indexLock){
-            if(topicIndex.size()>500) clearTopicIndex();
-            for(Locator l : lt.getSubjectIdentifiers()){
-                topicIndex.put(l,lt);
+        synchronized (indexLock) {
+            if (topicIndex.size() > 500) {
+                clearTopicIndex();
+            }
+            for (Locator l : lt.getSubjectIdentifiers()) {
+                topicIndex.put(l, lt);
             }
         }
     }
 
-    
+
     @Override
     public void setConsistencyCheck(boolean value) throws TopicMapException {
-        consistencyCheck=value;
+        consistencyCheck = value;
         Layer layer = null;
-        for(int i=layers.size()-1; i>=0; i--) {
+        for (int i = layers.size() - 1; i >= 0; i--) {
             layer = layers.elementAt(i);
             layer.topicMap.setConsistencyCheck(value);
         }
     }
+
+
     @Override
     public boolean getConsistencyCheck() throws TopicMapException {
         return consistencyCheck;
     }
-    
-    
-    public void setAmbiguityResolver(AmbiguityResolver resolver){
-        this.ambiguityResolver=resolver;
+
+
+    public void setAmbiguityResolver(AmbiguityResolver resolver) {
+        this.ambiguityResolver = resolver;
     }
-    
+
+
     /* See note beginning of the file about TopicMapListeners in LayerStack
      */
     @Override
     public void topicRemoved(Topic t) throws TopicMapException {
-        if(!topicMapListeners.isEmpty()) {
-            LayeredTopic lt=makeLayeredTopic(t);
-            for(TopicMapListener listener : topicMapListeners){
+        if (!topicMapListeners.isEmpty()) {
+            LayeredTopic lt = makeLayeredTopic(t);
+            for (TopicMapListener listener : topicMapListeners) {
                 listener.topicRemoved(lt);
             }
         }
         removeTopicFromIndex(t.getOneSubjectIdentifier());
     }
-    
+
+
     @Override
     public void associationRemoved(Association a) throws TopicMapException {
-        if(!topicMapListeners.isEmpty()) {
-            for(TopicMapListener listener : topicMapListeners){
+        if (!topicMapListeners.isEmpty()) {
+            for (TopicMapListener listener : topicMapListeners) {
                 listener.associationRemoved(makeLayeredAssociation(a));
             }
         }
     }
-    
+
+
     @Override
-    public void topicSubjectIdentifierChanged(Topic t,Locator added,Locator removed) throws TopicMapException{
-        if(removed!=null) removeTopicFromIndex(removed);
-        if(added!=null) removeTopicFromIndex(added);
-        for(Locator l : t.getSubjectIdentifiers()){
+    public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
+        if (removed != null) {
+            removeTopicFromIndex(removed);
+        }
+        if (added != null) {
+            removeTopicFromIndex(added);
+        }
+        for (Locator l : t.getSubjectIdentifiers()) {
             removeTopicFromIndex(l);
         }
-        if(!topicMapListeners.isEmpty()) {
-            LayeredTopic lt=makeLayeredTopic(t);
-            for(TopicMapListener listener : topicMapListeners){
-                listener.topicSubjectIdentifierChanged(lt,added,removed);
+        if (!topicMapListeners.isEmpty()) {
+            LayeredTopic lt = makeLayeredTopic(t);
+            for (TopicMapListener listener : topicMapListeners) {
+                listener.topicSubjectIdentifierChanged(lt, added, removed);
             }
         }
     }
-    
+
+
     @Override
-    public void topicBaseNameChanged(Topic t,String newName,String oldName) throws TopicMapException{
-        for(Locator l : t.getSubjectIdentifiers()){
+    public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
+        for (Locator l : t.getSubjectIdentifiers()) {
             removeTopicFromIndex(l);
         }
         removeTopicFromIndex(t.getOneSubjectIdentifier());
-        if(!topicMapListeners.isEmpty()) {
-            LayeredTopic lt=makeLayeredTopic(t);
-            for(TopicMapListener listener : topicMapListeners){
-                listener.topicBaseNameChanged(lt,newName,oldName);
+        if (!topicMapListeners.isEmpty()) {
+            LayeredTopic lt = makeLayeredTopic(t);
+            for (TopicMapListener listener : topicMapListeners) {
+                listener.topicBaseNameChanged(lt, newName, oldName);
             }
         }
     }
-    
+
+
     @Override
-    public void topicTypeChanged(Topic t,Topic added,Topic removed) throws TopicMapException {
-        if(!topicMapListeners.isEmpty()) {
-            LayeredTopic lt=makeLayeredTopic(t);
-            LayeredTopic ladded=makeLayeredTopic(added);
-            LayeredTopic lremoved=makeLayeredTopic(removed);
-            for(TopicMapListener listener : topicMapListeners){
-                listener.topicTypeChanged(lt,ladded,lremoved);
+    public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
+        if (!topicMapListeners.isEmpty()) {
+            LayeredTopic lt = makeLayeredTopic(t);
+            LayeredTopic ladded = makeLayeredTopic(added);
+            LayeredTopic lremoved = makeLayeredTopic(removed);
+            for (TopicMapListener listener : topicMapListeners) {
+                listener.topicTypeChanged(lt, ladded, lremoved);
             }
         }
     }
-    
+
+
     @Override
-    public void topicVariantChanged(Topic t,Collection<Topic> scope,String newName,String oldName) throws TopicMapException {
-        if(!topicMapListeners.isEmpty()) {
-            LayeredTopic lt=makeLayeredTopic(t);
-            Collection<Topic> lscope=makeLayeredTopics(scope);
-            for(TopicMapListener listener : topicMapListeners){
-                listener.topicVariantChanged(lt,lscope,newName,oldName);
+    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName)
+            throws TopicMapException {
+        if (!topicMapListeners.isEmpty()) {
+            LayeredTopic lt = makeLayeredTopic(t);
+            Collection<Topic> lscope = makeLayeredTopics(scope);
+            for (TopicMapListener listener : topicMapListeners) {
+                listener.topicVariantChanged(lt, lscope, newName, oldName);
             }
         }
     }
-    
+
+
     @Override
-    public void topicDataChanged(Topic t,Topic type,Topic version,String newValue,String oldValue) throws TopicMapException {
-        if(!topicMapListeners.isEmpty()) {
-            LayeredTopic lt=makeLayeredTopic(t);
-            LayeredTopic ltype=makeLayeredTopic(type);
-            LayeredTopic lversion=makeLayeredTopic(version);
-            for(TopicMapListener listener : topicMapListeners){
-                listener.topicDataChanged(lt,ltype,lversion,newValue,oldValue);
+    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue)
+            throws TopicMapException {
+        if (!topicMapListeners.isEmpty()) {
+            LayeredTopic lt = makeLayeredTopic(t);
+            LayeredTopic ltype = makeLayeredTopic(type);
+            LayeredTopic lversion = makeLayeredTopic(version);
+            for (TopicMapListener listener : topicMapListeners) {
+                listener.topicDataChanged(lt, ltype, lversion, newValue, oldValue);
             }
         }
     }
-    
+
+
     @Override
-    public void topicSubjectLocatorChanged(Topic t,Locator newLocator,Locator oldLocator) throws TopicMapException {
-        for(Locator l : t.getSubjectIdentifiers()){
+    public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
+        for (Locator l : t.getSubjectIdentifiers()) {
             removeTopicFromIndex(l);
         }
-        if(!topicMapListeners.isEmpty()) {
-            LayeredTopic lt=makeLayeredTopic(t);
-            for(TopicMapListener listener : topicMapListeners){
-                listener.topicSubjectLocatorChanged(lt,newLocator,oldLocator);
+        if (!topicMapListeners.isEmpty()) {
+            LayeredTopic lt = makeLayeredTopic(t);
+            for (TopicMapListener listener : topicMapListeners) {
+                listener.topicSubjectLocatorChanged(lt, newLocator, oldLocator);
             }
         }
     }
-    
+
+
     @Override
     public void topicChanged(Topic t) throws TopicMapException {
-        for(Locator l : t.getSubjectIdentifiers()){
+        for (Locator l : t.getSubjectIdentifiers()) {
             removeTopicFromIndex(l);
         }
-        if(!topicMapListeners.isEmpty()) {
-            LayeredTopic lt=null;
-            if(t instanceof LayeredTopic && t.getTopicMap()==this) lt=(LayeredTopic)t;
-            else lt=makeLayeredTopic(t);
-            for(TopicMapListener listener : topicMapListeners){
+        if (!topicMapListeners.isEmpty()) {
+            LayeredTopic lt = null;
+            if (t instanceof LayeredTopic && t.getTopicMap() == this) {
+                lt = (LayeredTopic) t;
+            }
+            else {
+                lt = makeLayeredTopic(t);
+            }
+            for (TopicMapListener listener : topicMapListeners) {
                 listener.topicChanged(lt);
             }
         }
     }
-    
+
+
     @Override
-    public void associationTypeChanged(Association a,Topic newType,Topic oldType) throws TopicMapException {
-        if(!topicMapListeners.isEmpty()) {
-            LayeredAssociation la=makeLayeredAssociation(a);
-            LayeredTopic lNewType=makeLayeredTopic(newType);
-            LayeredTopic lOldType=makeLayeredTopic(oldType);
-            for(TopicMapListener listener : topicMapListeners){
-                listener.associationTypeChanged(la,lNewType,lOldType);
+    public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
+        if (!topicMapListeners.isEmpty()) {
+            LayeredAssociation la = makeLayeredAssociation(a);
+            LayeredTopic lNewType = makeLayeredTopic(newType);
+            LayeredTopic lOldType = makeLayeredTopic(oldType);
+            for (TopicMapListener listener : topicMapListeners) {
+                listener.associationTypeChanged(la, lNewType, lOldType);
             }
         }
     }
-    
+
+
     @Override
-    public void associationPlayerChanged(Association a,Topic role,Topic newPlayer,Topic oldPlayer) throws TopicMapException {
-        if(!topicMapListeners.isEmpty()) {
-            LayeredAssociation la=makeLayeredAssociation(a);
-            LayeredTopic lrole=makeLayeredTopic(role);
-            LayeredTopic lNewPlayer=makeLayeredTopic(newPlayer);
-            LayeredTopic lOldPlayer=makeLayeredTopic(oldPlayer);
-            for(TopicMapListener listener : topicMapListeners){
-                listener.associationPlayerChanged(la,lrole,lNewPlayer,lOldPlayer);
+    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer)
+            throws TopicMapException {
+        if (!topicMapListeners.isEmpty()) {
+            LayeredAssociation la = makeLayeredAssociation(a);
+            LayeredTopic lrole = makeLayeredTopic(role);
+            LayeredTopic lNewPlayer = makeLayeredTopic(newPlayer);
+            LayeredTopic lOldPlayer = makeLayeredTopic(oldPlayer);
+            for (TopicMapListener listener : topicMapListeners) {
+                listener.associationPlayerChanged(la, lrole, lNewPlayer, lOldPlayer);
             }
         }
     }
-    
+
+
     @Override
     public void associationChanged(Association a) throws TopicMapException {
-        if(!topicMapListeners.isEmpty()){
-            LayeredAssociation la=null;
-            if(a instanceof LayeredAssociation && a.getTopicMap()==this) la=(LayeredAssociation)a;
-            else la=makeLayeredAssociation(a);
-            for(TopicMapListener listener : topicMapListeners){
+        if (!topicMapListeners.isEmpty()) {
+            LayeredAssociation la = null;
+            if (a instanceof LayeredAssociation && a.getTopicMap() == this) {
+                la = (LayeredAssociation) a;
+            }
+            else {
+                la = makeLayeredAssociation(a);
+            }
+            for (TopicMapListener listener : topicMapListeners) {
                 listener.associationChanged(la);
             }
         }
     }
-    
-    
+
+
     /**
      * Checks if the selected layer is in read only mode.
      */
-    public boolean isSelectedReadOnly(){
+    public boolean isSelectedReadOnly() {
         return getSelectedLayer().isReadOnly();
     }
-    
+
+
     /**
      * Gets layer position in the stack. Layer with index 0 is at the top.
      */
     public int getLayerZPos(Layer l) {
         return layers.indexOf(l);
     }
-    
+
+
     /**
      * Gets the layer a topic belongs to.
      */
     public Layer getLayer(Topic t) {
         return getLayer(t.getTopicMap());
     }
-    
+
+
     /**
      * Gets the layer of a topic map.
      */
     public Layer getLayer(TopicMap tm) {
         return layerIndex.get(tm);
     }
-    
+
+
     /**
      * Gets the layer with the specified name.
      */
     @Override
     public Layer getLayer(String layerName) {
         Layer layer = null;
-        if(layerName != null) {
-            for(int i=layers.size()-1; i>=0; i--) {
+        if (layerName != null) {
+            for (int i = layers.size() - 1; i >= 0; i--) {
                 layer = layers.elementAt(i);
-                if(layerName.equals(layer.getName())) {
+                if (layerName.equals(layer.getName())) {
                     return layer;
                 }
             }
         }
         return null;
     }
-    
+
+
     /**
      * Gets the selected layer.
      */
     @Override
-    public Layer getSelectedLayer(){
+    public Layer getSelectedLayer() {
         return selectedLayer;
     }
-    
+
+
     /**
      * Gets the selected layer position in the stack.
      */
     @Override
-    public int getSelectedIndex(){
+    public int getSelectedIndex() {
         return getLayerZPos(selectedLayer);
     }
-    
+
+
     /**
      * Makes the specified layer the selected layer.
      */
     @Override
-    public void selectLayer(Layer layer){
-        selectedLayer=layer; 
-//        if(controlPanel!=null) controlPanel.resetLayers(layers);
+    public void selectLayer(Layer layer) {
+        selectedLayer = layer;
     }
-    
+
+
     /**
      * Gets all layers in the order they are in the stack.
      */
     @Override
-    public List<Layer> getLayers(){
+    public List<Layer> getLayers() {
         return layers;
     }
-    
+
+
     /**
      * Gets all visible layers in the order they are in the stack.
      */
     @Override
-    public List<Layer> getVisibleLayers(){
+    public List<Layer> getVisibleLayers() {
         return visibleLayers;
     }
-    
-    @Override
-    public void notifyLayersChanged(){
-        clearTopicIndex();
-        visibleLayers=new Vector<>();
-        for(Layer l : layers) {
-            if(l.isVisible()) visibleLayers.add(l);
-        }
-//        TopicMap parent=getParentTopicMap();
-//        if(parent!=null && parent instanceof LayerStack) ((LayerStack)parent).notifyLayersChanged();
-    }
+
 
     @Override
-    public Collection<Topic> getTopicsForLayer(Layer l,Topic t) {
-        return ((LayeredTopic)t).getTopicsForLayer(l);
+    public void notifyLayersChanged() {
+        clearTopicIndex();
+        visibleLayers = new Vector<>();
+        for (Layer l : layers) {
+            if (l.isVisible())
+                visibleLayers.add(l);
+        }
     }
-    
+
+
+    @Override
+    public Collection<Topic> getTopicsForLayer(Layer l, Topic t) {
+        return ((LayeredTopic) t).getTopicsForLayer(l);
+    }
+
+
     /**
      * Adds a layer at the bottom of the stack.
      */
     @Override
     public void addLayer(Layer l) {
-        addLayer(l,layers.size());
+        addLayer(l, layers.size());
     }
-    
+
+
     /**
      * Inserts a layer at the specified position in the stack. Layers after
      * that index are moved one position down.
      */
     @Override
-    public void addLayer(Layer l,int pos) {
-        if(useUndo) l.wrapInUndo();
-        
-        if(layers.size()<pos) pos=layers.size();
-        layers.insertElementAt(l,pos);
-        layerIndex.put(l.getTopicMap(),l);
-        if(layers.size()==1) selectedLayer=layers.elementAt(0);
+    public void addLayer(Layer l, int pos) {
+        if (useUndo) {
+            l.wrapInUndo();
+        }
+        if (layers.size() < pos) {
+            pos = layers.size();
+        }
+        layers.insertElementAt(l, pos);
+        layerIndex.put(l.getTopicMap(), l);
+        if (layers.size() == 1) {
+            selectedLayer = layers.elementAt(0);
+        }
         l.getTopicMap().addTopicMapListener(this);
-        if(l.getTopicMap() instanceof ContainerTopicMap containerTopicMap) {
-        	containerTopicMap.addContainerListener(containerListener);
+        if (l.getTopicMap() instanceof ContainerTopicMap containerTopicMap) {
+            containerTopicMap.addContainerListener(containerListener);
         }
         l.getTopicMap().setParentTopicMap(this);
-        notifyLayersChanged();      
+        notifyLayersChanged();
         fireLayerAdded(l);
     }
-    
-    
+
+
     /**
      * Sets layer in the specified position removing old layer at that position.
      */
     @Override
     public void setLayer(Layer l, int pos) {
-        if(useUndo) l.wrapInUndo();
-        
-        Layer old=layers.elementAt(pos);
-        layerIndex.remove(old.topicMap);
-        layerIndex.put(l.getTopicMap(),l);
-        old.getTopicMap().removeTopicMapListener(this);
-        if(old.getTopicMap() instanceof ContainerTopicMap containerTopicMap) {
-        	containerTopicMap.removeContainerListener(containerListener);
+        if (useUndo) {
+            l.wrapInUndo();
         }
-        layers.setElementAt(l,pos);
+        Layer old = layers.elementAt(pos);
+        layerIndex.remove(old.topicMap);
+        layerIndex.put(l.getTopicMap(), l);
+        old.getTopicMap().removeTopicMapListener(this);
+        if (old.getTopicMap() instanceof ContainerTopicMap containerTopicMap) {
+            containerTopicMap.removeContainerListener(containerListener);
+        }
+        layers.setElementAt(l, pos);
         l.getTopicMap().addTopicMapListener(this);
-        if(l.getTopicMap() instanceof ContainerTopicMap containerTopicMap) {
-        	containerTopicMap.addContainerListener(containerListener);
+        if (l.getTopicMap() instanceof ContainerTopicMap containerTopicMap) {
+            containerTopicMap.addContainerListener(containerListener);
         }
         l.getTopicMap().setParentTopicMap(this);
-        if(selectedLayer==old) selectedLayer=l;
+        if (selectedLayer == old) {
+            selectedLayer = l;
+        }
         notifyLayersChanged();
         fireLayerChanged(old, l);
     }
-    
+
+
     /**
      * Removes the specified layer. Layers after the removed layer are
      * moved one position up.
      */
     @Override
     public boolean removeLayer(Layer l) {
-        if(layers.remove(l)){
+        if (layers.remove(l)) {
             layerIndex.remove(l);
-            if(selectedLayer==l) selectedLayer=(layers.size()>0?layers.elementAt(0):null);
+            if (selectedLayer == l) {
+                selectedLayer = (layers.size() > 0 ? layers.elementAt(0) : null);
+            }
             l.getTopicMap().removeTopicMapListener(this);
-            if(l.getTopicMap() instanceof ContainerTopicMap containerTopicMap) {
-            	containerTopicMap.removeContainerListener(containerListener);
+            if (l.getTopicMap() instanceof ContainerTopicMap containerTopicMap) {
+                containerTopicMap.removeContainerListener(containerListener);
             }
             l.getTopicMap().setParentTopicMap(null);
             l.getTopicMap().close();
@@ -779,51 +895,58 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
         return false;
     }
-    
+
+
     /**
      * Moves layers around to reverse layer order.
      */
     @Override
     public void reverseLayerOrder() {
-        Vector<Layer> newLayers=new Vector<>();
-        for(int i=layers.size()-1; i>=0; i--) {
+        Vector<Layer> newLayers = new Vector<>();
+        for (int i = layers.size() - 1; i >= 0; i--) {
             newLayers.add(layers.elementAt(i));
         }
         layers = newLayers;
         notifyLayersChanged();
         fireLayerStructureChanged();
     }
-    
+
+
     /**
      * Merges all layers in the specified layer.
      */
     public void mergeAllLayers(int targetLayerIndex) {
-        if(targetLayerIndex < 0 || targetLayerIndex >= layers.size()) return;
+        if (targetLayerIndex < 0 || targetLayerIndex >= layers.size()) {
+            return;
+        }
         int[] mergeIndex = new int[layers.size()];
         mergeIndex[0] = targetLayerIndex;
         int j = 1;
-        for(int i=0; i<layers.size(); i++) {
-            if(i != targetLayerIndex) {
+        for (int i = 0; i < layers.size(); i++) {
+            if (i != targetLayerIndex) {
                 mergeIndex[j++] = i;
             }
         }
         mergeLayers(mergeIndex);
     }
-    
+
+
     /**
      * Merges some layers. The array given as parameter should contain indexes
      * of layers to be merged. First index is used as the target layer and all
      * other layers are merged into that.
      */
     public void mergeLayers(int[] layerIndexes) {
-        if(layerIndexes == null || layerIndexes.length < 2) return;
+        if (layerIndexes == null || layerIndexes.length < 2) {
+            return;
+        }
         Layer targetLayer = layers.elementAt(layerIndexes[0]);
         Vector<Layer> sourceLayers = new Vector<>();
         Layer sourceLayer = null;
-        for(int i=1; i<layerIndexes.length; i++) {
+        for (int i = 1; i < layerIndexes.length; i++) {
             sourceLayers.add(layers.elementAt(layerIndexes[i]));
         }
-        for(int i=sourceLayers.size()-1; i>=0; i--) {
+        for (int i = sourceLayers.size() - 1; i >= 0; i--) {
             try {
                 sourceLayer = sourceLayers.elementAt(i);
                 targetLayer.getTopicMap().mergeIn(sourceLayer.getTopicMap());
@@ -831,53 +954,69 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
                 sourceLayers.remove(sourceLayer);
             }
             catch (Exception e) {
-            	logger.error(e);
+                logger.error(e);
             }
         }
     }
-    
-    void ambiguity(String s){
-        if(ambiguityResolver!=null) ambiguityResolver.ambiguity(s);
+
+
+    void ambiguity(String s) {
+        if (ambiguityResolver != null) {
+            ambiguityResolver.ambiguity(s);
+        }
     }
-    
-    public AmbiguityResolution resolveAmbiguity(String event){
-        if(ambiguityResolver!=null) return ambiguityResolver.resolveAmbiguity(event);
-        else return AmbiguityResolution.addToSelected;
+
+
+    public AmbiguityResolution resolveAmbiguity(String event) {
+        if (ambiguityResolver != null) {
+            return ambiguityResolver.resolveAmbiguity(event);
+        }
+        else {
+            return AmbiguityResolution.addToSelected;
+        }
     }
-    
-    public AmbiguityResolution resolveAmbiguity(String event,String msg){
-        if(ambiguityResolver!=null) return ambiguityResolver.resolveAmbiguity(event,msg);
-        else return AmbiguityResolution.addToSelected;
+
+
+    public AmbiguityResolution resolveAmbiguity(String event, String msg) {
+        if (ambiguityResolver != null) {
+            return ambiguityResolver.resolveAmbiguity(event, msg);
+        }
+        else {
+            return AmbiguityResolution.addToSelected;
+        }
     }
 
 
     /* ************************* TopicMap functions ************************* */
-    
+
+
     /**
      * Collects all topics from all layers that merge with the given topic.
      */
     protected Set<Topic> collectTopics(Topic t) throws TopicMapException {
-        Set<Topic> collected=new KeyedHashSet<>(new TopicAndLayerKeyMaker());
-        collectTopics(collected,t);
+        Set<Topic> collected = new KeyedHashSet<>(new TopicAndLayerKeyMaker());
+        collectTopics(collected, t);
         return collected;
     }
-    
+
+
     /**
      * Collects all topics from all layers that merge with the given topic. Initially
      * the collected Set is empty but all merging topics are added to it to be returned
      * later and to avoid processing same topic several times.
      */
-    protected void collectTopics(Set<Topic> collected,Topic t) throws TopicMapException {
-        for(Layer l : visibleLayers){
-            Collection<Topic> merging=l.getTopicMap().getMergingTopics(t);
-            for(Topic m : merging){
-                if(collected.add(m)){
-                    collectTopics(collected,m);
+    protected void collectTopics(Set<Topic> collected, Topic t) throws TopicMapException {
+        for (Layer l : visibleLayers) {
+            Collection<Topic> merging = l.getTopicMap().getMergingTopics(t);
+            for (Topic m : merging) {
+                if (collected.add(m)) {
+                    collectTopics(collected, m);
                 }
             }
         }
     }
-    
+
+
     /**
      * Makes a layered topic when given a topic in one of the layers, that is a topic
      * that isn't yet a LayeredTopic of this LayerStack. First
@@ -886,41 +1025,48 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
      * the index before it is returned.
      */
     LayeredTopic makeLayeredTopic(Topic t) throws TopicMapException {
-        if(t==null) return null;
-        if(useTopicIndex){
-            synchronized(indexLock){
-                Locator l=t.getOneSubjectIdentifier();
-                LayeredTopic lt=topicIndex.get(l);
-                if(lt!=null) return lt;
+        if (t == null) {
+            return null;
+        }
+        if (useTopicIndex) {
+            synchronized (indexLock) {
+                Locator l = t.getOneSubjectIdentifier();
+                LayeredTopic lt = topicIndex.get(l);
+                if (lt != null)
+                    return lt;
             }
         }
-        Set<Topic> collected=collectTopics(t);
-        LayeredTopic lt=new LayeredTopic(collected,this);
-        
-        if(useTopicIndex){
+        Set<Topic> collected = collectTopics(t);
+        LayeredTopic lt = new LayeredTopic(collected, this);
+
+        if (useTopicIndex) {
             addTopicToIndex(lt);
         }
-        
+
         return lt;
     }
-    
+
+
     /**
      * Makes layered topics for all topics in the collection. Note that some topics
      * in the collection may end up in the same layered topic and thus the returned
      * collection may have less items than the collection used as the parameter.
      */
     Collection<Topic> makeLayeredTopics(Collection<Topic> ts) throws TopicMapException {
-        List<Topic> ret=new ArrayList<>();
-        Set<Topic> processed=new KeyedHashSet<>(new TopicAndLayerKeyMaker());
-        for(Topic t : ts){
-            if(processed.contains(t)) continue;
-            Set<Topic> collected=collectTopics(t);
+        List<Topic> ret = new ArrayList<>();
+        Set<Topic> processed = new KeyedHashSet<>(new TopicAndLayerKeyMaker());
+        for (Topic t : ts) {
+            if (processed.contains(t)) {
+                continue;
+            }
+            Set<Topic> collected = collectTopics(t);
             processed.addAll(collected);
-            ret.add(new LayeredTopic(collected,this));
+            ret.add(new LayeredTopic(collected, this));
         }
         return ret;
     }
-    
+
+
     /**
      * Makes layered association from an individual association. Note that unlike
      * LayeredTopic.getAssociations, this method returns only one LayeredAssociation
@@ -930,120 +1076,139 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
      * the possible LayeredAssociations is returned arbitrarily.
      */
     LayeredAssociation makeLayeredAssociation(Association a) throws TopicMapException {
-        LayeredTopic type=(a.getType()==null?null:makeLayeredTopic(a.getType()));
-        LayeredAssociation la=new LayeredAssociation(this,type);
-        for(Topic role : a.getRoles()){
-            Topic player=a.getPlayer(role);
-            LayeredTopic lrole=makeLayeredTopic(role);
-            LayeredTopic lplayer=makeLayeredTopic(player);
-            if(la.getPlayer(lrole)!=null) {
+        LayeredTopic type = (a.getType() == null ? null : makeLayeredTopic(a.getType()));
+        LayeredAssociation la = new LayeredAssociation(this, type);
+        for (Topic role : a.getRoles()) {
+            Topic player = a.getPlayer(role);
+            LayeredTopic lrole = makeLayeredTopic(role);
+            LayeredTopic lplayer = makeLayeredTopic(player);
+            if (la.getPlayer(lrole) != null) {
                 ambiguity("Assocition roles merged (makeLayeredAssociation)");
                 continue;
             }
-            la.addLayeredPlayer(lplayer,lrole);
+            la.addLayeredPlayer(lplayer, lrole);
         }
         return la;
     }
-    
+
+
     @Override
     public Topic getTopic(Locator si) throws TopicMapException {
-        for(Layer l : visibleLayers){
-            Topic t=l.getTopicMap().getTopic(si);
-            if(t!=null) return makeLayeredTopic(t); 
+        for (Layer l : visibleLayers) {
+            Topic t = l.getTopicMap().getTopic(si);
+            if (t != null)
+                return makeLayeredTopic(t);
             // note: makeLayeredTopic calls collectTopics which will get rest of topics
             //       with the specified subject identifier
         }
         return null;
     }
-    
+
+
     @Override
     public Topic[] getTopics(String[] sis) throws TopicMapException {
-        Topic[] ret=new Topic[sis.length];
-        for(int i=0;i<sis.length;i++){
-            ret[i]=getTopic(sis[i]);
+        Topic[] ret = new Topic[sis.length];
+        for (int i = 0; i < sis.length; i++) {
+            ret[i] = getTopic(sis[i]);
         }
         return ret;
     }
-    
+
+
     @Override
     public Topic getTopicBySubjectLocator(Locator sl) throws TopicMapException {
-        for(Layer l : visibleLayers){
-            Topic t=l.getTopicMap().getTopicBySubjectLocator(sl);
-            if(t!=null) return makeLayeredTopic(t); 
-        }        
+        for (Layer l : visibleLayers) {
+            Topic t = l.getTopicMap().getTopicBySubjectLocator(sl);
+            if (t != null)
+                return makeLayeredTopic(t);
+        }
         return null;
     }
-    
+
+
     @Override
     public Topic createTopic(String id) throws TopicMapException {
-        if(isSelectedReadOnly()) throw new TopicMapReadOnlyException();
-        if(selectedLayer!=null){
-            Topic t=selectedLayer.getTopicMap().createTopic(id);
-            return new LayeredTopic(t,this);
+        if (isSelectedReadOnly()) {
+            throw new TopicMapReadOnlyException();
         }
-        else{
+        if (selectedLayer != null) {
+            Topic t = selectedLayer.getTopicMap().createTopic(id);
+            return new LayeredTopic(t, this);
+        }
+        else {
             // TODO: some other exception
             throw new RuntimeException("No selected layer");
         }
     }
-    
-    
+
+
     @Override
     public Topic createTopic() throws TopicMapException {
-        if(isSelectedReadOnly()) throw new TopicMapReadOnlyException();
-        if(selectedLayer!=null){
-            Topic t=selectedLayer.getTopicMap().createTopic();
-            return new LayeredTopic(t,this);
+        if (isSelectedReadOnly()) {
+            throw new TopicMapReadOnlyException();
         }
-        else{
+        if (selectedLayer != null) {
+            Topic t = selectedLayer.getTopicMap().createTopic();
+            return new LayeredTopic(t, this);
+        }
+        else {
             // TODO: some other exception
             throw new RuntimeException("No selected layer");
         }
     }
-    
+
+
     @Override
     public Association createAssociation(Topic type) throws TopicMapException {
-        if(isSelectedReadOnly()) throw new TopicMapReadOnlyException();
-        if(selectedLayer!=null){
-            LayeredTopic lt=(LayeredTopic)type;
-            Collection<Topic> c=lt.getTopicsForSelectedLayer();
-            Topic st=null;
-            if(c.isEmpty()){
-                AmbiguityResolution res=resolveAmbiguity("createAssociation.type.noSelected","No type in selected layer");
-                if(res==AmbiguityResolution.addToSelected){
-                    st=((LayeredTopic)type).copyStubTo(getSelectedLayer().getTopicMap());
-                    if(st==null){
+        if (isSelectedReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
+        if (selectedLayer != null) {
+            LayeredTopic lt = (LayeredTopic) type;
+            Collection<Topic> c = lt.getTopicsForSelectedLayer();
+            Topic st = null;
+            if (c.isEmpty()) {
+                AmbiguityResolution res = resolveAmbiguity(
+                        "createAssociation.type.noSelected",
+                        "No type in selected layer");
+                if (res == AmbiguityResolution.addToSelected) {
+                    st = ((LayeredTopic) type).copyStubTo(getSelectedLayer().getTopicMap());
+                    if (st == null) {
                         ambiguity("Cannot copy topic to selected layer");
                         throw new TopicMapException("Cannot copy topic to selected layer");
                     }
                 }
-                else throw new RuntimeException("Not implemented");
+                else
+                    throw new RuntimeException("Not implemented");
             }
-            else{
-                if(c.size()>1) ambiguity("Multiple possible types in layer (createAssociation)");
-                st=c.iterator().next();
+            else {
+                if (c.size() > 1)
+                    ambiguity("Multiple possible types in layer (createAssociation)");
+                st = c.iterator().next();
             }
-            return new LayeredAssociation(this,lt);
+            return new LayeredAssociation(this, lt);
         }
-        else{
+        else {
             throw new RuntimeException("No selected layer");
             // TODO: some other exception
         }
     }
-    
+
+
     @Override
     public Collection<Topic> getTopicsOfType(Topic type) throws TopicMapException {
-        Set<Topic> processed=new KeyedHashSet<>(new TopicAndLayerKeyMaker());
-        List<Topic> ret=new ArrayList<>();
-        LayeredTopic lt=(LayeredTopic)type;
-        for(Layer l : visibleLayers){
-            for(Topic typeIn : lt.getTopicsForLayer(l)){
-                Collection<Topic> c=l.getTopicMap().getTopicsOfType(typeIn);
-                for(Topic t : c){
-                    if(processed.contains(t)) continue;
-                    Set<Topic> collected=collectTopics(t);
+        Set<Topic> processed = new KeyedHashSet<>(new TopicAndLayerKeyMaker());
+        List<Topic> ret = new ArrayList<>();
+        LayeredTopic lt = (LayeredTopic) type;
+        for (Layer l : visibleLayers) {
+            for (Topic typeIn : lt.getTopicsForLayer(l)) {
+                Collection<Topic> c = l.getTopicMap().getTopicsOfType(typeIn);
+                for (Topic t : c) {
+                    if (processed.contains(t))
+                        continue;
+                    Set<Topic> collected = collectTopics(t);
                     processed.addAll(collected);
-                    LayeredTopic add=new LayeredTopic(collected,this);
+                    LayeredTopic add = new LayeredTopic(collected, this);
                     addTopicToIndex(add);
                     ret.add(add);
                 }
@@ -1051,218 +1216,243 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
         return ret;
     }
-    
+
+
     @Override
     public Topic getTopicWithBaseName(String name) throws TopicMapException {
-        for(Layer l : visibleLayers){
-            Topic t=l.getTopicMap().getTopicWithBaseName(name);
-            if(t!=null) return makeLayeredTopic(t);
+        for (Layer l : visibleLayers) {
+            Topic t = l.getTopicMap().getTopicWithBaseName(name);
+            if (t != null)
+                return makeLayeredTopic(t);
         }
         return null;
     }
 
-    
-    
+
+
     private class TopicsIterator implements TopicIterator {
-        public LayeredTopic next=null;
+        public LayeredTopic next = null;
         public Iterator<Topic> currentIterator = null;
         public int layerIndex = 0;
         public Set<Topic> processed;
-        
-        public TopicsIterator(){
-            processed=new KeyedHashSet<>(new TopicAndLayerKeyMaker());
+
+        public TopicsIterator() {
+            processed = new KeyedHashSet<>(new TopicAndLayerKeyMaker());
         }
+
 
         @Override
         public void dispose() {
-            if(currentIterator!=null){
-                if(currentIterator instanceof TopicIterator) ((TopicIterator)currentIterator).dispose();
+            if (currentIterator != null) {
+                if (currentIterator instanceof TopicIterator)
+                    ((TopicIterator) currentIterator).dispose();
                 else {
-                    while(currentIterator.hasNext()) currentIterator.next();
+                    while (currentIterator.hasNext())
+                        currentIterator.next();
                 }
-                currentIterator=null;
-                layerIndex=visibleLayers.size();
-                next=null;
+                currentIterator = null;
+                layerIndex = visibleLayers.size();
+                next = null;
             }
         }
-        
+
+
         @Override
         public boolean hasNext() {
-            if(next!=null) return true;
-            while(_hasNext()){
-                Topic t=_next();
-                if(processed.contains(t)){
+            if (next != null)
+                return true;
+            while (_hasNext()) {
+                Topic t = _next();
+                if (processed.contains(t)) {
                     continue;
                 }
-                else{
-                    try{
-                        Set<Topic> collected=collectTopics(t);
-                        next=new LayeredTopic(collected, LayerStack.this);
+                else {
+                    try {
+                        Set<Topic> collected = collectTopics(t);
+                        next = new LayeredTopic(collected, LayerStack.this);
                         processed.addAll(collected);
                         break;
-                    }catch(TopicMapException tme){
+                    }
+                    catch (TopicMapException tme) {
                         log(tme);
-                        next=null;
+                        next = null;
                         return false;
                     }
                 }
             }
-            return next!=null;
+            return next != null;
         }
+
 
         @Override
         public Topic next() {
-            if(!hasNext()) throw new NoSuchElementException();
-            Topic ret=next;
-            next=null;
+            if (!hasNext())
+                throw new NoSuchElementException();
+            Topic ret = next;
+            next = null;
             return ret;
         }
 
-        public boolean _hasNext(){
+
+        public boolean _hasNext() {
             currentIterator = solveCurrentIterator(currentIterator);
-            if(currentIterator != null) {
+            if (currentIterator != null) {
                 return currentIterator.hasNext();
             }
-            return false;                
+            return false;
         }
+
 
         public Topic _next() {
             currentIterator = solveCurrentIterator(currentIterator);
-            if(currentIterator != null) {
-                if(currentIterator.hasNext()) {
+            if (currentIterator != null) {
+                if (currentIterator.hasNext()) {
                     return currentIterator.next();
                 }
             }
             throw new NoSuchElementException();
         }
 
-        public Iterator<Topic> solveCurrentIterator(Iterator<Topic> iterator) {
-            while(true){
-                if(iterator!=null && iterator.hasNext()) return iterator;
 
-                if( layerIndex < visibleLayers.size()) {
+        public Iterator<Topic> solveCurrentIterator(Iterator<Topic> iterator) {
+            while (true) {
+                if (iterator != null && iterator.hasNext())
+                    return iterator;
+
+                if (layerIndex < visibleLayers.size()) {
                     try {
                         iterator = visibleLayers.elementAt(layerIndex).getTopicMap().getTopics();
                         layerIndex++;
                     }
-                    catch(Exception e) {
-                    	logger.error(e);
+                    catch (Exception e) {
+                        logger.error(e);
                     }
                 }
-                else return null;
+                else
+                    return null;
             }
         }
 
+
         @Override
-        public void remove(){
+        public void remove() {
             throw new UnsupportedOperationException();
         }
     }
-    
-    
+
+
     @Override
     public Iterator<Topic> getTopics() throws TopicMapException {
         return new TopicsIterator();
     }
-    
 
-    
-    
-    
+
+
     private class AssociationsIterator implements Iterator<Association> {
         public TopicsIterator topicsIterator;
         public Association next;
-        
+
         public Topic currentTopic;
         public Iterator<Association> currentAssociations;
-        
-        public AssociationsIterator(){
-            topicsIterator=new TopicsIterator();
+
+        public AssociationsIterator() {
+            topicsIterator = new TopicsIterator();
         }
+
+
         @Override
-        public boolean hasNext(){
-            if(next!=null) return true;
-            
-            try{
-                
-                Outer: while(true){
-                    if(currentAssociations==null || !currentAssociations.hasNext()){
-                        if(topicsIterator.hasNext()){
-                            currentTopic=topicsIterator.next();
-                            currentAssociations=currentTopic.getAssociations().iterator();
+        public boolean hasNext() {
+            if (next != null)
+                return true;
+
+            try {
+
+                Outer: while (true) {
+                    if (currentAssociations == null || !currentAssociations.hasNext()) {
+                        if (topicsIterator.hasNext()) {
+                            currentTopic = topicsIterator.next();
+                            currentAssociations = currentTopic.getAssociations().iterator();
                             continue;
                         }
-                        else return false;
+                        else
+                            return false;
                     }
-                    Association a=currentAssociations.next();
+                    Association a = currentAssociations.next();
                     // if, and only if, any of the players, except current topic,
                     // is in topicsIterator.processed then we have included this
                     // association already
-                    for(Topic role : a.getRoles()){
-                        LayeredTopic player=(LayeredTopic)a.getPlayer(role);
-                        if(player.mergesWithTopic(currentTopic)) continue;
-                        for(Topic t : player.getTopicsForAllLayers()){
-                            if(topicsIterator.processed.contains(t)){
+                    for (Topic role : a.getRoles()) {
+                        LayeredTopic player = (LayeredTopic) a.getPlayer(role);
+                        if (player.mergesWithTopic(currentTopic))
+                            continue;
+                        for (Topic t : player.getTopicsForAllLayers()) {
+                            if (topicsIterator.processed.contains(t)) {
                                 continue Outer; // skip this association
                             }
                         }
                     }
-                    next=a;
+                    next = a;
                     return true;
                 }
-            
+
             }
-            catch(TopicMapException tme){
+            catch (TopicMapException tme) {
                 log(tme);
                 return false;
             }
         }
+
+
         @Override
-        public Association next(){
-            if(!hasNext()) throw new NoSuchElementException();
-            Association ret=next;
-            next=null;
+        public Association next() {
+            if (!hasNext())
+                throw new NoSuchElementException();
+            Association ret = next;
+            next = null;
             return ret;
         }
+
+
         @Override
-        public void remove(){
+        public void remove() {
             throw new UnsupportedOperationException();
         }
     }
-    
-    
+
+
     @Override
     public Iterator<Association> getAssociations() throws TopicMapException {
         return new AssociationsIterator();
     }
-    
-    
-    
-    
-    LayeredTopic getLayeredTopic(Topic t,Map<Topic,LayeredTopic> layeredTopics) throws TopicMapException {
-        LayeredTopic lt=layeredTopics.get(t);
-        if(lt==null){
-            Set<Topic> collected=collectTopics(t);
-            lt=new LayeredTopic(collected,this);
-            for(Topic ct : collected) layeredTopics.put(ct,lt);
+
+
+
+    LayeredTopic getLayeredTopic(Topic t, Map<Topic, LayeredTopic> layeredTopics) throws TopicMapException {
+        LayeredTopic lt = layeredTopics.get(t);
+        if (lt == null) {
+            Set<Topic> collected = collectTopics(t);
+            lt = new LayeredTopic(collected, this);
+            for (Topic ct : collected)
+                layeredTopics.put(ct, lt);
         }
         return lt;
     }
-    
+
+
     @Override
     public Collection<Association> getAssociationsOfType(Topic type) throws TopicMapException {
-        LayeredTopic lt=(LayeredTopic)type;
-        Map<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<>(new TopicAndLayerKeyMaker());
-        Set<Association> associations=new LinkedHashSet<>();
-        for(Layer l : visibleLayers){
-            for(Topic typeIn : lt.getTopicsForLayer(l)){
-                Collection<Association> c=l.getTopicMap().getAssociationsOfType(typeIn);
-                for(Association a : c ){
-                    LayeredAssociation la=new LayeredAssociation(this,lt);
-                    for(Topic role : a.getRoles()){
-                        LayeredTopic lrole=getLayeredTopic(role,layeredTopics);
-                        Topic player=a.getPlayer(role);
-                        LayeredTopic lplayer=getLayeredTopic(player,layeredTopics);
+        LayeredTopic lt = (LayeredTopic) type;
+        Map<Topic, LayeredTopic> layeredTopics = new KeyedHashMap<>(new TopicAndLayerKeyMaker());
+        Set<Association> associations = new LinkedHashSet<>();
+        for (Layer l : visibleLayers) {
+            for (Topic typeIn : lt.getTopicsForLayer(l)) {
+                Collection<Association> c = l.getTopicMap().getAssociationsOfType(typeIn);
+                for (Association a : c) {
+                    LayeredAssociation la = new LayeredAssociation(this, lt);
+                    for (Topic role : a.getRoles()) {
+                        LayeredTopic lrole = getLayeredTopic(role, layeredTopics);
+                        Topic player = a.getPlayer(role);
+                        LayeredTopic lplayer = getLayeredTopic(player, layeredTopics);
                         la.addLayeredPlayer(lplayer, lrole);
                     }
                     associations.add(la);
@@ -1271,205 +1461,235 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
         return associations;
     }
-    
+
+
     @Override
     public int getNumTopics() throws TopicMapException {
-        Set<Topic> processed=new KeyedHashSet<>(new TopicAndLayerKeyMaker());
-        int count=0;
-        for(Layer l : visibleLayers) {
+        Set<Topic> processed = new KeyedHashSet<>(new TopicAndLayerKeyMaker());
+        int count = 0;
+        for (Layer l : visibleLayers) {
             Iterator<Topic> c = l.getTopicMap().getTopics();
-            while(c.hasNext()) {
-                Topic t=c.next();
-                if(processed.contains(t)) continue;
-                Set<Topic> collected=collectTopics(t);
+            while (c.hasNext()) {
+                Topic t = c.next();
+                if (processed.contains(t))
+                    continue;
+                Set<Topic> collected = collectTopics(t);
                 processed.addAll(collected);
                 count++;
             }
         }
         return count;
     }
-    
-    
+
+
     @Override
     public int getNumAssociations() throws TopicMapException {
-        int counter=0;
-        AssociationsIterator iter=new AssociationsIterator();
-        while(iter.hasNext()){
+        int counter = 0;
+        AssociationsIterator iter = new AssociationsIterator();
+        while (iter.hasNext()) {
             iter.next();
             counter++;
         }
 
         return counter;
     }
-    
+
+
     @Override
-    public Topic copyTopicIn(Topic t,boolean deep) throws TopicMapException {
-        if(isReadOnly()) throw new TopicMapReadOnlyException();
-        Topic ct=selectedLayer.topicMap.copyTopicIn(t,deep);
+    public Topic copyTopicIn(Topic t, boolean deep) throws TopicMapException {
+        if (isReadOnly())
+            throw new TopicMapReadOnlyException();
+        Topic ct = selectedLayer.topicMap.copyTopicIn(t, deep);
         return makeLayeredTopic(ct);
     }
-    
+
+
     @Override
     public Association copyAssociationIn(Association a) throws TopicMapException {
-        if(isReadOnly()) throw new TopicMapReadOnlyException();
-        Association ca=selectedLayer.topicMap.copyAssociationIn(a);
+        if (isReadOnly())
+            throw new TopicMapReadOnlyException();
+        Association ca = selectedLayer.topicMap.copyAssociationIn(a);
         return makeLayeredAssociation(ca);
     }
-    
+
+
     @Override
     public void copyTopicAssociationsIn(Topic t) throws TopicMapException {
-        if(isReadOnly()) throw new TopicMapReadOnlyException();
+        if (isReadOnly())
+            throw new TopicMapReadOnlyException();
         selectedLayer.topicMap.copyTopicAssociationsIn(t);
     }
-    
+
+
     @Override
-    public void importXTM(java.io.InputStream in, TopicMapLogger logger) throws java.io.IOException,TopicMapException {
-        if(isReadOnly()) throw new TopicMapReadOnlyException();
+    public void importXTM(java.io.InputStream in, TopicMapLogger logger) throws java.io.IOException, TopicMapException {
+        if (isReadOnly())
+            throw new TopicMapReadOnlyException();
         selectedLayer.topicMap.importXTM(in, logger);
     }
-    
+
+
     @Override
     public void importLTM(java.io.InputStream in, TopicMapLogger logger) throws java.io.IOException, TopicMapException {
-        if(isReadOnly()) throw new TopicMapReadOnlyException();
+        if (isReadOnly())
+            throw new TopicMapReadOnlyException();
         selectedLayer.topicMap.importLTM(in, logger);
     }
-    
+
+
     @Override
     public void importLTM(java.io.File in) throws java.io.IOException, TopicMapException {
-        if(isReadOnly()) throw new TopicMapReadOnlyException();
+        if (isReadOnly())
+            throw new TopicMapReadOnlyException();
         selectedLayer.topicMap.importLTM(in);
     }
-    
+
+
     @Override
-    public void mergeIn(TopicMap tm)  throws TopicMapException {
-        if(isReadOnly()) throw new TopicMapReadOnlyException();
+    public void mergeIn(TopicMap tm) throws TopicMapException {
+        if (isReadOnly())
+            throw new TopicMapReadOnlyException();
         selectedLayer.topicMap.mergeIn(tm);
     }
-    
+
+
     @Override
-    public boolean trackingDependent(){
+    public boolean trackingDependent() {
         return trackDependent;
     }
-    
+
+
     @Override
-    public void setTrackDependent(boolean v){
-        trackDependent=v;
+    public void setTrackDependent(boolean v) {
+        trackDependent = v;
     }
-    
+
+
     @Override
-    public List<TopicMapListener> getTopicMapListeners(){
+    public List<TopicMapListener> getTopicMapListeners() {
         return topicMapListeners;
     }
 
+
     @Override
-    public void addTopicMapListener(TopicMapListener listener){
-        if(!topicMapListeners.contains(listener)) topicMapListeners.add(listener);
+    public void addTopicMapListener(TopicMapListener listener) {
+        if (!topicMapListeners.contains(listener))
+            topicMapListeners.add(listener);
     }
-    
+
+
     @Override
-    public void removeTopicMapListener(TopicMapListener listener){
+    public void removeTopicMapListener(TopicMapListener listener) {
         topicMapListeners.remove(listener);
     }
-    
+
+
     @Override
-    public void disableAllListeners(){
-        if(disabledListeners==null){
-            disabledListeners=topicMapListeners;
-            topicMapListeners=new ArrayList<>();
-        }
-    }
-    
-    @Override
-    public void enableAllListeners(){
-        if(disabledListeners!=null){
-            topicMapListeners=disabledListeners;
-            disabledListeners=null;
+    public void disableAllListeners() {
+        if (disabledListeners == null) {
+            disabledListeners = topicMapListeners;
+            topicMapListeners = new ArrayList<>();
         }
     }
 
-    
+
+    @Override
+    public void enableAllListeners() {
+        if (disabledListeners != null) {
+            topicMapListeners = disabledListeners;
+            disabledListeners = null;
+        }
+    }
+
+
     @Override
     public boolean resetTopicMapChanged() throws TopicMapException {
-        boolean ret=false;
-        for(Layer l : visibleLayers){
-            ret|=l.getTopicMap().resetTopicMapChanged();
+        boolean ret = false;
+        for (Layer l : visibleLayers) {
+            ret |= l.getTopicMap().resetTopicMapChanged();
         }
         return ret;
     }
-    
+
+
     @Override
     public boolean isTopicMapChanged() throws TopicMapException {
-        for(Layer l : visibleLayers){
-            if(l.getTopicMap().isTopicMapChanged()) return true;
+        for (Layer l : visibleLayers) {
+            if (l.getTopicMap().isTopicMapChanged())
+                return true;
         }
         return false;
     }
-    
+
 
     // -------------------------------------------------------------------------
-    
-    
-    
-    public class TopicAndLayerKeyMaker implements Delegate<String,Topic> {
-        public String invoke(Topic t){
-            String lname=getLayer(t).getName();
-            String min=null;
-            try{
-                for(Locator l : t.getSubjectIdentifiers()){
-                    String s=l.toExternalForm();
-                    if(min==null) min=s;
-                    else if(s.compareTo(min)<0) min=s;
+
+
+
+    public class TopicAndLayerKeyMaker implements Delegate<String, Topic> {
+        public String invoke(Topic t) {
+            String lname = getLayer(t).getName();
+            String min = null;
+            try {
+                for (Locator l : t.getSubjectIdentifiers()) {
+                    String s = l.toExternalForm();
+                    if (min == null)
+                        min = s;
+                    else if (s.compareTo(min) < 0)
+                        min = s;
                 }
-                return lname+"//"+min;
+                return lname + "//" + min;
             }
-            catch(TopicMapException tme){
-            	logger.error(tme);
+            catch (TopicMapException tme) {
+                logger.error(tme);
                 return lname;
             }
         }
     }
-    
-    
+
+
     @Override
-    public Collection<Topic> search(String query, TopicMapSearchOptions options)  throws TopicMapException {
-        TopicMapSearchOptions options2=options.duplicate();
-        options2.maxResults=-1; // we can't know yet how many results we need from individual topic maps
-        
+    public Collection<Topic> search(String query, TopicMapSearchOptions options) throws TopicMapException {
+        TopicMapSearchOptions options2 = options.duplicate();
+        options2.maxResults = -1; // we can't know yet how many results we need from individual topic maps
+
         Set<Topic> searchResult = new LinkedHashSet<>();
         Set<Topic> searchResultLayered = new LinkedHashSet<>();
-        Outer: for(Layer l : visibleLayers) {
+        Outer: for (Layer l : visibleLayers) {
             searchResult.clear();
             searchResult.addAll(l.getTopicMap().search(query, options2));
-            for(Topic t : searchResult){
+            for (Topic t : searchResult) {
                 searchResultLayered.add(this.getTopic(t.getOneSubjectIdentifier()));
-                if(options.maxResults>=0 && searchResultLayered.size()>=options.maxResults) break Outer;
+                if (options.maxResults >= 0 && searchResultLayered.size() >= options.maxResults)
+                    break Outer;
             }
         }
         return searchResultLayered;
     }
-    
-    
+
+
     @Override
     public TopicMapStatData getStatistics(TopicMapStatOptions options) throws TopicMapException {
-        if(options == null) return null;
+        if (options == null)
+            return null;
         int option = options.getOption();
-        switch(option) {
+        switch (option) {
             case TopicMapStatOptions.NUMBER_OF_TOPICS: {
                 return new TopicMapStatData(getNumTopics());
             }
             case TopicMapStatOptions.NUMBER_OF_TOPIC_CLASSES: {
                 Set<Topic> typeIndex = new HashSet<>();
-                Iterator<Topic> topicIter=this.getTopics();
+                Iterator<Topic> topicIter = this.getTopics();
                 Topic t = null;
                 Topic type = null;
-                while(topicIter.hasNext()) {
+                while (topicIter.hasNext()) {
                     t = topicIter.next();
-                    if(t != null && !t.isRemoved()) {
+                    if (t != null && !t.isRemoved()) {
                         Collection<Topic> types = t.getTypes();
-                        if(types != null && !types.isEmpty()) {
-                            for(Iterator<Topic> iter = types.iterator(); iter.hasNext(); ) {
+                        if (types != null && !types.isEmpty()) {
+                            for (Iterator<Topic> iter = types.iterator(); iter.hasNext();) {
                                 type = iter.next();
-                                if(type != null && !type.isRemoved()) {
+                                if (type != null && !type.isRemoved()) {
                                     typeIndex.add(type);
                                 }
                             }
@@ -1483,7 +1703,7 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
             case TopicMapStatOptions.NUMBER_OF_ASSOCIATION_PLAYERS: {
                 Set<Topic> associationPlayers = new HashSet<>();
-                Iterator<Topic> topicIter=this.getTopics();
+                Iterator<Topic> topicIter = this.getTopics();
                 Topic t = null;
                 Collection<Association> associations = null;
                 Collection<Topic> associationRoles = null;
@@ -1491,19 +1711,19 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
                 Iterator<Topic> associationRoleIter = null;
                 Association association = null;
                 Topic role = null;
-                while(topicIter.hasNext()) {
-                    t=(Topic) topicIter.next();
-                    if(t != null && !t.isRemoved()) {
+                while (topicIter.hasNext()) {
+                    t = (Topic) topicIter.next();
+                    if (t != null && !t.isRemoved()) {
                         associations = t.getAssociations();
-                        if(associations != null && !associations.isEmpty()) {
+                        if (associations != null && !associations.isEmpty()) {
                             associationIter = associations.iterator();
-                            while(associationIter.hasNext()) {
+                            while (associationIter.hasNext()) {
                                 association = (Association) associationIter.next();
-                                if(association != null && !association.isRemoved()) {
+                                if (association != null && !association.isRemoved()) {
                                     associationRoles = association.getRoles();
-                                    if(associationRoles != null) {
+                                    if (associationRoles != null) {
                                         associationRoleIter = associationRoles.iterator();
-                                        while(associationRoleIter.hasNext()) {
+                                        while (associationRoleIter.hasNext()) {
                                             role = (Topic) associationRoleIter.next();
                                             associationPlayers.add(association.getPlayer(role));
                                         }
@@ -1517,21 +1737,21 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
             case TopicMapStatOptions.NUMBER_OF_ASSOCIATION_ROLES: {
                 Set<Topic> associationRoles = new HashSet<>();
-                Iterator<Topic> topicIter=this.getTopics();
+                Iterator<Topic> topicIter = this.getTopics();
                 Topic t = null;
                 Collection<Association> associations = null;
                 Iterator<Association> associationIter = null;
                 Association association = null;
-                while(topicIter.hasNext()) {
-                    t=(Topic) topicIter.next();
-                    if(t != null && !t.isRemoved()) {
+                while (topicIter.hasNext()) {
+                    t = (Topic) topicIter.next();
+                    if (t != null && !t.isRemoved()) {
                         associations = t.getAssociations();
-                        if(associations != null && !associations.isEmpty()) {
+                        if (associations != null && !associations.isEmpty()) {
                             associationIter = associations.iterator();
-                            while(associationIter.hasNext()) {
+                            while (associationIter.hasNext()) {
                                 association = (Association) associationIter.next();
-                                if(association != null && !association.isRemoved()) {
-                                    associationRoles.addAll( association.getRoles() );
+                                if (association != null && !association.isRemoved()) {
+                                    associationRoles.addAll(association.getRoles());
                                 }
                             }
                         }
@@ -1541,14 +1761,14 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
             case TopicMapStatOptions.NUMBER_OF_ASSOCIATION_TYPES: {
                 Set<Topic> typeIndex = new HashSet<>();
-                Iterator<Association> aIter=this.getAssociations();
+                Iterator<Association> aIter = this.getAssociations();
                 Association a = null;
                 Topic t = null;
-                while(aIter.hasNext()) {
+                while (aIter.hasNext()) {
                     a = aIter.next();
-                    if(a != null && !a.isRemoved()) {
+                    if (a != null && !a.isRemoved()) {
                         t = a.getType();
-                        if(t != null && !t.isRemoved()) {
+                        if (t != null && !t.isRemoved()) {
                             typeIndex.add(t);
                         }
                     }
@@ -1557,12 +1777,12 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
             case TopicMapStatOptions.NUMBER_OF_BASE_NAMES: {
                 Set<String> nameIndex = new HashSet<>();
-                Iterator<Topic> topicIter=this.getTopics();
+                Iterator<Topic> topicIter = this.getTopics();
                 Topic t = null;
-                while(topicIter.hasNext()) {
+                while (topicIter.hasNext()) {
                     t = topicIter.next();
-                    if(t != null && !t.isRemoved()) {
-                        if(t.getBaseName() != null) {
+                    if (t != null && !t.isRemoved()) {
+                        if (t.getBaseName() != null) {
                             nameIndex.add(t.getBaseName());
                         }
                     }
@@ -1570,31 +1790,32 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
                 return new TopicMapStatData(nameIndex.size());
             }
             case TopicMapStatOptions.NUMBER_OF_OCCURRENCES: {
-                int count=0;
-                Iterator<Topic> topicIter=this.getTopics();
+                int count = 0;
+                Iterator<Topic> topicIter = this.getTopics();
                 Topic t = null;
                 Collection<Topic> dataTypes = null;
-                while(topicIter.hasNext()) {
-                    t=(Topic) topicIter.next();
-                    if(t != null && !t.isRemoved()) {
+                while (topicIter.hasNext()) {
+                    t = (Topic) topicIter.next();
+                    if (t != null && !t.isRemoved()) {
                         dataTypes = t.getDataTypes();
-                        if(dataTypes != null) count += dataTypes.size();
+                        if (dataTypes != null)
+                            count += dataTypes.size();
                     }
                 }
                 return new TopicMapStatData(count);
             }
             case TopicMapStatOptions.NUMBER_OF_SUBJECT_IDENTIFIERS: {
                 Set<String> siIndex = new HashSet<>();
-                Iterator<Topic> topicIter=this.getTopics();
+                Iterator<Topic> topicIter = this.getTopics();
                 Topic t = null;
                 Collection<Locator> sis = null;
-                while(topicIter.hasNext()) {
+                while (topicIter.hasNext()) {
                     t = topicIter.next();
-                    if(t != null && !t.isRemoved()) {
+                    if (t != null && !t.isRemoved()) {
                         sis = t.getSubjectIdentifiers();
-                        if(sis != null) {
-                            for(Iterator<Locator> iter2=sis.iterator(); iter2.hasNext(); ) {
-                                if(iter2 != null) {
+                        if (sis != null) {
+                            for (Iterator<Locator> iter2 = sis.iterator(); iter2.hasNext();) {
+                                if (iter2 != null) {
                                     siIndex.add(iter2.next().toExternalForm());
                                 }
                             }
@@ -1605,14 +1826,14 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
             }
             case TopicMapStatOptions.NUMBER_OF_SUBJECT_LOCATORS: {
                 int count = 0;
-                Iterator<Topic> topicIter=this.getTopics();
+                Iterator<Topic> topicIter = this.getTopics();
                 Topic t = null;
                 Locator sl = null;
-                while(topicIter.hasNext()) {
+                while (topicIter.hasNext()) {
                     t = topicIter.next();
-                    if(t != null && !t.isRemoved()) {
+                    if (t != null && !t.isRemoved()) {
                         sl = t.getSubjectLocator();
-                        if(sl != null) {
+                        if (sl != null) {
                             count++;
                         }
                     }
@@ -1622,123 +1843,125 @@ public class LayerStack extends ContainerTopicMap implements TopicMapListener {
         }
         return new TopicMapStatData();
     }
-    
-    
-    
+
+
+
     public static void main(String[] args) throws Exception {
         // Note: this is far from exhaustive test
-        Topic t,t2,t3,a,b;
-        LayerStack ls=new LayerStack();
-        Layer l1=new Layer(new org.wandora.topicmap.memory.TopicMapImpl(),"Layer 1",ls);
-        Layer l2=new Layer(new org.wandora.topicmap.memory.TopicMapImpl(),"Layer 2",ls);
-        Layer l3=new Layer(new org.wandora.topicmap.memory.TopicMapImpl(),"Layer 3",ls);
+        Topic t, t2, t3, a, b;
+        LayerStack ls = new LayerStack();
+        Layer l1 = new Layer(new org.wandora.topicmap.memory.TopicMapImpl(), "Layer 1", ls);
+        Layer l2 = new Layer(new org.wandora.topicmap.memory.TopicMapImpl(), "Layer 2", ls);
+        Layer l3 = new Layer(new org.wandora.topicmap.memory.TopicMapImpl(), "Layer 3", ls);
         ls.addLayer(l1);
         ls.addLayer(l2);
         ls.addLayer(l3);
         ls.selectLayer(l1);
-        t=ls.createTopic();
+        t = ls.createTopic();
         t.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testi1"));
-        t=ls.createTopic();
+        t = ls.createTopic();
         t.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testi3"));
         ls.selectLayer(l2);
-        t=ls.createTopic();
+        t = ls.createTopic();
         t.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testi2"));
-        t=ls.createTopic();
+        t = ls.createTopic();
         t.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testi3"));
         t.setBaseName("basename");
-        
+
         ls.selectLayer(l3);
-        t3=ls.createTopic();
+        t3 = ls.createTopic();
         t3.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testi3"));
-        t=ls.createTopic();
+        t = ls.createTopic();
         t.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testi1"));
         t.addType(t3);
-        t2=ls.createTopic();
+        t2 = ls.createTopic();
         t2.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testi2"));
         t2.addType(t3);
-        a=ls.createTopic();
+        a = ls.createTopic();
         a.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testia"));
-        b=ls.createTopic();
+        b = ls.createTopic();
         b.addSubjectIdentifier(new Locator("https://wandora.org/si/testi/testib"));
-        Association a1=ls.createAssociation(t3);
+        Association a1 = ls.createAssociation(t3);
         a1.addPlayer(t, a);
-        a1.addPlayer(t2,b);
-        HashSet<Topic> scope=new HashSet<Topic>();
-        scope.add(a); scope.add(b);
+        a1.addPlayer(t2, b);
+        HashSet<Topic> scope = new HashSet<Topic>();
+        scope.add(a);
+        scope.add(b);
         t.setVariant(scope, "variant");
-        
 
-        int counter=1;
+
+        int counter = 1;
         Topic test;
         String s;
         Collection<Topic> c;
         Collection<Association> d;
-        
+
         l3.setVisible(false);
-        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi1"));
-        System.out.println("Test "+(counter++)+" "+(test==null?"failed":"passed"));
-        c=test.getTypes();
-        System.out.println("Test "+(counter++)+" "+(c.size()!=0?"failed":"passed"));
-        d=test.getAssociations();
-        System.out.println("Test "+(counter++)+" "+(d.size()!=0?"failed":"passed"));
+        test = ls.getTopic(new Locator("https://wandora.org/si/testi/testi1"));
+        System.out.println("Test " + (counter++) + " " + (test == null ? "failed" : "passed"));
+        c = test.getTypes();
+        System.out.println("Test " + (counter++) + " " + (c.size() != 0 ? "failed" : "passed"));
+        d = test.getAssociations();
+        System.out.println("Test " + (counter++) + " " + (d.size() != 0 ? "failed" : "passed"));
         l1.setVisible(false);
-        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi1"));
-        System.out.println("Test "+(counter++)+" "+(test!=null?"failed":"passed"));
+        test = ls.getTopic(new Locator("https://wandora.org/si/testi/testi1"));
+        System.out.println("Test " + (counter++) + " " + (test != null ? "failed" : "passed"));
         l1.setVisible(true);
-        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi1"));
-        System.out.println("Test "+(counter++)+" "+(test==null?"failed":"passed"));
+        test = ls.getTopic(new Locator("https://wandora.org/si/testi/testi1"));
+        System.out.println("Test " + (counter++) + " " + (test == null ? "failed" : "passed"));
         l1.setVisible(false);
-        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi2"));
-        System.out.println("Test "+(counter++)+" "+(test==null?"failed":"passed"));
-        c=test.getTypes();
-        System.out.println("Test "+(counter++)+" "+(!c.isEmpty()?"failed":"passed"));
+        test = ls.getTopic(new Locator("https://wandora.org/si/testi/testi2"));
+        System.out.println("Test " + (counter++) + " " + (test == null ? "failed" : "passed"));
+        c = test.getTypes();
+        System.out.println("Test " + (counter++) + " " + (!c.isEmpty() ? "failed" : "passed"));
         l2.setVisible(false);
-        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi2"));
-        System.out.println("Test "+(counter++)+" "+(test!=null?"failed":"passed"));
+        test = ls.getTopic(new Locator("https://wandora.org/si/testi/testi2"));
+        System.out.println("Test " + (counter++) + " " + (test != null ? "failed" : "passed"));
         l1.setVisible(true);
-        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
-        System.out.println("Test "+(counter++)+" "+(test==null?"failed":"passed"));
-        s=test.getBaseName();
-        System.out.println("Test "+(counter++)+" "+(s!=null?"failed":"passed"));
+        test = ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
+        System.out.println("Test " + (counter++) + " " + (test == null ? "failed" : "passed"));
+        s = test.getBaseName();
+        System.out.println("Test " + (counter++) + " " + (s != null ? "failed" : "passed"));
         l1.setVisible(false);
         l2.setVisible(true);
-        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
-        System.out.println("Test "+(counter++)+" "+(test==null?"failed":"passed"));
-        s=test.getBaseName();
-        System.out.println("Test "+(counter++)+" "+(s==null || !s.equals("basename")?"failed":"passed"));
+        test = ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
+        System.out.println("Test " + (counter++) + " " + (test == null ? "failed" : "passed"));
+        s = test.getBaseName();
+        System.out.println("Test " + (counter++) + " " + (s == null || !s.equals("basename") ? "failed" : "passed"));
         l1.setVisible(false);
         l2.setVisible(false);
-        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
-        System.out.println("Test "+(counter++)+" "+(test!=null?"failed":"passed"));
+        test = ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
+        System.out.println("Test " + (counter++) + " " + (test != null ? "failed" : "passed"));
         l3.setVisible(true);
-        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi1"));
-        System.out.println("Test "+(counter++)+" "+(test==null?"failed":"passed"));
-        c=test.getTypes();
-        System.out.println("Test "+(counter++)+" "+(c.size()!=1?"failed":"passed"));        
-        d=test.getAssociations();
-        System.out.println("Test "+(counter++)+" "+(d.size()!=1?"failed":"passed"));
-        t3=ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
-        d=test.getAssociations(t3);
-        System.out.println("Test "+(counter++)+" "+(d.size()!=1?"failed":"passed"));
-        a=ls.getTopic(new Locator("https://wandora.org/si/testi/testia"));
-        b=ls.getTopic(new Locator("https://wandora.org/si/testi/testib"));
-        d=test.getAssociations(t3,a);
-        System.out.println("Test "+(counter++)+" "+(d.size()!=1?"failed":"passed"));
-        a1=d.iterator().next();
-        System.out.println("Test "+(counter++)+" "+(a1.getPlayer(a)==null?"failed":"passed"));
-        System.out.println("Test "+(counter++)+" "+(a1.getPlayer(b)==null?"failed":"passed"));
-        d=test.getAssociations(a);
-        System.out.println("Test "+(counter++)+" "+(!d.isEmpty()?"failed":"passed"));
-        System.out.println("Test "+(counter++)+" "+(test.getVariantScopes().size()!=1?"failed":"passed"));
-        scope=new HashSet<Topic>();
-        scope.add(a); scope.add(b);
-        s=test.getVariant(scope);
-        System.out.println("Test "+(counter++)+" "+(s==null?"failed":"passed"));
+        test = ls.getTopic(new Locator("https://wandora.org/si/testi/testi1"));
+        System.out.println("Test " + (counter++) + " " + (test == null ? "failed" : "passed"));
+        c = test.getTypes();
+        System.out.println("Test " + (counter++) + " " + (c.size() != 1 ? "failed" : "passed"));
+        d = test.getAssociations();
+        System.out.println("Test " + (counter++) + " " + (d.size() != 1 ? "failed" : "passed"));
+        t3 = ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
+        d = test.getAssociations(t3);
+        System.out.println("Test " + (counter++) + " " + (d.size() != 1 ? "failed" : "passed"));
+        a = ls.getTopic(new Locator("https://wandora.org/si/testi/testia"));
+        b = ls.getTopic(new Locator("https://wandora.org/si/testi/testib"));
+        d = test.getAssociations(t3, a);
+        System.out.println("Test " + (counter++) + " " + (d.size() != 1 ? "failed" : "passed"));
+        a1 = d.iterator().next();
+        System.out.println("Test " + (counter++) + " " + (a1.getPlayer(a) == null ? "failed" : "passed"));
+        System.out.println("Test " + (counter++) + " " + (a1.getPlayer(b) == null ? "failed" : "passed"));
+        d = test.getAssociations(a);
+        System.out.println("Test " + (counter++) + " " + (!d.isEmpty() ? "failed" : "passed"));
+        System.out.println("Test " + (counter++) + " " + (test.getVariantScopes().size() != 1 ? "failed" : "passed"));
+        scope = new HashSet<Topic>();
+        scope.add(a);
+        scope.add(b);
+        s = test.getVariant(scope);
+        System.out.println("Test " + (counter++) + " " + (s == null ? "failed" : "passed"));
         l1.setVisible(true);
         l2.setVisible(true);
-        test=ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
-        c=ls.getTopicsOfType(test);
-        System.out.println("Test "+(counter++)+" "+(c.size()!=2?"failed":"passed"));                
-        
+        test = ls.getTopic(new Locator("https://wandora.org/si/testi/testi3"));
+        c = ls.getTopicsOfType(test);
+        System.out.println("Test " + (counter++) + " " + (c.size() != 2 ? "failed" : "passed"));
+
     }
 }

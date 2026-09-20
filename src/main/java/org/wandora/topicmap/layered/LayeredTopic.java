@@ -27,15 +27,15 @@
  */
 
 package org.wandora.topicmap.layered;
+
 import static org.wandora.utils.Tuples.t2;
 import static org.wandora.utils.Tuples.t3;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -52,6 +52,7 @@ import org.wandora.utils.KeyedHashMap;
 import org.wandora.utils.Tuples.T2;
 import org.wandora.utils.Tuples.T3;
 import org.wandora.utils.logger.Log4j2Logger;
+
 /**
  * <p>
  * A LayeredTopic is a collection of topics in different layers that together
@@ -83,120 +84,150 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author olli
  */
 public class LayeredTopic extends Topic {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LayeredTopic.class);
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(LayeredTopic.class);
 
     /**
      * Comparator used to order the topics LayeredTopic consists of. Topics
      * are first ordered according to the position of the layer of the topic
      * and then according to the smallest subject identifier of the topic.
      */
-    class LayerOrderComparator implements Comparator<Topic>{
-        private String getMinSI(Topic t){
-            String min=null;
+    class LayerOrderComparator implements Comparator<Topic> {
+        private String getMinSI(Topic t) {
+            String min = null;
             try {
-                for(Locator l : t.getSubjectIdentifiers()){
-                    String s=l.toExternalForm();
-                    if(min==null) min=s;
-                    else if(s.compareTo(min)<0) min=s;
+                for (Locator l : t.getSubjectIdentifiers()) {
+                    String s = l.toExternalForm();
+                    if (min == null) {
+                        min = s;
+                    }
+                    else if (s.compareTo(min) < 0) {
+                        min = s;
+                    }
                 }
-                if(min==null) min="";
+                if (min == null) {
+                    min = "";
+                }
                 return min;
             }
-            catch(TopicMapException tme){
-            	logger.error(tme);
+            catch (TopicMapException tme) {
+                logger.error(tme);
                 return "";
-            }            
+            }
         }
-        public int compare(Topic t1,Topic t2){
-            int p=layerStack.getLayer(t1).getZPos()-layerStack.getLayer(t2).getZPos();
-            if(p==0) return getMinSI(t1).compareTo(getMinSI(t2));
-            else return p;
+
+
+        public int compare(Topic t1, Topic t2) {
+            int p = layerStack.getLayer(t1).getZPos() - layerStack.getLayer(t2).getZPos();
+            if (p == 0) {
+                return getMinSI(t1).compareTo(getMinSI(t2));
+            }
+            else {
+                return p;
+            }
         }
     }
-    
+
     /** The topics this LayeredTopic consists of */
     protected Vector<Topic> topics;
     /** The layer stack for this topic */
     protected LayerStack layerStack;
-    
+
     /** 
      * Creates a new instance of LayeredTopic. This layered topic will consist
      * of the given topics and them alone. Thus the layer stack must not contain
      * a topic that merges with any of the topics in the collection that isn't
      * already in the collection.
      */
-    public LayeredTopic(Collection<Topic> topics,LayerStack layerStack) {
-        this.layerStack=layerStack;
-        this.topics=new Vector<>();
+    public LayeredTopic(Collection<Topic> topics, LayerStack layerStack) {
+        this.layerStack = layerStack;
+        this.topics = new Vector<>();
         this.topics.addAll(topics);
         reorderLayers();
     }
+
+
     /** 
      * Creates a new instance of LayeredTopic. This layered topic will consist
      * of the one given topic and that alone. Thus the layer stack must not contain
      * a topic that merges with that topic.
      */
-    public LayeredTopic(Topic t,LayerStack layerStack){
-        this.layerStack=layerStack;
-        this.topics=new Vector<>();
+    public LayeredTopic(Topic t, LayerStack layerStack) {
+        this.layerStack = layerStack;
+        this.topics = new Vector<>();
         this.topics.add(t);
         reorderLayers();
     }
-    
+
+
     /**
      * Two LayeredTopics are equal if their topics collections are equal.
      * Note that this largely depends on the equals check of the
      * individual topics.
      */
     @Override
-    public boolean equals(Object o){
-        if(o instanceof LayeredTopic){
-            if(hashCode!=((LayeredTopic)o).hashCode) return false;
-            return topics.equals(((LayeredTopic)o).topics);
+    public boolean equals(Object o) {
+        if (o instanceof LayeredTopic) {
+            if (hashCode != ((LayeredTopic) o).hashCode) {
+                return false;
+            }
+            return topics.equals(((LayeredTopic) o).topics);
         }
-        else return false;
+        else {
+            return false;
+        }
     }
-    
+
     // hashCode is updated whenever topics collection changes.
-    private int hashCode=0;
+    private int hashCode = 0;
+
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return hashCode;
     }
-    
-    protected void ambiguity(String s){
+
+
+    protected void ambiguity(String s) {
         layerStack.ambiguity(s);
     }
-    protected AmbiguityResolution resolveAmbiguity(String event){
-        return layerStack.resolveAmbiguity(event,null);
+
+
+    protected AmbiguityResolution resolveAmbiguity(String event) {
+        return layerStack.resolveAmbiguity(event, null);
     }
-    protected AmbiguityResolution resolveAmbiguity(String event,String msg){
-        return layerStack.resolveAmbiguity(event,msg);
+
+
+    protected AmbiguityResolution resolveAmbiguity(String event, String msg) {
+        return layerStack.resolveAmbiguity(event, msg);
     }
-    
+
+
     /**
      * Remakes the collection of topics this layered topic consists of.
      * Will use the first topic in the topics collection as the base.
      * @see #remakeLayered(Topic)
      */
     public void remakeLayered() throws TopicMapException {
-        if(topics.size()>0) remakeLayered(topics.iterator().next());
+        if (topics.size() > 0) {
+            remakeLayered(topics.iterator().next());
+        }
     }
-    
+
+
     /**
      * Makes a set having one key for each topic in the given collection.
      * This can be used to later compare two topic collections and see if they
      * are the same.
      */
-    private Set<String> makeKeySet(Collection<Topic> topics){
-        HashSet<String> keys=new LinkedHashSet<>();
-        Delegate <String,Topic> keyMaker=layerStack.new TopicAndLayerKeyMaker();
-        for(Topic t : topics){
+    private Set<String> makeKeySet(Collection<Topic> topics) {
+        Set<String> keys = new LinkedHashSet<>();
+        Delegate<String, Topic> keyMaker = layerStack.new TopicAndLayerKeyMaker();
+        for (Topic t : topics) {
             keys.add(keyMaker.invoke(t));
         }
         return keys;
     }
-    
+
+
     /**
      * Remake this LayeredTopic using the given topic as the base. After a
      * layered topic has been modified, the topics in topics collection
@@ -209,74 +240,85 @@ public class LayeredTopic extends Topic {
      * Usually there isn't any right way to choose this base topic and it is
      * chosen arbitrarily like is done in the remakeLayered method which takes
      * no parameters.
-     */ 
+     */
     public void remakeLayered(Topic t) throws TopicMapException {
-        Set<String> oldKeys=makeKeySet(topics);
-        topics=new Vector<>();
+        Set<String> oldKeys = makeKeySet(topics);
+        topics = new Vector<>();
         topics.addAll(layerStack.collectTopics(t));
-        Set<String> newKeys=makeKeySet(topics);
-        if(!oldKeys.equals(newKeys)) {
-//            layerStack.removeTopicFromIndex(getOneSubjectIdentifier());
+        Set<String> newKeys = makeKeySet(topics);
+        if (!oldKeys.equals(newKeys)) {
+            //            layerStack.removeTopicFromIndex(getOneSubjectIdentifier());
             layerStack.topicChanged(this);
         }
         reorderLayers();
     }
-    
+
+
     /**
      * Get all topics of selected layer that are part of this LayeredTopic.
      */
-    public Collection<Topic> getTopicsForSelectedLayer(){
+    public Collection<Topic> getTopicsForSelectedLayer() {
         return getTopicsForLayer(layerStack.getSelectedLayer());
     }
-    
+
+
     /**
      * Get all topics of the given layer that are part of this LayeredTopic.
      */
-    public Collection<Topic> getTopicsForLayer(Layer l){
-        Vector<Topic> v=new Vector<>();
-        for(Topic t : topics){
-            if(l==layerStack.getLayer(t)){
+    public Collection<Topic> getTopicsForLayer(Layer l) {
+        Vector<Topic> v = new Vector<>();
+        for (Topic t : topics) {
+            if (l == layerStack.getLayer(t)) {
                 v.add(t);
             }
         }
         return v;
     }
-    
+
+
     /**
      * Get all topics this layered topic consists of in the order they appear
      * in layers. Topics of top layers will appear first in the collection.
      */
-    public Collection<Topic> getTopicsForAllLayers(){
+    public Collection<Topic> getTopicsForAllLayers() {
         return topics;
     }
-    
+
+
     /**
      * Gets one of the topics of the selected layer that is part of this layered
      * topic or null if no such topic exists.
      */
-    public Topic getTopicForSelectedLayer(){
+    public Topic getTopicForSelectedLayer() {
         return getTopicForLayer(layerStack.getSelectedLayer());
     }
-    
+
+
     /**
      * Gets one of the topics of given layer that is part of this layered
      * topic or null if no such topic exists.
      */
-    public Topic getTopicForLayer(Layer l){
-        Collection<Topic> c=getTopicsForLayer(l);
-        if(c.isEmpty()) return null;
-        else return c.iterator().next();
+    public Topic getTopicForLayer(Layer l) {
+        Collection<Topic> c = getTopicsForLayer(l);
+        if (c.isEmpty()) {
+            return null;
+        }
+        else {
+            return c.iterator().next();
+        }
     }
-    
+
+
     /**
      * Sort the topics collection. This needs to be redone in remakeLayered or
      * after visibility or order of layers has been changed.
      */
-    public void reorderLayers(){
-        hashCode=topics.hashCode();
-        Collections.sort(topics,new LayerOrderComparator());        
+    public void reorderLayers() {
+        hashCode = topics.hashCode();
+        Collections.sort(topics, new LayerOrderComparator());
     }
-    
+
+
     /**
      * Returns the id of the first topic in the topics collection with layer name
      * hash code as prefix. Using layer name prefix makes sure that the returned ID is
@@ -285,12 +327,15 @@ public class LayeredTopic extends Topic {
      * characters. Note that the ID will change based on what layers are visible.
      */
     public String getID() throws TopicMapException {
-        if(topics==null || topics.isEmpty()) return null;
-        Topic t=topics.get(0);
-        Layer l=layerStack.getLayer(t);
-        return "L"+l.getName().hashCode()+"---"+t.getID();
+        if (topics == null || topics.isEmpty()) {
+            return null;
+        }
+        Topic t = topics.get(0);
+        Layer l = layerStack.getLayer(t);
+        return "L" + l.getName().hashCode() + "---" + t.getID();
     }
-    
+
+
     /**
      * Gets all the subject identifiers of all the topics that this layered topic
      * consists of.
@@ -298,237 +343,278 @@ public class LayeredTopic extends Topic {
     @Override
     public Collection<Locator> getSubjectIdentifiers() throws TopicMapException {
         Set<Locator> sis = new LinkedHashSet<>();
-        for(Topic t : topics){
+        for (Topic t : topics) {
             sis.addAll(t.getSubjectIdentifiers());
         }
         return sis;
     }
-    
+
+
     /**
      * Copies a stub of this topic to the given topic map. This can be used
      * to make a stub of this topic when it is needed in a layer that doesn't
      * have a topic for this layered topic.
      */
     public Topic copyStubTo(TopicMap tm) throws TopicMapException {
-        Topic t=null;
-        Collection<Locator> sis=getSubjectIdentifiers();
-        if(!sis.isEmpty()) {
-            t=tm.createTopic();
+        Topic t = null;
+        Collection<Locator> sis = getSubjectIdentifiers();
+        if (!sis.isEmpty()) {
+            t = tm.createTopic();
             t.addSubjectIdentifier(sis.iterator().next());
         }
         else {
-            String bn=getBaseName();
-            if(bn!=null && bn.length()>0){
-                t=tm.createTopic();
-                t.addSubjectIdentifier(sis.iterator().next());                        
+            String bn = getBaseName();
+            if (bn != null && bn.length() > 0) {
+                t = tm.createTopic();
+                t.addSubjectIdentifier(sis.iterator().next());
             }
         }
         remakeLayered();
         return t;
     }
-    
-    
+
+
     @Override
     public void addSubjectIdentifier(Locator l) throws TopicMapException {
-        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
-        Collection<Topic> ts=getTopicsForSelectedLayer();
-        Topic t=null;
-        if(ts==null || ts.isEmpty()) {
-            AmbiguityResolution res=resolveAmbiguity("addSubjectIdentifier.noSelected","No topic in selected layer");
-            if(res==AmbiguityResolution.addToSelected){
-                t=copyStubTo(layerStack.getSelectedLayer().getTopicMap());
-                if(t==null){
+        if (layerStack.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
+        Collection<Topic> ts = getTopicsForSelectedLayer();
+        Topic t = null;
+        if (ts == null || ts.isEmpty()) {
+            AmbiguityResolution res = resolveAmbiguity("addSubjectIdentifier.noSelected", "No topic in selected layer");
+            if (res == AmbiguityResolution.addToSelected) {
+                t = copyStubTo(layerStack.getSelectedLayer().getTopicMap());
+                if (t == null) {
                     ambiguity("Cannot copy topic to selected layer");
                     return;
                 }
             }
-            else throw new RuntimeException("Not implemented");
+            else {
+                throw new RuntimeException("Not implemented");
+            }
         }
         else {
-            if(ts.size()>1) ambiguity("Several topics in selected layer (addSubjectIdentifier");
-            t=ts.iterator().next();
+            if (ts.size() > 1) {
+                ambiguity("Several topics in selected layer (addSubjectIdentifier");
+            }
+            t = ts.iterator().next();
         }
-        if(!t.getSubjectIdentifiers().contains(l)){
+        if (!t.getSubjectIdentifiers().contains(l)) {
             t.addSubjectIdentifier(l);
             remakeLayered(t);
         }
     }
-    
-    
+
+
     @Override
     public void removeSubjectIdentifier(Locator l) throws TopicMapException {
-        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
-        Collection<Topic> ts=getTopicsForSelectedLayer();
-        if(ts==null || ts.size()==0) {
+        if (layerStack.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
+        Collection<Topic> ts = getTopicsForSelectedLayer();
+        if (ts == null || ts.size() == 0) {
             ambiguity("No topic in selected layer, nothing done (addSubjectIdentifier)");
             return;
         }
-//        layerStack.removeTopicFromIndex(l);
-        Topic changed=null;
-        for(Topic t : ts){
-            if(t.getSubjectIdentifiers().contains(l)){
-                if(changed!=null){
+        //        layerStack.removeTopicFromIndex(l);
+        Topic changed = null;
+        for (Topic t : ts) {
+            if (t.getSubjectIdentifiers().contains(l)) {
+                if (changed != null) {
                     ambiguity("Several topics in selected layer with subject identifier (removeSubjectIdentifier");
                     break;
                 }
-                else{
+                else {
                     t.removeSubjectIdentifier(l);
-                    changed=t;
+                    changed = t;
                 }
             }
         }
-        if(changed!=null) remakeLayered(changed);
+        if (changed != null) {
+            remakeLayered(changed);
+        }
     }
-    
-    
+
+
     /**
      * Returns the layer that is being used to get the base name for this topic.
      * That is the first layer that contains a topic in this layered topic that has
      * a non null base name.
      */
     public Topic getBaseNameSource() throws TopicMapException {
-        for(Topic t : topics){
-            String bn=t.getBaseName();
-            if(bn!=null && bn.length()>0) 
-//                return layerStack.getLayer(t);
+        for (Topic t : topics) {
+            String bn = t.getBaseName();
+            if (bn != null && bn.length() > 0)
+                //                return layerStack.getLayer(t);
                 return t;
         }
         return null;
     }
-        
-    
+
+
     @Override
     public String getBaseName() throws TopicMapException {
-        for(Topic t : topics){
-            String bn=t.getBaseName();
-            if(bn!=null && bn.length()>0) return bn;
+        for (Topic t : topics) {
+            String bn = t.getBaseName();
+            if (bn != null && bn.length() > 0) {
+                return bn;
+            }
         }
         return null;
     }
-    
-    
+
+
     @Override
     public void setBaseName(String name) throws TopicMapException {
-        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
-        Collection<Topic> ts=getTopicsForSelectedLayer();
-        Topic t=null;
-        if(ts.isEmpty()) {
-            AmbiguityResolution res=resolveAmbiguity("setBaseName.noSelected","No topic in selected layer");
-            if(res==AmbiguityResolution.addToSelected){
-                t=copyStubTo(layerStack.getSelectedLayer().getTopicMap());
-                if(t==null){
+        if (layerStack.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
+        Collection<Topic> ts = getTopicsForSelectedLayer();
+        Topic t = null;
+        if (ts.isEmpty()) {
+            AmbiguityResolution res = resolveAmbiguity("setBaseName.noSelected", "No topic in selected layer");
+            if (res == AmbiguityResolution.addToSelected) {
+                t = copyStubTo(layerStack.getSelectedLayer().getTopicMap());
+                if (t == null) {
                     ambiguity("Cannot copy topic to selected layer");
                     return;
                 }
             }
-            else throw new RuntimeException("Not implemented");
+            else {
+                throw new RuntimeException("Not implemented");
+            }
         }
         else {
-            if(ts.size()>1) ambiguity("Several topics in selected layer (setBaseName)");
-            t=ts.iterator().next();
+            if (ts.size() > 1) {
+                ambiguity("Several topics in selected layer (setBaseName)");
+            }
+            t = ts.iterator().next();
         }
         t.setBaseName(name);
         remakeLayered(t);
     }
-    
-    
+
+
     @Override
     public Collection<Topic> getTypes() throws TopicMapException {
-        Vector<Topic> v=new Vector<>();
-        for(Topic t : topics){
+        Vector<Topic> v = new Vector<>();
+        for (Topic t : topics) {
             v.addAll(t.getTypes());
         }
         return layerStack.makeLayeredTopics(v);
     }
-    
-    
+
+
     @Override
     public void addType(Topic type) throws TopicMapException {
-        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
-        LayeredTopic lt=(LayeredTopic)type;
-        Collection<Topic> types=lt.getTopicsForSelectedLayer();
-        Topic stype=null;
-        if(types.isEmpty()){
-            AmbiguityResolution res=resolveAmbiguity("addType.type.noSelected","No type in selected layer");
-            if(res==AmbiguityResolution.addToSelected){
-                stype=lt.copyStubTo(layerStack.getSelectedLayer().getTopicMap());
-                if(stype==null){
+        if (layerStack.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
+        LayeredTopic lt = (LayeredTopic) type;
+        Collection<Topic> types = lt.getTopicsForSelectedLayer();
+        Topic stype = null;
+        if (types.isEmpty()) {
+            AmbiguityResolution res = resolveAmbiguity("addType.type.noSelected", "No type in selected layer");
+            if (res == AmbiguityResolution.addToSelected) {
+                stype = lt.copyStubTo(layerStack.getSelectedLayer().getTopicMap());
+                if (stype == null) {
                     ambiguity("Cannot copy topic to selected layer");
                     return;
                 }
             }
-            else throw new RuntimeException("Not implemented");
+            else {
+                throw new RuntimeException("Not implemented");
+            }
         }
         else {
-            if(types.size()>1) ambiguity("Several types in selected layer (addType)");
-            stype=types.iterator().next();
+            if (types.size() > 1) {
+                ambiguity("Several types in selected layer (addType)");
+            }
+            stype = types.iterator().next();
         }
-        Collection<Topic> ts=getTopicsForSelectedLayer();
-        Topic t=null;
-        if(ts.isEmpty()){
-            AmbiguityResolution res=resolveAmbiguity("addType.topic.noSelected","No topic in selected layer");
-            if(res==AmbiguityResolution.addToSelected){
-                t=copyStubTo(layerStack.getSelectedLayer().getTopicMap());
-                if(t==null){
+        Collection<Topic> ts = getTopicsForSelectedLayer();
+        Topic t = null;
+        if (ts.isEmpty()) {
+            AmbiguityResolution res = resolveAmbiguity("addType.topic.noSelected", "No topic in selected layer");
+            if (res == AmbiguityResolution.addToSelected) {
+                t = copyStubTo(layerStack.getSelectedLayer().getTopicMap());
+                if (t == null) {
                     ambiguity("Cannot copy topic to selected layer");
                     return;
                 }
             }
-            else throw new RuntimeException("Not implemented");
+            else {
+                throw new RuntimeException("Not implemented");
+            }
         }
         else {
-            if(ts.size()>1) ambiguity("Several topics in selected layer (addType)");
-            t=ts.iterator().next();
+            if (ts.size() > 1) {
+                ambiguity("Several topics in selected layer (addType)");
+            }
+            t = ts.iterator().next();
         }
         t.addType(stype);
     }
-    
-    
+
+
     @Override
     public void removeType(Topic type) throws TopicMapException {
-        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
-        LayeredTopic lt=(LayeredTopic)type;
-        Collection<Topic> types=lt.getTopicsForSelectedLayer();
-        if(types.isEmpty()){
+        if (layerStack.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
+        LayeredTopic lt = (LayeredTopic) type;
+        Collection<Topic> types = lt.getTopicsForSelectedLayer();
+        if (types.isEmpty()) {
             ambiguity("No type in selected layer, nothing done (removeType)");
             return;
         }
-        else if(types.size()>1) ambiguity("Several types in selected layer (removeType)");
-        Collection<Topic> ts=getTopicsForSelectedLayer();
-        if(ts.isEmpty()){
+        else {
+            if (types.size() > 1) {
+                ambiguity("Several types in selected layer (removeType)");
+            }
+        }
+        Collection<Topic> ts = getTopicsForSelectedLayer();
+        if (ts.isEmpty()) {
             ambiguity("No topic in selected layer, nothing done (removeType)");
             return;
         }
-        else if(ts.size()>1) ambiguity("Several topics in selected layer (removeType)");
+        else {
+            if (ts.size() > 1) {
+                ambiguity("Several topics in selected layer (removeType)");
+            }
+        }
         ts.iterator().next().removeType(types.iterator().next());
     }
-    
-    
+
+
     @Override
     public boolean isOfType(Topic type) throws TopicMapException {
-        LayeredTopic lt=(LayeredTopic)type;
-        for(Topic t : topics){
-            Layer l=layerStack.getLayer(t);
-            for(Topic t2 : lt.topics){
-                if(layerStack.getLayer(t2)==l){
-                    if(t.isOfType(t2)) return true;
+        LayeredTopic lt = (LayeredTopic) type;
+        for (Topic t : topics) {
+            Layer l = layerStack.getLayer(t);
+            for (Topic t2 : lt.topics) {
+                if (layerStack.getLayer(t2) == l) {
+                    if (t.isOfType(t2)) {
+                        return true;
+                    }
                 }
             }
         }
         return false;
     }
 
-    
+
     /**
      * Creates a scope from a collection of LayeredTopics that can be used for the
      * given layer. Note that the given layer might not contain all topics needed
      * for the scope in which case this will return null.
      */
-    protected Set<Topic> createScope(Set<Topic> layeredScope,Layer l) throws TopicMapException {
-        return createScope(layeredScope,l,false);
+    protected Set<Topic> createScope(Set<Topic> layeredScope, Layer l) throws TopicMapException {
+        return createScope(layeredScope, l, false);
     }
-    
-    
+
+
     /**
      * Creates a scope from a collection of LayeredTopics that can be used for the
      * given layer. Note that the given layer might not contain all topics needed
@@ -536,17 +622,17 @@ public class LayeredTopic extends Topic {
      * in the layer, otherwise null is returned if any of the needed topics isn't
      * found in the layer.
      */
-    protected Set<Topic> createScope(Set<Topic> layeredScope,Layer l,boolean copyTopics) throws TopicMapException {
+    protected Set<Topic> createScope(Set<Topic> layeredScope, Layer l, boolean copyTopics) throws TopicMapException {
         // TODO: doesn't handle correctly theoretical case where scope topics get merged
-        Set<Topic> ret=new LinkedHashSet<>();
-        for(Topic t : layeredScope){
-            LayeredTopic lt=(LayeredTopic)t;
-            Collection<Topic> ts=lt.getTopicsForLayer(l);
-            Topic t2=null;
-            if(ts.isEmpty()){
-                if(copyTopics){
-                    t2=lt.copyStubTo(l.getTopicMap());
-                    if(t2==null) {
+        Set<Topic> ret = new LinkedHashSet<>();
+        for (Topic t : layeredScope) {
+            LayeredTopic lt = (LayeredTopic) t;
+            Collection<Topic> ts = lt.getTopicsForLayer(l);
+            Topic t2 = null;
+            if (ts.isEmpty()) {
+                if (copyTopics) {
+                    t2 = lt.copyStubTo(l.getTopicMap());
+                    if (t2 == null) {
                         ambiguity("Cannot copy topic to selected layer");
                         return null;
                     }
@@ -557,14 +643,15 @@ public class LayeredTopic extends Topic {
                 }
             }
             else {
-                if(ts.size()>1) ambiguity("Several topics in layer (createScope)");
-                t2=ts.iterator().next();
+                if (ts.size() > 1)
+                    ambiguity("Several topics in layer (createScope)");
+                t2 = ts.iterator().next();
             }
             ret.add(t2);
         }
         return ret;
     }
-    
+
 
     /**
      * Tries to find a variant scope in the given (non layered) topic that matches
@@ -573,17 +660,17 @@ public class LayeredTopic extends Topic {
      * chosen arbitrarily.
      */
     public Set<Topic> getScopeOfLayeredScope(Topic t, Set<Topic> layeredScope) throws TopicMapException {
-        Layer l =layerStack.getLayer(t);
-        Set<Set<Topic>> scopes=t.getVariantScopes();
-        LoopA: for(Set<Topic> s : scopes){
-            Set<Topic> used=new LinkedHashSet<>();
-            LoopB: for(Topic st : s ){
+        Layer l = layerStack.getLayer(t);
+        Set<Set<Topic>> scopes = t.getVariantScopes();
+        LoopA: for (Set<Topic> s : scopes) {
+            Set<Topic> used = new LinkedHashSet<>();
+            LoopB: for (Topic st : s) {
                 // Note that st cannot belong to several LayeredTopics in scope
                 // because otherwise those multiple LayeredTopics would be merged and be the same topic
-                for(Topic lst : layeredScope){
-                    LayeredTopic lt=(LayeredTopic)lst;
+                for (Topic lst : layeredScope) {
+                    LayeredTopic lt = (LayeredTopic) lst;
                     // TODO: depends on equals check
-                    if(lt != null && lt.topics != null && lt.topics.contains(st)){
+                    if (lt != null && lt.topics != null && lt.topics.contains(st)) {
                         used.add(lst);
                         continue LoopB; // check rest of the topics in s
                     }
@@ -592,102 +679,112 @@ public class LayeredTopic extends Topic {
             }
             // all in s belong to some LayeredTopic in scope, now test if all LayeredTopics
             // in scope have something in s
-            if(used.size()!=layeredScope.size()) continue;
+            if (used.size() != layeredScope.size())
+                continue;
 
             // found matching scope (there might be several matching scopes)
             return s;
         }
         return null;
     }
-    
-    
+
+
     /**
      * Returns the layer that is used to get the variant for the given scope.
      */
-    public T2<Topic,Set<Topic>> getVariantSource(Set<Topic> scope) throws TopicMapException {
-        for(Topic t : topics){
-            Set<Topic> s=getScopeOfLayeredScope(t,scope);
-            if(s!=null) {
-                return t2(t,scope);
-//                return layerStack.getLayer(t);
+    public T2<Topic, Set<Topic>> getVariantSource(Set<Topic> scope) throws TopicMapException {
+        for (Topic t : topics) {
+            Set<Topic> s = getScopeOfLayeredScope(t, scope);
+            if (s != null) {
+                return t2(t, scope);
             }
         }
         return null;
     }
-    
-    
+
+
     @Override
     public String getVariant(Set<Topic> scope) throws TopicMapException {
-        String ret=null;
-        for(Topic t : topics){
-            Set<Topic> s=getScopeOfLayeredScope(t,scope);
-            if(s!=null) {
-                String val=t.getVariant(s);
-                if(ret!=null && !ret.equals(val)){
+        String ret = null;
+        for (Topic t : topics) {
+            Set<Topic> s = getScopeOfLayeredScope(t, scope);
+            if (s != null) {
+                String val = t.getVariant(s);
+                if (ret != null && !ret.equals(val)) {
                     ambiguity("Several matching variants (getVariant)");
                     return ret;
                 }
-                ret=val;
+                ret = val;
             }
         }
         return ret;
     }
-    
-    
+
+
     @Override
-    public void setVariant(Set<Topic> scope,String name) throws TopicMapException {
-        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
-        Collection<Topic> ts=getTopicsForSelectedLayer();
-        Topic selectedTopic=null;
-        if(ts.isEmpty()){
-            AmbiguityResolution res=resolveAmbiguity("setVariant.topic.noSelected","No topic in selected layer");
-            if(res==AmbiguityResolution.addToSelected){
-                selectedTopic=copyStubTo(layerStack.getSelectedLayer().getTopicMap());
-                if(selectedTopic==null){
+    public void setVariant(Set<Topic> scope, String name) throws TopicMapException {
+        if (layerStack.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
+        Collection<Topic> ts = getTopicsForSelectedLayer();
+        Topic selectedTopic = null;
+        if (ts.isEmpty()) {
+            AmbiguityResolution res = resolveAmbiguity("setVariant.topic.noSelected", "No topic in selected layer");
+            if (res == AmbiguityResolution.addToSelected) {
+                selectedTopic = copyStubTo(layerStack.getSelectedLayer().getTopicMap());
+                if (selectedTopic == null) {
                     ambiguity("Cannot copy topic to selected layer");
                     return;
                 }
             }
-            else throw new RuntimeException("Not implemented");
+            else {
+                throw new RuntimeException("Not implemented");
+            }
         }
         else {
-            if(ts.size()>1) ambiguity("Several topics in selected layer (setVariant)");
-            selectedTopic=ts.iterator().next();
+            if (ts.size() > 1) {
+                ambiguity("Several topics in selected layer (setVariant)");
+            }
+            selectedTopic = ts.iterator().next();
         }
-        Set<Topic> s=getScopeOfLayeredScope(selectedTopic,scope);
-        if(s==null) {
-            s=createScope(scope, layerStack.getSelectedLayer(),false);
-            if(s==null) {
-                AmbiguityResolution res=resolveAmbiguity("setVariant.scope.noSelected","Topics in scope not in selected layer");
-                if(res==AmbiguityResolution.addToSelected){
-                    s=createScope(scope,layerStack.getSelectedLayer(),true);
-                    if(s==null){
+        Set<Topic> s = getScopeOfLayeredScope(selectedTopic, scope);
+        if (s == null) {
+            s = createScope(scope, layerStack.getSelectedLayer(), false);
+            if (s == null) {
+                AmbiguityResolution res = resolveAmbiguity("setVariant.scope.noSelected",
+                        "Topics in scope not in selected layer");
+                if (res == AmbiguityResolution.addToSelected) {
+                    s = createScope(scope, layerStack.getSelectedLayer(), true);
+                    if (s == null) {
                         ambiguity("Cannot copy scope to selected layer");
                         return;
                     }
                 }
-                else throw new RuntimeException("Not implemented");
+                else {
+                    throw new RuntimeException("Not implemented");
+                }
             }
         }
-        selectedTopic.setVariant(s,name);
+        selectedTopic.setVariant(s, name);
     }
-    
-    
+
+
     @Override
     public Set<Set<Topic>> getVariantScopes() throws TopicMapException {
         // TODO: doesn't handle correctly theoretical case where scope topics get merged
-        Set<Set<Topic>> ret=new LinkedHashSet<>();
-        Map<Topic,LayeredTopic> collectedMap=new HashMap<>();
-        for(Topic t : topics){
-            Set<Set<Topic>> scopes=t.getVariantScopes();
-            for(Set<Topic> scope : scopes){
-                Set<Topic> layeredScope=new LinkedHashSet<>();
-                for(Topic st : scope){
-                    LayeredTopic lt=collectedMap.get(st);
-                    if(lt==null) {
-                        Collection<Topic> collected=layerStack.collectTopics(st);
-                        lt=new LayeredTopic(collected,layerStack);
-                        for(Topic ct : collected) collectedMap.put(ct,lt);
+        Set<Set<Topic>> ret = new LinkedHashSet<>();
+        Map<Topic, LayeredTopic> collectedMap = new LinkedHashMap<>();
+        for (Topic t : topics) {
+            Set<Set<Topic>> scopes = t.getVariantScopes();
+            for (Set<Topic> scope : scopes) {
+                Set<Topic> layeredScope = new LinkedHashSet<>();
+                for (Topic st : scope) {
+                    LayeredTopic lt = collectedMap.get(st);
+                    if (lt == null) {
+                        Collection<Topic> collected = layerStack.collectTopics(st);
+                        lt = new LayeredTopic(collected, layerStack);
+                        for (Topic ct : collected)
+                            collectedMap.put(ct, lt);
                     }
                     layeredScope.add(lt);
                 }
@@ -696,92 +793,92 @@ public class LayeredTopic extends Topic {
         }
         return ret;
     }
-    
-    
+
+
     @Override
     public void removeVariant(Set<Topic> scope) throws TopicMapException {
-        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
+        if (layerStack.isReadOnly())
+            throw new TopicMapReadOnlyException();
         // TODO: if multiple, remove all or one? in none ask?
-        boolean removed=false;
-        for(Topic selectedTopic : getTopicsForSelectedLayer()){
-            Set<Topic> s=getScopeOfLayeredScope(selectedTopic,scope);
-            if(s!=null){
-                if(removed){
+        boolean removed = false;
+        for (Topic selectedTopic : getTopicsForSelectedLayer()) {
+            Set<Topic> s = getScopeOfLayeredScope(selectedTopic, scope);
+            if (s != null) {
+                if (removed) {
                     ambiguity("Several variants in selected layer (removeVariant)");
                     return;
                 }
                 selectedTopic.removeVariant(s);
-                removed=true;
+                removed = true;
             }
         }
     }
-    
-    
+
+
     /**
      * Returns the topic that is used to get data with specified type and version and
      * the type and version topics for the source topic layer.
      */
-    public T3<Topic,Topic,Topic> getDataSource(Topic type,Topic version) throws TopicMapException {
-        LayeredTopic lt=(LayeredTopic)type;
-        LayeredTopic lv=(LayeredTopic)version;
-        
-        String found=null;
-        for(Topic t : topics){
-            Layer l=layerStack.getLayer(t);
-            for(Topic st : lt.getTopicsForLayer(l)){
-                for(Topic sv : lv.getTopicsForLayer(l)){
-                    String data=t.getData(st,sv);
-                    if(data!=null && data.length()>0) {
-                        return t3(t,st,sv);
-//                        return layerStack.getLayer(t);
+    public T3<Topic, Topic, Topic> getDataSource(Topic type, Topic version) throws TopicMapException {
+        LayeredTopic lt = (LayeredTopic) type;
+        LayeredTopic lv = (LayeredTopic) version;
+
+        String found = null;
+        for (Topic t : topics) {
+            Layer l = layerStack.getLayer(t);
+            for (Topic st : lt.getTopicsForLayer(l)) {
+                for (Topic sv : lv.getTopicsForLayer(l)) {
+                    String data = t.getData(st, sv);
+                    if (data != null && data.length() > 0) {
+                        return t3(t, st, sv);
                     }
                 }
             }
         }
         return null;
     }
-    
-    
+
+
     @Override
-    public String getData(Topic type,Topic version) throws TopicMapException {
-        LayeredTopic lt=(LayeredTopic)type;
-        LayeredTopic lv=(LayeredTopic)version;
-        
-        String found=null;
-        for(Topic t : topics){
-            Layer l=layerStack.getLayer(t);
-            for(Topic st : lt.getTopicsForLayer(l)){
-                for(Topic sv : lv.getTopicsForLayer(l)){
-                    String data=t.getData(st,sv);
-                    if(data!=null && data.length()>0) {
-                        if(found!=null && !found.equals(data)){
+    public String getData(Topic type, Topic version) throws TopicMapException {
+        LayeredTopic lt = (LayeredTopic) type;
+        LayeredTopic lv = (LayeredTopic) version;
+
+        String found = null;
+        for (Topic t : topics) {
+            Layer l = layerStack.getLayer(t);
+            for (Topic st : lt.getTopicsForLayer(l)) {
+                for (Topic sv : lv.getTopicsForLayer(l)) {
+                    String data = t.getData(st, sv);
+                    if (data != null && data.length() > 0) {
+                        if (found != null && !found.equals(data)) {
                             ambiguity("Several data versions in layer (getData)");
                             return found;
                         }
-                        found=data;
+                        found = data;
                     }
                 }
             }
         }
         return found;
     }
-    
-    
+
+
     @Override
-    public Hashtable<Topic,String> getData(Topic type) throws TopicMapException {
-        LayeredTopic lt=(LayeredTopic)type;
-        Hashtable<Topic,String> ret=new Hashtable<>();
-        Map<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
-        
-        for(Topic t : topics){
-            for(Topic st : lt.getTopicsForLayer(layerStack.getLayer(t))){
-                Hashtable<Topic,String> data=t.getData(st);
-                if(data!=null && data.size()>0){
-                    for(Map.Entry<Topic,String> e : data.entrySet()){
-                        LayeredTopic lversion=layerStack.getLayeredTopic(e.getKey(), layeredTopics);
-                        String val=e.getValue();
-                        String old=ret.put(lversion,val);
-                        if(old!=null && !old.equals(val)){
+    public Hashtable<Topic, String> getData(Topic type) throws TopicMapException {
+        LayeredTopic lt = (LayeredTopic) type;
+        Hashtable<Topic, String> ret = new Hashtable<>();
+        Map<Topic, LayeredTopic> layeredTopics = new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
+
+        for (Topic t : topics) {
+            for (Topic st : lt.getTopicsForLayer(layerStack.getLayer(t))) {
+                Hashtable<Topic, String> data = t.getData(st);
+                if (data != null && data.size() > 0) {
+                    for (Map.Entry<Topic, String> e : data.entrySet()) {
+                        LayeredTopic lversion = layerStack.getLayeredTopic(e.getKey(), layeredTopics);
+                        String val = e.getValue();
+                        String old = ret.put(lversion, val);
+                        if (old != null && !old.equals(val)) {
                             ambiguity("Several data for given type and version (getData)");
                         }
                     }
@@ -790,207 +887,232 @@ public class LayeredTopic extends Topic {
         }
         return ret;
     }
-    
-    
+
+
     @Override
     public Collection<Topic> getDataTypes() throws TopicMapException {
-        Set<Topic> used=new LinkedHashSet<>();
-        Set<Topic> ret=new LinkedHashSet<>();
-        Map<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
-        
-        for(Topic t : topics){
-            for(Topic dt : t.getDataTypes()){
-                if(used.contains(dt)) continue;
-                LayeredTopic lt=layerStack.getLayeredTopic(dt,layeredTopics);
+        Set<Topic> used = new LinkedHashSet<>();
+        Set<Topic> ret = new LinkedHashSet<>();
+        Map<Topic, LayeredTopic> layeredTopics = new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
+
+        for (Topic t : topics) {
+            for (Topic dt : t.getDataTypes()) {
+                if (used.contains(dt)) {
+                    continue;
+                }
+                LayeredTopic lt = layerStack.getLayeredTopic(dt, layeredTopics);
                 ret.add(lt);
             }
         }
         return ret;
-        
+
     }
-    
-    
+
+
     @Override
-    public void setData(Topic type,Hashtable<Topic,String> versionData) throws TopicMapException {
-        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
-        for(Map.Entry<Topic,String> e : versionData.entrySet()){
-            setData(type,e.getKey(),e.getValue());
+    public void setData(Topic type, Hashtable<Topic, String> versionData) throws TopicMapException {
+        if (layerStack.isReadOnly())
+            throw new TopicMapReadOnlyException();
+        for (Map.Entry<Topic, String> e : versionData.entrySet()) {
+            setData(type, e.getKey(), e.getValue());
         }
     }
-    
-    
+
+
     @Override
-    public void setData(Topic type,Topic version,String value) throws TopicMapException {
-        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
-        LayeredTopic lt=(LayeredTopic)type;
-        LayeredTopic lv=(LayeredTopic)version;
-        Collection<Topic> ts=getTopicsForSelectedLayer();
-        Topic t=null;
-        if(ts.isEmpty()){
-            AmbiguityResolution res=resolveAmbiguity("setData.topic.noSelected","No topic in selected layer");
-            if(res==AmbiguityResolution.addToSelected){
-                t=copyStubTo(layerStack.getSelectedLayer().getTopicMap());
-                if(t==null){
+    public void setData(Topic type, Topic version, String value) throws TopicMapException {
+        if (layerStack.isReadOnly())
+            throw new TopicMapReadOnlyException();
+        LayeredTopic lt = (LayeredTopic) type;
+        LayeredTopic lv = (LayeredTopic) version;
+        Collection<Topic> ts = getTopicsForSelectedLayer();
+        Topic t = null;
+        if (ts.isEmpty()) {
+            AmbiguityResolution res = resolveAmbiguity("setData.topic.noSelected", "No topic in selected layer");
+            if (res == AmbiguityResolution.addToSelected) {
+                t = copyStubTo(layerStack.getSelectedLayer().getTopicMap());
+                if (t == null) {
                     ambiguity("Cannot copy topic to selected layer");
                     return;
                 }
             }
-            else throw new RuntimeException("Not implemented");
+            else {
+                throw new RuntimeException("Not implemented");
+            }
         }
         else {
-            if(ts.size()>1) ambiguity("Several topics in selected layer (setData)");
-            t=ts.iterator().next();
+            if (ts.size() > 1) {
+                ambiguity("Several topics in selected layer (setData)");
+            }
+            t = ts.iterator().next();
         }
-        Collection<Topic> ltype=lt.getTopicsForSelectedLayer();
-        Topic stype=null;
-        if(ltype.isEmpty()){
-            AmbiguityResolution res=resolveAmbiguity("setData.type.noSelected","No type in selected layer");
-            if(res==AmbiguityResolution.addToSelected){
-                stype=lt.copyStubTo(layerStack.getSelectedLayer().getTopicMap());
-                if(stype==null){
+        Collection<Topic> ltype = lt.getTopicsForSelectedLayer();
+        Topic stype = null;
+        if (ltype.isEmpty()) {
+            AmbiguityResolution res = resolveAmbiguity("setData.type.noSelected", "No type in selected layer");
+            if (res == AmbiguityResolution.addToSelected) {
+                stype = lt.copyStubTo(layerStack.getSelectedLayer().getTopicMap());
+                if (stype == null) {
                     ambiguity("Cannot copy topic to selected layer");
                     return;
                 }
             }
-            else throw new RuntimeException("Not implemented");
+            else {
+                throw new RuntimeException("Not implemented");
+            }
         }
         else {
-            if(ltype.size()>1) ambiguity("Several types in selected layer (setData)");
-            stype=ltype.iterator().next();
+            if (ltype.size() > 1) {
+                ambiguity("Several types in selected layer (setData)");
+            }
+            stype = ltype.iterator().next();
         }
-        Collection<Topic> lversion=lv.getTopicsForSelectedLayer();
-        Topic sversion=null;
-        if(lversion.isEmpty()){
-            AmbiguityResolution res=resolveAmbiguity("setData.version.noSelected","No version in selected layer");
-            if(res==AmbiguityResolution.addToSelected){
-                sversion=lv.copyStubTo(layerStack.getSelectedLayer().getTopicMap());
-                if(sversion==null){
+        Collection<Topic> lversion = lv.getTopicsForSelectedLayer();
+        Topic sversion = null;
+        if (lversion.isEmpty()) {
+            AmbiguityResolution res = resolveAmbiguity("setData.version.noSelected", "No version in selected layer");
+            if (res == AmbiguityResolution.addToSelected) {
+                sversion = lv.copyStubTo(layerStack.getSelectedLayer().getTopicMap());
+                if (sversion == null) {
                     ambiguity("Cannot copy topic to selected layer");
                     return;
                 }
             }
-            else throw new RuntimeException("Not implemented");
+            else {
+                throw new RuntimeException("Not implemented");
+            }
         }
         else {
-            if(lversion.size()>1) ambiguity("Several versions in selected layer (setData)");
-            sversion=lversion.iterator().next();
+            if (lversion.size() > 1) {
+                ambiguity("Several versions in selected layer (setData)");
+            }
+            sversion = lversion.iterator().next();
         }
-        t.setData(stype,sversion,value);
+        t.setData(stype, sversion, value);
     }
-    
-    
+
+
     @Override
-    public void removeData(Topic type,Topic version) throws TopicMapException {
-        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
-        LayeredTopic lt=(LayeredTopic)type;
-        LayeredTopic lv=(LayeredTopic)version;
-        boolean removed=false;
-        for(Topic selectedTopic : getTopicsForSelectedLayer()){
-            for(Topic st : lt.getTopicsForSelectedLayer()){
-                for(Topic sv : lv.getTopicsForSelectedLayer()){
-                    String d=selectedTopic.getData(st,sv);
-                    if(d!=null && d.length()>0) {
-                        if(removed){
+    public void removeData(Topic type, Topic version) throws TopicMapException {
+        if (layerStack.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
+        LayeredTopic lt = (LayeredTopic) type;
+        LayeredTopic lv = (LayeredTopic) version;
+        boolean removed = false;
+        for (Topic selectedTopic : getTopicsForSelectedLayer()) {
+            for (Topic st : lt.getTopicsForSelectedLayer()) {
+                for (Topic sv : lv.getTopicsForSelectedLayer()) {
+                    String d = selectedTopic.getData(st, sv);
+                    if (d != null && d.length() > 0) {
+                        if (removed) {
                             ambiguity("Several type and version matches (removeData)");
                             return;
                         }
-                        selectedTopic.removeData(st,sv);
-                        removed=true;
+                        selectedTopic.removeData(st, sv);
+                        removed = true;
                     }
                 }
             }
         }
     }
-    
-    
+
+
     @Override
     public void removeData(Topic type) throws TopicMapException {
-        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
-        LayeredTopic lt=(LayeredTopic)type;
-        boolean removed=false;
-        for(Topic selectedTopic : getTopicsForSelectedLayer()){
-            for(Topic st : lt.getTopicsForSelectedLayer()){
-                Hashtable<Topic,String> ht=selectedTopic.getData(st);
-                if(ht!=null && !ht.isEmpty()){
-                    if(removed){
+        if (layerStack.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
+        LayeredTopic lt = (LayeredTopic) type;
+        boolean removed = false;
+        for (Topic selectedTopic : getTopicsForSelectedLayer()) {
+            for (Topic st : lt.getTopicsForSelectedLayer()) {
+                Hashtable<Topic, String> ht = selectedTopic.getData(st);
+                if (ht != null && !ht.isEmpty()) {
+                    if (removed) {
                         ambiguity("several type matches (removeData)");
                         return;
                     }
                     selectedTopic.removeData(st);
-                    removed=true;
+                    removed = true;
                 }
             }
-        }        
+        }
     }
-    
-    
+
+
     public Topic getSubjectLocatorSource() throws TopicMapException {
-        for(Topic t : topics){
-            Locator l=t.getSubjectLocator();
-            if(l!=null){
-//                return layerStack.getLayer(t);
+        for (Topic t : topics) {
+            Locator l = t.getSubjectLocator();
+            if (l != null) {
                 return t;
             }
         }
         return null;
     }
-    
-    
+
+
     @Override
     public Locator getSubjectLocator() throws TopicMapException {
-        Locator ret=null;
-        for(Topic t : topics){
-            Locator l=t.getSubjectLocator();
-            if(l!=null) {
-                if(ret!=null && !ret.equals(l)){
+        Locator ret = null;
+        for (Topic t : topics) {
+            Locator l = t.getSubjectLocator();
+            if (l != null) {
+                if (ret != null && !ret.equals(l)) {
                     ambiguity("Several locators (getSubjectLocator)");
                     return ret;
                 }
-                ret=l;
+                ret = l;
             }
         }
         return ret;
     }
-    
-    
+
+
     @Override
     public void setSubjectLocator(Locator l) throws TopicMapException {
-        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
-        Collection<Topic> ts=getTopicsForSelectedLayer();
-        Topic t=null;
-        if(ts.isEmpty()) {
-            AmbiguityResolution res=resolveAmbiguity("setSubjectLocator.noSelected","No topic in selected layer");
-            if(res==AmbiguityResolution.addToSelected){
-                t=copyStubTo(layerStack.getSelectedLayer().getTopicMap());
-                if(t==null){
+        if (layerStack.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
+        Collection<Topic> ts = getTopicsForSelectedLayer();
+        Topic t = null;
+        if (ts.isEmpty()) {
+            AmbiguityResolution res = resolveAmbiguity("setSubjectLocator.noSelected", "No topic in selected layer");
+            if (res == AmbiguityResolution.addToSelected) {
+                t = copyStubTo(layerStack.getSelectedLayer().getTopicMap());
+                if (t == null) {
                     ambiguity("Cannot copy topic to selected layer");
                     return;
                 }
             }
-            else throw new RuntimeException("Not implemented");
+            else {
+                throw new RuntimeException("Not implemented");
+            }
         }
         else {
-            if(ts.size()>1) ambiguity("Several topics in selected layer (setSubjectLocator");
-            t=ts.iterator().next();
+            if (ts.size() > 1) {
+                ambiguity("Several topics in selected layer (setSubjectLocator");
+            }
+            t = ts.iterator().next();
         }
-        if(t.getSubjectLocator()==null || !t.getSubjectLocator().equals(l)){
+        if (t.getSubjectLocator() == null || !t.getSubjectLocator().equals(l)) {
             t.setSubjectLocator(l);
             remakeLayered(t);
         }
     }
-    
-    
+
+
     @Override
-    public TopicMap getTopicMap(){
+    public TopicMap getTopicMap() {
         return layerStack;
     }
-    
-    
-    public LayerStack getLayerStack(){
+
+
+    public LayerStack getLayerStack() {
         return layerStack;
     }
-    
-    
+
+
     /**
      * Adds LayeredAssociations into associations set based on the possible players
      * for each role given in the players map. When converting individual associations
@@ -1007,352 +1129,375 @@ public class LayeredTopic extends Topic {
      * the set which is later returned.
      *
      */
-    private void _addAssociations(Set<Association> associations,Map<LayeredTopic,Vector<LayeredTopic>> players,Vector<LayeredTopic> roles,Vector<LayeredTopic> chosen,LayeredTopic type) throws TopicMapException{
-        if(chosen==null) chosen=new Vector<LayeredTopic>();
-        if(roles==null){
-            roles=new Vector<LayeredTopic>();
+    private void _addAssociations(Set<Association> associations, Map<LayeredTopic, Vector<LayeredTopic>> players,
+            Vector<LayeredTopic> roles, Vector<LayeredTopic> chosen, LayeredTopic type) throws TopicMapException {
+        if (chosen == null) {
+            chosen = new Vector<LayeredTopic>();
+        }
+        if (roles == null) {
+            roles = new Vector<LayeredTopic>();
             roles.addAll(players.keySet());
         }
-        if(chosen.size()==roles.size()){
-            LayeredAssociation la=new LayeredAssociation(layerStack,type);
-            int counter=0;
-            for(LayeredTopic role : roles){
-                la.addLayeredPlayer(chosen.elementAt(counter++),role);
+        if (chosen.size() == roles.size()) {
+            LayeredAssociation la = new LayeredAssociation(layerStack, type);
+            int counter = 0;
+            for (LayeredTopic role : roles) {
+                la.addLayeredPlayer(chosen.elementAt(counter++), role);
             }
             associations.add(la);
         }
-        else{
-            int chosenSize=chosen.size();
-            Topic role=roles.elementAt(chosenSize);
-            Vector<LayeredTopic> ps=players.get(role);
-            for(LayeredTopic p : ps){
-                while(chosen.size()>chosenSize){
-                    chosen.remove(chosen.size()-1);
+        else {
+            int chosenSize = chosen.size();
+            Topic role = roles.elementAt(chosenSize);
+            Vector<LayeredTopic> ps = players.get(role);
+            for (LayeredTopic p : ps) {
+                while (chosen.size() > chosenSize) {
+                    chosen.remove(chosen.size() - 1);
                 }
                 chosen.add(p);
-                _addAssociations(associations,players,roles,chosen,type);
+                _addAssociations(associations, players, roles, chosen, type);
             }
         }
     }
-    
-    
+
+
     /**
      * Returns associations of this topic. Note that because roles may get
      * merged, one individual association may become multiple LayeredAssociations.
      */
     @Override
     public Collection<Association> getAssociations() throws TopicMapException {
-        Set<Association> associations=new LinkedHashSet<>();
+        Set<Association> associations = new LinkedHashSet<>();
 
-        Map<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
-        for(Topic t : topics){
-            Collection<Association> c=t.getAssociations();
-            for(Association a : c ){
-                LayeredTopic lt=layerStack.getLayeredTopic(a.getType(),layeredTopics);
-//                LayeredAssociation la=new LayeredAssociation(layerStack,lt);
-                Collection<Topic> roles=a.getRoles();
-                Map<LayeredTopic,Vector<LayeredTopic>> players=new KeyedHashMap<LayeredTopic,Vector<LayeredTopic>>(new TopicKeyMaker());
-                for(Topic role : roles){
-                    LayeredTopic lrole=layerStack.getLayeredTopic(role,layeredTopics);
-                    Topic player=a.getPlayer(role);
-                    LayeredTopic lplayer=layerStack.getLayeredTopic(player,layeredTopics);
+        Map<Topic, LayeredTopic> layeredTopics = new KeyedHashMap<Topic, LayeredTopic>(
+                layerStack.new TopicAndLayerKeyMaker());
+        for (Topic t : topics) {
+            Collection<Association> c = t.getAssociations();
+            for (Association a : c) {
+                LayeredTopic lt = layerStack.getLayeredTopic(a.getType(), layeredTopics);
+                //                LayeredAssociation la=new LayeredAssociation(layerStack,lt);
+                Collection<Topic> roles = a.getRoles();
+                Map<LayeredTopic, Vector<LayeredTopic>> players = new KeyedHashMap<LayeredTopic, Vector<LayeredTopic>>(
+                        new TopicKeyMaker());
+                for (Topic role : roles) {
+                    LayeredTopic lrole = layerStack.getLayeredTopic(role, layeredTopics);
+                    Topic player = a.getPlayer(role);
+                    LayeredTopic lplayer = layerStack.getLayeredTopic(player, layeredTopics);
 
-                    Vector<LayeredTopic> ps=players.get(lrole);
-                    if(ps==null){
-                        ps=new Vector<LayeredTopic>();
-                        players.put(lrole,ps);
+                    Vector<LayeredTopic> ps = players.get(lrole);
+                    if (ps == null) {
+                        ps = new Vector<LayeredTopic>();
+                        players.put(lrole, ps);
                     }
                     ps.add(lplayer);
 
-//                    la.addLayeredPlayer(lplayer,lrole);
+                    //                    la.addLayeredPlayer(lplayer,lrole);
                 }
-//                associations.add(la);
-                _addAssociations(associations,players,null,null,lt);
+                //                associations.add(la);
+                _addAssociations(associations, players, null, null, lt);
             }
-        }        
+        }
         return associations;
     }
-    
-    
-    
+
+
+
     /**
      * See notes in getAssociations().
      */
     @Override
     public Collection<Association> getAssociations(Topic type) throws TopicMapException {
-        Map<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<Topic,LayeredTopic>(layerStack.new TopicAndLayerKeyMaker());
-        Set<Association> associations=new LinkedHashSet<Association>();
-        LayeredTopic lt=(LayeredTopic)type;
-        for(Topic t : topics){
-            for(Topic st : lt.getTopicsForLayer(layerStack.getLayer(t))){
-                Collection<Association> c=t.getAssociations(st);
-                for(Association a : c ){
-//                    LayeredAssociation la=new LayeredAssociation(layerStack,lt);
-                    Collection<Topic> roles=a.getRoles();
-                    Map<LayeredTopic,Vector<LayeredTopic>> players=new KeyedHashMap<LayeredTopic,Vector<LayeredTopic>>(new TopicKeyMaker());
-                    for(Topic role : roles){
-                        LayeredTopic lrole=layerStack.getLayeredTopic(role,layeredTopics);
-                        Topic player=a.getPlayer(role);
-                        LayeredTopic lplayer=layerStack.getLayeredTopic(player,layeredTopics);
-                    
-                        Vector<LayeredTopic> ps=players.get(lrole);
-                        if(ps==null){
-                            ps=new Vector<LayeredTopic>();
-                            players.put(lrole,ps);
+        Map<Topic, LayeredTopic> layeredTopics = new KeyedHashMap<Topic, LayeredTopic>(
+                layerStack.new TopicAndLayerKeyMaker());
+        Set<Association> associations = new LinkedHashSet<Association>();
+        LayeredTopic lt = (LayeredTopic) type;
+        for (Topic t : topics) {
+            for (Topic st : lt.getTopicsForLayer(layerStack.getLayer(t))) {
+                Collection<Association> c = t.getAssociations(st);
+                for (Association a : c) {
+                    Collection<Topic> roles = a.getRoles();
+                    Map<LayeredTopic, Vector<LayeredTopic>> players = new KeyedHashMap<LayeredTopic, Vector<LayeredTopic>>(
+                            new TopicKeyMaker());
+                    for (Topic role : roles) {
+                        LayeredTopic lrole = layerStack.getLayeredTopic(role, layeredTopics);
+                        Topic player = a.getPlayer(role);
+                        LayeredTopic lplayer = layerStack.getLayeredTopic(player, layeredTopics);
+
+                        Vector<LayeredTopic> ps = players.get(lrole);
+                        if (ps == null) {
+                            ps = new Vector<LayeredTopic>();
+                            players.put(lrole, ps);
                         }
                         ps.add(lplayer);
-
-//                        la.addLayeredPlayer(lplayer,lrole);
                     }
-//                    associations.add(la);
-                    _addAssociations(associations,players,null,null,lt);
+                    _addAssociations(associations, players, null, null, lt);
                 }
             }
-        }        
+        }
         return associations;
     }
-    
-    
+
+
     /**
      * See notes in getAssociations().
      */
     @Override
-    public Collection<Association> getAssociations(Topic type,Topic role) throws TopicMapException {
-        LayeredTopic lt=(LayeredTopic)type;
-        LayeredTopic lr=(LayeredTopic)role;
-        Map<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
-        Set<Association> associations=new LinkedHashSet<>();
-        for(Topic t : topics){
-            for(Topic st : lt.getTopicsForLayer(layerStack.getLayer(t))){
-                for(Topic sr : lr.getTopicsForLayer(layerStack.getLayer(t))){
-                    Collection<Association> c=t.getAssociations(st,sr);
-                    for(Association a : c ){
-//                        LayeredAssociation la=new LayeredAssociation(layerStack,lt);
-                        Collection<Topic> roles=a.getRoles();
-                        KeyedHashMap<LayeredTopic,Vector<LayeredTopic>> players=new KeyedHashMap<LayeredTopic,Vector<LayeredTopic>>(new TopicKeyMaker());
-                        for(Topic arole : roles){
-                            LayeredTopic lrole=layerStack.getLayeredTopic(arole,layeredTopics);
-                            Topic player=a.getPlayer(arole);
-                            LayeredTopic lplayer=layerStack.getLayeredTopic(player,layeredTopics);
-                    
-                            Vector<LayeredTopic> ps=players.get(lrole);
-                            if(ps==null){
-                                ps=new Vector<LayeredTopic>();
-                                players.put(lrole,ps);
+    public Collection<Association> getAssociations(Topic type, Topic role) throws TopicMapException {
+        LayeredTopic lt = (LayeredTopic) type;
+        LayeredTopic lr = (LayeredTopic) role;
+        Map<Topic, LayeredTopic> layeredTopics = new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
+        Set<Association> associations = new LinkedHashSet<>();
+        for (Topic t : topics) {
+            for (Topic st : lt.getTopicsForLayer(layerStack.getLayer(t))) {
+                for (Topic sr : lr.getTopicsForLayer(layerStack.getLayer(t))) {
+                    Collection<Association> c = t.getAssociations(st, sr);
+                    for (Association a : c) {
+                        Collection<Topic> roles = a.getRoles();
+                        KeyedHashMap<LayeredTopic, Vector<LayeredTopic>> players = new KeyedHashMap<LayeredTopic, Vector<LayeredTopic>>(
+                                new TopicKeyMaker());
+                        for (Topic arole : roles) {
+                            LayeredTopic lrole = layerStack.getLayeredTopic(arole, layeredTopics);
+                            Topic player = a.getPlayer(arole);
+                            LayeredTopic lplayer = layerStack.getLayeredTopic(player, layeredTopics);
+
+                            Vector<LayeredTopic> ps = players.get(lrole);
+                            if (ps == null) {
+                                ps = new Vector<LayeredTopic>();
+                                players.put(lrole, ps);
                             }
                             ps.add(lplayer);
-
-//                            la.addLayeredPlayer(lplayer,lrole);
                         }
-//                        associations.add(la);
-                        _addAssociations(associations,players,null,null,lt);
+                        _addAssociations(associations, players, null, null, lt);
                     }
                 }
             }
-        }        
+        }
         return associations;
     }
-    
-    
+
+
     @Override
     public void remove() throws TopicMapException {
-        if(layerStack.isReadOnly()) throw new TopicMapReadOnlyException();
-        Collection<Topic> ts=getTopicsForSelectedLayer();
-        if(ts.isEmpty()){
+        if (layerStack.isReadOnly()) {
+            throw new TopicMapReadOnlyException();
+        }
+        Collection<Topic> ts = getTopicsForSelectedLayer();
+        if (ts.isEmpty()) {
             ambiguity("no topic in selected layer (remove)");
             return;
         }
-        else if(ts.size()>1) ambiguity("several topics in selected layer (remove)");
-//        layerStack.removeTopicFromIndex(getOneSubjectIdentifier());
+        else if (ts.size() > 1) {
+            ambiguity("several topics in selected layer (remove)");
+        }
         ts.iterator().next().remove();
     }
-    
-    
+
+
     @Override
     public long getEditTime() throws TopicMapException {
-        long max=-1;
-        for(Topic t : topics){
-            long time=t.getEditTime();
-            if(time>max) max=time;
+        long max = -1;
+        for (Topic t : topics) {
+            long time = t.getEditTime();
+            if (time > max) {
+                max = time;
+            }
         }
         return max;
     }
-    
-    
+
+
     @Override
     public void setEditTime(long time) throws TopicMapException {
         // TODO: edit time of what?
-        for(Topic t : getTopicsForSelectedLayer()){
+        for (Topic t : getTopicsForSelectedLayer()) {
             t.setEditTime(time);
         }
     }
-    
-    
+
+
     @Override
     public long getDependentEditTime() throws TopicMapException {
-        long max=-1;
-        for(Topic t : topics){
-            long time=t.getDependentEditTime();
-            if(time>max) max=time;
+        long max = -1;
+        for (Topic t : topics) {
+            long time = t.getDependentEditTime();
+            if (time > max) {
+                max = time;
+            }
         }
-        return max;        
+        return max;
     }
-    
-    
+
+
     @Override
     public void setDependentEditTime(long time) throws TopicMapException {
         // TODO: edit time of what?
-        for(Topic t : getTopicsForSelectedLayer()){
+        for (Topic t : getTopicsForSelectedLayer()) {
             t.setDependentEditTime(time);
-        }        
+        }
     }
-    
-    
+
+
     @Override
     public boolean isRemoved() throws TopicMapException {
         // TODO: how should this work?
-        if(topics.isEmpty()) return true;
-        Collection<Topic> ts=getTopicsForSelectedLayer();
-        if(ts.isEmpty()){
+        if (topics.isEmpty()) {
+            return true;
+        }
+        Collection<Topic> ts = getTopicsForSelectedLayer();
+        if (ts.isEmpty()) {
             ambiguity("no topic in selected layer (isRemoved)");
             return false;
         }
-        else if(ts.size()>1) ambiguity("several topics in selected layer (isRemoved)");
+        else if (ts.size() > 1) {
+            ambiguity("several topics in selected layer (isRemoved)");
+        }
         return ts.iterator().next().isRemoved();
     }
-    
-    
+
+
     @Override
     public boolean isDeleteAllowed() throws TopicMapException {
-        Collection<Topic> ts=getTopicsForSelectedLayer();
-        if(ts.isEmpty()){
+        Collection<Topic> ts = getTopicsForSelectedLayer();
+        if (ts.isEmpty()) {
             ambiguity("no topic in selected layer (isDeleteAllowed)");
             return false;
         }
-        else if(ts.size()>1) ambiguity("several topics in selected layer (isDeleteAllowed)");
+        else if (ts.size() > 1) {
+            ambiguity("several topics in selected layer (isDeleteAllowed)");
+        }
         return ts.iterator().next().isDeleteAllowed();
     }
-    
-    
+
+
     @Override
     public Collection<Topic> getTopicsWithDataType() throws TopicMapException {
-        Map<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
-        Set<Topic> ret=new LinkedHashSet<>();
-        for(Topic t : topics){
-            Collection<Topic> c=t.getTopicsWithDataType();
-            for(Topic to : c){
-                LayeredTopic lt=layerStack.getLayeredTopic(to,layeredTopics);
+        Map<Topic, LayeredTopic> layeredTopics = new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
+        Set<Topic> ret = new LinkedHashSet<>();
+        for (Topic t : topics) {
+            Collection<Topic> c = t.getTopicsWithDataType();
+            for (Topic to : c) {
+                LayeredTopic lt = layerStack.getLayeredTopic(to, layeredTopics);
                 ret.add(lt);
             }
         }
         return ret;
     }
-    
-    
+
+
     @Override
     public Collection<Association> getAssociationsWithType() throws TopicMapException {
-        Map<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
-        Set<Association> associations=new LinkedHashSet<>();
-        for(Topic t : topics){
-            Collection<Association> c=t.getAssociationsWithType();
-            for(Association a : c ){
-                LayeredTopic lt=layerStack.getLayeredTopic(a.getType(),layeredTopics);
-                LayeredAssociation la=new LayeredAssociation(layerStack,lt);
-                Collection<Topic> roles=a.getRoles();
-                for(Topic role : roles){
-                    LayeredTopic lrole=layerStack.getLayeredTopic(role,layeredTopics);
-                    Topic player=a.getPlayer(role);
-                    LayeredTopic lplayer=layerStack.getLayeredTopic(player,layeredTopics);
-                    la.addLayeredPlayer(lplayer,lrole);
+        Map<Topic, LayeredTopic> layeredTopics = new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
+        Set<Association> associations = new LinkedHashSet<>();
+        for (Topic t : topics) {
+            Collection<Association> c = t.getAssociationsWithType();
+            for (Association a : c) {
+                LayeredTopic lt = layerStack.getLayeredTopic(a.getType(), layeredTopics);
+                LayeredAssociation la = new LayeredAssociation(layerStack, lt);
+                Collection<Topic> roles = a.getRoles();
+                for (Topic role : roles) {
+                    LayeredTopic lrole = layerStack.getLayeredTopic(role, layeredTopics);
+                    Topic player = a.getPlayer(role);
+                    LayeredTopic lplayer = layerStack.getLayeredTopic(player, layeredTopics);
+                    la.addLayeredPlayer(lplayer, lrole);
                 }
                 associations.add(la);
             }
-        }        
-        return associations;
-    }
-    
-    
-    @Override
-    public Collection<Association> getAssociationsWithRole() throws TopicMapException {
-        Map<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
-        Set<Association> associations=new LinkedHashSet<>();
-        for(Topic t : topics){
-            Collection<Association> c=t.getAssociationsWithRole();
-            for(Association a : c ){
-                LayeredTopic lt=layerStack.getLayeredTopic(a.getType(),layeredTopics);
-                LayeredAssociation la=new LayeredAssociation(layerStack,lt);
-                Collection<Topic> roles=a.getRoles();
-                for(Topic role : roles){
-                    LayeredTopic lrole=layerStack.getLayeredTopic(role,layeredTopics);
-                    Topic player=a.getPlayer(role);
-                    LayeredTopic lplayer=layerStack.getLayeredTopic(player,layeredTopics);
-                    la.addLayeredPlayer(lplayer,lrole);
-                }
-                associations.add(la);
-            }
-        }        
+        }
         return associations;
     }
 
-    
+
+    @Override
+    public Collection<Association> getAssociationsWithRole() throws TopicMapException {
+        Map<Topic, LayeredTopic> layeredTopics = new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
+        Set<Association> associations = new LinkedHashSet<>();
+        for (Topic t : topics) {
+            Collection<Association> c = t.getAssociationsWithRole();
+            for (Association a : c) {
+                LayeredTopic lt = layerStack.getLayeredTopic(a.getType(), layeredTopics);
+                LayeredAssociation la = new LayeredAssociation(layerStack, lt);
+                Collection<Topic> roles = a.getRoles();
+                for (Topic role : roles) {
+                    LayeredTopic lrole = layerStack.getLayeredTopic(role, layeredTopics);
+                    Topic player = a.getPlayer(role);
+                    LayeredTopic lplayer = layerStack.getLayeredTopic(player, layeredTopics);
+                    la.addLayeredPlayer(lplayer, lrole);
+                }
+                associations.add(la);
+            }
+        }
+        return associations;
+    }
+
+
     @Override
     public Collection<Topic> getTopicsWithDataVersion() throws TopicMapException {
-        Map<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
-        Set<Topic> ret=new LinkedHashSet<>();
-        for(Topic t : topics){
-            Collection<Topic> c=t.getTopicsWithDataVersion();
-            for(Topic to : c){
-                LayeredTopic lt=layerStack.getLayeredTopic(to,layeredTopics);
+        Map<Topic, LayeredTopic> layeredTopics = new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
+        Set<Topic> ret = new LinkedHashSet<>();
+        for (Topic t : topics) {
+            Collection<Topic> c = t.getTopicsWithDataVersion();
+            for (Topic to : c) {
+                LayeredTopic lt = layerStack.getLayeredTopic(to, layeredTopics);
                 ret.add(lt);
             }
         }
         return ret;
     }
-    
+
 
     @Override
     public Collection<Topic> getTopicsWithVariantScope() throws TopicMapException {
-        Map<Topic,LayeredTopic> layeredTopics=new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
-        Set<Topic> ret=new LinkedHashSet<>();
-        for(Topic t : topics){
-            Collection<Topic> c=t.getTopicsWithVariantScope();
-            for(Topic to : c){
-                LayeredTopic lt=layerStack.getLayeredTopic(to,layeredTopics);
+        Map<Topic, LayeredTopic> layeredTopics = new KeyedHashMap<>(layerStack.new TopicAndLayerKeyMaker());
+        Set<Topic> ret = new LinkedHashSet<>();
+        for (Topic t : topics) {
+            Collection<Topic> c = t.getTopicsWithVariantScope();
+            for (Topic to : c) {
+                LayeredTopic lt = layerStack.getLayeredTopic(to, layeredTopics);
                 ret.add(lt);
             }
         }
         return ret;
     }
-   
-    
+
+
     @Override
     public boolean mergesWithTopic(Topic topic) throws TopicMapException {
-        if(topic == null) return false;
-        for(Topic t : topics){
-            if(t.getBaseName()!=null && topic.getBaseName()!=null && t.getBaseName().equals(topic.getBaseName())) 
+        if (topic == null) {
+            return false;
+        }
+        for (Topic t : topics) {
+            if (t.getBaseName() != null && topic.getBaseName() != null && t.getBaseName().equals(topic.getBaseName())) {
                 return true;
-            for(Locator l : t.getSubjectIdentifiers()) {
-                if(topic.getSubjectIdentifiers().contains(l)) return true;
             }
-            if(t.getSubjectLocator()!=null && topic.getSubjectLocator()!=null && t.getSubjectLocator().equals(topic.getSubjectLocator())) 
-                return true;            
+            for (Locator l : t.getSubjectIdentifiers()) {
+                if (topic.getSubjectIdentifiers().contains(l))
+                    return true;
+            }
+            if (t.getSubjectLocator() != null && topic.getSubjectLocator() != null
+                    && t.getSubjectLocator().equals(topic.getSubjectLocator())) {
+                return true;
+            }
         }
         return false;
     }
-    
-    
-    public static class TopicKeyMaker implements Delegate<String,LayeredTopic> {
-        public String invoke(LayeredTopic t){
-            String min=null;
-            try{
-                for(Locator l : t.getSubjectIdentifiers()) {
-                    String s=l.toExternalForm();
-                    if(min==null) min=s;
-                    else if(s.compareTo(min)<0) min=s;
+
+
+    public static class TopicKeyMaker implements Delegate<String, LayeredTopic> {
+        public String invoke(LayeredTopic t) {
+            String min = null;
+            try {
+                for (Locator l : t.getSubjectIdentifiers()) {
+                    String s = l.toExternalForm();
+                    if (min == null) {
+                        min = s;
+                    }
+                    else if (s.compareTo(min) < 0) {
+                        min = s;
+                    }
                 }
             }
-            catch(TopicMapException tme){
-            	logger.error(tme);
+            catch (TopicMapException tme) {
+                logger.error(tme);
             }
             return min;
         }

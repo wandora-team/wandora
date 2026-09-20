@@ -27,9 +27,13 @@
  */
 
 package org.wandora.topicmap.layered;
+
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
+
+
+
 /**
  * The Layer class represents one layer in a LayerStack. Each Layer contains
  * the topic map of that layer and in addition to that, the name of the layer,
@@ -39,66 +43,109 @@ import org.wandora.topicmap.undowrapper.UndoTopicMap;
  * @author olli
  */
 public class Layer {
-    
+
     protected ContainerTopicMap container;
-    
+
     protected TopicMap topicMap;
     protected boolean visible;
     protected int color;
     protected String name;
-    protected boolean broken=false;
-    
+    protected boolean broken = false;
+
     /** Creates a new instance of Layer */
-    public Layer(TopicMap topicMap,String name,ContainerTopicMap container) throws TopicMapException {
-        this.topicMap=topicMap;
-        this.container=container;
+    public Layer(TopicMap topicMap, String name, ContainerTopicMap container) throws TopicMapException {
+        this.topicMap = topicMap;
+        this.container = container;
         setName(name);
         setVisible(true);
         setColor(0x000000);
-        
-        if(!topicMap.isConnected()){
-            this.broken=true;
+
+        if (!topicMap.isConnected()) {
+            this.broken = true;
         }
     }
-    
-    public void wrapInUndo(){
-        if(!(topicMap instanceof LayerStack) && !(topicMap instanceof UndoTopicMap)){
-            topicMap=new UndoTopicMap(topicMap);
+
+
+    public void wrapInUndo() {
+        if (!(topicMap instanceof LayerStack) && !(topicMap instanceof UndoTopicMap)) {
+            topicMap = new UndoTopicMap(topicMap);
         }
     }
-    
-    public ContainerTopicMap getContainer(){return container;}
-    public TopicMap getTopicMap(){return topicMap;}
-    
-    public boolean isVisible(){return visible;}
-    public void setVisible(boolean visible){
-        this.visible=visible;
-        if(container!=null) container.notifyLayersChanged();
-        if(container!=null) container.fireLayerVisibilityChanged(this);
-//        layerStack.visibilityChanged(this);
+
+
+    public ContainerTopicMap getContainer() {
+        return container;
     }
-    
-    public boolean isReadOnly(){
-        if(topicMap != null) {
+
+
+    public TopicMap getTopicMap() {
+        return topicMap;
+    }
+
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+        if (container != null) {
+            container.notifyLayersChanged();
+        }
+        if (container != null) {
+            container.fireLayerVisibilityChanged(this);
+        }
+    }
+
+
+    public boolean isReadOnly() {
+        if (topicMap != null) {
             return topicMap.isReadOnly();
         }
         return true;
     }
-    
+
+
     public void setReadOnly(boolean readOnly) {
-        if(topicMap != null) {
+        if (topicMap != null) {
             topicMap.setReadOnly(readOnly);
         }
     }
-    
-    public int getColor(){return color;}
-    public void setColor(int color){this.color=color;}
-    public String getName(){return name;}
-    public void setName(String name){this.name=name;}
-    public int getZPos(){
+
+
+    public int getColor() {
+        return color;
+    }
+
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    public int getZPos() {
         return container.getLayerZPos(this);
     }
-    public void setBroken(boolean broken){this.broken=broken;}
-    public boolean getBroken(){return broken;}
-    
+
+
+    public void setBroken(boolean broken) {
+        this.broken = broken;
+    }
+
+
+    public boolean getBroken() {
+        return broken;
+    }
+
 }
