@@ -36,14 +36,14 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author akivela
  */
 public class PDFbox {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PDFbox.class);
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(PDFbox.class);
 
 
 
     public static String extractTextOutOfPDF(String url) {
         PDDocument doc = null;
         try {
-            if(url.startsWith("file:")) {
+            if (url.startsWith("file:")) {
                 doc = PDDocument.load(new File(url));
             }
             else {
@@ -54,7 +54,7 @@ public class PDFbox {
             doc.close();
             return content;
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error(e);
         }
         return null;

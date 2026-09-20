@@ -51,31 +51,31 @@ import org.wandora.utils.transferables.TransferableImage;
 
 
 /**
- * This class provides methods to modify and retrieve information from the system
- * clipboard.
+ * This class provides methods to modify and retrieve information from the
+ * system clipboard.
  *
- * @author  akivela
+ * @author akivela
  */
 
 
 public class ClipboardBox {
-    
+
     public static boolean makeDataURLs = true;
-    
-    
-    
+
+
+
     /** Creates a new instance of ClipboardBox */
     private ClipboardBox() {
         // Private
     }
-    
-    
+
+
     /**
      * Copies the selected text of the specified text component.
      */
     public static void copy(Component c) {
-        if(c != null) {
-            if(c instanceof JTextComponent) {
+        if (c != null) {
+            if (c instanceof JTextComponent) {
                 ((JTextComponent) c).copy();
             }
             else {
@@ -83,102 +83,105 @@ public class ClipboardBox {
             }
         }
     }
-    
-    
+
+
     /**
      * Cuts the selected text of the specified text component.
      */
     public static void cut(Component c) {
-        if(c != null) {
-            if(c instanceof JTextComponent) {
+        if (c != null) {
+            if (c instanceof JTextComponent) {
                 ((JTextComponent) c).cut();
             }
             else {
                 System.out.println("Cut event not handled!");
             }
-        }        
+        }
     }
-    
+
+
     /**
      * Pastes contents of the clipboard in the specified text component.
      */
     public static void paste(Component c) {
-        if(c != null) {
-            if(c instanceof JTextComponent) {
+        if (c != null) {
+            if (c instanceof JTextComponent) {
                 ((JTextComponent) c).paste();
             }
             else {
                 System.out.println("Paste event not handled!");
             }
-        }       
+        }
     }
-    
-    
-    
-    
-    
+
+
+
     /**
-     * Returns the contents of the clipboard if it contains a string.
-     * Otherwise returns null.
+     * Returns the contents of the clipboard if it contains a string. Otherwise
+     * returns null.
      */
     public static String getClipboard() {
         Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
-        if(t == null) return null;
-        
+        if (t == null)
+            return null;
+
         try {
-            if(t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+            if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                 java.util.List<File> files = (java.util.List<File>) t.getTransferData(DataFlavor.javaFileListFlavor);
-                if(makeDataURLs) {
-                    for( File file : files ) {
-                        if(file != null) {
+                if (makeDataURLs) {
+                    for (File file : files) {
+                        if (file != null) {
                             DataURL dataURL = new DataURL(file);
-                            return dataURL.toExternalForm(); // CAN'T HANDLE MULTIPLE FILES. RETURN FIRST FILE AS A DATAURL.
+                            return dataURL.toExternalForm(); // CAN'T HANDLE MULTIPLE FILES. RETURN FIRST FILE AS A
+                                                             // DATAURL.
                         }
                     }
                 }
                 else {
                     String text = "";
-                    for( File file : files ) {
-                        if(file != null) {
-                            if(text.length()>0) text+=";";
+                    for (File file : files) {
+                        if (file != null) {
+                            if (text.length() > 0)
+                                text += ";";
                             text += file.toURI().toString();
                         }
                     }
                     return text;
                 }
             }
-            else if(t.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+            else if (t.isDataFlavorSupported(DataFlavor.imageFlavor)) {
                 BufferedImage image = (BufferedImage) t.getTransferData(DataFlavor.imageFlavor);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write( image, "png", baos );
+                ImageIO.write(image, "png", baos);
                 baos.flush();
                 byte[] imageBytes = baos.toByteArray();
                 baos.close();
                 DataURL dataURL = new DataURL("image/png", imageBytes);
                 return dataURL.toExternalForm();
             }
-            else if(t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                String text = (String)t.getTransferData(DataFlavor.stringFlavor);
+            else if (t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+                String text = (String) t.getTransferData(DataFlavor.stringFlavor);
                 return text;
             }
-        } catch (UnsupportedFlavorException e) {
-        } catch (IOException e) {
+        }
+        catch (UnsupportedFlavorException e) {
+        }
+        catch (IOException e) {
         }
         return null;
     }
 
-    
-    
-    
+
+
     /**
      * Sets the contents of the clipboard.
      */
     public static void setClipboard(String str) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        if(DataURL.isDataURL(str)) {
+        if (DataURL.isDataURL(str)) {
             try {
                 DataURL dataURL = new DataURL(str);
-                if(dataURL.getMimetype().startsWith("image")) {
+                if (dataURL.getMimetype().startsWith("image")) {
                     BufferedImage image = ImageIO.read(new ByteArrayInputStream(dataURL.getData()));
                     TransferableImage imageTransferable = new TransferableImage(image, str);
                     clipboard.setContents(imageTransferable, null);
@@ -190,25 +193,26 @@ public class ClipboardBox {
                     return;
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 // IGNORE
             }
         }
         StringSelection ss = new StringSelection(str);
         clipboard.setContents(ss, null);
     }
-    
+
+
     /**
-     * Sets the contents of the clipboard. Calls toString of the specified
-     * object and sets the returned string in the clipboard.
+     * Sets the contents of the clipboard. Calls toString of the specified object
+     * and sets the returned string in the clipboard.
      */
     public static void setClipboard(Object o) {
         StringSelection ss = new StringSelection(o.toString());
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
     }
-    
-    
-    
+
+
+
     /**
      * Sets the contents of the clipboard.
      */

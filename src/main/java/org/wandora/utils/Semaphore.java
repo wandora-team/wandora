@@ -33,22 +33,25 @@ package org.wandora.utils;
  * @author  olli
  */
 public class Semaphore {
-    
+
     private int counter;
-    
+
     /** Creates a new instance of Semaphore */
     public Semaphore(int counter) {
-        this.counter=counter;
+        this.counter = counter;
     }
-    
-    public synchronized void acquire() throws InterruptedException{
-        while(counter==0) this.wait();
+
+
+    public synchronized void acquire() throws InterruptedException {
+        while (counter == 0)
+            this.wait();
         counter--;
     }
-    
-    public synchronized void release(){
+
+
+    public synchronized void release() {
         counter++;
         this.notify();
     }
-    
+
 }

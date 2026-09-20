@@ -50,14 +50,14 @@ import javax.imageio.stream.FileImageOutputStream;
  * @author  akivela
  */
 public class ImageBox {
-    
+
     /** Creates a new instance of ImageBox */
     private ImageBox() {
         // Private
     }
-    
-    
-    
+
+
+
     public static void makeThumbnail(String ins, String outs, int width, int height, int quality) throws Exception {
         // load image from INFILE
         BufferedImage image = null;
@@ -66,28 +66,26 @@ public class ImageBox {
             image = ImageIO.read(url);
         }
         catch (Exception e1) {
-            if(ins.startsWith("file:")) {
+            if (ins.startsWith("file:")) {
                 ins = IObox.getFileFromURL(ins);
             }
-//            if(ins.startsWith("file:/")) {
-//                ins = ins.substring(6);
-//            }
             File imageFile = new File(ins); // remove prefix "file://"
             image = ImageIO.read(imageFile);
         }
 
-        if(image != null) {
+        if (image != null) {
             // determine thumbnail size from WIDTH and HEIGHT
             int thumbWidth = width;
             int thumbHeight = height;
-            double thumbRatio = (double)thumbWidth / (double)thumbHeight;
+            double thumbRatio = (double) thumbWidth / (double) thumbHeight;
             int imageWidth = image.getWidth(null);
             int imageHeight = image.getHeight(null);
-            double imageRatio = (double)imageWidth / (double)imageHeight;
+            double imageRatio = (double) imageWidth / (double) imageHeight;
             if (thumbRatio < imageRatio) {
-                thumbHeight = (int)(thumbWidth / imageRatio);
-            } else {
-                thumbWidth = (int)(thumbHeight * imageRatio);
+                thumbHeight = (int) (thumbWidth / imageRatio);
+            }
+            else {
+                thumbWidth = (int) (thumbHeight * imageRatio);
             }
 
             // draw original image to thumbnail image object and
@@ -98,29 +96,18 @@ public class ImageBox {
             graphics2D.drawImage(image, 0, 0, thumbWidth, thumbHeight, null);
 
             // save thumbnail image to OUTFILE
-            ImageWriter writer=ImageIO.getImageWritersByFormatName("jpeg").next();
-            IIOImage iioi=new IIOImage(thumbImage,null,null);
-            ImageWriteParam param=writer.getDefaultWriteParam();
+            ImageWriter writer = ImageIO.getImageWritersByFormatName("jpeg").next();
+            IIOImage iioi = new IIOImage(thumbImage, null, null);
+            ImageWriteParam param = writer.getDefaultWriteParam();
             param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-            param.setCompressionQuality((float)quality / 100.0f);
-            FileImageOutputStream output=new FileImageOutputStream(new File(outs));
+            param.setCompressionQuality((float) quality / 100.0f);
+            FileImageOutputStream output = new FileImageOutputStream(new File(outs));
             writer.setOutput(output);
-            writer.write(null,iioi,param);
+            writer.write(null, iioi, param);
             output.close();
-            
-/*            
-            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(outs));
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-            JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(thumbImage);
-            quality = Math.max(0, Math.min(quality, 100));
-            param.setQuality((float)quality / 100.0f, false);
-            encoder.setJPEGEncodeParam(param);
-            encoder.encode(thumbImage);
-            out.close(); */
         }
     }
 
-    
-    
-    
+
+
 }

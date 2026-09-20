@@ -26,6 +26,7 @@
  */
 
 package org.wandora.utils;
+
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Array;
@@ -43,6 +44,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 /**
  * <p>
  * Utility to create Java Objects from xml. Recursively creates or retrieves objects from symbol table
@@ -171,53 +173,56 @@ import org.w3c.dom.NodeList;
  * @author  olli
  */
 public class XMLParamProcessor {
-    
+
     /**
      * The default namespace URI.
      */
-    public static final String DEFAULT_NAMESPACE="http://www.gripstudios.com/xmlparamprocessor";
-    
-    private HashMap<String,Object> objectTable;
-    private HashMap<String,String> objectTypeTable;
+    public static final String DEFAULT_NAMESPACE = "http://www.gripstudios.com/xmlparamprocessor";
+
+    private HashMap<String, Object> objectTable;
+    private HashMap<String, String> objectTypeTable;
     private String nameSpace;
-    private HashMap<String,String> classMap;
+    private HashMap<String, String> classMap;
     private HashSet<String> forcedLiterals;
-    
+
     /** Creates a new instance of XMLParamProcessor */
     public XMLParamProcessor() {
-        objectTable=new HashMap<>();
-        objectTypeTable=new HashMap<>();
-        classMap=new HashMap<>();
-        nameSpace=DEFAULT_NAMESPACE;
-        addObjectToTable("this",this);
-        mapClass("integer","java.lang.Integer");
-        mapClass("string","java.lang.String");
-        mapClass("boolean","java.lang.Boolean");
-        mapClass("double","java.lang.Double");
-        mapClass("properties","org.wandora.piccolo.XMLProperties");
-        forcedLiterals=new HashSet<>();
+        objectTable = new HashMap<>();
+        objectTypeTable = new HashMap<>();
+        classMap = new HashMap<>();
+        nameSpace = DEFAULT_NAMESPACE;
+        addObjectToTable("this", this);
+        mapClass("integer", "java.lang.Integer");
+        mapClass("string", "java.lang.String");
+        mapClass("boolean", "java.lang.Boolean");
+        mapClass("double", "java.lang.Double");
+        mapClass("properties", "org.wandora.piccolo.XMLProperties");
+        forcedLiterals = new HashSet<>();
         forcedLiterals.add("integer");
         forcedLiterals.add("string");
         forcedLiterals.add("boolean");
         forcedLiterals.add("double");
     }
-    
+
+
     /**
      * Sets the used name space URI.
      * @param ns The new name space URI or null to disable the use of name spaces.
      */
-    public void setNameSpace(String ns){
-        nameSpace=ns;
+    public void setNameSpace(String ns) {
+        nameSpace = ns;
     }
-    
+
+
     /**
      * Reset the whole symbol table.
      * @param table The new symbol table. Should contain id Strings mapped to the corresponding objects.
      */
-    public void setSymbolTable(HashMap<String,Object> table){
-        objectTable=table;
+    public void setSymbolTable(HashMap<String, Object> table) {
+        objectTable = table;
     }
-    
+
+
     /**
      * Map a given node name to a specific class. If className is null, removes the previous association.
      * After a node name N is mapped to class C, an element with node name N will behave as if it had
@@ -225,122 +230,158 @@ public class XMLParamProcessor {
      * a specific node name to that class after which you don't need to write the class attribute for
      * every element.
      */
-    public void mapClass(String nodeName,String className){
-        if(className==null) classMap.remove(nodeName);
-        else classMap.put(nodeName,className);
+    public void mapClass(String nodeName, String className) {
+        if (className == null)
+            classMap.remove(nodeName);
+        else
+            classMap.put(nodeName, className);
     }
-    
-    public String getClassMapping(String nodeName){
+
+
+    public String getClassMapping(String nodeName) {
         return classMap.get(nodeName);
     }
-    
+
+
     /**
      * Adds (or reassigns) a single object to the symbol table.
      * @param id The id of the object.
      * @param o The object to be assigned with the given id.
      */
-    public void addObjectToTable(String id,Object o){
-        objectTable.put(id,o);
+    public void addObjectToTable(String id, Object o) {
+        objectTable.put(id, o);
     }
-    
+
+
     /**
      * Gets an object from the symbol table.
      * @param id The id of the object to get.
      * @return The object or null if not found (or the object really is null).
      */
-    public Object getObject(String id){
+    public Object getObject(String id) {
         return objectTable.get(id);
     }
-    public String getObjectType(String id){
+
+
+    public String getObjectType(String id) {
         return objectTypeTable.get(id);
     }
+
+
     /**
      * Returns the whole symbol table.
      * @return The symbol table with ids mapped to objects.
-     */    
-    public HashMap<String,Object> getSymbolTable(){
+     */
+    public HashMap<String, Object> getSymbolTable() {
         return objectTable;
     }
-    
-    public static Class<?>[] getTypeArray(Object[] params){
-        Class<?>[] paramTypes=new Class[params.length];
-        for(int i=0;i<paramTypes.length;i++) {
-        	paramTypes[i]=params[i].getClass();
+
+
+    public static Class<?>[] getTypeArray(Object[] params) {
+        Class<?>[] paramTypes = new Class[params.length];
+        for (int i = 0; i < paramTypes.length; i++) {
+            paramTypes[i] = params[i].getClass();
         }
         return paramTypes;
     }
-    
-    public static boolean isInstanceOrBoxed(Class<?> type,Object param){
-        if(param==null) return !type.isPrimitive();
-        if(type.isInstance(param)) return true;
-        Class<?> pclass=param.getClass();
-        if(type.isPrimitive()){
-            if(type.equals(Boolean.TYPE) && pclass.equals(Boolean.class)) return true;
-            if(type.equals(Character.TYPE) && pclass.equals(Character.class)) return true;
-            if(type.equals(Byte.TYPE) && pclass.equals(Byte.class)) return true;
-            if(type.equals(Short.TYPE) && pclass.equals(Short.class)) return true;
-            if(type.equals(Integer.TYPE) && pclass.equals(Integer.class)) return true;
-            if(type.equals(Long.TYPE) && pclass.equals(Long.class)) return true;
-            if(type.equals(Float.TYPE) && pclass.equals(Float.class)) return true;
-            if(type.equals(Double.TYPE) && pclass.equals(Double.class)) return true;
+
+
+    public static boolean isInstanceOrBoxed(Class<?> type, Object param) {
+        if (param == null)
+            return !type.isPrimitive();
+        if (type.isInstance(param))
+            return true;
+        Class<?> pclass = param.getClass();
+        if (type.isPrimitive()) {
+            if (type.equals(Boolean.TYPE) && pclass.equals(Boolean.class))
+                return true;
+            if (type.equals(Character.TYPE) && pclass.equals(Character.class))
+                return true;
+            if (type.equals(Byte.TYPE) && pclass.equals(Byte.class))
+                return true;
+            if (type.equals(Short.TYPE) && pclass.equals(Short.class))
+                return true;
+            if (type.equals(Integer.TYPE) && pclass.equals(Integer.class))
+                return true;
+            if (type.equals(Long.TYPE) && pclass.equals(Long.class))
+                return true;
+            if (type.equals(Float.TYPE) && pclass.equals(Float.class))
+                return true;
+            if (type.equals(Double.TYPE) && pclass.equals(Double.class))
+                return true;
         }
         return false;
     }
 
-    public static Constructor<?> findConstructor(Class<?> cls,Object[] params) throws Exception {
-        Constructor<?>[] cs=cls.getConstructors();
-        Outer: for(int i=0;i<cs.length;i++){
-//            if(!cs[i].isAccessible()) continue;
-            Class<?>[] types=cs[i].getParameterTypes();
-            if(types.length!=params.length) continue;
-            for(int j=0;j<types.length;j++){
-//                if(!types[j].isInstance(params[j])) continue Outer;
-                if(!isInstanceOrBoxed(types[j],params[j])) continue Outer;
+
+    public static Constructor<?> findConstructor(Class<?> cls, Object[] params) throws Exception {
+        Constructor<?>[] cs = cls.getConstructors();
+        Outer: for (int i = 0; i < cs.length; i++) {
+            //            if(!cs[i].isAccessible()) continue;
+            Class<?>[] types = cs[i].getParameterTypes();
+            if (types.length != params.length)
+                continue;
+            for (int j = 0; j < types.length; j++) {
+                //                if(!types[j].isInstance(params[j])) continue Outer;
+                if (!isInstanceOrBoxed(types[j], params[j]))
+                    continue Outer;
             }
             return cs[i];
         }
         return null;
     }
-    
-    public static Method findMethod(Class<?> cls,String method,Object[] params) throws Exception {
-        Method[] ms=cls.getMethods();
-        Outer: for(int i=0;i<ms.length;i++){
-            if(!ms[i].getName().equals(method)) continue;
-//            if(!ms[i].isAccessible()) continue;
-            Class<?>[] types=ms[i].getParameterTypes();
-            if(types.length!=params.length) continue;
-            for(int j=0;j<types.length;j++){
-//                if(!types[j].isInstance(params[j])) continue Outer;
-                if(!isInstanceOrBoxed(types[j],params[j])) continue Outer;
+
+
+    public static Method findMethod(Class<?> cls, String method, Object[] params) throws Exception {
+        Method[] ms = cls.getMethods();
+        Outer: for (int i = 0; i < ms.length; i++) {
+            if (!ms[i].getName().equals(method))
+                continue;
+            //            if(!ms[i].isAccessible()) continue;
+            Class<?>[] types = ms[i].getParameterTypes();
+            if (types.length != params.length)
+                continue;
+            for (int j = 0; j < types.length; j++) {
+                //                if(!types[j].isInstance(params[j])) continue Outer;
+                if (!isInstanceOrBoxed(types[j], params[j]))
+                    continue Outer;
             }
             return ms[i];
         }
         return null;
     }
 
-    private String getAttribute(Element e,String attr){
-        if(nameSpace!=null) return e.getAttributeNS(nameSpace,attr);
-        else return e.getAttribute(attr);
+
+    private String getAttribute(Element e, String attr) {
+        if (nameSpace != null)
+            return e.getAttributeNS(nameSpace, attr);
+        else
+            return e.getAttribute(attr);
     }
-    
-    public static String getNodeContents(Node n){
-        short type=n.getNodeType();
-        if(type==Node.TEXT_NODE) return n.getNodeValue();
-        else if(type==Node.CDATA_SECTION_NODE) return n.getNodeValue();
-        else if(type==Node.ELEMENT_NODE){
-            StringBuilder buf=new StringBuilder();
-            NodeList nl=n.getChildNodes();
-            for(int i=0;i<nl.getLength();i++){
+
+
+    public static String getNodeContents(Node n) {
+        short type = n.getNodeType();
+        if (type == Node.TEXT_NODE)
+            return n.getNodeValue();
+        else if (type == Node.CDATA_SECTION_NODE)
+            return n.getNodeValue();
+        else if (type == Node.ELEMENT_NODE) {
+            StringBuilder buf = new StringBuilder();
+            NodeList nl = n.getChildNodes();
+            for (int i = 0; i < nl.getLength(); i++) {
                 buf.append(getNodeContents(nl.item(i)));
             }
             return buf.toString();
         }
-        else return "";
+        else
+            return "";
     }
-    
-    public static String getElementContents(Element e){
+
+
+    public static String getElementContents(Element e) {
         return getNodeContents(e);
-/*        NodeList nl=e.getChildNodes();
+        /*        NodeList nl=e.getChildNodes();
         StringBuilder s=new StringBuilder();
         for(int i=0;i<nl.getLength();i++){
             Node n=nl.item(i);
@@ -349,7 +390,8 @@ public class XMLParamProcessor {
         }
         return s.toString();*/
     }
-    
+
+
     /**
      * Interprets one element and returns the created or retrieved object. Also interpretes any parameters
      * (child nodes) the interpration of the actual element might require. Adds objects to symbol table
@@ -359,80 +401,88 @@ public class XMLParamProcessor {
      *          table didn't contain the object or the method call returns null.
      */
     public Object createObject(Element e) throws Exception {
-        return createObject(e,null);
+        return createObject(e, null);
     }
-    public Object createObject(Element e,String forceClass) throws Exception {
-        String idref=getAttribute(e,"idref");
-        String id=getAttribute(e,"id");
-        String array=getAttribute(e,"array");
-        String cls=getAttribute(e,"class");
-        if(forceClass!=null) cls=forceClass;
-        String method=getAttribute(e,"method");
-        String field=getAttribute(e,"field");
-        String literal=getAttribute(e,"literal");
-        String stc=getAttribute(e,"static");
-        if(idref.length()>0 || stc.length()>0){
-            Object o=null;
-            Class<?> c=null;
-            if(idref.length()>0){
-                if(idref.equals("null")){
-                    o=null;
-                    c=null;
+
+
+    public Object createObject(Element e, String forceClass) throws Exception {
+        String idref = getAttribute(e, "idref");
+        String id = getAttribute(e, "id");
+        String array = getAttribute(e, "array");
+        String cls = getAttribute(e, "class");
+        if (forceClass != null)
+            cls = forceClass;
+        String method = getAttribute(e, "method");
+        String field = getAttribute(e, "field");
+        String literal = getAttribute(e, "literal");
+        String stc = getAttribute(e, "static");
+        if (idref.length() > 0 || stc.length() > 0) {
+            Object o = null;
+            Class<?> c = null;
+            if (idref.length() > 0) {
+                if (idref.equals("null")) {
+                    o = null;
+                    c = null;
                 }
-                else{
-                    o=objectTable.get(idref);
-                    if(o==null) throw new Exception("invalid object id :\""+idref+"\"");
-                    c=o.getClass();
+                else {
+                    o = objectTable.get(idref);
+                    if (o == null)
+                        throw new Exception("invalid object id :\"" + idref + "\"");
+                    c = o.getClass();
                 }
             }
-            else{
-                c=Class.forName(stc);    
-                o=null;
-                if(field.length()==0 && method.length()==0) throw new Exception("Can't use static class "+stc+" without filed or method.");
+            else {
+                c = Class.forName(stc);
+                o = null;
+                if (field.length() == 0 && method.length() == 0)
+                    throw new Exception("Can't use static class " + stc + " without filed or method.");
             }
-            
-            if(field.length()>0){
-                Object r=c.getField(field).get(o);
-                if(id.length()>0) {
-                    objectTable.put(id,r);
-                    objectTypeTable.put(id,e.getNodeName());
-                }
-                return r;
-            }
-            else if(method.length()>0){
-                Object[] params=createArray(e,new Object[0]);
-                Method m=findMethod(c,method,params);
-                if(m==null) throw new NoSuchMethodException(o.getClass().getName()+"."+method);
-                Object r=m.invoke(o,params);
-                if(id.length()>0){
-                    objectTable.put(id,r);
-                    objectTypeTable.put(id,e.getNodeName());
+
+            if (field.length() > 0) {
+                Object r = c.getField(field).get(o);
+                if (id.length() > 0) {
+                    objectTable.put(id, r);
+                    objectTypeTable.put(id, e.getNodeName());
                 }
                 return r;
             }
-            else{
-                if(id.length()>0){
-                    objectTable.put(id,o);
-                    objectTypeTable.put(id,e.getNodeName());
+            else if (method.length() > 0) {
+                Object[] params = createArray(e, new Object[0]);
+                Method m = findMethod(c, method, params);
+                if (m == null)
+                    throw new NoSuchMethodException(o.getClass().getName() + "." + method);
+                Object r = m.invoke(o, params);
+                if (id.length() > 0) {
+                    objectTable.put(id, r);
+                    objectTypeTable.put(id, e.getNodeName());
+                }
+                return r;
+            }
+            else {
+                if (id.length() > 0) {
+                    objectTable.put(id, o);
+                    objectTypeTable.put(id, e.getNodeName());
                 }
                 return o;
             }
         }
-        else if(array.length()>0){
-            Object arrayType=Array.newInstance(Class.forName(array),0);
-            Object a=createArray(e,(Object[])arrayType);
-            if(id.length()>0) objectTable.put(id,a);
+        else if (array.length() > 0) {
+            Object arrayType = Array.newInstance(Class.forName(array), 0);
+            Object a = createArray(e, (Object[]) arrayType);
+            if (id.length() > 0)
+                objectTable.put(id, a);
             return a;
         }
-        else{
-            if(cls.length()==0){
-                String nname=e.getNodeName();
-                if(classMap.get(nname)!=null){
-                    cls=classMap.get(nname);
-                    if(forcedLiterals.contains(nname)) literal="true";
+        else {
+            if (cls.length() == 0) {
+                String nname = e.getNodeName();
+                if (classMap.get(nname) != null) {
+                    cls = classMap.get(nname);
+                    if (forcedLiterals.contains(nname))
+                        literal = "true";
                 }
-                else{
-/*                    nname=nname.toLowerCase();
+                else {
+                    /*                    nname=nname.toLowerCase();
                     nname=nname.substring(0,1).toUpperCase()+nname.substring(1);
                     try{
                         Class.forName("java.lang."+nname);
@@ -440,60 +490,64 @@ public class XMLParamProcessor {
                     }catch(ClassNotFoundException ex){
                         cls="java.lang.String";
                     }*/
-                    cls="java.lang.String";
-                    literal="true";
+                    cls = "java.lang.String";
+                    literal = "true";
                 }
             }
-            boolean aware=false;
-            Class<?> c=Class.forName(cls);
-            Class<?>[] ints=c.getInterfaces();
-            for(int i=0;i<ints.length;i++){
-                if(ints[i]==XMLParamAware.class){
-                    aware=true;
+            boolean aware = false;
+            Class<?> c = Class.forName(cls);
+            Class<?>[] ints = c.getInterfaces();
+            for (int i = 0; i < ints.length; i++) {
+                if (ints[i] == XMLParamAware.class) {
+                    aware = true;
                     break;
                 }
             }
             Object o;
-            if(!aware){
+            if (!aware) {
                 Object[] params;
-                if(literal.equalsIgnoreCase("true")){
-                    String s=getElementContents(e);
-                    params=new Object[]{s};
+                if (literal.equalsIgnoreCase("true")) {
+                    String s = getElementContents(e);
+                    params = new Object[] { s };
                 }
-                else{
-                    params=createArray(e,new Object[0]);
+                else {
+                    params = createArray(e, new Object[0]);
                 }
 
-                Constructor<?> constructor=findConstructor(c,params);
-                if(constructor==null) throw new NoSuchMethodException(cls+".<init>");
-                o=constructor.newInstance(params);
+                Constructor<?> constructor = findConstructor(c, params);
+                if (constructor == null)
+                    throw new NoSuchMethodException(cls + ".<init>");
+                o = constructor.newInstance(params);
             }
-            else{
-                Constructor<?> constructor=c.getConstructor(new Class[0]);
-                if(constructor==null) throw new NoSuchMethodException(cls+".<init>");
-                o=constructor.newInstance(new Object[]{});
-                ((XMLParamAware)o).xmlParamInitialize(e,this);
+            else {
+                Constructor<?> constructor = c.getConstructor(new Class[0]);
+                if (constructor == null)
+                    throw new NoSuchMethodException(cls + ".<init>");
+                o = constructor.newInstance(new Object[] {});
+                ((XMLParamAware) o).xmlParamInitialize(e, this);
             }
-            
-            if(field.length()>0){
-                o=o.getClass().getField(field).get(o);
+
+            if (field.length() > 0) {
+                o = o.getClass().getField(field).get(o);
             }
-            else if(method.length()>0){
-                Object[] params=new Object[0];
-                Method m=findMethod(o.getClass(),method,params);
-                if(m==null) throw new NoSuchMethodException(o.getClass().getName()+"."+method);
-                o=m.invoke(o,params);
-            }            
-            
-            if(id.length()>0){
-                objectTable.put(id,o);
-                objectTypeTable.put(id,e.getNodeName());
+            else if (method.length() > 0) {
+                Object[] params = new Object[0];
+                Method m = findMethod(o.getClass(), method, params);
+                if (m == null)
+                    throw new NoSuchMethodException(o.getClass().getName() + "." + method);
+                o = m.invoke(o, params);
+            }
+
+            if (id.length() > 0) {
+                objectTable.put(id, o);
+                objectTypeTable.put(id, e.getNodeName());
             }
             return o;
         }
-        
+
     }
-    
+
+
     /**
      * Creates an array of the child nodes of the given element. This is equivalent to calling
      * createObject for each child element of the given element, and putting the results in an
@@ -503,19 +557,22 @@ public class XMLParamProcessor {
      *                  array will be of type Object[].
      * @return The created array.
      */
-    public Object[] createArray(Element e,Object[] arrayType) throws Exception {
-        NodeList nl=e.getChildNodes();
-        List<Object> al=new ArrayList<>();
-        for(int i=0;i<nl.getLength();i++){
-            Node n=nl.item(i);
-            if(n instanceof Element element){
+    public Object[] createArray(Element e, Object[] arrayType) throws Exception {
+        NodeList nl = e.getChildNodes();
+        List<Object> al = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            Node n = nl.item(i);
+            if (n instanceof Element element) {
                 al.add(createObject(element));
             }
         }
-        if(arrayType==null) return al.toArray();
-        else return al.toArray(arrayType);
+        if (arrayType == null)
+            return al.toArray();
+        else
+            return al.toArray(arrayType);
     }
-    
+
+
     /**
      * Processes all the child elements of the given element. First (non null) element is returned 
      * and the processing might
@@ -523,47 +580,53 @@ public class XMLParamProcessor {
      * @param e The element whose child elements are parsed.
      */
     public Object processElement(Element e) throws Exception {
-//        createArray(e,null);
-        Object first=null;
-        NodeList nl=e.getChildNodes();
-        for(int i=0;i<nl.getLength();i++){
-            Node n=nl.item(i);
-            if(n instanceof Element element){
-                if(first==null) first=createObject(element);
-                else createObject(element);
+        //        createArray(e,null);
+        Object first = null;
+        NodeList nl = e.getChildNodes();
+        for (int i = 0; i < nl.getLength(); i++) {
+            Node n = nl.item(i);
+            if (n instanceof Element element) {
+                if (first == null)
+                    first = createObject(element);
+                else
+                    createObject(element);
             }
         }
         return first;
     }
-    
+
+
     /**
      * A convenience method to parse a Document from a File. The returned document
      * should support name spaces.
      */
     public static Document parseDocument(String file) throws Exception {
-        DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
-        DocumentBuilder builder=factory.newDocumentBuilder();
-        return builder.parse(new File(file));        
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        return builder.parse(new File(file));
     }
+
+
     /**
      * A convenience method to parse a Document from a File. The returned document
      * should support name spaces.
      */
     public static Document parseDocument(InputStream in) throws Exception {
-        DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
-        DocumentBuilder builder=factory.newDocumentBuilder();
-        return builder.parse(in);        
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        return builder.parse(in);
     }
+
 
     /**
      * A test main method. Parses the file given as the first command line parameter.
      */
     public static void main(String[] args) throws Exception {
-        Element doc=parseDocument(args[0]).getDocumentElement();
-	XMLParamProcessor processor=new XMLParamProcessor();
-        processor.createArray(doc,null);
+        Element doc = parseDocument(args[0]).getDocumentElement();
+        XMLParamProcessor processor = new XMLParamProcessor();
+        processor.createArray(doc, null);
     }
-    
+
 }

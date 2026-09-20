@@ -37,23 +37,23 @@ public class Abortable implements Runnable {
          * shall not block and must be safe to call from another thread than run
          */
         void forceAbort();
-        
+
         /**
          * can block; will be run in a separate thread
          */
         void run();
     }
-    
+
     public enum Status {
         InProgress,
         Success,
         Failure
     }
-    
+
     public interface ImplFactory {
         Impl create(Abortable parent);
     }
-    
+
     private Impl impl;
     private Thread runThread;
     private Frame dialogParent;
@@ -64,43 +64,54 @@ public class Abortable implements Runnable {
     public Status getStatus() {
         return status;
     }
-    
-    
-    
+
+
+
     private static Runnable abortProc(final Impl impl) {
-        return new Runnable() { public void run() { impl.forceAbort(); }};
+        return new Runnable() {
+            public void run() {
+                impl.forceAbort();
+            }
+        };
     }
-    
+
+
     private static Runnable runProc(final Impl impl) {
-        return new Runnable() { public void run() { impl.run(); }};
+        return new Runnable() {
+            public void run() {
+                impl.run();
+            }
+        };
     }
-    
+
+
     public Abortable(final Frame dialogParent, final ImplFactory fac, final Option<String> name) {
-        if(fac == null)
+        if (fac == null)
             throw new NullPointerException("null ImplFactory passed to Abortable");
-        if(dialogParent == null)
+        if (dialogParent == null)
             throw new NullPointerException("null dialog parent Frame passed to Abortable");
-        
+
         this.name = name.getOrElse("");
-        
-        
+
+
         impl = fac.create(this);
         this.dialogParent = dialogParent;
         this.status = Abortable.Status.InProgress;
     }
-    
+
+
     public void progress(final double ratio, final Status status, final String message) {
         this.status = status;
-        if(dlg != null) {
+        if (dlg != null) {
             SwingUtilities.invokeLater(
-                new Runnable() { 
-                    public void run() { 
-                        dlg.progress(ratio, status, message); 
-                    } 
-                }
-            );
+                    new Runnable() {
+                        public void run() {
+                            dlg.progress(ratio, status, message);
+                        }
+                    });
         }
     }
+
 
     /**
      * will block with dialog presented to user
@@ -108,7 +119,7 @@ public class Abortable implements Runnable {
     public void run() {
         runThread = new Thread(runProc(impl));
         dlg = new AbortableProgressDialog(dialogParent, true, abortProc(impl), name);
-        
+
         runThread.start();
         UIBox.centerWindow(dlg, dialogParent);
         dlg.setVisible(true);

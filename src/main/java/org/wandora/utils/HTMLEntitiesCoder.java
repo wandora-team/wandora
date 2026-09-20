@@ -512,21 +512,26 @@ public class HTMLEntitiesCoder {
                 /* rsaquo is proposed but not yet ISO standardized */
         "euro",Character.valueOf((char)8364) , /* euro sign, U+20AC NEW */
     });
+    
+    
     /**
      * The inverse of table entitiesTable.
      */
-    public static final Map<Character,String> inverseTable=new HashMap<>();
-    static{
-        Iterator<Map.Entry<String, Character>> iter=entitiesTable.entrySet().iterator();
-        while(iter.hasNext()){
-            Map.Entry<String,Character> e=iter.next();
-            inverseTable.put(e.getValue(),e.getKey());
+    public static final Map<Character, String> inverseTable = new HashMap<>();
+    static {
+        Iterator<Map.Entry<String, Character>> iter = entitiesTable.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<String, Character> e = iter.next();
+            inverseTable.put(e.getValue(), e.getKey());
         }
     }
+
     
-    public static String encode(String text){
-        return encode(text,true);
+    public static String encode(String text) {
+        return encode(text, true);
     }
+
+
     /**
      * Encodes all characters in the text with character code outside range
      * 32 to 127 (inclusive) and the ampersand and less-than characters.
@@ -534,75 +539,81 @@ public class HTMLEntitiesCoder {
      * If it is false or no suitable entity is found, uses an entity of the
      * form "&#xxx;" where xxx is the character code.
      */
-    public static String encode(String text,boolean trytable){
-        StringBuilder buf=new StringBuilder(text);
-        int ptr=0;
-        while(ptr<buf.length()){
-            char c=buf.charAt(ptr);
-            if(c<32 || c>127 || c=='&' || c=='<'){
-                String ent=null;
-                if(trytable) {
-                    ent=(String)inverseTable.get(Character.valueOf(c));
-                    if(ent!=null) ent="&"+ent+";";
+    public static String encode(String text, boolean trytable) {
+        StringBuilder buf = new StringBuilder(text);
+        int ptr = 0;
+        while (ptr < buf.length()) {
+            char c = buf.charAt(ptr);
+            if (c < 32 || c > 127 || c == '&' || c == '<') {
+                String ent = null;
+                if (trytable) {
+                    ent = (String) inverseTable.get(Character.valueOf(c));
+                    if (ent != null)
+                        ent = "&" + ent + ";";
                 }
-                if(ent==null){
-                    ent="&#"+((int)c)+";";
+                if (ent == null) {
+                    ent = "&#" + ((int) c) + ";";
                 }
-                buf.replace(ptr, ptr+1,ent);
-                ptr+=ent.length();
+                buf.replace(ptr, ptr + 1, ent);
+                ptr += ent.length();
             }
-            else ptr++;
+            else
+                ptr++;
         }
         return buf.toString();
     }
-    
-    private static int getNumber(String ent){
-        int ptr=0;
-        char c=ent.charAt(0);
-        boolean hex=false;
-        if(c=='x' || c=='X'){
-            hex=true;
-            ptr=1;
+
+
+    private static int getNumber(String ent) {
+        int ptr = 0;
+        char c = ent.charAt(0);
+        boolean hex = false;
+        if (c == 'x' || c == 'X') {
+            hex = true;
+            ptr = 1;
         }
-        for(int i=ptr;i<ent.length();i++){
-            if(!Character.isDigit(ent.charAt(i))) return -1;
+        for (int i = ptr; i < ent.length(); i++) {
+            if (!Character.isDigit(ent.charAt(i)))
+                return -1;
         }
-        return Integer.parseInt(ent,(hex?16:10));
+        return Integer.parseInt(ent, (hex ? 16 : 10));
     }
-    
+
+
     /**
      * Decodes html entities in the text.
      */
-    public static String decode(String htmlText){
-        StringBuilder buf=new StringBuilder(htmlText);
-        int ind=-1;
-        int ptr=0;
-        while( (ind=buf.indexOf("&",ptr))!= -1 ){
-            ptr=ind+1;
-            int ind2=buf.indexOf(";",ind);
-            if(ind2==-1){
+    public static String decode(String htmlText) {
+        StringBuilder buf = new StringBuilder(htmlText);
+        int ind = -1;
+        int ptr = 0;
+        while ((ind = buf.indexOf("&", ptr)) != -1) {
+            ptr = ind + 1;
+            int ind2 = buf.indexOf(";", ind);
+            if (ind2 == -1) {
                 continue;
             }
-            String ent=buf.substring(ind+1,ind2);
-            if(ent.startsWith("#")) {
-                    ent = ent.substring(1);
+            String ent = buf.substring(ind + 1, ind2);
+            if (ent.startsWith("#")) {
+                ent = ent.substring(1);
             }
-            Character cha=(Character)entitiesTable.get(ent);
-            if(cha!=null){
-                buf.replace(ind, ind2+1,cha.toString());
+            Character cha = (Character) entitiesTable.get(ent);
+            if (cha != null) {
+                buf.replace(ind, ind2 + 1, cha.toString());
             }
-            else{
-                int num=getNumber(ent);
-                if(num!=-1){
-                    buf.replace(ind,ind2+1,Character.valueOf((char)num).toString());
+            else {
+                int num = getNumber(ent);
+                if (num != -1) {
+                    buf.replace(ind, ind2 + 1, Character.valueOf((char) num).toString());
                 }
             }
         }
         return buf.toString();
     }
-    
+
+
     /** Creates a new instance of HTMLEntitiesCoder */
     public HTMLEntitiesCoder() {
     }
-    
+
 }

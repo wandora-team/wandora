@@ -27,6 +27,7 @@
  */
 
 package org.wandora.utils;
+
 import java.util.Iterator;
 import java.util.Map;
 
@@ -37,86 +38,96 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 import bsh.EvalError;
 import bsh.Interpreter;
+
 /**
  *
- * @author  olli
+ * @author olli
  */
 public class BeanShellXMLParam implements XMLParamAware {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(BeanShellXMLParam.class);
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(BeanShellXMLParam.class);
+
     protected Interpreter interpreter;
     protected String getID;
-    
+
     /** Creates a new instance of BeanShellXMLParam */
     public BeanShellXMLParam() {
-        interpreter=new Interpreter();
-        getID="returnValue";
+        interpreter = new Interpreter();
+        getID = "returnValue";
     }
-    
-    public BeanShellXMLParam(String src,Map<String,Object> params) throws Exception {
-        this(src,params,"returnValue");
+
+
+    public BeanShellXMLParam(String src, Map<String, Object> params) throws Exception {
+        this(src, params, "returnValue");
     }
-    public BeanShellXMLParam(String src,Map<String,Object> params,String id) throws Exception {
+
+
+    public BeanShellXMLParam(String src, Map<String, Object> params, String id) throws Exception {
         this();
-        Iterator<Map.Entry<String,Object>> iter=params.entrySet().iterator();
-        while(iter.hasNext()){
-            Map.Entry<String,Object> en=iter.next();
-            interpreter.set((String)en.getKey(),en.getValue());
+        Iterator<Map.Entry<String, Object>> iter = params.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<String, Object> en = iter.next();
+            interpreter.set((String) en.getKey(), en.getValue());
         }
         interpreter.source(src);
-        getID=id;
+        getID = id;
     }
-    
-    public Interpreter getInterpreter(){
+
+
+    public Interpreter getInterpreter() {
         return interpreter;
     }
-    
-    public Object get(){
+
+
+    public Object get() {
         return get(getID);
     }
-    
-    public Object get(String id){
-        try{
+
+
+    public Object get(String id) {
+        try {
             return interpreter.get(id);
-        }catch(EvalError ee){
+        }
+        catch (EvalError ee) {
             logger.error(ee);
             return null;
         }
     }
-    
+
+
     public void xmlParamInitialize(org.w3c.dom.Element element, org.wandora.utils.XMLParamProcessor processor) {
-        try{
-            NodeList nl=element.getChildNodes();
-            for(int i=0;i<nl.getLength();i++){
-                Node n=nl.item(i);
-                if(n instanceof Element){
-                    Element e=(Element)n;
-                    if(e.getNodeName().equals("objects")){
-                        Map<String,Object> m = (Map<String,Object>) processor.createObject(e);
-                        Iterator<Map.Entry<String,Object>> iter=m.entrySet().iterator();
-                        while(iter.hasNext()){
-                            Map.Entry<String,Object> en=iter.next();
-                            interpreter.set((String)en.getKey(),en.getValue());
+        try {
+            NodeList nl = element.getChildNodes();
+            for (int i = 0; i < nl.getLength(); i++) {
+                Node n = nl.item(i);
+                if (n instanceof Element) {
+                    Element e = (Element) n;
+                    if (e.getNodeName().equals("objects")) {
+                        Map<String, Object> m = (Map<String, Object>) processor.createObject(e);
+                        Iterator<Map.Entry<String, Object>> iter = m.entrySet().iterator();
+                        while (iter.hasNext()) {
+                            Map.Entry<String, Object> en = iter.next();
+                            interpreter.set((String) en.getKey(), en.getValue());
                         }
                     }
-                    else if(e.getNodeName().equals("source")){
-                        String src=e.getAttribute("src");
-                        if(src!=null && src.length()>0){
+                    else if (e.getNodeName().equals("source")) {
+                        String src = e.getAttribute("src");
+                        if (src != null && src.length() > 0) {
                             interpreter.source(src);
                         }
-                        else{
-                            String contents=processor.getElementContents(e);
+                        else {
+                            String contents = processor.getElementContents(e);
                             interpreter.eval(contents);
                         }
                     }
-                    else if(e.getNodeName().equals("id")){
-                        getID=(String)processor.createObject(e);
+                    else if (e.getNodeName().equals("id")) {
+                        getID = (String) processor.createObject(e);
                     }
                 }
             }
-        }catch(Exception e){
+        }
+        catch (Exception e) {
             logger.error(e);
         }
     }
-    
+
 }

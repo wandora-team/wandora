@@ -85,6 +85,7 @@ public class Option<T> implements Iterable<T> {
         return new Option<T>(val);
     }
 
+
     /**
      * Returns an Option that represents null
      * @return
@@ -92,7 +93,8 @@ public class Option<T> implements Iterable<T> {
     public static <T> Option<T> none() {
         return none_;
     }
-    
+
+
     /**
      * Creates an iterator that treats the Option as a list that contains
      * either 0 or 1 elements.
@@ -103,22 +105,25 @@ public class Option<T> implements Iterable<T> {
             private boolean iterationDone = false;
 
             public boolean hasNext() {
-                if(iterationDone || value_ == null)
+                if (iterationDone || value_ == null)
                     return false;
 
                 iterationDone = true;
                 return true;
             }
 
+
             public T next() {
                 return value_;
             }
+
 
             public void remove() {
                 throw new UnsupportedOperationException("Attempted removal from Option");
             }
         };
     }
+
 
     /**
      * Essentially the map operation from functional programming where Option
@@ -127,11 +132,13 @@ public class Option<T> implements Iterable<T> {
      * @return some(delegate.invoke(value)) if value is not null, none() otherwise
      */
     public <R> Option<R> map(final Delegate<R, ? super T> f) {
-        if(value_ != null)
+        if (value_ != null)
             return some(f.invoke(value_));
-        
+
         return none();
     }
+
+
     /**
      * Essentially the map operation from functional programming where Option
      * is a list that contains either 0 or 1 elements.
@@ -139,12 +146,13 @@ public class Option<T> implements Iterable<T> {
      * @return some(delegate.invoke(value)) if value is not null, none() otherwise
      */
     public <R> Option<R> map(final Fn1<R, ? super T> f) {
-        if(value_ != null)
+        if (value_ != null)
             return some(f.invoke(value_));
-        
+
         return none();
     }
-    
+
+
     /**
      * Essentially the map operation from functional programming where Option
      * is a list that contains either 0 or 1 elements. flatMap additionally
@@ -155,45 +163,49 @@ public class Option<T> implements Iterable<T> {
      * @return f.invoke(value) if value is not null, none() otherwise
      */
     public <R> Option<R> flatMap(final Fn1<Option<R>, ? super T> f) {
-        if(value_ != null)
+        if (value_ != null)
             return f.invoke(value_);
-        
+
         return none();
     }
-    
+
+
     /**
      * opt.apply(f) is the same as for(Object val : opt) f.invoke(val);
      * @param f The function that is invoked if a value exists
      */
     public void apply(final Pr1<? super T> f) {
-        if(value_ != null)
+        if (value_ != null)
             f.invoke(value_);
     }
-    
+
+
     /**
      * Gets the value of this Option or if no value exists returns the result of f
      * @param f The function to call if this Option is empty
      * @return value if not null, f.invoke() otherwise
      */
     public T getOrElse(final Fn0<? extends T> f) {
-        if(value_ != null)
+        if (value_ != null)
             return value_;
-        
+
         return f.invoke();
     }
-    
+
+
     /**
      * Gets the value of this Option or if no value exists, returns other
      * @param other The value to return if this Option is empty
      * @return value if not null, other otherwise
      */
     public T getOrElse(final T other) {
-        if(value_ != null)
+        if (value_ != null)
             return value_;
-        
+
         return other;
     }
-    
+
+
     /**
      * Maps the value through f or if no value exists returns the result of g
      * @param f The function to call if a value exists
@@ -201,12 +213,13 @@ public class Option<T> implements Iterable<T> {
      * @return f.invoke(value) if value is not null, g.invoke() otherwise
      */
     public <R> R mapOrElse(final Delegate<R, ? super T> f, final Fn0<R> g) {
-        if(value_ != null)
+        if (value_ != null)
             return f.invoke(value_);
-        
+
         return g.invoke();
     }
-    
+
+
     /**
      * Maps the value through f or if no value exists returns other
      * @param f The function to call if a value exists
@@ -214,12 +227,13 @@ public class Option<T> implements Iterable<T> {
      * @return f.invoke(value) if value is not null, other otherwise
      */
     public <R> R mapOrElse(final Delegate<R, ? super T> f, final R other) {
-        if(value_ != null)
+        if (value_ != null)
             return f.invoke(value_);
-        
+
         return other;
     }
-    
+
+
     /**
      * Maps the value through f or if no value exists returns the result of g
      * @param f The function to call if a value exists
@@ -227,12 +241,13 @@ public class Option<T> implements Iterable<T> {
      * @return f.invoke(value) if value is not null, g.invoke() otherwise
      */
     public <R> R mapOrElse(final Fn1<R, ? super T> f, final Fn0<R> g) {
-        if(value_ != null)
+        if (value_ != null)
             return f.invoke(value_);
-        
+
         return g.invoke();
     }
-    
+
+
     /**
      * Maps the value through f or if no value exists returns other
      * @param f The function to call if a value exists
@@ -240,12 +255,13 @@ public class Option<T> implements Iterable<T> {
      * @return f.invoke(value) if value is not null, other otherwise
      */
     public <R> R mapOrElse(final Fn1<R, ? super T> f, final R other) {
-        if(value_ != null)
+        if (value_ != null)
             return f.invoke(value_);
-        
+
         return other;
     }
-    
+
+
     /**
      * Replaces this with other if this is empty, otherwise
      * yields this.
@@ -253,15 +269,16 @@ public class Option<T> implements Iterable<T> {
      * @return
      */
     public Option<T> or(final Option<? extends T> other) {
-        if(value_ != null)
+        if (value_ != null)
             return this;
-        
-        if(other.value_ != null)
+
+        if (other.value_ != null)
             return some(other.value_);
-        
+
         return none();
     }
-    
+
+
     /**
      * Replaces this with other if this is empty, otherwise
      * yields this.
@@ -269,14 +286,14 @@ public class Option<T> implements Iterable<T> {
      * @return
      */
     public Option<T> or(final T other) {
-        if(value_ == null)
-        {
+        if (value_ == null) {
             return some(other);
         }
-        
+
         return this;
     }
-    
+
+
     /**
      * Throws a checked exception if the value is null,
      * in order to prevent situations where NullPointerException
@@ -285,11 +302,12 @@ public class Option<T> implements Iterable<T> {
      * @throws org.wandora.utils.Option.EmptyOptionException
      */
     public T value() throws EmptyOptionException {
-        if(value_ == null)
+        if (value_ == null)
             throw new EmptyOptionException();
 
         return value_;
     }
+
 
     /**
      * Checks whether this instance contains a value.
@@ -298,21 +316,23 @@ public class Option<T> implements Iterable<T> {
     public boolean empty() {
         return value_ == null;
     }
-    
+
+
     @Override
     public boolean equals(Object other) {
         // traverse potentially nested options recursively
-        
-        if(value_ instanceof Option) {
+
+        if (value_ instanceof Option) {
             return value_.equals(other);
         }
         else {
-            if(other == null)
+            if (other == null)
                 return value_ == null;
             else
                 return other.equals(value_);
         }
     }
+
 
     @Override
     public int hashCode() {
@@ -320,7 +340,7 @@ public class Option<T> implements Iterable<T> {
         hash = 37 * hash + (this.value_ != null ? this.value_.hashCode() : 0);
         return hash;
     }
-    
+
     /**
      * A checked exception that is thrown if the value getter
      * is used on an empty Option.
@@ -328,9 +348,11 @@ public class Option<T> implements Iterable<T> {
     public static class EmptyOptionException extends Exception {
         private static final long serialVersionUID = 1L;
 
-		public EmptyOptionException() { super(); }
+        public EmptyOptionException() {
+            super();
+        }
     }
-    
+
     /**
      * Creates a collection containing only the actual values from a collection of options
      * @param col The Collection to filter
@@ -338,18 +360,26 @@ public class Option<T> implements Iterable<T> {
      */
     public static <T, C extends Collection<Option<T>>> Collection<T> somes(C col) {
         Collection<T> ret = new ArrayList<>();
-        for(Option<? extends T> opt : col)
-            for(T val : opt)
+        for (Option<? extends T> opt : col)
+            for (T val : opt)
                 ret.add(val);
-            
+
         return ret;
     }
 
-    private Option() { value_ = null; }
-    private Option(T val) { value_ = val; }
+
+    private Option() {
+        value_ = null;
+    }
+
+
+    private Option(T val) {
+        value_ = val;
+    }
+
     private static final Option none_ = new Option<>();
     private final T value_;
-    
+
     /**
      * A convenience procedure that can be used with Option.apply to
      * add the value of an Option into a Collection:
@@ -367,7 +397,8 @@ public class Option<T> implements Iterable<T> {
             }
         };
     }
-    
+
+
     /**
      * A convenience procedure that can be used with Option.apply to
      * run the value of an Option&lt;T extends Runnable&gt;

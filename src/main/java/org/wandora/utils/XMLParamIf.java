@@ -26,6 +26,7 @@
  */
 
 package org.wandora.utils;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -54,42 +55,48 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author  olli
  */
 public class XMLParamIf implements XMLParamAware {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(XMLParamIf.class);
-	
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(XMLParamIf.class);
+
     private Object object;
-    public XMLParamIf(){
+
+    public XMLParamIf() {
     }
 
+
     public void xmlParamInitialize(Element element, XMLParamProcessor processor) {
-        NodeList nl=element.getChildNodes();
-        Element test=null,then=null,els=null;
-        for(int i=0;i<nl.getLength();i++){
-            Node n=nl.item(i);
-            if(n instanceof Element){
-                Element e=(Element)n;
-                if(e.getNodeName().equals("if")){
-                    test=e;
-                }else if(e.getNodeName().equals("then")){
-                    then=e;
-                }else if(e.getNodeName().equals("else")){
-                    els=e;
+        NodeList nl = element.getChildNodes();
+        Element test = null, then = null, els = null;
+        for (int i = 0; i < nl.getLength(); i++) {
+            Node n = nl.item(i);
+            if (n instanceof Element) {
+                Element e = (Element) n;
+                if (e.getNodeName().equals("if")) {
+                    test = e;
+                }
+                else if (e.getNodeName().equals("then")) {
+                    then = e;
+                }
+                else if (e.getNodeName().equals("else")) {
+                    els = e;
                 }
             }
         }
-        try{
-            Object o=processor.createObject(test);
-            if(o!=null && ( !(o instanceof Boolean) || ((Boolean)o).booleanValue() ) ){
-                object=processor.createObject(then);
+        try {
+            Object o = processor.createObject(test);
+            if (o != null && (!(o instanceof Boolean) || ((Boolean) o).booleanValue())) {
+                object = processor.createObject(then);
             }
-            else if(els!=null){
-                object=processor.createObject(els);
+            else if (els != null) {
+                object = processor.createObject(els);
             }
-        }catch(Exception e){
+        }
+        catch (Exception e) {
             logger.error(e);
         }
     }
 
-    public Object getObject(){
+
+    public Object getObject() {
         return object;
     }
 }

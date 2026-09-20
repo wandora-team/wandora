@@ -43,106 +43,115 @@ import org.wandora.application.Wandora;
  * @author akivela
  */
 public class HttpAuthorizer extends Options {
-    
+
 
     /**
      * Creates a new instance of HttpAuthorizer
      */
     public HttpAuthorizer() {
     }
-    
+
+
     public HttpAuthorizer(String storeResource) {
         super(storeResource);
     }
-    
-    
-    
-    
+
+
+
     public void addAuthorization(URL url, String user, String password) {
         addAuthorization(makeKeyAddress(url), user, password);
     }
+
+
     public void addAuthorization(String address, String user, String password) {
         put(makeKeyAddress(address) + ".user", user);
         put(makeKeyAddress(address) + ".password", password);
     }
-    
-    
-    
-    
+
+
+
     public String getAuthorizedUserFor(URL url) {
         return getAuthorizedUserFor(makeKeyAddress(url));
-    }    
+    }
+
+
     public String getAuthorizedPasswordFor(URL url) {
         return getAuthorizedPasswordFor(makeKeyAddress(url));
     }
-    
-    
-    
+
+
+
     public String getAuthorizedUserFor(String address) {
         return get(makeKeyAddress(address) + ".user");
     }
+
+
     public String getAuthorizedPasswordFor(String address) {
         return get(makeKeyAddress(address) + ".password");
     }
-    
-    
-    
+
+
+
     public String quessAuthorizedUserFor(String address) {
-        return get( makeKeyAddress(address) + ".user");
+        return get(makeKeyAddress(address) + ".user");
     }
+
+
     public String quessAuthorizedPasswordFor(String address) {
-        return get( makeKeyAddress(address) + ".password");
+        return get(makeKeyAddress(address) + ".password");
     }
-    
-    
+
+
     public String quessAuthorizedUserFor(URL url) {
         return quessAuthorizedUserFor(makeKeyAddress(url));
     }
+
+
     public String quessAuthorizedPasswordFor(URL url) {
         return quessAuthorizedPasswordFor(makeKeyAddress(url));
     }
-    
-    
-    
-    
+
+
+
     public String makeKeyAddress(String address) {
         return "httpAuth." + address;
     }
+
+
     public String makeKeyAddress(URL url) {
         return url.getHost();
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
 
     public URLConnection getAuthorizedAccess(URL url) throws Exception {
         URLConnection uc = url.openConnection();
         Wandora.initUrlConnection(uc);
-        if(uc instanceof HttpURLConnection) {
+        if (uc instanceof HttpURLConnection) {
             int res = 0;
             try {
                 res = ((HttpURLConnection) uc).getResponseCode();
             }
-            catch(Exception e) {
-                if(e.toString().indexOf("HTTP response code: 401") != -1) {
+            catch (Exception e) {
+                if (e.toString().indexOf("HTTP response code: 401") != -1) {
                     res = HttpURLConnection.HTTP_UNAUTHORIZED;
                 }
             }
             boolean tried = false;
-            if(res == HttpURLConnection.HTTP_UNAUTHORIZED) {
+            if (res == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 String authUser = quessAuthorizedUserFor(url);
                 String authPassword = quessAuthorizedPasswordFor(url);
 
-                if(authUser != null && authPassword != null) {
+                if (authUser != null && authPassword != null) {
                     String userPassword = authUser + ":" + authPassword;
-//                    String encoding = new sun.misc.BASE64Encoder().encode (userPassword.getBytes());
                     String encoding = Base64.encodeBytes(userPassword.getBytes());
                     uc = (HttpURLConnection) uc.getURL().openConnection();
                     Wandora.initUrlConnection(uc);
-                    uc.setRequestProperty ("Authorization", "Basic " + encoding);
+                    uc.setRequestProperty("Authorization", "Basic " + encoding);
                 }
                 tried = true;
                 res = ((HttpURLConnection) uc).getResponseCode();
@@ -150,7 +159,7 @@ public class HttpAuthorizer extends Options {
         }
         return uc;
     }
-    
-    
-    
+
+
+
 }

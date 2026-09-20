@@ -46,23 +46,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class JsonMapper extends ObjectMapper {
     private static final long serialVersionUID = 1L;
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(JsonMapper.class);
-    
 
-    public JsonMapper(){
+
+    public JsonMapper() {
         super();
     }
 
-    public String writeValue(Object value){
+
+    public String writeValue(Object value) {
         try {
-            StringWriter sw=new StringWriter();
-            writeValue(sw,value);
+            StringWriter sw = new StringWriter();
+            writeValue(sw, value);
             return sw.toString();
-        } 
-        catch(IOException ioe) {
-        	logger.error(ioe);
+        }
+        catch (IOException ioe) {
+            logger.error(ioe);
         }
         return null;
     }
-    
-    
+
+
 }

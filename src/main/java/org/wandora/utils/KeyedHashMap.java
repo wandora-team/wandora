@@ -54,102 +54,139 @@ import java.util.Set;
  *
  * @author olli
  */
-public class KeyedHashMap<K,V> implements Map<K,V> {    
-    
-    protected HashMap<Wrapper<K>,V> map;
-    
-    protected Delegate<? extends Object,K> keyMaker;
-    
+public class KeyedHashMap<K, V> implements Map<K, V> {
+
+    protected HashMap<Wrapper<K>, V> map;
+
+    protected Delegate<? extends Object, K> keyMaker;
+
     /** Creates a new instance of KeyedHashMap */
-    public KeyedHashMap(Delegate<? extends Object,K> keyMaker) {
-        this.keyMaker=keyMaker;
-        map=new HashMap<Wrapper<K>,V>();
+    public KeyedHashMap(Delegate<? extends Object, K> keyMaker) {
+        this.keyMaker = keyMaker;
+        map = new HashMap<Wrapper<K>, V>();
     }
-    
-    
-    public Wrapper<K> getWrapper(K k){
-        return new Wrapper<>(k,keyMaker.invoke(k));
+
+
+    public Wrapper<K> getWrapper(K k) {
+        return new Wrapper<>(k, keyMaker.invoke(k));
     }
-    
-    public void clear(){
+
+
+    public void clear() {
         map.clear();
     }
-    public boolean containsKey(Object key){
-        return map.containsKey(getWrapper((K)key));
+
+
+    public boolean containsKey(Object key) {
+        return map.containsKey(getWrapper((K) key));
     }
-    public boolean containsValue(Object value){
+
+
+    public boolean containsValue(Object value) {
         return map.containsValue(value);
     }
-    public Set<Map.Entry<K,V>> entrySet(){
-        HashSet<Map.Entry<K,V>> ret=new HashSet<Map.Entry<K,V>>();
-        for(Map.Entry<Wrapper<K>,V> e : map.entrySet()){
-            ret.add(new MapEntry<K,V>(e.getKey().wrapped,e.getValue()));
+
+
+    public Set<Map.Entry<K, V>> entrySet() {
+        HashSet<Map.Entry<K, V>> ret = new HashSet<Map.Entry<K, V>>();
+        for (Map.Entry<Wrapper<K>, V> e : map.entrySet()) {
+            ret.add(new MapEntry<K, V>(e.getKey().wrapped, e.getValue()));
         }
         return ret;
     }
-    public boolean equals(Object o){
-        if(o instanceof Map map){
+
+
+    public boolean equals(Object o) {
+        if (o instanceof Map map) {
             return entrySet().equals(map.entrySet());
         }
-        else return false;
+        else
+            return false;
     }
-    public V get(Object key){
-        return map.get(getWrapper((K)key));
+
+
+    public V get(Object key) {
+        return map.get(getWrapper((K) key));
     }
-    public int hashCode(){
-        int code=0;
-        for(Map.Entry<K,V> e : entrySet()){
-            code+=e.hashCode();
+
+
+    public int hashCode() {
+        int code = 0;
+        for (Map.Entry<K, V> e : entrySet()) {
+            code += e.hashCode();
         }
         return code;
     }
-    public boolean isEmpty(){
+
+
+    public boolean isEmpty() {
         return map.isEmpty();
     }
-    public Set<K> keySet(){
-        HashSet<K> ret=new HashSet<K>();
-        for(Map.Entry<Wrapper<K>,V> e : map.entrySet()){
+
+
+    public Set<K> keySet() {
+        HashSet<K> ret = new HashSet<K>();
+        for (Map.Entry<Wrapper<K>, V> e : map.entrySet()) {
             ret.add(e.getKey().wrapped);
         }
-        return ret;        
+        return ret;
     }
-    public V put(K key,V value){
-        Wrapper<K> wrapper=getWrapper(key);
-        if(wrapper.key==null) throw new NullPointerException("KeyedHashMap wrapper key is null");
-        return (V)map.put(wrapper,value);
+
+
+    public V put(K key, V value) {
+        Wrapper<K> wrapper = getWrapper(key);
+        if (wrapper.key == null)
+            throw new NullPointerException("KeyedHashMap wrapper key is null");
+        return (V) map.put(wrapper, value);
     }
-    public void putAll(Map<? extends K,? extends V> t){
-        for(Map.Entry<? extends K,? extends V> e : t.entrySet()){
-            put(e.getKey(),e.getValue());
+
+
+    public void putAll(Map<? extends K, ? extends V> t) {
+        for (Map.Entry<? extends K, ? extends V> e : t.entrySet()) {
+            put(e.getKey(), e.getValue());
         }
     }
-    public V remove(Object key){
-        return map.remove(getWrapper((K)key));
+
+
+    public V remove(Object key) {
+        return map.remove(getWrapper((K) key));
     }
-    public int size(){
+
+
+    public int size() {
         return map.size();
     }
-    public Collection<V> values(){
+
+
+    public Collection<V> values() {
         return map.values();
     }
 }
 
+
 class Wrapper<K> {
     public K wrapped;
     public Object key;
-    public Wrapper(K wrapped,Object key){
-        this.wrapped=wrapped;
-        this.key=key;
+
+    public Wrapper(K wrapped, Object key) {
+        this.wrapped = wrapped;
+        this.key = key;
     }
-    public int hashCode(){
-        if(key==null) return 0;
+
+
+    public int hashCode() {
+        if (key == null)
+            return 0;
         return key.hashCode();
     }
-    public boolean equals(Object o){
-        if(o instanceof Wrapper wrapper && key != null) {
+
+
+    public boolean equals(Object o) {
+        if (o instanceof Wrapper wrapper && key != null) {
             return key.equals(wrapper.key);
         }
-        else return false;
+        else
+            return false;
     }
 }
 

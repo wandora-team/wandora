@@ -26,6 +26,7 @@ import java.net.InetAddress;
 import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -35,55 +36,60 @@ import java.util.ArrayList;
 
 public class MultiNetAuthenticator extends Authenticator {
 
-    private static MultiNetAuthenticator instance=null;
-    protected final ArrayList<SingleAuthenticator> authenticators=new ArrayList<SingleAuthenticator>();
-    
-    public static synchronized MultiNetAuthenticator getInstance(){
-        if(instance!=null) return instance;
+    private static MultiNetAuthenticator instance = null;
+    protected final List<SingleAuthenticator> authenticators = new ArrayList<>();
+
+    public static synchronized MultiNetAuthenticator getInstance() {
+        if (instance != null)
+            return instance;
         else {
-            instance=new MultiNetAuthenticator();
+            instance = new MultiNetAuthenticator();
             return instance;
         }
     }
-    
+
+
     @Override
     protected PasswordAuthentication getPasswordAuthentication() {
-        String host=this.getRequestingHost();
-        InetAddress addr=this.getRequestingSite();
-        int port=this.getRequestingPort();
-        String protocol=this.getRequestingProtocol();
-        String prompt=this.getRequestingPrompt();
-        String scheme=this.getRequestingScheme();
-        URL url=this.getRequestingURL();
-        RequestorType reqType=this.getRequestorType();
-        
-        synchronized(authenticators){
-            for(SingleAuthenticator auth : authenticators){
-                PasswordAuthentication ret=auth.getPasswordAuthentication(host, addr, port, protocol, prompt, scheme, url, reqType);
-                if(ret!=null) return ret;
+        String host = this.getRequestingHost();
+        InetAddress addr = this.getRequestingSite();
+        int port = this.getRequestingPort();
+        String protocol = this.getRequestingProtocol();
+        String prompt = this.getRequestingPrompt();
+        String scheme = this.getRequestingScheme();
+        URL url = this.getRequestingURL();
+        RequestorType reqType = this.getRequestorType();
+
+        synchronized (authenticators) {
+            for (SingleAuthenticator auth : authenticators) {
+                PasswordAuthentication ret = auth.getPasswordAuthentication(host, addr, port, protocol, prompt, scheme,
+                        url, reqType);
+                if (ret != null)
+                    return ret;
             }
         }
         return null;
     }
 
 
-    public void addAuthenticator(SingleAuthenticator auth){
-        synchronized(authenticators){
+    public void addAuthenticator(SingleAuthenticator auth) {
+        synchronized (authenticators) {
             authenticators.add(auth);
-            if(authenticators.size()==1) Authenticator.setDefault(this);
+            if (authenticators.size() == 1)
+                Authenticator.setDefault(this);
         }
     }
-    
+
     public static interface SingleAuthenticator {
         public PasswordAuthentication getPasswordAuthentication(
-                                    String host,
-                                    InetAddress addr,
-                                    int port,
-                                    String protocol,
-                                    String prompt,
-                                    String scheme,
-                                    URL url,
-                                    RequestorType reqType);
+                String host,
+                InetAddress addr,
+                int port,
+                String protocol,
+                String prompt,
+                String scheme,
+                URL url,
+                RequestorType reqType);
     }
 }
 

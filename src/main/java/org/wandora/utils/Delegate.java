@@ -31,25 +31,31 @@ package org.wandora.utils;
 /**
  * <p>
  * Delegate is a function wrapped in an Object. Normally you will want to make
- * an anonymous inner class implementing Delegate and pass that object somewhere.
- * Delegate can be used as a generic listener (the delegate is invoked on an
- * event) or some kind of other handler. If you need to use more than one
- * parameter, you can use the com.gripstudios.utils.Tuples library.
- * </p><p>
+ * an anonymous inner class implementing Delegate and pass that object
+ * somewhere. Delegate can be used as a generic listener (the delegate is
+ * invoked on an event) or some kind of other handler. If you need to use more
+ * than one parameter, you can use the com.gripstudios.utils.Tuples library.
+ * </p>
+ * <p>
  * If your delegate doesn't return a value, you can set it to return Object and
  * then just return null or you can set the return value to Delegate.Void and
  * return Delegate.VOID to make it clear that the return value means nothing.
- * </p><p>
- * Using Delegate class you can use some programming techniques readily available
- * in functional programming languages allthough the syntax in Java becomes
- * somewhat inconvenient.
  * </p>
+ * <p>
+ * Using Delegate class you can use some programming techniques readily
+ * available in functional programming languages allthough the syntax in Java
+ * becomes somewhat inconvenient.
+ * </p>
+ * 
  * @author olli
  */
-public interface Delegate<R,P> {    
+public interface Delegate<R, P> {
     public R invoke(P param);
-    public static final class Void{
-        private Void(){}
+
+    public static final class Void {
+        private Void() {
+        }
     }
-    public static final Void VOID=new Void();
+
+    public static final Void VOID = new Void();
 }

@@ -33,54 +33,74 @@ import java.net.URL;
 
 
 public class SimpleNetAuthenticator implements MultiNetAuthenticator.SingleAuthenticator {
-    
+
     protected String host;
     protected String user;
     protected char[] password;
-    
-    public SimpleNetAuthenticator(String host, String user, String password){
-        this(host,user,password.toCharArray());
+
+    public SimpleNetAuthenticator(String host, String user, String password) {
+        this(host, user, password.toCharArray());
     }
-    public SimpleNetAuthenticator(String host, String user, char[] password){
-        this.host=host;
-        this.user=user;
-        this.password=password;
+
+
+    public SimpleNetAuthenticator(String host, String user, char[] password) {
+        this.host = host;
+        this.user = user;
+        this.password = password;
     }
-    
-    public SimpleNetAuthenticator(){}
+
+
+    public SimpleNetAuthenticator() {
+    }
+
 
     public String getHost() {
         return host;
     }
 
+
     public void setHost(String host) {
         this.host = host;
     }
+
 
     public char[] getPassword() {
         return password;
     }
 
+
     public void setPassword(char[] password) {
         this.password = password;
     }
+
 
     public String getUser() {
         return user;
     }
 
+
     public void setUser(String user) {
         this.user = user;
     }
-    
-    
+
+
 
     @Override
-    public PasswordAuthentication getPasswordAuthentication(String host, InetAddress addr, int port, String protocol, String prompt, String scheme, URL url, RequestorType reqType) {
-        if(this.host.equalsIgnoreCase(host)) {
+    public PasswordAuthentication getPasswordAuthentication(
+            String host, 
+            InetAddress addr, 
+            int port, 
+            String protocol,
+            String prompt, 
+            String scheme, 
+            URL url, 
+            RequestorType reqType) {
+        
+        if (this.host.equalsIgnoreCase(host)) {
             return new PasswordAuthentication(user, password);
         }
-        else return null;
+        else
+            return null;
     }
-    
+
 }

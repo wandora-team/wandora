@@ -46,75 +46,93 @@ import org.wandora.utils.Tuples.T2;
  * 
  * @author olli
  */
-public class IteratedMap<K,V> extends AbstractMap<K,V> {
+public class IteratedMap<K, V> extends AbstractMap<K, V> {
 
-    private ArrayList<T2<K,V>> data;
-    
-    public IteratedMap(){
-        data=new ArrayList<T2<K,V>>();
+    private ArrayList<T2<K, V>> data;
+
+    public IteratedMap() {
+        data = new ArrayList<T2<K, V>>();
     }
-    
-    public IteratedMap(Map<? extends K,? extends V> m){
+
+
+    public IteratedMap(Map<? extends K, ? extends V> m) {
         this();
         putAll(m);
     }
-    
+
+
     @Override
-    public Set<Map.Entry<K,V>> entrySet() {
+    public Set<Map.Entry<K, V>> entrySet() {
         return new EntrySet();
     }
 
+
     @Override
     public V put(K key, V value) {
-        for(int i=0;i<data.size();i++){
-            T2<K,V> d = data.get(i);
-            if(d.e1.equals(key)) {
-                V old=d.e2;
-                data.set(i, t2(key,value));
+        for (int i = 0; i < data.size(); i++) {
+            T2<K, V> d = data.get(i);
+            if (d.e1.equals(key)) {
+                V old = d.e2;
+                data.set(i, t2(key, value));
                 return old;
             }
         }
-        data.add(t2(key,value));
+        data.add(t2(key, value));
         return null;
     }
 
-    private class EntrySet extends AbstractSet<Map.Entry<K,V>> {
+    private class EntrySet extends AbstractSet<Map.Entry<K, V>> {
         @Override
         public Iterator<Map.Entry<K, V>> iterator() {
             return new EntryIterator();
         }
+
+
         @Override
         public int size() {
             return data.size();
         }
     }
-    
-    private class EntryIterator implements Iterator<Map.Entry<K,V>> {
-        private int nextPos=0;
+
+    private class EntryIterator implements Iterator<Map.Entry<K, V>> {
+        private int nextPos = 0;
+
         public boolean hasNext() {
-            return nextPos<data.size();
+            return nextPos < data.size();
         }
+
+
         public Map.Entry<K, V> next() {
             return new Entry(nextPos++);
         }
+
+
         public void remove() {
             data.remove(--nextPos);
         }
     }
-    private class Entry implements Map.Entry<K,V> {
+
+    private class Entry implements Map.Entry<K, V> {
         private int pos;
-        public Entry(int pos){
-            this.pos=pos;
+
+        public Entry(int pos) {
+            this.pos = pos;
         }
+
+
         public K getKey() {
             return data.get(pos).e1;
         }
+
+
         public V getValue() {
             return data.get(pos).e2;
         }
+
+
         public V setValue(V value) {
-            T2<K,V> d=data.get(pos);
-            data.set(pos, t2(d.e1,value));
+            T2<K, V> d = data.get(pos);
+            data.set(pos, t2(d.e1, value));
             return d.e2;
         }
     }

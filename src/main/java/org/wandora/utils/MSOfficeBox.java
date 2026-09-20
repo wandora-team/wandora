@@ -50,7 +50,6 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 
-
 /**
  * Class to extract the text from MS office documents.
  * Based on Apache's POI framework
@@ -61,154 +60,158 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 public class MSOfficeBox {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MSOfficeBox.class);
-	
-			
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(MSOfficeBox.class);
+
+
     /**
      * Creates a new instance of MSOfficeBox
      */
     private MSOfficeBox() {
         // Private
     }
-    
-    
-    
-    
+
+
+
     // ----------------------------------------------------------- WORD TEXT ---
-    
-    
+
+
     public static String getWordTextOld(InputStream is) {
         try {
             return getWordTextOld(new HWPFDocument(is));
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error(e);
         }
         return null;
     }
-    
-    
-	/**
-	 * Get the text from the word file, as an array with one String
-	 *  per paragraph
-	 */
-	public static String[] getWordParagraphText(HWPFDocument doc) {
-		String[] ret;
-		
-		// Extract using the model code
-		try {
-	    	Range r = doc.getRange();
-
-			ret = new String[r.numParagraphs()];
-			for(int i=0; i<ret.length; i++) {
-				Paragraph p = r.getParagraph(i);
-				ret[i] = p.text();
-				
-				// Fix the line ending
-				if(ret[i].endsWith("\r")) {
-					ret[i] = ret[i] + "\n";
-				}
-			}
-		}
-                catch(Exception e) {
-			// Something's up with turning the text pieces into paragraphs
-			// Fall back to ripping out the text pieces
-			ret = new String[1];
-			ret[0] = getWordTextFromPieces(doc);
-		}
-		
-		return ret;
-	}
-	
-	/**
-	 * Grab the text out of the text pieces. Might also include various
-	 *  bits of crud, but will work in cases where the text piece -> paragraph
-	 *  mapping is broken. Fast too.
-	 */
-	public static String getWordTextFromPieces(HWPFDocument doc) {
-    	StringBuilder textBuf = new StringBuilder();
-    	
-    	Iterator<TextPiece> textPieces = doc.getTextTable().getTextPieces().iterator();
-    	while (textPieces.hasNext()) {
-    		TextPiece piece = textPieces.next();
-
-    		String encoding = "Cp1252";
-    		if (piece.isUnicode()) {
-    			encoding = "UTF-16LE";
-    		}
-    		try {
-    			String text = new String(piece.getRawBytes(), encoding);
-    			textBuf.append(text);
-    		} catch(UnsupportedEncodingException e) {
-    			throw new InternalError("Standard Encoding " + encoding + " not found, JVM broken");
-    		}
-    	}
-    	
-    	String text = textBuf.toString();
-    	
-    	// Fix line endings (Note - won't get all of them
-    	text = text.replaceAll("\r\r\r", "\r\n\r\n\r\n");
-    	text = text.replaceAll("\r\r", "\r\n\r\n");
-    	
-    	if(text.endsWith("\r")) {
-    		text += "\n";
-    	}
-    	
-    	return text;
-	}
-	
-	/**
-	 * Grab the text, based on the paragraphs. Shouldn't include any crud,
-	 *  but slightly slower than getTextFromPieces().
-	 */
-	public static String getWordTextOld(HWPFDocument doc) {
-		StringBuilder ret = new StringBuilder();
-		String[] text = getWordParagraphText(doc);
-		for(int i=0; i<text.length; i++) {
-			ret.append(text[i]);
-		}
-		return ret.toString();
-	}
 
 
+    /**
+     * Get the text from the word file, as an array with one String
+     *  per paragraph
+     */
+    public static String[] getWordParagraphText(HWPFDocument doc) {
+        String[] ret;
+
+        // Extract using the model code
+        try {
+            Range r = doc.getRange();
+
+            ret = new String[r.numParagraphs()];
+            for (int i = 0; i < ret.length; i++) {
+                Paragraph p = r.getParagraph(i);
+                ret[i] = p.text();
+
+                // Fix the line ending
+                if (ret[i].endsWith("\r")) {
+                    ret[i] = ret[i] + "\n";
+                }
+            }
+        }
+        catch (Exception e) {
+            // Something's up with turning the text pieces into paragraphs
+            // Fall back to ripping out the text pieces
+            ret = new String[1];
+            ret[0] = getWordTextFromPieces(doc);
+        }
+
+        return ret;
+    }
 
 
-	public static String getWordText(InputStream is) {
-	    WordExtractor extractor = null;
+    /**
+     * Grab the text out of the text pieces. Might also include various
+     *  bits of crud, but will work in cases where the text piece -> paragraph
+     *  mapping is broken. Fast too.
+     */
+    public static String getWordTextFromPieces(HWPFDocument doc) {
+        StringBuilder textBuf = new StringBuilder();
+
+        Iterator<TextPiece> textPieces = doc.getTextTable().getTextPieces().iterator();
+        while (textPieces.hasNext()) {
+            TextPiece piece = textPieces.next();
+
+            String encoding = "Cp1252";
+            if (piece.isUnicode()) {
+                encoding = "UTF-16LE";
+            }
+            try {
+                String text = new String(piece.getRawBytes(), encoding);
+                textBuf.append(text);
+            }
+            catch (UnsupportedEncodingException e) {
+                throw new InternalError("Standard Encoding " + encoding + " not found, JVM broken");
+            }
+        }
+
+        String text = textBuf.toString();
+
+        // Fix line endings (Note - won't get all of them
+        text = text.replaceAll("\r\r\r", "\r\n\r\n\r\n");
+        text = text.replaceAll("\r\r", "\r\n\r\n");
+
+        if (text.endsWith("\r")) {
+            text += "\n";
+        }
+
+        return text;
+    }
+
+
+    /**
+     * Grab the text, based on the paragraphs. Shouldn't include any crud,
+     *  but slightly slower than getTextFromPieces().
+     */
+    public static String getWordTextOld(HWPFDocument doc) {
+        StringBuilder ret = new StringBuilder();
+        String[] text = getWordParagraphText(doc);
+        for (int i = 0; i < text.length; i++) {
+            ret.append(text[i]);
+        }
+        return ret.toString();
+    }
+
+
+
+    public static String getWordText(InputStream is) {
+        WordExtractor extractor = null;
         try {
             extractor = new WordExtractor(is);
             return extractor.getText();
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error(e);
         }
         finally {
-            if(extractor != null ) {
-                try { extractor.close(); } catch(Exception ex) {};
+            if (extractor != null) {
+                try {
+                    extractor.close();
+                }
+                catch (Exception ex) {
+                }
+                ;
             }
         }
         return null;
-	}
-    
+    }
 
-    
 
 
     // ----------------------------------------------------------------- Any ---
 
 
-    
+
     public static String getText(URL url) {
         try {
             return getText(url.openStream());
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error(e);
         }
         return null;
     }
 
-    
+
     public static String getDocxText(File file) {
         XWPFWordExtractor extractor = null;
         try {
@@ -217,25 +220,30 @@ public class MSOfficeBox {
             String text = extractor.getText();
             return text;
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error(e);
         }
         finally {
-            if(extractor != null ) {
-                try { extractor.close(); } catch(Exception ex) {};
+            if (extractor != null) {
+                try {
+                    extractor.close();
+                }
+                catch (Exception ex) {
+                }
+                ;
             }
         }
         return null;
     }
-    
-    
+
+
 
     public static String getText(InputStream is) {
         try {
             POITextExtractor extractor = ExtractorFactory.createExtractor(is);
             return extractor.getText();
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error(e);
         }
         return null;
@@ -248,7 +256,7 @@ public class MSOfficeBox {
             POITextExtractor extractor = ExtractorFactory.createExtractor(f);
             return extractor.getText();
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error(e);
         }
         return null;

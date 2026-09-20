@@ -30,47 +30,53 @@ package org.wandora.utils;
 
 /**
  *
- * @author  akivela
+ * @author akivela
  */
 public class ByteBuffer {
-    
-    
-    private static final int BUFFER=8192;
+
+
+    private static final int BUFFER = 8192;
     private byte[] buffer;
     private int ptr;
-    
-    
-    
-    public ByteBuffer(){
-        buffer=new byte[BUFFER];
-        ptr=0;
+
+
+
+    public ByteBuffer() {
+        buffer = new byte[BUFFER];
+        ptr = 0;
     }
-    
-    
-    public void append(byte[] b){
-        append(b,0,b.length);
+
+
+    public void append(byte[] b) {
+        append(b, 0, b.length);
     }
-    
-    
-    public void append(byte[] b,int offs,int length){
-        if(ptr+length<=buffer.length){
-            System.arraycopy(b,offs,buffer,ptr,length);
-            ptr+=length;
+
+
+    public void append(byte[] b, int offs, int length) {
+        if (ptr + length <= buffer.length) {
+            System.arraycopy(b, offs, buffer, ptr, length);
+            ptr += length;
         }
-        else{
-            int l=buffer.length;
-            while(ptr+length>l){
-                l*=2;
+        else {
+            int l = buffer.length;
+            while (ptr + length > l) {
+                l *= 2;
             }
-            byte[] n=new byte[l];
-            System.arraycopy(buffer,0,n,0,ptr);
-            buffer=n;
-            append(b,offs,length);
+            byte[] n = new byte[l];
+            System.arraycopy(buffer, 0, n, 0, ptr);
+            buffer = n;
+            append(b, offs, length);
         }
     }
-    
-    public byte[] getArray() { return buffer; }
-    
-    public int getLength() { return ptr; }
+
+
+    public byte[] getArray() {
+        return buffer;
+    }
+
+
+    public int getLength() {
+        return ptr;
+    }
 }
 

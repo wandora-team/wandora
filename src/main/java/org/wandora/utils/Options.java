@@ -43,7 +43,6 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 
-
 /**
  * Options is a LinkedHashMap wrapper class. Options is used to store all
  * important settings in Wandora between use sessions. Options support XML
@@ -55,12 +54,12 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author  akivela
  */
 public class Options {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Options.class);
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(Options.class);
+
     private Map<String, String> options;
     private String resource;
-    
-    
+
+
     /**
      * Used to pick up all available options.
      * 
@@ -69,47 +68,57 @@ public class Options {
     public Map<String, String> asMap() {
         return options;
     }
-    
+
+
     /** Creates a new instance of Options */
     public Options(String optionsResource) {
         resource = optionsResource;
         options = new LinkedHashMap<>();
         String optionsString = null;
-        if(optionsResource.startsWith("http")) {
-            //System.out.println("Reading options from URL '" + resource + "'.");
-            try { optionsString = IObox.doUrl(new URI(resource).toURL()); }
-            catch (Exception e) { logger.error(e); }
+        if (optionsResource.startsWith("http")) {
+            logger.info("Reading options from URL '" + resource + "'.");
+            try {
+                optionsString = IObox.doUrl(new URI(resource).toURL());
+            }
+            catch (Exception e) {
+                logger.error(e);
+            }
         }
-        else if(optionsResource.startsWith("file")) {
+        else if (optionsResource.startsWith("file")) {
             try {
                 String filename = resource.substring(7);
-                //System.out.println("Reading options from file '" + filename + "'.");
+                logger.info("Reading options from file '" + filename + "'.");
                 optionsString = IObox.loadFile(filename);
-                //System.out.println("optionsString==" +optionsString);
             }
-            catch (Exception e) { logger.error(e);  }
+            catch (Exception e) {
+                logger.error(e);
+            }
         }
         else {
-            //System.out.println("Reading options from resource '" + resource + "'.");
+            logger.info("Reading options from resource '" + resource + "'.");
             optionsString = IObox.loadResource(resource);
         }
-        try { parseOptions(optionsString); }
-        catch (Exception e) { logger.error(e); }
+        try {
+            parseOptions(optionsString);
+        }
+        catch (Exception e) {
+            logger.error(e);
+        }
     }
-    
-    
-    
+
+
+
     public Options() {
-        options=new LinkedHashMap<>();
+        options = new LinkedHashMap<>();
     }
-    
-    
+
+
     public Options(Options opts) {
-        options=new LinkedHashMap<>();
+        options = new LinkedHashMap<>();
         options.putAll(opts.asMap());
     }
-    
-    
+
+
     /**
      * Private method used to add indexes into an options key.
      * 
@@ -120,28 +129,30 @@ public class Options {
     private String fixIndexes(String key, boolean fixAlsoLast) {
         String[] parts = ((String) key).split("\\.");
         int endIndex = parts.length;
-        if(parts != null && endIndex > 0) {
+        if (parts != null && endIndex > 0) {
             key = "";
             String part = null;
-            for(int i=0; i<endIndex; i++) {
+            for (int i = 0; i < endIndex; i++) {
                 part = parts[i];
-                if(fixAlsoLast || i < endIndex-1) {
-                    if(part.lastIndexOf("[") == -1) {
+                if (fixAlsoLast || i < endIndex - 1) {
+                    if (part.lastIndexOf("[") == -1) {
                         part = part + "[0]";
                     }
                 }
-                if(i < endIndex-1) part = part + ".";
+                if (i < endIndex - 1)
+                    part = part + ".";
                 key = key + part;
             }
         }
         return key;
     }
-    
+
+
     private String fixIndexes(String key) {
         return fixIndexes(key, true);
     }
-    
-    
+
+
 
     /**
      * Returns value for the given key or defaultValue if key resolves no value.
@@ -151,12 +162,14 @@ public class Options {
      * @return
      */
     public String get(String key, String defaultValue) {
-        String v=get(key);
-        if(v==null) return defaultValue;
-        else return v;
+        String v = get(key);
+        if (v == null)
+            return defaultValue;
+        else
+            return v;
     }
-    
-    
+
+
     /**
      * Returns value for the given key. If key has no prefix "options." it is
      * added to the key. Also, key is modified by fixIndexes method.
@@ -165,11 +178,11 @@ public class Options {
      * @return String value stored in options with key or null if key resolves no value.
      */
     public String get(String key) {
-        if(key != null) {
+        if (key != null) {
             try {
-                if(!key.startsWith("options.")) key = "options." + key; 
+                if (!key.startsWith("options."))
+                    key = "options." + key;
                 key = fixIndexes(key);
-                //System.out.println("option request: "+key+" == "+options.get(key));
                 return options.get(key);
             }
             catch (Exception e) {
@@ -178,8 +191,8 @@ public class Options {
         }
         return null;
     }
-    
-    
+
+
     /**
      * Shortcut method that returns options value as integer or 0 (zero) if
      * value can not be parsed to an integer.
@@ -190,8 +203,8 @@ public class Options {
     public int getInt(String key) {
         return getInt(key, 0);
     }
-    
-    
+
+
     /**
      * Shortcut method that returns options value as integer or defaultValue if
      * value can not be converted to an integer.
@@ -203,57 +216,74 @@ public class Options {
      */
     public int getInt(String key, int defaultValue) {
         String sint = get(key);
-        if(sint != null) {
-            try { int val = Integer.parseInt(sint); return val; }
-            catch (Exception e) {}
-        }
-        return defaultValue;
-    }
-    
-    
-    public double getDouble(String key) {
-        return getDouble(key, 0.0);
-    }
-    
-    
-    public double getDouble(String key, double defaultValue) {
-        String sd = get(key);
-        if(sd != null) {
-            try { double val = Double.parseDouble(sd); return val; }
-            catch (Exception e) {}
-        }
-        return defaultValue;
-    }
-    
-    
-    public float getFloat(String key) {
-        return getFloat(key, 0.0f);
-    }
-    
-    
-    public float getFloat(String key, float defaultValue) {
-        String sd = get(key);
-        if(sd != null) {
-            try { float val = Float.parseFloat(sd); return val; }
-            catch (Exception e) {}
-        }
-        return defaultValue;
-    }
-    
-    
-    public boolean getBoolean(String key, boolean defaultValue) {
-        String s = get(key);
-        if(s != null) {
-            try { boolean val = Boolean.parseBoolean(s); return val; }
+        if (sint != null) {
+            try {
+                int val = Integer.parseInt(sint);
+                return val;
+            }
             catch (Exception e) {
-                if("1".equals(s)) return true;
-                if("0".equals(s)) return false;
             }
         }
         return defaultValue;
     }
-    
-    
+
+
+    public double getDouble(String key) {
+        return getDouble(key, 0.0);
+    }
+
+
+    public double getDouble(String key, double defaultValue) {
+        String sd = get(key);
+        if (sd != null) {
+            try {
+                double val = Double.parseDouble(sd);
+                return val;
+            }
+            catch (Exception e) {
+            }
+        }
+        return defaultValue;
+    }
+
+
+    public float getFloat(String key) {
+        return getFloat(key, 0.0f);
+    }
+
+
+    public float getFloat(String key, float defaultValue) {
+        String sd = get(key);
+        if (sd != null) {
+            try {
+                float val = Float.parseFloat(sd);
+                return val;
+            }
+            catch (Exception e) {
+            }
+        }
+        return defaultValue;
+    }
+
+
+    public boolean getBoolean(String key, boolean defaultValue) {
+        String s = get(key);
+        if (s != null) {
+            try {
+                boolean val = Boolean.parseBoolean(s);
+                return val;
+            }
+            catch (Exception e) {
+                if ("1".equals(s))
+                    return true;
+                if ("0".equals(s))
+                    return false;
+            }
+        }
+        return defaultValue;
+    }
+
+
     /**
      * Shortcut method to store integer numbers to options.
      * @param key
@@ -262,8 +292,8 @@ public class Options {
     public void put(String key, int value) {
         put(key, "" + value);
     }
-    
-    
+
+
     /**
      * Shortcut method to store double numbers to options.
      * @param key
@@ -272,8 +302,8 @@ public class Options {
     public void put(String key, double value) {
         put(key, "" + value);
     }
-    
-    
+
+
     /**
      * Shortcut method to store float numbers to options.
      * 
@@ -283,8 +313,8 @@ public class Options {
     public void put(String key, float value) {
         put(key, "" + value);
     }
-    
-    
+
+
     /**
      * This is the actual put method every other put method uses. If key has no
      * "options." prefix, it is added to the key. If value is null then method
@@ -294,10 +324,11 @@ public class Options {
      * @param value String value of the key
      */
     public void put(String key, String value) {
-        if(key != null) {
-            if(!key.startsWith("options.")) key = "options." + key;
+        if (key != null) {
+            if (!key.startsWith("options."))
+                key = "options." + key;
             key = fixIndexes(key);
-            if(value == null) {
+            if (value == null) {
                 options.remove(key);
             }
             else {
@@ -305,8 +336,8 @@ public class Options {
             }
         }
     }
-    
-    
+
+
     /**
      * Method iterates all values in options and returns first key i.e.
      * path that contains the key. If options contains no value string,
@@ -316,16 +347,17 @@ public class Options {
      * @return String representing options path or null
      */
     public String findKeyFor(String value) {
-        if(value != null && options.containsValue(value)) {
-            for(String key : options.keySet()) {
-                if(value.equalsIgnoreCase(get(key))) return key;
+        if (value != null && options.containsValue(value)) {
+            for (String key : options.keySet()) {
+                if (value.equalsIgnoreCase(get(key)))
+                    return key;
             }
         }
         return null;
     }
-    
-    
-    
+
+
+
     /**
      * Shortcut to discover boolean value of given options key.
      * 
@@ -334,14 +366,16 @@ public class Options {
      */
     public boolean isTrue(String key) {
         String val = get(key);
-        if(val != null) {
-            if("true".equalsIgnoreCase(val)) return true;
-            if("1".equalsIgnoreCase(val)) return true;
+        if (val != null) {
+            if ("true".equalsIgnoreCase(val))
+                return true;
+            if ("1".equalsIgnoreCase(val))
+                return true;
         }
         return false;
     }
-    
-    
+
+
     /**
      * Shortcut method to discover boolean value of given options key.
      * 
@@ -350,14 +384,16 @@ public class Options {
      */
     public boolean isFalse(String key) {
         String val = get(key);
-        if(val != null) {
-            if("false".equalsIgnoreCase(val)) return true;
-            if("0".equalsIgnoreCase(val)) return true;
+        if (val != null) {
+            if ("false".equalsIgnoreCase(val))
+                return true;
+            if ("0".equalsIgnoreCase(val))
+                return true;
         }
         return false;
     }
-    
-    
+
+
     /**
      * Removes all key-value pairs that start with given key path string.
      * Method is used to clean up options.
@@ -366,35 +402,39 @@ public class Options {
      */
     public void removeAll(String path) {
         List<String> toBeDeletedKeys = new ArrayList<>();
-        if(!path.startsWith("options.")) path = "options."+path;
+        if (!path.startsWith("options."))
+            path = "options." + path;
         path = this.fixIndexes(path, false);
-        for(String key : options.keySet() ) {
-            if(key.startsWith(path)) {
+        for (String key : options.keySet()) {
+            if (key.startsWith(path)) {
                 toBeDeletedKeys.add(key);
             }
         }
-        for( String key : toBeDeletedKeys ) {
+        for (String key : toBeDeletedKeys) {
             options.remove(key);
         }
     }
-    
+
+
     /**
      * Adds all key-value pairs from a map into this one.
      * @param map The values to add.
      * @param prefix A prefix to add all key-value pairs.
      */
-    public void putAll(Map<String,String> map,String prefix){
-        if(prefix==null) prefix="";
-        for(Map.Entry<String,String> e : map.entrySet()){
-            put(prefix+e.getKey(),e.getValue());
+    public void putAll(Map<String, String> map, String prefix) {
+        if (prefix == null)
+            prefix = "";
+        for (Map.Entry<String, String> e : map.entrySet()) {
+            put(prefix + e.getKey(), e.getValue());
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
     // ------------------------------------------------------------------ IO ---
     // -------------------------------------------------------------------------
-    
+
+
     /**
      * Parses given XML string and sets options to parsed content. This method
      * passes the parsing to parseOptions(String content, String encoding)
@@ -404,8 +444,8 @@ public class Options {
     public synchronized void parseOptions(String content) {
         parseOptions(content, null);
     }
-    
-    
+
+
     /**
      * Parses given XML string and sets options to parsed content.
      * @param content String containing valid XML document.
@@ -414,64 +454,82 @@ public class Options {
     public synchronized void parseOptions(String content, String encoding) {
         options = XMLbox.getAsMapTree(content, encoding);
     }
-    
-    
+
+
     public synchronized void parseOptions(BufferedReader reader) throws IOException {
-        String line=null;
-        StringBuilder sb=new StringBuilder();
-        while( (line=reader.readLine())!=null ){
+        String line = null;
+        StringBuilder sb = new StringBuilder();
+        while ((line = reader.readLine()) != null) {
             sb.append(line).append("\n");
         }
         parseOptions(sb.toString());
     }
-   
+
 
     public void print() {
         Object value;
-        if(options.isEmpty()) {
-            System.out.println("  no options available (size == 0)!");
+        if (options.isEmpty()) {
+            logger.info("  no options available (size == 0)!");
         }
-        for(String key : options.keySet()) {
+        for (String key : options.keySet()) {
             value = options.get(key.toString());
-            System.out.println("  " + key + " == " + value);
+            logger.info("  " + key + " == " + value);
         }
     }
 
-    
-    public void save(Writer out) throws IOException{
+
+    public void save(Writer out) throws IOException {
         String optionsXML = XMLbox.wrapMap2XML(options);
         out.write(optionsXML);
         out.flush();
     }
 
-    
+
     public void save() {
-        if(resource.startsWith("http:")) { return; }
-        else if(resource.startsWith("file:")) { 
+        if (resource.startsWith("http:")) {
+            return;
+        }
+        else if (resource.startsWith("file:")) {
             try {
-                String filename=IObox.getFileFromURL(resource);
-//                String filename = resource.substring(7);
-                try { IObox.moveFile(filename, filename + ".bak"); } catch (Exception e) { logger.error(e); }
+                String filename = IObox.getFileFromURL(resource);
+                try {
+                    IObox.moveFile(filename, filename + ".bak");
+                }
+                catch (Exception e) {
+                    logger.error(e);
+                }
                 String optionsXML = XMLbox.wrapMap2XML(options);
                 IObox.saveFile(filename, optionsXML);
             }
-            catch (Exception e) { logger.error(e); }
+            catch (Exception e) {
+                logger.error(e);
+            }
         }
         else {
             String path = "./resources/";
             String resourcePath = path + resource;
             String optionsXML = XMLbox.wrapMap2XML(options);
-            try { IObox.moveFile(resourcePath, resourcePath + ".bak"); } catch (Exception e) { logger.error(e); }
-            try { IObox.saveFile(resourcePath, optionsXML); } catch (Exception e) { logger.error(e); }
+            try {
+                IObox.moveFile(resourcePath, resourcePath + ".bak");
+            }
+            catch (Exception e) {
+                logger.error(e);
+            }
+            try {
+                IObox.saveFile(resourcePath, optionsXML);
+            }
+            catch (Exception e) {
+                logger.error(e);
+            }
         }
     }
 
-    
-    public Collection<String> keySet(){
-        List<String> copy=new ArrayList<>();
+
+    public Collection<String> keySet() {
+        List<String> copy = new ArrayList<>();
         copy.addAll(options.keySet());
         return copy;
     }
-    
-    
+
+
 }

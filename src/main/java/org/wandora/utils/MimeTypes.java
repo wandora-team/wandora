@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 
 /**
  * This class contains mappings from common file extensions to their mime types.
@@ -38,24 +40,28 @@ import java.util.Map;
  * @author olli
  */
 public class MimeTypes {
-    public static HashMap<String,String> extensionMap = new LinkedHashMap<String,String>();
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(MimeTypes.class);
+
+    public static Map<String, String> extensionMap = new LinkedHashMap<String, String>();
+
     static {
         try {
             String mimeContent = IObox.loadResource("conf/mime.types");
             String[] mimeLines = mimeContent.split("\n");
-            for(int i=0; i<mimeLines.length; i++) {
+            for (int i = 0; i < mimeLines.length; i++) {
                 String mimeLine = mimeLines[i].trim();
-                if(mimeLine.length() == 0) continue;
-                if(mimeLine.startsWith("#")) continue;
+                if (mimeLine.length() == 0)
+                    continue;
+                if (mimeLine.startsWith("#"))
+                    continue;
                 String[] mimeParts = mimeLine.split("\\s");
-                if(mimeParts.length > 1) {
+                if (mimeParts.length > 1) {
                     String mimeType = mimeParts[0].trim();
-                    if(mimeType.length() > 0) {
-                        for(int j=1; j<mimeParts.length; j++) {
+                    if (mimeType.length() > 0) {
+                        for (int j = 1; j < mimeParts.length; j++) {
                             String fileExtension = mimeParts[j].trim();
-                            if(fileExtension.length() > 0) {
+                            if (fileExtension.length() > 0) {
                                 extensionMap.put(fileExtension, mimeType);
-                                // System.out.println(" "+mimeType+"\t\t"+fileExtension);
                             }
                         }
                     }
@@ -63,7 +69,8 @@ public class MimeTypes {
             }
         }
         catch (Exception e) {
-            System.out.println("Exception '"+e.getMessage()+"' occurred while reading mime types from 'conf/mime.types'.");
+            logger.error(
+                    "Exception '" + e.getMessage() + "' occurred while reading mime types from 'conf/mime.types'.");
         }
 
         /*
@@ -189,39 +196,44 @@ public class MimeTypes {
         extensionMap.put("zip","application/zip");
         */
     }
-    public static HashMap<String,String> inverseMap = new LinkedHashMap<String,String>();
+    public static HashMap<String, String> inverseMap = new LinkedHashMap<String, String>();
     static {
-        for(Map.Entry<String,String> e : extensionMap.entrySet()) {
-            if(!inverseMap.containsKey(e.getValue())) {
+        for (Map.Entry<String, String> e : extensionMap.entrySet()) {
+            if (!inverseMap.containsKey(e.getValue())) {
                 inverseMap.put(e.getValue(), e.getKey());
             }
         }
     }
 
-    public MimeTypes(){
+    public MimeTypes() {
     }
+
 
     /**
      * Returns mime type for a file or extension.
      * @param file File name or just file extension.
      * @return
      */
-    public static String getMimeType(String file){
-        int ind=file.lastIndexOf(".");
-        if(ind>-1) file=file.substring(ind+1);
-        file=file.toLowerCase();
+    public static String getMimeType(String file) {
+        int ind = file.lastIndexOf(".");
+        if (ind > -1)
+            file = file.substring(ind + 1);
+        file = file.toLowerCase();
         return extensionMap.get(file);
     }
 
-    public static String getMimeType(File file){
+
+    public static String getMimeType(File file) {
         return getMimeType(file.getAbsolutePath());
     }
 
-    public static String getMimeType(URL url){
+
+    public static String getMimeType(URL url) {
         return getMimeType(url.getPath());
     }
 
-    public static String getExtension(String mimeType){
+
+    public static String getExtension(String mimeType) {
         return inverseMap.get(mimeType);
     }
 }

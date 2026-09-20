@@ -27,6 +27,7 @@
  */
 
 package org.wandora.utils;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
@@ -36,84 +37,116 @@ import java.util.Set;
  * @author olli
  */
 public class KeyedHashSet<E> implements Set<E> {
-    
-    protected KeyedHashMap<E,Object> map;
-    protected Delegate<String,E> keyMaker;
-    
+
+    protected KeyedHashMap<E, Object> map;
+    protected Delegate<String, E> keyMaker;
+
     /** Creates a new instance of KeyedHashSet */
-    public KeyedHashSet(Delegate<String,E> keyMaker) {
-        this.keyMaker=keyMaker;
-        map=new KeyedHashMap<E,Object>(keyMaker);
+    public KeyedHashSet(Delegate<String, E> keyMaker) {
+        this.keyMaker = keyMaker;
+        map = new KeyedHashMap<E, Object>(keyMaker);
     }
-    
-    public boolean add(E o){
-        return map.put(o,o)==null;
+
+
+    public boolean add(E o) {
+        return map.put(o, o) == null;
     }
-    public boolean addAll(Collection<? extends E> c){
-        boolean ret=false;
-        for(E e : c){
-            ret^=add(e);
+
+
+    public boolean addAll(Collection<? extends E> c) {
+        boolean ret = false;
+        for (E e : c) {
+            ret ^= add(e);
         }
         return ret;
     }
-    public void clear(){
-        map=new KeyedHashMap<E,Object>(keyMaker);        
+
+
+    public void clear() {
+        map = new KeyedHashMap<E, Object>(keyMaker);
     }
-    public boolean contains(Object o){
+
+
+    public boolean contains(Object o) {
         return map.containsKey(o);
     }
-    public boolean containsAll(Collection<?> c){
-        for(Object o : c){
-            if(!map.containsKey(o)) return false;
+
+
+    public boolean containsAll(Collection<?> c) {
+        for (Object o : c) {
+            if (!map.containsKey(o))
+                return false;
         }
         return true;
     }
-    public boolean equals(Object o){
-        if(o instanceof Set set){
-            if(set.size()!=this.size()) return false;
+
+
+    public boolean equals(Object o) {
+        if (o instanceof Set set) {
+            if (set.size() != this.size())
+                return false;
             return this.containsAll(set);
         }
-        else return false;
+        else
+            return false;
     }
-    public int hashCode(){
-        int hashCode=0;
-        for(E e : map.keySet()){
-            hashCode+=e.hashCode();
+
+
+    public int hashCode() {
+        int hashCode = 0;
+        for (E e : map.keySet()) {
+            hashCode += e.hashCode();
         }
         return hashCode;
     }
-    public boolean isEmpty(){
+
+
+    public boolean isEmpty() {
         return map.isEmpty();
     }
-    public Iterator<E> iterator(){
+
+
+    public Iterator<E> iterator() {
         return map.keySet().iterator();
     }
-    public boolean remove(Object o){
-        return map.remove(o)!=null;
+
+
+    public boolean remove(Object o) {
+        return map.remove(o) != null;
     }
-    public boolean removeAll(Collection<?> c){
-        boolean changed=false;
-        for(Object o : c ){
-            changed^=(map.remove(o)!=null);
+
+
+    public boolean removeAll(Collection<?> c) {
+        boolean changed = false;
+        for (Object o : c) {
+            changed ^= (map.remove(o) != null);
         }
         return changed;
     }
-    public boolean retainAll(Collection<?> c){
+
+
+    public boolean retainAll(Collection<?> c) {
         throw new UnsupportedOperationException();
     }
-    public int size(){
+
+
+    public int size() {
         return map.size();
     }
-    public Object[] toArray(){
-        Object[] a=new Object[size()];
-        int ptr=0;
-        for(E e : map.keySet()){
-            a[ptr++]=e;
+
+
+    public Object[] toArray() {
+        Object[] a = new Object[size()];
+        int ptr = 0;
+        for (E e : map.keySet()) {
+            a[ptr++] = e;
         }
         return a;
     }
-    public <T> T[] toArray(T[] a){
+
+
+    public <T> T[] toArray(T[] a) {
         throw new RuntimeException("Not implemented");
     }
-    
+
 }

@@ -27,43 +27,52 @@
  */
 
 package org.wandora.utils;
+
 import java.io.File;
 import java.util.regex.Pattern;
 
 import javax.swing.filechooser.FileFilter;
+
 /**
  *
  * @author olli
  */
-public class RegexFileChooser extends FileFilter{
-    
+public class RegexFileChooser extends FileFilter {
+
     public String description;
     public Pattern pattern;
-    
+
     /** Creates a new instance of RegexFileChooser */
-    public RegexFileChooser(String regex,String description) {
-        pattern=Pattern.compile(regex);
-        this.description=description;
+    public RegexFileChooser(String regex, String description) {
+        pattern = Pattern.compile(regex);
+        this.description = description;
     }
-    public boolean accept(File f){
-        if(f.isDirectory()) return true;
+
+
+    public boolean accept(File f) {
+        if (f.isDirectory())
+            return true;
         return pattern.matcher(f.getAbsolutePath()).matches();
     }
-    public String getDescription(){
+
+
+    public String getDescription() {
         return description;
     }
-    
+
+
     /**
      * Makes a RegexFileChooser for regular expression "(?i)^.*"+suffix+"$", that is, the
      * file must end with the given suffix (case insensitive).
      */
-    public static RegexFileChooser suffixChooser(String suffix,String description){
-        return new RegexFileChooser("(?i)^.*"+suffix+"$",description);
+    public static RegexFileChooser suffixChooser(String suffix, String description) {
+        return new RegexFileChooser("(?i)^.*" + suffix + "$", description);
     }
-    
-    public static java.io.FileFilter ioFileFilter(final FileFilter ff){
-        return new java.io.FileFilter(){
-            public boolean accept(File pathname){
+
+
+    public static java.io.FileFilter ioFileFilter(final FileFilter ff) {
+        return new java.io.FileFilter() {
+            public boolean accept(File pathname) {
                 return ff.accept(pathname);
             }
         };

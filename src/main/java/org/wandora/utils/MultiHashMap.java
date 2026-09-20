@@ -27,9 +27,12 @@
  */
 
 package org.wandora.utils;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+
+
 /**
  * 09.05.2014 AK: Commented method boolean remove(K key, V value)
  * 20.08.2011 AK: Commented method Collection<V> get(K key)
@@ -40,34 +43,36 @@ import java.util.HashMap;
  * 
  * @author  olli
  */
-public class MultiHashMap<K,V> extends HashMap<K,Collection<V>> {
+public class MultiHashMap<K, V> extends HashMap<K, Collection<V>> {
 
     private static final long serialVersionUID = 1L;
 
-	/** Creates new MultiHashMap */
+    /** Creates new MultiHashMap */
     public MultiHashMap() {
         super();
     }
+
 
     public void addUniq(K key, V value) {
         if (!containsAt(key, value)) {
             add(key, value);
         }
     }
-    
-    public void add(K key, V value){
+
+
+    public void add(K key, V value) {
         Collection<V> c = super.get(key);
-        if(c==null){
-            c=new ArrayList<>();
+        if (c == null) {
+            c = new ArrayList<>();
             c.add(value);
-            super.put(key,c);
+            super.put(key, c);
         }
-        else{
+        else {
             c.add(value);
         }
     }
-    
-    
+
+
 
     /*
     public boolean remove(K key, V value) {
@@ -80,36 +85,43 @@ public class MultiHashMap<K,V> extends HashMap<K,Collection<V>> {
         return rval;
     }
     */
-    
+
 
     /*
     public Collection<V> get(K key){
         return super.get(key);
     }
     */
-    
+
+
     public void reset() {
         super.clear();
     }
-    
-    public int totalSize(){
-        int count=0;
-        for(K key : keySet()){
-            Collection<V> c=super.get(key);
-            if(c!=null) count+=c.size();
+
+
+    public int totalSize() {
+        int count = 0;
+        for (K key : keySet()) {
+            Collection<V> c = super.get(key);
+            if (c != null)
+                count += c.size();
         }
         return count;
     }
-    
-    public boolean containsAt(K key,V value){  
-        Collection<V> c=get(key);
-        if(c==null) return false;
-        else return c.contains(value);
+
+
+    public boolean containsAt(K key, V value) {
+        Collection<V> c = get(key);
+        if (c == null)
+            return false;
+        else
+            return c.contains(value);
     }
-    
+
+
     @Override
     public java.util.Set<K> keySet() {
         return super.keySet();
     }
-    
+
 }

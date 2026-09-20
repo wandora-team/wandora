@@ -31,94 +31,105 @@ package org.wandora.utils;
 
 import java.util.regex.Pattern;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 
 /**
  *
  * @author akivela
  */
 public class EasyReplaceExpression {
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(EasyReplaceExpression.class);
 
-    
     boolean isCaseInsensitive;
     boolean findInsteadMatch;
     Pattern pattern;
     String replacement;
     String name;
-    
-    
-    
-    
-    /** Creates a new instance of EasyPattern */
+
+
+
+    /** Creates a new instance of EasyReplaceExpression */
     public EasyReplaceExpression() {
     }
-    
 
-    
-    
-    /** Creates a new instance of KirjavaPattern */
+
+
+    /** Creates a new instance of EasyReplaceExpression */
     public EasyReplaceExpression(String n, String ps, String rep, boolean findInstead, boolean caseInsensitive) {
         try {
             name = n;
             isCaseInsensitive = caseInsensitive;
-            if(isCaseInsensitive) pattern = Pattern.compile(ps, Pattern.CASE_INSENSITIVE);
-            else pattern = Pattern.compile(ps);
+            if (isCaseInsensitive)
+                pattern = Pattern.compile(ps, Pattern.CASE_INSENSITIVE);
+            else
+                pattern = Pattern.compile(ps);
             replacement = rep;
             findInsteadMatch = findInstead;
         }
         catch (Exception e) {
-            System.out.println(e);
+            logger.error(e);
         }
     }
-    
+
+
     public EasyReplaceExpression(String n, Pattern p, String rep, boolean findInstead, boolean caseInsensitive) {
         try {
             name = n;
             isCaseInsensitive = caseInsensitive;
-            if(isCaseInsensitive) pattern = Pattern.compile(p.toString(), Pattern.CASE_INSENSITIVE);
-            else pattern = Pattern.compile(p.toString());
+            if (isCaseInsensitive)
+                pattern = Pattern.compile(p.toString(), Pattern.CASE_INSENSITIVE);
+            else
+                pattern = Pattern.compile(p.toString());
             replacement = rep;
             findInsteadMatch = findInstead;
         }
         catch (Exception e) {
-            System.out.println(e);
+            logger.error(e);
         }
     }
-    
-    
+
+
     public boolean matches(String s) {
-        if(pattern != null && s != null) {
-            if(findInsteadMatch) return pattern.matcher(s).find();
-            else return pattern.matcher(s).matches();
+        if (pattern != null && s != null) {
+            if (findInsteadMatch)
+                return pattern.matcher(s).find();
+            else
+                return pattern.matcher(s).matches();
         }
         return false;
     }
-    
-    
+
+
     public Pattern getPattern() {
         return pattern;
     }
-    
-    
+
+
     public String getPatternString() {
-        if(pattern != null) return pattern.toString();
+        if (pattern != null)
+            return pattern.toString();
         return "";
     }
-    
+
+
     public String getReplacementString() {
         return replacement != null ? replacement : "";
     }
-    
-    
+
+
     public boolean findInsteadMatch() {
         return findInsteadMatch;
     }
-    
+
+
     public boolean isCaseInsensitive() {
         return isCaseInsensitive;
     }
-    
+
+
     public String getName() {
         return name;
     }
-    
+
 }

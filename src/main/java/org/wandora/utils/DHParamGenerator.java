@@ -27,6 +27,7 @@
  */
 
 package org.wandora.utils;
+
 import java.math.BigInteger;
 import java.security.AlgorithmParameterGenerator;
 import java.security.AlgorithmParameters;
@@ -35,24 +36,25 @@ import javax.crypto.spec.DHParameterSpec;
 
 /**
  *
- * Use this class to generate modulus and base that can be used with DHParameterSpec in
- * Diffie-Hellman key exchange.
+ * Use this class to generate modulus and base that can be used with
+ * DHParameterSpec in Diffie-Hellman key exchange.
  *
- * @author  olli
+ * @author olli
  */
 public class DHParamGenerator {
-    
+
     /** Creates a new instance of DHParamGenerator */
     public DHParamGenerator() {
     }
+
 
     public static void main(String args[]) throws Exception {
         AlgorithmParameterGenerator paramGen = AlgorithmParameterGenerator.getInstance("DH");
         paramGen.init(1024);
         AlgorithmParameters params = paramGen.generateParameters();
-        DHParameterSpec paramSpec = (DHParameterSpec)params.getParameterSpec(DHParameterSpec.class);
-        BigInteger modulus=paramSpec.getP();
-        BigInteger base=paramSpec.getG();
+        DHParameterSpec paramSpec = (DHParameterSpec) params.getParameterSpec(DHParameterSpec.class);
+        BigInteger modulus = paramSpec.getP();
+        BigInteger base = paramSpec.getG();
         System.out.print("private static final BigInteger DHModulus = new BigInteger(1,new byte[]{");
         outputBytes(modulus.toByteArray());
         System.out.println("\n});");
@@ -60,16 +62,26 @@ public class DHParamGenerator {
         outputBytes(base.toByteArray());
         System.out.println("\n});");
     }
-    public static void outputBytes(byte[] bytes){
-        for(int i=0;i<bytes.length;i++){
-            if(i!=0) System.out.print(",");
-            if(i%4==0) System.out.println();
-            int b=bytes[i];
-            if(b<0) b+=256;
-            String s=Integer.toHexString(b);
-            if(s.length()==1) s="0"+s;
-            System.out.print("(byte)0x"+s);
+
+
+    public static void outputBytes(byte[] bytes) {
+        for (int i = 0; i < bytes.length; i++) {
+            if (i != 0) {
+                System.out.print(",");
+            }
+            if (i % 4 == 0) {
+                System.out.println();
+            }
+            int b = bytes[i];
+            if (b < 0) {
+                b += 256;
+            }
+            String s = Integer.toHexString(b);
+            if (s.length() == 1) {
+                s = "0" + s;
+            }
+            System.out.print("(byte)0x" + s);
         }
     }
-    
+
 }

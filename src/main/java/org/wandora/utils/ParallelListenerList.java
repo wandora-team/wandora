@@ -46,171 +46,199 @@ import java.util.Map;
  */
 
 
-public class ParallelListenerList <T> {
-    
-    protected final List<T> listeners;
-    protected final List<Tuples.T2<T,Boolean>> changes;
-    protected Class<T> cls;
-    protected final Map<String,Method> methods;
-    protected boolean returnValues=false;
-    protected int iterating=0;
+public class ParallelListenerList<T> {
 
-    public ParallelListenerList(Class<T> cls){
-        this.cls=cls;
-        listeners=new ArrayList<T>();
-        changes=new ArrayList<Tuples.T2<T,Boolean>>();
-        methods=new HashMap<String,Method>();
+    protected final List<T> listeners;
+    protected final List<Tuples.T2<T, Boolean>> changes;
+    protected Class<T> cls;
+    protected final Map<String, Method> methods;
+    protected boolean returnValues = false;
+    protected int iterating = 0;
+
+    public ParallelListenerList(Class<T> cls) {
+        this.cls = cls;
+        listeners = new ArrayList<T>();
+        changes = new ArrayList<Tuples.T2<T, Boolean>>();
+        methods = new HashMap<String, Method>();
     }
 
-    public int size(){
+
+    public int size() {
         return listeners.size();
     }
 
-    public boolean isEmpty(){
+
+    public boolean isEmpty() {
         return listeners.isEmpty();
     }
+
 
     public boolean isReturnValues() {
         return returnValues;
     }
+
 
     public void setReturnValues(boolean returnValues) {
         this.returnValues = returnValues;
     }
 
 
-    public void addListener(T l){
-        synchronized(changes){
-            if(iterating==0){
+    public void addListener(T l) {
+        synchronized (changes) {
+            if (iterating == 0) {
                 listeners.add(l);
             }
             else {
-                changes.add(t2(l,true));
-            }
-        }
-    }
-    public void removeListener(T l){
-        synchronized(changes){
-            if(iterating==0){
-                listeners.remove(l);
-            }
-            else {
-                changes.add(t2(l,false));
+                changes.add(t2(l, true));
             }
         }
     }
 
-    protected void processChanges(){
+
+    public void removeListener(T l) {
+        synchronized (changes) {
+            if (iterating == 0) {
+                listeners.remove(l);
+            }
+            else {
+                changes.add(t2(l, false));
+            }
+        }
+    }
+
+
+    protected void processChanges() {
         // you must hold the changes lock and iterating must be 0 before calling this
-        for( Tuples.T2<T,Boolean> c : changes ){
-            if(c.e2) listeners.add(c.e1);
-            else listeners.remove(c.e1);
+        for (Tuples.T2<T, Boolean> c : changes) {
+            if (c.e2)
+                listeners.add(c.e1);
+            else
+                listeners.remove(c.e1);
         }
         changes.clear();
-        synchronized(changes){ // we should already have this lock, just do it again to avoid the warning of calling notifyAll outside synchronized block
+        synchronized (changes) { // we should already have this lock, just do it again to avoid the warning of calling notifyAll outside synchronized block
             changes.notifyAll();
         }
     }
 
-    public Method findMethod(String event){
-        synchronized(methods){
-            Method m=methods.get(event);
-            if(m==null){
-                if(!methods.containsKey(event)){
-                    Method[] ms=cls.getMethods();
-                    for(int i=0;i<ms.length;i++){
-                        if(ms[i].getName().equals(event)) {
-                            m=ms[i];
+
+    public Method findMethod(String event) {
+        synchronized (methods) {
+            Method m = methods.get(event);
+            if (m == null) {
+                if (!methods.containsKey(event)) {
+                    Method[] ms = cls.getMethods();
+                    for (int i = 0; i < ms.length; i++) {
+                        if (ms[i].getName().equals(event)) {
+                            m = ms[i];
                             break;
                         }
                     }
-                    methods.put(event,m);
+                    methods.put(event, m);
                 }
             }
             return m;
         }
     }
-    public Object[] fireEvent(Method m,Object ... params){
-        return fireEventFiltered(m,null,params);
+
+
+    public Object[] fireEvent(Method m, Object... params) {
+        return fireEventFiltered(m, null, params);
     }
 
-    public Object[] fireEventFiltered(Method m,ListenerList.ListenerFilter<T> filter,Object ... params){
-        synchronized(changes){
-            while(!changes.isEmpty()) {
-                try{
+
+    public Object[] fireEventFiltered(Method m, ListenerList.ListenerFilter<T> filter, Object... params) {
+        synchronized (changes) {
+            while (!changes.isEmpty()) {
+                try {
                     changes.wait();
-                }catch(InterruptedException ie){ return null; }
+                }
+                catch (InterruptedException ie) {
+                    return null;
+                }
             }
             iterating++;
         }
-        Object[] ret=null;
-        try{
-            if(returnValues && m.getReturnType()!=null) ret=new Object[listeners.size()];
+        Object[] ret = null;
+        try {
+            if (returnValues && m.getReturnType() != null)
+                ret = new Object[listeners.size()];
 
-            try{
-                for(int i=0;i<listeners.size();i++){
-                    T l=listeners.get(i);
-                    if(filter==null || filter.invokeListener(l)){
-                        if(ret!=null) ret[i]=m.invoke(l,params);
-                        else m.invoke(l, params);
+            try {
+                for (int i = 0; i < listeners.size(); i++) {
+                    T l = listeners.get(i);
+                    if (filter == null || filter.invokeListener(l)) {
+                        if (ret != null)
+                            ret[i] = m.invoke(l, params);
+                        else
+                            m.invoke(l, params);
                     }
                 }
             }
-            catch(IllegalAccessException iae){
+            catch (IllegalAccessException iae) {
                 throw new RuntimeException(iae);
             }
-            catch(InvocationTargetException ite){
+            catch (InvocationTargetException ite) {
                 throw new RuntimeException(ite);
             }
         }
-        finally{
-            synchronized(changes){
+        finally {
+            synchronized (changes) {
                 iterating--;
-                if(iterating==0 && !changes.isEmpty()) processChanges();
+                if (iterating == 0 && !changes.isEmpty())
+                    processChanges();
             }
         }
-        return ret;                    
+        return ret;
     }
 
 
-    public Object[] fireEvent(String event,Object ... params){
-        return fireEventFiltered(event,null,params);
+    public Object[] fireEvent(String event, Object... params) {
+        return fireEventFiltered(event, null, params);
     }
-    public Object[] fireEventFiltered(String event,ListenerList.ListenerFilter<T> filter,Object ... params){
-        Method m=findMethod(event);
-        if(m==null) throw new RuntimeException("Trying to fire event "+event+" but method not found.");
-        return fireEventFiltered(m,filter,params);
+
+
+    public Object[] fireEventFiltered(String event, ListenerList.ListenerFilter<T> filter, Object... params) {
+        Method m = findMethod(event);
+        if (m == null)
+            throw new RuntimeException("Trying to fire event " + event + " but method not found.");
+        return fireEventFiltered(m, filter, params);
     }
-    
-    public void forEach(ListenerList.EachDelegate delegate,Object ... params) {
-        synchronized(changes){
-            while(!changes.isEmpty()) {
-                try{
+
+
+    public void forEach(ListenerList.EachDelegate delegate, Object... params) {
+        synchronized (changes) {
+            while (!changes.isEmpty()) {
+                try {
                     changes.wait();
-                }catch(InterruptedException ie){ return; }
+                }
+                catch (InterruptedException ie) {
+                    return;
+                }
             }
             iterating++;
         }
-        try{
-            for(int i=0;i<listeners.size();i++){
-                T l=listeners.get(i);
-                delegate.run(l,params);
+        try {
+            for (int i = 0; i < listeners.size(); i++) {
+                T l = listeners.get(i);
+                delegate.run(l, params);
             }
         }
-        finally{
-            synchronized(changes){
+        finally {
+            synchronized (changes) {
                 iterating--;
-                if(iterating==0 && !changes.isEmpty()) processChanges();
+                if (iterating == 0 && !changes.isEmpty())
+                    processChanges();
             }
-        }        
+        }
     }
 
     public static interface EachDelegate<T> {
-        public void run(T listener,Object ... params);
+        public void run(T listener, Object... params);
     }
-    
+
     public static interface ListenerFilter<T> {
         public boolean invokeListener(T listener);
     }
-    
+
 }

@@ -27,7 +27,9 @@
  */
 
 package org.wandora.utils;
+
 import java.util.Vector;
+
 /**
  *
  * @author  olli
@@ -36,9 +38,9 @@ public class EasyVector<K> extends Vector<K> {
 
     private static final long serialVersionUID = 1L;
 
-	/** Creates new EasyVector */
+    /** Creates new EasyVector */
     public EasyVector(K[] o) {
-        for(int i=0;i<o.length;i++){
+        for (int i = 0; i < o.length; i++) {
             this.add(o[i]);
         }
     }

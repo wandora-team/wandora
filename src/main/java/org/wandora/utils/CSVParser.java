@@ -41,80 +41,92 @@ import java.util.Date;
  * @author olli
  */
 public class CSVParser {
-    private char valueSeparator=',';
-    private char lineSeparator='\n';
-    private char stringChar='"';
+    private char valueSeparator = ',';
+    private char lineSeparator = '\n';
+    private char stringChar = '"';
 
     private String encoding = "UTF-8";
-    
-    
-    
-    public CSVParser(){
+
+
+
+    public CSVParser() {
 
     }
+
 
     public Table parse(String filename) throws IOException {
         return parse(new File(filename));
     }
+
+
     public Table parse(String filename, String encoding) throws IOException {
-        return parse(new File(filename),encoding);
+        return parse(new File(filename), encoding);
     }
+
 
     public Table parse(File f) throws IOException {
         return parse(new FileInputStream(f));
     }
+
+
     public Table parse(File f, String encoding) throws IOException {
         return parse(new FileInputStream(f), encoding);
     }
 
+
     public Table parse(InputStream inRaw) throws IOException {
         return parse(inRaw, encoding);
     }
+
+
     public Table parse(InputStream inRaw, String encoding) throws IOException {
-        Table ret=new Table();
-
-        PushbackReader in=new PushbackReader(new InputStreamReader(inRaw,encoding),20);
-
-        Row row=null;
-        while( (row=readLine(in))!=null ){
+        Table ret = new Table();
+        PushbackReader in = new PushbackReader(new InputStreamReader(inRaw, encoding), 20);
+        Row row = null;
+        while ((row = readLine(in)) != null) {
             ret.add(row);
         }
 
         return ret;
     }
 
-    
-    private Row readLine(PushbackReader in) throws IOException {
-        Row ret=new Row();
-        while(true){
-            int c=in.read();
-            if(c<0) {
-                if(ret.size()>0) return ret;
-                else return null;
-            }
-            else in.unread(c);
 
-            Object v=readValue(in);
+    private Row readLine(PushbackReader in) throws IOException {
+        Row ret = new Row();
+        while (true) {
+            int c = in.read();
+            if (c < 0) {
+                if (ret.size() > 0)
+                    return ret;
+                else
+                    return null;
+            }
+            else
+                in.unread(c);
+
+            Object v = readValue(in);
             ret.add(v);
-            boolean next=readValueSeparator(in);
-            if(!next) break;
+            boolean next = readValueSeparator(in);
+            if (!next)
+                break;
         }
 
         return ret;
     }
 
+
     private Object readValue(PushbackReader in) throws IOException {
         readWhitespace(in);
-        while(true){
-            int c=in.read();
-            if(c==valueSeparator || c==lineSeparator) {
+        while (true) {
+            int c = in.read();
+            if (c == valueSeparator || c == lineSeparator) {
                 in.unread(c);
                 return null;
             }
-            if(c<0){
+            if (c < 0) {
                 return null;
             }
-            else if(c==stringChar){
+            else if (c == stringChar) {
                 in.unread(c);
                 return parseString(in);
             }
@@ -125,122 +137,140 @@ public class CSVParser {
         }
     }
 
+
     private boolean readValueSeparator(PushbackReader in) throws IOException {
         readWhitespace(in);
-        while(true) {
-            int c=in.read();
-            if(c==valueSeparator) return true;
-            else if(c==lineSeparator || c<0) return false;
+        while (true) {
+            int c = in.read();
+            if (c == valueSeparator)
+                return true;
+            else if (c == lineSeparator || c < 0)
+                return false;
             else {
                 throw new RuntimeException("Error parsing CSV file");
             }
         }
     }
 
+
     private Object parseNumberOrDate(PushbackReader in) throws IOException {
         readWhitespace(in);
 
-        StringBuilder sb=new StringBuilder();
-        while(true) {
-            int c=in.read();
-            if(c==valueSeparator || c==lineSeparator || c<0) {
-                if(c>=0) in.unread(c);
+        StringBuilder sb = new StringBuilder();
+        while (true) {
+            int c = in.read();
+            if (c == valueSeparator || c == lineSeparator || c < 0) {
+                if (c >= 0)
+                    in.unread(c);
                 break;
             }
-            else sb.append((char)c);
+            else
+                sb.append((char) c);
         }
-        String s=sb.toString().trim();
+        String s = sb.toString().trim();
 
         try {
-            int i=Integer.parseInt(s);
+            int i = Integer.parseInt(s);
             return i;
-        } 
-        catch(NumberFormatException nfe) {
+        }
+        catch (NumberFormatException nfe) {
             try {
-                double d=Double.parseDouble(s);
+                double d = Double.parseDouble(s);
                 return d;
             }
-            catch(NumberFormatException nfe2) {
+            catch (NumberFormatException nfe2) {
                 try {
                     return parseDate(s);
                 }
-                catch(Exception ex) {
+                catch (Exception ex) {
                     return s; // FINALLY WHEN EVERYTHING ELSE FAILS RETURN THE STRING AS A VALUE
                 }
             }
         }
     }
-    
-    private SimpleDateFormat[] dateFormats={
-        new SimpleDateFormat("yyyy-MM-dd"),
-        new SimpleDateFormat("MM/dd/yyyy"),
-        new SimpleDateFormat("dd.MM.yyyy")
+
+    private SimpleDateFormat[] dateFormats = {
+            new SimpleDateFormat("yyyy-MM-dd"),
+            new SimpleDateFormat("MM/dd/yyyy"),
+            new SimpleDateFormat("dd.MM.yyyy")
     };
 
     private Date parseDate(String s) throws IOException {
-        Date d=null;
-        for(SimpleDateFormat df : dateFormats) {
+        Date d = null;
+        for (SimpleDateFormat df : dateFormats) {
             try {
-                d=df.parse(s);
+                d = df.parse(s);
                 break;
             }
-            catch(ParseException pe){
+            catch (ParseException pe) {
                 continue;
             }
         }
 
-        if(d==null) {
+        if (d == null) {
             throw new RuntimeException("Error parsing CSV file");
         }
-        else return d;
+        else
+            return d;
     }
 
+
     private String parseIntPart(PushbackReader in) throws IOException {
-        StringBuilder sb=new StringBuilder();
-        while(true){
-            int c=in.read();
-            if(c>='0' && c<='9'){
-                sb.append((char)c);
+        StringBuilder sb = new StringBuilder();
+        while (true) {
+            int c = in.read();
+            if (c >= '0' && c <= '9') {
+                sb.append((char) c);
             }
             else {
-                if(c>=0) in.unread(c);
-                if(sb.length()==0) return null;
-                else return sb.toString();
+                if (c >= 0)
+                    in.unread(c);
+                if (sb.length() == 0)
+                    return null;
+                else
+                    return sb.toString();
             }
         }
     }
+
 
     private String parseString(PushbackReader in) throws IOException {
         readWhitespace(in);
 
-        int c=in.read();
-        if(c!=stringChar) throw new RuntimeException("Error parsing CSV file");
-        StringBuilder sb=new StringBuilder();
+        int c = in.read();
+        if (c != stringChar)
+            throw new RuntimeException("Error parsing CSV file");
+        StringBuilder sb = new StringBuilder();
 
-        while(true){
-            c=in.read();
-            if(c<0) throw new RuntimeException("Error parsing CSV file");
-            else if(c == stringChar) {
-                int c2=in.read();
-                if(c2==stringChar){
-                    sb.append((char)stringChar);
+        while (true) {
+            c = in.read();
+            if (c < 0)
+                throw new RuntimeException("Error parsing CSV file");
+            else if (c == stringChar) {
+                int c2 = in.read();
+                if (c2 == stringChar) {
+                    sb.append((char) stringChar);
                 }
                 else {
-                    if(c2>=0) in.unread(c2);
+                    if (c2 >= 0)
+                        in.unread(c2);
                     return sb.toString();
                 }
             }
             else {
-                sb.append((char)c);
+                sb.append((char) c);
             }
         }
     }
 
+
     private void readWhitespace(PushbackReader in) throws IOException {
-        while(true){
-            int c=in.read();
-            if(c<0) return;
-            else if(c!=lineSeparator && Character.isWhitespace(c)) continue;
+        while (true) {
+            int c = in.read();
+            if (c < 0)
+                return;
+            else if (c != lineSeparator && Character.isWhitespace(c))
+                continue;
             else {
                 in.unread(c);
                 return;
@@ -248,66 +278,55 @@ public class CSVParser {
         }
     }
 
-    public static class Row extends ArrayList<Object>{
-		private static final long serialVersionUID = 1L;
-    }
-    
-    public static class Table extends ArrayList<Row>{
-		private static final long serialVersionUID = 1L;
+    public static class Row extends ArrayList<Object> {
+        private static final long serialVersionUID = 1L;
     }
 
-/*
-    public static void main(String[] args) throws Exception {
-        InputStream in=System.in;
-//        InputStream in=new FileInputStream("Strindberg_lahtenyt_kv_1.csv");
-
-        Table t=new CSVParser().parse(in);
-
-        System.out.println("Parsed "+t.size()+" rows");
-
-        for(Row r : t){
-            for(Object o : r){
-                if(o==null) System.out.print("null,");
-                else System.out.print(o.toString()+",");
-            }
-            System.out.println();
-        }
+    public static class Table extends ArrayList<Row> {
+        private static final long serialVersionUID = 1L;
     }
-*/
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
-    
+
+
+
     public void setValueSeparator(char c) {
-        valueSeparator=c;
+        valueSeparator = c;
     }
-    
+
+
     public void setLineSeparator(char c) {
-        lineSeparator=c;
+        lineSeparator = c;
     }
-    
+
+
     public void setStringCharacter(char c) {
-        stringChar=c;
+        stringChar = c;
     }
-    
+
+
     public void setEncoding(String e) {
         encoding = e;
     }
-    
+
+
     public char getValueSeparator() {
         return valueSeparator;
     }
-    
+
+
     public char getLineSeparator() {
         return lineSeparator;
     }
-    
+
+
     public char getStringCharacter() {
         return stringChar;
     }
+
+
     public String getEncoding() {
         return encoding;
     }

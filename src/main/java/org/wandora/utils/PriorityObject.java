@@ -27,55 +27,56 @@ package org.wandora.utils;
 
 
 
-
 public class PriorityObject extends Object implements Comparable<PriorityObject>, java.io.Serializable {
     private static final long serialVersionUID = 1L;
-    
-    
+
+
     public final static int HIGHEST_PRIORITY = 10000;
-    public final static int HIGHER_PRIORITY  = 1000;
+    public final static int HIGHER_PRIORITY = 1000;
     public final static int DEFAULT_PRIORITY = 100;
-    public final static int LOWER_PRIORITY   = 10;
-    public final static int LOWEST_PRIORITY  = 1;
-    
+    public final static int LOWER_PRIORITY = 10;
+    public final static int LOWEST_PRIORITY = 1;
+
     protected int priority = DEFAULT_PRIORITY;
     protected Object object = null;
 
 
-    
-    
+
     public PriorityObject(Object object) {
         this.object = object;
         this.priority = DEFAULT_PRIORITY;
     }
-    
-    
+
+
     public PriorityObject(Object object, int priority) {
         this.object = object;
         this.priority = priority;
     }
-    
 
-    
+
+
     // -------------------------------------------------------------------------
-    
+
+
     public synchronized int getPriority() {
         return priority;
     }
-    
-    
+
+
     public synchronized void setPriority(int newPriority) {
         priority = newPriority;
     }
 
-    
+
     public synchronized boolean isSuperior(PriorityObject priorityObject) {
         if (priorityObject != null) {
-            if (priority > priorityObject.getPriority()) return true;
+            if (priority > priorityObject.getPriority())
+                return true;
         }
         return false;
     }
-   
+
+
     public int compareTo(PriorityObject o) {
         if (o != null) {
             if (priority > o.getPriority())
@@ -86,24 +87,32 @@ public class PriorityObject extends Object implements Comparable<PriorityObject>
         }
         return 0;
     }
-    
+
     // -------------------------------------------------------------------------
-    
-    public synchronized Object getObject() { return object; }
-    public synchronized void setObject(Object newObject) { object = newObject; }
-       
+
+
+    public synchronized Object getObject() {
+        return object;
+    }
+
+
+    public synchronized void setObject(Object newObject) {
+        object = newObject;
+    }
+
     // -------------------------------------------------------------------------
-    
-    public synchronized void adjustPriority( int amount ) {
+
+
+    public synchronized void adjustPriority(int amount) {
         this.priority += amount;
     }
-    
+
 
     public String toString() {
-        if( null==object )
-            return "PriorityObject[null pri="+priority+"]";
+        if (null == object)
+            return "PriorityObject[null pri=" + priority + "]";
         else
-            return "PriorityObject["+object.toString()+" pri="+priority+"]";
+            return "PriorityObject[" + object.toString() + " pri=" + priority + "]";
     }
 
 }

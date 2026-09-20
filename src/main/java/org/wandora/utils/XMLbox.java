@@ -43,185 +43,90 @@ import org.xml.sax.SAXException;
 
 
 
-
-
-
-
-
 public class XMLbox {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(XMLbox.class);
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(XMLbox.class);
 
-    
-    
-    public static Document getDocument( String contents ) {
+
+
+    public static Document getDocument(String contents) {
         return getDocument(contents, null);
     }
 
-    public static Document getDocument( String contents, String encoding ) {
+
+    public static Document getDocument(String contents, String encoding) {
         try {
             org.apache.xerces.parsers.DOMParser parser = new org.apache.xerces.parsers.DOMParser();
-    	    try {
-                parser.setFeature( "http://xml.org/sax/features/validation", false);
-                parser.setFeature( "http://apache.org/xml/features/dom/defer-node-expansion", false ); // NOTE THIS ADDED, HOPEFULLY NOBODY WANTED THIS METHOD DEFERRED?
-                parser.setFeature( "http://apache.org/xml/features/dom/include-ignorable-whitespace", false );
-                parser.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-                parser.setFeature( "http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
-            } catch (SAXException e) {
-                //LogWriter.println("WRN", "WRN parse(S): Couldn't set XML parser feature: "+e.getMessage());
+            try {
+                parser.setFeature("http://xml.org/sax/features/validation", false);
+                parser.setFeature("http://apache.org/xml/features/dom/defer-node-expansion", false); // NOTE THIS ADDED, HOPEFULLY NOBODY WANTED THIS METHOD DEFERRED?
+                parser.setFeature("http://apache.org/xml/features/dom/include-ignorable-whitespace", false);
+                parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+                parser.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
             }
-            InputSource source = new InputSource( new StringReader( contents ) );
-            if(encoding != null) source.setEncoding(encoding);
+            catch (SAXException e) {
+                logger.error("Couldn't set XML parser feature: "+e.getMessage());
+            }
+            InputSource source = new InputSource(new StringReader(contents));
+            if (encoding != null)
+                source.setEncoding(encoding);
             parser.parse(source);
-    	    Document doc = parser.getDocument();
+            Document doc = parser.getDocument();
             return doc;
-        } catch( Exception e ) {
+        }
+        catch (Exception e) {
             logger.error(e);
         }
         return null;
     }
 
-    /*
-    public static Hashtable getAsHashtable(String content) {
-        return getAsHashtable(content, null);
-    }
-    
-    
-    public static Hashtable getAsHashtable(String content, String encoding) {
-        Hashtable xmlHash = new Hashtable();
-        try {
-            Document doc = getDocument(content, encoding);
-            xmlHash = xml2Hash(doc);
-        }
-        catch (Exception e) {
-            //LogWriter.println("ERR", "Unable to parse XML from content!");
-        }
-        return xmlHash;
-    }
-    
 
-    
-    public static Hashtable xml2Hash(org.w3c.dom.Document doc) {
-        Hashtable xmlHash = new Hashtable();
-        parse2Hashtable(doc.getDocumentElement(), "", xmlHash);
-        return xmlHash;
-    }
-
-    
-    private static void parse2Hashtable(Node node, String key, Hashtable xmlHash) {
-        NodeList nodes = node.getChildNodes();
-        int numOfNodes = nodes.getLength();
-        for( int nnum=0; nnum<numOfNodes; nnum++ ) {
-            Node n = nodes.item(nnum);
-            if( n.getNodeType()==Node.ELEMENT_NODE ) {
-                String value = textValue((Element)n);
-                int i = -1;
-                String currentKey = null;
-                do {
-                    i++;
-                    currentKey = key + "." + n.getNodeName() + "["+i+"]";
-                } while(xmlHash.get(currentKey) != null);
-                if(null == value) {
-                    xmlHash.put(currentKey, "");
-                    parseXML( n, currentKey, xmlHash );
-                }
-                else {
-                    //System.out.println("parsed: "+currentKey+" == "+value);
-                    xmlHash.put(currentKey, value);
-                }
-            }
-            else {
-                // ignoring whitespace TEXT_NODEs
-            }
-        }
-    }
-    
-    
-    
-    
-    public static String wrapHash2XML(Hashtable h) {
-        return hash2XML(wrapHash(h, "."));
-    }
-    
-    
-    
-    
-    public static String hash2XML(Hashtable hash) {
-        String prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + System.getProperty("line.separator");
-        return prefix + hash2XML(hash, 0);
-    }
-
-    
-    private static String hash2XML(Hashtable hash, int depth) {
-        String br = System.getProperty("line.separator");
-        if(br == null) br = "";
-        String s = "";
-        String tab = "";
-        for(int i=0; i<depth; i++) {
-            tab = tab + "   ";
-        }
-        for(Enumeration keys = hash.keys(); keys.hasMoreElements(); ) {
-            Object key = keys.nextElement();
-            Object value = hash.get(key);
-            String keyStr = key.toString();
-            int index = keyStr.indexOf("[");
-            if(index > 0) keyStr = keyStr.substring(0, index);
-            if(value instanceof Hashtable) {
-                s = s + tab + "<" + keyStr + ">" + br + hash2XML((Hashtable) value, depth+1) + tab + "</" + keyStr + ">" + br;
-            }
-            else {
-                s = s + tab + "<" + keyStr + ">" + cleanForXML(value.toString()) + "</" + keyStr + ">" + br;
-            }
-        }
-        return s;
-    }
-    */
-    
-    
-    public static String cleanForAttribute(String value){
-        value=value.replace("&","&amp;");
-        value=value.replace("\"","&quot;");
-        return value;
-    }
-    
-    public static String cleanForXML(String value){
-        value=value.replace("&","&amp;");
-        value=value.replace("<","&lt;");
+    public static String cleanForAttribute(String value) {
+        value = value.replace("&", "&amp;");
+        value = value.replace("\"", "&quot;");
         return value;
     }
 
-    
+
+    public static String cleanForXML(String value) {
+        value = value.replace("&", "&amp;");
+        value = value.replace("<", "&lt;");
+        return value;
+    }
+
+
     // -------------------------------------------------------------------------
-    
-    
 
-    public static String wrapMap2XML(Map<String,? extends Object> map) {
+
+
+    public static String wrapMap2XML(Map<String, ? extends Object> map) {
         return map2XML(wrapMap(map, "."));
     }
-    
-    
-    
-    
-    public static String map2XML(Map<String,Object> map) {
+
+
+
+    public static String map2XML(Map<String, Object> map) {
         String prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + System.getProperty("line.separator");
         return prefix + map2XML(map, 0);
     }
 
-    
-    private static String map2XML(Map<String,Object> map, int depth) {
+
+    private static String map2XML(Map<String, Object> map, int depth) {
         String br = System.getProperty("line.separator");
-        if(br == null) br = "";
+        if (br == null)
+            br = "";
         String s = "";
         String tab = "";
-        for(int i=0; i<depth; i++) {
+        for (int i = 0; i < depth; i++) {
             tab = tab + "   ";
         }
-        for(Object key : map.keySet() ) {
+        for (Object key : map.keySet()) {
             Object value = map.get(key);
             String keyStr = key.toString();
             int index = keyStr.indexOf("[");
-            if(index > 0) keyStr = keyStr.substring(0, index);
-            if(value instanceof Map valueAsMap) {
-                s = s + tab + "<" + keyStr + ">" + br + map2XML(valueAsMap, depth+1) + tab + "</" + keyStr + ">" + br;
+            if (index > 0)
+                keyStr = keyStr.substring(0, index);
+            if (value instanceof Map valueAsMap) {
+                s = s + tab + "<" + keyStr + ">" + br + map2XML(valueAsMap, depth + 1) + tab + "</" + keyStr + ">" + br;
             }
             else {
                 s = s + tab + "<" + keyStr + ">" + cleanForXML(value.toString()) + "</" + keyStr + ">" + br;
@@ -229,137 +134,88 @@ public class XMLbox {
         }
         return s;
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    /*
-    public static Hashtable wrapHash(Hashtable hash, String delimiters) {
-        Hashtable wrapped = new Hashtable();
-        
-        for(Enumeration keys = hash.keys(); keys.hasMoreElements(); ) {
-            Object key = keys.nextElement();
-            if(key instanceof String) {
+
+
+
+    public static Map<String, Object> wrapMap(Map<String, ? extends Object> map, String delimiters) {
+        Map<String, Object> wrapped = new LinkedHashMap<>();
+
+        for (Object key : map.keySet()) {
+            if (key instanceof String) {
                 StringTokenizer address = new StringTokenizer((String) key, delimiters);
-                Hashtable subhash = wrapped;
+                Map<String, Object> subhash = wrapped;
                 String path = null;
-                while(address.hasMoreTokens()) {
+                while (address.hasMoreTokens()) {
                     path = address.nextToken();
-                    if(address.hasMoreTokens()) {
-                        if(subhash.get(path) == null || !(subhash.get(path) instanceof Hashtable)) {
-                            subhash.put(path, new Hashtable());
+                    if (address.hasMoreTokens()) {
+                        if (subhash.get(path) == null || !(subhash.get(path) instanceof Map)) {
+                            subhash.put(path, new LinkedHashMap<String, Object>());
                         }
-                        subhash = (Hashtable) subhash.get(path);
+                        subhash = (Map<String, Object>) subhash.get(path);
                     }
                 }
-                if(hash.get(key) != null) {
-                    subhash.put(path, hash.get(key));
-                }
-            }
-        }
-        return wrapped;
-    }
-    
-    
-    
-    public static Hashtable getAsHashTree(String content) {
-        return getAsHashTree(content, null);
-    }    
-    public static Hashtable getAsHashTree(String content, String encoding) {
-        Hashtable xmlHash = new Hashtable();
-        try {
-            Document doc = getDocument(content, encoding);
-            xmlHash = xml2HashTree(doc);
-        }
-        catch (Exception e) {
-            //LogWriter.println("ERR", "Unable to parse XML from content!");
-        }
-        return xmlHash;
-    }
-    */
-    
-    
-    // -------------
-    
-    
-    public static Map<String,Object> wrapMap(Map<String,? extends Object> map, String delimiters) {
-        Map<String,Object> wrapped = new LinkedHashMap<>();
-        
-        for(Object key : map.keySet()) {
-            if(key instanceof String) {
-                StringTokenizer address = new StringTokenizer((String) key, delimiters);
-                Map<String,Object> subhash = wrapped;
-                String path = null;
-                while(address.hasMoreTokens()) {
-                    path = address.nextToken();
-                    if(address.hasMoreTokens()) {
-                        if(subhash.get(path) == null || !(subhash.get(path) instanceof Map)) {
-                            subhash.put(path, new LinkedHashMap<String,Object>());
-                        }
-                        subhash = (Map<String,Object>) subhash.get(path);
-                    }
-                }
-                if(map.get(key) != null) {
+                if (map.get(key) != null) {
                     subhash.put(path, map.get(key));
                 }
             }
         }
         return wrapped;
     }
-    
-    
-    public static Map<String,? extends Object> getAsMapTree(String content) {
+
+
+    public static Map<String, ? extends Object> getAsMapTree(String content) {
         return getAsMapTree(content, null);
-    }    
-    
-    
-    
-    public static Map<String,String> getAsMapTree(String content, String encoding) {
-        Map<String,String> xmlMap = new LinkedHashMap<>();
+    }
+
+
+
+    public static Map<String, String> getAsMapTree(String content, String encoding) {
+        Map<String, String> xmlMap = new LinkedHashMap<>();
         try {
             Document doc = getDocument(content, encoding);
             xmlMap = xml2MapTree(doc);
         }
         catch (Exception e) {
-            //LogWriter.println("ERR", "Unable to parse XML from content!");
+            logger.error("Unable to parse XML from content!");
         }
         return xmlMap;
     }
-    
-    
-    
-    /*
-    public static Hashtable xml2HashTree(org.w3c.dom.Document doc) {
-        Hashtable xmlHash = new Hashtable();
+
+
+
+    public static Map<String, String> xml2MapTree(org.w3c.dom.Document doc) {
+        Map<String, String> xmlMap = new LinkedHashMap<>();
         Node rootNode = doc.getDocumentElement();
-        parseXML(rootNode, rootNode.getNodeName()+"[0]", xmlHash);
-        return xmlHash;
+        parseXML(rootNode, rootNode.getNodeName() + "[0]", xmlMap);
+        return xmlMap;
     }
-    
-    
-    
-    
-    private static void parseXML(Node node, String key, Hashtable xmlHash) {
+
+
+
+    private static void parseXML(Node node, String key, Map<String, String> map) {
         NodeList nodes = node.getChildNodes();
         int numOfNodes = nodes.getLength();
-        for( int nnum=0; nnum<numOfNodes; nnum++ ) {
+        for (int nnum = 0; nnum < numOfNodes; nnum++) {
             Node n = nodes.item(nnum);
-            if( n.getNodeType()==Node.ELEMENT_NODE ) {
-                String value = textValue((Element)n);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                String value = textValue((Element) n);
                 int i = -1;
                 String currentKey = null;
                 do {
                     i++;
-                    currentKey = key + "." + n.getNodeName() + "["+i+"]";
-                } while(xmlHash.get(currentKey) != null);
-                if(null == value) {
-                    xmlHash.put(currentKey, "");
-                    parseXML( n, currentKey, xmlHash );
+                    currentKey = key + "." + n.getNodeName() + "[" + i + "]";
+                }
+                while (map.get(currentKey) != null);
+                if (null == value) {
+                    map.put(currentKey, "");
+                    parseXML(n, currentKey, map);
                 }
                 else {
                     //System.out.println("parsed: "+currentKey+" == "+value);
-                    xmlHash.put(currentKey, value);
+                    map.put(currentKey, value);
                 }
             }
             else {
@@ -367,54 +223,12 @@ public class XMLbox {
             }
         }
     }
-    */
-    
-    
-    
-    public static Map<String,String> xml2MapTree(org.w3c.dom.Document doc) {
-        Map<String,String> xmlMap = new LinkedHashMap<>();
-        Node rootNode = doc.getDocumentElement();
-        parseXML(rootNode, rootNode.getNodeName()+"[0]", xmlMap);
-        return xmlMap;
-    }
-    
-    
-    
-    
-    private static void parseXML(Node node, String key, Map<String,String> map) {
-        NodeList nodes = node.getChildNodes();
-        int numOfNodes = nodes.getLength();
-        for( int nnum=0; nnum<numOfNodes; nnum++ ) {
-            Node n = nodes.item(nnum);
-            if( n.getNodeType()==Node.ELEMENT_NODE ) {
-                String value = textValue((Element)n);
-                int i = -1;
-                String currentKey = null;
-                do {
-                    i++;
-                    currentKey = key + "." + n.getNodeName() + "["+i+"]";
-                } while(map.get(currentKey) != null);
-                if(null == value) {
-                	map.put(currentKey, "");
-                    parseXML( n, currentKey, map );
-                }
-                else {
-                    //System.out.println("parsed: "+currentKey+" == "+value);
-                	map.put(currentKey, value);
-                }
-            }
-            else {
-                // ignoring whitespace TEXT_NODEs
-            }
-        }
-    }
-    
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
+
+
     public static String naiveGetAsText(String content) {
         String str = content;
         try {
@@ -429,8 +243,8 @@ public class XMLbox {
         }
         return str;
     }
-    
-    
+
+
     public static String getAsText(String content, String encoding) {
         String str = content;
         try {
@@ -442,44 +256,44 @@ public class XMLbox {
         }
         return str;
     }
-    
-    
-    
+
+
+
     public static String xml2Text(org.w3c.dom.Document doc) {
         StringBuilder sb = new StringBuilder("");
         xml2Text(doc.getDocumentElement(), sb);
         return sb.toString().trim();
     }
-    
-    
-    
-    
+
+
+
     private static void xml2Text(Node node, StringBuilder sb) {
         NodeList nodes = node.getChildNodes();
         int numOfNodes = nodes.getLength();
-        for( int nnum=0; nnum<numOfNodes; nnum++ ) {
+        for (int nnum = 0; nnum < numOfNodes; nnum++) {
             Node n = nodes.item(nnum);
-            if( n.getNodeType()==Node.ELEMENT_NODE ) {
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
                 sb.append(" ");
-                xml2Text( n, sb );
+                xml2Text(n, sb);
             }
-            else if( n.getNodeType()==Node.TEXT_NODE || n.getNodeType()==Node.CDATA_SECTION_NODE ) {
+            else if (n.getNodeType() == Node.TEXT_NODE || n.getNodeType() == Node.CDATA_SECTION_NODE) {
                 String bit = n.getNodeValue().trim();
-                sb.append( bit );
-                if(!bit.endsWith("\n")) sb.append( " " );
+                sb.append(bit);
+                if (!bit.endsWith("\n"))
+                    sb.append(" ");
             }
         }
     }
-    
-        
-    private static String textValue( Element e ) {
+
+
+    private static String textValue(Element e) {
         StringBuilder text = new StringBuilder("");
         NodeList nl = e.getChildNodes();
-        for( int i=0;i<nl.getLength();i++ ) {
+        for (int i = 0; i < nl.getLength(); i++) {
             Node n = nl.item(i);
-            if( n.getNodeType()==Node.TEXT_NODE || n.getNodeType()==Node.CDATA_SECTION_NODE ) {
+            if (n.getNodeType() == Node.TEXT_NODE || n.getNodeType() == Node.CDATA_SECTION_NODE) {
                 String bit = n.getNodeValue().trim();
-                text.append( bit );
+                text.append(bit);
             }
             else {
                 return null;
@@ -487,11 +301,10 @@ public class XMLbox {
         }
         return text.toString();
     }
-    
-    
-    
-    
-    public static String cleanUp( String xml ) {
+
+
+
+    public static String cleanUp(String xml) {
         org.w3c.tidy.Tidy tidy = null;
         String tidyContent = null;
 
@@ -508,15 +321,15 @@ public class XMLbox {
             tidy.setWraplen(0);
 
             ByteArrayOutputStream tidyOutput = null;
-            tidyOutput = new ByteArrayOutputStream();       
+            tidyOutput = new ByteArrayOutputStream();
             tidy.parse(new ByteArrayInputStream(xml.getBytes()), tidyOutput);
             tidyContent = tidyOutput.toString();
         }
-        catch(Error er) {
+        catch (Error er) {
             logger.error(er);
         }
         return tidyContent;
     }
-    
-    
+
+
 }

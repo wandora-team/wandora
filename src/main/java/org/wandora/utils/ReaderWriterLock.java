@@ -50,73 +50,107 @@ package org.wandora.utils;
  * @author  olli
  */
 public class ReaderWriterLock {
-    public static final int LOCK_READ=0;
-    public static final int LOCK_WRITE=1;
-    
+    public static final int LOCK_READ = 0;
+    public static final int LOCK_WRITE = 1;
+
     private int numReaders;
     private int numWriters;
     private int waitingWriters;
-    
-    public ReaderWriterLock(){
-        numReaders=0;
-        numWriters=0;
-        waitingWriters=0;
+
+    public ReaderWriterLock() {
+        numReaders = 0;
+        numWriters = 0;
+        waitingWriters = 0;
     }
-    public synchronized boolean getReaderLockNonBlocking(){
-        if(numWriters==0 && waitingWriters==0) {
+
+
+    public synchronized boolean getReaderLockNonBlocking() {
+        if (numWriters == 0 && waitingWriters == 0) {
             numReaders++;
             return true;
         }
-        else return false;
+        else
+            return false;
     }
-    public synchronized boolean getReaderLock(){
-        while(numWriters>0 || waitingWriters>0) {
-            try{
+
+
+    public synchronized boolean getReaderLock() {
+        while (numWriters > 0 || waitingWriters > 0) {
+            try {
                 this.wait();
-            }catch(InterruptedException ie){return false;}
+            }
+            catch (InterruptedException ie) {
+                return false;
+            }
         }
-        numReaders++;        
+        numReaders++;
         return true;
     }
-    public synchronized void releaseReaderLock(){
+
+
+    public synchronized void releaseReaderLock() {
         numReaders--;
-        if(numReaders<0) throw new RuntimeException("Too many readers realeased");
+        if (numReaders < 0)
+            throw new RuntimeException("Too many readers realeased");
         this.notifyAll();
     }
-    public synchronized boolean getWriterLockNonBlocking(){
-        if(numWriters==0 && numReaders==0) {
+
+
+    public synchronized boolean getWriterLockNonBlocking() {
+        if (numWriters == 0 && numReaders == 0) {
             numWriters++;
             return true;
         }
-        else return false;
+        else
+            return false;
     }
-    public synchronized boolean getWriterLock(){
+
+
+    public synchronized boolean getWriterLock() {
         waitingWriters++;
-        while(numWriters>0 || numReaders>0) {
-            try{
+        while (numWriters > 0 || numReaders > 0) {
+            try {
                 this.wait();
-            }catch(InterruptedException ie){return false;}
-        }            
+            }
+            catch (InterruptedException ie) {
+                return false;
+            }
+        }
         waitingWriters--;
-        numWriters++;        
+        numWriters++;
         return true;
     }
-    public synchronized void releaseWriterLock(){
+
+
+    public synchronized void releaseWriterLock() {
         numWriters--;
-        if(numWriters<0) throw new RuntimeException("Too many writers realeased");
+        if (numWriters < 0)
+            throw new RuntimeException("Too many writers realeased");
         this.notifyAll();
     }
-    public synchronized boolean getLockNonBlocking(int type){
-        if(type==LOCK_READ) return getReaderLockNonBlocking();
-        else return getWriterLockNonBlocking();
+
+
+    public synchronized boolean getLockNonBlocking(int type) {
+        if (type == LOCK_READ)
+            return getReaderLockNonBlocking();
+        else
+            return getWriterLockNonBlocking();
     }
-    public synchronized boolean getLock(int type){
-        if(type==LOCK_READ) return getReaderLock();
-        else return getWriterLock();
+
+
+    public synchronized boolean getLock(int type) {
+        if (type == LOCK_READ)
+            return getReaderLock();
+        else
+            return getWriterLock();
     }
-    public synchronized void releaseLock(int type){
-        if(type==LOCK_READ) releaseReaderLock();
-        else releaseWriterLock();
+
+
+    public synchronized void releaseLock(int type) {
+        if (type == LOCK_READ)
+            releaseReaderLock();
+        else
+            releaseWriterLock();
     }
-    
+
 }

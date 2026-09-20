@@ -28,8 +28,10 @@
  */
 
 package org.wandora.utils;
+
 import java.util.HashMap;
 import java.util.Map;
+
 /**
  * This class provides mappings between commonly used file suffixes and 
  * content types.
@@ -37,7 +39,7 @@ import java.util.Map;
  * @author olli
  */
 public class FileTypes {
-    
+
     /**
      * Maps file suffixes to content types. There may be several suffixes
      * mapping to same content type.
@@ -203,22 +205,26 @@ public class FileTypes {
         "application/zip","zip",
         "application/octet-stream","",
     });
+
     
     /** Creates a new instance of FileTypes */
     public FileTypes() {
     }
-    
+
+
     /**
      * Gets a file suffix for the specified content type.
      */
-    public static String getSuffixForContentType(String contentType){
+    public static String getSuffixForContentType(String contentType) {
         return typeToSuffix.get(contentType.toLowerCase());
     }
+
+
     /**
      * Gets content type for the specified file suffix.
      */
-    public static String getContentTypeForSuffix(String suffix){
+    public static String getContentTypeForSuffix(String suffix) {
         return suffixToType.get(suffix.toLowerCase());
     }
-    
+
 }

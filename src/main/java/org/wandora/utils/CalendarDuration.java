@@ -33,70 +33,73 @@ import java.util.Calendar;
 
 
 
-
 public class CalendarDuration {
-    
+
     private Calendar startCalendar = Calendar.getInstance();
     private Calendar endCalendar = Calendar.getInstance();
-    
+
     /** Creates a new instance of CalendarDuration */
     public CalendarDuration() {
     }
-    
-    
-    
+
+
+
     public CalendarDuration(Calendar start, Calendar end) {
         setStartCalendar(start);
         setEndCalendar(end);
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
+
+
     public void setStartCalendar(Calendar calendar) {
         this.startCalendar = calendar;
     }
-    
+
+
     public void setEndCalendar(Calendar calendar) {
         this.endCalendar = calendar;
     }
-    
+
+
     public void setStart(int year, int mon, int day, int hour, int minute, int second) {
-        if(startCalendar == null) startCalendar = Calendar.getInstance();
-        startCalendar.set(year,mon,day,hour,minute,second);
+        if (startCalendar == null)
+            startCalendar = Calendar.getInstance();
+        startCalendar.set(year, mon, day, hour, minute, second);
     }
+
 
     public void setEnd(int year, int mon, int day, int hour, int minute, int second) {
-        if(endCalendar == null) endCalendar = Calendar.getInstance();
-        endCalendar.set(year,mon,day,hour,minute,second);
+        if (endCalendar == null)
+            endCalendar = Calendar.getInstance();
+        endCalendar.set(year, mon, day, hour, minute, second);
     }
 
-    
+
     public void set(String formattedDuration) {
-        if(formattedDuration.length() > 0) {
+        if (formattedDuration.length() > 0) {
             try {
                 setStart(
-                    Integer.parseInt(formattedDuration.substring(0,4)),
-                    Integer.parseInt(formattedDuration.substring(4,6)),
-                    Integer.parseInt(formattedDuration.substring(6,8)),
-                    Integer.parseInt(formattedDuration.substring(8,10)),
-                    Integer.parseInt(formattedDuration.substring(10,12)),
-                    Integer.parseInt(formattedDuration.substring(12,14))
-                );
+                        Integer.parseInt(formattedDuration.substring(0, 4)),
+                        Integer.parseInt(formattedDuration.substring(4, 6)),
+                        Integer.parseInt(formattedDuration.substring(6, 8)),
+                        Integer.parseInt(formattedDuration.substring(8, 10)),
+                        Integer.parseInt(formattedDuration.substring(10, 12)),
+                        Integer.parseInt(formattedDuration.substring(12, 14)));
             }
             catch (Exception e) {
                 startCalendar = null;
             }
             try {
                 setEnd(
-                    Integer.parseInt(formattedDuration.substring(15,19)),
-                    Integer.parseInt(formattedDuration.substring(19,21)),
-                    Integer.parseInt(formattedDuration.substring(21,23)),
-                    Integer.parseInt(formattedDuration.substring(23,25)),
-                    Integer.parseInt(formattedDuration.substring(25,27)),
-                    Integer.parseInt(formattedDuration.substring(27,29))
-                );
+                        Integer.parseInt(formattedDuration.substring(15, 19)),
+                        Integer.parseInt(formattedDuration.substring(19, 21)),
+                        Integer.parseInt(formattedDuration.substring(21, 23)),
+                        Integer.parseInt(formattedDuration.substring(23, 25)),
+                        Integer.parseInt(formattedDuration.substring(25, 27)),
+                        Integer.parseInt(formattedDuration.substring(27, 29)));
             }
             catch (Exception e) {
                 endCalendar = null;
@@ -104,38 +107,42 @@ public class CalendarDuration {
         }
     }
 
-    
-    
+
+
     public Calendar getStartCalendar() {
         return this.startCalendar;
     }
-    
+
+
     public Calendar getEndCalendar() {
         return this.endCalendar;
     }
-    
+
+
     public String getFormattedStartCalendar() {
         return formatCalendar(startCalendar);
     }
-    
+
+
     public String getFormattedEndCalendar() {
         return formatCalendar(endCalendar);
     }
-    
-    
-    
+
+
+
     private String formatCalendar(Calendar cal) {
-        if(cal != null) {
+        if (cal != null) {
             return "" +
-                cal.get(Calendar.DAY_OF_MONTH) + "." +
-                cal.get(Calendar.MONTH) + "." +
-                cal.get(Calendar.YEAR) + " " +
-                cal.get(Calendar.HOUR_OF_DAY) + ":" +
-                (cal.get(Calendar.MINUTE)<10 ? "0" + cal.get(Calendar.MINUTE) : "" + cal.get(Calendar.MINUTE)) + "." +
-                (cal.get(Calendar.SECOND)<10 ? "0" + cal.get(Calendar.SECOND) : "" + cal.get(Calendar.SECOND));
+                    cal.get(Calendar.DAY_OF_MONTH) + "." +
+                    cal.get(Calendar.MONTH) + "." +
+                    cal.get(Calendar.YEAR) + " " +
+                    cal.get(Calendar.HOUR_OF_DAY) + ":" +
+                    (cal.get(Calendar.MINUTE) < 10 ? "0" + cal.get(Calendar.MINUTE) : "" + cal.get(Calendar.MINUTE))
+                    + "." +
+                    (cal.get(Calendar.SECOND) < 10 ? "0" + cal.get(Calendar.SECOND) : "" + cal.get(Calendar.SECOND));
         }
         return "";
     }
-    
-    
+
+
 }
