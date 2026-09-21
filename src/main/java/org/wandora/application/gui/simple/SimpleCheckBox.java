@@ -28,8 +28,6 @@
 package org.wandora.application.gui.simple;
 
 
-
-
 import java.awt.Cursor;
 import java.awt.Graphics;
 
@@ -53,11 +51,9 @@ public class SimpleCheckBox extends JCheckBox {
         this.setSelectedIcon(UIBox.getIcon("gui/icons/checkbox_selected.png"));
         this.setFocusPainted(false);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        // this.setUI(new SimpleCheckBoxUI());
-        // this.setBackground(UIConstants.checkBoxBackgroundColor);
     }
 
-    
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);

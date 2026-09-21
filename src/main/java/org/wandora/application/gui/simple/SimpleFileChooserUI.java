@@ -34,41 +34,10 @@ import javax.swing.plaf.metal.MetalFileChooserUI;
 
 
 public class SimpleFileChooserUI extends MetalFileChooserUI {
-    
-    /*
-    
-    protected String cancelButtonText;
-    protected String cancelButtonToolTipText;
-    protected Icon computerIcon;
-    protected Icon detailsViewIcon;
-    protected Icon directoryIcon;
 
-    protected Icon fileIcon;
-    protected Icon floppyDriveIcon;
-    protected Icon hardDriveIcon;
-    protected int helpButtonMnemonic;
-    protected String helpButtonText;
-    protected String helpButtonToolTipText;
-    protected Icon homeFolderIcon;
-    protected Icon listViewIcon;
-    protected Icon newFolderIcon;
-    protected int openButtonMnemonic;
-    protected String openButtonText;
-    protected String openButtonToolTipText;
-    protected int saveButtonMnemonic;
-    protected String saveButtonText;
-    protected String saveButtonToolTipText;
-    protected int updateButtonMnemonic;
-    protected String updateButtonText;
-    protected String updateButtonToolTipText;
-    protected Icon upFolderIcon;
-           
-    */
-    
-    
-    
+
     public SimpleFileChooserUI(JFileChooser b) {
         super(b);
     }
-    
+
 }

@@ -50,43 +50,43 @@ import org.wandora.application.gui.UIConstants;
  * @author  akivela
  */
 public class SimpleComboBox<T> extends JComboBox<T> implements MouseListener, SimpleComponent {
-    
+
     private static final long serialVersionUID = 1L;
-   
-    
+
+
     /** Creates a new instance of SimpleComboBox */
     public SimpleComboBox() {
         initialize();
     }
-    
-    
+
+
     public SimpleComboBox(Vector<T> v) {
         super(v);
         initialize();
     }
-    
-    
+
+
     public SimpleComboBox(T[] content) {
         super();
         initialize();
         setOptions(content);
     }
-    
-    
+
+
     public SimpleComboBox(Set<T> content) {
         super();
         initialize();
         setOptions(content);
     }
-    
-    
+
+
     public SimpleComboBox(Collection<T> content) {
         super();
         initialize();
         setOptions(content);
     }
-    
-    
+
+
     private void initialize() {
         this.addMouseListener(this);
         this.setFont(UIConstants.comboBoxFont);
@@ -95,94 +95,95 @@ public class SimpleComboBox<T> extends JComboBox<T> implements MouseListener, Si
         this.setRenderer(new BorderListCellRenderer<T>());
         this.setEditable(true);
     }
-    
-    
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
-    
-    
-    
+
+
+
     public void setOptions(T[] content) {
         removeAllItems();
         for (T item : content) {
             addItem(item);
         }
     }
-    
-        
+
+
     public void setOptions(Enumeration<T> content) {
         removeAllItems();
-        while(content.hasMoreElements()) {
+        while (content.hasMoreElements()) {
             try {
                 addItem(content.nextElement());
             }
-            catch (Exception e) {}
-        }
-    }
-    
-    public void setOptions(Set<T> content) {
-        removeAllItems();
-        for(T o : content) {
-            try {
-                addItem(o);
+            catch (Exception e) {
             }
-            catch (Exception e) {}
-        }
-    }
-    
-    public void setOptions(Collection<T> content) {
-        removeAllItems();
-        for(T o : content) {
-            try {
-                addItem(o);
-            }
-            catch (Exception e) {}
         }
     }
 
-    
+
+    public void setOptions(Set<T> content) {
+        removeAllItems();
+        for (T o : content) {
+            try {
+                addItem(o);
+            }
+            catch (Exception e) {
+            }
+        }
+    }
+
+
+    public void setOptions(Collection<T> content) {
+        removeAllItems();
+        for (T o : content) {
+            try {
+                addItem(o);
+            }
+            catch (Exception e) {
+            }
+        }
+    }
+
+
     @Override
     public void focusGained(java.awt.event.FocusEvent focusEvent) {
         // DO NOTHING...
     }
-    
+
+
     @Override
     public void focusLost(java.awt.event.FocusEvent focusEvent) {
         // DO NOTHING...
     }
-   
-    
-    
-    /*
-    @Override
-    public void paint(Graphics g) {
-        UIConstants.preparePaint(g);
-        super.paint(g);
-    }
-    */
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     public class BorderListCellRenderer<E> implements ListCellRenderer<E> {
 
         private Border insetBorder;
@@ -193,15 +194,16 @@ public class SimpleComboBox<T> extends JComboBox<T> implements MouseListener, Si
             this.defaultRenderer = new DefaultListCellRenderer();
         }
 
+
         @Override
-        public Component getListCellRendererComponent(JList<? extends E> list, E value, int index, boolean isSelected, boolean cellHasFocus) {
+        public Component getListCellRendererComponent(JList<? extends E> list, E value, int index, boolean isSelected,
+                boolean cellHasFocus) {
             JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(
-                    list, 
-                    value, 
-                    index, 
-                    isSelected, 
-                    cellHasFocus
-            );
+                    list,
+                    value,
+                    index,
+                    isSelected,
+                    cellHasFocus);
             renderer.setBorder(insetBorder);
             return renderer;
         }

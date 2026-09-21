@@ -61,23 +61,26 @@ class SimpleCheckBoxUI extends BasicCheckBoxUI implements java.io.Serializable {
         super.uninstallUI(c);
     }
 
+
     @Override
     public void paint(Graphics g, JComponent c) {
-        super.paint(g, c);       
+        super.paint(g, c);
     }
-    
+
 
     @Override
     protected void paintIcon(Graphics g, JComponent c, Rectangle iconRect) {
-        
+
     }
 
-    
+
     @Override
-    protected void paintFocus(Graphics g, AbstractButton b, Rectangle viewRect, Rectangle textRect, Rectangle iconRect) {
-        
+    protected void paintFocus(Graphics g, AbstractButton b, Rectangle viewRect, Rectangle textRect,
+            Rectangle iconRect) {
+
     }
-    
+
+
     protected Color getSelectColor() {
         return Color.BLACK;
     }

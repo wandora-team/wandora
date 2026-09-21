@@ -34,24 +34,24 @@ import javax.swing.JPasswordField;
  * @author akikivela
  */
 public class SimplePasswordField extends JPasswordField {
-    
+
     private static final long serialVersionUID = 1L;
-    
-    protected Insets defaultMargins = new Insets(3,3,3,3);
-    
+
+    protected Insets defaultMargins = new Insets(3, 3, 3, 3);
+
     public SimplePasswordField() {
         initialize();
     }
-    
-    
-    
-    public void initialize() {
 
+
+
+    public void initialize() {
         this.setFocusTraversalKeysEnabled(true);
-        this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,0)));
-        this.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,InputEvent.SHIFT_DOWN_MASK)));
+        this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,
+                Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, 0)));
+        this.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,
+                Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK)));
 
         this.setMargin(defaultMargins);
-        
     }
 }

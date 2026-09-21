@@ -44,86 +44,87 @@ import javax.swing.JPanel;
  * @author akivela
  */
 public class ComponentThumbnail extends JPanel implements Runnable {
-    
+
     private static final long serialVersionUID = 1L;
-    
-    Component original = null;
-    int thumbWidth = 50;
-    int thumbHeight = 50;
-    Image thumbnailImage = null;
-    
-    
-    
+
+    private Component original = null;
+    private int thumbWidth = 50;
+    private int thumbHeight = 50;
+    private Image thumbnailImage = null;
+
+
+
     /** Creates a new instance of ComponentThumbnail */
     public ComponentThumbnail(Component original) {
         this.original = original;
         this.add(original);
-        
+
         Thread runner = new Thread(this);
         runner.start();
     }
-    
-    
-    
-    
+
+
+
     public void run() {
         /*
          This is problematic as the thread runs for ever and consumes resources.
          The thread should end when ever the original component becomes
          redundant.
         */
-        while(true) {               
-            if(original.getWidth() > 0 && original.getHeight() > 0) {
-                
+        while (true) {
+            if (original.getWidth() > 0 && original.getHeight() > 0) {
+
                 int w = original.getWidth();
                 int h = original.getHeight();
-                w = ( w > 2000 ? 2000 : w );
-                h = ( h > 2000 ? 2000 : h );
-                thumbWidth = 200*w/h;
+                w = (w > 2000 ? 2000 : w);
+                h = (h > 2000 ? 2000 : h);
+                thumbWidth = 200 * w / h;
                 thumbHeight = 200;
 
-                BufferedImage tempImage = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR );
+                BufferedImage tempImage = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
                 original.paint(tempImage.getGraphics());
 
                 Graphics2D g2 = tempImage.createGraphics();
                 g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-                g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY );
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
-                g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY );
+                g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 
-                thumbnailImage = tempImage.getScaledInstance( thumbWidth, thumbHeight, BufferedImage.SCALE_SMOOTH );
-                
+                thumbnailImage = tempImage.getScaledInstance(thumbWidth, thumbHeight, BufferedImage.SCALE_SMOOTH);
+
                 repaint();
                 revalidate();
-                
-                if(getParent() != null) {
+
+                if (getParent() != null) {
                     getParent().invalidate();
                 }
             }
-            
+
             try {
                 Thread.sleep(1000);
             }
-            catch(Exception e) {}
+            catch (Exception e) {
+            }
         }
     }
-    
-    
-    
+
+
+
     public void paint(Graphics g) {
-        //super.paint(g);
-        if(getParent() != null) g.setColor(getParent().getBackground());
-        g.fillRect(0,0,g.getClipBounds().width, g.getClipBounds().height);
-        g.drawImage(thumbnailImage,0,0,this);
+        if (getParent() != null) {
+            g.setColor(getParent().getBackground());
+        }
+        g.fillRect(0, 0, g.getClipBounds().width, g.getClipBounds().height);
+        g.drawImage(thumbnailImage, 0, 0, this);
         g.setColor(Color.GRAY);
-        g.drawRect(0,0,thumbWidth-1,thumbHeight-1);
+        g.drawRect(0, 0, thumbWidth - 1, thumbHeight - 1);
     }
-    
-    
+
+
     public Dimension getPreferredSize() {
         Dimension thumbDimensions = new Dimension(thumbWidth, thumbHeight);
         return thumbDimensions;
     }
-    
+
 
 }

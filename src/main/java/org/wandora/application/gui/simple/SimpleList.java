@@ -39,25 +39,29 @@ import org.wandora.application.gui.UIConstants;
  * @author akivela
  */
 public class SimpleList<T> extends JList<T> {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     public SimpleList() {
         super();
     }
-    
+
+
     public SimpleList(ListModel<T> m) {
         super(m);
     }
-    
+
+
     public SimpleList(T[] a) {
         super(a);
     }
-    
+
+
     public SimpleList(Collection<T> c) {
         super((T[]) c.toArray());
     }
-    
+
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);

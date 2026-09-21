@@ -37,28 +37,29 @@ import org.wandora.application.gui.UIConstants;
 
 
 
-
 /**
  *
  * @author akivela
  */
 public class SimpleMenu extends JMenu {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     /** Creates a new instance of SimpleMenu */
     public SimpleMenu() {
         super();
     }
-    
+
+
     public SimpleMenu(String menuName) {
         this(menuName, UIBox.getIcon("gui/icons/empty.png"));
     }
-    
+
+
     public SimpleMenu(String menuName, Icon icon) {
-        if(menuName.startsWith("[") && menuName.endsWith("]")) {
+        if (menuName.startsWith("[") && menuName.endsWith("]")) {
             setEnabled(false);
-            menuName = menuName.substring(1, menuName.length()-1);
+            menuName = menuName.substring(1, menuName.length() - 1);
         }
         setFont(UIConstants.menuFont);
         UIConstants.setFancyFont(this);
@@ -67,12 +68,12 @@ public class SimpleMenu extends JMenu {
         setName(menuName);
         setIcon(icon);
     }
-    
-    
+
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);
         super.paint(g);
     }
-    
+
 }

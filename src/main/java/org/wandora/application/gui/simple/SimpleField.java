@@ -69,318 +69,318 @@ import org.wandora.utils.logger.Log4j2Logger;
  *
  * @author  akivela
  */
-public class SimpleField extends JTextField implements MouseListener, KeyListener, ActionListener, SimpleComponent, Clipboardable, DropTargetListener, DragGestureListener {
-    
+public class SimpleField extends JTextField implements MouseListener, KeyListener, ActionListener, SimpleComponent,
+        Clipboardable, DropTargetListener, DragGestureListener {
+
     private static final long serialVersionUID = 1L;
-    
+
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleField.class);
-    
+
     protected Border defaultBorder = null;
     protected DropTarget dt;
     protected Wandora wandora = null;
     protected UndoManager undoManager = null;
-    protected Insets defaultMargins = new Insets(3,3,3,3);
-    
-    
+    protected Insets defaultMargins = new Insets(3, 3, 3, 3);
+
+
     protected String[] options = new String[] {};
     private Object[] popupStruct = new Object[] {
-        "Cut", UIBox.getIcon("gui/icons/cut.png"),
-        "Copy", UIBox.getIcon("gui/icons/copy.png"),
-        "Paste", UIBox.getIcon("gui/icons/paste.png"),
-        "Clear", UIBox.getIcon("gui/icons/clear.png")
+            "Cut", UIBox.getIcon("gui/icons/cut.png"),
+            "Copy", UIBox.getIcon("gui/icons/copy.png"),
+            "Paste", UIBox.getIcon("gui/icons/paste.png"),
+            "Clear", UIBox.getIcon("gui/icons/clear.png")
     };
-    
-    
+
+
     public SimpleField(String name) {
         super(name);
         initialize();
     }
-    
-    
-    
+
+
+
     /** Creates a new instance of SimpleField */
     public SimpleField() {
         initialize();
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     public void initialize() {
         this.addMouseListener(this);
-        // this.setFocusTraversalKeysEnabled(false);
         this.addKeyListener(this);
         this.setFocusable(true);
         this.addFocusListener(this);
         this.setFocusTraversalKeysEnabled(true);
-        this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,0)));
-        this.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB,InputEvent.SHIFT_DOWN_MASK)));
+        this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,
+                Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, 0)));
+        this.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,
+                Set.of(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK)));
         this.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-        
-        // undoManager = new UndoManager();
-        // Document document = this.getDocument();
-        // document.addUndoableEditListener(undoManager);
- 
+
         this.setMargin(defaultMargins);
-        
+
         this.setDragEnabled(true);
         dt = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
-        
+
         setPopupMenu();
     }
-    
-    
-    
+
+
+
     public void setPopupMenu() {
         JPopupMenu popup = UIBox.makePopupMenu(popupStruct, this);
         setComponentPopupMenu(popup);
     }
-    
-    
-    
+
+
+
     public void setOptions(String[] ops) {
         this.options = ops;
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     public void setCurrentPart(String partText) {
         setPart(currentPartNumber(), partText);
     }
-    
-    
+
+
     public void setPart(int partNumber, String partText) {
         String[] fields = text2Parts(this.getText());
-        String oldPart = fields[partNumber];
         fields[partNumber] = partText;
         setText(parts2Text(fields));
-        moveCaretToPart(partNumber+1);
+        moveCaretToPart(partNumber + 1);
     }
-   
-    
+
+
     public int currentPartNumber() {
         String s = getText().substring(0, getCaretPosition());
         String[] fields = text2Parts(s);
-        return fields.length-1;
+        return fields.length - 1;
     }
-    
-    
+
+
     public String currentPartString() {
         String s = getText().substring(0, getCaretPosition());
         String[] fields = text2Parts(s);
-        return fields[fields.length-1];
+        return fields[fields.length - 1];
     }
-    
-   
+
+
 
     public String parts2Text(String[] fields) {
         StringBuilder sb = new StringBuilder();
         int size = fields.length;
-        for(int i=0; i<size; i++) {
+        for (int i = 0; i < size; i++) {
             sb.append(fields[i]);
-            if(i<size-1) sb.append(" ; ");
+            if (i < size - 1)
+                sb.append(" ; ");
         }
         return sb.toString();
     }
 
-    
+
     public String[] text2Parts(String text) {
         String[] parts = text.split(" ; ");
         try {
-            if(Pattern.compile(" ; " + "$").matcher(text).find()) {
+            if (Pattern.compile(" ; " + "$").matcher(text).find()) {
                 String[] parts2 = new String[parts.length + 1];
-                for(int i=0; i<parts.length; i++) {
+                for (int i = 0; i < parts.length; i++) {
                     parts2[i] = parts[i];
                 }
                 parts2[parts.length] = "";
                 parts = parts2;
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error(e);
         }
         return parts;
     }
-    
-    
+
+
     public void moveCaretToPart(int partNumber) {
         Pattern p = Pattern.compile("^" + " ; ");
         String text = getText();
         int i = 0;
         int c = 0;
-        for(; i<text.length(); i++) {
+        for (; i < text.length(); i++) {
             Matcher m = p.matcher(text.substring(i));
-            if(m.find()) {
+            if (m.find()) {
                 c++;
-                i = i+m.end();
+                i = i + m.end();
             }
-            if(c == partNumber) break;
+            if (c == partNumber)
+                break;
         }
         setCaretPosition(i);
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
-    
+
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void keyPressed(java.awt.event.KeyEvent keyEvent) {
     }
-    
+
+
     @Override
     public void keyReleased(java.awt.event.KeyEvent e) {
-/*        if(listWindow==null && e.getKeyCode()==e.VK_TAB){
+        /*        if(listWindow==null && e.getKeyCode()==e.VK_TAB){
             e.consume();
             showList(); 
         }*/
     }
-    
+
+
     @Override
     public void keyTyped(java.awt.event.KeyEvent e) {
-/*        if(listWindow!=null){
-            e.setSource(listWindow.l);
-            listWindow.l.dispatchEvent(e);
-        }*/
     }
-    
+
+
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
-        if(c.equals("Copy")) {
+        if (c.equals("Copy")) {
             this.copy();
         }
-        else if(c.equals("Cut")) {
+        else if (c.equals("Cut")) {
             this.cut();
         }
-        else if(c.equals("Paste")) {
+        else if (c.equals("Paste")) {
             this.paste();
         }
-        else if(c.equals("Clear")) {
+        else if (c.equals("Clear")) {
             this.setText("");
         }
-        else if(c.equals("Undo")) {
-            if(undoManager != null) {
-                if(undoManager.canUndo()) {
+        else if (c.equals("Undo")) {
+            if (undoManager != null) {
+                if (undoManager.canUndo()) {
                     undoManager.undo();
                 }
             }
         }
-        else if(c.equals("Redo")) {
-            if(undoManager != null) {
-                if(undoManager.canRedo()) {
+        else if (c.equals("Redo")) {
+            if (undoManager != null) {
+                if (undoManager.canRedo()) {
                     undoManager.redo();
                 }
             }
         }
 
-    }    
+    }
 
-    
-    
-    
+
+
     // -------------------------------------------------------------------------
     // --------------------------------------------------------------- FOCUS ---
     // -------------------------------------------------------------------------
-    
-    
-     
-    
+
+
+
     @Override
     public void focusGained(java.awt.event.FocusEvent focusEvent) {
-        if(wandora == null) wandora = Wandora.getWandora(this);
-        if(wandora != null) {
+        if (wandora == null)
+            wandora = Wandora.getWandora(this);
+        if (wandora != null) {
             wandora.gainFocus(this);
         }
     }
-    
+
+
     @Override
     public void focusLost(java.awt.event.FocusEvent focusEvent) {
         // DO NOTHING...
     }
-   
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // --------------------------------------------------------- DRAG & DROP ---
     // -------------------------------------------------------------------------
-    
-    
 
-    
+
+
     @Override
     public void dragEnter(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
-        if(! UIConstants.dragBorder.equals( this.getBorder())) {
+        if (!UIConstants.dragBorder.equals(this.getBorder())) {
             defaultBorder = this.getBorder();
             this.setBorder(UIConstants.dragBorder);
         }
     }
-    
-    
+
+
     @Override
     public void dragExit(java.awt.dnd.DropTargetEvent dropTargetEvent) {
         this.setBorder(defaultBorder);
     }
-    
-    
+
+
     @Override
     public void dragOver(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
-        if(! UIConstants.dragBorder.equals( this.getBorder())) {
+        if (!UIConstants.dragBorder.equals(this.getBorder())) {
             defaultBorder = this.getBorder();
             this.setBorder(UIConstants.dragBorder);
         }
     }
-    
-    
+
+
     @Override
     public void drop(java.awt.dnd.DropTargetDropEvent e) {
         try {
             DataFlavor fileListFlavor = DataFlavor.javaFileListFlavor;
             DataFlavor stringFlavor = DataFlavor.stringFlavor;
             Transferable tr = e.getTransferable();
-            if(e.isDataFlavorSupported(fileListFlavor)) {
+            if (e.isDataFlavorSupported(fileListFlavor)) {
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                 java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
-                String text="";
-                for( File file : files ) {
-                    if(text.length()>0) text+=";";
-                    text+=file.getPath();
+                String text = "";
+                for (File file : files) {
+                    if (text.length() > 0)
+                        text += ";";
+                    text += file.getPath();
                 }
                 this.setText(text);
                 e.dropComplete(true);
             }
-            else if(e.isDataFlavorSupported(stringFlavor)) {
+            else if (e.isDataFlavorSupported(stringFlavor)) {
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                String data = (String)tr.getTransferData(stringFlavor);
+                String data = (String) tr.getTransferData(stringFlavor);
                 this.setText(data);
                 e.dropComplete(true);
             }
@@ -389,111 +389,111 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
                 e.rejectDrop();
             }
         }
-        catch(IOException ioe) {
-        	logger.error(ioe);
+        catch (IOException ioe) {
+            logger.error(ioe);
         }
-        catch(UnsupportedFlavorException ufe) {
-        	logger.error(ufe);
+        catch (UnsupportedFlavorException ufe) {
+            logger.error(ufe);
         }
-        catch(Exception ex) {
-        	logger.error(ex);
+        catch (Exception ex) {
+            logger.error(ex);
         }
-        catch(Error err) {
-        	logger.error(err);
+        catch (Error err) {
+            logger.error(err);
         }
         this.setBorder(defaultBorder);
     }
-    
+
+
     @Override
     public void dropActionChanged(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
     }
 
+
     @Override
     public void dragGestureRecognized(java.awt.dnd.DragGestureEvent dragGestureEvent) {
-    }    
-    
-    
-    
+    }
+
+
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);
         super.paint(g);
     }
-    
-    
+
+
     // ----------------------------------------------------------- CLIPBOARD ---
-    
-    
+
+
     @Override
     public void copy() {
         String text = getSelectedText();
-        if(text == null || text.length() == 0) {
+        if (text == null || text.length() == 0) {
             text = getText();
         }
         ClipboardBox.setClipboard(text);
     }
-    
-    
+
+
     @Override
     public void cut() {
         String text = getSelectedText();
-        if(text == null || text.length() == 0) {
+        if (text == null || text.length() == 0) {
             ClipboardBox.setClipboard(getText());
             setText("");
         }
         else {
             ClipboardBox.setClipboard(text);
             removeSelectedText();
-        }   
+        }
     }
-    
-    
+
+
     @Override
     public void paste() {
         String text = ClipboardBox.getClipboard();
         replaceSelectedText(text);
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public void removeSelectedText() {
         try {
             int selectionStartLoc = this.getSelectionStart();
             int selectionEndLoc = this.getSelectionEnd();
 
-            if(selectionStartLoc != selectionEndLoc) {
-                int d = selectionEndLoc-selectionStartLoc;
+            if (selectionStartLoc != selectionEndLoc) {
+                int d = selectionEndLoc - selectionStartLoc;
                 this.getDocument().remove(selectionStartLoc, d);
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
-    
-    
-    
-    
+
+
+
     public void replaceSelectedText(String txt) {
         try {
             int selectionStartLoc = this.getSelectionStart();
             int selectionEndLoc = this.getSelectionEnd();
 
-            if(selectionStartLoc != selectionEndLoc) {
-                int d = selectionEndLoc-selectionStartLoc;
+            if (selectionStartLoc != selectionEndLoc) {
+                int d = selectionEndLoc - selectionStartLoc;
                 this.getDocument().remove(selectionStartLoc, d);
             }
             this.getDocument().insertString(selectionStartLoc, txt, null);
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
-    
+
+
 }
 
 

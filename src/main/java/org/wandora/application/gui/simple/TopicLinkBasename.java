@@ -28,7 +28,6 @@ package org.wandora.application.gui.simple;
 
 
 
-
 import java.awt.event.MouseEvent;
 
 import org.wandora.application.Wandora;
@@ -44,30 +43,30 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author  akivela
  */
 public class TopicLinkBasename extends SimpleLabel {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicLinkBasename.class);
-    
+
     protected Wandora parent;
     protected Locator locator;
     protected Topic topic;
-    
-    
-    
+
+
+
     /** Creates a new instance of TopicLink */
     public TopicLinkBasename(Topic t, Wandora wandora) {
         super();
         try {
             this.topic = t;
-            this.locator=(Locator)topic.getOneSubjectIdentifier();
-            this.parent=wandora;
+            this.locator = (Locator) topic.getOneSubjectIdentifier();
+            this.parent = wandora;
             String basename = topic.getBaseName();
-            if(basename != null) {
+            if (basename != null) {
                 this.setText(basename);
             }
             else {
-                if(!topic.isRemoved()) {
+                if (!topic.isRemoved()) {
                     this.setText(locator.toExternalForm());
                 }
                 else {
@@ -75,42 +74,38 @@ public class TopicLinkBasename extends SimpleLabel {
                 }
             }
         }
-        catch(TopicMapException tme){
-        	logger.error(tme);
+        catch (TopicMapException tme) {
+            logger.error(tme);
             this.setText("[Exception retrieving name]");
         }
 
-        java.awt.Color c=parent.topicHilights.get(t);
-        if(c==null) c=parent.topicHilights.getLayerColor(t);
-        if(c!=null){
-              this.setForeground(c);
-//            this.setBackground(c);
-//            this.setOpaque(true);
+        java.awt.Color c = parent.topicHilights.get(t);
+        if (c == null)
+            c = parent.topicHilights.getLayerColor(t);
+        if (c != null) {
+            this.setForeground(c);
         }
         this.setVisible(true);
     }
-        
-        
-    
-    
+
+
+
     public Topic getTopic() {
         return topic;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
-    
+
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent e) {
-        if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount()>=2) {
-            //System.out.println("link pressed");
+        if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
             parent.applyChangesAndOpen(locator);
         }
     }
 
-    
+
 }

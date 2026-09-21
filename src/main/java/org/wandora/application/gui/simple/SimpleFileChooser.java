@@ -39,7 +39,6 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 
-
 /**
  *
  * @author akivela
@@ -47,87 +46,55 @@ import org.wandora.utils.logger.Log4j2Logger;
 public class SimpleFileChooser extends JFileChooser {
 
     private static final long serialVersionUID = 1L;
-   
+
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleFileChooser.class);
-    
+
     public SimpleFileChooser() {
         setLookAndFeel();
     }
+
+
     public SimpleFileChooser(String currentPath) {
         setLookAndFeel();
         File f = new File(currentPath);
-        if(f.exists()) {
+        if (f.exists()) {
             this.setCurrentDirectory(f);
         }
     }
 
-    
-    public void setLookAndFeel() {
-        /*
-         * FileChooser.listFont
-         * com.sun.java.plaf.windows.WindowsFileChooserUI
-         */
-        try {
-            //this.setUI(new SimpleFileChooserUI(this));
-            //System.out.println("SET UI: "+this.getUI());
-        }
-        catch(Exception e) { logger.error(e); }
-        catch(Error er) { logger.error(er); }
 
+    public void setLookAndFeel() {
     }
-    
-    
+
+
     public int open(Component parent, String buttonLabel) {
         return open(parent, JFileChooser.OPEN_DIALOG, buttonLabel);
     }
+
+
     public int open(Component parent) {
         return open(parent, JFileChooser.OPEN_DIALOG, null);
     }
+
+
     public int open(Component parent, int type) {
         return open(parent, type, null);
     }
+
+
     public int open(Component parent, int type, String buttonLabel) {
-        /*
-        LookAndFeel originalLookAndFeel = null;
-        try {
-            originalLookAndFeel = UIManager.getLookAndFeel();
-            UIManager.setLookAndFeel(
-                UIManager.getSystemLookAndFeelClassName()
-            );
-            SwingUtilities.updateComponentTreeUI(this);
-            this.validate();
-        }
-        catch (UnsupportedLookAndFeelException e) {
-           // handle exception
-        }
-        catch (ClassNotFoundException e) {
-           // handle exception
-        }
-        catch (InstantiationException e) {
-           // handle exception
-        }
-        catch (IllegalAccessException e) {
-           // handle exception
-        }
-
-         
-        */ 
-        
-        
-        // ***** RESTORE PREVIOUS DIRECTORY ******
-
-        if(parent instanceof Wandora && parent != null) {
+        if (parent instanceof Wandora && parent != null) {
             String currentDirectory = ((Wandora) parent).options.get("current.directory");
-            if(currentDirectory != null) {
+            if (currentDirectory != null) {
                 File f = new File(currentDirectory);
-                if(f.exists()) {
+                if (f.exists()) {
                     this.setCurrentDirectory(f);
                 }
             }
         }
         int answer = JFileChooser.CANCEL_OPTION;
-        if(buttonLabel == null) {
-            if(type == JFileChooser.OPEN_DIALOG) {
+        if (buttonLabel == null) {
+            if (type == JFileChooser.OPEN_DIALOG) {
                 answer = this.showOpenDialog(parent);
             }
             else {
@@ -137,41 +104,23 @@ public class SimpleFileChooser extends JFileChooser {
         else {
             answer = this.showDialog(parent, buttonLabel);
         }
-         // ***** SAVE CURRENT DIRECTORY ******
-        if(answer == JFileChooser.APPROVE_OPTION) {
-            if(parent instanceof Wandora wandora && parent != null) {
+        // ***** SAVE CURRENT DIRECTORY ******
+        if (answer == JFileChooser.APPROVE_OPTION) {
+            if (parent instanceof Wandora wandora && parent != null) {
                 wandora.options.put("current.directory", this.getCurrentDirectory().getPath());
             }
         }
-        
-        
-        /*
-        try {
-            if(originalLookAndFeel != null) {
-                UIManager.setLookAndFeel(originalLookAndFeel);
-            }
-        } 
-        catch (UnsupportedLookAndFeelException e) {
-           // handle exception
-        }
-        */
-        
-        
+
         return answer;
     }
-    
-    
-    
+
+
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);
         super.paint(g);
     }
-
-
-
-
-
 
 
 

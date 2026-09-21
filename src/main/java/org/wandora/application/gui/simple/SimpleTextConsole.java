@@ -54,9 +54,9 @@ import org.wandora.utils.logger.Log4j2Logger;
 public class SimpleTextConsole extends SimpleTextPane {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleTextConsole.class);
-    
+
     private static final int DEFAULT_FONT_SIZE = 12;
 
     private static final Color DEFAULT_FOREGROUND_COLOR = Color.BLACK;
@@ -67,26 +67,25 @@ public class SimpleTextConsole extends SimpleTextPane {
 
     private StringBuilder input = null;
     private int inputPos = 0;
-    
+
     private SimpleTextConsoleListener consoleListener = null;
-    
+
     private List<String> history;
     private int historyMaxSize = 999;
-    private int historyPtr=0;
+    private int historyPtr = 0;
     private String tempHistory = null;
-    
-    
-    
+
+
 
     public SimpleTextConsole(SimpleTextConsoleListener cl) {
         input = new StringBuilder("");
         inputPos = 0;
-        
+
         consoleListener = cl;
 
         Font font = new Font(Font.MONOSPACED, Font.PLAIN, DEFAULT_FONT_SIZE);
         setFont(font);
-        
+
         setForeground(foregroundColor);
         setBackground(backgroundColor);
         setCaretColor(foregroundColor);
@@ -94,62 +93,62 @@ public class SimpleTextConsole extends SimpleTextPane {
         history = new ArrayList<String>();
     }
 
-    
+
     public void setFontSize(int s) {
         Font font = new Font(Font.MONOSPACED, Font.PLAIN, s);
         setFont(font);
     }
 
-    
-    
+
 
     protected boolean onKeyPressed(KeyEvent e) {
         boolean consumed = false;
 
-        if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             Document d = this.getDocument();
-            this.setCaretPosition(d.getLength()-1);
+            this.setCaretPosition(d.getLength() - 1);
             eraseInputInConsole();
-            inputPos=0;
+            inputPos = 0;
             String output = handleInput();
             //output("\n"+output);
-            historyPtr=0;
+            historyPtr = 0;
             consumed = true;
         }
-        
-        else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-            if(inputPos < input.length()) {
+
+        else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            if (inputPos < input.length()) {
                 inputPos++;
                 Document d = this.getDocument();
-                this.setCaretPosition(d.getLength()-inputPos);
+                this.setCaretPosition(d.getLength() - inputPos);
             }
             consumed = true;
         }
-        
-        else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            if(inputPos > 0) {
+
+        else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+            if (inputPos > 0) {
                 inputPos--;
                 Document d = this.getDocument();
-                this.setCaretPosition(d.getLength()-inputPos);
+                this.setCaretPosition(d.getLength() - inputPos);
             }
             consumed = true;
         }
-        
-        else if(e.getKeyCode() == KeyEvent.VK_UP) {
-            if(historyPtr == 0) tempHistory = input.toString();
-            if(historyPtr < history.size()) {
-                inputPos=0;
+
+        else if (e.getKeyCode() == KeyEvent.VK_UP) {
+            if (historyPtr == 0)
+                tempHistory = input.toString();
+            if (historyPtr < history.size()) {
+                inputPos = 0;
                 historyPtr++;
                 changeInput(history.get(history.size() - historyPtr));
             }
             consumed = true;
         }
-        
-        else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-            if(historyPtr > 0) {
-                inputPos=0;
+
+        else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+            if (historyPtr > 0) {
+                inputPos = 0;
                 historyPtr--;
-                if(historyPtr == 0) {
+                if (historyPtr == 0) {
                     changeInput(tempHistory);
                 }
                 else {
@@ -158,253 +157,251 @@ public class SimpleTextConsole extends SimpleTextPane {
             }
             consumed = true;
         }
-        
-        else if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+
+        else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
             backspace();
             consumed = true;
         }
-                
-        else if(e.getKeyCode() == KeyEvent.VK_DELETE) {
+
+        else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
             del();
             consumed = true;
         }
-                
-        else if(e.getKeyCode() == KeyEvent.VK_HOME) {
-            inputPos=input.length();
+
+        else if (e.getKeyCode() == KeyEvent.VK_HOME) {
+            inputPos = input.length();
             Document d = this.getDocument();
-            this.setCaretPosition(d.getLength()-inputPos);
+            this.setCaretPosition(d.getLength() - inputPos);
             consumed = true;
         }
-                
-        else if(e.getKeyCode() == KeyEvent.VK_END) {
-            inputPos=0;
+
+        else if (e.getKeyCode() == KeyEvent.VK_END) {
+            inputPos = 0;
             Document d = this.getDocument();
-            this.setCaretPosition(d.getLength()-inputPos);
+            this.setCaretPosition(d.getLength() - inputPos);
             consumed = true;
         }
-        
-        else if(isValidCharacter(e.getKeyChar())) {
+
+        else if (isValidCharacter(e.getKeyChar())) {
             output(e.getKeyChar());
-            input.insert(input.length()-inputPos, e.getKeyChar());
+            input.insert(input.length() - inputPos, e.getKeyChar());
             consumed = true;
         }
-        
-        if(consumed) {
+
+        if (consumed) {
             refresh();
         }
         return consumed;
     }
 
-    
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
         int cpos = getCaretPosition();
         Document d = this.getDocument();
-        if(d.getLength()-cpos <= input.length()) {
-            inputPos = d.getLength()-cpos;
-            this.setCaretPosition(d.getLength()-inputPos);
+        if (d.getLength() - cpos <= input.length()) {
+            inputPos = d.getLength() - cpos;
+            this.setCaretPosition(d.getLength() - inputPos);
         }
     }
 
-    
+
     private boolean isValidCharacter(int c) {
-        if("1234567890qwertyuiopåasdfghjklöäzxcvbnmQWERTYUIOPÅASDFGHJKLÖÄZXCVBNM,.:;-+_'*!\"#¤%&/()=?`@${[]}\\ <>|".indexOf(c) != -1) return true;
+        if ("1234567890qwertyuiopåasdfghjklöäzxcvbnmQWERTYUIOPÅASDFGHJKLÖÄZXCVBNM,.:;-+_'*!\"#¤%&/()=?`@${[]}\\ <>|"
+                .indexOf(c) != -1)
+            return true;
         return false;
     }
-    
-    
+
+
     @Override
     public void cut() {
         super.cut();
     }
-    
-    
-    
+
+
+
     @Override
     public void copy() {
         super.copy();
     }
-    
-    
+
+
     @Override
     public void paste() {
         String t = ClipboardBox.getClipboard();
         output(t);
-        input.insert(input.length()-inputPos, t);
+        input.insert(input.length() - inputPos, t);
         refresh();
     }
-    
-    
-    
+
+
+
     public void paste(String t) {
-        if(t != null) {
+        if (t != null) {
             output(t);
-            input.insert(input.length()-inputPos, t);
+            input.insert(input.length() - inputPos, t);
         }
         refresh();
     }
-    
+
+
     public void changeInput(String newInput) {
         backspace(input.length());
         output(newInput);
         input = new StringBuilder(newInput);
         inputPos = 0;
     }
-    
-    
+
+
     public String handleInput(String in) {
         input = new StringBuilder(in);
         String output = handleInput();
-        historyPtr=0;
-        inputPos=0;
+        historyPtr = 0;
+        inputPos = 0;
         return output;
     }
-    
+
+
     public String handleInput() {
         String output = null;
         String inputStr = input.toString();
-        
-        if(inputStr.length() > 0) {
+
+        if (inputStr.length() > 0) {
             history.add(inputStr);
-            if(history.size() > historyMaxSize) {
+            if (history.size() > historyMaxSize) {
                 history.remove(0);
             }
         }
-        
-        if(consoleListener != null) {
+
+        if (consoleListener != null) {
             output = consoleListener.handleInput(inputStr);
         }
         input = new StringBuilder("");
         inputPos = 0;
         return output;
     }
-    
-    
-    
+
+
+
     public void output(String o) {
         try {
-            if(o != null) {
+            if (o != null) {
                 Document d = this.getDocument();
-                d.insertString(d.getLength()-inputPos, o, null);
-                this.setCaretPosition(d.getLength()-inputPos);
+                d.insertString(d.getLength() - inputPos, o, null);
+                this.setCaretPosition(d.getLength() - inputPos);
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
-    
-    
-    
+
+
+
     public void output(char c) {
         try {
             Document d = this.getDocument();
-            d.insertString(d.getLength()-inputPos, ""+c, null);
-            this.setCaretPosition(d.getLength()-inputPos);
+            d.insertString(d.getLength() - inputPos, "" + c, null);
+            this.setCaretPosition(d.getLength() - inputPos);
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
-    
-    
+
+
+
     public void del() {
-        if(inputPos > 0) {
+        if (inputPos > 0) {
             try {
                 Document d = this.getDocument();
-                d.remove(d.getLength()-inputPos, 1);
-                input.deleteCharAt(input.length()-inputPos);
+                d.remove(d.getLength() - inputPos, 1);
+                input.deleteCharAt(input.length() - inputPos);
                 inputPos--;
-                this.setCaretPosition(d.getLength()-inputPos);
+                this.setCaretPosition(d.getLength() - inputPos);
             }
-            catch(Exception e) {
-            	logger.error(e);
+            catch (Exception e) {
+                logger.error(e);
             }
         }
     }
-    
-    
+
+
     public void backspace() {
-        if(inputPos < input.length()) {
+        if (inputPos < input.length()) {
             try {
                 Document d = this.getDocument();
-                d.remove(d.getLength()-inputPos-1, 1);
-                this.setCaretPosition(d.getLength()-inputPos);
-                input.deleteCharAt(input.length()-inputPos-1);
+                d.remove(d.getLength() - inputPos - 1, 1);
+                this.setCaretPosition(d.getLength() - inputPos);
+                input.deleteCharAt(input.length() - inputPos - 1);
             }
-            catch(Exception e) {
-            	logger.error(e);
+            catch (Exception e) {
+                logger.error(e);
             }
         }
     }
-    
+
+
     public void backspace(int n) {
-        if(inputPos < n) {
+        if (inputPos < n) {
             try {
                 Document d = this.getDocument();
-                d.remove(d.getLength()-inputPos-n, n);
-                this.setCaretPosition(d.getLength()-inputPos);
-                input = new StringBuilder(input.subSequence(0, input.length()-inputPos-1));
+                d.remove(d.getLength() - inputPos - n, n);
+                this.setCaretPosition(d.getLength() - inputPos);
+                input = new StringBuilder(input.subSequence(0, input.length() - inputPos - 1));
             }
-            catch(Exception e) {
-            	logger.error(e);
+            catch (Exception e) {
+                logger.error(e);
             }
         }
     }
-    
+
+
     private void eraseInputInConsole() {
         try {
             Document d = this.getDocument();
             int inputLen = input.length();
-            d.remove(d.getLength()-inputLen, inputLen);
+            d.remove(d.getLength() - inputLen, inputLen);
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
 
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
-    
+
+
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);
         super.paint(g);
     }
 
-    
-    
+
 
     @Override
     protected void processKeyEvent(KeyEvent e) {
-        if(e.getID() != KeyEvent.KEY_PRESSED) {
+        if (e.getID() != KeyEvent.KEY_PRESSED) {
             return;
         }
         boolean consumed = onKeyPressed(e);
-        if(!consumed) {
+        if (!consumed) {
             super.processKeyEvent(e);
         }
     }
 
-    
-    
 
-    
-    
+
     public void refresh() {
 
     }
-    
-    
-    
-    
+
+
 
     public void clear() {
         setText("");
@@ -413,45 +410,44 @@ public class SimpleTextConsole extends SimpleTextPane {
         refresh();
     }
 
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     public void save() {
-        SimpleFileChooser chooser=UIConstants.getFileChooser();
-        if(chooser.open(Wandora.getWandora(), "Export")==SimpleFileChooser.APPROVE_OPTION){
+        SimpleFileChooser chooser = UIConstants.getFileChooser();
+        if (chooser.open(Wandora.getWandora(), "Export") == SimpleFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             try {
                 IObox.saveFile(file, this.getText());
             }
-            catch(Exception e){
-            	logger.error(e);
+            catch (Exception e) {
+                logger.error(e);
             }
         }
     }
-    
 
-    
-    
+
+
     public void saveInput() {
-        SimpleFileChooser chooser=UIConstants.getFileChooser();
-        if(chooser.open(Wandora.getWandora(), "Export")==SimpleFileChooser.APPROVE_OPTION){
+        SimpleFileChooser chooser = UIConstants.getFileChooser();
+        if (chooser.open(Wandora.getWandora(), "Export") == SimpleFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             try {
                 StringBuilder data = new StringBuilder("");
-                for( String o : history ) {
+                for (String o : history) {
                     data.append(o);
                     data.append(System.getProperty("line.separator"));
                 }
                 data.append(input);
                 IObox.saveFile(file, data.toString());
             }
-            catch(Exception e){
-            	logger.error(e);
+            catch (Exception e) {
+                logger.error(e);
             }
         }
     }
-    
+
 }

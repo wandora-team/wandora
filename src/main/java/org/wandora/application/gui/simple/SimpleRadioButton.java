@@ -42,9 +42,9 @@ import org.wandora.application.gui.UIConstants;
  * @author akivela
  */
 public class SimpleRadioButton extends JRadioButton {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     /** Creates a new instance of SimpleRadioButton */
     public SimpleRadioButton() {
         this.setFont(UIConstants.buttonLabelFont);
@@ -54,7 +54,7 @@ public class SimpleRadioButton extends JRadioButton {
         this.setFocusPainted(false);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
-    
+
 
     @Override
     public void paint(Graphics g) {

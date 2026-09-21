@@ -44,36 +44,37 @@ import org.wandora.application.gui.table.MixedTopicTable;
 public class SearchTopicsResults extends javax.swing.JDialog {
 
     private static final long serialVersionUID = 1L;
-    
+
     private boolean searchAgain = false;
-    
-    
+
+
     /** Creates new form SearchTopicsResults */
     public SearchTopicsResults(Wandora wandora, Collection<?> results) {
         super(wandora, true);
         initComponents();
-        
-        if(results != null && results.size() > 0) {
+
+        if (results != null && results.size() > 0) {
             MixedTopicTable table = new MixedTopicTable(wandora);
-            table.initialize(results.toArray(new Object[] {} ), null);
-            JScrollPane sp=new JScrollPane(table);
+            table.initialize(results.toArray(new Object[] {}), null);
+            JScrollPane sp = new JScrollPane(table);
             resultPanel.add(sp, BorderLayout.CENTER);
         }
         else {
             resultPanel.add(emptyResultSetLabel, BorderLayout.CENTER);
         }
-        
+
         searchAgain = false;
         this.setSize(800, 600);
-        if(wandora != null) UIBox.centerWindow(this, wandora);
+        if (wandora != null)
+            UIBox.centerWindow(this, wandora);
     }
 
 
     public SearchTopicsResults(Wandora wandora, MixedTopicTable table) {
         super(wandora, true);
         initComponents();
-        if(table != null) {
-            JScrollPane sp=new JScrollPane(table);
+        if (table != null) {
+            JScrollPane sp = new JScrollPane(table);
             resultPanel.add(sp, BorderLayout.CENTER);
         }
         else {
@@ -81,21 +82,25 @@ public class SearchTopicsResults extends javax.swing.JDialog {
         }
         searchAgain = false;
         this.setSize(800, 600);
-        if(wandora != null) UIBox.centerWindow(this, wandora);
+        if (wandora != null)
+            UIBox.centerWindow(this, wandora);
     }
 
 
 
     // ------
-    
+
+
     public boolean doSearchAgain() {
         return searchAgain;
     }
+
+
     public void hideAgainButton() {
         this.againButton.setVisible(false);
     }
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -162,15 +167,17 @@ public class SearchTopicsResults extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-    searchAgain = false;
-    setVisible(false);
-}//GEN-LAST:event_closeButtonActionPerformed
 
-private void againButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_againButtonActionPerformed
-    searchAgain = true;
-    setVisible(false);
-}//GEN-LAST:event_againButtonActionPerformed
+    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
+        searchAgain = false;
+        setVisible(false);
+    }//GEN-LAST:event_closeButtonActionPerformed
+
+
+    private void againButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_againButtonActionPerformed
+        searchAgain = true;
+        setVisible(false);
+    }//GEN-LAST:event_againButtonActionPerformed
 
 
 

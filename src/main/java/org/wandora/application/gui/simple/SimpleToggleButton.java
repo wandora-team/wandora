@@ -41,25 +41,25 @@ import org.wandora.application.gui.UIConstants;
 
 
 
-
 /**
  *
  * @author akivela
  */
 public class SimpleToggleButton extends JToggleButton {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     Icon onIcon = null;
     Icon offIcon = null;
-    
-    
-    
+
+
+
     public SimpleToggleButton(String label) {
         this();
         this.setText(label);
     }
-    
+
+
     public SimpleToggleButton() {
         this.setFocusPainted(false);
         this.setFont(UIConstants.buttonLabelFont);
@@ -70,33 +70,35 @@ public class SimpleToggleButton extends JToggleButton {
         this.offIcon = UIBox.getIcon("gui/icons/checkbox.png");
         this.onIcon = UIBox.getIcon("gui/icons/checkbox_selected.png");
         this.addMouseListener(
-            new MouseAdapter() {
-                @Override
-                public void mouseEntered(java.awt.event.MouseEvent evt) {
-                    if(evt.getComponent().isEnabled())
-                        evt.getComponent().setBackground(UIConstants.defaultActiveBackground);
-                }
-                @Override
-                public void mouseExited(java.awt.event.MouseEvent evt) {
-                    if(evt.getComponent().isEnabled())
-                        evt.getComponent().setBackground(UIConstants.defaultActiveBackground);
-                }
-            }
-        );
+                new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(java.awt.event.MouseEvent evt) {
+                        if (evt.getComponent().isEnabled())
+                            evt.getComponent().setBackground(UIConstants.defaultActiveBackground);
+                    }
+
+
+                    @Override
+                    public void mouseExited(java.awt.event.MouseEvent evt) {
+                        if (evt.getComponent().isEnabled())
+                            evt.getComponent().setBackground(UIConstants.defaultActiveBackground);
+                    }
+                });
     }
-    
-    
+
+
     public SimpleToggleButton(String onIconResource, String offIconResource) {
         this(onIconResource, offIconResource, false);
     }
-    
+
+
     public SimpleToggleButton(String onIconResource, String offIconResource, boolean isSelected) {
         this.onIcon = UIBox.getIcon(onIconResource);
         this.offIcon = UIBox.getIcon(offIconResource);
-        
+
         this.setBackground(null);
         this.setForeground(null);
-        
+
         setSelected(isSelected);
         setBorderPainted(false);
         setFocusPainted(false);
@@ -104,33 +106,37 @@ public class SimpleToggleButton extends JToggleButton {
         setMargin(null);
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
-    
-    
+
+
     public SimpleToggleButton(Icon onIcon, Icon offIcon, boolean isSelected) {
         this.onIcon = onIcon;
         this.offIcon = offIcon;
-        
+
         setSelected(isSelected);
     }
-    
-    
+
+
     @Override
     public void setSelected(boolean state) {
         super.setSelected(state);
-        if(state) setIcon(onIcon);
-        else setIcon(offIcon);
+        if (state)
+            setIcon(onIcon);
+        else
+            setIcon(offIcon);
     }
-    
-    
-    
+
+
+
     @Override
     public void paint(Graphics graphics) {
-        if(isSelected()) setIcon(onIcon);
-        else setIcon(offIcon);
+        if (isSelected())
+            setIcon(onIcon);
+        else
+            setIcon(offIcon);
         UIConstants.preparePaint(graphics);
         super.paint(graphics);
     }
-    
-    
-    
+
+
+
 }

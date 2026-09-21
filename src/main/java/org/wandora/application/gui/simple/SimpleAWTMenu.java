@@ -36,24 +36,22 @@ import org.wandora.application.gui.UIConstants;
  * @author anttirt
  */
 public class SimpleAWTMenu extends Menu {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     public SimpleAWTMenu() {
     }
-    
+
+
     public SimpleAWTMenu(String menuName) {
-        if(menuName.startsWith("[") && menuName.endsWith("]")) {
+        if (menuName.startsWith("[") && menuName.endsWith("]")) {
             setEnabled(false);
-            menuName = menuName.substring(1, menuName.length()-1);
+            menuName = menuName.substring(1, menuName.length() - 1);
         }
         setFont(UIConstants.menuFont);
         setLabel(menuName);
         setName(menuName);
     }
-    
-    
-    
-    
+
 
 }

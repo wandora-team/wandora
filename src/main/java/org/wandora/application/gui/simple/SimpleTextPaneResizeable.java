@@ -55,66 +55,67 @@ import javax.swing.JViewport;
 
 
 public class SimpleTextPaneResizeable extends SimpleTextPane implements MouseMotionListener {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     protected boolean onlyVerticalResize = false;
     protected boolean mousePressedInTriangle = false;
     protected Point mousePressedPoint = null;
     protected Dimension sizeAtPress = null;
     protected Dimension newSize = null;
-    
-    
+
+
     // Reference to the underlying scrollpane
     protected JScrollPane scrollPane = null;
- 
+
     // Height and width.. not hypotenuse
     protected int triangleSize = 15;
- 
+
     // Is the mouse in the triangle
     protected boolean inTheTriangleZone = false;
-    
-    
-    
+
+
+
     public SimpleTextPaneResizeable(JPanel parent) {
         super(parent);
         addMouseMotionListener(this);
     }
+
+
     public SimpleTextPaneResizeable() {
         this(null);
     }
-    
-    
-    
+
+
+
     /**
      * Paint the text area
      */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D graphics = (Graphics2D)g;
-        if(inTheTriangleZone) {
-            graphics.setColor(new Color(0.5f,0.5f,0.5f,0.75f));
+        Graphics2D graphics = (Graphics2D) g;
+        if (inTheTriangleZone) {
+            graphics.setColor(new Color(0.5f, 0.5f, 0.5f, 0.75f));
         }
         else {
-            graphics.setColor(new Color(0.5f,0.5f,0.5f,0.2f));
+            graphics.setColor(new Color(0.5f, 0.5f, 0.5f, 0.2f));
         }
         graphics.fillPolygon(getTriangle());
     }
-    
-    
-    
-    
+
+
+
     protected JScrollPane getScrollPane() {
- 
+
         // Get scrollpane, if first time calling this method then add an addjustment listener
         // to the scroll pane
- 
-        if(this.getParent() instanceof JViewport) {
-            if(scrollPane == null) {
-                JViewport p = (JViewport)this.getParent();
-                scrollPane = (JScrollPane)p.getParent();
-                scrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener(){
+
+        if (this.getParent() instanceof JViewport) {
+            if (scrollPane == null) {
+                JViewport p = (JViewport) this.getParent();
+                scrollPane = (JScrollPane) p.getParent();
+                scrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
                     @Override
                     public void adjustmentValueChanged(AdjustmentEvent e) {
                         //need to repaint the triangle when scroll bar moves
@@ -128,13 +129,12 @@ public class SimpleTextPaneResizeable extends SimpleTextPane implements MouseMot
 
 
 
-    
     @Override
     public void mouseMoved(MouseEvent e) {
         Point p = e.getPoint();
         Polygon polygon = getTriangle();
- 
-        if(polygon.contains(p)) {
+
+        if (polygon.contains(p)) {
             inTheTriangleZone = true;
             this.setCursor(new Cursor(Cursor.SE_RESIZE_CURSOR));
             this.repaint();
@@ -145,19 +145,19 @@ public class SimpleTextPaneResizeable extends SimpleTextPane implements MouseMot
             this.repaint();
         }
     }
-    
-    
-    
+
+
+
     @Override
     public void mouseDragged(MouseEvent e) {
         Point p = e.getPoint();
-        if(mousePressedInTriangle) { 
+        if (mousePressedInTriangle) {
             // Mouse was pressed in triangle so we can resize
             inTheTriangleZone = true;
             int xDiff = (mousePressedPoint.x - p.x);
             int yDiff = (mousePressedPoint.y - p.y);
-            
-            if(onlyVerticalResize) {
+
+            if (onlyVerticalResize) {
                 newSize = new Dimension(sizeAtPress.width, sizeAtPress.height - yDiff);
             }
             else {
@@ -168,7 +168,7 @@ public class SimpleTextPaneResizeable extends SimpleTextPane implements MouseMot
             this.revalidate();
             this.repaint();
 
-            if(sp != null) {
+            if (sp != null) {
                 sp.getViewport().setSize(newSize);
                 sp.getViewport().setPreferredSize(newSize);
                 sp.getViewport().setMinimumSize(newSize);
@@ -184,57 +184,56 @@ public class SimpleTextPaneResizeable extends SimpleTextPane implements MouseMot
         }
     }
 
-    
-    
+
+
     public void setHorizontallyResizeable(boolean rh) {
         onlyVerticalResize = !rh;
     }
 
-    
+
     @Override
     public void mousePressed(MouseEvent e) {
         Point p = e.getPoint();
-        if(getTriangle().contains(p)) {
+        if (getTriangle().contains(p)) {
             mousePressedInTriangle = true;
             mousePressedPoint = p;
             sizeAtPress = getScrollPane().getSize();
         }
     }
 
-    
+
     @Override
     public void mouseReleased(MouseEvent e) {
         mousePressedInTriangle = false;
         mousePressedPoint = null;
     }
 
-    
+
     @Override
     public void mouseExited(MouseEvent e) {
-        inTheTriangleZone=false;
+        inTheTriangleZone = false;
         repaint();
     }
-    
-    
-    
-    
+
+
+
     private Polygon getTriangle() {
         JViewport viewport = getScrollPane().getViewport();
- 
+
         // Get bounds of viewport
         Rectangle bounds = viewport.getBounds();
- 
+
         // Position of viewport relative to text area.
         Point viewportPosition = viewport.getViewPosition();
- 
+
         int w = viewportPosition.x + bounds.width;
         int h = viewportPosition.y + bounds.height;
- 
-        int[] xs = {w,w,w-triangleSize};
-        int[] ys = {h-triangleSize,h,h};
- 
+
+        int[] xs = { w, w, w - triangleSize };
+        int[] ys = { h - triangleSize, h, h };
+
         Polygon polygon = new Polygon(xs, ys, 3);
         return polygon;
     }
-    
+
 }

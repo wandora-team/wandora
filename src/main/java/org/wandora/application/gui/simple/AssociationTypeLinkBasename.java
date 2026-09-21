@@ -37,21 +37,21 @@ import org.wandora.topicmap.Topic;
  * @author akivela
  */
 public class AssociationTypeLinkBasename extends TopicLinkBasename {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private AssociationTable associationTable = null;
-    
-    
+
+
     /** Creates a new instance of AssociationTypeLinkBasename */
     public AssociationTypeLinkBasename(AssociationTable at, Topic t, Wandora wandora) {
         super(t, wandora);
         associationTable = at;
     }
-    
-    
+
+
     public AssociationTable getAssociationTable() {
         return associationTable;
     }
-    
+
 }

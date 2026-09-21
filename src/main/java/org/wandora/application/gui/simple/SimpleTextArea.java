@@ -36,7 +36,7 @@ import org.wandora.application.gui.UIConstants;
 public class SimpleTextArea extends JTextArea {
 
     private static final long serialVersionUID = 1L;
-        
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);

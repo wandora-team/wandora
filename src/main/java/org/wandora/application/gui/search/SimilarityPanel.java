@@ -110,7 +110,7 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
     public static final int SIMILARITY_COSINE_SIMILARITY = 122;
     public static final int SIMILARITY_Q_GRAM = 136;
 
-    
+
     
     @SuppressWarnings("unchecked")
     public Tuples.T2<String, Integer>[] similarityTypes = new Tuples.T2[] {
@@ -130,86 +130,84 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         new Tuples.T2<>("Cosine similarity",                     Integer.valueOf(SIMILARITY_COSINE_SIMILARITY)),
         new Tuples.T2<>("q-gram",                                Integer.valueOf(SIMILARITY_Q_GRAM)),
     };
-    
-    
+
+
     @SuppressWarnings("unchecked")
     public Tuples.T2<String, InterfaceTokeniser>[] similarityTokenizers = new Tuples.T2[] {
-        new Tuples.T2<>("Whitespace", new TokeniserWhitespace()),
-        new Tuples.T2<>("CSVBasic", new TokeniserCSVBasic()),
-        new Tuples.T2<>("QGram2", new TokeniserQGram2()),
-        new Tuples.T2<>("QGram2 extended", new TokeniserQGram2Extended()),
-        new Tuples.T2<>("QGram3", new TokeniserQGram3()),
-        new Tuples.T2<>("QGram3 extended", new TokeniserQGram3Extended())
+            new Tuples.T2<>("Whitespace", new TokeniserWhitespace()),
+            new Tuples.T2<>("CSVBasic", new TokeniserCSVBasic()),
+            new Tuples.T2<>("QGram2", new TokeniserQGram2()),
+            new Tuples.T2<>("QGram2 extended", new TokeniserQGram2Extended()),
+            new Tuples.T2<>("QGram3", new TokeniserQGram3()),
+            new Tuples.T2<>("QGram3 extended", new TokeniserQGram3Extended())
     };
-    
-    
+
+
     private TopicTable resultsTable = null;
     private SimpleLabel message = null;
-    
-    
-    
+
+
+
     /**
      * Creates new form SimilarityPanel
      */
     public SimilarityPanel() {
         initComponents();
-        
+
         message = new SimpleLabel();
         message.setHorizontalAlignment(SimpleLabel.CENTER);
         message.setIcon(UIBox.getIcon("gui/icons/warn.png"));
-        
+
         similarityTextField.setPreferredSize(new Dimension(200, 26));
-        
+
         similarityThresholdSlider.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         similarityTypeComboBox.removeAllItems();
         similarityTypeComboBox.setEditable(false);
-        for(int i=0; i<similarityTypes.length; i++) {
+        for (int i = 0; i < similarityTypes.length; i++) {
             similarityTypeComboBox.addItem(similarityTypes[i].e1.toString());
         }
         similarityTokenizerComboBox.removeAllItems();
         similarityTokenizerComboBox.setEditable(false);
-        for(int i=0; i<similarityTokenizers.length; i++) {
+        for (int i = 0; i < similarityTokenizers.length; i++) {
             similarityTokenizerComboBox.addItem(similarityTokenizers[i].e1.toString());
         }
         updateSimilarityOptions();
-        
+
         similarityTextField.addKeyListener(
-            new java.awt.event.KeyAdapter() {
-                @Override
-                public void keyReleased(java.awt.event.KeyEvent evt){
-                    if(evt.getKeyChar()==KeyEvent.VK_ENTER) {
-                        doSearch();
+                new java.awt.event.KeyAdapter() {
+                    @Override
+                    public void keyReleased(java.awt.event.KeyEvent evt) {
+                        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+                            doSearch();
+                        }
                     }
-                }
-            }
-        );
+                });
     }
 
-    
-    
+
+
     public void removeResultScrollPanesMouseListeners() {
         MouseWheelListener[] mouseWheelListeners = resultScrollPane.getMouseWheelListeners();
-        for(MouseWheelListener listener : mouseWheelListeners) {
+        for (MouseWheelListener listener : mouseWheelListeners) {
             resultScrollPane.removeMouseWheelListener(listener);
         }
     }
-    
-    
-    
+
+
 
     public String getSimilarityQuery() {
         return similarityTextField.getText();
     }
-    
-    
+
+
     public int getSimilarityType() {
         Object type = similarityTypeComboBox.getSelectedItem();
-        if(type != null) {
+        if (type != null) {
             Object t = null;
-            for(Tuples.T2<?,?> similarityType : similarityTypes) {
-                if(type.equals(similarityType.e1)) {
+            for (Tuples.T2<?, ?> similarityType : similarityTypes) {
+                if (type.equals(similarityType.e1)) {
                     t = similarityType.e2;
-                    if(t instanceof Integer) {
+                    if (t instanceof Integer) {
                         return ((Integer) t).intValue();
                     }
                 }
@@ -217,17 +215,17 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         }
         return 0;
     }
-    
-    
-    
+
+
+
     public InterfaceTokeniser getSimilarityTokenizer() {
         Object tokenizer = similarityTokenizerComboBox.getSelectedItem();
-        if(tokenizer != null) {
+        if (tokenizer != null) {
             Object t = null;
-            for(Tuples.T2<?,?> similarityTokenizer : similarityTokenizers) {
-                if(tokenizer.equals(similarityTokenizer.e1)) {
+            for (Tuples.T2<?, ?> similarityTokenizer : similarityTokenizers) {
+                if (tokenizer.equals(similarityTokenizer.e1)) {
                     t = similarityTokenizer.e2;
-                    if(t instanceof InterfaceTokeniser) {
+                    if (t instanceof InterfaceTokeniser) {
                         return (InterfaceTokeniser) t;
                     }
                 }
@@ -235,48 +233,42 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         }
         return new TokeniserWhitespace();
     }
-    
-    
-    
-    
+
+
+
     public TopicMapSearchOptions getSimilarityOptions() {
         return new TopicMapSearchOptions(
                 similarityBasenameCheckBox.isSelected(),
                 similarityVariantCheckBox.isSelected(),
                 similarityOccurrenceCheckBox.isSelected(),
                 similaritySICheckBox.isSelected(),
-                similaritySLCheckBox.isSelected()
-                );
+                similaritySLCheckBox.isSelected());
     }
-    
-    
+
+
     public float getSimilarityThreshold() {
         String ts = similarityThresholdTextField.getText();
         float threshold = 0.5f;
         try {
             threshold = Float.parseFloat(ts);
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
-        return Math.max(0, Math.min( threshold, 100 )) / 100;
+        return Math.max(0, Math.min(threshold, 100)) / 100;
     }
-    
-    
 
-    
-    
-    
+
+
     public void updateSimilarityThreshold() {
         int threshold = similarityThresholdSlider.getValue();
-        similarityThresholdTextField.setText(""+threshold);
+        similarityThresholdTextField.setText("" + threshold);
     }
-    
-    
-    
-    
+
+
+
     public Collection<Topic> getSimilarTopics(TopicMap tm) throws TopicMapException {
-        if(tm != null) {
+        if (tm != null) {
             int similarityType = getSimilarityType();
             float threshold = getSimilarityThreshold();
             Iterator<Topic> iterator = tm.getTopics();
@@ -287,13 +279,13 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         }
         return null;
     }
-    
-    
-    
+
+
+
     public InterfaceStringMetric getStringMetric(int similarityType) {
         InterfaceStringMetric stringMetric = null;
         InterfaceTokeniser tokenizer = getSimilarityTokenizer();
-        switch(similarityType) {
+        switch (similarityType) {
             case SIMILARITY_LEVENSHTEIN_DISTANCE: {
                 stringMetric = new Levenshtein();
                 break;
@@ -362,27 +354,25 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         }
         return stringMetric;
     }
-    
-    
-    
-    
-    public Collection<Topic> getSimilarTopics(String query, TopicMapSearchOptions options, Iterator<Topic> topicIterator, int similarityType, float threshold, boolean differenceInsteadOfSimilarity) {
+
+
+
+    public Collection<Topic> getSimilarTopics(String query, TopicMapSearchOptions options,
+            Iterator<Topic> topicIterator, int similarityType, float threshold, boolean differenceInsteadOfSimilarity) {
         InterfaceStringMetric stringMetric = getStringMetric(similarityType);
-        if(stringMetric != null) {
-            return SimilarityBox.getSimilarTopics(query, options, topicIterator, stringMetric, threshold, differenceInsteadOfSimilarity, getUseNGrams());
+        if (stringMetric != null) {
+            return SimilarityBox.getSimilarTopics(query, options, topicIterator, stringMetric, threshold,
+                    differenceInsteadOfSimilarity, getUseNGrams());
         }
         return new ArrayList<Topic>();
     }
-    
-    
-    
-    
-    
-    
+
+
+
     private void updateSimilarityOptions() {
         int t = getSimilarityType();
-        if(t == SIMILARITY_SMITH_WATERMAN_DISTANCE ||
-           t == SIMILARITY_NEEDLEMAN_WUNCH_DISTANCE) {
+        if (t == SIMILARITY_SMITH_WATERMAN_DISTANCE ||
+                t == SIMILARITY_NEEDLEMAN_WUNCH_DISTANCE) {
             gapCostTextField.setEnabled(true);
             gapCostLabel.setEnabled(true);
         }
@@ -390,73 +380,76 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
             gapCostTextField.setEnabled(false);
             gapCostLabel.setEnabled(false);
         }
-        
-        
-        if(t == SIMILARITY_SOUNDEX_DISTANCE_METRIC ||
-           t == SIMILARITY_JARO_WINKLER ||
-           t == SIMILARITY_JARO_DISTANCE_METRIC ||
-           t == SIMILARITY_LEVENSHTEIN_DISTANCE ||
-           t == SIMILARITY_NEEDLEMAN_WUNCH_DISTANCE ||
-           t == SIMILARITY_SMITH_WATERMAN_DISTANCE) {
-                similarityTokenizerComboBox.setEnabled(false);
-                similarityTokenizerLabel.setEnabled(false);
+
+
+        if (t == SIMILARITY_SOUNDEX_DISTANCE_METRIC ||
+                t == SIMILARITY_JARO_WINKLER ||
+                t == SIMILARITY_JARO_DISTANCE_METRIC ||
+                t == SIMILARITY_LEVENSHTEIN_DISTANCE ||
+                t == SIMILARITY_NEEDLEMAN_WUNCH_DISTANCE ||
+                t == SIMILARITY_SMITH_WATERMAN_DISTANCE) {
+            similarityTokenizerComboBox.setEnabled(false);
+            similarityTokenizerLabel.setEnabled(false);
         }
         else {
             similarityTokenizerComboBox.setEnabled(true);
             similarityTokenizerLabel.setEnabled(true);
         }
-        
+
         InterfaceStringMetric stringMetric = getStringMetric(getSimilarityType());
-        if(stringMetric != null) {
-            similarityTypeComboBox.setToolTipText(Textbox.makeHTMLParagraph(stringMetric.getLongDescriptionString(), 40));
+        if (stringMetric != null) {
+            similarityTypeComboBox
+                    .setToolTipText(Textbox.makeHTMLParagraph(stringMetric.getLongDescriptionString(), 40));
         }
     }
-    
+
+
     public void updateTokenizerOptions() {
         InterfaceTokeniser tokenizer = getSimilarityTokenizer();
-        if(tokenizer != null) {
-            similarityTokenizerComboBox.setToolTipText(Textbox.makeHTMLParagraph(tokenizer.getShortDescriptionString(), 40));
+        if (tokenizer != null) {
+            similarityTokenizerComboBox
+                    .setToolTipText(Textbox.makeHTMLParagraph(tokenizer.getShortDescriptionString(), 40));
         }
     }
-    
-    
-    
+
+
+
     public float getGapCost(float defaultValue) {
         float cost = defaultValue;
         try {
             cost = Float.parseFloat(gapCostTextField.getText());
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
         return cost;
     }
 
 
-    
+
     public boolean getUseNGrams() {
         return useNGrams.isSelected();
     }
-    
-    
-    
+
+
+
     public void refresh() {
-        if(resultsTable != null) {
+        if (resultsTable != null) {
             ((DefaultTableModel) resultsTable.getModel()).fireTableDataChanged();
         }
         resultPanel.revalidate();
         revalidate();
     }
 
-    
-    
+
+
     public void doSearch() {
         try {
             resultPanel.removeAll();
             Wandora wandora = Wandora.getWandora();
             TopicMap topicMap = wandora.getTopicMap();
             Collection<Topic> results = getSimilarTopics(topicMap);
-            if(results != null && !results.isEmpty()) {
+            if (results != null && !results.isEmpty()) {
                 resultsTable = new TopicTable(wandora);
                 resultsTable.initialize(results);
                 resultPanel.add(resultsTable, BorderLayout.NORTH);
@@ -467,12 +460,12 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
                 resultPanel.add(message, BorderLayout.CENTER);
             }
         }
-        catch(TopicMapException tme) {
+        catch (TopicMapException tme) {
             message.setText("Topic map exception!");
             resultPanel.add(message, BorderLayout.CENTER);
             logger.error(tme);
         }
-        catch(Exception e){
+        catch (Exception e) {
             message.setText("Error!");
             resultPanel.add(message, BorderLayout.CENTER);
             logger.error(e);
@@ -481,8 +474,8 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         revalidate();
         repaint();
     }
-    
-    
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -575,13 +568,17 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
 
         thresholdInnerPanel.setLayout(new java.awt.GridBagLayout());
 
-        similarityThresholdSlider.setToolTipText(Textbox.makeHTMLParagraph("Similarity threshold specifies allowed difference between similar strings. When threshold is near 100, only minimal differences are allowed. When threshold is near 0, strings may be very different and they are still similar.", 40));
+        similarityThresholdSlider.setToolTipText(Textbox.makeHTMLParagraph(
+                "Similarity threshold specifies allowed difference between similar strings. When threshold is near 100, only minimal differences are allowed. When threshold is near 0, strings may be very different and they are still similar.",
+                40));
         similarityThresholdSlider.setMinimumSize(new java.awt.Dimension(100, 24));
         similarityThresholdSlider.setPreferredSize(new java.awt.Dimension(200, 24));
         similarityThresholdSlider.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 similarityThresholdSliderMousePressed(evt);
             }
+
+
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 similarityThresholdSliderMouseReleased(evt);
             }
@@ -712,7 +709,8 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
 
         useNGrams.setSelected(true);
         useNGrams.setText("Compare n-grams instead of complete strings");
-        useNGrams.setToolTipText("<html>If the target string is longer than user specified similarity text,<br>split the target string into n-grams and choose biggest n-gram similarity value.</html>");
+        useNGrams.setToolTipText(
+                "<html>If the target string is longer than user specified similarity text,<br>split the target string into n-grams and choose biggest n-gram similarity value.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         jPanel3.add(useNGrams, gridBagConstraints);
@@ -791,29 +789,35 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
         add(containerPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void similarityTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_similarityTypeComboBoxActionPerformed
-        if((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
+        if ((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
             updateSimilarityOptions();
         }
     }//GEN-LAST:event_similarityTypeComboBoxActionPerformed
 
+
     private void similarityTokenizerComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_similarityTokenizerComboBoxActionPerformed
-        if((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
+        if ((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
             updateTokenizerOptions();
         }
     }//GEN-LAST:event_similarityTokenizerComboBoxActionPerformed
+
 
     private void similarityThresholdSliderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_similarityThresholdSliderMousePressed
         updateSimilarityThreshold();
     }//GEN-LAST:event_similarityThresholdSliderMousePressed
 
+
     private void similarityThresholdSliderMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_similarityThresholdSliderMouseReleased
         updateSimilarityThreshold();
     }//GEN-LAST:event_similarityThresholdSliderMouseReleased
 
+
     private void similarityThresholdSliderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_similarityThresholdSliderMouseDragged
         updateSimilarityThreshold();
     }//GEN-LAST:event_similarityThresholdSliderMouseDragged
+
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         doSearch();
@@ -861,14 +865,13 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
 
 
 
-
     // ------------------------------------------------------- TopicSelector ---
-    
+
     @Override
     public Topic getSelectedTopic() {
-        if(resultsTable != null) {
+        if (resultsTable != null) {
             Topic[] topics = resultsTable.getSelectedTopics();
-            if(topics != null && topics.length > 0) {
+            if (topics != null && topics.length > 0) {
                 return topics[0];
             }
         }
@@ -878,34 +881,36 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
 
     @Override
     public Topic[] getSelectedTopics() {
-        if(resultsTable != null) {
+        if (resultsTable != null) {
             resultsTable.getSelectedTopics();
         }
         return null;
     }
-    
+
 
     @Override
     public java.awt.Component getPanel() {
         return this;
     }
-    
-    
+
+
     @Override
     public String getSelectorName() {
         return "Similarity";
     }
-    
+
+
     @Override
     public void init() {
-        
+
     }
-    
+
+
     @Override
     public void cleanup() {
-        
+
     }
-    
+
 
 
 }

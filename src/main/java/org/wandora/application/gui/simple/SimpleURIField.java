@@ -52,7 +52,6 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 
-
 /**
  *
  * @author akivela
@@ -60,67 +59,67 @@ import org.wandora.utils.logger.Log4j2Logger;
 public class SimpleURIField extends SimpleField {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleURIField.class);
-    
+
     private static Color BROKEN_URI_COLOR = new Color(255, 240, 240);
     private static Color DATA_URI_COLOR = Color.WHITE;
     private static Color UNSET_URI_COLOR = new Color(246, 246, 246);
-    
+
     private String completeFieldText = null;
 
     private Object[] popupStruct = new Object[] {
-        "Cut", UIBox.getIcon("gui/icons/cut.png"),
-        "Copy", UIBox.getIcon("gui/icons/copy.png"),
-        "Paste", UIBox.getIcon("gui/icons/paste.png"),
-        "Clear", UIBox.getIcon("gui/icons/clear.png"),
+            "Cut", UIBox.getIcon("gui/icons/cut.png"),
+            "Copy", UIBox.getIcon("gui/icons/copy.png"),
+            "Paste", UIBox.getIcon("gui/icons/paste.png"),
+            "Clear", UIBox.getIcon("gui/icons/clear.png"),
     };
-    
-    
-    
+
+
+
     public SimpleURIField() {
         initialize();
     }
 
-    
+
     public boolean isValidURI(String uriString) {
-        if(uriString != null && uriString.length() > 0) {
+        if (uriString != null && uriString.length() > 0) {
             try {
                 new URI(uriString);
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 return DataURL.isDataURL(uriString);
             }
         }
         return true;
     }
-    
-    
+
+
     private Color getBackgroundColorFor(String uriString) {
-        if(uriString == null || uriString.length() == 0) {
+        if (uriString == null || uriString.length() == 0) {
             return UNSET_URI_COLOR;
         }
-        if(DataURL.isDataURL(uriString)) {
+        if (DataURL.isDataURL(uriString)) {
             return DATA_URI_COLOR;
         }
         try {
             new URI(uriString);
         }
-        catch(Exception e) {
+        catch (Exception e) {
             return BROKEN_URI_COLOR;
         }
         return Color.WHITE;
     }
-    
 
-    
+
+
     @Override
     public void setText(String text) {
         setBackground(getBackgroundColorFor(text));
-        
+
         try {
-            if(DataURL.isDataURL(text)) {
-                String textFragment = text.substring(0, Math.min(text.length(), 64))+"... ("+text.length()+")";
+            if (DataURL.isDataURL(text)) {
+                String textFragment = text.substring(0, Math.min(text.length(), 64)) + "... (" + text.length() + ")";
                 completeFieldText = text;
                 super.setText(textFragment);
                 setEditable(false);
@@ -131,81 +130,84 @@ public class SimpleURIField extends SimpleField {
                 setEditable(true);
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
-    
-    
+
+
+
     @Override
     public String getText() {
         try {
-            if(completeFieldText != null) {
+            if (completeFieldText != null) {
                 return completeFieldText;
             }
             else {
                 return super.getText();
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
         return "";
     }
-    
-    
-    
+
+
+
     @Override
     public void setPopupMenu() {
         JPopupMenu popup = UIBox.makePopupMenu(popupStruct, this);
         setComponentPopupMenu(popup);
     }
-    
-    
+
+
     @Override
     public void drop(final java.awt.dnd.DropTargetDropEvent e) {
         try {
             DataFlavor fileListFlavor = DataFlavor.javaFileListFlavor;
             DataFlavor stringFlavor = DataFlavor.stringFlavor;
             Transferable tr = e.getTransferable();
-            if(e.isDataFlavorSupported(fileListFlavor)) {
+            if (e.isDataFlavorSupported(fileListFlavor)) {
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                 final SimpleURIField uriField = this;
                 final java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
-                
+
                 Thread dropThread = new Thread() {
                     public void run() {
                         try {
-                            int ret=WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Make DataURI out of given file content? Answering no uses filename as an URI.","Make DataURI?", WandoraOptionPane.YES_NO_OPTION);
-                            if(ret==WandoraOptionPane.YES_OPTION) {
-                                for( File file : files ) {
+                            int ret = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(),
+                                    "Make DataURI out of given file content? Answering no uses filename as an URI.",
+                                    "Make DataURI?", WandoraOptionPane.YES_NO_OPTION);
+                            if (ret == WandoraOptionPane.YES_OPTION) {
+                                for (File file : files) {
                                     DataURL dataURL = new DataURL(file);
                                     uriField.setText(dataURL.toExternalForm(Base64.DONT_BREAK_LINES));
                                     break; // CAN'T HANDLE MULTIPLE FILES. ONLY FIRST IS USED.
                                 }
                             }
-                            else if(ret==WandoraOptionPane.NO_OPTION) {
-                                String text="";
-                                for( File file : files ) {
-                                    if(text.length()>0) text+=";";
-                                    text+=file.toURI().toString();
+                            else if (ret == WandoraOptionPane.NO_OPTION) {
+                                String text = "";
+                                for (File file : files) {
+                                    if (text.length() > 0)
+                                        text += ";";
+                                    text += file.toURI().toString();
                                 }
                                 uriField.setText(text);
                             }
                             triggerChangeAction();
                             e.dropComplete(true);
                         }
-                        catch(Exception e) {
-                        	logger.error(e);
+                        catch (Exception e) {
+                            logger.error(e);
                         }
                     }
                 };
                 dropThread.start();
             }
-            else if(e.isDataFlavorSupported(stringFlavor)) {
+            else if (e.isDataFlavorSupported(stringFlavor)) {
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                String data = (String)tr.getTransferData(stringFlavor);
+                String data = (String) tr.getTransferData(stringFlavor);
                 this.setText(data);
                 e.dropComplete(true);
             }
@@ -214,38 +216,38 @@ public class SimpleURIField extends SimpleField {
                 e.rejectDrop();
             }
         }
-        catch(IOException ioe) {
-        	logger.error(ioe);
+        catch (IOException ioe) {
+            logger.error(ioe);
         }
-        catch(UnsupportedFlavorException ufe) {
-        	logger.error(ufe);
+        catch (UnsupportedFlavorException ufe) {
+            logger.error(ufe);
         }
-        catch(Exception ex) {
-        	logger.error(ex);
+        catch (Exception ex) {
+            logger.error(ex);
         }
         this.setBorder(defaultBorder);
     }
-    
-    
+
+
     // ------------------------------------------------- copy, cut and paste ---
-    
-    
+
+
     @Override
     public void copy() {
-        if(completeFieldText != null) {
-            if(getSelectionStart() == 0 && getSelectionEnd() == super.getText().length()) {
+        if (completeFieldText != null) {
+            if (getSelectionStart() == 0 && getSelectionEnd() == super.getText().length()) {
                 ClipboardBox.setClipboard(completeFieldText);
                 return;
             }
         }
         super.copy();
     }
-    
-    
+
+
     @Override
     public void cut() {
-        if(completeFieldText != null) {
-            if(getSelectionStart() == 0 && getSelectionStart() == super.getText().length()) {
+        if (completeFieldText != null) {
+            if (getSelectionStart() == 0 && getSelectionStart() == super.getText().length()) {
                 ClipboardBox.setClipboard(completeFieldText);
                 setText("");
                 return;
@@ -253,33 +255,33 @@ public class SimpleURIField extends SimpleField {
         }
         super.cut();
     }
-    
-    
+
+
     @Override
     public void paste() {
-        if(completeFieldText != null) {
+        if (completeFieldText != null) {
             String newText = ClipboardBox.getClipboard();
             setText(newText);
             return;
         }
         super.paste();
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     protected void triggerChangeAction() {
         this.requestFocusInWindow();
 
-        try { 
-            Robot robot = new Robot(); 
-            robot.keyPress(KeyEvent.VK_ENTER); 
-        } 
-        catch (AWTException e) { 
-        	logger.error(e);
-        } 
+        try {
+            Robot robot = new Robot();
+            robot.keyPress(KeyEvent.VK_ENTER);
+        }
+        catch (AWTException e) {
+            logger.error(e);
+        }
     }
 
 }

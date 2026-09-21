@@ -36,21 +36,21 @@ import org.wandora.topicmap.Topic;
  * @author akivela
  */
 public class OccurrenceTypeLink extends TopicLink {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private OccurrenceTable occurrenceTable = null;
-    
-    
-    /** Creates a new instance of AssociationTypeLink */
+
+
+    /** Creates a new instance of OccurrenceTypeLink */
     public OccurrenceTypeLink(OccurrenceTable ot, Topic t, Wandora wandora) {
         super(t, wandora);
         occurrenceTable = ot;
     }
-    
-    
+
+
     public OccurrenceTable getOccurrenceTable() {
         return occurrenceTable;
     }
-    
+
 }

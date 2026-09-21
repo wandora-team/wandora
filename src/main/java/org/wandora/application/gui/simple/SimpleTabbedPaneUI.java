@@ -44,33 +44,31 @@ public class SimpleTabbedPaneUI extends BasicTabbedPaneUI {
 
     @Override
     protected Insets getContentBorderInsets(int tabPlacement) {
-        //return super.getContentBorderInsets(tabPlacement);
-        return new Insets(2,2,2,2);
+        return new Insets(2, 2, 2, 2);
     }
-    
-    
+
+
     @Override
     protected int calculateTabWidth(int tabPlacement, int tabIndex, FontMetrics metrics) {
         int w = super.calculateTabWidth(tabPlacement, tabIndex, metrics);
-        return w+8;
+        return w + 8;
     }
-    
-    @Override
-    protected int calculateTabHeight(int tabPlacement, int tabIndex, int fontHeight)  {
-        int h = super.calculateTabHeight(tabPlacement, tabIndex, fontHeight);
-        return h+2;
-    }
-    
 
-    
+
     @Override
-    protected void paintFocusIndicator(Graphics g, int tabPlacement, Rectangle[] rects, int tabIndex, Rectangle iconRect, Rectangle textRect, boolean isSelected) {
+    protected int calculateTabHeight(int tabPlacement, int tabIndex, int fontHeight) {
+        int h = super.calculateTabHeight(tabPlacement, tabIndex, fontHeight);
+        return h + 2;
+    }
+
+
+
+    @Override
+    protected void paintFocusIndicator(Graphics g, int tabPlacement, Rectangle[] rects, int tabIndex,
+            Rectangle iconRect, Rectangle textRect, boolean isSelected) {
         // NO FOCUS INDICATOR
     }
-    
-    
-    
-    
-    
-    
+
+
+
 }

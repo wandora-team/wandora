@@ -51,138 +51,169 @@ import org.wandora.utils.swing.TableSorter;
  * @author akivela
  */
 public class SearchTable extends JTable {
-    
+
     private static final long serialVersionUID = 1L;
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(SearchTable.class);
-    
+
     private Object[][] data;
     private TableSorter sorter;
     private Wandora wandora;
     private String[] res;
     private JDialog dialog;
-    
-    
-    
+
+
+
     /** Creates a new instance of SearchTable */
     public SearchTable(String[] res, Wandora parent, JDialog dialog) {
-        this.wandora=parent;
-        this.res=res;
-        this.dialog=dialog;
-        data=new Object[res.length/3][2];
-        
-        for(int i=0;i<res.length/3;i++){
-            try { data[i][0]=Double.valueOf(res[i*3]); }
-            catch (Exception e) { data[i][0]=Double.valueOf( 0 ); }
-            data[i][1]=res[i*3+2];
+        this.wandora = parent;
+        this.res = res;
+        this.dialog = dialog;
+        data = new Object[res.length / 3][2];
+
+        for (int i = 0; i < res.length / 3; i++) {
+            try {
+                data[i][0] = Double.valueOf(res[i * 3]);
+            }
+            catch (Exception e) {
+                data[i][0] = Double.valueOf(0);
+            }
+            data[i][1] = res[i * 3 + 2];
         }
         this.setColumnSelectionAllowed(false);
         this.setRowSelectionAllowed(false);
-        sorter=new TableSorter(new SearchTableModel());
+        sorter = new TableSorter(new SearchTableModel());
         this.setAutoCreateColumnsFromModel(false);
         this.setModel(sorter);
-        TableColumn column=new TableColumn(0,80,null,null);
+        TableColumn column = new TableColumn(0, 80, null, null);
         column.setMaxWidth(80);
         this.addColumn(column);
-        this.addColumn(new TableColumn(1,80,null,new TopicCellEditor()));
+        this.addColumn(new TableColumn(1, 80, null, new TopicCellEditor()));
         sorter.setTableHeader(this.getTableHeader());
 
     }
-    
+
+
     @Override
-    public String getToolTipText(java.awt.event.MouseEvent e){
-        java.awt.Point p=e.getPoint();
-        int row=rowAtPoint(p);
-        int col=columnAtPoint(p);
-        int realCol=convertColumnIndexToModel(col);
-        if(realCol==0) return null;
-        else return sorter.getValueAt(row,realCol).toString();
+    public String getToolTipText(java.awt.event.MouseEvent e) {
+        java.awt.Point p = e.getPoint();
+        int row = rowAtPoint(p);
+        int col = columnAtPoint(p);
+        int realCol = convertColumnIndexToModel(col);
+        if (realCol == 0)
+            return null;
+        else
+            return sorter.getValueAt(row, realCol).toString();
     }
-        
-    private class TopicCellEditor extends AbstractCellEditor implements TableCellEditor, java.awt.event.MouseListener {        
+
+    private class TopicCellEditor extends AbstractCellEditor implements TableCellEditor, java.awt.event.MouseListener {
         private static final long serialVersionUID = 1L;
-        
-		private int topic;
+
+        private int topic;
         private JLabel label;
-        
-        public TopicCellEditor(){
-            label= new JLabel();
-            Font f=label.getFont();
-            label.setFont(new Font(f.getName(),Font.PLAIN,f.getSize()));
+
+        public TopicCellEditor() {
+            label = new JLabel();
+            Font f = label.getFont();
+            label.setFont(new Font(f.getName(), Font.PLAIN, f.getSize()));
             label.addMouseListener(this);
         }
-        
+
+
         @Override
         public Object getCellEditorValue() {
-            return res[topic*3+2];
+            return res[topic * 3 + 2];
         }
-        
+
+
         @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            topic=sorter.modelIndex(row);
-            label.setText(res[topic*3+2]);
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+                int column) {
+            topic = sorter.modelIndex(row);
+            label.setText(res[topic * 3 + 2]);
             return label;
         }
+
+
         @Override
         public void mouseReleased(java.awt.event.MouseEvent e) {
             fireEditingStopped();
-            if(label.contains(e.getPoint())){
+            if (label.contains(e.getPoint())) {
                 try {
-                    Topic t=wandora.getTopicMap().getTopic(res[topic*3+1]);
+                    Topic t = wandora.getTopicMap().getTopic(res[topic * 3 + 1]);
                     dialog.setVisible(false);
-                    if(t!=null) wandora.openTopic(t);
-                } 
-                catch(TopicMapException tme){
-                	logger.error(tme);
+                    if (t != null)
+                        wandora.openTopic(t);
+                }
+                catch (TopicMapException tme) {
+                    logger.error(tme);
                     dialog.setVisible(false);
                 }
             }
         }
-        
+
+
         @Override
-        public void mouseClicked(java.awt.event.MouseEvent e) {}
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+        }
+
+
         @Override
-        public void mouseEntered(java.awt.event.MouseEvent e) {}
+        public void mouseEntered(java.awt.event.MouseEvent e) {
+        }
+
+
         @Override
-        public void mouseExited(java.awt.event.MouseEvent e) {}
+        public void mouseExited(java.awt.event.MouseEvent e) {
+        }
+
+
         @Override
-        public void mousePressed(java.awt.event.MouseEvent e) {}
-        
+        public void mousePressed(java.awt.event.MouseEvent e) {
+        }
+
     }
-    
+
     private class SearchTableModel extends AbstractTableModel {
-        
-        
+
+
         private static final long serialVersionUID = 1L;
 
 
-		@Override
+        @Override
         public int getColumnCount() {
             return 2;
         }
-        
+
+
         @Override
         public int getRowCount() {
-            return res.length/3;
+            return res.length / 3;
         }
-        
+
+
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             return data[rowIndex][columnIndex];
         }
-        
+
+
         @Override
-        public String getColumnName(int columnIndex){
-            if(columnIndex==0) return "Score";
-            else return "Topic";
+        public String getColumnName(int columnIndex) {
+            if (columnIndex == 0)
+                return "Score";
+            else
+                return "Topic";
         }
-        
-        
+
+
         @Override
-        public boolean isCellEditable(int row,int col){
-            if(col==1) return true;
-            else return false;
+        public boolean isCellEditable(int row, int col) {
+            if (col == 1)
+                return true;
+            else
+                return false;
         }
-        
+
     }
-    
+
 }

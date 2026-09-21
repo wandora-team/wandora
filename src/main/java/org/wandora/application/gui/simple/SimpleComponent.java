@@ -35,8 +35,5 @@ import java.awt.event.FocusListener;
  * @author  Wandora group
  */
 public interface SimpleComponent extends FocusListener {
-    
-    
-    
- 
+
 }

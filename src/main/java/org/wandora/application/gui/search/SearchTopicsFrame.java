@@ -40,10 +40,10 @@ import org.wandora.application.gui.topicpanels.SearchTopicPanel;
 public class SearchTopicsFrame extends javax.swing.JDialog {
 
     private static final long serialVersionUID = 1L;
-    
-    
+
+
     private SearchTopicPanel searchPanels = null;
-    
+
     /**
      * Creates new form SearchTopicsFrame
      */
@@ -52,23 +52,23 @@ public class SearchTopicsFrame extends javax.swing.JDialog {
         Wandora wandora = Wandora.getWandora();
         setAlwaysOnTop(false);
         setTitle("Search and query");
-        
+
         initComponents();
-        
+
         searchPanels = new SearchTopicPanel();
         searchPanels.setUseResultScrollPanes(true);
         searchPanels.init();
         containerPanel.add(searchPanels.getGui(), BorderLayout.CENTER);
-        
+
         setSize(850, 600);
 
-        if(wandora != null) {
+        if (wandora != null) {
             setIconImages(wandora.wandoraIcons);
             wandora.centerWindow(this);
         }
     }
-    
-    
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -115,9 +115,10 @@ public class SearchTopicsFrame extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         this.setVisible(false);
-        
+
     }//GEN-LAST:event_closeButtonActionPerformed
 
 

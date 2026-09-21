@@ -36,27 +36,29 @@ import javax.swing.JSlider;
 
 
 public class SimpleSlider extends JSlider implements MouseWheelListener {
-    
+
     private static final long serialVersionUID = 1L;
-    
-    
+
+
     public SimpleSlider(int orientation, int min, int max, int value) {
         super(orientation, min, max, value);
         this.addMouseWheelListener(this);
     }
 
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        if(e.getWheelRotation() > 0) this.setValue(this.getValue() - 1);
-        else this.setValue(this.getValue() + 1);
+        if (e.getWheelRotation() > 0)
+            this.setValue(this.getValue() - 1);
+        else
+            this.setValue(this.getValue() + 1);
     }
-    
-    
-    
+
+
+
 }

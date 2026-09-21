@@ -38,35 +38,34 @@ import javax.swing.JButton;
 import org.wandora.application.gui.UIConstants;
 
 
-
-
-
-
 /**
  *
  * @author akivela
  */
 public class SimpleButton extends JButton {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     /** Creates a new instance of SimpleButton */
     public SimpleButton() {
         initialize();
     }
+
+
     public SimpleButton(String label) {
         initialize();
         setText(label);
     }
+
+
     public SimpleButton(Icon icon) {
         initialize();
         this.setIcon(icon);
     }
-    
-    
-    
-    protected void initialize() {
 
+
+
+    protected void initialize() {
         this.setFocusPainted(false);
         this.setFont(UIConstants.buttonLabelFont);
         UIConstants.setFancyFont(this);
@@ -75,29 +74,30 @@ public class SimpleButton extends JButton {
         this.setOpaque(true);
         this.setBackground(UIConstants.defaultActiveBackground);
         this.addMouseListener(
-            new MouseAdapter() {
-                @Override
-                public void mouseEntered(java.awt.event.MouseEvent evt) {
-                    if(evt.getComponent().isEnabled())
-                        evt.getComponent().setBackground(UIConstants.defaultActiveBackground);
-                }
-                @Override
-                public void mouseExited(java.awt.event.MouseEvent evt) {
-                    if(evt.getComponent().isEnabled())
-                        evt.getComponent().setBackground(UIConstants.defaultActiveBackground);
-                }
-            }
-        );
+                new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(java.awt.event.MouseEvent evt) {
+                        if (evt.getComponent().isEnabled())
+                            evt.getComponent().setBackground(UIConstants.defaultActiveBackground);
+                    }
+
+
+                    @Override
+                    public void mouseExited(java.awt.event.MouseEvent evt) {
+                        if (evt.getComponent().isEnabled())
+                            evt.getComponent().setBackground(UIConstants.defaultActiveBackground);
+                    }
+                });
     }
-    
-    
-    
+
+
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);
         super.paint(g);
     }
-    
-    
-    
+
+
+
 }

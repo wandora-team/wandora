@@ -41,18 +41,17 @@ import org.wandora.utils.swing.anyselectiontable.AnySelectionTable;
 
 
 
-
 /**
  *
  * @author akivela
  */
 public class SimpleTable extends AnySelectionTable implements SimpleComponent {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     public static final int DEFAULT_ROW_HEIGHT = 21;
-    
-    
+
+
     /** Creates a new instance of SimpleTable */
     public SimpleTable() {
         this.setFocusable(true);
@@ -61,63 +60,67 @@ public class SimpleTable extends AnySelectionTable implements SimpleComponent {
         this.setRowHeight(DEFAULT_ROW_HEIGHT);
         UIBox.registerClipboardableKeyStrokes(this);
     }
-    
-    
-    
-    
-    
-    
+
+
+
     @Override
     public void focusGained(java.awt.event.FocusEvent focusEvent) {
         Wandora w = Wandora.getWandora();
-        if(w != null) {
+        if (w != null) {
             w.gainFocus(this);
         }
     }
-    
+
+
     @Override
     public void focusLost(java.awt.event.FocusEvent focusEvent) {
     }
-    
-    
-    
+
+
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);
         super.paint(g);
     }
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // http://stackoverflow.com/questions/996948/live-sorting-of-jtable
     // -------------------------------------------------------------------------
-    
+
     private UpdateHandler beforeSort;
 
     @Override
     public void sorterChanged(RowSorterEvent e) {
         super.sorterChanged(e);
         maybeRepaintOnSorterChanged(e);
-    } 
+    }
+
 
     private void beforeUpdate(TableModelEvent e) {
-        if (!isSorted()) return;
+        if (!isSorted())
+            return;
         beforeSort = new UpdateHandler(e);
     }
+
 
     private void afterUpdate() {
         beforeSort = null;
     }
 
+
     private void maybeRepaintOnSorterChanged(RowSorterEvent e) {
-        if (beforeSort == null) return;
-        if ((e == null) || (e.getType() != RowSorterEvent.Type.SORTED)) return;
+        if (beforeSort == null)
+            return;
+        if ((e == null) || (e.getType() != RowSorterEvent.Type.SORTED))
+            return;
         UpdateHandler afterSort = new UpdateHandler(beforeSort);
         if (afterSort.allHidden(beforeSort)) {
             return;
-        } else if (afterSort.complex(beforeSort)) {
+        }
+        else if (afterSort.complex(beforeSort)) {
             repaint();
             return;
         }
@@ -129,6 +132,8 @@ public class SimpleTable extends AnySelectionTable implements SimpleComponent {
         repaint(first.union(last));
     }
 
+    
+    
     private class UpdateHandler {
         private int firstModelRow;
         private int lastModelRow;
@@ -141,31 +146,40 @@ public class SimpleTable extends AnySelectionTable implements SimpleComponent {
             convert();
         }
 
+
         public UpdateHandler(UpdateHandler e) {
             firstModelRow = e.firstModelRow;
             lastModelRow = e.lastModelRow;
             convert();
         }
 
+
         public boolean allHidden(UpdateHandler e) {
             return this.allHidden && e.allHidden;
         }
+
 
         public boolean complex(UpdateHandler e) {
             return (firstModelRow != lastModelRow);
         }
 
+
         public int getFirstCombined(UpdateHandler e) {
-            if (allHidden) return e.viewRow;
-            if (e.allHidden) return viewRow;
+            if (allHidden)
+                return e.viewRow;
+            if (e.allHidden)
+                return viewRow;
             return Math.min(viewRow, e.viewRow);
         }
 
+
         public int getLastCombined(UpdateHandler e) {
-            if (allHidden || e.allHidden) return getRowCount() - 1;
+            if (allHidden || e.allHidden)
+                return getRowCount() - 1;
             return Math.max(viewRow, e.viewRow);
 
         }
+
 
         private void convert() {
             // multiple updates
@@ -195,6 +209,7 @@ public class SimpleTable extends AnySelectionTable implements SimpleComponent {
         return getRowSorter() != null;
     }
 
+
     @Override
     public void tableChanged(TableModelEvent e) {
         if (isUpdate(e)) {
@@ -202,10 +217,12 @@ public class SimpleTable extends AnySelectionTable implements SimpleComponent {
         }
         try {
             super.tableChanged(e);
-        } finally {
+        }
+        finally {
             afterUpdate();
         }
     }
+
 
     /**
      * Convenience method to detect dataChanged table event type.
@@ -214,11 +231,13 @@ public class SimpleTable extends AnySelectionTable implements SimpleComponent {
      * @return true if the event is of type dataChanged, false else.
      */
     protected boolean isDataChanged(TableModelEvent e) {
-        if (e == null) return false;
-        return e.getType() == TableModelEvent.UPDATE && 
-            e.getFirstRow() == 0 &&
-            e.getLastRow() == Integer.MAX_VALUE;
+        if (e == null)
+            return false;
+        return e.getType() == TableModelEvent.UPDATE &&
+                e.getFirstRow() == 0 &&
+                e.getLastRow() == Integer.MAX_VALUE;
     }
+
 
     /**
      * Convenience method to detect update table event type.
@@ -227,10 +246,12 @@ public class SimpleTable extends AnySelectionTable implements SimpleComponent {
      * @return true if the event is of type update and not dataChanged, false else.
      */
     protected boolean isUpdate(TableModelEvent e) {
-        if (isStructureChanged(e)) return false;
-        return e.getType() == TableModelEvent.UPDATE && 
-            e.getLastRow() < Integer.MAX_VALUE;
+        if (isStructureChanged(e))
+            return false;
+        return e.getType() == TableModelEvent.UPDATE &&
+                e.getLastRow() < Integer.MAX_VALUE;
     }
+
 
     /**
      * Convenience method to detect a structureChanged table event type.

@@ -40,9 +40,9 @@ import org.wandora.application.gui.UIConstants;
  * @author akivela
  */
 public class SimpleTabbedPane extends JTabbedPane {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     /** Creates a new instance of SimpleTabbedPane */
     public SimpleTabbedPane() {
         this.setUI(new SimpleTabbedPaneUI());
@@ -50,7 +50,8 @@ public class SimpleTabbedPane extends JTabbedPane {
         UIConstants.setFancyFont(this);
         this.setOpaque(false);
     }
-    
+
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);

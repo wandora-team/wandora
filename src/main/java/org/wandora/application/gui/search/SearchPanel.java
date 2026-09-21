@@ -52,12 +52,12 @@ import org.wandora.utils.Textbox;
  * @author  akivela
  */
 public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
-       
-    
+
+
     private static final long serialVersionUID = 1L;
 
     public static final int HISTORYMAXSIZE = 40;
-    
+
     private Wandora wandora;
     private TopicTable foundTable = null;
     private Collection<Topic> foundTopics = null;
@@ -66,86 +66,86 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
 
 
 
-    
     /** Creates new form SearchPanel */
     public SearchPanel() {
         this.wandora = Wandora.getWandora();
         initComponents();
         searchWords.getEditor().getEditorComponent().addKeyListener(
-            new java.awt.event.KeyAdapter() {
-                @Override
-                public void keyReleased(java.awt.event.KeyEvent evt){
-                    if(evt.getKeyChar()==KeyEvent.VK_ENTER) {
-                        doSearch();
+                new java.awt.event.KeyAdapter() {
+                    @Override
+                    public void keyReleased(java.awt.event.KeyEvent evt) {
+                        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+                            doSearch();
+                        }
                     }
-                }
-            }
-        );
+                });
         toggleSearchOptionsVisibility(null);
     }
-    
+
+
     public SearchPanel(boolean allowMultiSelection) {
         this();
         this.allowMultiSelection = allowMultiSelection;
     }
 
-    
+
     public void requestSearchFieldFocus() {
         searchWords.requestFocus();
         ComboBoxEditor ed = searchWords.getEditor();
-        if(ed != null) {
+        if (ed != null) {
             ed.selectAll();
         }
     }
 
-    
+
     public void removeResultScrollPanesMouseListeners() {
         MouseWheelListener[] mouseWheelListeners = resultPanelScroller.getMouseWheelListeners();
-        for(MouseWheelListener listener : mouseWheelListeners) {
+        for (MouseWheelListener listener : mouseWheelListeners) {
             resultPanelScroller.removeMouseWheelListener(listener);
         }
     }
-    
-    
+
+
     public void doSearch() {
         try {
             String query = (String) searchWords.getSelectedItem();
             query = Textbox.trimExtraSpaces(query);
             resultPanel.removeAll();
             foundTopics = null;
-            if(query != null && query.length() > 0) {
+            if (query != null && query.length() > 0) {
                 resultPanel.add(messagePanel, BorderLayout.CENTER);
                 messageField.setText("Executing query...");
                 messageField.setIcon(UIBox.getIcon("gui/icons/wait.png"));
                 refresh();
-                
+
                 TopicMap topicMap = wandora.getTopicMap();
                 //this.searchWords.setSelectedIndex(0);
                 searchWords.addItem(query);
-                if(searchWords.getItemCount() > HISTORYMAXSIZE) searchWords.removeItemAt(1);
-                
+                if (searchWords.getItemCount() > HISTORYMAXSIZE)
+                    searchWords.removeItemAt(1);
+
                 TopicMapSearchOptions searchOptions;
-                if(searchAllCheckBox.isSelected()) {
+                if (searchAllCheckBox.isSelected()) {
                     searchOptions = new TopicMapSearchOptions();
                 }
                 else {
                     searchOptions = new TopicMapSearchOptions(
-                        searchBasenamesCheckBox.isSelected(),
-                        searchVariantnamesCheckBox.isSelected(),
-                        searchTextdatasCheckBox.isSelected(),
-                        searchSIsCheckBox.isSelected(),
-                        searchSLsCheckBox.isSelected());
+                            searchBasenamesCheckBox.isSelected(),
+                            searchVariantnamesCheckBox.isSelected(),
+                            searchTextdatasCheckBox.isSelected(),
+                            searchSIsCheckBox.isSelected(),
+                            searchSLsCheckBox.isSelected());
                 }
                 foundTopics = topicMap.search(query, searchOptions);
                 foundTopicsArray = foundTopics.toArray(new Topic[] {});
-                if(foundTopics != null && foundTopicsArray.length > 0) {
+                if (foundTopics != null && foundTopicsArray.length > 0) {
                     foundTable = new TopicTable(wandora);
                     foundTable.initialize(foundTopicsArray, null);
                     foundTable.toggleSortOrder(0);
-                    if(!allowMultiSelection) {
+                    if (!allowMultiSelection) {
                         foundTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
                     }
-                    
+
                     resultPanel.removeAll();
                     resultPanel.add(foundTable, BorderLayout.CENTER);
                 }
@@ -168,11 +168,11 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
             wandora.handleError(e);
         }
     }
-    
-    
-    
+
+
+
     public void refresh() {
-        if(foundTable != null) {
+        if (foundTable != null) {
             ((DefaultTableModel) foundTable.getModel()).fireTableDataChanged();
         }
         resultPanel.revalidate();
@@ -182,17 +182,15 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
 
 
 
-
     // -------------------------------------------------------------------------
 
 
-    
-    
+
     @Override
     public Topic getSelectedTopic() {
-        if(foundTable != null) {
+        if (foundTable != null) {
             Topic[] topics = foundTable.getSelectedTopics();
-            if(topics != null && topics.length > 0) {
+            if (topics != null && topics.length > 0) {
                 return topics[0];
             }
         }
@@ -202,7 +200,7 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
 
     @Override
     public Topic[] getSelectedTopics() {
-        if(foundTable != null) {
+        if (foundTable != null) {
             foundTable.getSelectedTopics();
         }
         return null;
@@ -214,10 +212,12 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
         return this;
     }
 
+
     @Override
     public String getSelectorName() {
         return "Finder";
     }
+
 
     @Override
     public void init() {
@@ -411,9 +411,10 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
         add(resultPanelContainer, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void toggleSearchOptionsVisibility(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleSearchOptionsVisibility
         boolean flag = false;
-        if(!searchAllCheckBox.isSelected()) {
+        if (!searchAllCheckBox.isSelected()) {
             flag = true;
         }
         searchBasenamesCheckBox.setVisible(flag);
@@ -422,6 +423,7 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
         searchSLsCheckBox.setVisible(flag);
         searchSIsCheckBox.setVisible(flag);
     }//GEN-LAST:event_toggleSearchOptionsVisibility
+
 
     private void doSearch(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doSearch
         startSearchButton.setEnabled(false);
@@ -433,8 +435,8 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
         };
         searchThread.start();
     }//GEN-LAST:event_doSearch
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel messageField;
@@ -453,5 +455,5 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
     private javax.swing.JComboBox<String> searchWords;
     private javax.swing.JButton startSearchButton;
     // End of variables declaration//GEN-END:variables
-    
+
 }

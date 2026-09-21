@@ -33,7 +33,7 @@ package org.wandora.application.gui.simple;
 
 
 public interface SimpleTextConsoleListener {
-    
+
     public String handleInput(String input);
-    
+
 }

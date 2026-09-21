@@ -46,45 +46,47 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.InterfaceStringMetric;
 
 
 public class SimilarityBox {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimilarityBox.class);
-    
-    
-    
-    public static Collection<Topic> getSimilarTopics(String query, TopicMapSearchOptions options, Iterator<Topic> topicIterator, InterfaceStringMetric stringMetric, float threshold, boolean differenceInsteadOfSimilarity, boolean useNGrams) {
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimilarityBox.class);
+
+
+
+    public static Collection<Topic> getSimilarTopics(String query, TopicMapSearchOptions options,
+            Iterator<Topic> topicIterator, InterfaceStringMetric stringMetric, float threshold,
+            boolean differenceInsteadOfSimilarity, boolean useNGrams) {
         List<Topic> selection = new ArrayList<>();
         Topic t = null;
         boolean isSimilar = false;
         float similarity = 0.0f;
         try {
-            while(topicIterator.hasNext()) {
+            while (topicIterator.hasNext()) {
                 similarity = 0.0f;
                 isSimilar = false;
                 t = topicIterator.next();
-                if(t != null && !t.isRemoved()) {
-                    if(options.searchBasenames) {
+                if (t != null && !t.isRemoved()) {
+                    if (options.searchBasenames) {
                         String n = t.getBaseName();
-                        if(n != null && n.length() > 0) {
+                        if (n != null && n.length() > 0) {
                             similarity = getSimilarity(query, n, stringMetric, useNGrams);
                             isSimilar = isSimilar(similarity, threshold, differenceInsteadOfSimilarity);
                         }
                     }
-                    if(!isSimilar && options.searchVariants) {
+                    if (!isSimilar && options.searchVariants) {
                         String n = null;
                         Set<Set<Topic>> scopes = t.getVariantScopes();
                         Iterator<Set<Topic>> scopeIterator = scopes.iterator();
                         Set<Topic> scope = null;
-                        while(!isSimilar && scopeIterator.hasNext()) {
+                        while (!isSimilar && scopeIterator.hasNext()) {
                             scope = scopeIterator.next();
-                            if(scope != null) {
+                            if (scope != null) {
                                 n = t.getVariant(scope);
-                                if(n != null && n.length() > 0) {
+                                if (n != null && n.length() > 0) {
                                     similarity = getSimilarity(query, n, stringMetric, useNGrams);
                                     isSimilar = isSimilar(similarity, threshold, differenceInsteadOfSimilarity);
                                 }
                             }
                         }
                     }
-                    if(!isSimilar && options.searchOccurrences) {
+                    if (!isSimilar && options.searchOccurrences) {
                         String o = null;
                         Collection<Topic> types = t.getDataTypes();
                         Iterator<Topic> typeIterator = types.iterator();
@@ -92,15 +94,15 @@ public class SimilarityBox {
                         Hashtable<Topic, String> os = null;
                         Enumeration<Topic> osEnumeration = null;
                         Topic osTopic = null;
-                        while(!isSimilar && typeIterator.hasNext()) {
+                        while (!isSimilar && typeIterator.hasNext()) {
                             type = typeIterator.next();
-                            if(type != null && !type.isRemoved()) {
+                            if (type != null && !type.isRemoved()) {
                                 os = t.getData(type);
                                 osEnumeration = os.keys();
-                                while(osEnumeration.hasMoreElements() && !isSimilar) {
+                                while (osEnumeration.hasMoreElements() && !isSimilar) {
                                     osTopic = osEnumeration.nextElement();
                                     o = os.get(osTopic);
-                                    if(o != null && o.length() > 0) {
+                                    if (o != null && o.length() > 0) {
                                         similarity = getSimilarity(query, o, stringMetric, useNGrams);
                                         isSimilar = isSimilar(similarity, threshold, differenceInsteadOfSimilarity);
                                     }
@@ -108,15 +110,15 @@ public class SimilarityBox {
                             }
                         }
                     }
-                    if(!isSimilar && options.searchSIs) {
+                    if (!isSimilar && options.searchSIs) {
                         Collection<Locator> locs = t.getSubjectIdentifiers();
-                        if(locs != null && locs.size() > 0) {
+                        if (locs != null && locs.size() > 0) {
                             Iterator<Locator> locIter = locs.iterator();
                             Locator loc = null;
                             String l = null;
-                            while(locIter.hasNext() && !isSimilar) {
+                            while (locIter.hasNext() && !isSimilar) {
                                 loc = locIter.next();
-                                if(loc != null) {
+                                if (loc != null) {
                                     l = loc.toExternalForm();
                                     similarity = getSimilarity(query, l, stringMetric, useNGrams);
                                     isSimilar = isSimilar(similarity, threshold, differenceInsteadOfSimilarity);
@@ -124,40 +126,39 @@ public class SimilarityBox {
                             }
                         }
                     }
-                    if(!isSimilar && options.searchSL) {
+                    if (!isSimilar && options.searchSL) {
                         Locator loc = t.getSubjectLocator();
-                        if(loc != null) {
+                        if (loc != null) {
                             String l = loc.toExternalForm();
                             similarity = getSimilarity(query, l, stringMetric, useNGrams);
                             isSimilar = isSimilar(similarity, threshold, differenceInsteadOfSimilarity);
                         }
                     }
                     // ***** IF TOPIC IS SIMILAR ****
-                    if(isSimilar) {
+                    if (isSimilar) {
                         selection.add(t);
                     }
                 }
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
         return selection;
     }
-    
-    
 
-    
+
+
     public static float getSimilarity(String s1, String s2, InterfaceStringMetric stringMetric, boolean useNGrams) {
         float similarity = 0.0f;
-        if(s1 != null && s2 != null && stringMetric != null) {
-            if(useNGrams) {
+        if (s1 != null && s2 != null && stringMetric != null) {
+            if (useNGrams) {
                 int l1 = s1.length();
                 int l2 = s2.length();
-                if(l2 > l1) {
-                    for(int i=0; i<l2-l1; i++) {
-                        float s = stringMetric.getSimilarity(s1, s2.substring(i, i+l1));
-                        if(s > similarity) {
+                if (l2 > l1) {
+                    for (int i = 0; i < l2 - l1; i++) {
+                        float s = stringMetric.getSimilarity(s1, s2.substring(i, i + l1));
+                        if (s > similarity) {
                             similarity = s;
                         }
                     }
@@ -172,16 +173,16 @@ public class SimilarityBox {
         }
         return similarity;
     }
-    
-    
-    
+
+
+
     public static boolean isSimilar(float similarity, float threshold, boolean differenceInsteadOfSimilarity) {
-        if(differenceInsteadOfSimilarity) {
+        if (differenceInsteadOfSimilarity) {
             return (similarity < threshold);
         }
         else {
             return (similarity > threshold);
         }
     }
-    
+
 }

@@ -41,13 +41,13 @@ import org.wandora.topicmap.Topic;
 public class TopicLink extends TopicLinkBasename {
 
     private static final long serialVersionUID = 1L;
-    
+
     private boolean limitLength = true;
     private String lname = "";
     private String sname = "";
-    
-    
-    
+
+
+
     /** Creates a new instance of TopicLink */
     public TopicLink(Topic t, Wandora wandora) {
         super(t, wandora);
@@ -56,36 +56,30 @@ public class TopicLink extends TopicLinkBasename {
 
 
 
-
     public void setLimitLength(boolean limit) {
         limitLength = limit;
-        if(limitLength)
+        if (limitLength)
             this.setText(sname);
         else
             this.setText(lname);
         this.setVisible(true);
     }
-    
 
 
 
     public void setText(Topic t) {
         lname = TopicToString.toString(t);
-        if(lname.length() > 30)
-            sname = lname.substring(0,13)+"..."+lname.substring(lname.length()-13);
+        if (lname.length() > 30)
+            sname = lname.substring(0, 13) + "..." + lname.substring(lname.length() - 13);
         else
             sname = lname;
-        if(limitLength)
+        if (limitLength)
             this.setText(sname);
         else
             this.setText(lname);
         this.setVisible(true);
     }
-        
-    
 
-    
-    
 
-    
+
 }

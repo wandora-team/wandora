@@ -28,7 +28,6 @@ package org.wandora.application.gui.search;
 
 
 
-
 import java.awt.Component;
 import java.awt.event.KeyEvent;
 
@@ -45,25 +44,25 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 
-
 /**
  *
  * @author  olli
  */
 public class SelectTopicPanel extends javax.swing.JPanel implements TopicSelector {
-    
+
     private static final long serialVersionUID = 1L;
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(SelectTopicPanel.class);
-    
+
     private Wandora wandora;
     private Topic result;
-    
+
     /** Creates new form SelectTopicPanel */
     public SelectTopicPanel(Wandora wandora) {
-        this.wandora=wandora;
+        this.wandora = wandora;
         initComponents();
     }
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -140,6 +139,8 @@ public class SelectTopicPanel extends javax.swing.JPanel implements TopicSelecto
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 searchTextFieldKeyReleased(evt);
             }
+
+
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 searchTextFieldKeyTyped(evt);
             }
@@ -171,7 +172,8 @@ public class SelectTopicPanel extends javax.swing.JPanel implements TopicSelecto
         resultTextArea.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
         resultTextArea.setLineWrap(true);
         resultTextArea.setRows(6);
-        resultTextArea.setText("Select identifier type and enter complete identifier. Finalize by clicking the Seek button. Select result is viewed in this field.");
+        resultTextArea.setText(
+                "Select identifier type and enter complete identifier. Finalize by clicking the Seek button. Select result is viewed in this field.");
         resultTextArea.setWrapStyleWord(true);
         resultTextArea.setOpaque(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -192,95 +194,112 @@ public class SelectTopicPanel extends javax.swing.JPanel implements TopicSelecto
         add(searchPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void searchTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextFieldKeyReleased
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             doSearch();
         }
     }//GEN-LAST:event_searchTextFieldKeyReleased
 
+
     @Override
-    public void init(){}
+    public void init() {
+    }
+
+
     @Override
-    public void cleanup(){}
-    
-    
-    
+    public void cleanup() {
+    }
+
+
+
     public void requestSearchFieldFocus() {
         searchTextField.requestFocus();
         searchTextField.selectAll();
     }
-    
-    
-    public void doSearch(){
-        String text=searchTextField.getText().trim();
-        result=null;
+
+
+    public void doSearch() {
+        String text = searchTextField.getText().trim();
+        result = null;
         try {
-            if(baseNameRadioButton.isSelected()){
-                result=wandora.getTopicMap().getTopicWithBaseName(text);
+            if (baseNameRadioButton.isSelected()) {
+                result = wandora.getTopicMap().getTopicWithBaseName(text);
             }
-            else if(subjectIdentifierRadioButton.isSelected()){
-                result=wandora.getTopicMap().getTopic(text);
+            else if (subjectIdentifierRadioButton.isSelected()) {
+                result = wandora.getTopicMap().getTopic(text);
             }
-            else{
-                result=wandora.getTopicMap().getTopicBySubjectLocator(text);
+            else {
+                result = wandora.getTopicMap().getTopicBySubjectLocator(text);
             }
-        } catch(TopicMapException tme){
-        	logger.error(tme);
+        }
+        catch (TopicMapException tme) {
+            logger.error(tme);
             return;
         }
-        if(result==null){
+        if (result == null) {
             resultTextArea.setText("Topic not found");
         }
-        else{
+        else {
             try {
-                String resText="Found topic\n"+
-                               "Base name: "+result.getBaseName()+"\n"+
-                               "Subject identifiers:\n";
+                String resText = "Found topic\n" +
+                        "Base name: " + result.getBaseName() + "\n" +
+                        "Subject identifiers:\n";
 
-                for(Locator l : result.getSubjectIdentifiers()){
-                    resText+="    "+l.toExternalForm()+"\n";
+                for (Locator l : result.getSubjectIdentifiers()) {
+                    resText += "    " + l.toExternalForm() + "\n";
                 }
-                if(result.getSubjectLocator()!=null) resText+="Subject locator: "+result.getSubjectLocator().toExternalForm()+"\n";
+                if (result.getSubjectLocator() != null)
+                    resText += "Subject locator: " + result.getSubjectLocator().toExternalForm() + "\n";
                 resultTextArea.setText(resText);
-            } catch(TopicMapException tme){
-            	logger.error(tme);
+            }
+            catch (TopicMapException tme) {
+                logger.error(tme);
                 resultTextArea.setText("Exception retrieving topic info");
             }
         }
     }
-    
+
+
     @Override
-    public Topic getSelectedTopic(){
+    public Topic getSelectedTopic() {
         return result;
     }
-    
+
+
     @Override
-    public Topic[] getSelectedTopics(){
-        if(result==null) return new Topic[0];
-        else return new Topic[]{result};
+    public Topic[] getSelectedTopics() {
+        if (result == null)
+            return new Topic[0];
+        else
+            return new Topic[] { result };
     }
+
 
     @Override
     public Component getPanel() {
         return this;
     }
-    
+
+
     @Override
-    public String getSelectorName(){
+    public String getSelectorName() {
         return "Select";
     }
-    
+
+
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         doSearch();
     }//GEN-LAST:event_searchButtonActionPerformed
 
+
     private void searchTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextFieldKeyTyped
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             doSearch();
         }
     }//GEN-LAST:event_searchTextFieldKeyTyped
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton baseNameRadioButton;
     private javax.swing.ButtonGroup buttonGroup1;
@@ -293,5 +312,5 @@ public class SelectTopicPanel extends javax.swing.JPanel implements TopicSelecto
     private javax.swing.JRadioButton subjectIdentifierRadioButton;
     private javax.swing.JRadioButton subjectLocatorRadioButton;
     // End of variables declaration//GEN-END:variables
-    
+
 }
