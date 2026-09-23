@@ -206,12 +206,6 @@ public class Join extends Directive implements DirectiveUIHints.Provider {
             }
             if(row==null) return false;
             nextRow=row;
-//            counter++;
-//            if((counter%50000)==0){
-//                double speed=50000.0/(double)(System.currentTimeMillis()-startTime)*1000.0;
-//                System.out.println("Join counter "+counter+" "+speed);
-//                startTime=System.currentTimeMillis();
-//            }
 
             for(int i=iterators.size()-1;i>=0;i--){
                 ResultIterator iter=iterators.get(i);

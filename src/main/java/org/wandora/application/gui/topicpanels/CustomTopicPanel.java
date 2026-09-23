@@ -536,7 +536,7 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         try {
             topic=wandora.getTopicMap().getTopic(topicSI);
             if(topic==null || topic.isRemoved()) {
-                System.out.println("Topic is null or removed!");
+                logger.warn("Topic is null or removed!");
                 panelContainer.setVisible(false);
                 removedTopicMessage.setVisible(true);
                 return;

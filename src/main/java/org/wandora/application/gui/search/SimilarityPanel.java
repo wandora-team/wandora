@@ -349,7 +349,7 @@ public class SimilarityPanel extends javax.swing.JPanel implements TopicSelector
                 break;
             }
             default: {
-                System.out.println("Unknown similarity type used in similarity test");
+                logger.warn("Unknown similarity type used in similarity test");
             }
         }
         return stringMetric;

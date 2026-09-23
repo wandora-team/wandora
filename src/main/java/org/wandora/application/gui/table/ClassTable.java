@@ -230,7 +230,7 @@ public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                 String data = (String)tr.getTransferData(stringFlavor);
 
-                System.out.println("Trying string data flavor. Data="+data);                    
+                logger.info("Trying string data flavor. Data="+data);                    
 
                 String[] split=data.split("\n");
                 String identifier = null;
@@ -264,7 +264,7 @@ public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
                 e.dropComplete(true);
             }
             else {
-                System.out.println("Drop rejected! Wrong data flavor!");
+                logger.info("Drop rejected! Wrong data flavor!");
                 e.rejectDrop();
             }
             this.setBorder(null);

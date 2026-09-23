@@ -236,7 +236,6 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        // System.out.println("TopicTabbedPane state changed!");
         if(e.getSource().equals(topicTabbedPane) && options != null) {
             Component component = topicTabbedPane.getSelectedComponent();
             if(component != null) {
@@ -470,7 +469,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
                 topic = wandora.getTopicMap().getTopic(topicSI);
             }
             if(topic==null || topic.isRemoved()) {
-                System.out.println("Topic is null or removed!");
+                logger.warn("Topic is null or removed!");
                 topicTabbedPane.setVisible(false);
                 removedTopicMessage.setVisible(true);
                 return;
@@ -482,7 +481,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
         }
         catch(Exception e){
         	logger.error(e);
-            System.out.println("Topic is null or removed!");
+            logger.warn("Topic is null or removed!");
             topicTabbedPane.setVisible(false);
             removedTopicMessage.setVisible(true);
             return;
@@ -1148,7 +1147,7 @@ public class TabbedTopicPanel extends AbstractTraditionalTopicPanel implements A
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
-        System.out.println("TabbedTopicPanel catched action command '" + c + "'.");
+        logger.info("TabbedTopicPanel catched action command '" + c + "'.");
         toggleVisibility(c);    
     }
     

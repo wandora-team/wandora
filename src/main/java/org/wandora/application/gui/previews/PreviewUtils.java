@@ -245,7 +245,7 @@ public class PreviewUtils {
     public static void forkExternalPlayer(String locator) {
         if(locator != null && locator.length() > 0) {
             if(!DataURL.isDataURL(locator)) {
-                System.out.println("Spawning viewer for \""+locator+"\"");
+                logger.info("Spawning viewer for \""+locator+"\"");
                 try {
                     Desktop desktop = Desktop.getDesktop();
                     desktop.browse(new URI(locator));
@@ -300,7 +300,7 @@ public class PreviewUtils {
                 }
             }
             catch(Exception e) {
-                System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + file.getPath() + "'.");
+                logger.info("Exception '" + e.toString() + "' occurred while saving file '" + file.getPath() + "'.");
             }
         }
     }
@@ -507,7 +507,7 @@ public class PreviewUtils {
                                 mimetypeCache.put(url, lowerCaseMimeType);
                             }
                             if(lowerCaseMimeType != null) {
-                                // System.out.println("Tika detected mimetype: "+lowerCaseMimeType);
+                                // logger.info("Tika detected mimetype: "+lowerCaseMimeType);
                                 for(String testMimeType : mimeTypes) {
                                     if(lowerCaseMimeType.startsWith(testMimeType)) {
                                         return true;
@@ -518,21 +518,21 @@ public class PreviewUtils {
                     }
                     catch(ConnectException ce) {
                         mimetypeCache.put(url, null);
-                        System.out.println("ConnectException occurred while detecting preview's type: "+ce.toString());
+                        logger.error("ConnectException occurred while detecting preview's type: "+ce.toString());
                     }
                     catch(FileNotFoundException fnfe) {
                         mimetypeCache.put(url, null);
-                        System.out.println("FileNotFoundException occurred while detecting preview's type: "+fnfe.toString());
+                        logger.error("FileNotFoundException occurred while detecting preview's type: "+fnfe.toString());
                     }
                     catch(IllegalArgumentException iae) {
                         mimetypeCache.put(url, null);
-                        System.out.println("IllegalArgumentException occurred while detecting preview's type: "+iae.toString());
+                        logger.error("IllegalArgumentException occurred while detecting preview's type: "+iae.toString());
                     }
                     catch(Exception e) {
-                        System.out.println("PreviewUtils.canView fails after an exception: "+e.toString());
+                        logger.error("PreviewUtils.canView fails after an exception: "+e.toString());
                     }
                     catch(Error err) {
-                        System.out.println("PreviewUtils.canView fails after an error: "+err.toString());
+                        logger.error("PreviewUtils.canView fails after an error: "+err.toString());
                     }
                 }
             }

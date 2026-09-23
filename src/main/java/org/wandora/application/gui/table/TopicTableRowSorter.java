@@ -78,7 +78,6 @@ public class TopicTableRowSorter extends TableRowSorter {
                     try {
                         String n1 = TopicToString.toString((Topic) o1);
                         String n2 = TopicToString.toString((Topic) o2);
-//                        System.out.println("comparing topics: "+n1+" and "+n2+"");
                         return n1.compareTo(n2);
                     }
                     catch(Exception e) {
@@ -88,7 +87,6 @@ public class TopicTableRowSorter extends TableRowSorter {
                 else if(o1 instanceof String && o2 instanceof String) {
                     try {
                         int d = ((String) o1).compareTo((String) o2);
-//                        System.out.println("comparing strings: "+o1+" and "+o2+"");
                         return d;
                     }
                     catch(Exception e) {}

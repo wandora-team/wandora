@@ -85,15 +85,15 @@ public class TopicPanelMenuAction extends SimpleButtonAction {
 
     @Override
     public void action(Dockable dockable) {
-        System.out.println("ACTION Open topic panel options TRIGGERED");
+        logger.debug("ACTION Open topic panel options TRIGGERED");
         try {
             if(topicPanel != null) {
                 JPopupMenu popupMenu = topicPanel.getViewPopupMenu();
                 Point p = new Point(dockable.getComponent().getWidth(), 0);
                 if(dockable instanceof WandoraDockable) {
-                    System.out.println("Dockable is WandoraDockable");
+                    logger.debug("Dockable is WandoraDockable");
                     MouseEvent me = ((WandoraDockable) dockable).getLastMouseEvent();
-                    System.out.println("Dockable's last mousevent is "+me);
+                    logger.debug("Dockable's last mousevent is "+me);
                     if(me != null) {
                         p = me.getPoint();
                     }

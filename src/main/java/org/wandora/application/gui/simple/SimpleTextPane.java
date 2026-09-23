@@ -610,7 +610,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                                 inputReader = new StringReader(content);
                             }
                             catch (Exception e) {
-                                System.out.println("No PDF support!");
+                                logger.error("No PDF support!");
                             }
                         }
 
@@ -861,7 +861,7 @@ public class SimpleTextPane extends javax.swing.JTextPane implements MouseListen
                 e.dropComplete(true);
             }
             else {
-                System.out.println("Unknown data flavor. Drop rejected.");
+                logger.warn("Unknown data flavor. Drop rejected.");
                 e.rejectDrop();
             }
         }

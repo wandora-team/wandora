@@ -185,7 +185,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
                 }
             }
             catch (Exception e) {
-                System.out.println("No options for text editor. Using defaults!");
+                logger.warn("No options for text editor. Using defaults!");
             }
         }
         if(!placedSuccessfully) {
@@ -519,7 +519,7 @@ public class TextEditor extends javax.swing.JDialog implements ActionListener {
                 updateEditorColors();
             }
             else {
-                System.out.println("Passing actionEvent '"+c+"' to SimpleTextPane.");
+                logger.info("Passing actionEvent '"+c+"' to SimpleTextPane.");
                 simpleTextPane.actionPerformed(actionEvent);
             }
         }

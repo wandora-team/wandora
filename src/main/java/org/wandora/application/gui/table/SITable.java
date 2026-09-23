@@ -79,7 +79,6 @@ public class SITable extends LocatorTable {
     @Override
     public void processDrop(String data) {
         boolean siAdded = false;
-        //System.out.println("data == " + data);
         if(data.startsWith("file:")) {
             try {
                 topic.addSubjectIdentifier(new Locator(data));
@@ -109,14 +108,12 @@ public class SITable extends LocatorTable {
                 if(l == -1) l = data.indexOf("file:");
                 if(l > -1) {
                     String url = data.substring(l);
-                    // System.out.println("url == " + url);
                     data = "";
                     int j = url.indexOf(' ');
                     if(j == -1) j = url.indexOf('\n');
                     if(j > -1) {
                         data = url.substring(j);
                         url = url.substring(0, j);
-                        // System.out.println("url == " + url);
                     }
                     try {
                         topic.addSubjectIdentifier(new Locator(url.trim()));

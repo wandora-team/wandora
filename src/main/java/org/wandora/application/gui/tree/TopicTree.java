@@ -350,28 +350,18 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
         if(rootTopicSI != null) {
             rootTopic=topicMap.getTopic(rootTopicSI);
             if(rootTopic==null){
-                System.out.println("Topic tree root topic not found ("+rootTopicSI+")");
-    /*            System.out.println("Root topic not found in topic map. Trying default root '"+WandoraManager.WANDORACLASS_SI+"'.");
-                rootTopic=topicMap.getTopic(WandoraManager.WANDORACLASS_SI);
-                if(rootTopic == null) {
-                    System.out.println("Default root not found. Trying XTM base '"+XTMPSI.XTM1_BASE+"'.");
-                    rootTopic=topicMap.getTopic(XTMPSI.XTM1_BASE);
-                    if(rootTopic == null) {
-                        // TODO: WHAT NOW! THERE IS NO SUFFICIENT ROOT FOR THE TREE!!!
-                    }
-                }*/
+                logger.warn("Topic tree root topic not found ("+rootTopicSI+")");
             }
         }
         if(rootTopic!=null){
             TopicTreeModel newModel=new TopicTreeModel(rootTopic,selectedAs,this);
             this.model=newModel;
-            // System.out.println("Resetting tree model "+selectedAs.size());
             setModel(newModel); 
             needsRefresh=false;
             if(chooser!=null) chooser.setTreeEnabled(true);
         }
         else{
-            System.out.println("Root topic not found for topic tree. Disabling tree.");
+            logger.warn("Root topic not found for topic tree. Disabling tree.");
             if(chooser!=null) chooser.setTreeEnabled(false);
             this.model=null;
             // setModel(null);
@@ -413,8 +403,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
     
     public boolean selectTopic(Topic t) {
         TreePath path = model.getPathFor(t);
-        if(path != null) {  
-            // System.out.println(path.toString());    // Able to get the exact node here    
+        if(path != null) {    
             setExpandsSelectedPaths(true);                  
             setSelectionPath(path);
             scrollPathToVisible(path);

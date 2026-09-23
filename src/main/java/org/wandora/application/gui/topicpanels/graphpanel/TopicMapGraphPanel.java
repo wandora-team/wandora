@@ -477,7 +477,6 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     }
     
     public void clearModel(){
-        // System.out.println("Clear model");
         model=null;
         tmModel=null;
         stopThread();
@@ -485,7 +484,6 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     }
     
     public void remakeModels(TopicMap tm){
-        // System.out.println("Remake model");
         needsRefresh=false;
         model=new VModel(this);
         tmModel=new TopicMapModel(model,tm);
@@ -507,9 +505,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         synchronized(this) {
             rootTopic=t;
             if(model==null){
-                // System.out.println("setRootTopic, remake");
                 remakeModels(t.getTopicMap());
-
                 TopicNode n=tmModel.getNodeFor(t);
                 model.addNode(n);
                 model.openNode(n);
@@ -517,7 +513,6 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
                 if(!running) startThread();
             }
             else {
-                // System.out.println("setRootTopic, reuse");
                 Node n=tmModel.getNodeFor(t);
                 boolean exists=(model.getNode(n)!=null);
                 VNode vn=null;
@@ -1688,7 +1683,6 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
             projection.set(Projection.VIEW_HEIGHT, this.getHeight());
         }
 
-        // System.out.println("Refreshing graph");
         synchronized(this){
             needsRefresh=false;
             TopicMap tm=tmModel.getTopicMap();

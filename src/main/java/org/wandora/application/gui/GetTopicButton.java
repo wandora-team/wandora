@@ -408,9 +408,6 @@ public class GetTopicButton extends SimpleButton {
 
         @Override
         public boolean importData(TransferHandler.TransferSupport support) {
-            
-            System.out.println("DROP ON GETTOPICBUTTON");
-            
             if(!support.isDrop()) return false;
             try {
                 TopicMap tm=Wandora.getWandora().getTopicMap();

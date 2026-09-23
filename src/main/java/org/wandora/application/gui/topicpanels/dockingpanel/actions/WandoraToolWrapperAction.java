@@ -75,7 +75,7 @@ public class WandoraToolWrapperAction extends SimpleButtonAction {
 
     @Override
     public void action(Dockable dockable) {
-        System.out.println("ACTION TRIGGERED");
+        logger.debug("ACTION TRIGGERED");
         try {
             if(tool != null) {
                 tool.execute(Wandora.getWandora(), (ActionEvent) null);

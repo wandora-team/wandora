@@ -305,7 +305,6 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
     }// </editor-fold>//GEN-END:initComponents
 
     private void urlTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_urlTextFieldKeyPressed
-        //System.out.println("evt.getKeyCode() == "+evt.getKeyCode());
         if(webEngine != null && evt.getKeyCode() == 10) {
             final String u = toURL(urlTextField.getText());
             Platform.runLater(new Runnable() {
@@ -935,7 +934,6 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
                 @Override
                 public void changed(ObservableValue ov, State oldState, State newState) {
                     if(newState == Worker.State.SCHEDULED) {
-                        //System.out.println("Scheduled!");
                         startLoadingAnimation();
                     }
                     if(newState == Worker.State.SUCCEEDED) {
@@ -960,7 +958,6 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
                         stopLoadingAnimation();
                     }
                     else if(newState == Worker.State.CANCELLED) {
-                        //System.out.println("Cancelled!");
                         stopLoadingAnimation();
                     }
                     else if(newState == Worker.State.FAILED) {
@@ -976,7 +973,6 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
     
 
     public void stop() {
-        //System.out.println("---- Stopping Webview topic panel!");
         browse((String) null);
     }
     
@@ -1056,18 +1052,13 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
     
     
     public String getSelectedText() {
-        //System.out.println("get selected text");
         String selection = (String) executeSynchronizedScript("window.getSelection().toString()");
-        //System.out.println("  and the selection is "+selection);
         return selection;
     }
     
     
     public String getSelectedSource() {
         String selection = (String) executeSynchronizedScriptResource(JAVASCRIPT_RESOURCE_GET_SELECTED_SOURCE);
-        //System.out.println("--------");
-        //System.out.println(selection);
-        //System.out.println("--------");
         return selection;
     }
     
@@ -1079,23 +1070,12 @@ public class WebViewPanel extends javax.swing.JPanel implements TopicMapListener
             JSObject d = (JSObject) executeSynchronizedScriptResource(JAVASCRIPT_RESOURCE_GET_SOURCE_WITH_SELECTION_INDEXES);
 
             if(d != null) {
-                //System.out.println("========");
-                //System.out.println(d.toString());
-                //System.out.println("========");
                 try {
                     content = (String) d.getMember("content");
                     start = (Integer) d.getMember("selectionStart");
                     end = (Integer) d.getMember("selectionEnd");
                 } catch(Exception e) {}
             }
-            //System.out.println("--------");
-            //System.out.println(content);
-            //if(start != -1 && end != -1) System.out.println(content.substring(start, end));
-            //else System.out.println("ALL");
-            //System.out.println("--------");
-            //System.out.println("start: "+start);
-            //System.out.println("end: "+end);
-            //System.out.println("--------");
         }
         catch(Exception e) {
         	logger.error(e);

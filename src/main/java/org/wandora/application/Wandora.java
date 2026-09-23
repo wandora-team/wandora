@@ -2078,13 +2078,13 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
-        System.out.println("Wandora catched action command '" + c + "'.");
+        logger.info("Wandora catched action command '" + c + "'.");
         
         if("Reset".equalsIgnoreCase(c)) {
             resetWandora();
         }
         else {
-            System.out.println("Warning: Action command " + c + " NOT processed!");
+            logger.warn("Warning: Action command " + c + " NOT processed!");
         }
     }    
     
@@ -2148,7 +2148,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             }
         }
         catch (Exception e) { 
-            System.out.println("Couldn't solve Wandora with component '"+c+"'. Exception '"+e.toString()+"' occurred."); 
+            logger.error("Couldn't solve Wandora with component '"+c+"'. Exception '"+e.toString()+"' occurred."); 
         }
         return w;
     }
@@ -2180,7 +2180,6 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     
     public void gainFocus(Component c) {
         focusOwner = c;
-        // System.out.println("gain focus for "+(c==null?"null":c.getClass()));
     }
     
     public void looseFocus(Component c) {

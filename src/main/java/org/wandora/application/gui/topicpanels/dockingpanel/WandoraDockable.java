@@ -59,7 +59,6 @@ public class WandoraDockable extends DefaultDockable {
         for(int i=0; i<dtitles.length; i++) {
             DockTitle dtitle = dtitles[i];
             Component comp = dtitle.getComponent();
-            //System.out.println("COMP="+comp);
             //comp.add(tp.getViewPopupMenu());
         }
         this.addMouseInputListener(new WandoraDockableMouseListener());

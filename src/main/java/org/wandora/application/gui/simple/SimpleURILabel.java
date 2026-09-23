@@ -54,7 +54,7 @@ public class SimpleURILabel extends SimpleLabel {
         if (DataURL.isDataURL(str)) {
             completeLabelString = str;
             String strFragment = str.substring(0, Math.min(str.length(), 64)) + "... (" + str.length() + ")";
-            System.out.println("strFragment==" + strFragment);
+            logger.debug("strFragment==" + strFragment);
             super.setText(strFragment);
         }
         else {

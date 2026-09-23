@@ -218,7 +218,6 @@ public class TopicTreeModel implements TreeModel {
                             }
                         }
                     }
-                    //System.out.println("visible topics (locators): "+visibleTopics.size());
                 }
                 catch(Exception tme) {
                     logger.error(tme);

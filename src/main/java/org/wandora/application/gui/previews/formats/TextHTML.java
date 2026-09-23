@@ -134,7 +134,7 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
     
     @Override
     public JPanel getGui() {
-        // System.out.println("getting ui...");
+        // logger.info("getting ui...");
         if(ui == null) {
             ui = new JPanel();
             // ui.addMouseListener(this);
@@ -260,8 +260,8 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                         try {
                             String s = getSelection();
                             ((DropExtractor) myTool).dropExtract(s);
-                            //System.out.println("extracting " + s);
-                            //System.out.println("extractor " + myTool);
+                            //logger.info("extracting " + s);
+                            //logger.info("extractor " + myTool);
                         }
                         catch(Exception exx) { 
                             wandora.handleError(exx);
@@ -433,8 +433,8 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                         try {
                             String url = currentHyperLink.toExternalForm();
                             ((DropExtractor) myTool).dropExtract(new String[] { url });
-                            System.out.println("extracting url " + url);
-                            System.out.println("extractor " + myTool);
+                            logger.info("extracting url " + url);
+                            logger.info("extractor " + myTool);
                         }
                         catch(Exception exx) { 
                             wandora.handleError(exx);
@@ -474,9 +474,7 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
             currentHyperLink = e.getURL();
             
             if(!linkPopup.isVisible()) {
-                System.out.println("link pupup1");
                 if(mouseEvent != null) {
-                    System.out.println("link pupup2");
                     linkPopup.show(ui, mouseEvent.getX(), mouseEvent.getY());
                 }
             }
@@ -677,7 +675,7 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                     @Override
                     public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
                         if(newState == Worker.State.SCHEDULED) {
-                            //System.out.println("Scheduled!");
+                            //logger.info("Scheduled!");
                             
                         }
                         if(newState == Worker.State.SUCCEEDED) {
@@ -701,7 +699,7 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                             }
                         }
                         else if(newState == Worker.State.CANCELLED) {
-                            //System.out.println("Cancelled!");
+                            //logger.info("Cancelled!");
                         }
                         else if(newState == Worker.State.FAILED) {
                             String failedToOpenMessage = "<h1>Failed to open URL</h1>";
@@ -790,9 +788,9 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
         
         
         public String getSelectedText() {
-            //System.out.println("get selected text");
+            //logger.info("get selected text");
             String selection = (String) executeSynchronizedScript("window.getSelection().toString()");
-            //System.out.println("  and the selection is "+selection);
+            //logger.info("  and the selection is "+selection);
             return selection;
         }
         

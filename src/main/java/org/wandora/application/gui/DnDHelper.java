@@ -147,7 +147,7 @@ public class DnDHelper {
                 if(y!=0) sb.append("\n");
                 for(int x=0; x<columns.length; x++) {
                     t = table.getTopicAt(y,x);
-                    System.out.println("transferable at "+x+", "+y);
+                    logger.debug("transferable at "+x+", "+y);
                     selected.add(t);
                     if(x!=0) sb.append("\t");
                     if(t != null && !t.isRemoved()) {

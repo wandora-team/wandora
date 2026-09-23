@@ -246,9 +246,6 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     
     @Override
     public void open(Topic topic) throws TopicMapException, OpenTopicNotSupportedException {
-        //System.out.println("initialize Docking Frame Panel");
-        //String name = TopicToString.toString(topic);
-
         openedTopic = topic;
         
         if(currentDockable == null) {
@@ -356,7 +353,6 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             for(Dockable dockable : dockedTopicPanels.keySet()) {
                 TopicPanel topicPanel = dockedTopicPanels.get(dockable);
                 if(topicPanel != null) {
-                    //System.out.println("refresh topic panel at docking frame panel");
                     topicPanel.refresh();
                     updateDockableTitle(topicPanel);
                 }
@@ -1162,7 +1158,6 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                 }               
             }
         }
-        //System.out.println("drop context == " + dropContext);
         ActionEvent fakeEvent = new ActionEvent(wandora, 0, "merge");
         ChainExecuter chainExecuter = new ChainExecuter(importTools);
         chainExecuter.execute(wandora, fakeEvent);
@@ -1212,7 +1207,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                     }
                 }
                 else {
-                    System.out.println("Drop rejected! Wrong data flavor!");
+                    logger.warn("Drop rejected! Wrong data flavor!");
                     e.rejectDrop();
                 }
             }

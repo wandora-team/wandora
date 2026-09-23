@@ -462,7 +462,6 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
         while(!refresher.isInterrupted()) {
             if(requiresRefresh) {
                 requiresRefresh = false;
-                // System.out.println("RefreshInfo");
                 refreshInfo();
                 infoPanel.revalidate();
                 infoPanel.repaint();

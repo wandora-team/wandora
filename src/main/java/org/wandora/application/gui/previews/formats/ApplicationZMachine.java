@@ -242,7 +242,7 @@ public class ApplicationZMachine implements ActionListener, PreviewPanel {
     @Override
     public void finish() {
         if(machine != null) {
-            System.out.println("Finishing machine!");
+            logger.info("Finishing machine!");
             
             /*
             Input in = machine.getInput();

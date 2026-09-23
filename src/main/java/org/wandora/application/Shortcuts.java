@@ -266,7 +266,6 @@ public class Shortcuts implements ActionListener {
             parseShortcuts(shortcutString);
         }
         catch (Exception e) {
-            System.out.println("Exception occurred '" + e.toString() + "' while loading shortcuts from '" + filename + "'!");
             if(wandora != null) wandora.handleError(e);
             else logger.error(e);
         }
@@ -284,7 +283,6 @@ public class Shortcuts implements ActionListener {
             }
         }
         catch (Exception e) {
-            System.out.println("Exception occurred '" + e.toString() + "' while parsing shortcuts!");
             wandora.handleError(e);
         }
     }
@@ -306,7 +304,7 @@ public class Shortcuts implements ActionListener {
             writer.close();
         }
         catch(Exception e) {
-            //System.out.println("Exception occurred '" + e.toString() + "' while saving shortcuts to '" + file.getPath() + "'!");
+            logger.error("Exception occurred '" + e.toString() + "' while saving shortcuts to file!");
             WandoraOptionPane.showMessageDialog(wandora, "Exception occurred '" + e.toString() + "' while saving shortcuts to '" + file.getPath() + "'!", WandoraOptionPane.ERROR_MESSAGE);
         }
     }
@@ -323,7 +321,7 @@ public class Shortcuts implements ActionListener {
             }
         }
         catch(Exception e) {
-            //System.out.println("Exception occurred '" + e.toString() + "' while saving shortcuts to options!");
+            logger.error("Exception occurred '" + e.toString() + "' while saving shortcuts to options!");
             WandoraOptionPane.showMessageDialog(wandora,"Exception occurred '" + e.toString() + "' while saving shortcuts to options!");
         }
     }

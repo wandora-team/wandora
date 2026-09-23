@@ -181,7 +181,6 @@ public class TreeModel {
     }
 
     private void print(String prefix) {
-        System.out.println(prefix+"size="+mapItem.getSize());
         for(int i=0; i<childCount(); i++)
             getChild(i).print(prefix+"..");
     }

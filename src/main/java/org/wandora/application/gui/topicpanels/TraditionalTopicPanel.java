@@ -359,7 +359,6 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     
     private void toggleVisibility(Component component, String optionName) {
         boolean currentValue = options.isFalse(OPTIONS_VIEW_PREFIX + optionName);
-        //System.out.println("currentValue==" + currentValue);
         setVisibitilityOption(optionName, currentValue);
         if(component != null) {
             SwingUtilities.invokeLater(new Runnable() {
@@ -407,7 +406,6 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
                 topic = wandora.getTopicMap().getTopic(topicSI);
             }
             if(topic==null || topic.isRemoved()) {
-                //System.out.println("Topic is null or removed!");
                 containerPanel.setVisible(false);
                 removedTopicMessage.setVisible(true);
                 return;
@@ -419,13 +417,11 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         }
         catch(Exception e){
         	logger.error(e);
-            //System.out.println("Topic is null or removed!");
             containerPanel.setVisible(false);
             removedTopicMessage.setVisible(true);
             return;
         }
-        
-        //System.out.println("refresh");
+
         super.refresh();
         
         // First update visibility of panels!!
@@ -512,7 +508,6 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         
         this.revalidate();
         this.repaint();
-        //System.out.println("refresh-end");
     }
     
     
@@ -522,8 +517,6 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     
     @Override
     public boolean applyChanges() throws CancelledException, TopicMapException {
-        //System.out.println("applyChanges");
-        
         // First check if user has somehow removed current topic. 
         // Then there is no need for apply changes!
         try {
@@ -551,7 +544,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
                 throw new CancelledException();
             }
             if(fieldTextBN.length() > 0) {
-                System.out.println("set basename to "+fieldTextBN);
+                logger.debug("set basename to "+fieldTextBN);
                 topic.setBaseName(fieldTextBN);
             }
             else {
@@ -582,7 +575,6 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         if(changed) {
             wandora.doRefresh();
         }
-        //System.out.println("applyChanges-end");
         return changed;
     }
     
@@ -1170,7 +1162,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     private void baseNameFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_baseNameFieldKeyReleased
         try {
             if(evt.getKeyCode()==KeyEvent.VK_ENTER) {
-                System.out.println("Applying changes called at keyReleased");
+                logger.debug("Applying changes called at keyReleased");
                 applyChanges();
             }
         }
@@ -1302,7 +1294,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
-        System.out.println("TraditionalTopicPanel catched action command '" + c + "'.");
+        logger.info("TraditionalTopicPanel catched action command '" + c + "'.");
         toggleVisibility(c);       
     }
     

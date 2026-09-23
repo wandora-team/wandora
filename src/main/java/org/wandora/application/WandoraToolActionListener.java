@@ -32,6 +32,7 @@ package org.wandora.application;
 import javax.swing.SwingUtilities;
 
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -42,7 +43,7 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class WandoraToolActionListener implements java.awt.event.ActionListener {
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolActionListener.class);
     
     private final WandoraTool tool;
     private final Wandora wandora;
@@ -84,7 +85,7 @@ public class WandoraToolActionListener implements java.awt.event.ActionListener 
             });
         }
         else {
-            System.out.println("No Wandora or tool object specified in WandoraToolActionListener. Can't execute.");
+            logger.warn("No Wandora or tool object specified in WandoraToolActionListener. Can't execute.");
         }
     }
     

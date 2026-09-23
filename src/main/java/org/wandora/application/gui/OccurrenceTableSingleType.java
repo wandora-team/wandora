@@ -651,7 +651,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             int modelCol = convertColumnIndexToModel(columnAtPoint(coords));
             int modelRow = convertRowIndexToModel(rowAtPoint(coords));
             
-            System.out.println("getTableModelPoint: "+col+","+row+" -> "+modelCol+","+modelRow);
+            logger.info("getTableModelPoint: "+col+","+row+" -> "+modelCol+","+modelRow);
             
             return new Point(modelCol, modelRow);
         }
@@ -728,7 +728,6 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
-        //System.out.println("Mouse clicked!");
     }
     
     @Override
@@ -816,7 +815,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                     }
                 }
                 catch(MalformedURLException mue) {
-                    System.out.println("Warning: Malformed data-url found.");
+                    logger.error("Warning: Malformed data-url found.");
                 }
                 catch(Exception e) {
                     logger.error(e);
@@ -1236,7 +1235,7 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                                                 doc.close();
                                             }
                                             catch(Exception e) {
-                                                System.out.println("No PDF support!");
+                                                logger.warn("No PDF support!");
                                             }
                                         }
 

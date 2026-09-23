@@ -749,7 +749,6 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
         TableSelectionModel selection = getTableSelectionModel();
         int colCount = this.getColumnCount();
         int rowCount = this.getRowCount();
-        //System.out.println("----");
         for(int c=0; c<colCount; c++) {
             int cc = convertColumnIndexToModel(c);
             ListSelectionModel columnSelectionModel = selection.getListSelectionModelAt(cc);
@@ -757,7 +756,6 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 for(int r=0; r<rowCount; r++) {
                     if(columnSelectionModel.isSelectedIndex(r)) {
                         selected.add( new int[] { r, c } );
-                        //System.out.println("found cell "+cc+","+r);
                     }
                 }
             }
@@ -1586,9 +1584,9 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
             }
         }
         else {
-            System.out.println("Has less than three rows. Can't build an association.");
+            logger.info("Has less than three rows. Can't build an association.");
         }
-        System.out.println("Created "+associationCount+" associations.");
+        logger.info("Created "+associationCount+" associations.");
     }
     
     
@@ -1635,9 +1633,9 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
             }
         }
         else {
-            System.out.println("Has no rows. Can't build an association.");
+            logger.info("Has no rows. Can't build an association.");
         }
-        System.out.println("Created "+associationCount+" associations.");
+        logger.info("Created "+associationCount+" associations.");
     }
     
     
@@ -1679,9 +1677,9 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
             }
         }
         else {
-            System.out.println("Has no rows. Can't build an association.");
+            logger.info("Has no rows. Can't build an association.");
         }
-        System.out.println("Created "+associationCount+" associations.");
+        logger.info("Created "+associationCount+" associations.");
     }
     
 
@@ -1716,9 +1714,9 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
             }
         }
         else {
-            System.out.println("Has no rows. Can't build an association.");
+            logger.info("Has no rows. Can't build an association.");
         }
-        System.out.println("Created "+associationCount+" associations.");
+        logger.info("Created "+associationCount+" associations.");
     }
     
     
@@ -1940,7 +1938,6 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 int dropRow = tablePoint.y;
                 TopicMap tm=Wandora.getWandora().getTopicMap();
                 if(support.isDataFlavorSupported(DnDHelper.topicGridDataFlavor)) {
-                    //System.out.println("Pasted topic grid");
                     Transferable trans = support.getTransferable();
                     Object transData = trans.getTransferData(DnDHelper.topicGridDataFlavor);
                     if(transData == null) return false;
@@ -2089,7 +2086,7 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                         newGridData.put(new T2<>(e1i, e2i), t);
                     }
                     else {
-                        System.out.println("Couldn't find a topic for subject identifier '"+si+"'. Skipping topic.");
+                        logger.warn("Couldn't find a topic for subject identifier '"+si+"'. Skipping topic.");
                     }
                 }
                 catch(Exception e) {

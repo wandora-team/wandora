@@ -491,7 +491,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
         if(c == null) return;
-        System.out.println("Regular expression editor action command: " +c);
+        logger.debug("Regular expression editor action command: " +c);
         
         if("New expression".equalsIgnoreCase(c)) {
             this.regexPane.setText("");
@@ -572,8 +572,6 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
     public String replace(String target) {
         try {
             if(target != null && target.length() > 0) {
-                //System.out.println("Replacing " + regexPane.getText() + " with " + replacementPane.getText());
-
                 int flags = 0;
                 if(caseSensitivityCheckBox.isSelected()) flags |= Pattern.CASE_INSENSITIVE;
                 Pattern pattern = Pattern.compile(regexPane.getText(), flags);
@@ -600,8 +598,6 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
     public boolean matches(String target) {
         try {
             if(target != null && target.length() > 0) {
-                //System.out.println("Replacing " + regexPane.getText() + " with " + replacementPane.getText());
-
                 int flags = 0;
                 if(caseSensitivityCheckBox.isSelected()) flags |= Pattern.CASE_INSENSITIVE;
                 Pattern pattern = Pattern.compile(regexPane.getText(), flags);
@@ -829,7 +825,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
                         }
                     }
                     else {
-                        System.out.println("Rejecting pattern!");
+                        logger.warn("Rejecting pattern!");
                     }
                 }
             }
@@ -858,7 +854,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
                         patterns.put(name, new EasyReplaceExpression(name, pattern, replacement, "true".equalsIgnoreCase(findInstead), "true".equalsIgnoreCase(caseSensitivity)));
                     }
                     else {
-                        //System.out.println("Rejecting pattern!");
+                        logger.warn("Rejecting pattern!");
                         noRejects = false;
                     }
                     i++;
@@ -884,7 +880,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
                     i++;
                 }
                 catch (Exception ex) {
-                    System.out.println(ex);
+                    logger.error(ex);
                 }
             }
         }
@@ -914,7 +910,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
             IObox.saveFile(file, patterns2String());
         }
         catch (Exception e) {
-            System.out.println(e);
+            logger.error(e);
         }
     }
     
@@ -929,7 +925,7 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
                 sb.append("\n");
             }
             catch (Exception ex) {
-                System.out.println(ex);
+                logger.error(ex);
             }
         }
         return sb.toString();

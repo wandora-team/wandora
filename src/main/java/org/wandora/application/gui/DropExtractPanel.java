@@ -297,7 +297,7 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String toolName = actionEvent.getActionCommand();
-        System.out.println("action performed in Drop extract panel");
+        logger.debug("action performed in Drop extract panel");
         setTool(toolName);
     }
     
@@ -430,8 +430,6 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
                         if(tool != null) {
                             setLogger(tool);
                             if(tool instanceof DropExtractor) {
-                                System.out.println("Drop!");
-                                
                                 DropExtractor dropTool = (DropExtractor) tool;
                                 
                                 forceStop = false;

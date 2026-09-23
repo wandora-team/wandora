@@ -41,6 +41,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JDialog;
@@ -174,7 +175,6 @@ public class WandoraToolManager extends AbstractWandoraTool {
                 String toolResourcePath = admin.options.get("tools.path["+pathCounter+"]");
                 if(toolResourcePath == null || toolResourcePath.length() == 0) {
                     toolResourcePath = "org/wandora/application/tools";
-                    //System.out.println("Using default tool resource path: " + toolResourcePath);
                     continueSearch = false;
                 }
                 if(paths.contains(toolResourcePath)) continue;
@@ -189,7 +189,6 @@ public class WandoraToolManager extends AbstractWandoraTool {
 //                        String baseDir = URLDecoder.decode(toolBaseUrl.toExternalForm().substring(6), "UTF-8");
                         if(!baseDir.startsWith("/") && !baseDir.startsWith("\\") && baseDir.charAt(1)!=':') 
                             baseDir="/"+baseDir;
-                        //System.out.println("Basedir: " + baseDir);
                         HashSet<String> toolFileNames = IObox.getFilesAsHash(baseDir, ".*\\.class", 1, 1000);
                         for(String classFileName : toolFileNames) {
                             try {
@@ -201,18 +200,18 @@ public class WandoraToolManager extends AbstractWandoraTool {
                                 else {
                                     Class<?> cls=Class.forName(className);
                                     if(!WandoraTool.class.isAssignableFrom(cls)) {
-                                        System.out.println("Rejecting '" + className + "'. Does not implement AdminTool interface!");
+                                        logger.info("Rejecting '" + className + "'. Does not implement AdminTool interface!");
                                         continue;
                                     }
                                     if(cls.isInterface()) {
-                                        System.out.println("Rejecting '" + className + "'. Is interface!");
+                                        logger.info("Rejecting '" + className + "'. Is interface!");
                                         continue;
                                     }
                                     try {
                                         cls.getConstructor();
                                     }
                                     catch(NoSuchMethodException nsme){
-                                        System.out.println("Rejecting '" + className + "'. No constructor!");
+                                        logger.info("Rejecting '" + className + "'. No constructor!");
                                         continue;
                                     }
                                     tool=(WandoraTool)Class.forName(className).getDeclaredConstructor().newInstance();
@@ -222,8 +221,7 @@ public class WandoraToolManager extends AbstractWandoraTool {
                                 }
                             }
                             catch(Exception ex) {
-                                System.out.println("Rejecting tool. Exception '" + ex.toString() + "' occurred while investigating tool class '" + classFileName + "'.");
-                                //logger.error(ex);
+                                logger.warn("Rejecting tool. Exception '" + ex.toString() + "' occurred while investigating tool class '" + classFileName + "'.");
                             }
                         }
                     }
@@ -413,13 +411,13 @@ public class WandoraToolManager extends AbstractWandoraTool {
                     */
                 }
                 catch(ClassNotFoundException cnfe) {
-                    System.out.println("Options refer tool class '" + cls + "' not available! Discarding tool!");
+                    logger.error("Options refer tool class '" + cls + "' not available! Discarding tool!");
                 }
                 catch(NoClassDefFoundError ncdfe) {
-                    System.out.println("A tool configured in options requires a class that was not found. This is most likely caused by a missing library. Missing class was "+ncdfe.getMessage()+". Discarding tool!");
+                    logger.error("A tool configured in options requires a class that was not found. This is most likely caused by a missing library. Missing class was "+ncdfe.getMessage()+". Discarding tool!");
                 }
                 catch(Exception e) {
-                    System.out.println(e);
+                    logger.error(e);
                 }
                 counter++;
             }
@@ -428,7 +426,7 @@ public class WandoraToolManager extends AbstractWandoraTool {
     
 
     public String getOptionsPrefix(WandoraTool adminTool){
-        HashMap<String,Integer> counters=new HashMap<String,Integer>();
+        Map<String,Integer> counters=new HashMap<>();
         for(Vector<T2<WandoraTool,String>> ts : tools.values()){
             for(T2<WandoraTool,String> tool : ts){
                 String type=tool.e1.getType().oneType();
@@ -451,7 +449,7 @@ public class WandoraToolManager extends AbstractWandoraTool {
                 options.put(key,null);
             }
         }
-        HashMap<String,Integer> counters=new HashMap<String,Integer>();
+        Map<String,Integer> counters=new HashMap<>();
         for(Vector<T2<WandoraTool,String>> ts : tools.values()){
             if(ts != null) {
                 for(T2<WandoraTool,String> tool : ts){
@@ -459,7 +457,7 @@ public class WandoraToolManager extends AbstractWandoraTool {
                         String type=tool.e1.getType().oneType();
                         int counter=0;
                         if(counters.containsKey(type)) counter=counters.get(type);
-                        System.out.println("rewriting option "+type+" == "+ tool.e2);
+                        logger.info("rewriting option "+type+" == "+ tool.e2);
                         options.put("tools."+type+".item["+counter+"].class",tool.e1.getClass().getName());
                         options.put("tools."+type+".item["+counter+"].instanceName",tool.e2);
                         /*

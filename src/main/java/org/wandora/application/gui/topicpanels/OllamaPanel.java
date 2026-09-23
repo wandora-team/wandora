@@ -1103,7 +1103,7 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
     
 
     public String handleInput(final String input) {
-        System.out.println("HANDLE INPUT: "+input);
+        logger.info("HANDLE INPUT: "+input);
         capturedOutput = new StringBuilder("");
         
         Runnable handleInputRunnable = new Runnable() {
@@ -1151,7 +1151,7 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
         
         new Thread(handleInputRunnable).start();
 
-        System.out.println("EXITING HANDLE INPUT");
+        logger.info("EXITING HANDLE INPUT");
         return "";
     }
 
@@ -1161,7 +1161,7 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
     
     
     public void output(String output) {
-    	System.out.println("OUTPUT: "+output);
+    	logger.info("OUTPUT: "+output);
         ((SimpleTextConsole) ollamaConsoleTextPane).output(output);
         ((SimpleTextConsole) ollamaConsoleTextPane).refresh();
     }

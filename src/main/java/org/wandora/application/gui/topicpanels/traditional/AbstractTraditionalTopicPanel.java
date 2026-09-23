@@ -1366,7 +1366,6 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
 
         @Override
         public boolean importData(TransferSupport support) {
-            //System.out.println("Dropped "+support);
             if(!support.isDrop()) return false;
             try {
                 TopicMap tm = wandora.getTopicMap();
@@ -1665,7 +1664,7 @@ public abstract class AbstractTraditionalTopicPanel extends JPanel implements Pr
                                         inputReader = new StringReader(content);
                                     }
                                     catch(Exception e) {
-                                        System.out.println("No PDF support!");
+                                        logger.warn("No PDF support!");
                                     }
                                 }
 

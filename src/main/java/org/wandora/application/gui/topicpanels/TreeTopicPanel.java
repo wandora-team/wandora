@@ -159,7 +159,7 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
                 configure();
             }
             else {
-                System.out.println("Unprosessed action captured '"+cmd+"' in TreeTopicPanel.");
+                logger.warn("Unprosessed action captured '"+cmd+"' in TreeTopicPanel.");
             }
         }
     }

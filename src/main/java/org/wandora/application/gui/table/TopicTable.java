@@ -440,7 +440,6 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
         TableSelectionModel selection = getTableSelectionModel();
         int colCount = this.getColumnCount();
         int rowCount = this.getRowCount();
-        //System.out.println("----");
         for(int c=0; c<colCount; c++) {
             int cc = convertColumnIndexToModel(c);
             ListSelectionModel columnSelectionModel = selection.getListSelectionModelAt(cc);
@@ -448,7 +447,6 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
                 for(int r=0; r<rowCount; r++) {
                     if(columnSelectionModel.isSelectedIndex(r)) {
                         selected.add( new int[] { r, c } );
-                        //System.out.println("found cell "+cc+","+r);
                     }
                 }
             }

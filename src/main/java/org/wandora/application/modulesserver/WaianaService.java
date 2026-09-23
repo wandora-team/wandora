@@ -280,12 +280,9 @@ public class WaianaService extends AbstractTopicWebApp {
         }
         in.close();
         
-        // System.out.println("FOUND:\n"+sb.toString());
-        
         if(sb.length() > 0) {
             try {
                 JSONObject requestJSON = new JSONObject(sb.toString());
-                // System.out.println("requestJSON:" +requestJSON.toString());
                 return requestJSON;
             } 
             catch (JSONException ex) {
@@ -573,9 +570,6 @@ public class WaianaService extends AbstractTopicWebApp {
                         reply.put("code", 0);
                         try {
                             String topicMapData = readFile(basePath+"/"+topicMapsPath+"/"+shortName+".xtm");
-                            
-                            // System.out.println(topicMapData);
-                            
                             reply.put("data", topicMapData);
                             return reply;
                         } 
@@ -832,14 +826,14 @@ public class WaianaService extends AbstractTopicWebApp {
         File pf = new File(fname);
         if (pf.exists()) {
             pf.delete();
-            System.out.println("Deleting previously existing file '" + fname + "' before save file operation!");
+            logger.info("Deleting previously existing file '" + fname + "' before save file operation!");
         }
 
         PrintWriter writer=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fname),"UTF-8"));
         writer.print(data);
         writer.flush();
         writer.close();
-        System.out.println("Saving a file '" + fname + "'");
+        logger.info("Saving a file '" + fname + "'");
     }
     
     

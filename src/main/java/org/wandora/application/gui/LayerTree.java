@@ -361,7 +361,7 @@ public class LayerTree extends DragJTree {
             menu=UIBox.fillMenuTemplate("___TOPICMAPMENU___",m, menuStructure);
         }
         else {
-            System.out.println("Warning. LayerTree didn't find layer type (getContextMenuFor).");
+            logger.warn("Warning. LayerTree didn't find layer type (getContextMenuFor).");
             menu=UIBox.fillMenuTemplate("___TOPICMAPMENU___",null, menuStructure);
         }
         
@@ -789,13 +789,6 @@ public class LayerTree extends DragJTree {
         }
         else if(e instanceof DropTargetDragEvent){
             DropTargetDragEvent ev=(DropTargetDragEvent)e;
-/*
-            DataFlavor[] flavors=ev.getCurrentDataFlavors();
-            System.out.println("------------------");
-            for(int i=0;i<flavors.length;i++){
-                System.out.println(flavors[i].getMimeType());
-            }
-*/
             if(ev.isDataFlavorSupported(fileListFlavor) || 
                     ev.isDataFlavorSupported(stringFlavor) ||
                     ev.isDataFlavorSupported(DnDBox.uriListFlavor) ||

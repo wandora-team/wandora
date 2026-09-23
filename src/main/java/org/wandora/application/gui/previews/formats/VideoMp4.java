@@ -39,6 +39,7 @@ import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
 import org.wandora.application.gui.simple.SimpleTimeSlider;
 import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -61,6 +62,7 @@ import javafx.util.Duration;
  */
 public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, ComponentListener {
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(VideoMp4.class);
     
 	private String mediaUrlString = null;
     private JFXPanel fxPanel;
@@ -299,7 +301,7 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
         Platform.runLater(new Runnable() {
             @Override public void run() {
                 if(player != null) {
-                    // System.out.println("VideoMp4 stopped.");
+                    // logger.info("VideoMp4 stopped.");
                     player.stop();
                 }
             }
@@ -316,7 +318,7 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
         if(e == null) return;
         
         String actionCommand = e.getActionCommand();
-        System.out.println("Action '"+actionCommand+"' performed at FXMediaPlayer");
+        logger.info("Action '"+actionCommand+"' performed at FXMediaPlayer");
         
         if("Play".equalsIgnoreCase(actionCommand)) {
             Platform.runLater(new Runnable() {

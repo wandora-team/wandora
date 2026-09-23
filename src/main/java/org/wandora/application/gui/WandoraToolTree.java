@@ -138,7 +138,6 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
             if(to != null) {
                 if(to instanceof WandoraToolSet) {
                     subset = (WandoraToolSet) to;
-                    //System.out.println("adding subtree "+subset+" to tool tree");
                     subnode = new ToolTreeNode(subset);
                     createNodes(subnode, subset);
                     subnode.setParentNode(node);
@@ -146,7 +145,6 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                 }
                 else if(to instanceof WandoraToolSet.ToolItem) {
                     toolWrapper = (WandoraToolSet.ToolItem) to;
-                    //System.out.println("adding tool "+toolWrapper+" to tool tree");
                     subnode = new ToolTreeNode(toolWrapper);
                     subnode.setParentNode(node);
                     node.add(subnode);
@@ -264,7 +262,6 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
         this.setModel(toolTreeModel);
         this.validate();
         this.repaint();
-        // System.out.println("refresh acquired");
     }
     
     public WandoraToolSet getToolSet() {
@@ -296,8 +293,7 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
         String c = e.getActionCommand();
         if(c == null) return;
         c = c.toLowerCase();
-        // System.out.println("actionPerformed @ ToolTree "+e);
-        
+
         // ***** EXECUTE *****
         if(c.startsWith("execute")) {
             try {
@@ -473,7 +469,7 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
     
     @Override
     public void valueChanged(TreeSelectionEvent e) {
-        //System.out.println("valueChanged @ tooltree");
+        //logger.info("valueChanged @ tooltree");
     }
     
     
@@ -499,8 +495,8 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                    (node.getChildAt(index));
         } catch (NullPointerException exc) {}
 
-        System.out.println("The user has finished editing the node.");
-        System.out.println("New value: " + node.getUserObject());
+        logger.info("The user has finished editing the node.");
+        logger.info("New value: " + node.getUserObject());
     }
     @Override
     public void treeNodesInserted(TreeModelEvent e) {
@@ -633,10 +629,7 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
             try {
                 if(c instanceof JLabel) {
                     JLabel l = (JLabel) c;
-                    
                     Object userValueContent = ((DefaultMutableTreeNode) value).getUserObject();
-                    //System.out.println("userValue == " +userValueContent+" --- " +userValueContent.getClass());
-                    
                     if(userValueContent instanceof WandoraToolSet.ToolItem) {
                         WandoraToolSet.ToolItem tool = (WandoraToolSet.ToolItem) userValueContent;
                         l.setText(tool.getName());

@@ -62,7 +62,7 @@ public class MaximizeDockableAction extends SimpleButtonAction {
 
     @Override
     public void action(Dockable dockable) {
-        System.out.println("ACTION MaximizeDockableAction TRIGGERED");
+        logger.debug("ACTION MaximizeDockableAction TRIGGERED");
         try {
             dockingFramePanel.maximizeDockable(dockable);
         }

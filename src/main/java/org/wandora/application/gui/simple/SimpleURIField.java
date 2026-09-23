@@ -212,7 +212,7 @@ public class SimpleURIField extends SimpleField {
                 e.dropComplete(true);
             }
             else {
-                System.out.println("Drop rejected! Unsupported data flavor!");
+                logger.warn("Drop rejected! Unsupported data flavor!");
                 e.rejectDrop();
             }
         }

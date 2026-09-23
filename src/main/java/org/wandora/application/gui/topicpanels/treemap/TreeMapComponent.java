@@ -68,6 +68,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -78,9 +79,8 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class TreeMapComponent extends JComponent implements ComponentListener, MouseListener, MouseMotionListener, ActionListener, MouseWheelListener {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TreeMapComponent.class);
 	
 	
 	private static final int topicFontSize = 12;
@@ -177,7 +177,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
             initialize(topic);
         }
         else {
-            System.out.println("Illegal iteration depth used ("+d+"). Rejecting.");
+            logger.error("Illegal iteration depth used ("+d+"). Rejecting.");
         }
     }
     
@@ -335,8 +335,6 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
 
 
     public void drawNodeTree(DefaultMutableTreeNode node) {
-        //System.out.println("drawing node: "+node.getChildCount());
-
         int w=treeMapWidth;
         int h=treeMapHeight;
         int tx=treeMapX; 
@@ -350,7 +348,6 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
 
         TopicInfo ti = (TopicInfo)node.getUserObject();
         Rect r = ti.getBounds();
-        //System.out.println("bounds: "+r);
 
         if(r.x > zoomRect.x+zoomRect.w || r.y > zoomRect.y+zoomRect.h || r.x+r.w < zoomRect.x || r.y+r.h < zoomRect.y) {
             return;
@@ -602,7 +599,6 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
                         } 
                         catch(Exception e){};
                     }
-                    //System.out.println("popup created!");
                     popup = UIBox.makePopupMenu(struct, this);
                     
                     Object[] optionsStruct = new Object[] {
@@ -662,7 +658,6 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
                     size = c.getSize();
                 }
                 if(!size.equals(getSize())) {
-                    //System.out.println("new size treemapcomponent: "+size);
                     setPreferredSize(size);
                     setMinimumSize(size);
                     setSize(size);
@@ -927,7 +922,6 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
     
     @Override
     public void actionPerformed(ActionEvent event) {
-        //System.out.println("TreeMapComponent captured action event '"+event+"'");
         if(event != null) {
             String eventName = event.getActionCommand();
             if("Add filter for classes".equalsIgnoreCase(eventName)) {

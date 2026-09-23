@@ -246,7 +246,6 @@ public class UIBox {
                     }
                     else if(struct[i] instanceof Menu) {
                         if(menu != null) { 
-                            //System.out.println("Adding menu " + struct[i]);
                             menu.add((Menu) struct[i]); 
                             menuItem = null;
                         }
@@ -384,7 +383,6 @@ public class UIBox {
                     }
                     else if(struct[i] instanceof JMenu) {
                         if(menu != null) { 
-                            //System.out.println("Adding menu " + struct[i]);
                             menu.add((JMenu) struct[i]); 
                             menuItem = null;
                         }
@@ -515,7 +513,6 @@ public class UIBox {
                         }
                     }
                     else if(struct[i] instanceof Menu) {
-                        //System.out.println("Adding menu " + struct[i]);
                         if(menu != null) { 
                             menu.add((Menu) struct[i]); 
                         }
@@ -644,7 +641,6 @@ public class UIBox {
                         }
                     }
                     else if(struct[i] instanceof JMenu) {
-                        //System.out.println("Adding menu " + struct[i]);
                         if(menu != null) { 
                             menu.add((JMenu) struct[i]); 
                         }
@@ -722,8 +718,6 @@ public class UIBox {
                 JButton button = null;
                 for(int i=0; i<struct.length; i++) {
                     if(struct[i] == null) continue;
-                    // System.out.println("BUTTON: "+struct[i]);
-                    // System.out.println();
                     if(struct[i] instanceof String) {
                         String str = (String) struct[i];
                         if("---".equals(str)) {
@@ -782,7 +776,6 @@ public class UIBox {
                         }
                     }
                     else if(struct[i] instanceof JButton) {
-                        //System.out.println("Adding menu " + struct[i]);
                         button = (JButton) struct[i];
                         container.add(button); 
                     }
@@ -910,10 +903,8 @@ public class UIBox {
                             button.addKeyListener( new KeyListener() {
                                 @Override
                                 public void keyPressed(KeyEvent e) {
-                                    //System.out.println("key pressed1");
                                     if(ks.equals(KeyStroke.getKeyStrokeForEvent(e))) {
                                         b.doClick();
-                                        //System.out.println("key pressed2");
                                     }
                                 }
                                 @Override
@@ -1201,7 +1192,7 @@ public class UIBox {
                 }
             }
             catch(Exception e) {
-                System.out.println("'"+e.getMessage()+"' occurred while reading datauri image '" + imageName + "'!");
+                logger.error("'"+e.getMessage()+"' occurred while reading datauri image '" + imageName + "'!");
             }
         }
         else {
@@ -1372,7 +1363,6 @@ public class UIBox {
         
     public static Object getActionsRealSource(ActionEvent e) {
         try {
-            //System.out.println("INVESTIGATING ACTION SOURCE");
             if(e != null) {
                 Object s = e.getSource();
                 if(s instanceof JMenuItem) {
@@ -1380,7 +1370,6 @@ public class UIBox {
                     Component nc = c;
                     int count = 30;
                     while(nc != null && count-- > 0 && (c instanceof MenuElement || c instanceof JMenuBar || c instanceof JLayeredPane || c instanceof JRootPane)) {
-                        // System.out.println("source "+c+"\n");
                         c = nc;
                         if(c instanceof JPopupMenu) nc = ((JPopupMenu)c).getInvoker();
                         else if(c instanceof JMenu) nc = ((JMenu) c).getParent();
@@ -1395,7 +1384,6 @@ public class UIBox {
                         else nc = c.getParent();
                     }
                     if(c != null) {
-                        //System.out.println("source "+c+"\n");
                         return c;
                     }
                 }
@@ -1419,7 +1407,6 @@ public class UIBox {
         
     public static Component getComponentByName(String componentName, Component root) {
         try {
-            //System.out.println(" COMPARE " + componentName + " == " + root.getName());
             if(componentName.equalsIgnoreCase(root.getName())) return root;
             else {
                 Component[] components = new Component[] {};
@@ -1445,7 +1432,6 @@ public class UIBox {
         if(componentName == null) return null;
         while(root != null && !componentName.equals(root.getName()) && maxDepth > 0) {
             maxDepth--;
-            //if(root != null) System.out.println("CNAME: " + root.getName());
             root = root.getParent();
         }
         if(maxDepth > 0 && root != null) return root;
@@ -1459,7 +1445,6 @@ public class UIBox {
         if(componentClass == null) return null;
         while(root != null && !componentClass.equals(root.getClass()) && maxDepth > 0) {
             maxDepth--;
-            //if(root != null) System.out.println("CNAME: " + root.getName());
             root = root.getParent();
         }
         if(maxDepth > 0 && root != null) return root;

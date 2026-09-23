@@ -100,7 +100,6 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
             tabbedPane.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
-                    // System.out.println("Tab: " + tabbedPane.getSelectedIndex());
                     setCurrentPanel(tabbedPane.getSelectedComponent());
                 }
             });

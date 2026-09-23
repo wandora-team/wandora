@@ -244,7 +244,7 @@ public class TreeMapTopicPanel extends javax.swing.JPanel implements RefreshList
         try {
             topic=Wandora.getWandora().getTopicMap().getTopic(topicSI);
             if(topic==null || topic.isRemoved()) {
-                System.out.println("Topic is null or removed!");
+                logger.warn("Topic is null or removed!");
                 contentPanel.setVisible(false);
                 removedTopicMessage.setVisible(true);
                 return;

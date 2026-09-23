@@ -1099,7 +1099,6 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
 
     @Override
     public String handleInput(String input) {
-        //System.out.println("HANDLE INPUT: "+input);
         return rBridge.handleInput(input);
     }
 

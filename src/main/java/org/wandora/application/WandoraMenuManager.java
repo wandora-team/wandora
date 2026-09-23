@@ -455,7 +455,7 @@ public class WandoraMenuManager {
                 wandoraMenuBar.add( menu );
             }
             else {
-                System.out.println("Warning! Null menu item found in wandoraAdminBarMenus");
+                logger.warn("Warning! Null menu item found in wandoraAdminBarMenus");
             }
         }
     }

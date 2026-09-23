@@ -63,7 +63,7 @@ public class CloseDockableAction extends SimpleButtonAction {
 
     @Override
     public void action(Dockable dockable) {
-        System.out.println("ACTION CloseDockableAction TRIGGERED");
+        logger.debug("ACTION CloseDockableAction TRIGGERED");
         try {
             dockingFramePanel.deleteDockable(dockable);
         }

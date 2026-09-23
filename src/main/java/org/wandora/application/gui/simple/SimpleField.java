@@ -385,7 +385,7 @@ public class SimpleField extends JTextField implements MouseListener, KeyListene
                 e.dropComplete(true);
             }
             else {
-                System.out.println("Drop rejected! Wrong data flavor!");
+                logger.warn("Drop rejected! Wrong data flavor!");
                 e.rejectDrop();
             }
         }

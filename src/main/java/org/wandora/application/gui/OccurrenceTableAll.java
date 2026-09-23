@@ -677,7 +677,6 @@ public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable {
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
-        //System.out.println("Mouse clicked!");
     }
     
     @Override
@@ -1223,7 +1222,7 @@ public class OccurrenceTableAll extends SimpleTable implements OccurrenceTable {
                                             inputReader = new StringReader(content);
                                         }
                                         catch(Exception e) {
-                                            System.out.println("No PDF support!");
+                                            logger.warn("No PDF support!");
                                         }
                                     }
 

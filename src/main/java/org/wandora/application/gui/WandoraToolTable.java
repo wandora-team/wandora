@@ -226,7 +226,6 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        // System.out.println("Action event == "+e.getActionCommand());
         String c = e.getActionCommand();
         if(c == null) return;
         c = c.toLowerCase();

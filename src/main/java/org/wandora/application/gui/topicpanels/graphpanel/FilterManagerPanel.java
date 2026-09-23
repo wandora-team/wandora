@@ -41,6 +41,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleMenu;
 import org.wandora.application.gui.simple.SimpleMenuItem;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -49,9 +50,8 @@ import org.wandora.application.gui.simple.SimpleMenuItem;
  * @author  olli
  */
 public class FilterManagerPanel extends javax.swing.JPanel implements ActionListener {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(FilterManagerPanel.class);
 	
     private DefaultListModel<TopicNode> filteredTopicsModel;
     private DefaultListModel<TopicNode> filteredTopicTypesModel;
@@ -368,7 +368,7 @@ public class FilterManagerPanel extends javax.swing.JPanel implements ActionList
     
     
     public void actionPerformed(ActionEvent actionEvent) {
-        System.out.println("Action preformed in FilterManagerPanel: "+actionEvent.getActionCommand());
+        logger.debug("Action preformed in FilterManagerPanel: "+actionEvent.getActionCommand());
         String ac = actionEvent.getActionCommand();
         if("Exit".equalsIgnoreCase(ac)) {
             if(filterDialog != null) {

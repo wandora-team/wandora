@@ -204,7 +204,6 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
             String toolResourcePath = options.get("tool.path["+pathCounter+"]");
             if(toolResourcePath == null || toolResourcePath.length() == 0) {
                 toolResourcePath = "org/wandora/application/tools";
-                //System.out.println("Using default tool resource path: " + toolResourcePath);
                 continueRefresh = false;
             }
             pathCounter++;
@@ -270,8 +269,7 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
                         }
                     }
                     catch(Exception e) {
-                        if(ADDITIONAL_DEBUG) System.out.println("Rejecting tool. Exception '" + e.toString() + "' occurred while investigating class '" + toolClass + "'.");
-                        //logger.error(e);
+                        logger.error(e);
                     }
                 }
             }
@@ -301,81 +299,6 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
         return false;
     }
     
-    
-    
-    
-    /*
-    public void scanAllTools() {
-        readToolPaths();
-        readJarPaths();
-        
-        allTools=new ArrayList<WandoraTool>();
-        toolInfos=new HashMap<WandoraTool,ToolInfo>();
-
-        for(String path : toolPaths) {
-            try {
-                String classPath = path.replace('/', '.');
-                Enumeration toolResources = ClassLoader.getSystemResources(path);
-
-                while(toolResources.hasMoreElements()) {
-                    URL toolBaseUrl = (URL) toolResources.nextElement();
-                    if(toolBaseUrl.toExternalForm().startsWith("file:")) {
-                        String baseDir = IObox.getFileFromURL(toolBaseUrl);
-                        // String baseDir = URLDecoder.decode(toolBaseUrl.toExternalForm().substring(6), "UTF-8");
-                        if(!baseDir.startsWith("/") && !baseDir.startsWith("\\") && baseDir.charAt(1)!=':') 
-                            baseDir="/"+baseDir;
-                        //System.out.println("Basedir: " + baseDir);
-                        HashSet<String> toolFileNames = IObox.getFilesAsHash(baseDir, ".*\\.class", 1, 9000);
-                        for(String classFileName : toolFileNames) {
-                            try {
-                                File classFile = new File(classFileName);
-                                String className = classPath + "." + classFile.getName().replaceFirst("\\.class", "");
-                                if(className.indexOf("$")>-1) continue;
-                                WandoraTool tool=null;
-                                if(className.equals(this.getClass().getName())) tool=this;
-                                else {
-                                    Class cls=Class.forName(className);
-                                    if(!WandoraTool.class.isAssignableFrom(cls)) {
-                                        if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + cls.getSimpleName() + "'. Does not implement Tool interface!");
-                                        continue;
-                                    }
-                                    if(cls.isInterface()) {
-                                        if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + cls.getSimpleName() + "'. Is interface!");
-                                        continue;
-                                    }
-                                    try {
-                                        cls.getConstructor();
-                                    }
-                                    catch(NoSuchMethodException nsme){
-                                        if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + cls.getSimpleName() + "'. No constructor!");
-                                        continue;
-                                    }
-                                    tool=(WandoraTool)Class.forName(className).newInstance();
-                                }
-                                if(tool != null) {
-                                    addTool(tool, "path", path);
-                                    //allTools.add(tool);
-                                }
-                            }
-                            catch(Exception ex) {
-                                if(ADDITIONAL_DEBUG) System.out.println("Rejecting tool. Exception '" + ex.toString() + "' occurred while investigating '" + classFileName + "'.");
-                                //logger.error(ex);
-                            }
-                        }
-                    }
-                }
-            }
-            catch(Exception e) {
-                logger.error(e);
-            }
-        }
-        
-        for(String jarPath : jarPaths){
-            File f=new File(jarPath);
-            scanJarPath(f);
-        }
-    }
-    */
     
     
     

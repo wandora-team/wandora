@@ -186,7 +186,7 @@ public class TopicPanelManager implements ActionListener {
             topicPanel = getTopicPanelWithClassName(topicPanelClassName);
         }
         catch (Exception e) {
-            System.out.println("No topic panel for name: " + topicPanelName);
+            logger.error("No topic panel for name: " + topicPanelName);
             if(wandora != null) wandora.handleError(e);
         }
         return topicPanel;
@@ -236,7 +236,6 @@ public class TopicPanelManager implements ActionListener {
                 if(className != null) {
                     TopicPanel topicPanel = getTopicPanelWithClassName(className);
                     if(topicPanel != null) {
-                        //System.out.println("TopicPanel class found: " + className);
                         String panelName = topicPanel.getName();
                         topicPanelMap.put(panelName, className);
                         topicPanelOrder.put(panelName, topicPanel.getOrder());
@@ -403,7 +402,7 @@ public class TopicPanelManager implements ActionListener {
             }
         }
         else {
-            //System.out.println("Topic panel manager activation!");
+            logger.debug("Topic panel manager activation!");
         }
     }
     

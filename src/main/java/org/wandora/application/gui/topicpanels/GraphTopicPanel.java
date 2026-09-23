@@ -362,7 +362,7 @@ public class GraphTopicPanel extends JPanel implements TopicPanel, Scrollable, S
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
-        System.out.println("GraphTopicPanel catched action command '" + c + "'.");
+        logger.info("GraphTopicPanel catched action command '" + c + "'.");
         toggleVisibility(c);       
     }
     

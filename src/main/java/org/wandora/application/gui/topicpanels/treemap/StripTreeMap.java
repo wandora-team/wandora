@@ -24,6 +24,8 @@
 
 package org.wandora.application.gui.topicpanels.treemap;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 /**
  *
  * @author elias, akivela
@@ -31,6 +33,8 @@ package org.wandora.application.gui.topicpanels.treemap;
 
 
 public class StripTreeMap {
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(StripTreeMap.class);
+    
     MapItem[] items;
     Rect layoutBox; 
     boolean lookahead = true;
@@ -57,7 +61,6 @@ public class StripTreeMap {
         double totalSize = 0;
         for (i=0; i<items.length; i++) {
             totalSize += items[i].getSize();
-            //System.out.println(items[i].getSize());
         }
 
         double area = layoutBox.w * layoutBox.h;
@@ -168,9 +171,7 @@ public class StripTreeMap {
     }
 
     public void debug(String str) {
-        /*if (DEBUG) {
-            System.out.println(str);
-        }*/
+        logger.debug(str);
     }
 
     double computeSize(int index, int num) {

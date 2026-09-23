@@ -72,8 +72,6 @@ public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
                 URL baseUrl=toolResources.nextElement();
                 if(baseUrl.toExternalForm().startsWith("file:")) {
                     String baseDir = IObox.getFileFromURL(baseUrl);
-                    //String baseDir = URLDecoder.decode(baseUrl.toExternalForm().substring(6), "UTF-8");
-                    //System.out.println("Basedir: " + baseDir);
                     Set<String> fileNames = IObox.getFilesAsHash(baseDir, ".*\\.png", 10, 1000);
                     for(String f : fileNames) {
                         int ind=f.lastIndexOf("/");

@@ -37,6 +37,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import org.wandora.topicmap.Locator;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -46,6 +47,7 @@ import org.wandora.topicmap.Locator;
  */
 public class PreviewWrapper extends JPanel {
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(PreviewWrapper.class);
     
     private static Map<Object,PreviewWrapper> previewWrappers = null;
     
@@ -86,7 +88,7 @@ public class PreviewWrapper extends JPanel {
                 previewWrappers.remove(owner);
             }
             else {
-                System.out.println("Found no preview wrapper "+owner);
+                logger.info("Found no preview wrapper "+owner);
             }
         }
     }
@@ -99,12 +101,12 @@ public class PreviewWrapper extends JPanel {
     public void stop() {
         if(initializer != null) {
             if(initializer.isAlive()) {
-                System.out.println("Setting the preview initializer aborted.");
+                logger.info("Setting the preview initializer aborted.");
                 initializer.setAborted();
             }
         }
         if(currentPanel != null) {
-            // System.out.println("Stopping preview wrapper.");
+            // logger.info("Stopping preview wrapper.");
             currentPanel.stop();
         }
         currentPanel = null;
@@ -223,7 +225,7 @@ public class PreviewWrapper extends JPanel {
                         if(currentPanel != null) {
                             String locatorString = subjectLocator.toExternalForm();
                             if(locatorString.length() > 50) locatorString = locatorString.substring(0,50)+"...";
-                            System.out.println("Created preview "+currentPanel.getClass()+" for "+locatorString);
+                            logger.info("Created preview "+currentPanel.getClass()+" for "+locatorString);
                         }
                         else {
                             currentUI = PreviewUtils.previewNoPreview(previewWrapper, subjectLocator);
