@@ -279,9 +279,9 @@ public class HCalendarExtractor extends AbstractExtractor {
                 throw new SAXException("User interrupt");
             }
 
-            if(debug) System.out.print("qname=="+ qName);
-            if(debug) System.out.print(", class=="+ clas);
-            if(debug) System.out.print(", sstate="+state);
+            if(debug) logger.info("qname=="+ qName);
+            if(debug) logger.info(", class=="+ clas);
+            if(debug) logger.info(", sstate="+state);
             
             switch(state) {
                 case STATE_START: {

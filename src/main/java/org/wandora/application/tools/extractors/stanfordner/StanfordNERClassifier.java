@@ -222,18 +222,6 @@ public class StanfordNERClassifier extends AbstractExtractor {
                         }
                     }
                 }
-                /*
-                out = classifier.classifyFile(args[1]);
-                for (List<CoreLabel> sentence : out) {
-                    for (CoreLabel word : sentence) {
-                        System.out.print(word.word() + '/' + word.get(AnswerAnnotation.class) + ' ');
-                    }
-                    System.out.println();
-                }
-                System.out.println(classifier.classifyToString(s1));
-                System.out.println(classifier.classifyWithInlineXML(s2));
-                System.out.println(classifier.classifyToString(s2, "xml", true));
-                */
                 log("Total " + entityCounter + " entities found by Stanford Named Entity Recognizer.");
             }
             else {

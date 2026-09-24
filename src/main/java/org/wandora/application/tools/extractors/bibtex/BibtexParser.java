@@ -301,33 +301,34 @@ public class BibtexParser {
         BibtexParser parser=new BibtexParser();
 //        parser.parse(new InputStreamReader(System.in));
         parser.parse(new InputStreamReader(new FileInputStream("C:\\wandora\\build\\classes\\test.bib")));
+        StringBuilder sb = new StringBuilder();
         for(BibtexEntry e : parser.getEntries()){
-            logger.info("@"+e.getType()+"{");
-            if(e.getID()!=null) System.out.print(e.getID()+",");
-            logger.info("");
+            sb.append("@"+e.getType()+"{");
+            if(e.getID()!=null) sb.append(e.getID()+",");
             Map<String,Object> values=e.getValues();
             for(String key : values.keySet()){
                 Object value=values.get(key);
                 if(value instanceof String) {
-                    logger.info("\t"+key+" = \""+value+"\",");
+                    sb.append("\t"+key+" = \""+value+"\",");
                 }
                 else{
                     ArrayList<BibtexPerson> list=(ArrayList<BibtexPerson>)value;
-                    System.out.print("\t"+key+" = \"");
+                    sb.append("\t"+key+" = \"");
                     boolean first=true;
                     for(BibtexPerson p : list){
-                        if(!first) System.out.print(" and ");
+                        if(!first) sb.append(" and ");
                         else first=false;
-                        System.out.print(p.getLastName());
+                        sb.append(p.getLastName());
                         if(p.getFirstName()!=null){
-                            System.out.print(", "+p.getFirstName());
-                            if(p.getInitials()!=null) System.out.print(" "+p.getInitials());
+                            sb.append(", "+p.getFirstName());
+                            if(p.getInitials()!=null) sb.append(" "+p.getInitials());
                         }
                     }
-                    logger.info("\",");
+                    sb.append("\",");
                 }
             }
-            logger.info("}");
+            sb.append("}");
         }
+        logger.info(sb.toString());
     }
 }

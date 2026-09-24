@@ -1416,13 +1416,6 @@ public abstract class TopicMap implements TopicMapLogger {
             reader.setErrorHandler(parserHandler);
 
             reader.parse(new InputSource(in));
-            
-          // Debugging            
-/*            Iterator iter=getTopics();
-            while(iter.hasNext()){
-                Topic t=(Topic)iter.next();
-                if(t.getSubjectIdentifiers().size()==0) System.out.println("Parsed topic doesn't have subject identifiers");
-            }*/
         }
         catch(org.xml.sax.SAXParseException se) {
             topicMapLogger.log("Position "+se.getLineNumber()+":"+se.getColumnNumber(), se);

@@ -354,9 +354,9 @@ public class HCardExtractor extends AbstractExtractor {
             String clas = atts.getValue("class");
             String abbrTitle = atts.getValue("title");
             
-            if(debug) System.out.print("qname=="+ qName);
-            if(debug) System.out.print(", class=="+ clas);
-            if(debug) System.out.print(", sstate="+state);
+            if(debug) logger.info("qname=="+ qName);
+            if(debug) logger.info(", class=="+ clas);
+            if(debug) logger.info(", sstate="+state);
             
             if(clas == null) {
                 if(debug) logger.info(", no class here - rejecting");
@@ -1271,10 +1271,10 @@ public class HCardExtractor extends AbstractExtractor {
                         }
                         if(cardName.length() == 0) {
                             if(n.fn != null) {
-                                System.out.print("n.fn == " + n.fn);
+                                logger.info("n.fn == " + n.fn);
                                 n.fn = n.fn.trim();
                                 cardName = n.fn;
-                                System.out.print("cardName == " + cardName);
+                                logger.info("cardName == " + cardName);
 
                                 if(n.fn.indexOf(", ") != -1) {
                                     String[] ns = n.fn.split(", ");

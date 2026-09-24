@@ -475,41 +475,6 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
     
     
     
-    /*
-    public void addToolToSet(WandoraToolSet set, WandoraToolSet.ToolItem toolItem) {
-        set.add(toolItem);
-        writeToolSets();
-    }
-    
-    
-    public void addToolToSet(WandoraToolSet set, WandoraTool tool, String instanceName) {
-        set.add(instanceName, tool);
-        writeToolSets();
-    }
-    
-    public void addSetToSet(WandoraToolSet set, WandoraToolSet child) {
-        set.add(child);
-        System.out.println("adding set to set: parent == "+set+", child == "+child);
-        writeToolSets();
-    }
-    
-    
-    public void removeToolOrSet(WandoraToolSet set, Object toolOrSet) {
-        set.remove(toolOrSet);
-        writeToolSets();
-    }
-    
-    public void renameToolOrSet(WandoraToolSet set, Object toolOrSet, String newName) {
-        if(toolOrSet instanceof WandoraToolSet) {
-            ((WandoraToolSet) toolOrSet).setName(newName);
-        }
-        else if(toolOrSet instanceof WandoraToolSet.ToolItem) {
-            ((WandoraToolSet.ToolItem) toolOrSet).setName(newName);
-        }
-        writeToolSets();
-    }
-    */
-    
     
     
     public boolean allowDelete(WandoraToolSet set) {

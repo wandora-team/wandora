@@ -155,7 +155,7 @@ public class UClassifier extends AbstractUClassifier {
                     i++;
                 }
                 if(classifiers.isEmpty()) {
-                    System.out.print("Warning: UClassifier didn't find any classifiers in Wandora options.");
+                    logger.warn("Warning: UClassifier didn't find any classifiers in Wandora options.");
                 }
             }
             catch(Exception e) {

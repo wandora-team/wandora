@@ -296,20 +296,9 @@ public class SimpleRDFImport extends AbstractImportTool {
             }
             counter++;
             setProgress((counter/1000) % 100);
-            if(counter % 1000 == 0) hlog("RDF statements processed: " + counter);
-            
-            
-            /*
-            System.out.print(subject.toString());
-            System.out.print(" " + predicate.toString() + " ");
-            if (object instanceof Resource) {
-               System.out.print(object.toString());
-            } else {
-                // object is a literal
-                System.out.print(" \"" + object.toString() + "\"");
+            if(counter % 1000 == 0) {
+                hlog("RDF statements processed: " + counter);
             }
-            System.out.println(" .");
-             **/
         }
         log("Total RDF statements processed: " + counter);
     }

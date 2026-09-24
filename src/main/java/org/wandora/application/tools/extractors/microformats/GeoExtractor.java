@@ -158,12 +158,6 @@ public class GeoExtractor extends AbstractExtractor {
         
         //tidyXML = tidyXML.replace("&", "&amp;");
         tidyXML = tidyXML.replace("&amp;deg;", "&#0176;");
-        
-        /*
-        System.out.println("------");
-        System.out.println(tidyXML);
-        System.out.println("------");
-        */
           
         javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
         factory.setNamespaceAware(true);

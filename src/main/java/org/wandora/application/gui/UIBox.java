@@ -1223,7 +1223,6 @@ public class UIBox {
                         if(fname.startsWith("file:")) {
                             fname = IObox.getFileFromURL(fname);
                         }
-                        //System.out.print("Finding file name: " + fname);
                         File imageFile = new File(fname); 
                         BufferedImage image = ImageIO.read(imageFile);
                         return image;

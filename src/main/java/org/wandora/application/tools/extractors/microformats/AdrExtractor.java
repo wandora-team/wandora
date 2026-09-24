@@ -160,12 +160,6 @@ public class AdrExtractor extends AbstractExtractor {
         //tidyXML = tidyXML.replace("&", "&amp;");
         tidyXML = tidyXML.replace("&amp;deg;", "&#0176;");
         //tidyXML = HTMLEntitiesCoder.decode(tidyXML);
-        
-        /*
-        System.out.println("------");
-        System.out.println(tidyXML);
-        System.out.println("------");
-        */
 
         javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -264,9 +258,9 @@ public class AdrExtractor extends AbstractExtractor {
             stateStack.push(Integer.valueOf(state));
             String clas = atts.getValue("class");
             
-            if(debug) System.out.print("qname=="+ qName);
-            if(debug) System.out.print(", class=="+ clas);
-            if(debug) System.out.print(", sstate="+state);
+            if(debug) logger.info("qname=="+ qName);
+            if(debug) logger.info(", class=="+ clas);
+            if(debug) logger.info(", sstate="+state);
             
             if(parent.forceStop()){
                 throw new SAXException("User interrupt");

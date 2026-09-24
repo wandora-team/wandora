@@ -163,14 +163,14 @@ public class AsuntojenHintaTiedotExtractor {
                     String hissi = m.group(8);
                     String kunto = m.group(9);
 
-                    System.out.print( kpginOsa + " - " );
-                    System.out.print( huoneet + " - " );
-                    System.out.print( neliot + " - " );
-                    System.out.print( hinta + " - " );
-                    System.out.print( nelioHinta + " - " );
-                    System.out.print( rakVuosi + " - " );
-                    System.out.print( kerros + " - " );
-                    System.out.print( hissi + " - " );
+                    logger.info( kpginOsa + " - " );
+                    logger.info( huoneet + " - " );
+                    logger.info( neliot + " - " );
+                    logger.info( hinta + " - " );
+                    logger.info( nelioHinta + " - " );
+                    logger.info( rakVuosi + " - " );
+                    logger.info( kerros + " - " );
+                    logger.info( hissi + " - " );
                     logger.info(kunto + " - ");
                     
                     sb.append(files[i].getName()).append( "\t");

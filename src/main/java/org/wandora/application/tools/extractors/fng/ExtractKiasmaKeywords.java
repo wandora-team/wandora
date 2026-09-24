@@ -190,9 +190,7 @@ public class ExtractKiasmaKeywords extends AbstractExtractor {
                 tokens = line.split("\t");
                 for(int i=0; i<tokens.length; i++) { // Trim results!
                     if(tokens[i] != null && tokens[i].length() > 0) {
-                        //System.out.print("trimming " + tokens[i]);
                         tokens[i] = Textbox.trimExtraSpaces(tokens[i]);
-                        //System.out.print(" --> " + tokens[i]);
                     }
                 }
                 if(tokens.length > 1) {
