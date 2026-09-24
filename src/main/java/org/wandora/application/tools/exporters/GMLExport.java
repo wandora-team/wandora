@@ -245,7 +245,6 @@ public class GMLExport extends AbstractExportTool {
                         String data=(String)e.getValue();
                         echoNode(data, writer);
                         echoEdge(t, data, type, writer);
-                        //System.out.println("occurrence:"+data);
                     }
                 }
             }

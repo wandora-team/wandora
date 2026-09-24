@@ -84,7 +84,7 @@ public class OBORoundTrip extends AbstractWandoraTool {
         if(o!=null){
             int i=Integer.parseInt(o);
             OBO.setOptions(i);
-            System.out.println("oboroundtrip init:"+i);
+            logger.info("oboroundtrip init:"+i);
         }
     }
     
@@ -95,7 +95,6 @@ public class OBORoundTrip extends AbstractWandoraTool {
     
     @Override
     public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        //System.out.println(prefix);
         OBOConfiguration dialog=new OBOConfiguration(wandora,true);
         dialog.setOptions(OBO.getOptions());
         dialog.setVisible(true);
@@ -103,7 +102,6 @@ public class OBORoundTrip extends AbstractWandoraTool {
             int i=dialog.getOptions();
             OBO.setOptions(i);
             options.put(OBO.optionPrefix+"options",""+i);
-            //System.out.println("oboroundtrip configure:"+i);
         }
     }
     
@@ -180,7 +178,7 @@ public class OBORoundTrip extends AbstractWandoraTool {
             log("Ready.");
         }
         else {
-            System.out.println("No OBO files to import!");
+            logger.warn("No OBO files to import!");
         }
     }
     

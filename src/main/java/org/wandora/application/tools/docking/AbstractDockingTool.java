@@ -30,6 +30,7 @@ import org.wandora.application.gui.topicpanels.DockingFramePanel;
 import org.wandora.application.gui.topicpanels.TopicPanel;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -38,7 +39,7 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class AbstractDockingTool extends AbstractWandoraTool {
-
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractDockingTool.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,7 +47,7 @@ public class AbstractDockingTool extends AbstractWandoraTool {
 
 	@Override
     public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
-        System.out.println("Warning: Docking tool is not overriding execute method.");
+        logger.warn("Warning: Docking tool is not overriding execute method.");
     }
     
     

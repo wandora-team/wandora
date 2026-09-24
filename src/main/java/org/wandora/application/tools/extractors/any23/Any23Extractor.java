@@ -370,10 +370,6 @@ public class Any23Extractor extends AbstractExtractor {
                         }
                     }
                 }
-
-                if(ec != null) {
-                    //System.out.println(" context: "+ec.getDocumentURI());
-                }
             }
             catch(Exception e) {
                 log(e);

@@ -65,7 +65,7 @@ public class BrowserExtractorManager {
 
     
     public String[] getExtractionMethods(BrowserExtractRequest request) {
-        List<String> methods=new ArrayList<String>();
+        List<String> methods=new ArrayList<>();
         BrowserPluginExtractor tool = null;
         for(String key : browserTools.keySet()) {
             try {
@@ -81,8 +81,6 @@ public class BrowserExtractorManager {
             	logger.error(e);
             }
         }
-        // System.out.println("methods size: "+methods.size());
-        // Collections.sort(methods);
         return methods.toArray(new String[methods.size()]);
     }
 
@@ -136,17 +134,16 @@ public class BrowserExtractorManager {
 
 
     public Map<String,BrowserPluginExtractor> readExtractorList(boolean strictlyBrowserPlugins) {
-        Map<String,BrowserPluginExtractor> tools = new LinkedHashMap<String,BrowserPluginExtractor>();
+        Map<String,BrowserPluginExtractor> tools = new LinkedHashMap<>();
         try {
             int pathCounter = 0;
             boolean continueSearch = true;
-            List<String> paths = new ArrayList<String>();
+            List<String> paths = new ArrayList<>();
             while(continueSearch) {
                 String toolResourcePath = wandora.options.get("tool.path["+pathCounter+"]");
                 pathCounter++;
                 if(toolResourcePath == null || toolResourcePath.length() == 0) {
                     toolResourcePath = "org/wandora/application/tools";
-                    //System.out.println("Using default tool resource path: " + toolResourcePath);
                     continueSearch = false;
                 }
                 if(paths.contains(toolResourcePath)) continue;
@@ -158,10 +155,8 @@ public class BrowserExtractorManager {
                     URL toolBaseUrl = (URL) toolResources.nextElement();
                     if(toolBaseUrl.toExternalForm().startsWith("file:")) {
                         String baseDir = IObox.getFileFromURL(toolBaseUrl);
-//                        String baseDir = URLDecoder.decode(toolBaseUrl.toExternalForm().substring(6), "UTF-8");
                         if(!baseDir.startsWith("/") && !baseDir.startsWith("\\") && baseDir.charAt(1)!=':') 
                             baseDir="/"+baseDir;
-                        //System.out.println("Basedir: " + baseDir);
                         Set<String> toolFileNames = IObox.getFilesAsHash(baseDir, ".*\\.class", 1, 1000);
                         for(String classFileName : toolFileNames) {
                             try {
@@ -174,18 +169,15 @@ public class BrowserExtractorManager {
                                     continue;
                                 }
                                 if(!BrowserPluginExtractor.class.isAssignableFrom(cls)) {
-                                    //System.out.println("Rejecting '" + className + "'. Does not implement BrowserPluginExtractor interface!");
                                     continue;
                                 }
                                 if(cls.isInterface()) {
-                                    //System.out.println("Rejecting '" + className + "'. Is interface!");
                                     continue;
                                 }
                                 try {
                                     cls.getConstructor();
                                 }
                                 catch(NoSuchMethodException nsme){
-                                    //System.out.println("Rejecting '" + className + "'. No constructor!");
                                     continue;
                                 }
                                 extractor=(BrowserPluginExtractor)Class.forName(className).getDeclaredConstructor().newInstance();

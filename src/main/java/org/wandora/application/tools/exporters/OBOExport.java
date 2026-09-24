@@ -111,7 +111,6 @@ public class OBOExport extends AbstractExportTool {
     
     @Override
     public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        //System.out.println(prefix);
         OBOConfiguration dialog=new OBOConfiguration(wandora,true);
         dialog.setOptions(OBO.getOptions());
         dialog.setVisible(true);

@@ -34,6 +34,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -46,9 +47,8 @@ import org.xml.sax.XMLReader;
  * @author akivela
  */
 public class TagTopAlbumsExtractor extends AbstractAudioScrobblerExtractor {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TagTopAlbumsExtractor.class);
 
 
 	/** Creates a new instance of TagTopAlbumsExtractor */
@@ -267,7 +267,7 @@ public class TagTopAlbumsExtractor extends AbstractAudioScrobblerExtractor {
                             
                             if(data_artist_name != null && data_artist_name.length() > 0) {
                                 Topic artistType = getArtistTypeTopic(tm);
-                                System.out.println("creating artist topic: "+data_artist_name+", "+data_artist_url);
+                                logger.info("creating artist topic: "+data_artist_name+", "+data_artist_url);
                                 Topic artistTopic = getArtistTopic(tm, data_artist_name, data_artist_url, data_artist_mbid);
                                 Association a = tm.createAssociation(albumType);
                                 a.addPlayer(artistTopic, artistType);

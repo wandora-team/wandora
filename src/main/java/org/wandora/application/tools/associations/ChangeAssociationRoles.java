@@ -122,9 +122,7 @@ public class ChangeAssociationRoles extends AbstractWandoraTool {
                 if(association != null && !association.isRemoved()) {
                     List<Topic> oldRoles = associationsWithOldRoles.get(association);
                     for(Topic oldRole : oldRoles) {
-                        System.out.println("oldrole == "+oldRole);
                         player = association.getPlayer(oldRole);
-                        System.out.println("    player == "+player);
                         if(player != null) {
                             requiresRefresh = true;
                             association.addPlayer(player, newRole);

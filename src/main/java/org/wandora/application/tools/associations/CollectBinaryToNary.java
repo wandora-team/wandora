@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.AssociationContext;
@@ -228,10 +229,8 @@ public class CollectBinaryToNary extends AbstractWandoraTool {
         Iterator<Topic> roleIterator = null;
         Topic baseRole = null;
         Topic associationType = null;
-        HashMap<Topic, Topic> newMembers = new HashMap<Topic, Topic>();
+        Map<Topic, Topic> newMembers = new HashMap<>();
         
-        
-        System.out.println("-------------in");
         try {
             if(association != null && baseTopic != null) {
                 ArrayList<Topic> playerTopics = new ArrayList<Topic>();
@@ -246,12 +245,10 @@ public class CollectBinaryToNary extends AbstractWandoraTool {
                         playerTopic = association.getPlayer(roleTopic);
                         if(playerTopic.mergesWithTopic(baseTopic)) {
                             baseRole = roleTopic;
-                            System.out.println("1 Adding player '"+getTopicName(baseTopic)+"'  with role '"+roleTopic.getBaseName()+"'.");
                             newMembers.put(roleTopic, baseTopic);
                         }
                         else {
                             playerTopics.add(playerTopic);
-                            System.out.println("3 Investigating player: " + getTopicName(playerTopic));
                         }
                     }
                 }
@@ -259,8 +256,6 @@ public class CollectBinaryToNary extends AbstractWandoraTool {
                 Iterator<Topic> playerIterator = playerTopics.iterator();
                 while(playerIterator.hasNext()) {
                     playerTopic = playerIterator.next();
-
-                    System.out.println("4 Investigating player: " + getTopicName(playerTopic));
                     playerAssociations = playerTopic.getAssociations();
                     playerAssociationIterator = playerAssociations.iterator();
                     while(playerAssociationIterator.hasNext()) {
@@ -272,9 +267,7 @@ public class CollectBinaryToNary extends AbstractWandoraTool {
                                 playerAssociationRole = playerAssociationRoleIterator.next();
                                 if(!playerAssociationRole.mergesWithTopic(baseRole) && !playerAssociationRole.mergesWithTopic(roleTopic)) {
                                     playerAssociationPlayer = playerAssociation.getPlayer(playerAssociationRole);
-                                    //System.out.println("2 Checking '"+getTopicName(playerAssociationPlayer)+"'  with role '"+getTopicName(playerAssociationRole)+"'.");
                                     if(!playerAssociationPlayer.mergesWithTopic(playerTopic) && !playerAssociationPlayer.mergesWithTopic(baseTopic)) {
-                                        //System.out.println("2 Adding player '"+getTopicName(playerAssociationPlayer)+"'  with role '"+getTopicName(playerAssociationRole)+"'.");
                                         newMembers.put(playerAssociationRole, playerAssociationPlayer);
                                     }
                                 }
@@ -287,7 +280,6 @@ public class CollectBinaryToNary extends AbstractWandoraTool {
                     newAssociation = baseTopic.getTopicMap().createAssociation(newAssociationType);
                     newAssociation.addPlayers(newMembers);
                     requiresRefresh = true;
-                    //if(deleteOld) topicsToDelete.add(playerTopic);
                 }
             }
         }
@@ -302,7 +294,6 @@ public class CollectBinaryToNary extends AbstractWandoraTool {
         catch(Exception e) {
             log(e);
         }
-        System.out.println("-------------out");
     }
  
     

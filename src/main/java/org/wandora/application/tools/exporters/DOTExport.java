@@ -156,7 +156,6 @@ public class DOTExport extends AbstractExportTool {
                 fileName = file.getName(); // Updating filename if file has changed!
                 out=new FileOutputStream(file);
                 log(exportInfo+" to '"+fileName+"'.");
-                //System.out.println("tm == "+ tm);
                 exportGraph(out, tm, topicMapName, getCurrentLogger());
                 out.close();
                 log("Ready.");

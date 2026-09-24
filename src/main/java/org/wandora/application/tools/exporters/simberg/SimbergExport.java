@@ -389,38 +389,8 @@ public class SimbergExport extends AbstractExportTool {
                 
                 // add the matched keyword in the array
                 matched.add(keyword);
-/*
-                if(start>end){
-                    System.out.println("Matched "+keyword+" to "+
-                        keywordString.substring(Math.max(0,start-10),m[1])+"|^|"+
-                        keywordString.substring(end,Math.min(keywordString.length(),m[1]+10))
-                        );                    
-                }
-                else{
-                    System.out.println("Matched "+keyword+" to "+
-                        keywordString.substring(Math.max(0,start-10),start)+"|"+
-                        keywordString.substring(start,m[1])+"^"+
-                        keywordString.substring(m[1],end)+"|"+
-                        keywordString.substring(end,Math.min(keywordString.length(),end+10))
-                        );
-                }*/
             }
         }
-/*        
-        Collections.sort(keywordsAndPos,new Comparator<T2<String,Integer>>(){
-            @Override
-            public int compare(T2<String, Integer> o1, T2<String, Integer> o2) {
-                if(o1.e2==o2.e2) return o1.e1.compareTo(o2.e1); // shouldn't really happen
-                else return o1.e2-o2.e2;
-            }
-        });
-        
-        List<String> ret=new ArrayList<>();
-        for(T2<String,Integer> e : keywordsAndPos){
-            ret.add(e.e1);
-        }
-        
-        return ret;*/
         
         return Tuples.t2(matched, keywordLinks);
     }
@@ -767,17 +737,6 @@ public class SimbergExport extends AbstractExportTool {
         }
         setState(WAIT);
     }
-    /*
-    public static void main(String[] args){
-        String test="taiteilija, Simberg-suku, kesäpaikka Niemenlautta, Säkkijärvi, ".toLowerCase();
-        int[] ret=levenshtein(test,"niemenlautta");
-        System.out.println(ret[0]+" "+ret[1]+" "+ret[2]);
-        System.out.println(test);
-        for(int i=0;i<test.length();i++){
-            if(i==ret[1] || i==ret[2]) System.out.print("^");
-            else System.out.print(" ");
-        }
-        System.out.println();
-    }*/
+
     
 }

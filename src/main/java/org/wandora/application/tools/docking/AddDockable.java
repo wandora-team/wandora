@@ -73,11 +73,11 @@ public class AddDockable extends AbstractDockingTool {
                 dockableClass = Class.forName(className);
             }
             else {
-                System.out.println("AddDockable can't use given class name 'null'.");
+                logger.warn("AddDockable can't use given class name 'null'.");
             }
         }
         catch(Exception e) {
-            System.out.println("AddDockable can't use given class name '"+className+"'.");
+            logger.error("AddDockable can't use given class name '"+className+"'.");
         }
     }
     
@@ -148,7 +148,7 @@ public class AddDockable extends AbstractDockingTool {
             }
         }
         else {
-            System.out.println("No valid dockable class registered in AddDockable. Can't create new dockable.");
+            logger.warn("No valid dockable class registered in AddDockable. Can't create new dockable.");
         }
     }    
     

@@ -137,7 +137,6 @@ public class ExportTopicMap extends AbstractExportTool {
                     fileName = file.getName(); // Updating filename if file has changed!
                     out=new FileOutputStream(file);
                     log(exportInfo+" in XTM 2.0 format to '"+fileName+"'.");
-                    //System.out.println("tm == "+ tm);
                     tm.exportXTM20(out, getCurrentLogger());
                 }
                 if(out != null) out.close();
