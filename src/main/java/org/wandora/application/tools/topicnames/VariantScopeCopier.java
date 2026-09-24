@@ -166,9 +166,6 @@ public class VariantScopeCopier extends AbstractWandoraTool {
                             targetVariant = topic.getVariant(targetScope);
                             Set<Set<Topic>> scopes = topic.getVariantScopes();
                             
-                            // System.out.println("scopes "+scopes);
-                            // System.out.println("scopes size "+scopes.size());
-                            // System.out.println("Processing "+getTopicName(topic)+" with variant "+variant);
                             
                             if(variant != null) {
                                 if(REMOVE_AFTER_COPY) topic.setVariant(sourceScope, null);

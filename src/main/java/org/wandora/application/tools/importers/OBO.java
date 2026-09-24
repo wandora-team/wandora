@@ -1360,7 +1360,7 @@ public class OBO {
             }
         }
         else {
-            System.out.println("No OBO files to import!");
+            logger.warn("No OBO files to import!");
         }
     }
     

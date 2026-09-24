@@ -1047,25 +1047,13 @@ public class TMBox {
      * is not found, other variants, base name or subject identifier is used.
      */
     public static Collection<Topic> sortTopics(Collection<Topic> topics,String lang) {
-/*        TopicAndName[] a=new TopicAndName[topics.size()];
-        Iterator iter=topics.iterator();
-        int counter=0;
-        while(iter.hasNext()){
-            a[counter++]=new TopicAndName((Topic)iter.next(),lang);
-        }
-        quickSortTopics(a,0,a.length-1);
-        ArrayList al=new ArrayList(a.length);
-        for(int i=0;i<a.length;i++){
-            al.add(a[i].topic);
-        }
-        return al;*/
         List<Topic> al=new ArrayList<>();
         if(topics != null) {
             try {
                 al.addAll(topics);
                 Collections.sort(al,new TopicNameComparator(lang));
             } catch(Exception e){
-                System.out.println("Exception in sort topics: "+e.toString());
+                logger.error("Exception in sort topics: "+e.toString());
             }
         }
         return al;

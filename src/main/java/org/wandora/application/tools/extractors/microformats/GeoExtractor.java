@@ -53,6 +53,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -64,6 +65,8 @@ import org.xml.sax.XMLReader;
  */
 
 public class GeoExtractor extends AbstractExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(GeoExtractor.class);
 
 
 	private static final long serialVersionUID = 1L;
@@ -232,8 +235,6 @@ public class GeoExtractor extends AbstractExtractor {
         }
 
         public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-            //System.out.println("qname=="+ qName);
-            //System.out.println("atts=="+ atts);
             
             if(parent.forceStop()){
                 throw new SAXException("User interrupt");
@@ -278,7 +279,6 @@ public class GeoExtractor extends AbstractExtractor {
 
 
         public void endElement(String uri, String localName, String qName) throws SAXException {
-            //System.out.println("handleEndTag: " + qName);
             if("span".equalsIgnoreCase(qName)) {
                 processCoordinates();
                 state = STATE_OTHER;
@@ -415,7 +415,7 @@ public class GeoExtractor extends AbstractExtractor {
                 }
             }
             if(t == null) {
-                System.out.println("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
+                logger.info("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
             }
             return t;
         }

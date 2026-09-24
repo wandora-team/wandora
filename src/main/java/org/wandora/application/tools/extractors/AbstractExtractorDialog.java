@@ -184,7 +184,6 @@ public class AbstractExtractorDialog extends javax.swing.JDialog {
         int mode = defaultValue;
         try {
             mode = crawlerComboBox.getSelectedIndex();
-            // System.out.println("getCrawlerMode: "+ mode);
         }
         catch(Exception e) {}
         return mode;

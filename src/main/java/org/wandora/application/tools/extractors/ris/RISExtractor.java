@@ -58,12 +58,15 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * 
  * @author anttirt
  */
 public class RISExtractor extends AbstractExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(RISExtractor.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -137,7 +140,7 @@ public class RISExtractor extends AbstractExtractor {
             }
             return t;
         }
-        System.out.println("Failed to create topic!");
+        logger.info("Failed to create topic!");
         return null;
     }
     
@@ -657,7 +660,7 @@ public class RISExtractor extends AbstractExtractor {
 	        }
 	        catch(IllegalArgumentException e)
 	        {
-	            System.out.println("foobar");
+	            logger.error("foobar");
 	        }
         }
     }

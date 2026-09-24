@@ -212,7 +212,6 @@ public class ExtractKiasmaKeywords extends AbstractExtractor {
                         }
                     }
                     if(currentWork != null) {
-                        //System.out.println("tokens length:" + tokens.length);
                         if(tokens.length > 3 && tokens[3].length() > 0) { // Iconclass code exists!
                             iconclassCode = tokens[3];
                             log("Found iconclass keyword '" + iconclassCode + "'.");

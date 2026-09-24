@@ -86,7 +86,7 @@ public class RunOccurrenceAsQuery extends AbstractWandoraTool {
                     occurrence = new String(dataURL.getData());
                 }
             }
-            System.out.println("Running Wandora Query script:\n"+occurrence);
+            logger.info("Running Wandora Query script:\n"+occurrence);
             try {
                 QueryRunner queryRunner = new QueryRunner();
                 Collection<Topic> contextTopics = new ArrayList<>();

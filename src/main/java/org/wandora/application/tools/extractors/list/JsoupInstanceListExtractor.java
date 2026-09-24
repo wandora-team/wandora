@@ -31,6 +31,7 @@ import org.wandora.application.tools.extractors.AbstractJsoupExtractor;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -39,6 +40,8 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class JsoupInstanceListExtractor extends AbstractJsoupExtractor implements BrowserPluginExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(JsoupInstanceListExtractor.class);
 
 	
 	private static final long serialVersionUID = 1L;
@@ -56,7 +59,7 @@ public class JsoupInstanceListExtractor extends AbstractJsoupExtractor implement
         Elements children = d.body().children();
         
         for(Element listCandidate : children){
-            System.out.println(listCandidate.outerHtml());
+            logger.info(listCandidate.outerHtml());
             if(listCandidate.tagName().equals("ul"))
                 parseList(listCandidate, null);
         }
@@ -80,7 +83,7 @@ public class JsoupInstanceListExtractor extends AbstractJsoupExtractor implement
     
 
     private void parseTopic(Element classElement, Topic typeTopic) throws TopicMapException {
-        System.out.println(classElement.text());
+        logger.info(classElement.text());
         
         Topic t = getOrCreateTopic(tm, null, classElement.text());
         

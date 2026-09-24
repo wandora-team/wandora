@@ -34,6 +34,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.search.SearchTopicsFrame;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -41,6 +42,8 @@ import org.wandora.application.gui.search.SearchTopicsFrame;
  * @author  olli, ak
  */
 public class Search extends AbstractWandoraTool {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(Search.class);
 
 
 	private static final long serialVersionUID = 1L;
@@ -59,7 +62,7 @@ public class Search extends AbstractWandoraTool {
             searchFrame.setVisible(true);
         }
         else {
-            System.out.println("Unable in instantiate SearchTopicsFrame.");
+            logger.warn("Unable in instantiate SearchTopicsFrame.");
         }
     }
 

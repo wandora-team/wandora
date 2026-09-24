@@ -27,11 +27,15 @@
 
 package org.wandora.application.tools.som;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 /**
  *
  * @author akivela
  */
 public class SOMVector {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SOMVector.class);
     private double[] vector = null;
 
     
@@ -144,11 +148,13 @@ public class SOMVector {
     
     
     public void print() {
-        System.out.print("[ ");
+        StringBuilder sb = new StringBuilder();
+        sb.append("[ ");
         for(int i=0; i<vector.length; i++) {
-            System.out.print( vector[i]+";" );
+            sb.append( vector[i]+";" );
         }
-        System.out.println(" ]");
+        sb.append(" ]");
+        logger.info(sb.toString());
     }
     
     

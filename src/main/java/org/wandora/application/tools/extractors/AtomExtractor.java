@@ -177,12 +177,9 @@ public class AtomExtractor extends AbstractExtractor {
             setWandora(wandora);
             String urlstr = request.getSource();
 
-            // System.out.println("FOUND URL: "+urlstr);
-
             URL url = new URI(urlstr).toURL();
             URLConnection uc = url.openConnection();
             String type = uc.getContentType();
-            // System.out.println("FOUND TYPE: "+type);
 
             if(type != null && type.indexOf("text/html") > -1) {
                 String htmlContent = IObox.doUrl(url);

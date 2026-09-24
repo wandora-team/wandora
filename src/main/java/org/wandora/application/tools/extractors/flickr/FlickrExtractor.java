@@ -57,12 +57,15 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
         
 /**
  *
  * @author anttirt
  */
 public abstract class FlickrExtractor extends AbstractWandoraTool {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(FlickrExtractor.class);
     
 
 	private static final long serialVersionUID = 1L;
@@ -160,7 +163,7 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
             String baz = FlickrUtils.searchString(obj, "foo.baz");
         }
         catch(Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
    

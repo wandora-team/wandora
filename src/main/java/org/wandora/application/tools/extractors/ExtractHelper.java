@@ -223,15 +223,15 @@ public class ExtractHelper {
         String content = null;
         try {
             if(url.endsWith(".pdf") || url.endsWith(".PDF")) {
-                System.out.println("Found no content. Reading the url content as a PDF.");
+                logger.info("Found no content. Reading the url content as a PDF.");
                 content = PDFbox.extractTextOutOfPDF(url);
             }
             else if(url.endsWith(".doc") || url.endsWith(".DOC") || url.endsWith(".ppt") || url.endsWith(".PPT")) {
-                System.out.println("Found no content. Reading the url content as a MS Office file.");
+                logger.info("Found no content. Reading the url content as a MS Office file.");
                 content = MSOfficeBox.getText(new URI(url).toURL());
             }
             else {
-                System.out.println("Found no content. Reading the url content.");
+                logger.info("Found no content. Reading the url content.");
                 content = IObox.doUrl(new URI(url).toURL());
             }
         }
@@ -254,19 +254,19 @@ public class ExtractHelper {
                 // to Wandora.
                 String lurl = url.toLowerCase();
                 if(lurl.endsWith(".pdf")) {
-                    System.out.println("Found no content. Reading the url content as a PDF.");
+                    logger.info("Found no content. Reading the url content as a PDF.");
                     content = PDFbox.extractTextOutOfPDF(url);
                 }
                 else if(lurl.endsWith(".doc") || lurl.endsWith(".ppt") || lurl.endsWith(".xsl")) {
-                    System.out.println("Found no content. Reading the url content as a MS Office file.");
+                    logger.info("Found no content. Reading the url content as a MS Office file.");
                     content = MSOfficeBox.getText(new URI(url).toURL());
                 }
                 else if(lurl.endsWith(".xml")) {
-                    System.out.println("Found no content. Reading the url content as an XML file.");
+                    logger.info("Found no content. Reading the url content as an XML file.");
                     content = getContent(url);
                 }
                 else if(lurl.endsWith(".rdf") || lurl.endsWith(".owl")) {
-                    System.out.println("Found no content. Reading the url content as an RDF file.");
+                    logger.info("Found no content. Reading the url content as an RDF file.");
                     content = getContent(url);
                 }
             }
@@ -279,7 +279,7 @@ public class ExtractHelper {
         }
         if(content == null && url != null) {
             try {
-                System.out.println("Found no content. Reading the url content.");
+                logger.info("Found no content. Reading the url content.");
                 content = getContent(url);
             }
             catch(Exception e) {
@@ -306,7 +306,7 @@ public class ExtractHelper {
 
             // SOURCE IS A FRACTION OF URL
             if(content!=null) {
-                System.out.println("Found selection.");
+                logger.info("Found selection.");
                 String tidyContent = XMLbox.cleanUp( content );
                 if(tidyContent != null && tidyContent.length() > 0) {
                     content = XMLbox.getAsText(tidyContent, defaultEncoding);
@@ -440,7 +440,6 @@ public class ExtractHelper {
             else {
                 // Ok, Tidy fixed the html/xml document
                 tdata = XMLbox.getAsText(tdata, "UTF-8");
-                //System.out.println("content after getAsText: "+content);
                 //contentType = "text/txt";
             }
         }

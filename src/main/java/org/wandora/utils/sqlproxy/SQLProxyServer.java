@@ -177,8 +177,7 @@ public class SQLProxyServer extends Thread {
 
 
     public static void printUsage() {
-        System.out.println(
-                "Usage: java com.gripstudios.utils.sqlproxy.SQLProxyServer [driver] connectionString user password");
+        logger.info("Usage: java com.gripstudios.utils.sqlproxy.SQLProxyServer [driver] connectionString user password");
     }
 
 
@@ -223,11 +222,11 @@ public class SQLProxyServer extends Thread {
             return con;
         }
         catch (Exception e) {
-            System.out.println("Database connection failed with");
-            System.out.println("Driver: " + dbDriver);
-            System.out.println("Connection string: " + dbConnectionString);
-            System.out.println("User: " + dbUser);
-            System.out.println("Password: " + dbPassword);
+            logger.error("Database connection failed with");
+            logger.error("Driver: " + dbDriver);
+            logger.error("Connection string: " + dbConnectionString);
+            logger.error("User: " + dbUser);
+            logger.error("Password: " + dbPassword);
             logger.error(e);
             return null;
         }
@@ -237,7 +236,7 @@ public class SQLProxyServer extends Thread {
     public void run() {
         running = true;
         if (verbose)
-            System.out.println("Listening to port " + port);
+            logger.info("Listening to port " + port);
         try {
             ServerSocket ss;
             if (!useSSL) {
@@ -251,7 +250,7 @@ public class SQLProxyServer extends Thread {
                 try {
                     final Socket s = ss.accept();
                     if (verbose)
-                        System.out.println("Accepted connection from " + s.getRemoteSocketAddress().toString());
+                        logger.info("Accepted connection from " + s.getRemoteSocketAddress().toString());
                     ServerThread t = new ServerThread(s);
                     t.start();
                 }
@@ -529,7 +528,7 @@ public class SQLProxyServer extends Thread {
                 }
             }
             if (verbose)
-                System.out.println("Closing connection from " + socket.getRemoteSocketAddress().toString());
+                logger.info("Closing connection from " + socket.getRemoteSocketAddress().toString());
             dispose();
         }
 

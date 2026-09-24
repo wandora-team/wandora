@@ -193,7 +193,6 @@ public class SQLExtractor extends AbstractExtractor {
                     String name = x;
                     String lang = DEFAULT_LANG;
                     player = createTopic(tm, uri, name);
-                    //System.out.println("lang=="+lang+" name=="+name);
                     player.setDisplayName(lang, name);
 
                     if(role != null && player != null) {

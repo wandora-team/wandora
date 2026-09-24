@@ -205,7 +205,7 @@ public class RHelper {
         
         if(occ != null){
             for(String key : occ.keySet()){
-                System.out.println("adding occurrence type " + key);
+                logger.info("adding occurrence type " + key);
                 occTypeMap.put(key, getOccTypeTopic(tm,key));
             }
         }

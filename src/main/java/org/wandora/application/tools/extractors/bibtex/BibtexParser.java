@@ -302,13 +302,15 @@ public class BibtexParser {
 //        parser.parse(new InputStreamReader(System.in));
         parser.parse(new InputStreamReader(new FileInputStream("C:\\wandora\\build\\classes\\test.bib")));
         for(BibtexEntry e : parser.getEntries()){
-            System.out.print("@"+e.getType()+"{");
+            logger.info("@"+e.getType()+"{");
             if(e.getID()!=null) System.out.print(e.getID()+",");
-            System.out.println();
+            logger.info("");
             Map<String,Object> values=e.getValues();
             for(String key : values.keySet()){
                 Object value=values.get(key);
-                if(value instanceof String) System.out.println("\t"+key+" = \""+value+"\",");
+                if(value instanceof String) {
+                    logger.info("\t"+key+" = \""+value+"\",");
+                }
                 else{
                     ArrayList<BibtexPerson> list=(ArrayList<BibtexPerson>)value;
                     System.out.print("\t"+key+" = \"");
@@ -322,10 +324,10 @@ public class BibtexParser {
                             if(p.getInitials()!=null) System.out.print(" "+p.getInitials());
                         }
                     }
-                    System.out.println("\",");
+                    logger.info("\",");
                 }
             }
-            System.out.println("}");
+            logger.info("}");
         }
     }
 }

@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.wandora.application.WandoraTool;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -45,6 +46,8 @@ import org.wandora.application.WandoraTool;
  */
 
 public class Gedcom {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(Gedcom.class);
 	public static boolean DEBUG = false;
 
 	// map from String key to Node.
@@ -91,11 +94,11 @@ public class Gedcom {
 		}
 
 		if (DEBUG) {
-			System.out.println("level = " + level);
-			System.out.println("key = " + key);
-			System.out.println("tag = " + tag);
-			System.out.println("value = " + value);
-			System.out.println();
+			logger.info("level = " + level);
+			logger.info("key = " + key);
+			logger.info("tag = " + tag);
+			logger.info("value = " + value);
+			logger.info("");
 		}
 
 		Node node = new Node(key, tag, value);

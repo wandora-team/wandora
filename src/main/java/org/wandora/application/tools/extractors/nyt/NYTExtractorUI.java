@@ -45,6 +45,7 @@ import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleList;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -52,6 +53,8 @@ import org.wandora.topicmap.TopicMapException;
  * @author Eero Lehtonen
  */
 public class NYTExtractorUI extends javax.swing.JPanel {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(NYTExtractorUI.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -143,7 +146,7 @@ public class NYTExtractorUI extends javax.swing.JPanel {
                 extractUrl += "&sort=" + urlEncode(rank);
             }
 
-            System.out.println("URL: " + extractUrl);
+            logger.info("URL: " + extractUrl);
 
             NYTArticleSearchExtractor ex = new NYTArticleSearchExtractor();
             ex.setForceUrls(new String[]{extractUrl});
@@ -257,7 +260,7 @@ public class NYTExtractorUI extends javax.swing.JPanel {
             
             extractUrl += "&api-key=" + eventKey;
 
-            System.out.println(extractUrl);
+            logger.info(extractUrl);
 
             NYTEventSearchExtractor ex = new NYTEventSearchExtractor();
             ex.setForceUrls(new String[]{extractUrl});

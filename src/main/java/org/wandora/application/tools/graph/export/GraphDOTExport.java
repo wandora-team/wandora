@@ -103,7 +103,6 @@ public class GraphDOTExport extends AbstractGraphTool {
                         fileName = file.getName(); // Updating filename if file has changed!
                         out=new FileOutputStream(file);
                         log("Exporting graph view to '"+fileName+"'.");
-                        //System.out.println("tm == "+ tm);
                         exportGraph(out, model);
 
                         out.close();

@@ -80,7 +80,6 @@ public class ChangeVariantView extends AbstractWandoraTool {
         if(wandora != null) {
             Options ops = wandora.getOptions();
             ops.put(TraditionalTopicPanel.VARIANT_GUITYPE_OPTIONS_KEY, viewType);
-            //System.out.println("ops == " + ops.get(TraditionalTopicPanel.VARIANT_GUITYPE_OPTIONS_KEY));
         }
     }
     

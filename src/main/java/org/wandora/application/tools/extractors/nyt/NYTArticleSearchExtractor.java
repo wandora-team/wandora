@@ -81,9 +81,10 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
 
         String in = IObox.doUrl(u);
 
-        System.out.println("New York Times API returned-------------------------\n" + in
-                + "\n----------------------------------------------------");
-
+        logger.info("New York Times API returned-------------------------");
+        logger.info(in);
+        logger.info("----------------------------------------------------");
+        
         JSONObject json = new JSONObject(in);
         parse(json, tm);
         return true;
@@ -167,16 +168,16 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
             String originalURL = currentURL;
             
             if (pagingOptions[1].equals(a)) {
-                System.out.println("Selected to extract only next page");
+                logger.info("Selected to extract only next page");
                 String newURL = originalURL.replace("page=" + page, "page=" + (page + 1));
                 shouldHandlePagination = false;
                 _extractTopicsFrom(new URI(newURL).toURL(), tm);
             } else if (pagingOptions[2].equals(a)) {
-                System.out.println("Selected to extract next page");
+                logger.info("Selected to extract next page");
                 String newURL = originalURL.replace("page=" + page, "page=" + (page + 1));
                 _extractTopicsFrom(new URI(newURL).toURL(), tm);
             } else if (pagingOptions[3].equals(a)) {
-                System.out.println("Selected to extract 10 next pages");
+                logger.info("Selected to extract 10 next pages");
                 shouldHandlePagination = false;
                 setProgress(1);
                 setProgressMax(10);
@@ -191,7 +192,7 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
                     nap();
                 }
             } else if (pagingOptions[4].equals(a)) {
-                System.out.println("Selected to extract all pages");
+                logger.info("Selected to extract all pages");
                 shouldHandlePagination = false;
                 setProgress(1);
                 setProgressMax((int) (total - page));

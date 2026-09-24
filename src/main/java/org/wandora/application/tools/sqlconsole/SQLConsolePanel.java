@@ -109,7 +109,7 @@ public class SQLConsolePanel extends javax.swing.JPanel {
     public static Connection getConnection(String driver,String connectString,String user,String password)
                     throws ClassNotFoundException,SQLException {
         
-        System.out.println("Opening DB connection with driver " + driver);
+        logger.info("Opening DB connection with driver " + driver);
         Class.forName(driver);
         return DriverManager.getConnection(connectString,user,password);        
     }
@@ -157,7 +157,7 @@ public class SQLConsolePanel extends javax.swing.JPanel {
     }
     
     public static SQLQueryResult executeQueryLowLevel(String query,Connection connection,int resultMaxRows,Delegate<Integer,Integer> onOverflow) throws SQLException {
-        System.out.println("Excecuting query "+query);
+        logger.info("Excecuting query "+query);
         Statement statement=connection.createStatement();
         query=query.trim();
         boolean type=statement.execute(query);
@@ -186,7 +186,7 @@ public class SQLConsolePanel extends javax.swing.JPanel {
                     rows.add(row);
                     count++;
                     hasNext = resultSet.next();
-                    System.out.println("count == " + count);
+                    logger.info("count == " + count);
                 }
                 catch (Exception e) {
                 	logger.error(e);

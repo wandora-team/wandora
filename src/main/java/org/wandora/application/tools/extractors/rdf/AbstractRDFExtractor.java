@@ -132,7 +132,6 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
         if(baseUrl != null) {
             int lindex = baseUrl.lastIndexOf("/");
             int findex = baseUrl.indexOf("/");
-            //System.out.println("solving base url: "+lindex+", "+findex+", "+baseUrl);
             if(1+findex < lindex) {
                 baseUrl = baseUrl.substring(0, lindex);
             }
@@ -242,9 +241,6 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
             // of some other statement
             return;
         }
-            
-        
-        //System.out.println("statement:\n  "+subject+"\n   "+predicate+"\n    "+object);
         
         Topic subjectTopic = getOrCreateTopic(map, subject.toString());
                 

@@ -239,15 +239,15 @@ public class SparqlExtractor extends AbstractExtractor {
         ResultSet results = null;
         if(in != null) {
             if("JSON".equalsIgnoreCase(format)) {
-                System.out.println("Processing SPARQL results set as JSON");
+                logger.info("Processing SPARQL results set as JSON");
                 results = ResultSetFactory.fromJSON(in);
             }
             else if("XML".equalsIgnoreCase(format)) {
-                System.out.println("Processing SPARQL results set as XML");
+                logger.info("Processing SPARQL results set as XML");
                 results = ResultSetFactory.fromXML(in);
             }
             else if("RDF/XML".equalsIgnoreCase(format)) {
-                System.out.println("Processing SPARQL results set as RDF/XML");
+                logger.info("Processing SPARQL results set as RDF/XML");
                 // results = ResultSetFactory.load(in, com.hp.hpl.jena.sparql.resultset.ResultsFormat.FMT_RDF_XML);
             }
         }
@@ -394,7 +394,6 @@ public class SparqlExtractor extends AbstractExtractor {
         Property predicate = stmt.getPredicate();   // get the predicate
         RDFNode object     = stmt.getObject();      // get the object
 
-        //System.out.println("statement:\n  "+subject+"\n   "+predicate+"\n    "+object);
 
         Topic subjectTopic = getOrCreateTopic(map, subject.toString());
 
@@ -488,7 +487,6 @@ public class SparqlExtractor extends AbstractExtractor {
         if(baseUrl != null) {
             int lindex = baseUrl.lastIndexOf("/");
             int findex = baseUrl.indexOf("/");
-            //System.out.println("solving base url: "+lindex+", "+findex+", "+baseUrl);
             if(1+findex < lindex) {
                 baseUrl = baseUrl.substring(0, lindex);
             }

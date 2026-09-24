@@ -75,6 +75,7 @@ import javax.swing.Timer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * A JTree that allows moving nodes in the tree with drag and drop. You will
@@ -86,6 +87,8 @@ import javax.swing.tree.TreePath;
  * @author olli
  */
 public abstract class DragJTree extends JTree implements Autoscroll {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(DragJTree.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -590,7 +593,7 @@ public abstract class DragJTree extends JTree implements Autoscroll {
 
 
             public void doDrop(TreePath destinationParent, TreePath destinationPosition, TreePath source, int action) {
-                System.out.println("Moving " + source + " to " + destinationParent + ", " + destinationPosition);
+                logger.info("Moving " + source + " to " + destinationParent + ", " + destinationPosition);
             }
         });
         w.pack();

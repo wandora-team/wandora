@@ -265,15 +265,15 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                 return null;}
             try {
                 if(connection.isClosed()) {
-                    System.out.println("SQL connection closed. Opening new connection!");
+                    logger.info("SQL connection closed. Opening new connection!");
                     connection=createConnection(false);
                     isDBReadOnly=testReadOnly();
                 }
             }
             catch (SQLException sqle) {
-                System.out.println("SQL exception occurred while acquiring connection:");
+                logger.error("SQL exception occurred while acquiring connection:");
                 logger.error(sqle);
-                System.out.println("Trying to open new connection!");
+                logger.error("Trying to open new connection!");
                 connection=createConnection(true);
                 isDBReadOnly=testReadOnly();
             }
@@ -297,15 +297,14 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             else {
                 con.setAutoCommit(false);
             }
-            // System.out.println("Database connection created");
             return con;
         }
         catch(Exception e){
-            System.out.println("Database connection failed with");
-            System.out.println("Driver: " + dbDriver);
-            System.out.println("Connection string: " + dbConnectionString);
-            System.out.println("User: " + dbUser);
-            System.out.println("Password: " + dbPassword);
+            logger.error("Database connection failed with");
+            logger.error("Driver: " + dbDriver);
+            logger.error("Connection string: " + dbConnectionString);
+            logger.error("User: " + dbUser);
+            logger.error("Password: " + dbPassword);
             logger.error(e);
             return null;
         }
@@ -431,9 +430,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                     for(int i=0;i<columns;i++) {
                         // Column names are transformed to uppercase.
                         row.put(columnNames[i].toUpperCase(), rs.getObject(i+1));
-                        //System.out.println("  "+columnNames[i]+"="+rs.getObject(i+1));
                     }
-                    //System.out.println("---");
                     rows.add(row);
                 }
                 rs.close();
@@ -508,7 +505,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
     
     private void logQuery(String query) {
         if(query != null) {
-            System.out.println(query.substring(0, query.length() > 512 ? 512 : query.length()));
+            logger.info(query.substring(0, query.length() > 512 ? 512 : query.length()));
         }
     }
     

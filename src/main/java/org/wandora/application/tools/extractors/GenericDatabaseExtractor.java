@@ -118,7 +118,7 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
             DatabaseSchema schema=getDatabaseSchema(metadata,null,sc.user);
                                 
             setDefaultBaseNameColumns(schema);
-            System.out.println("Found tables:");
+            logger.info("Found tables:");
             schema.print(System.out);
             
             if(!configureSchema(wandora,schema)){ return; }
@@ -172,9 +172,9 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
         ResultSetMetaData rsmd=rs.getMetaData();
         while(rs.next()){
             for(int i=0;i<rsmd.getColumnCount();i++){
-                System.out.println(rsmd.getColumnLabel(i+1)+": "+rs.getObject(i+1));
+                logger.info(rsmd.getColumnLabel(i+1)+": "+rs.getObject(i+1));
             }
-            System.out.println("--------------------------");
+            logger.info("--------------------------");
         }        
     }
     
@@ -371,7 +371,7 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
                     String ids=makeIdentifier(row,columns,table);
                     String identifier="https://wandora.org/si/dbimport/"+table+"/"+ids;
                     if(extendsTable!=null) identifier="https://wandora.org/si/dbimport/"+extendsTable+"/"+ids;
-                    if(identifier.length()>255) System.out.println("WARNING! Locator over 255 characters");
+                    if(identifier.length()>255) logger.info("WARNING! Locator over 255 characters");
                     if(hasNonReferences){
                         Topic t=getOrCreateTopic(tm,identifier);
                         Topic type=getOrCreateCached(tm,"https://wandora.org/si/dbimport/type/"+table);

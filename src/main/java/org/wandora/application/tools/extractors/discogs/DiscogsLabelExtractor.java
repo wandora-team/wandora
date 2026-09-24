@@ -80,8 +80,9 @@ public class DiscogsLabelExtractor extends AbstractDiscogsExtractor {
 
             String in = DiscogsSearchExtractor.doUrl(u);
 
-            System.out.println("---------------Discogs API returned------------\n"+in+
-                               "\n-----------------------------------------------");
+            logger.info("---------------Discogs API returned------------");
+            logger.info(in);
+            logger.info("-----------------------------------------------");
 
             JSONObject json = new JSONObject(in);
             parseLabel(json, tm);

@@ -366,13 +366,11 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
         }
         
         else if(evtSource.equals(templateSelector)) {
-            //System.out.println("----------------------- Updating preview!");
             parent.options.put(OPTIONS_PREFIX+"currentTemplate", templateSelector.getSelectedItem().toString());
             updatePreview();
         }
         
         else if(evtSource.equals(pageSelector)) {
-            //System.out.println("----------------------- Page change!");
             String pageString = (String) pageSelector.getSelectedItem();
             if(pageString != null && pageString.length() > 0) {
                 try {
@@ -387,7 +385,7 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
         }
         
         else {
-            System.out.println("Unknown action event source: " +evtSource);
+            logger.info("Unknown action event source: " +evtSource);
         }
     }
     
@@ -410,20 +408,16 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     };
     
     public void keyTyped(KeyEvent e) {
-        //System.out.println("keyTyped "+e);
     }
     public void keyPressed(KeyEvent e) {
-        //System.out.println("keyPressed "+e);
     }
     public void keyReleased(KeyEvent e) {
-        //System.out.println("keyReleased "+e);
         if(e == null) return;
         for(int i=0; i<keyMap.length; i+=2) {
             if(keyMap[i].equals(e.getKeyCode())) {
                 int pn = ((Integer) keyMap[i+1]).intValue();
                 if(pn < preview.numberOfPages) {
                     //preview.setPage(pn);
-                    //System.out.println("changing page to "+pn);
                     pageSelector.setSelectedIndex(pn);
                 }
                 break;
@@ -460,7 +454,6 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     
     
     public void setPreview(Topic t, String template, Wandora admin) {
-        //System.out.println("setPreview()");
         try {
             String text = getTopicAsText(admin, t, template, SORT);
             if(preview != null) { 
@@ -476,7 +469,6 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     
     
     public void updatePageSelector() {
-        //System.out.println("updatePageSelector()");
         String[] pageNumbers = preview.getPageNumbers();
         pageSelector.setOptions(pageNumbers);
         if(pageNumbers.length > 0) {
@@ -744,7 +736,6 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
             for(String templateFilename : templateFiles) {
                 if(templateFilename != null) {
                     try {
-                        //System.out.println("found template: " + templateFilename );
                         boolean nameFound = false;
                         BufferedReader reader = new BufferedReader(new FileReader(templateFilename));
                         String firstLine = reader.readLine();
@@ -859,7 +850,6 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
                 
         public int print(java.awt.Graphics g, java.awt.print.PageFormat pageFormat, int p) throws java.awt.print.PrinterException {
             if(p < getPageCount(g, pageFormat)) {
-                //System.out.println("Printing page " + p);
                 page = p;
                 Graphics2D g2d = (Graphics2D)g;
                 RepaintManager currentManager = RepaintManager.currentManager(this);    
@@ -937,7 +927,6 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
         
     
         public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
-            //System.out.println("actionPerformed at Preview");
             String c = actionEvent.getActionCommand();
             if(c.equals("Copy")) {
                 ClipboardBox.setClipboard(getTopicAsText(parent));
@@ -981,7 +970,7 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
                     writer.close();
                 }
                 catch(Exception e) {
-                    System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + textFile.getPath() + "'.");
+                    logger.error("Exception '" + e.toString() + "' occurred while saving file '" + textFile.getPath() + "'.");
                 }
             }
         }

@@ -99,8 +99,9 @@ public class EuropeanaSearchExtractor extends AbstractEuropeanaExtractor {
 
             String in = doUrl(u);
 
-            System.out.println("---------------Europeana API returned------------\n"+in+
-                               "\n-----------------------------------------------");
+            logger.info("---------------Europeana API returned----------");
+            logger.info(in);
+            logger.info("-----------------------------------------------");
 
             JSONObject json = new JSONObject(in);
             parse(json, tm);

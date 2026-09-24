@@ -143,8 +143,6 @@ public class MaianaImport extends AbstractWandoraTool {
                         
                     String reply = MaianaUtils.doUrl(new URI(apiEndPoint).toURL(), request, "application/json");
 
-                    //System.out.println("reply:\n"+reply);
-
                     JSONObject replyObject = new JSONObject(reply);
 
                     if(replyObject.has("code")) {

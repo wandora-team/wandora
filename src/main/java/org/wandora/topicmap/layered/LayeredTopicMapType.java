@@ -49,6 +49,7 @@ import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.topicmap.packageio.PackageOutput;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -56,6 +57,8 @@ import org.wandora.utils.Options;
  * @author olli
  */
 public class LayeredTopicMapType implements TopicMapType {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(LayeredTopicMapType.class);
 
     public static boolean USE_UNDO_WRAPPED_TOPICMAPS = true;
 
@@ -66,7 +69,7 @@ public class LayeredTopicMapType implements TopicMapType {
 
 
     @Override
-    public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger)
+    public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger tmLogger)
             throws IOException, TopicMapException {
         LayerStack ls = (LayerStack) tm;
         Options options = new Options();
@@ -93,8 +96,8 @@ public class LayeredTopicMapType implements TopicMapType {
         for (Layer l : ls.getLayers()) {
             TopicMap ltm = getWrappedTopicMap(l.getTopicMap());
             TopicMapType tmtype = TopicMapTypeManager.getType(ltm);
-            logger.log("Saving layer '" + l.getName() + "'.");
-            tmtype.packageTopicMap(ltm, out, out.joinPath(path, "layer" + lcounter), logger);
+            tmLogger.log("Saving layer '" + l.getName() + "'.");
+            tmtype.packageTopicMap(ltm, out, out.joinPath(path, "layer" + lcounter), tmLogger);
             lcounter++;
         }
         for (int i = lcounter; i < lcounter + 99; i++) {
@@ -200,16 +203,16 @@ public class LayeredTopicMapType implements TopicMapType {
 
 
     @Override
-    public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger, Wandora wandora)
+    public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger tmLogger, Wandora wandora)
             throws IOException, TopicMapException {
         if (!in.gotoEntry(path, "options.xml")) {
-            if (logger != null) {
-                logger.log("Can't find options.xml in the package.");
-                logger.log("Aborting.");
+            if (tmLogger != null) {
+                tmLogger.log("Can't find options.xml in the package.");
+                tmLogger.log("Aborting.");
             }
             else {
-                System.out.println("Can't find options.xml in the package.");
-                System.out.println("Aborting.");
+                logger.info("Can't find options.xml in the package.");
+                logger.info("Aborting.");
             }
             return null;
         }
@@ -218,8 +221,8 @@ public class LayeredTopicMapType implements TopicMapType {
 
         LayerStack ls = new LayerStack();
         Layer selectedLayer = null;
-        if (logger == null)
-            logger = ls;
+        if (tmLogger == null)
+            tmLogger = ls;
 
         int counter = 0;
         while (true && counter < 9999) {
@@ -231,8 +234,8 @@ public class LayeredTopicMapType implements TopicMapType {
             try {
                 Class<?> c = Class.forName(typeClass);
                 TopicMapType type = TopicMapTypeManager.getType(c);
-                logger.log("Loading layer '" + layerName + "'.");
-                TopicMap tm = type.unpackageTopicMap(in, in.joinPath(path, "layer" + counter), logger, wandora);
+                tmLogger.log("Loading layer '" + layerName + "'.");
+                TopicMap tm = type.unpackageTopicMap(in, in.joinPath(path, "layer" + counter), tmLogger, wandora);
 
                 Layer l = new Layer(tm, layerName, ls);
                 ls.addLayer(l);
@@ -257,7 +260,7 @@ public class LayeredTopicMapType implements TopicMapType {
                 }
             }
             catch (ClassNotFoundException cnfe) {
-                logger.log("Can't find topic map class '" + typeClass + "', skipping layer.");
+                tmLogger.log("Can't find topic map class '" + typeClass + "', skipping layer.");
             }
             counter++;
         }

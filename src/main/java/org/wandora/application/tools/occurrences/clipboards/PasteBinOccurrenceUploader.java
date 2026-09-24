@@ -289,7 +289,6 @@ public class PasteBinOccurrenceUploader extends AbstractWandoraTool {
 
             if(method != null && con instanceof HttpURLConnection) {
                 ((HttpURLConnection) con).setRequestMethod(method);
-                //System.out.println("****** Setting HTTP request method to "+method);
             }
 
             if(ctype != null) {

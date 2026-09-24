@@ -45,6 +45,7 @@ import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -89,6 +90,8 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class SOMClassifier extends AbstractWandoraTool {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SOMClassifier.class);
 
 
 	private static final long serialVersionUID = 1L;
@@ -150,10 +153,10 @@ public class SOMClassifier extends AbstractWandoraTool {
             }
         }
         else if( context instanceof LayeredTopicContext ) {
-            System.out.println("LayeredTopicContext not processed!");
+            logger.warn("LayeredTopicContext not processed!");
         }
         else {
-            System.out.println("Unknown context not processed!");
+            logger.warn("Unknown context not processed!");
         }
         setState(WAIT);
     }

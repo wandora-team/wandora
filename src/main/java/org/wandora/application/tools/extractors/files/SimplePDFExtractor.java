@@ -146,7 +146,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
                 }
                 if(content == null && url != null) {
                     try {
-                        System.out.println("Found no content. Reading the url content.");
+                        logger.info("Found no content. Reading the url content.");
                         content = IObox.doUrl(new URI(url).toURL());
                     }
                     catch(Exception e) {
@@ -155,8 +155,8 @@ public class SimplePDFExtractor extends AbstractExtractor {
                 }
 
                 if(content != null) {
-                    System.out.println("--- browser plugin processing content ---");
-                    System.out.println(content);
+                    logger.info("--- browser plugin processing content ---");
+                    logger.info(content);
 
                     Pattern p = Pattern.compile("\"[^\"]+?\\.pdf\"");
                     Matcher m = p.matcher(content);
@@ -171,7 +171,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
                     }
 
                     for( String u : pdfUrls ) {
-                        System.out.println("Extracting pdf url: " + u);
+                        logger.info("Extracting pdf url: " + u);
                         _extractTopicsFrom(new URI(u).toURL(), tm);
                     }
                     wandora.doRefresh();

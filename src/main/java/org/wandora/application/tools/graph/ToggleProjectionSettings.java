@@ -31,6 +31,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.GraphNodeContext;
 import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -38,6 +39,8 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
  * @author akivela
  */
 public class ToggleProjectionSettings extends AbstractGraphTool {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(ToggleProjectionSettings.class);
     
 
 
@@ -65,7 +68,7 @@ public class ToggleProjectionSettings extends AbstractGraphTool {
                 graphPanel.getProjection().useNextProjectionSettings();
             }
             catch(Exception e) {
-                System.out.println("Exception occurred in toggle projection settings.");
+                logger.error("Exception occurred in toggle projection settings.");
                 singleLog(e);
             }
         }

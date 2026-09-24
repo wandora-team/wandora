@@ -81,8 +81,9 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
 
             String in = IObox.doUrl(u);
 
-            System.out.println("New York Times API returned-------------------------\n" + in
-                    + "\n----------------------------------------------------");
+            logger.info("New York Times API returned-------------------------");
+            logger.info(in);
+            logger.info("----------------------------------------------------");
             
             JSONObject json = new JSONObject(in);
             if (json.get("num_results").toString().equals("0")){
@@ -115,7 +116,7 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
                 }
             } catch (JSONException ex) {
                 log(ex);
-                System.out.println(ex);
+                logger.error(ex);
             }
         }
     }
@@ -232,7 +233,7 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
                 Date startDate = input.parse(startDateString);
                 startDateString = output.format(startDate);
               } catch (Exception e){
-                System.out.println("dateparseerror");
+                logger.error("dateparseerror");
               }
               
               if(startDateString != null && startDateString.length() > 0) {
@@ -265,7 +266,7 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
                    Date endDate = input.parse(endDateString);
                    endDateString = output.format(endDate);
                 } catch (Exception e){
-                  System.out.println("dateparseerror");
+                  logger.error("dateparseerror");
                 }
                 if(endDateString != null && endDateString.length() > 0) {
                   Topic dateEndTypeTopic = getEndDateTypeTopic(tm);

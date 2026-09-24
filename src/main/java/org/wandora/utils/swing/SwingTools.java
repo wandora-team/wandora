@@ -50,7 +50,7 @@ public class SwingTools {
      */
     public static void debugCheckEventThread() {
         if (!EventQueue.isDispatchThread()) {
-            System.out.println("WARNING: not event dispatch thread");
+            logger.info("WARNING: not event dispatch thread");
             try {
                 throw new Exception("Not event dispatch thread");
             }
@@ -199,7 +199,7 @@ public class SwingTools {
                 break SyncBlock;
             }
             if (workThread != null) {
-                System.out.println("Work ignored");
+                logger.info("Work ignored");
                 return false;
             }
             final ValueContainer<Integer> container = new ValueContainer<Integer>(0);

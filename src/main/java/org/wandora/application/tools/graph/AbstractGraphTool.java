@@ -36,6 +36,7 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 import org.wandora.application.gui.topicpanels.graphpanel.VModel;
 import org.wandora.application.gui.topicpanels.graphpanel.VNode;
 import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -46,6 +47,8 @@ import org.wandora.application.tools.AbstractWandoraTool;
  * @author akivela
  */
 public abstract class AbstractGraphTool extends AbstractWandoraTool {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractGraphTool.class);
 
 	private static final long serialVersionUID = 1L;
 	
@@ -71,7 +74,7 @@ public abstract class AbstractGraphTool extends AbstractWandoraTool {
             }
         }
         catch(Exception e) {
-            System.out.println("Exception '"+e.toString()+"' captured in abstract graph tool.");
+            logger.error("Exception '"+e.toString()+"' captured in abstract graph tool.");
             singleLog(e);
         }
     }

@@ -48,12 +48,15 @@ import org.wandora.topicmap.layered.LayerStack;
 import org.wandora.topicmap.memory.TopicMapImpl;
 import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.topicmap.packageio.ZipPackageInput;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author olli
  */
 public class TopicMapDiff {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicMapDiff.class);
 
     public TopicMapDiff(){
         
@@ -1116,19 +1119,19 @@ public class TopicMapDiff {
     }
     
     public static void printUsage(){
-        System.out.println("java org.wandora.topicmap.diff.DiffTool <command> <options>");
-        System.out.println("Commands:");
-        System.out.println("  c    Compare two topic maps.");
-        System.out.println("  p    Patch a topic map.");
-        System.out.println("  P    Perform an inverse patch.");
-        System.out.println("  i    Inverse a patch file.");
-        System.out.println("  h    Calculate a hash code for a topic map.");
-        System.out.println("Options:");
-        System.out.println("  <filename> Input file. For comparison enter two topic maps.");
-        System.out.println("             For patching enter a topic map and a patch file in that order.");
-        System.out.println("             For hash code enter a single topic map.");
-        System.out.println("  -o   Output in the specified file.");
-        System.out.println("  -e   Character encoding for patch files, default is UTF-8.");
+        logger.info("java org.wandora.topicmap.diff.DiffTool <command> <options>");
+        logger.info("Commands:");
+        logger.info("  c    Compare two topic maps.");
+        logger.info("  p    Patch a topic map.");
+        logger.info("  P    Perform an inverse patch.");
+        logger.info("  i    Inverse a patch file.");
+        logger.info("  h    Calculate a hash code for a topic map.");
+        logger.info("Options:");
+        logger.info("  <filename> Input file. For comparison enter two topic maps.");
+        logger.info("             For patching enter a topic map and a patch file in that order.");
+        logger.info("             For hash code enter a single topic map.");
+        logger.info("  -o   Output in the specified file.");
+        logger.info("  -e   Character encoding for patch files, default is UTF-8.");
     }
         
     public static void main(String[] args) throws Exception {
@@ -1215,7 +1218,7 @@ public class TopicMapDiff {
             }
             TopicMap tm1=openFile(file1);
             long hash=TopicMapHashCode.getTopicMapHashCode(tm1);
-            System.out.println(Long.toHexString(hash));
+            logger.info(Long.toHexString(hash));
         }
     }
 }

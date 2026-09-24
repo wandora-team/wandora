@@ -214,7 +214,6 @@ public class XMLbox {
                     parseXML(n, currentKey, map);
                 }
                 else {
-                    //System.out.println("parsed: "+currentKey+" == "+value);
                     map.put(currentKey, value);
                 }
             }

@@ -597,7 +597,6 @@ public class GedcomExtractor extends AbstractExtractor {
 				}
 			}
 		}
-		// System.out.println("---note:"+note.toString());
 		return note.toString();
 	}
 	

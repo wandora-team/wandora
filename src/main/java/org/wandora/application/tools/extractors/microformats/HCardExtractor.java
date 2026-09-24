@@ -55,6 +55,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -62,6 +63,8 @@ import org.xml.sax.XMLReader;
  * @author akivela
  */
 public class HCardExtractor extends AbstractExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(HCardExtractor.class);
     
 
 	private static final long serialVersionUID = 1L;
@@ -157,9 +160,9 @@ public class HCardExtractor extends AbstractExtractor {
         //tidyXML = HTMLEntitiesCoder.decode(tidyXML);
         //tidyXML = tidyXML.replace("&amp;deg;", "&#0176;");
         
-        System.out.println("------");
-        System.out.println(tidyXML);
-        System.out.println("------");
+        logger.info("------");
+        logger.info(tidyXML);
+        logger.info("------");
         
         javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -356,7 +359,7 @@ public class HCardExtractor extends AbstractExtractor {
             if(debug) System.out.print(", sstate="+state);
             
             if(clas == null) {
-                if(debug) System.out.println(", no class here - rejecting");
+                if(debug) logger.info(", no class here - rejecting");
                 return;
             }
 
@@ -874,7 +877,7 @@ public class HCardExtractor extends AbstractExtractor {
                 }
             }
             
-            if(debug) System.out.println(", nstate="+state);
+            if(debug) logger.info(", nstate="+state);
         }
 
         
@@ -913,7 +916,7 @@ public class HCardExtractor extends AbstractExtractor {
             // **** POP STATE ****
             if(!stateStack.empty()) {
                 state = (ArrayList<Integer>) stateStack.pop();
-                if(debug) System.out.println("  popping state:"+state);
+                if(debug) logger.info("  popping state:"+state);
             }
             else {
                 state = new ArrayList<Integer>();
@@ -1140,7 +1143,7 @@ public class HCardExtractor extends AbstractExtractor {
         private String catenate(String base, char[] data, int start, int length) {
             if(base == null) base = "";
             base = base + new String(data,start,length);
-            if(debug) System.out.println("  string=="+base);
+            if(debug) logger.info("  string=="+base);
             return base;
         }
 
@@ -1621,7 +1624,7 @@ public class HCardExtractor extends AbstractExtractor {
                 }
             }
             if(t == null) {
-                System.out.println("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
+                logger.info("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
             }
             return t;
         }

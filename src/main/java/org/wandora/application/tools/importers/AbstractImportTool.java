@@ -48,6 +48,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.layered.Layer;
 import org.wandora.topicmap.layered.LayerStack;
 import org.wandora.utils.HttpAuthorizer;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -55,6 +56,8 @@ import org.wandora.utils.HttpAuthorizer;
  * @author akivela
  */
 public abstract class AbstractImportTool extends AbstractWandoraTool {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractImportTool.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -233,7 +236,7 @@ public abstract class AbstractImportTool extends AbstractWandoraTool {
             }
         }
         else {
-            System.out.println("Illegal import source: "+selectedImportSource);
+            logger.info("Illegal import source: "+selectedImportSource);
         }
     }
     

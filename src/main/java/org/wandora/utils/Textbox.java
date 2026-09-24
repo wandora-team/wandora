@@ -570,7 +570,6 @@ public class Textbox {
         if (code.length() < 2)
             code = "0" + code;
         colorName.append(code);
-        //System.out.println("color: " + colorName.toString());
         return colorName.toString();
     }
 

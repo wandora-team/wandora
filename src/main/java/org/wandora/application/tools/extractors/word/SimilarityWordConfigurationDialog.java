@@ -39,12 +39,15 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleCheckBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author Eero Lehtonen
  */
 class SimilarityWordConfigurationDialog extends javax.swing.JPanel {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimilarityWordConfigurationDialog.class);
 
 	private static final long serialVersionUID = 1L;
 	
@@ -139,7 +142,7 @@ class SimilarityWordConfigurationDialog extends javax.swing.JPanel {
                 float f = Float.parseFloat(s);
                 return (f >= 0 && f <= 1);
             } catch (NumberFormatException e) {
-                System.out.println(s);
+                logger.error(s);
                 return false;
             }
         }

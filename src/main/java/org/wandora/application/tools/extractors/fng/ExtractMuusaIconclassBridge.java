@@ -218,7 +218,6 @@ public class ExtractMuusaIconclassBridge extends AbstractExtractor {
                         }
                     }
                     if(muusaKeyword != null) {
-                        //System.out.println("tokens length:" + tokens.length);
                         if(tokens.length > 3 && isValidIconclass(tokens[3])) { // Iconclass code exists!
                             iconclassCode = tokens[3];
                             log("Found iconclass keyword '" + iconclassCode + "'.");

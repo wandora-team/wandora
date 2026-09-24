@@ -258,7 +258,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
     }
     
     public EmailSession openEmailSession() throws MessagingException {
-        System.out.println("Connecting to mail server");
+        logger.info("Connecting to mail server");
         Properties mailSessionProps=new Properties();
         mailSessionProps.setProperty("mail.store.protocol",protocol);
         mailSessionProps.setProperty("mail."+protocol+".host",host);
@@ -299,7 +299,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                 messageLabel.setText("Fetching "+numMessages+" messages");
             }
         });
-        System.out.println("Fetching "+numMessages+" messages");
+        logger.info("Fetching "+numMessages+" messages");
         Message[] msgs=session.getMessages();
         FetchProfile prof=new FetchProfile();
         prof.add(FetchProfile.Item.ENVELOPE);
@@ -328,7 +328,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                         BodyPart bp=mm.getBodyPart(j);
                         String contentType=bp.getContentType();
                         if(contentType.startsWith("image/")){
-                            System.out.println("found image");
+                            logger.info("found image");
                             img=ImageIO.read(bp.getInputStream());
                             int height=50;
                             int width=(int)(img.getWidth()*(double)height/(double)img.getHeight());
@@ -366,7 +366,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                             from+=a.toString();
                         }
                         senders.add(from);
-                        System.out.println("UID: "+uid);
+                        logger.info("UID: "+uid);
                     }
                     else msgs[i].setFlag(Flags.Flag.DELETED,true);
                 }catch(Exception e){
@@ -417,7 +417,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                 count++;
             }
         }
-        System.out.println("Deleting "+count+" messages");
+        logger.info("Deleting "+count+" messages");
         session.close(true);
     }
     

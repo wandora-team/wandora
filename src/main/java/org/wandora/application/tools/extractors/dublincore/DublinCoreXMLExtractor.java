@@ -49,6 +49,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -83,6 +84,7 @@ import org.xml.sax.XMLReader;
 public class DublinCoreXMLExtractor extends AbstractExtractor {
 	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DublinCoreXMLExtractor.class);
 
 	public static boolean IDENTIFIER_AS_SI = true;
 
@@ -199,7 +201,6 @@ public class DublinCoreXMLExtractor extends AbstractExtractor {
     public boolean _extractTopicsFrom(String in, TopicMap topicMap) throws Exception {
         try {
             String result = in;
-            //System.out.println("Result = "+result);
 
             // ---- Parse results ----
             javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
@@ -780,7 +781,6 @@ public class DublinCoreXMLExtractor extends AbstractExtractor {
 
         @Override
         public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-            //System.out.println("found tag: "+qName+", localName: "+localName);
             if(parent.forceStop()){
                 throw new SAXException("User interrupt");
             }
@@ -1305,7 +1305,7 @@ public class DublinCoreXMLExtractor extends AbstractExtractor {
                                         if(APPEND_OCCURRENCE_TABLEOFCONTENTS) o = dcTopic.getData(tableofcontentsType, langTopic);
                                         if(o == null) o = data_tableofcontents;
                                         else o = o + "\n\n" + data_tableofcontents;
-                                        System.out.println("Setting toc: "+o);
+                                        logger.info("Setting toc: "+o);
                                         dcTopic.setData(tableofcontentsType, langTopic, o);
                                     }
                                 }
@@ -1582,7 +1582,6 @@ public class DublinCoreXMLExtractor extends AbstractExtractor {
             String[] t1s = t1.split(":");
             t1 = t1s[t1s.length-1];
         }
-        //System.out.println("Comparing: "+t1+" and "+t2);
         return t1.equalsIgnoreCase(t2);
     }
 

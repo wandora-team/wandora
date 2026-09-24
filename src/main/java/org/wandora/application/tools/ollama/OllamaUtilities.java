@@ -5,8 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.github.ollama4j.Ollama;
 import java.util.Properties;
+import org.wandora.utils.logger.Log4j2Logger;
 
 public class OllamaUtilities {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(OllamaUtilities.class);
 	
 	private static String defaultModelName;
 	
@@ -52,7 +55,7 @@ public class OllamaUtilities {
             }
 
             if (useExternalOllamaHost) {
-                System.out.println("Using external Ollama host...");
+                logger.info("Using external Ollama host...");
                 api = new Ollama(ollamaHost);
             } else {
                 throw new RuntimeException(
@@ -80,7 +83,7 @@ public class OllamaUtilities {
     public static String getFromEnvVar(String key) {
         String val = System.getenv(key);
         if (val == null) {
-            System.out.println("Environment variable " + key + " not found!");
+            logger.info("Environment variable " + key + " not found!");
         }
         return val;
     }

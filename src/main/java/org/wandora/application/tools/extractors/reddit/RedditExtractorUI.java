@@ -184,7 +184,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
         try {
             str = URLEncoder.encode(str, "utf-8");
         } catch (Exception e) {
-          System.out.println(e.getMessage());
+          logger.error(e.getMessage());
         }
         return str;
     }
@@ -347,7 +347,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             threadSearchDetails.setText(sb.toString());
         } 
         catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -361,7 +361,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             subredditDetailTextArea.setLineWrap(true);
         } 
         catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 

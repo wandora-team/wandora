@@ -286,9 +286,6 @@ public class LSystemGraphGenerator extends AbstractGenerator {
             role2.setBaseName(actualRole2Name);
         }
 
-        //System.out.println("create association: "+atype);
-        //System.out.println("  with player: "+t1+" and role "+role1);
-        //System.out.println("  with player: "+t2+" and role "+role2);
         
         Association a = tm.createAssociation(atype);
         a.addPlayer(t1, role1);
@@ -716,13 +713,11 @@ public class LSystemGraphGenerator extends AbstractGenerator {
         
         public boolean startsWith(Word otherWord, int index) {
             boolean found = false;
-            //System.out.println("startsWith-1");
             if(alphabets != null && otherWord != null && alphabets.size() >= index+otherWord.size() ) {
                 Alphabet as = null;
                 Alphabet aw = null;
                 int kmax = otherWord.size();
                 found = true;
-                //System.out.println("startsWith-2");
                 for(int j=0; j<kmax; j++) {
                     as = alphabets.get(index+j);
                     if(as.isFresh()) {
@@ -730,9 +725,7 @@ public class LSystemGraphGenerator extends AbstractGenerator {
                         break;
                     }
                     aw = otherWord.get(j);
-                    //System.out.println("startsWith-3");
                     if(!as.equals(aw)) {
-                        //System.out.println("startsWith-4");
                         found = false;
                         break;
                     }

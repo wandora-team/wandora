@@ -37,6 +37,7 @@ import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -44,6 +45,8 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 public class EuropeanaExtractorUI extends javax.swing.JPanel {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(EuropeanaExtractorUI.class);
 
 	private static final long serialVersionUID = 1L;
 	
@@ -100,7 +103,7 @@ public class EuropeanaExtractorUI extends javax.swing.JPanel {
          
         String extractUrl = EUROPEANA_API_BASE + "?wskey=" + key + "&profile=standard&query=" + urlEncode(query);
 
-        System.out.println("Search URL: " + extractUrl);
+        logger.info("Search URL: " + extractUrl);
 
         EuropeanaSearchExtractor ex = new EuropeanaSearchExtractor();
         ex.setForceUrls(new String[]{extractUrl});

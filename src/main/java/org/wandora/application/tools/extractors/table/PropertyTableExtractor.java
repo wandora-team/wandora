@@ -391,7 +391,7 @@ public class PropertyTableExtractor extends AbstractExtractor {
 
         @Override
         public void handleError(String errorMsg,int pos) {
-            // System.out.println("PropertyTableExtractor: " + errorMsg);
+            logger.error(errorMsg);
         }
         
         

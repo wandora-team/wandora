@@ -452,7 +452,7 @@ public class AssociationRowTableExtractor extends AbstractExtractor {
 
         @Override
         public void handleError(String errorMsg,int pos) {
-            System.out.println("TableExtractor: " + errorMsg);
+            logger.error("TableExtractor: " + errorMsg);
         }
         
 

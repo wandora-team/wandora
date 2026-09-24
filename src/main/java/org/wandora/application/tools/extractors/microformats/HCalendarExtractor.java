@@ -53,12 +53,15 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class HCalendarExtractor extends AbstractExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(HCalendarExtractor.class);
     
 
 	private static final long serialVersionUID = 1L;
@@ -150,9 +153,9 @@ public class HCalendarExtractor extends AbstractExtractor {
         tidyXML = tidyXML.replace("&amp;deg;", "&#0176;");
         
 
-        System.out.println("------");
-        System.out.println(tidyXML);
-        System.out.println("------");
+        logger.info("------");
+        logger.info(tidyXML);
+        logger.info("------");
           
         javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -413,7 +416,7 @@ public class HCalendarExtractor extends AbstractExtractor {
                 }
             }
 
-            if(debug) System.out.println(", nstate="+state);
+            if(debug) logger.info(", nstate="+state);
         }
 
 
@@ -501,7 +504,7 @@ public class HCalendarExtractor extends AbstractExtractor {
         private String catenate(String base, char[] data, int start, int length) {
             if(base == null) base = "";
             base = base + new String(data,start,length);
-            if(debug) System.out.println("  string=="+base);
+            if(debug) logger.info("  string=="+base);
             return base;
         }
 
@@ -700,7 +703,7 @@ public class HCalendarExtractor extends AbstractExtractor {
         private void popState() {
             if(!stateStack.empty()) {
                 state = ((Integer) stateStack.pop()).intValue();
-                if(debug) System.out.println("  popping state:"+state);
+                if(debug) logger.info("  popping state:"+state);
             }
             else {
                 state = STATE_START;
@@ -740,7 +743,7 @@ public class HCalendarExtractor extends AbstractExtractor {
                 }
             }
             if(t == null) {
-                System.out.println("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
+                logger.info("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
             }
             return t;
         }

@@ -224,7 +224,6 @@ public class PasteTopics extends AbstractWandoraTool {
                                                             String si = nt.nextToken();
                                                             if(si != null && si.length() > 0) {
                                                                 try {
-                                                                    //System.out.println("Adding SI '" +si+ "' to " + topic.getBaseName());
                                                                     topic.addSubjectIdentifier(new Locator(si));
                                                                 }
                                                                 catch (Exception e) {

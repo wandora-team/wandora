@@ -289,7 +289,7 @@ public class OCRExtractor extends AbstractExtractor {
                 if(error.length() == 0){
                     error = gobbler.getMessage();
                 }
-                System.out.println(error);
+                logger.info(error);
                 throw new RuntimeException(error);
             }
             

@@ -48,10 +48,6 @@ public class AddWebLocationAsSubjectLocator extends AbstractWebViewTool {
         String location = getWebLocation(context);
         Topic topic = getTopic(context);
         
-        //System.out.println("@AddWebLocationAsSubjectLocator");
-        //System.out.println("  location="+location);
-        //System.out.println("  topic="+topic);
-        
         if(topic != null && !topic.isRemoved()) {
             if(location != null && location.length() > 0) {
                 topic.setSubjectLocator(new Locator(location));

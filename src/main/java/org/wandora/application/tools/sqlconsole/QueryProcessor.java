@@ -38,18 +38,21 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.text.JTextComponent;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author  olli
  */
 public class QueryProcessor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(QueryProcessor.class);
     
     /** Creates a new instance of QueryProcessor */
     public QueryProcessor() {
     }
     
     public static String[] parseParemeterFields(String query){
-        System.out.println("Finding params from "+query);
+        logger.info("Finding params from "+query);
         Vector<String> params=new Vector<>();
         Pattern pattern=Pattern.compile("(^|[^\\{])((\\{\\{)*)\\{([^\\{\\}]+)\\}");
         Matcher matcher=pattern.matcher(query);
@@ -59,7 +62,7 @@ public class QueryProcessor {
             if(!params.contains(param)) params.add(param);
             ptr=matcher.start()+1;
         }
-        System.out.println("Found parameters "+params);
+        logger.info("Found parameters "+params);
         return (String[])params.toArray(new String[0]);
     }
     public static String replaceParams(String query,String[] params){

@@ -80,11 +80,9 @@ public class CopySubjectIdentifiers extends AbstractWandoraTool {
         int progress = 0;
 
         if(context instanceof SIContext) {
-            //System.out.println("CopySubjectIdentifiers & SIContext");
             SIIterator = context.getContextObjects();
             while(SIIterator.hasNext()) {
                 SI = (Locator) SIIterator.next();
-                //System.out.println("  si="+SI.toExternalForm());
                 if(SI != null) {
                     sis.append(SI.toExternalForm()).append("\n");
                 }

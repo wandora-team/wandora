@@ -40,6 +40,7 @@ import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.MultiHashMap;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -68,6 +69,8 @@ import org.wandora.utils.MultiHashMap;
  * @author olli
  */
 public class WeakTopicIndex implements Runnable {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(WeakTopicIndex.class);
     
     /**
      * <p>
@@ -177,10 +180,8 @@ public class WeakTopicIndex implements Runnable {
             ListItem<E> item=map.get(e);
             if(item!=null) {
                 moveUp(item);
-//                System.out.println("CACHE move up "+size);
             }
             else {
-//                System.out.println("CACHE add at mark "+size);
                 addAtMark(e);
             }
         }
@@ -209,7 +210,7 @@ public class WeakTopicIndex implements Runnable {
                 counter2++;
             }
             boolean check2=(prev==first);
-            System.out.println("Cachelist size "+counter1+", "+counter2+", "+size+", "+uniqTest.size()+", "+check1+", "+check2+")");
+            logger.info("Cachelist size "+counter1+", "+counter2+", "+size+", "+uniqTest.size()+", "+check1+", "+check2);
         }
     }
     
@@ -301,7 +302,7 @@ public class WeakTopicIndex implements Runnable {
      */
     public void stopCleanerThread(){
         if(useRefQueue){
-            System.out.println("Stopping index cleaner");
+            logger.info("Stopping index cleaner");
             useRefQueue=false;
 
             topicInvIDIndex=null;
@@ -323,7 +324,7 @@ public class WeakTopicIndex implements Runnable {
      */ 
     public void startCleanerThread(){
         if(!useRefQueue){
-            System.out.println("Starting index cleaner");
+            logger.info("Starting index cleaner");
             useRefQueue=true;
             running=false;
             if(thread!=null) thread.interrupt();
@@ -427,7 +428,7 @@ public class WeakTopicIndex implements Runnable {
      */
     public synchronized DatabaseTopic createTopic(String id, DatabaseTopicMap tm) {
         if(id == null) {
-            System.out.println("Warning: DatabaseTopic's id will be null. This will cause problems.");
+            logger.info("Warning: DatabaseTopic's id will be null. This will cause problems.");
         }
         DatabaseTopic t=getTopicWithID(id);
         if(t!=null) return topicAccessed(t);
@@ -572,7 +573,6 @@ public class WeakTopicIndex implements Runnable {
      * anymore in the indexes.
      */
     private synchronized void removeTopicKey(Reference<? extends DatabaseTopic> ref){
-//        System.out.println("Removing topic from index");
         String id=topicInvIDIndex.get(ref); // will produce null pointer exception if !useRefQueue, but that shouldn't happen
         if(id!=null) topicIDIndex.remove(id);
         topicInvIDIndex.remove(ref);
@@ -589,14 +589,13 @@ public class WeakTopicIndex implements Runnable {
     }
         
     private synchronized void removeAssociationKey(Reference<? extends DatabaseAssociation> ref){
-//        System.out.println("Removing association from index");
         String id=associationInvIDIndex.get(ref);
         if(id!=null) associationIDIndex.remove(id);
         associationInvIDIndex.remove(ref);
     }
     
     public void printDebugInfo(){
-        System.out.println("Index sizes "+topicIDIndex.size()+", "+topicInvIDIndex.size()+", "+associationIDIndex.size()+", "+associationInvIDIndex.size()+", "+topicBNIndex.size()+", "+topicInvBNIndex.size()+", "+topicSIIndex.size()+", "+topicInvSIIndex.size());
+        logger.info("Index sizes "+topicIDIndex.size()+", "+topicInvIDIndex.size()+", "+associationIDIndex.size()+", "+associationInvIDIndex.size()+", "+topicBNIndex.size()+", "+topicInvBNIndex.size()+", "+topicSIIndex.size()+", "+topicInvSIIndex.size());
         topicCache.printDebugInfo();
     }
 
@@ -610,7 +609,6 @@ public class WeakTopicIndex implements Runnable {
                 if(ref==null && ref2==null){
                     Thread.sleep(1000);
                 }
-//                System.out.println("Index sizes "+topicIDIndex.size()+", "+topicBNIndex.size()+", "+topicSIIndex.size()+", "+associationIDIndex.size());
             }catch(InterruptedException ie){}
         }
     }

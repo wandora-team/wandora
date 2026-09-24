@@ -98,7 +98,7 @@ public class SimpleRDFImport extends AbstractImportTool {
     
     @Override
     public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        System.out.println(prefix);
+        logger.info(prefix);
         ImportConfiguration dialog=new ImportConfiguration(wandora,true);
         dialog.setOptions(getOptions());
         dialog.setVisible(true);

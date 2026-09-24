@@ -97,7 +97,7 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
             String query = searchTextField.getText();
 
             extractUrl = DISCOGS_API_BASE + "?type=" + type + "&q=" + urlEncode(query);
-            System.out.println("Search URL: " + extractUrl);
+            logger.info("Search URL: " + extractUrl);
             
             if (type.equals("release")) {
                 DiscogsReleaseExtractor ex = new DiscogsReleaseExtractor();
@@ -125,7 +125,7 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
         if (releaseSearchPanel.equals(tab)) {
             String query = releaseTextField.getText();
             extractUrl = DISCOGS_API_BASE + "?type=release&q=" + urlEncode(query);
-            System.out.println("Search URL: " + extractUrl);
+            logger.info("Search URL: " + extractUrl);
             
             DiscogsReleaseExtractor ex = new DiscogsReleaseExtractor();
             ex.setForceUrls( new String[] {extractUrl} );
@@ -134,7 +134,7 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
         } else if (masterSearchPanel.equals(tab)) {
             String query = masterTextField.getText();
             extractUrl = DISCOGS_API_BASE + "?type=master&q=" + urlEncode(query);
-            System.out.println("Search URL: " + extractUrl);
+            logger.info("Search URL: " + extractUrl);
             
             DiscogsMasterExtractor ex = new DiscogsMasterExtractor();
             ex.setForceUrls( new String[] {extractUrl} );
@@ -143,7 +143,7 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
         } else if (artistSearchPanel.equals(tab)) {
             String query = artistTextField.getText();
             extractUrl = DISCOGS_API_BASE + "?type=artist&q=" + urlEncode(query);
-            System.out.println("Search URL: " + extractUrl);
+            logger.info("Search URL: " + extractUrl);
             
             DiscogsArtistExtractor ex = new DiscogsArtistExtractor();
             ex.setForceUrls( new String[] {extractUrl} );
@@ -152,7 +152,7 @@ public class DiscogsExtractorUI extends javax.swing.JPanel {
         } else if (labelSearchPanel.equals(tab)) {
             String query = labelTextField.getText();
             extractUrl = DISCOGS_API_BASE + "?type=label&q=" + urlEncode(query);
-            System.out.println("Search URL: " + extractUrl);
+            logger.info("Search URL: " + extractUrl);
             
             DiscogsLabelExtractor ex = new DiscogsLabelExtractor();
             ex.setForceUrls( new String[] {extractUrl} );

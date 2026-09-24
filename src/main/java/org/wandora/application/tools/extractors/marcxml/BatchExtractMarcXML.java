@@ -129,7 +129,7 @@ public class BatchExtractMarcXML extends AbstractWandoraTool {
             log("Ready.");
         }
         else {
-            System.out.println("No MARCXML files to import!");
+            logger.warn("No MARCXML files to import!");
         }
     }
 }

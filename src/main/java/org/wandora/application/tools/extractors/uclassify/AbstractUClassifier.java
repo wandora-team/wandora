@@ -419,11 +419,11 @@ public abstract class AbstractUClassifier extends AbstractExtractor {
                 requestData = requestData.replace("__PUBLISHED_USER__", classifierOwner);
                 requestData = requestData.replace("__PUBLISHED_CLASSIFIER__", classifier);
 
-                System.out.println("Sending: "+requestData);
+                logger.info("Sending: "+requestData);
 
                 String result = sendRequest(new URI(API_URL).toURL(), requestData, "text/xml; charset=utf-8", "POST");
 
-                System.out.println("uClassifier returned == "+result);
+                logger.info("uClassifier returned == "+result);
 
                 javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
                 factory.setNamespaceAware(true);
@@ -465,7 +465,6 @@ public abstract class AbstractUClassifier extends AbstractExtractor {
 
             if(method != null && con instanceof HttpURLConnection) {
                 ((HttpURLConnection) con).setRequestMethod(method);
-                //System.out.println("****** Setting HTTP request method to "+method);
             }
 
             if(ctype != null) {

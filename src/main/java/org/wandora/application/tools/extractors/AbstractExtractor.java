@@ -229,7 +229,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements D
             
             case LOG_TITLE: return "Extraction Log";
         }
-        System.out.println("Requesting Illegal extraction GUI text: " + textType);
+        logger.info("Requesting Illegal extraction GUI text: " + textType);
         return "";
     }
     
@@ -526,7 +526,6 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements D
     public int extractTopicsFrom(String fileName, Collection<String> visited, Pattern fileMask, int depth, int space) {
         browseCounter++;
         if(!forceStop()) {
-            //System.out.println("depth: "+depth);
             if(depth >= 0) {
                 if(space >= 0) {
                     if(!visited.contains(fileName)) {
@@ -767,7 +766,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements D
             }
             return t;
         }
-        System.out.println("Failed to create topic!");
+        logger.info("Failed to create topic!");
         return null;
     }
 
@@ -944,8 +943,8 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements D
                     }
                 }
                 
-                System.out.println("--- browser plugin processing content ---");
-                System.out.println(content);
+                logger.info("--- browser plugin processing content ---");
+                logger.info(content);
                 _extractTopicsFrom(content, wandora.getTopicMap());
                 wandora.doRefresh();
                 return null;

@@ -28,6 +28,7 @@ import org.wandora.topicmap.TopicMap;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -36,6 +37,8 @@ import org.xml.sax.SAXParseException;
  * @author akivela
  */
 public abstract class AbstractGeoNamesWikipediaParser implements org.xml.sax.ContentHandler, org.xml.sax.ErrorHandler {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractGeoNamesWikipediaParser.class);
     protected String lang = "en";
     protected int progress = 0;
     protected TopicMap tm;
@@ -136,7 +139,7 @@ public abstract class AbstractGeoNamesWikipediaParser implements org.xml.sax.Con
                         parent.log("GeoNames web service says: "+msg+" ("+val+")");
                     }
                     else {
-                        System.out.println("GeoNames web service says: "+msg+" ("+val+")");
+                        logger.info("GeoNames web service says: "+msg+" ("+val+")");
                     }
                 }
                 else if(qName.equals(TAG_ENTRY)) {

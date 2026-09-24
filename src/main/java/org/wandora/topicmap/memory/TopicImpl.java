@@ -998,8 +998,7 @@ public class TopicImpl extends Topic {
             t.remove();
         }
         catch (TopicInUseException e) {
-            System.out.println(
-                    "ERROR couldn't delete merged topic, topic in use. There is a bug in the code if this happens. "
+            logger.error("ERROR couldn't delete merged topic, topic in use. There is a bug in the code if this happens. "
                             + e.getReason());
         }
         topicMap.topicChanged(this);

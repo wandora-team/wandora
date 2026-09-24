@@ -52,6 +52,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapReadOnlyException;
 import org.wandora.topicmap.TopicRemovedException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -59,6 +60,8 @@ import org.wandora.utils.Tuples.T2;
  * @author olli
  */
 public class DatabaseTopic extends Topic {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(DatabaseTopic.class);
     
     protected boolean full;
     // flags indicating what kind of data has been fecthed from the database
@@ -133,7 +136,7 @@ public class DatabaseTopic extends Topic {
             this.id=id.toString();
         }
         else {
-            System.out.println("Warning: DatabaseTopic id is not set: "+this.id+" != "+id);
+            logger.info("Warning: DatabaseTopic id is not set: "+this.id+" != "+id);
         }
     }
     
@@ -246,9 +249,8 @@ public class DatabaseTopic extends Topic {
     
     protected void fetchSubjectIdentifiers() throws TopicMapException {
         if(id == null) {
-            System.out.println("topic's id is null.");
-            System.out.println(this.baseName);
-            //System.out.println(this);
+            logger.info("topic's id is null.");
+            logger.info(this.baseName);
         }
         
         Collection<Map<String,Object>> res=topicMap.executeQuery("select * from SUBJECTIDENTIFIER where TOPIC='"+escapeSQL(id)+"'");
@@ -498,10 +500,9 @@ public class DatabaseTopic extends Topic {
             }
             else {
                 subjectIdentifiers.add(l);
-//                System.out.println("Inserting si "+l.toExternalForm());
                 boolean ok = topicMap.executeUpdate("insert into SUBJECTIDENTIFIER (TOPIC,SI) values ('"+
                     escapeSQL(id)+"','"+escapeSQL(l.toExternalForm())+"')");
-                if(!ok) System.out.println("Failed to add si "+l.toExternalForm());
+                if(!ok) logger.info("Failed to add si "+l.toExternalForm());
                 topicMap.topicSIChanged(this, null,l);
                 topicMap.topicSubjectIdentifierChanged(this,l,null);
             }
@@ -688,7 +689,7 @@ public class DatabaseTopic extends Topic {
         try{
             t.remove();
         }catch(TopicInUseException e){
-            System.out.println("ERROR couldn't delete merged topic, topic in use. There is a bug in the code if this happens. "+e.getReason());
+            logger.error("ERROR couldn't delete merged topic, topic in use. There is a bug in the code if this happens. "+e.getReason());
         }
         
         sisFetched=false;

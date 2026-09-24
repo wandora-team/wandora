@@ -33,6 +33,7 @@ import java.security.AlgorithmParameterGenerator;
 import java.security.AlgorithmParameters;
 
 import javax.crypto.spec.DHParameterSpec;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -42,6 +43,8 @@ import javax.crypto.spec.DHParameterSpec;
  * @author olli
  */
 public class DHParamGenerator {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(DHParamGenerator.class);
 
     /** Creates a new instance of DHParamGenerator */
     public DHParamGenerator() {

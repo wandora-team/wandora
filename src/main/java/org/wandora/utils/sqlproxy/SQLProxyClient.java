@@ -465,7 +465,7 @@ public class SQLProxyClient {
 
 
     public synchronized int executeUpdate(String update) throws IOException, SQLProxyException {
-        System.out.println("Executing proxy update " + update);
+        logger.info("Executing proxy update " + update);
         outWriter.write(update + "\n");
         outWriter.flush();
         if (compress)
@@ -492,14 +492,9 @@ public class SQLProxyClient {
             }
             Collection<Map<String, Object>> res = client.executeQuery(line);
             for (Map<String, Object> row : res) {
-                boolean first = true;
                 for (Map.Entry<String, Object> e : row.entrySet()) {
-                    if (!first)
-                        System.out.print(", ");
-                    first = false;
-                    System.out.print(e.getKey() + "=>" + e.getValue());
+                    logger.info(e.getKey() + "=>" + e.getValue());
                 }
-                System.out.println();
             }
         }
         client.close();

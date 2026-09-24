@@ -105,7 +105,6 @@ public class Undo extends AbstractWandoraTool {
     
     @Override
     public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        //System.out.println(prefix);
         UndoRedoOptions dialog=new UndoRedoOptions();
         dialog.open(wandora);
     }

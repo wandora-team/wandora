@@ -555,7 +555,6 @@ public class TopicTools {
                 }
             }
         }
-        //System.out.println("players.size() == " + players.size());
         for(int i=0; i<players.size(); i++) {
             Topic[] tc = players.get(i);
             if(tc != null && tc.length == 2) {
@@ -565,7 +564,6 @@ public class TopicTools {
                 }
             }
         }
-        //System.out.println("sortedPlayers.size() == " + sortedPlayers.size());
         return sortedPlayers;
     }
     
@@ -637,7 +635,6 @@ public class TopicTools {
                 }
             }
         }
-        //System.out.println("players.size() == " + players.size());
         for(int i=0; i<players.size(); i++) {
             Topic[] tc = (Topic[]) players.get(i);
             if(tc != null && tc.length == 2) {
@@ -647,7 +644,6 @@ public class TopicTools {
                 }
             }
         }
-        //System.out.println("sortedPlayers.size() == " + sortedPlayers.size());
         return sortedPlayers;
     }
     
@@ -1023,7 +1019,6 @@ public class TopicTools {
         long stamp = System.currentTimeMillis();
         String defaultSIprefix = "https://wandora.org/si/temp/";
         Locator newLocator = new Locator(defaultSIprefix + stamp + "-" + locatorCounter);
-        // System.out.println("Creating default SI '"+newLocator.toExternalForm());
         return newLocator;
     }
     

@@ -201,12 +201,10 @@ public class IncidenceMatrixImport extends AbstractWandoraTool {
                 try {
                     Topic atype = getOrCreateTopic(topicmap, SI_PREFIX+"edge", "edge");
                     Association realAssociation = topicmap.createAssociation(atype);
-                    //System.out.println("Creating asso: ");
                     int roleCount = 0;
                     for(String playerStr : associationStruct) {
                         Topic player = getOrCreateTopic(topicmap, SI_PREFIX+playerStr, ""+playerStr);
                         Topic role = getOrCreateTopic(topicmap, SI_PREFIX+"role-"+roleCount, "role-"+roleCount);
-                        //System.out.println("    player: "+player+", role: "+role);
                         realAssociation.addPlayer(player, role);
                         roleCount++;
                     }

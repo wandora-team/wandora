@@ -206,7 +206,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
             throw new Exception("Failed to get the continuation parameter");            
         }
         
-        System.out.println(this.queryURL + cont);
+        logger.info(this.queryURL + cont);
         
         URL u = new URI(this.queryURL + cont).toURL();
         extractTopicsFromURL(u,t);

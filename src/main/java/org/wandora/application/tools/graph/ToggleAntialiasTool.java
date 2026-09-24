@@ -63,7 +63,6 @@ public class ToggleAntialiasTool extends AbstractGraphTool {
     
     public void executeSynchronized(Wandora wandora, Context<?> context) {
         TopicMapGraphPanel graphPanel = this.solveGraphPanel(wandora, context);
-        //System.out.println("GRAPHPANEL: "+graphPanel);
         if(graphPanel != null) {
             graphPanel.setAntialized(!graphPanel.getAntialized());
         }

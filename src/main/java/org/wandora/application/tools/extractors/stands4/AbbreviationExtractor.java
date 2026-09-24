@@ -110,7 +110,6 @@ public class AbbreviationExtractor extends AbstractStands4Extractor {
     public boolean _extractTopicsFrom(String in, TopicMap topicMap) throws Exception {
         try {
             String result = in;
-            //System.out.println("Result = "+result);
 
             // ---- Parse results ----
             javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();

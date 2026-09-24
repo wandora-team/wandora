@@ -37,6 +37,7 @@ import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.LayerTree;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -44,6 +45,8 @@ import org.wandora.topicmap.undowrapper.UndoTopicMap;
  * @author akivela
  */
 public class SQLTopicMapImport extends AbstractImportTool {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SQLTopicMapImport.class);
     
 
 	private static final long serialVersionUID = 1L;
@@ -78,7 +81,7 @@ public class SQLTopicMapImport extends AbstractImportTool {
         }
         else {
             log("Selected topic map is not a database topic map! Unable to import SQL file.");
-            System.out.println("topicMap:"+topicMap);
+            logger.info("topicMap:"+topicMap);
         }
     }
     

@@ -34,11 +34,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.wandora.topicmap.memory.TopicMapImpl;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author  olli
  */
 public class Test {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(Test.class);
     
     /** Creates a new instance of Test */
     public Test() {
@@ -49,21 +52,21 @@ public class Test {
      */
     public static void main(String[] args) throws Exception {
         TopicMap tm=new TopicMapImpl();
-        System.out.println("Reading inital topic map from "+args[0]);
+        logger.info("Reading inital topic map from "+args[0]);
         InputStream in=new FileInputStream(args[0]);
         tm.importXTM(in);
         in.close();
         for(int i=1;i<args.length-1;i++){
-            System.out.println("Reading next topic map from "+args[i]);
+            logger.info("Reading next topic map from "+args[i]);
             TopicMap next=new TopicMapImpl();
             in=new FileInputStream(args[i]);
             next.importXTM(in);
             in.close();
-            System.out.println("Merging");
+            logger.info("Merging");
             tm.mergeIn(next);
         }
         if(args.length>1){
-            System.out.println("Exporting to "+args[args.length-1]);
+            logger.info("Exporting to "+args[args.length-1]);
             OutputStream out=new FileOutputStream(args[args.length-1]);
             tm.exportXTM(out);
             out.close();

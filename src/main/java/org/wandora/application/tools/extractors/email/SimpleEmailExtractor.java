@@ -232,7 +232,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     
     @Override
     public boolean _extractTopicsFrom(File file, TopicMap topicMap) throws Exception {
-        System.out.println("@ _extractTopicsFrom: "+file.getAbsolutePath());
+        logger.info("@ _extractTopicsFrom: "+file.getAbsolutePath());
         return _extractTopicsFrom(file, topicMap, SimpleEmailExtractorPanel.EMAIL_RESOURCE);
     }
     
@@ -730,7 +730,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
                     doc.close();
                 }
                 catch(Exception e) {
-                    System.out.println("No PDF support!");
+                    logger.error("No PDF support!");
                 }
                 setData(emailTopic, contentTypeTopic, defaultLang, stringContent.trim());
             }
@@ -872,17 +872,14 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
         if(nameMatcher.matches()) {
             emailName = nameMatcher.group(1);
             emailAddress = nameMatcher.group(2);
-            //System.out.println("found name '"+emailName+"' and address '"+emailAddress+"' in '"+originalAddress+"'");
         }
 
         Matcher addressMatcher = emailPattern.matcher(emailAddress);
         if(addressMatcher.matches()) {
-            //System.out.println("good! email address '"+emailAddress+"' matches the email pattern!");
         }
         else {
             if(addressMatcher.find()) {
                 emailAddress = addressMatcher.group(1);
-                //System.out.println("found email address '"+emailAddress+"'!");
             }
         }
 

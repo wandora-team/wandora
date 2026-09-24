@@ -120,8 +120,6 @@ public class DbpediaExtractorSelector extends JDialog {
                 query = query.trim();
                 query = urlEncode(query);
                 String url = sparqlServiceBase+"?query="+query+"&format=application%2Frdf%2Bxml";
-                //System.out.println("url == '"+url+"'");
-                //url = "http://dbpedia.org/sparql/?query=PREFIX+dbo%3A+%3Chttp%3A%2F%2Fdbpedia.org%2Fontology%2F%3E%0D%0A%0D%0ASELECT+%3Fname+%3Fbirth+%3Fdescription+%3Fperson+WHERE+{%0D%0A+++++%3Fperson+dbo%3Abirthplace+%3Chttp%3A%2F%2Fdbpedia.org%2Fresource%2FBerlin%3E+.%0D%0A+++++%3Fperson+skos%3Asubject+%3Chttp%3A%2F%2Fdbpedia.org%2Fresource%2FCategory%3AGerman_musicians%3E+.%0D%0A+++++%3Fperson+dbo%3Abirthdate+%3Fbirth+.%0D%0A+++++%3Fperson+foaf%3Aname+%3Fname+.%0D%0A+++++%3Fperson+rdfs%3Acomment+%3Fdescription+.%0D%0A+++++FILTER+%28LANG%28%3Fdescription%29+%3D+%27en%27%29+.%0D%0A}%0D%0AORDER+BY+%3Fname&format=application%2Frdf%2Bxml";
                 DbpediaRDFExtractor ex = new DbpediaRDFExtractor();
                 ex.setForceUrls( new String[] { url } );
                 wt = ex;

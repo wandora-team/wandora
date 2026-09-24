@@ -287,7 +287,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                         if(code.length() == 1) code = "00"+code;
                         else if(code.length() == 2) code = "0"+code;
                         codes.put(code, code);
-                        System.out.println("field code: "+code);
+                        logger.info("field code: "+code);
                     }
                 }
                 else {
@@ -657,11 +657,9 @@ public class MarcXMLExtractor extends AbstractExtractor {
                         String fieldCode = data_datafield_tag.trim();
                         if(!excludeFields.containsKey(fieldCode)) {
                             if(!includeFields.isEmpty() && includeFields.containsKey(fieldCode)) {
-                                //System.out.println("Adding a field: "+fieldCode);
                                 data_datafields.add(datafield);
                             }
                             else if(includeFields.isEmpty()) {
-                                //System.out.println("Adding a field: "+fieldCode);
                                 data_datafields.add(datafield);
                             }
                         }
@@ -674,11 +672,9 @@ public class MarcXMLExtractor extends AbstractExtractor {
                         String fieldCode = data_controlfield_tag.trim();
                         if(!excludeFields.containsKey(fieldCode)) {
                             if(!includeFields.isEmpty() && includeFields.containsKey(fieldCode)) {
-                                //System.out.println("Adding a control field: "+fieldCode);
                                 data_controlfields.put(fieldCode, data_controlfield);
                             }
                             else if(includeFields.isEmpty()) {
-                                //System.out.println("Adding a control field: "+fieldCode);
                                 data_controlfields.put(fieldCode, data_controlfield);
                             }
                         }

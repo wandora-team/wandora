@@ -1422,7 +1422,6 @@ public abstract class TopicMap implements TopicMapLogger {
             while(iter.hasNext()){
                 Topic t=(Topic)iter.next();
                 if(t.getSubjectIdentifiers().size()==0) System.out.println("Parsed topic doesn't have subject identifiers");
-//                else System.out.println(t.getSubjectIdentifiers().iterator().next());
             }*/
         }
         catch(org.xml.sax.SAXParseException se) {

@@ -48,6 +48,7 @@ import javax.swing.text.JTextComponent;
 
 import org.wandora.utils.transferables.TransferableDataURL;
 import org.wandora.utils.transferables.TransferableImage;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -59,6 +60,8 @@ import org.wandora.utils.transferables.TransferableImage;
 
 
 public class ClipboardBox {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(ClipboardBox.class);
 
     public static boolean makeDataURLs = true;
 
@@ -79,7 +82,7 @@ public class ClipboardBox {
                 ((JTextComponent) c).copy();
             }
             else {
-                System.out.println("Copy event not handled!");
+                logger.info("Copy event not handled!");
             }
         }
     }
@@ -94,7 +97,7 @@ public class ClipboardBox {
                 ((JTextComponent) c).cut();
             }
             else {
-                System.out.println("Cut event not handled!");
+                logger.info("Cut event not handled!");
             }
         }
     }
@@ -109,7 +112,7 @@ public class ClipboardBox {
                 ((JTextComponent) c).paste();
             }
             else {
-                System.out.println("Paste event not handled!");
+                logger.info("Paste event not handled!");
             }
         }
     }

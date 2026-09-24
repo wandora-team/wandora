@@ -41,6 +41,7 @@ import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleList;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -48,6 +49,8 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 public class GuardianExtractorUI extends javax.swing.JPanel {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(GuardianExtractorUI.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -161,7 +164,7 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 
 			extractUrl += "&page=1&api-key=" + key;
 
-			System.out.println("URL: " + extractUrl);
+			logger.info("URL: " + extractUrl);
 
 			GuardianContentSearchExtractor ex = new GuardianContentSearchExtractor();
 			ex.setForceUrls(new String[] { extractUrl });
@@ -195,7 +198,7 @@ public class GuardianExtractorUI extends javax.swing.JPanel {
 				}
 
 				extractUrl += "&page=1&api-key=" + key;
-				System.out.println(extractUrl);
+				logger.info(extractUrl);
 				GuardianTagSearchExtractor ex = new GuardianTagSearchExtractor();
 				ex.setForceUrls(new String[] { extractUrl });
 				wt = ex;

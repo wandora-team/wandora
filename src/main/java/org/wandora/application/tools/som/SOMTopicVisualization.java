@@ -274,7 +274,7 @@ private void cellSizeSliderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FI
 }//GEN-LAST:event_cellSizeSliderMouseDragged
 
 private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-    System.out.println("key pressed at FORM");
+    logger.info("key pressed at FORM");
     if(mapPanel instanceof SOMTopicVisualizationPanel) {
         ((SOMTopicVisualizationPanel) mapPanel).keyPressed(evt);
     }

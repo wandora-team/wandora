@@ -710,7 +710,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
                 }
             };
             
-            System.out.println("Requesting " + commentUrl);
+            logger.info("Requesting " + commentUrl);
             requester.addRequest(Unirest.get(commentUrl), callback);
         }
         return linkTopic;

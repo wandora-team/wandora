@@ -151,9 +151,6 @@ public class MaianaUtils {
         json = json.replace("__SHORTNAME__", makeJSON(makeShortName(sn)));
         json = json.replace("__NAME__", makeJSON(n));
         json = json.replace("__FORMAT__", makeJSON(format));
-
-        //System.out.println("json:\n"+json);
-
         return json;
     }
 
@@ -183,9 +180,7 @@ public class MaianaUtils {
         checkForLocalService(endpoint);
 
         String reply = IObox.doUrl(new URI(endpoint).toURL(), in, "application/json");
-
-        //System.out.println("reply:\n"+reply);
-
+        
         JSONObject replyObject = new JSONObject(reply);
         return replyObject;
     }

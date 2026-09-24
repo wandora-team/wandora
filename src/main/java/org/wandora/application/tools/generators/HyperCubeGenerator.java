@@ -268,7 +268,6 @@ public class HyperCubeGenerator extends AbstractGenerator {
                             edges.add( new T2<String,String>(vertex+"-"+this.dimension, vertex) );
                         }
                     }
-                    //System.out.println("edges: dim="+this.dimension+", edges="+edges.size());
                 }
             }
             return edges;
@@ -287,7 +286,6 @@ public class HyperCubeGenerator extends AbstractGenerator {
                     for(String vertex : parentVertices) {
                         vertices.add(vertex+"-"+this.dimension);
                     }
-                    //System.out.println("dim="+this.dimension+", vertices="+vertices.size());
                 }
             }
             return vertices;

@@ -96,7 +96,6 @@ public class TagtheExtractor extends AbstractTagtheExtractor {
                 else {
                     // Ok, Tidy fixed the html/xml document
                     content = XMLbox.getAsText(content, defaultEncoding);
-                    //System.out.println("content after getAsText: "+content);
                     //contentType = "text/txt";
                 }
             }
@@ -108,8 +107,6 @@ public class TagtheExtractor extends AbstractTagtheExtractor {
 
             String extractURL = WEB_SERVICE_URL+"?text="+URLEncoder.encode(content, "utf-8");
             String result = IObox.doUrl(new URI(extractURL).toURL());
-
-            //System.out.println("Tagthe returned == "+result);
 
             javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -247,7 +244,6 @@ public class TagtheExtractor extends AbstractTagtheExtractor {
 
 
         public void endElement(String uri, String localName, String qName) throws SAXException {
-            // System.out.println("   "+state);
             switch(state) {
                 case STATE_MEMES_MEME_DIM_ITEM:
                     if(qName.equals(TAG_ITEM)) {

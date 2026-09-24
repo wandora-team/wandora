@@ -30,6 +30,7 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 
 import org.wandora.application.Wandora;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -40,6 +41,7 @@ public class DiscogsSearchExtractor extends AbstractDiscogsExtractor {
         
  
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DiscogsSearchExtractor.class);
 	
 	private static String defaultEncoding = "UTF-8";
     
@@ -66,7 +68,7 @@ public class DiscogsSearchExtractor extends AbstractDiscogsExtractor {
                 }
                 in.close();
             } catch (Exception ex) {
-                System.out.println("There was an error fetching data from Discogs.");
+                logger.error("There was an error fetching data from Discogs.");
             }
         }
         

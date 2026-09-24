@@ -32,6 +32,7 @@ import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
 
 import javafx.scene.web.WebEngine;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * This tool should be executed in context of the WebViewTopicPanel.
@@ -41,6 +42,8 @@ import javafx.scene.web.WebEngine;
 
 
 public abstract class AbstractWebViewTool extends AbstractWandoraTool {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractWebViewTool.class);
 
 
 	private static final long serialVersionUID = 1L;
@@ -81,7 +84,7 @@ public abstract class AbstractWebViewTool extends AbstractWandoraTool {
                 return (WebViewPanel) source;
             }
             else {
-                System.out.println("Invalid context source. Expecting WebViewPanel but found "
+                logger.info("Invalid context source. Expecting WebViewPanel but found "
                 		+(source != null ? source.getClass() : "null"));
             }
         }

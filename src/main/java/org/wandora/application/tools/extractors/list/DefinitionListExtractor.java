@@ -60,6 +60,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * <p>
@@ -80,6 +81,8 @@ import org.wandora.utils.IObox;
  * @author akivela
  */
 public class DefinitionListExtractor extends AbstractExtractor implements BrowserPluginExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(DefinitionListExtractor.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -372,7 +375,7 @@ public class DefinitionListExtractor extends AbstractExtractor implements Browse
         
         @Override
         public void handleError(String errorMsg,int pos) {
-            System.out.println("DefinitionListExtractor: " + errorMsg);
+            logger.info("DefinitionListExtractor: " + errorMsg);
         }
         
         
@@ -516,7 +519,7 @@ public class DefinitionListExtractor extends AbstractExtractor implements Browse
                 }
             }
             if(t == null) {
-                System.out.println("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
+                logger.info("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
             }
             return t;
         }

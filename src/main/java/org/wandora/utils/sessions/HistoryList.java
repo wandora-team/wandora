@@ -32,6 +32,7 @@ package org.wandora.utils.sessions;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -39,6 +40,8 @@ import java.util.List;
  * @author marko
  */
 public class HistoryList {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(HistoryList.class);
 
     private int currentIndex = -1;
 
@@ -81,7 +84,7 @@ public class HistoryList {
         currentIndex++;
         if (currentIndex >= list.size())
             currentIndex = list.size() - 1;
-        System.out.println("adding object " + currentIndex);
+        logger.info("adding object " + currentIndex);
     }
 
 
@@ -154,7 +157,7 @@ public class HistoryList {
     public void moveBack() {
         if (currentIndex > 0)
             currentIndex--;
-        System.out.println("Index:" + currentIndex);
+        logger.info("Index:" + currentIndex);
     }
 
 

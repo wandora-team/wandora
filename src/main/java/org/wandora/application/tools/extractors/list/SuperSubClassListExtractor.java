@@ -401,7 +401,7 @@ public class SuperSubClassListExtractor extends AbstractExtractor implements Bro
         
         @Override
         public void handleError(String errorMsg,int pos) {
-            // System.out.println("InstanceListExtractor: " + errorMsg);
+            logger.error(errorMsg);
         }
         
         

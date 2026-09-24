@@ -56,6 +56,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapReadOnlyException;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -69,6 +70,8 @@ import org.wandora.utils.Tuples.T2;
 
 
 public class OBOImport extends AbstractImportTool {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(OBOImport.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -100,7 +103,6 @@ public class OBOImport extends AbstractImportTool {
     
     @Override
     public void configure(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
-        //System.out.println(prefix);
         OBOConfiguration dialog=new OBOConfiguration(wandora,true);
         dialog.setOptions(OBO.getOptions());
         dialog.setVisible(true);
@@ -311,15 +313,6 @@ public class OBOImport extends AbstractImportTool {
                             stanza = new Stanza(stanzaType);
                         }
                         else {
-                            //System.out.println("parsing line: " + line);
-                            /*
-                            comment = null;
-                            splitPoint = line.indexOf('!');
-                            if(splitPoint > -1) {
-                                comment = line.substring(splitPoint+1).trim();
-                                line = line.substring(0, splitPoint);
-                            }
-                            */
                             comment = null;
                             String preline = null;
                             boolean precedesBackslash = true;
@@ -475,16 +468,16 @@ public class OBOImport extends AbstractImportTool {
                         comment = tagValue.getComment();
                         
                         if(printExtraDebug) {
-                            System.out.println("---------------------------------");
-                            System.out.println("header");
-                            System.out.println("tag: "+ tag);
-                            System.out.println("value: "+ value);
-                            System.out.println("modifiers:");
+                            logger.info("---------------------------------");
+                            logger.info("header");
+                            logger.info("tag: "+ tag);
+                            logger.info("value: "+ value);
+                            logger.info("modifiers:");
                             for(Iterator<T2<String,String>> mi=modifiers.iterator(); mi.hasNext();) {
                                 T2<String,String> mo = mi.next();
-                                System.out.println("   "+mo.e1+":"+mo.e2);
+                                logger.info("   "+mo.e1+":"+mo.e2);
                             }
-                            System.out.println("comment: "+ comment);
+                            logger.info("comment: "+ comment);
                         }
                         
                         
@@ -585,16 +578,16 @@ public class OBOImport extends AbstractImportTool {
                         comment = tagValue.getComment();
                         
                         if(printExtraDebug) {
-                            System.out.println("---------------------------------");
-                            System.out.println("id: "+ id);
-                            System.out.println("tag: "+ tag);
-                            System.out.println("value: "+ value);
-                            System.out.println("modifiers:");
+                            logger.info("---------------------------------");
+                            logger.info("id: "+ id);
+                            logger.info("tag: "+ tag);
+                            logger.info("value: "+ value);
+                            logger.info("modifiers:");
                             for(Iterator<T2<String,String>> mi=modifiers.iterator(); mi.hasNext();) {
                                 T2<String,String> mo = mi.next();
-                                System.out.println("   "+mo.e1+":"+mo.e2);
+                                logger.info("   "+mo.e1+":"+mo.e2);
                             }
-                            System.out.println("comment: "+ comment);
+                            logger.info("comment: "+ comment);
                         }
                         
                         
@@ -830,16 +823,16 @@ public class OBOImport extends AbstractImportTool {
                         comment = tagValue.getComment();
                         
                         if(printExtraDebug) {
-                            System.out.println("---------------------------------");
-                            System.out.println("id: "+ id);
-                            System.out.println("tag: "+ tag);
-                            System.out.println("value: "+ value);
-                            System.out.println("modifiers:");
+                            logger.info("---------------------------------");
+                            logger.info("id: "+ id);
+                            logger.info("tag: "+ tag);
+                            logger.info("value: "+ value);
+                            logger.info("modifiers:");
                             for(Iterator<T2<String,String>> mi=modifiers.iterator(); mi.hasNext();) {
                                 T2<String,String> mo = mi.next();
-                                System.out.println("   "+mo.e1+":"+mo.e2);
+                                logger.info("   "+mo.e1+":"+mo.e2);
                             }
-                            System.out.println("comment: "+ comment);
+                            logger.info("comment: "+ comment);
                         }
                         
                         // **** PROCESS CURRENT TAG AND VALUE ****
@@ -1188,16 +1181,16 @@ public class OBOImport extends AbstractImportTool {
                         comment = tagValue.getComment();
                         
                         if(printExtraDebug) {
-                            System.out.println("---------------------------------");
-                            System.out.println("id: "+ id);
-                            System.out.println("tag: "+ tag);
-                            System.out.println("value: "+ value);
-                            System.out.println("modifiers:");
+                            logger.info("---------------------------------");
+                            logger.info("id: "+ id);
+                            logger.info("tag: "+ tag);
+                            logger.info("value: "+ value);
+                            logger.info("modifiers:");
                             for(Iterator<T2<String,String>> mi=modifiers.iterator(); mi.hasNext();) {
                                 T2<String,String> mo = mi.next();
-                                System.out.println("   "+mo.e1+":"+mo.e2);
+                                logger.info("   "+mo.e1+":"+mo.e2);
                             }
-                            System.out.println("comment: "+ comment);
+                            logger.info("comment: "+ comment);
                         }
                         
                         
@@ -2147,7 +2140,6 @@ public class OBOImport extends AbstractImportTool {
         
         public void parseSynonym(String str) {
             str = str.trim();
-            //System.out.println("parsing synonym: "+str);
             boolean parsed = false;
             if(!parsed) {
                 Matcher m = STOSynonymPattern.matcher(str);
@@ -2156,7 +2148,6 @@ public class OBOImport extends AbstractImportTool {
                     if(m.group(2) != null && m.group(2).length() > 0) scope = m.group(2);
                     if(m.group(3) != null && m.group(3).length() > 0) type = m.group(3);
                     if(m.group(4) != null && m.group(4).length() > 0) origins = new Dbxrefs(m.group(4));
-                    //System.out.println("found synonym 1: "+synonym);
                     parsed = true;
                 }
             }
@@ -2166,7 +2157,6 @@ public class OBOImport extends AbstractImportTool {
                     if(m.group(1) != null && m.group(1).length() > 0) synonym = m.group(1);
                     if(m.group(2) != null && m.group(2).length() > 0) scope = m.group(2);
                     if(m.group(3) != null && m.group(3).length() > 0) origins = new Dbxrefs(m.group(3));
-                    //System.out.println("found synonym 2: "+synonym);
                     parsed = true;
                 }
             }
@@ -2176,7 +2166,6 @@ public class OBOImport extends AbstractImportTool {
                     if(m.group(1) != null && m.group(1).length() > 0) synonym = m.group(1);
                     if(m.group(2) != null && m.group(2).length() > 0) scope = m.group(2);
                     if(m.group(3) != null && m.group(3).length() > 0) type = m.group(3);
-                    //System.out.println("found synonym 3: "+synonym);
                     parsed = true;
                 }
             }
@@ -2185,7 +2174,6 @@ public class OBOImport extends AbstractImportTool {
                 if(m.matches()) {
                     if(m.group(1) != null && m.group(1).length() > 0) synonym = m.group(1);
                     if(m.group(2) != null && m.group(2).length() > 0) scope = m.group(2);
-                    //System.out.println("found synonym 4: "+synonym);
                     parsed = true;
                 }
             }
@@ -2194,21 +2182,18 @@ public class OBOImport extends AbstractImportTool {
                 if(m.matches()) {
                     if(m.group(1) != null && m.group(1).length() > 0) synonym = m.group(1);
                     if(m.group(2) != null && m.group(2).length() > 0) origins = new Dbxrefs(m.group(2));
-                    //System.out.println("found synonym 5: "+synonym);
                     parsed = true;
                 }
             }
             if(!parsed) {
                 Matcher m = plainStringPattern.matcher(str);
                 if(m.matches()) {
-                    //System.out.println("found synonym 6: "+synonym);
                     if(m.group(1) != null && m.group(1).length() > 0) synonym = m.group(1);
                     parsed = true;
                 }
             }
             if(!parsed) {
                 synonym = str;
-                //System.out.println("found synonym 7: "+synonym);
             }
         }
         

@@ -317,11 +317,11 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
                     try{
                         Class<?> cls=jc.loadClass(clsName);
                         if(!WandoraTool.class.isAssignableFrom(cls)){
-                            if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + cls.getSimpleName() + "'. Does not implement Tool interface!");
+                            if(ADDITIONAL_DEBUG) logger.info("Rejecting '" + cls.getSimpleName() + "'. Does not implement Tool interface!");
                             continue;
                         }
                         if(cls.isInterface()) {
-                            if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + cls.getSimpleName() + "'. Is interface!");
+                            if(ADDITIONAL_DEBUG) logger.info("Rejecting '" + cls.getSimpleName() + "'. Is interface!");
                             continue;
                         }
                         try{
@@ -332,12 +332,12 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
                             addTool(tool,"jar",f.getAbsolutePath());
                         }
                         catch(NoSuchMethodException nsme){
-                            if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + cls.getSimpleName() + "'. No constructor!");
+                            if(ADDITIONAL_DEBUG) logger.error("Rejecting '" + cls.getSimpleName() + "'. No constructor!");
                             continue;
                         }
                     }
                     catch(Exception ex){
-                        if(ADDITIONAL_DEBUG) System.out.println("Rejecting tool. Exception '" + ex.toString() + "' occurred while investigating '" + clsName + "'.");
+                        if(ADDITIONAL_DEBUG) logger.error("Rejecting tool. Exception '" + ex.toString() + "' occurred while investigating '" + clsName + "'.");
                     }
                 }
             }catch(MalformedURLException mue){
@@ -395,14 +395,14 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
                         set.add(name, tool);    
                     }
                     else {
-                        System.out.println("Options refer tool class '" + cls + "' not available! Discarding tool!");                        
+                        logger.info("Options refer tool class '" + cls + "' not available! Discarding tool!");                        
                     }
                 }
                 catch(NoClassDefFoundError ncdfe) {
-                    System.out.println("A tool configured in options requires a class that was not found. This is most likely caused by a missing library. Missing class was "+ncdfe.getMessage()+". Discarding tool!");
+                    logger.error("A tool configured in options requires a class that was not found. This is most likely caused by a missing library. Missing class was "+ncdfe.getMessage()+". Discarding tool!");
                 }
                 catch(Exception e) {
-                    System.out.println(e);
+                    logger.error(e);
                 }
             }
             else {
@@ -432,7 +432,6 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
     private void writeToolSet(WandoraToolSet set, String optionsPath) {
         options.removeAll(optionsPath);
         options.put(optionsPath+".name", set.getName());
-        // System.out.println("writeToolSet: " + optionsPath + " ---- "+set);
         Object[] array = set.asArray();
         Object o = null;
         WandoraToolSet.ToolItem toolItem = null;
@@ -441,7 +440,6 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
             o = array[i];
             if(o instanceof WandoraToolSet.ToolItem) {
                 toolItem = (WandoraToolSet.ToolItem) o;
-                // System.out.println("     "+optionsPath+".item["+i+"].name = "+toolItem.getName());
                 options.put(optionsPath+".item["+i+"].name", toolItem.getName());
                 options.put(optionsPath+".item["+i+"].class", toolItem.getTool().getClass().getName());
             }
@@ -503,11 +501,9 @@ public class WandoraToolManager2 extends AbstractWandoraTool {
     
     public void renameToolOrSet(WandoraToolSet set, Object toolOrSet, String newName) {
         if(toolOrSet instanceof WandoraToolSet) {
-            //System.out.println("WandoraToolSet == "+toolOrSet + " --- new name === "+newName+ "  --- currentSet = "+set);
             ((WandoraToolSet) toolOrSet).setName(newName);
         }
         else if(toolOrSet instanceof WandoraToolSet.ToolItem) {
-            //System.out.println("WandoraToolSet.ToolItem == "+toolOrSet + " --- new name === "+newName+ "  --- currentSet = "+set);
             ((WandoraToolSet.ToolItem) toolOrSet).setName(newName);
         }
         writeToolSets();

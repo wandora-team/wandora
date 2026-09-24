@@ -403,7 +403,7 @@ public class InstanceListExtractor extends AbstractExtractor implements BrowserP
         
         @Override
         public void handleError(String errorMsg,int pos) {
-            // System.out.println("InstanceListExtractor: " + errorMsg);
+            logger.error(errorMsg);
         }
         
         

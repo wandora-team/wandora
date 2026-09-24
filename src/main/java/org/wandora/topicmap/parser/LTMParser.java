@@ -796,7 +796,6 @@ public class LTMParser {
                     }
                 }
                 while (consume(','));
-                // System.out.println("found "+memberCounter+" members.");
                 consume(')');
             }
             List<Topic> scopes = parseScope();
@@ -865,7 +864,6 @@ public class LTMParser {
                 Collection<Topic> types = player.getTypes();
                 if (types != null && types.size() > 0 && PREFER_CLASS_AS_ROLE) {
                     role = types.iterator().next();
-                    // System.out.println("found role '"+role+"' ("+role.getOneSubjectIdentifier().toExternalForm()+")");
                 }
                 else {
                     String associationTypeName = "";
@@ -939,7 +937,6 @@ public class LTMParser {
                         for (Iterator<Topic> iter = scope.iterator(); iter.hasNext();) {
                             scopeTopic = iter.next();
                             if (scopeTopic != null) {
-                                // System.out.println("CREATING OCCURRENCE: " +occurrenceType + " --- " + scopeTopic + " --- " + resource);
                                 occurrenceTopic.setData(occurrenceType, scopeTopic, resource);
                                 //topicMapLogger.log("  Occurrence type: "+ occurrenceType);
                                 //topicMapLogger.log("  Occurrence scope: "+ scopeTopic);
@@ -1179,7 +1176,6 @@ public class LTMParser {
                             len++;
                         }
                         else {
-                            //System.out.println("found string end.");
                             ready = true;
                         }
                     }
@@ -1189,7 +1185,6 @@ public class LTMParser {
                             int c3 = in.read(unicode);
                             int uc = Integer.parseInt(new String(unicode), 16);
                             sb.append((char) uc);
-                            //System.out.println("escaped unicode char found '" + ((char) uc) + "' ("+new String(unicode)+")");
                             len++;
                         }
                         else {
@@ -1199,7 +1194,6 @@ public class LTMParser {
                                 proceed = false;
                             else {
                                 ch = (char) c;
-                                //System.out.println("escaped char found '" + ch + "'");
                                 sb.append(ch);
                                 len++;
                             }
@@ -1211,7 +1205,6 @@ public class LTMParser {
                             proceed = false;
                         else {
                             ch = (char) c;
-                            //System.out.println("char found '" + ch + "'");
                             sb.append(ch);
                             len++;
                         }
@@ -1275,11 +1268,8 @@ public class LTMParser {
                 charStr[i - 1] = charStr[i];
                 if (ready && str.charAt(i - 1) != charStr[i])
                     ready = false;
-                //System.out.println("TEST: " + str.charAt(i-1) + " == " + charStr[i]);
             }
             charStr[strLen - 1] = (char) c;
-            //System.out.println("TEST: " + str.charAt(strLen-1) + " == " + charStr[strLen-1]);
-            //System.out.println("--");
             if (ready && str.charAt(strLen - 1) != charStr[strLen - 1])
                 ready = false;
         }

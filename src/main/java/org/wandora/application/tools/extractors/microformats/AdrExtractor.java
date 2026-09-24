@@ -55,6 +55,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -62,6 +63,8 @@ import org.xml.sax.XMLReader;
  * @author akivela
  */
 public class AdrExtractor extends AbstractExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AdrExtractor.class);
     
 
 	private static final long serialVersionUID = 1L;
@@ -343,7 +346,7 @@ public class AdrExtractor extends AbstractExtractor {
                     break;
                 }
             }
-            if(debug) System.out.println(", nstate="+state);
+            if(debug) logger.info(", nstate="+state);
         }
 
 
@@ -545,7 +548,7 @@ public class AdrExtractor extends AbstractExtractor {
                 }
             }
             if(t == null) {
-                System.out.println("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
+                logger.warn("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
             }
             return t;
         }

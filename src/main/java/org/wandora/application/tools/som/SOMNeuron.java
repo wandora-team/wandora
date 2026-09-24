@@ -29,11 +29,15 @@
 
 package org.wandora.application.tools.som;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 /**
  *
  * @author akivela
  */
 public class SOMNeuron {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SOMNeuron.class);
     private SOMVector vector = null;
         
     public SOMNeuron(int dim) {
@@ -61,7 +65,7 @@ public class SOMNeuron {
     }
         
     public void print() {
-        if(vector == null) System.out.println("-null-");
+        if(vector == null) logger.info("-null-");
         else vector.print();
     }
     @Override

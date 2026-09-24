@@ -301,18 +301,17 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool {
                     String value = keyValue[0];
                     if(!originals.containsKey(key)) {
                         originals.put(key, value);
-                        // System.out.println("Adding key: "+key);
                     }
                     else {
-                        System.out.println("Originals already contains key: "+key);
+                        logger.warn("Originals already contains key: "+key);
                         originals.put(key, originals.get(key) + " ; " + value);
                     }
                 }
                 else {
-                    System.out.println("Illegal number of elements in original line: "+str);
+                    logger.warn("Illegal number of elements in original line: "+str);
                 }
             }
-            System.out.println("Originals has "+originals.size()+" values.");
+            logger.info("Originals has "+originals.size()+" values.");
             
             br.close();
             
@@ -330,15 +329,15 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool {
                             // OK!
                         }
                         else {
-                            System.out.println("Original key "+keyValue[1]+ " contains no '"+keyValue[0]+"'");
+                            logger.info("Original key "+keyValue[1]+ " contains no '"+keyValue[0]+"'");
                         }
                     }
                     else {
-                        System.out.println("Originals has no key: "+keyValue[1]);
+                        logger.info("Originals has no key: "+keyValue[1]);
                     }
                 }
                 else {
-                    System.out.println("Illegal number of elements in original line: "+str);
+                    logger.info("Illegal number of elements in original line: "+str);
                 }
             }
 

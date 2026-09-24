@@ -89,9 +89,9 @@ public class GuardianContentSearchExtractor extends AbstractGuardianExtractor {
 
 		String in = IObox.doUrl(u);
 
-		System.out.println(
-				    "The Guardian API returned-------------------------\n" + in
-				+ "\n----------------------------------------------------");
+		logger.info("The Guardian API returned-------------------------");
+		logger.info(in);
+	    logger.info("--------------------------------------------------");
 
 		JSONObject json = new JSONObject(in);
 
@@ -109,7 +109,7 @@ public class GuardianContentSearchExtractor extends AbstractGuardianExtractor {
 					
 					if (didMean == WandoraOptionPane.YES_OPTION) {
 						URL newUrl = new URI(currentURL.replaceAll("&q=[^&]*", "&q=" + dym)).toURL();
-						System.out.println(newUrl.toString());
+						logger.info(newUrl.toString());
 						this._extractTopicsFrom(newUrl, tm);
 					} 
 					else {
@@ -154,7 +154,7 @@ public class GuardianContentSearchExtractor extends AbstractGuardianExtractor {
 					parseResult(result, tm);
 				}
 			} catch (JSONException ex) {
-				System.out.println(ex);
+				logger.error(ex);
 				log(ex);
 			}
 		}
@@ -189,20 +189,20 @@ public class GuardianContentSearchExtractor extends AbstractGuardianExtractor {
 							String originalURL = currentURL;
 							try {
 								if (pagingOptions[1].equals(a)) {
-									System.out.println("Selected to extract only next page");
+									logger.info("Selected to extract only next page");
 									String newURL = originalURL.replace("page=" + page, "page=" + (page + 1));
 									shouldHandlePagination = false;
 									_extractTopicsFrom(new URI(newURL).toURL(), tm);
 								}
 
 								else if (pagingOptions[2].equals(a)) {
-									System.out.println("Selected to extract next page");
+									logger.info("Selected to extract next page");
 									String newURL = originalURL.replace("page=" + page, "page=" + (page + 1));
 									_extractTopicsFrom(new URI(newURL).toURL(), tm);
 								}
 
 								else if (pagingOptions[3].equals(a)) {
-									System.out.println("Selected to extract 10 next pages");
+									logger.info("Selected to extract 10 next pages");
 									shouldHandlePagination = false;
 									setProgress(1);
 									setProgressMax(10);
@@ -218,7 +218,7 @@ public class GuardianContentSearchExtractor extends AbstractGuardianExtractor {
 								}
 
 								else if (pagingOptions[4].equals(a)) {
-									System.out.println("Selected to extract all pages");
+									logger.info("Selected to extract all pages");
 									shouldHandlePagination = false;
 									setProgress(1);
 									setProgressMax((int) (total));

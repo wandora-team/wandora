@@ -222,7 +222,6 @@ public class URLOccurrenceChecker extends AbstractWandoraTool {
                 }
             }
         }
-        //System.out.println("NOT A URL: '"+urlString+"'");
         return null;
     }
 

@@ -42,6 +42,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -51,6 +52,8 @@ import org.xml.sax.XMLReader;
  * @author akivela
  */
 public class GeoNamesCountryInfo extends AbstractGeoNamesExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(GeoNamesCountryInfo.class);
 
 	private static final long serialVersionUID = 1L;
 	
@@ -208,7 +211,7 @@ public class GeoNamesCountryInfo extends AbstractGeoNamesExtractor {
                             parent.log("GeoNames web service says: "+msg+" ("+val+")");
                         }
                         else {
-                            System.out.println("GeoNames web service says: "+msg+" ("+val+")");
+                            logger.info("GeoNames web service says: "+msg+" ("+val+")");
                         }
                     }
                     else if(qName.equals(TAG_COUNTRY)) {

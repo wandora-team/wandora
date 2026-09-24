@@ -99,7 +99,6 @@ public class TopicMapImport extends AbstractImportTool {
     
     @Override
     public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        //System.out.println(prefix);
         TopicMapImportConfiguration dialog=new TopicMapImportConfiguration(wandora);
         dialog.openDialog();
         if(!dialog.wasAccepted()){

@@ -60,7 +60,7 @@ public class AsuntojenHintaTiedotExtractor {
             int z = 1;
             boolean nextPage = false;
             do {
-                System.out.println("Scraping "+i+" and page "+z+".");
+                logger.info("Scraping "+i+" and page "+z+".");
                 String u = ubody.replace("__p__", ""+i);
                 u = u.replace("__z__", ""+z);
 
@@ -98,7 +98,7 @@ public class AsuntojenHintaTiedotExtractor {
         String saveFile = "G:/asuntojen_hintatiedot_111011.txt";
         StringBuilder sb = new StringBuilder("");
         File[] files = IObox.getFiles(loadFolder);
-        System.out.println("Found total "+files.length+" files.");
+        logger.info("Found total "+files.length+" files.");
         for(int i=0; i<files.length; i++) {
             try {
                 String c = IObox.loadFile(files[i]);
@@ -115,9 +115,6 @@ public class AsuntojenHintaTiedotExtractor {
                 int pni = pn.indexOf("_");
                 pn = pn.substring(0,pni);
                 
-                //System.out.println("-----------------------------");
-                //System.out.println(c);
-                //System.out.println("-----------------------------");
                 
                 Pattern p = Pattern.compile(
                         "<tr(?:\\sclass\\=\\\"last\\\")?>\\s*?"+
@@ -174,7 +171,7 @@ public class AsuntojenHintaTiedotExtractor {
                     System.out.print( rakVuosi + " - " );
                     System.out.print( kerros + " - " );
                     System.out.print( hissi + " - " );
-                    System.out.println( kunto + " - " );
+                    logger.info(kunto + " - ");
                     
                     sb.append(files[i].getName()).append( "\t");
                     sb.append(pn).append( "\t");
@@ -221,8 +218,8 @@ public class AsuntojenHintaTiedotExtractor {
             String[] ilmoituksetArray = ilmoituksetRaw.split("\n");
             String[] myydytArray = myydytRaw.split("\n");
             
-            System.out.println(ilmoituksetArray.length + " ilmoitusta.");
-            System.out.println(myydytArray.length + " myyntia.");
+            logger.info(ilmoituksetArray.length + " ilmoitusta.");
+            logger.info(myydytArray.length + " myyntia.");
             
             HashMap<String,ArrayList<String[]>> ilmoituksetHash = new HashMap<>();
             HashMap<String,ArrayList<String[]>> myydytHash = new HashMap<>();
@@ -252,7 +249,7 @@ public class AsuntojenHintaTiedotExtractor {
             // **** calculate ****
             for(String pno : ilmoituksetHash.keySet()) {
                 if(!"100".equals(pno)) continue;
-                System.out.println("--------------------");
+                logger.info("--------------------");
                 
                 
                 ArrayList<String[]> iArray = ilmoituksetHash.get(pno);
@@ -272,11 +269,11 @@ public class AsuntojenHintaTiedotExtractor {
                         countI++;
                     }
                 }
-                System.out.println(pno+" kohteitaI="+countI);
+                logger.info(pno+" kohteitaI="+countI);
                 double keskiarvoHintaI = countI != 0 ? hintaTotalI / countI : 0;
                 double keskiarvoNelioHintaI = countI != 0 ? nelioHintaTotalI / countI : 0;
-                System.out.println(pno+" keskiarvoHintaI="+keskiarvoHintaI);
-                System.out.println(pno+" keskiarvoNelioHintaI="+keskiarvoNelioHintaI);
+                logger.info(pno+" keskiarvoHintaI="+keskiarvoHintaI);
+                logger.info(pno+" keskiarvoNelioHintaI="+keskiarvoNelioHintaI);
                 
                 int countM = 0;
                 double hintaTotalM = 0;
@@ -292,17 +289,17 @@ public class AsuntojenHintaTiedotExtractor {
                         countM++;
                     }
                 }
-                System.out.println(pno+" kohteitaM="+countM);
+                logger.info(pno+" kohteitaM="+countM);
                 double keskiarvoHintaM = countM != 0 ? hintaTotalM / countM : 0;
                 double keskiarvoNelioHintaM = countM != 0 ? nelioHintaTotalM / countM : 0;
-                System.out.println(pno+" keskiarvoHintaM="+keskiarvoHintaM);
-                System.out.println(pno+" keskiarvoNelioHintaM="+keskiarvoNelioHintaM);
+                logger.info(pno+" keskiarvoHintaM="+keskiarvoHintaM);
+                logger.info(pno+" keskiarvoNelioHintaM="+keskiarvoNelioHintaM);
                 
                 double hintaJousto = keskiarvoHintaI - keskiarvoHintaM;
                 double nelioHintaJousto = keskiarvoNelioHintaI - keskiarvoNelioHintaM;
                 
-                System.out.println(pno+" hintaJousto="+hintaJousto);
-                System.out.println(pno+" nelioHintaJousto="+nelioHintaJousto);
+                logger.info(pno+" hintaJousto="+hintaJousto);
+                logger.info(pno+" nelioHintaJousto="+nelioHintaJousto);
                 
                 sb.append(pno).append("\t");
                 sb.append(countI).append("\t");

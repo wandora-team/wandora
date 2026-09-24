@@ -31,6 +31,7 @@ import org.wandora.application.tools.extractors.AbstractJsoupExtractor;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -40,6 +41,8 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class JsoupSuperSubClassListExtractor extends AbstractJsoupExtractor implements BrowserPluginExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(JsoupSuperSubClassListExtractor.class);
 
 
 	private static final long serialVersionUID = 1L;
@@ -58,7 +61,7 @@ public class JsoupSuperSubClassListExtractor extends AbstractJsoupExtractor impl
         
         for(Element listCandidate: children){
             
-            System.out.println(listCandidate.outerHtml());
+            logger.info(listCandidate.outerHtml());
             
             if(listCandidate.tagName().equals("ul"))
                 parseList(listCandidate, null);
