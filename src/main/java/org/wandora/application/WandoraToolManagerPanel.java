@@ -42,33 +42,40 @@ import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
 import org.wandora.utils.logger.Log4j2Logger;
+
 /**
  *
  * @author  olli
  */
 public class WandoraToolManagerPanel extends javax.swing.JPanel {
-	private static final long serialVersionUID = 1L;
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolManagerPanel.class);
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolManagerPanel.class);
 
-	public static class WandoraToolListWrapper {
-        public T2<WandoraTool,String> tool;
-        public WandoraToolListWrapper(T2<WandoraTool,String> tool){
-            this.tool=tool;
+    public static class WandoraToolListWrapper {
+        public T2<WandoraTool, String> tool;
+
+        public WandoraToolListWrapper(T2<WandoraTool, String> tool) {
+            this.tool = tool;
         }
-        public String toString(){
+        
+        public String toString() {
             return tool.e2;
         }
     }
-	
-    public static class ComboboxWrapper{
+
+    
+    public static class ComboboxWrapper {
         public WandoraTool tool;
-        public ComboboxWrapper(WandoraTool tool){
-            this.tool=tool;
+
+        public ComboboxWrapper(WandoraTool tool) {
+            this.tool = tool;
         }
-        public String toString(){
-            return tool.getName()+" ("+tool.getClass().getName()+")";
+
+        public String toString() {
+            return tool.getName() + " (" + tool.getClass().getName() + ")";
         }
     }
+
     
     private Wandora admin;
     private WandoraToolManager manager;
@@ -77,7 +84,7 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
     private JDialog parent;
     private JDialog renameDialog;
     private boolean renameCancelled;
-    
+
     /** Creates new form WandoraToolManagerPanel */
     public WandoraToolManagerPanel(WandoraToolManager manager, JDialog parent, Wandora admin) {
         this.admin = admin;
@@ -86,32 +93,33 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
         listModel = new DefaultListModel<>();
         initComponents();
         refreshTools();
-        
-        newDialog=new JDialog(parent,true);
+
+        newDialog = new JDialog(parent, true);
         newDialog.getContentPane().add(newToolPanel);
         newDialog.setTitle("New tool");
-        
-        renameDialog=new JDialog(parent,true);
+
+        renameDialog = new JDialog(parent, true);
         renameDialog.getContentPane().add(renamePanel);
         renameDialog.setTitle("Rename tool");
     }
-    
-    
-    public void refreshTools(){
+
+
+    public void refreshTools() {
         listModel.removeAllElements();
-        Vector<T2<WandoraTool,String>> tools=manager.getTools(typeComboBox.getSelectedItem().toString());
-        for(T2<WandoraTool,String> tool : tools){
+        Vector<T2<WandoraTool, String>> tools = manager.getTools(typeComboBox.getSelectedItem().toString());
+        for (T2<WandoraTool, String> tool : tools) {
             listModel.addElement(new WandoraToolListWrapper(tool));
-        }        
+        }
         toolList.repaint();
     }
-    
-    
-    
+
+
+
     private String getCurrentType() {
         return typeComboBox.getSelectedItem().toString();
     }
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -151,7 +159,8 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
         okButton = new org.wandora.application.gui.simple.SimpleButton();
         typePanel = new javax.swing.JPanel();
         jLabel4 = new org.wandora.application.gui.simple.SimpleLabel();
-        typeComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>(org.wandora.application.WandoraToolManager.toolTypes);
+        typeComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>(
+                org.wandora.application.WandoraToolManager.toolTypes);
         jSeparator1 = new javax.swing.JSeparator();
 
         newToolPanel.setLayout(new java.awt.GridBagLayout());
@@ -474,11 +483,12 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
         add(jSeparator1, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void typeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeComboBoxActionPerformed
         refreshTools();
-        boolean enableButtons=true;
-        if("configurable".equals(getCurrentType())) {
-            enableButtons=false;
+        boolean enableButtons = true;
+        if ("configurable".equals(getCurrentType())) {
+            enableButtons = false;
         }
         renameButton.setEnabled(enableButtons);
         newButton.setEnabled(enableButtons);
@@ -487,42 +497,49 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
         downButton.setEnabled(enableButtons);
     }//GEN-LAST:event_typeComboBoxActionPerformed
 
+
     private void renameCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_renameCancelButtonActionPerformed
-        renameCancelled=true;
+        renameCancelled = true;
         renameDialog.setVisible(false);
     }//GEN-LAST:event_renameCancelButtonActionPerformed
 
+
     private void renameOKButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_renameOKButtonActionPerformed
-        renameCancelled=false;
+        renameCancelled = false;
         renameDialog.setVisible(false);
     }//GEN-LAST:event_renameOKButtonActionPerformed
+
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         parent.setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
 
+
     private void newCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCancelButtonActionPerformed
         newDialog.setVisible(false);
     }//GEN-LAST:event_newCancelButtonActionPerformed
 
+
     private void toolComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toolComboBoxActionPerformed
-        if(toolComboBox.getSelectedItem() != null) {
-            WandoraTool tool = ((ComboboxWrapper)toolComboBox.getSelectedItem()).tool;
-            if(tool != null) {
+        if (toolComboBox.getSelectedItem() != null) {
+            WandoraTool tool = ((ComboboxWrapper) toolComboBox.getSelectedItem()).tool;
+            if (tool != null) {
                 nameTextField.setText(tool.getName());
                 descriptionTextPane.setText(tool.getDescription());
             }
         }
     }//GEN-LAST:event_toolComboBoxActionPerformed
 
+
     private void newOKButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newOKButtonActionPerformed
-        String name=nameTextField.getText();
-        if(name.trim().length()==0) {
+        String name = nameTextField.getText();
+        if (name.trim().length() == 0) {
             WandoraOptionPane.showMessageDialog(this, "You must enter a name for the tool!");
             return;
         }
-        boolean added=manager.addTool(((ComboboxWrapper)toolComboBox.getSelectedItem()).tool,name,getCurrentType());
-        if(!added) {
+        boolean added = manager.addTool(((ComboboxWrapper) toolComboBox.getSelectedItem()).tool, name,
+                getCurrentType());
+        if (!added) {
             WandoraOptionPane.showMessageDialog(this, "That name is already used for another tool!");
             return;
         }
@@ -530,122 +547,140 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
         newDialog.setVisible(false);
     }//GEN-LAST:event_newOKButtonActionPerformed
 
+
     private void toolListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_toolListValueChanged
-    	WandoraToolListWrapper wrapper=(WandoraToolListWrapper)toolList.getSelectedValue();
-        if(wrapper==null) {
+        WandoraToolListWrapper wrapper = (WandoraToolListWrapper) toolList.getSelectedValue();
+        if (wrapper == null) {
             configureButton.setEnabled(false);
             return;
         }
-        WandoraTool tool=wrapper.tool.e1;
+        WandoraTool tool = wrapper.tool.e1;
         configureButton.setEnabled(tool.isConfigurable());
     }//GEN-LAST:event_toolListValueChanged
 
+
     private void downButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downButtonActionPerformed
-        int sel=toolList.getSelectedIndex();
-        Vector<T2<WandoraTool,String>> tools=manager.getTools(getCurrentType());
-        if(sel==-1 || sel==tools.size()-1) return;
-        T2<WandoraTool,String> temp=tools.get(sel+1);
-        tools.setElementAt(tools.get(sel), sel+1);
-        tools.setElementAt(temp,sel);
+        int sel = toolList.getSelectedIndex();
+        Vector<T2<WandoraTool, String>> tools = manager.getTools(getCurrentType());
+        if (sel == -1 || sel == tools.size() - 1)
+            return;
+        T2<WandoraTool, String> temp = tools.get(sel + 1);
+        tools.setElementAt(tools.get(sel), sel + 1);
+        tools.setElementAt(temp, sel);
         refreshTools();
-        toolList.setSelectedIndex(sel+1);
+        toolList.setSelectedIndex(sel + 1);
         manager.rewriteOptions();
         manager.getAdmin().toolsChanged();
     }//GEN-LAST:event_downButtonActionPerformed
 
+
     private void upButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upButtonActionPerformed
-        int sel=toolList.getSelectedIndex();
-        if(sel==-1 || sel==0) return;
-        Vector<T2<WandoraTool,String>> tools=manager.getTools(getCurrentType());
-        T2<WandoraTool,String> temp=tools.get(sel-1);
-        tools.setElementAt(tools.get(sel), sel-1);
-        tools.setElementAt(temp,sel);
+        int sel = toolList.getSelectedIndex();
+        if (sel == -1 || sel == 0)
+            return;
+        Vector<T2<WandoraTool, String>> tools = manager.getTools(getCurrentType());
+        T2<WandoraTool, String> temp = tools.get(sel - 1);
+        tools.setElementAt(tools.get(sel), sel - 1);
+        tools.setElementAt(temp, sel);
         refreshTools();
-        toolList.setSelectedIndex(sel-1);
+        toolList.setSelectedIndex(sel - 1);
         manager.rewriteOptions();
-        manager.getAdmin().toolsChanged();        
+        manager.getAdmin().toolsChanged();
     }//GEN-LAST:event_upButtonActionPerformed
 
+
     private void configureButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureButtonActionPerformed
-    	WandoraToolListWrapper wrapper=(WandoraToolListWrapper)toolList.getSelectedValue();
-        if(wrapper==null) {
+        WandoraToolListWrapper wrapper = (WandoraToolListWrapper) toolList.getSelectedValue();
+        if (wrapper == null) {
             configureButton.setEnabled(false);
             return;
         }
-        WandoraTool tool=wrapper.tool.e1;
-        int counter=toolList.getSelectedIndex();
-        if(tool.isConfigurable()) {
+        WandoraTool tool = wrapper.tool.e1;
+        int counter = toolList.getSelectedIndex();
+        if (tool.isConfigurable()) {
             try {
-                String type=getCurrentType();
-                tool.configure(manager.getAdmin(),manager.getAdmin().getOptions(),"tools."+type+".item"+counter+".options.");
+                String type = getCurrentType();
+                tool.configure(manager.getAdmin(), manager.getAdmin().getOptions(),
+                        "tools." + type + ".item" + counter + ".options.");
             }
-            catch(TopicMapException tme) {
-            	logger.error(tme);
+            catch (TopicMapException tme) {
+                logger.error(tme);
             }
         }
     }//GEN-LAST:event_configureButtonActionPerformed
 
+
     private void renameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_renameButtonActionPerformed
-        int sel=toolList.getSelectedIndex();
-        if(sel==-1) return;
-        renameDialog.setSize(400,100);
-        if(admin != null) admin.centerWindow(renameDialog);
+        int sel = toolList.getSelectedIndex();
+        if (sel == -1)
+            return;
+        renameDialog.setSize(400, 100);
+        if (admin != null)
+            admin.centerWindow(renameDialog);
         renameTextField.setText(manager.getTools(getCurrentType()).get(sel).e2);
-        renameTextField.setSelectionStart(0); renameTextField.setSelectionEnd(renameTextField.getText().length());
+        renameTextField.setSelectionStart(0);
+        renameTextField.setSelectionEnd(renameTextField.getText().length());
         renameDialog.setVisible(true);
-        if(renameCancelled) return;
-        String name=renameTextField.getText();
-        while(!manager.checkName(name)){
+        if (renameCancelled)
+            return;
+        String name = renameTextField.getText();
+        while (!manager.checkName(name)) {
             WandoraOptionPane.showMessageDialog(this, "That name is already used by another tool.");
-            renameDialog.setSize(400,100);
-            org.wandora.utils.swing.GuiTools.centerWindow(renameDialog,this);
+            renameDialog.setSize(400, 100);
+            org.wandora.utils.swing.GuiTools.centerWindow(renameDialog, this);
             renameTextField.setText(name);
-            renameTextField.setSelectionStart(0); renameTextField.setSelectionEnd(renameTextField.getText().length());
+            renameTextField.setSelectionStart(0);
+            renameTextField.setSelectionEnd(renameTextField.getText().length());
             renameDialog.setVisible(true);
-            if(renameCancelled) return;
-            name=renameTextField.getText();
+            if (renameCancelled)
+                return;
+            name = renameTextField.getText();
         }
-        Vector<T2<WandoraTool,String>> tools=manager.getTools(getCurrentType());
-        T2<WandoraTool,String> tool=tools.get(sel);
-        tools.setElementAt(t2(tool.e1,name),sel);
+        Vector<T2<WandoraTool, String>> tools = manager.getTools(getCurrentType());
+        T2<WandoraTool, String> tool = tools.get(sel);
+        tools.setElementAt(t2(tool.e1, name), sel);
         refreshTools();
         manager.rewriteOptions();
-        manager.getAdmin().toolsChanged();                
+        manager.getAdmin().toolsChanged();
     }//GEN-LAST:event_renameButtonActionPerformed
 
+
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-        int sel=toolList.getSelectedIndex();
-        if(sel==-1) return;
-        Vector<T2<WandoraTool,String>> tools=manager.getTools(getCurrentType());
-        T2<WandoraTool,String> tool=tools.get(sel);
+        int sel = toolList.getSelectedIndex();
+        if (sel == -1)
+            return;
+        Vector<T2<WandoraTool, String>> tools = manager.getTools(getCurrentType());
+        T2<WandoraTool, String> tool = tools.get(sel);
         manager.removeTool(tool.e1, tool.e2, getCurrentType());
         refreshTools();
         manager.rewriteOptions();
         manager.getAdmin().toolsChanged();
     }//GEN-LAST:event_removeButtonActionPerformed
 
+
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
 
-        List<WandoraTool> tools=new Vector<WandoraTool>();
-        for(WandoraTool tool : manager.getToolList(getCurrentType())) {
+        List<WandoraTool> tools = new Vector<WandoraTool>();
+        for (WandoraTool tool : manager.getToolList(getCurrentType())) {
             tools.add(tool);
         }
-        Collections.sort(tools,new Comparator<WandoraTool>() {
-            public int compare(WandoraTool a1,WandoraTool a2){
+        Collections.sort(tools, new Comparator<WandoraTool>() {
+            public int compare(WandoraTool a1, WandoraTool a2) {
                 return a1.getName().compareTo(a2.getName());
             }
         });
         toolComboBox.removeAllItems();
-        for(WandoraTool tool : tools) {
+        for (WandoraTool tool : tools) {
             toolComboBox.addItem(new ComboboxWrapper(tool));
         }
-        
-        newDialog.setSize(600,190);
-        if(admin != null) admin.centerWindow(newDialog);
+
+        newDialog.setSize(600, 190);
+        if (admin != null)
+            admin.centerWindow(newDialog);
         newDialog.setVisible(true);
     }//GEN-LAST:event_newButtonActionPerformed
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton configureButton;
@@ -680,5 +715,5 @@ public class WandoraToolManagerPanel extends javax.swing.JPanel {
     private javax.swing.JPanel typePanel;
     private javax.swing.JButton upButton;
     // End of variables declaration//GEN-END:variables
-    
+
 }

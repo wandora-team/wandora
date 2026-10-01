@@ -42,23 +42,20 @@ import org.wandora.application.gui.WandoraToolTree;
 
 
 
-
 /**
  *
  * @author  akivela
  */
 public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
+    private static final long serialVersionUID = 1L;
 
-
-	private static final long serialVersionUID = 1L;
-
-	private Wandora wandora;
+    private Wandora wandora;
     private WandoraToolManager2 manager;
     private JDialog parent;
     private WandoraToolSet currentToolSet = null;
     private WandoraToolTree currentToolTree = null;
-    
-            
+
+
     /** Creates new form WandoraToolManagerPanel2 */
     public WandoraToolManagerPanel2(WandoraToolManager2 m, JDialog d, Wandora w) {
         this.wandora = w;
@@ -68,110 +65,120 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
         initContent();
         parent.invalidate();
     }
-    
-    
-    
+
+
+
     private void initContent() {
         initToolPaths();
         initJarPaths();
-        
+
         initAllTools();
         initToolSets();
     }
-    
-    
+
+
     public void initAllTools() {
         List<WandoraTool> allTools = manager.getAllTools();
         WandoraToolTable toolTable = new WandoraToolTable(wandora);
-        toolTable.initialize(allTools.toArray( new WandoraTool[] {} ));
+        toolTable.initialize(allTools.toArray(new WandoraTool[] {}));
 
         allToolsTablePanel.removeAll();
         allToolsTablePanel.add(toolTable, BorderLayout.NORTH);
         allToolsScrollPane.setColumnHeaderView(toolTable.getTableHeader());
-//        allToolsTitlePanel.removeAll();
-//        allToolsTitlePanel.add(toolTable.getTableHeader(), BorderLayout.CENTER);
     }
-    
-    
+
+
     // ---------------------------------------------------------- TOOL PATHS ---
-    
-    
+
+
     public void initToolPaths() {
         List<String> toolPaths = manager.getToolPaths();
         StringBuilder pathString = new StringBuilder("");
-        for( String path : toolPaths ) {
-            if(path != null) {
+        for (String path : toolPaths) {
+            if (path != null) {
                 pathString.append(path).append("\n");
             }
         }
         pathTextPane.setText(pathString.toString());
     }
-    
-    public void initJarPaths(){
+
+
+    public void initJarPaths() {
         List<String> jarPaths = manager.getJarPaths();
         StringBuilder pathString = new StringBuilder("");
-        for( String path : jarPaths ) {
-            if(path != null) {
+        for (String path : jarPaths) {
+            if (path != null) {
                 pathString.append(path).append("\n");
             }
         }
-        jarTextPane.setText(pathString.toString());        
+        jarTextPane.setText(pathString.toString());
     }
-    
+
 
     public void saveToolPaths() {
         String pathString = pathTextPane.getText();
         String[] paths = pathString.split("\n");
         String path = null;
-        ArrayList<String> toolPaths = new ArrayList<String>();
-        for(int i=0; i<paths.length; i++) {
+        List<String> toolPaths = new ArrayList<>();
+        for (int i = 0; i < paths.length; i++) {
             path = paths[i];
-            if(path != null) {
+            if (path != null) {
                 path = path.trim();
-                if(path.length() > 0) {
+                if (path.length() > 0) {
                     toolPaths.add(path);
                 }
             }
         }
         boolean saveToOptions = true;
-        if(toolPaths.isEmpty()) {
-            int a = WandoraOptionPane.showConfirmDialog(parent, "No tool paths found. Do you want to delete all path saved in Wandora options?", "Delete all paths");
-            if(a == WandoraOptionPane.NO_OPTION) saveToOptions = false;
-            else if(a == WandoraOptionPane.CLOSED_OPTION) saveToOptions = false;
-            else if(a == WandoraOptionPane.CANCEL_OPTION) saveToOptions = false;
+        if (toolPaths.isEmpty()) {
+            int a = WandoraOptionPane.showConfirmDialog(parent,
+                    "No tool paths found. Do you want to delete all path saved in Wandora options?",
+                    "Delete all paths");
+            if (a == WandoraOptionPane.NO_OPTION)
+                saveToOptions = false;
+            else if (a == WandoraOptionPane.CLOSED_OPTION)
+                saveToOptions = false;
+            else if (a == WandoraOptionPane.CANCEL_OPTION)
+                saveToOptions = false;
         }
-        if(saveToOptions) {
+        if (saveToOptions) {
             manager.writeToolPaths(toolPaths);
         }
     }
-    
+
+
     public void saveJarPaths() {
         String pathString = jarTextPane.getText();
         String[] paths = pathString.split("\n");
         String path = null;
-        ArrayList<String> jarPaths = new ArrayList<String>();
-        for(int i=0; i<paths.length; i++) {
+        List<String> jarPaths = new ArrayList<>();
+        for (int i = 0; i < paths.length; i++) {
             path = paths[i];
-            if(path != null) {
+            if (path != null) {
                 path = path.trim();
-                if(path.length() > 0) {
+                if (path.length() > 0) {
                     jarPaths.add(path);
                 }
             }
         }
         boolean saveToOptions = true;
-        if(jarPaths.isEmpty()) {
-            int a = WandoraOptionPane.showConfirmDialog(parent, "No jar tool paths found. Do you want to delete all jar path saved in Wandora options?", "Delete all jar paths");
-            if(a == WandoraOptionPane.NO_OPTION) saveToOptions = false;
-            else if(a == WandoraOptionPane.CLOSED_OPTION) saveToOptions = false;
-            else if(a == WandoraOptionPane.CANCEL_OPTION) saveToOptions = false;
+        if (jarPaths.isEmpty()) {
+            int a = WandoraOptionPane.showConfirmDialog(parent,
+                    "No jar tool paths found. Do you want to delete all jar path saved in Wandora options?",
+                    "Delete all jar paths");
+            if (a == WandoraOptionPane.NO_OPTION)
+                saveToOptions = false;
+            else if (a == WandoraOptionPane.CLOSED_OPTION)
+                saveToOptions = false;
+            else if (a == WandoraOptionPane.CANCEL_OPTION)
+                saveToOptions = false;
         }
-        if(saveToOptions) {
+        if (saveToOptions) {
             manager.writeJarPaths(jarPaths);
         }
     }
-    
-    
+
+
     public void scanToolPaths() {
         saveToolPaths();
         saveJarPaths();
@@ -179,25 +186,28 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
         initAllTools();
     }
 
-    
-    
+
+
     // ----------------------------------------------------------- TOOL SETS ---
-    
-    
-    
+
+
+
     public void initToolSets() {
         initToolSets(null);
     }
+
+
     public void initToolSets(WandoraToolSet selectedSet) {
         List<WandoraToolSet> toolSets = manager.getToolSets();
         toolSetsComboBox.setEditable(false);
         toolSetsComboBox.removeAllItems();
         int selectedIndex = 0;
         int index = 0;
-        
-        if(toolSets.size() > 0) {
-            for(WandoraToolSet toolSet : toolSets ) {
-                if(toolSet.equals(selectedSet)) selectedIndex = index;
+
+        if (toolSets.size() > 0) {
+            for (WandoraToolSet toolSet : toolSets) {
+                if (toolSet.equals(selectedSet))
+                    selectedIndex = index;
                 toolSetsComboBox.addItem(toolSet.getName());
                 index++;
             }
@@ -205,13 +215,15 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
             selectToolSet(toolSets.get(selectedIndex));
         }
     }
-    
+
+
     public void selectToolSet() {
         int setIndex = Math.max(0, toolSetsComboBox.getSelectedIndex());
         List<WandoraToolSet> toolSets = manager.getToolSets();
-        selectToolSet(toolSets.get(Math.min(setIndex, toolSets.size()-1)));
+        selectToolSet(toolSets.get(Math.min(setIndex, toolSets.size() - 1)));
     }
-    
+
+
     public void selectToolSet(WandoraToolSet toolSet) {
         currentToolSet = toolSet;
         currentToolTree = new WandoraToolTree(wandora);
@@ -223,46 +235,48 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
         toolSetsScrollPane.validate();
         toolSetsScrollPane.repaint();
     }
-    
 
-   
-    
-    
+
+
     public void addToolSet() {
         String name = WandoraOptionPane.showInputDialog(wandora, "Name of tool set", "", "Name of tool set");
-        if(name != null) {
+        if (name != null) {
             WandoraToolSet set = manager.getToolSet(name);
-            if(set == null) {
+            if (set == null) {
                 set = manager.createToolSet(name);
                 initToolSets(set);
             }
             else {
-                WandoraOptionPane.showMessageDialog(wandora, "Tool set name should be unique. Tool set with name '"+name+"' already exists.", "Set name already exists!");
+                WandoraOptionPane.showMessageDialog(wandora,
+                        "Tool set name should be unique. Tool set with name '" + name + "' already exists.",
+                        "Set name already exists!");
             }
         }
     }
-    
-    
-    
+
+
+
     public void deleteToolSet() {
         boolean deleteAllowed = manager.allowDelete(currentToolSet);
-        if(deleteAllowed) {
-            int a = WandoraOptionPane.showConfirmDialog(wandora, "Delete tool set '"+currentToolSet.getName()+"'?", "Delete tool set '"+currentToolSet.getName()+"'?", WandoraOptionPane.OK_CANCEL_OPTION);
-            if(a == WandoraOptionPane.OK_OPTION) {
+        if (deleteAllowed) {
+            int a = WandoraOptionPane.showConfirmDialog(wandora, "Delete tool set '" + currentToolSet.getName() + "'?",
+                    "Delete tool set '" + currentToolSet.getName() + "'?", WandoraOptionPane.OK_CANCEL_OPTION);
+            if (a == WandoraOptionPane.OK_OPTION) {
                 manager.deleteToolSet(currentToolSet);
                 initToolSets();
             }
         }
         else {
-            WandoraOptionPane.showMessageDialog(wandora, "You can't delete Wandora's base tool set '"+currentToolSet.getName()+"'. Delete cancelled.");
+            WandoraOptionPane.showMessageDialog(wandora,
+                    "You can't delete Wandora's base tool set '" + currentToolSet.getName() + "'. Delete cancelled.");
         }
     }
-    
-        
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -443,7 +457,8 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
 
         allToolsPanel.setLayout(new java.awt.GridBagLayout());
 
-        allToolsLabel.setText("<html>All known tools are listed here. The list contains also unfinished, buggy and deprecated tools. Running such tool may cause exceptions and unpredictable behaviour. We suggest you don't run tools listed here unless you really know what you are doing.</html>");
+        allToolsLabel.setText(
+                "<html>All known tools are listed here. The list contains also unfinished, buggy and deprecated tools. Running such tool may cause exceptions and unpredictable behaviour. We suggest you don't run tools listed here unless you really know what you are doing.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -498,13 +513,11 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
         javax.swing.GroupLayout pathButtonFillerPanelLayout = new javax.swing.GroupLayout(pathButtonFillerPanel);
         pathButtonFillerPanel.setLayout(pathButtonFillerPanelLayout);
         pathButtonFillerPanelLayout.setHorizontalGroup(
-            pathButtonFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                pathButtonFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
         pathButtonFillerPanelLayout.setVerticalGroup(
-            pathButtonFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                pathButtonFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
 
         pathButtonPanel.add(pathButtonFillerPanel, new java.awt.GridBagConstraints());
 
@@ -541,7 +554,8 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
 
         jarPanel.setLayout(new java.awt.GridBagLayout());
 
-        pathLabel1.setText("<html>This tab is used to view and edit paths to JAR files or directories containing JAR files where Wandora scans for tool classes.");
+        pathLabel1.setText(
+                "<html>This tab is used to view and edit paths to JAR files or directories containing JAR files where Wandora scans for tool classes.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -565,13 +579,11 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
         javax.swing.GroupLayout pathButtonFillerPanel1Layout = new javax.swing.GroupLayout(pathButtonFillerPanel1);
         pathButtonFillerPanel1.setLayout(pathButtonFillerPanel1Layout);
         pathButtonFillerPanel1Layout.setHorizontalGroup(
-            pathButtonFillerPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                pathButtonFillerPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
         pathButtonFillerPanel1Layout.setVerticalGroup(
-            pathButtonFillerPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                pathButtonFillerPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
 
         jarButtonPanel.add(pathButtonFillerPanel1, new java.awt.GridBagConstraints());
 
@@ -619,13 +631,11 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
         javax.swing.GroupLayout buttonFillerPanelLayout = new javax.swing.GroupLayout(buttonFillerPanel);
         buttonFillerPanel.setLayout(buttonFillerPanelLayout);
         buttonFillerPanelLayout.setHorizontalGroup(
-            buttonFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                buttonFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
         buttonFillerPanelLayout.setVerticalGroup(
-            buttonFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                buttonFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -652,49 +662,61 @@ public class WandoraToolManagerPanel2 extends javax.swing.JPanel {
         add(bottomButtonPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-private void closeButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeButtonMousePressed
-    parent.setVisible(false);
-}//GEN-LAST:event_closeButtonMousePressed
 
-private void scanButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanButtonMousePressed
-    scanToolPaths();
-}//GEN-LAST:event_scanButtonMousePressed
+    private void closeButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeButtonMousePressed
+        parent.setVisible(false);
+    }//GEN-LAST:event_closeButtonMousePressed
 
-private void savePathsButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_savePathsButtonMousePressed
-    saveToolPaths();
-}//GEN-LAST:event_savePathsButtonMousePressed
 
-private void toolSetsComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toolSetsComboBoxActionPerformed
-    this.selectToolSet();
-}//GEN-LAST:event_toolSetsComboBoxActionPerformed
+    private void scanButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanButtonMousePressed
+        scanToolPaths();
+    }//GEN-LAST:event_scanButtonMousePressed
 
-private void addToolButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToolButtonActionPerformed
-    currentToolTree.actionPerformed(new ActionEvent(this, 0, "Add tool"));
-}//GEN-LAST:event_addToolButtonActionPerformed
 
-private void newSetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newSetButtonActionPerformed
-    addToolSet();
-}//GEN-LAST:event_newSetButtonActionPerformed
+    private void savePathsButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_savePathsButtonMousePressed
+        saveToolPaths();
+    }//GEN-LAST:event_savePathsButtonMousePressed
 
-private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-    currentToolTree.actionPerformed(new ActionEvent(this, 0, "Delete"));
-}//GEN-LAST:event_deleteButtonActionPerformed
 
-private void deleteSetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSetButtonActionPerformed
-    deleteToolSet();
-}//GEN-LAST:event_deleteSetButtonActionPerformed
+    private void toolSetsComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toolSetsComboBoxActionPerformed
+        this.selectToolSet();
+    }//GEN-LAST:event_toolSetsComboBoxActionPerformed
 
-private void addGroupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGroupButtonActionPerformed
-    currentToolTree.actionPerformed(new ActionEvent(this, 0, "Add group"));
-}//GEN-LAST:event_addGroupButtonActionPerformed
 
-private void renameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_renameButtonActionPerformed
-    currentToolTree.actionPerformed(new ActionEvent(this, 0, "Rename"));
-}//GEN-LAST:event_renameButtonActionPerformed
+    private void addToolButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToolButtonActionPerformed
+        currentToolTree.actionPerformed(new ActionEvent(this, 0, "Add tool"));
+    }//GEN-LAST:event_addToolButtonActionPerformed
+
+
+    private void newSetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newSetButtonActionPerformed
+        addToolSet();
+    }//GEN-LAST:event_newSetButtonActionPerformed
+
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        currentToolTree.actionPerformed(new ActionEvent(this, 0, "Delete"));
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+
+    private void deleteSetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSetButtonActionPerformed
+        deleteToolSet();
+    }//GEN-LAST:event_deleteSetButtonActionPerformed
+
+
+    private void addGroupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGroupButtonActionPerformed
+        currentToolTree.actionPerformed(new ActionEvent(this, 0, "Add group"));
+    }//GEN-LAST:event_addGroupButtonActionPerformed
+
+
+    private void renameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_renameButtonActionPerformed
+        currentToolTree.actionPerformed(new ActionEvent(this, 0, "Rename"));
+    }//GEN-LAST:event_renameButtonActionPerformed
+
 
     private void saveJarsButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveJarsButtonMousePressed
         saveJarPaths();
     }//GEN-LAST:event_saveJarsButtonMousePressed
+
 
     private void scanJarsButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scanJarsButtonMousePressed
         scanToolPaths();

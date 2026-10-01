@@ -80,43 +80,43 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author  akivela
  */
 public class Shortcuts implements ActionListener {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Shortcuts.class);
-	
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(Shortcuts.class);
+
     public static final String OPTIONS_PREFIX = "shortcuts.";
-    
+
     private List<String> shortcuts;
     private Wandora wandora;
-    
+
     private ManageDialog manageDialog = null;
-    
-    
-    
+
+
+
     private Object[] accelerators = new Object[] {
-        KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_4, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_5, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_6, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_7, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_8, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_9, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_4, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_5, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_6, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_7, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_8, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_9, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
     };
     Object[] staticMenuStructure = new Object[] {
-        "Add shortcut", UIBox.getIcon("gui/icons/shortcut_new.png"),
-        "Manage shortcuts...", UIBox.getIcon("gui/icons/shortcuts_configure.png"),
-        "---"
+            "Add shortcut", UIBox.getIcon("gui/icons/shortcut_new.png"),
+            "Manage shortcuts...", UIBox.getIcon("gui/icons/shortcuts_configure.png"),
+            "---"
     };
     Object[] staticFullMenuStructure = new Object[] {
-        "Shortcuts",
-        staticMenuStructure
+            "Shortcuts",
+            staticMenuStructure
     };
 
 
     ShortcutMenuListener shortcutMenuListener = new ShortcutMenuListener();
-    
-    
-    
+
+
+
     /** Creates a new instance of Shortcuts */
     public Shortcuts(Wandora w) {
         this.wandora = w;
@@ -124,58 +124,59 @@ public class Shortcuts implements ActionListener {
         loadShortcuts(wandora.options);
     }
 
-    
+
     public void addShortcut(String shortcut) {
-        if(shortcuts.contains(shortcut)) shortcuts.remove(shortcut);
+        if (shortcuts.contains(shortcut))
+            shortcuts.remove(shortcut);
         shortcuts.add(0, shortcut);
     }
-    
-    
+
+
     public void manage() {
-        manageDialog=new ManageDialog(wandora, false, this);
+        manageDialog = new ManageDialog(wandora, false, this);
         manageDialog.setSize(600, 400);
         wandora.centerWindow(manageDialog);
         manageDialog.setVisible(true);
     }
-    
-    
-    
-   
-    public JMenu getShortcutsMenu(JMenu shortcutsMenu)  throws TopicMapException {
+
+
+
+    public JMenu getShortcutsMenu(JMenu shortcutsMenu) throws TopicMapException {
         shortcutsMenu.removeAll();
         UIBox.attachMenu(shortcutsMenu, staticMenuStructure, this);
         UIBox.attachMenu(shortcutsMenu, getMenuStructure(), shortcutMenuListener);
         return shortcutsMenu;
     }
-    
-    
-    public JMenu getShortcutsMenu()  throws TopicMapException {
-        return UIBox.attachMenu(UIBox.makeMenu(staticFullMenuStructure, this), getMenuStructure(), shortcutMenuListener);
-    }
-    
 
-    
+
+    public JMenu getShortcutsMenu() throws TopicMapException {
+        return UIBox.attachMenu(UIBox.makeMenu(staticFullMenuStructure, this), getMenuStructure(),
+                shortcutMenuListener);
+    }
+
+
+
     public Object[] getMenuStructure() throws TopicMapException {
         List<Object> shortcutMenuStructure = new ArrayList<>();
         Topic t = null;
         TopicMap topicMap = wandora.getTopicMap();
-        if(topicMap != null) {
+        if (topicMap != null) {
             String name = null;
             int acceleratorCount = 0;
 
-            for(Iterator<String> iter=shortcuts.iterator(); iter.hasNext(); ) {
+            for (Iterator<String> iter = shortcuts.iterator(); iter.hasNext();) {
                 String si = iter.next();
                 t = null;
-                try{
-                    t=topicMap.getTopic(si);
+                try {
+                    t = topicMap.getTopic(si);
                 }
-                catch(TopicMapException tme) {
-                	logger.error(tme);
+                catch (TopicMapException tme) {
+                    logger.error(tme);
                 }
 
-                if(t != null) {
+                if (t != null) {
                     name = t.getBaseName();
-                    if(name != null && name.length() > 0) {
+                    if (name != null && name.length() > 0) {
                         shortcutMenuStructure.add(name);
                     }
                     else {
@@ -185,7 +186,7 @@ public class Shortcuts implements ActionListener {
                 else {
                     shortcutMenuStructure.add(si);
                 }
-                if(acceleratorCount < accelerators.length) {
+                if (acceleratorCount < accelerators.length) {
                     shortcutMenuStructure.add(accelerators[acceleratorCount++]);
                 }
                 shortcutMenuStructure.add(UIBox.getIcon("gui/icons/shortcut.png"));
@@ -193,63 +194,71 @@ public class Shortcuts implements ActionListener {
         }
         return shortcutMenuStructure.toArray();
     }
-    
-    
-    
+
+
+
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
- 
-        if("Add shortcut".equalsIgnoreCase(c)) {
-            Topic t=wandora.getOpenTopic();
-            if(t != null) {
-                Collection<Locator> tsis=null;
+
+        if ("Add shortcut".equalsIgnoreCase(c)) {
+            Topic t = wandora.getOpenTopic();
+            if (t != null) {
+                Collection<Locator> tsis = null;
                 try {
-                    tsis=t.getSubjectIdentifiers();
-                    if(tsis != null && tsis.size() > 1) {
+                    tsis = t.getSubjectIdentifiers();
+                    if (tsis != null && tsis.size() > 1) {
                         Object[] tsisArray = tsis.toArray();
-                        Object answer = WandoraOptionPane.showOptionDialog(wandora, "Topic contains multiple subject identifiers. Select subject identifier for the shortcut.", "Select subject identifier", WandoraOptionPane.QUESTION_MESSAGE, tsisArray, tsisArray[0]);
-                        if(answer == null) return;
+                        Object answer = WandoraOptionPane.showOptionDialog(wandora,
+                                "Topic contains multiple subject identifiers. Select subject identifier for the shortcut.",
+                                "Select subject identifier", WandoraOptionPane.QUESTION_MESSAGE, tsisArray,
+                                tsisArray[0]);
+                        if (answer == null)
+                            return;
                         else {
-                            String si=answer.toString();
+                            String si = answer.toString();
                             addShortcut(si);
                         }
                     }
-                    else if(tsis != null) {
+                    else if (tsis != null) {
                         Locator si = (Locator) (tsis.iterator().next());
                         addShortcut(si.toExternalForm());
                     }
                     wandora.shortcutsChanged();
                 }
-                catch(Exception e) {
-                    if(wandora != null) wandora.handleError(e);
-                    else logger.error(e);
+                catch (Exception e) {
+                    if (wandora != null)
+                        wandora.handleError(e);
+                    else
+                        logger.error(e);
                     return;
                 }
-                if(wandora != null) saveShortcuts(wandora.options);
+                if (wandora != null)
+                    saveShortcuts(wandora.options);
             }
         }
-        
-        
-        else if("Manage shortcuts...".equalsIgnoreCase(c)) {
+
+
+        else if ("Manage shortcuts...".equalsIgnoreCase(c)) {
             manage();
         }
-       
+
         else {
             // Should not be here!
         }
     }
-    
-    
-    
+
+
+
     public void loadShortcuts(Options opts) {
         int i = 0;
         boolean loadOk = true;
         String shortcut = null;
-        while(loadOk) {
-            shortcut = opts.get(OPTIONS_PREFIX + "si["+i+"]");
-            if(shortcut != null && shortcut.length() > 0) {
-                if(!shortcuts.contains(shortcut)) shortcuts.add(shortcut);
+        while (loadOk) {
+            shortcut = opts.get(OPTIONS_PREFIX + "si[" + i + "]");
+            if (shortcut != null && shortcut.length() > 0) {
+                if (!shortcuts.contains(shortcut))
+                    shortcuts.add(shortcut);
                 i++;
             }
             else {
@@ -257,28 +266,31 @@ public class Shortcuts implements ActionListener {
             }
         }
     }
-    
-    
-    
+
+
+
     public void loadShortcuts(String filename) {
         try {
             String shortcutString = IObox.loadFile(filename);
             parseShortcuts(shortcutString);
         }
         catch (Exception e) {
-            if(wandora != null) wandora.handleError(e);
-            else logger.error(e);
+            if (wandora != null)
+                wandora.handleError(e);
+            else
+                logger.error(e);
         }
     }
-    
-    
+
+
     public void parseShortcuts(String shortcutString) {
         try {
             StringTokenizer st = new StringTokenizer(shortcutString, "\n");
-            while(st.hasMoreTokens()) {
+            while (st.hasMoreTokens()) {
                 String shortcut = Textbox.trimExtraSpaces(st.nextToken());
-                if(shortcut != null && shortcut.length() > 0) {
-                    if(!shortcuts.contains(shortcut)) shortcuts.add(shortcut);
+                if (shortcut != null && shortcut.length() > 0) {
+                    if (!shortcuts.contains(shortcut))
+                        shortcuts.add(shortcut);
                 }
             }
         }
@@ -286,57 +298,61 @@ public class Shortcuts implements ActionListener {
             wandora.handleError(e);
         }
     }
-    
-    
-    
+
+
+
     public void saveShortcuts(String fileName) {
         saveShortcuts(new File(fileName));
     }
-    
+
+
     public void saveShortcuts(File file) {
         try {
-            OutputStream fos=new FileOutputStream(file);
-            PrintWriter writer=new PrintWriter(fos);
-            Iterator<String> iter=shortcuts.iterator();
-            while(iter.hasNext()) {
-                writer.print(iter.next()+ "\n");
+            OutputStream fos = new FileOutputStream(file);
+            PrintWriter writer = new PrintWriter(fos);
+            Iterator<String> iter = shortcuts.iterator();
+            while (iter.hasNext()) {
+                writer.print(iter.next() + "\n");
             }
             writer.close();
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error("Exception occurred '" + e.toString() + "' while saving shortcuts to file!");
-            WandoraOptionPane.showMessageDialog(wandora, "Exception occurred '" + e.toString() + "' while saving shortcuts to '" + file.getPath() + "'!", WandoraOptionPane.ERROR_MESSAGE);
+            WandoraOptionPane.showMessageDialog(wandora,
+                    "Exception occurred '" + e.toString() + "' while saving shortcuts to '" + file.getPath() + "'!",
+                    WandoraOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    
-    
+
+
+
     public void saveShortcuts(Options opts) {
         try {
-            int i=0;
-            Iterator<String> iter=shortcuts.iterator();
-            while(iter.hasNext()) {
-                opts.put(OPTIONS_PREFIX + "si["+i+"]", iter.next());
+            int i = 0;
+            Iterator<String> iter = shortcuts.iterator();
+            while (iter.hasNext()) {
+                opts.put(OPTIONS_PREFIX + "si[" + i + "]", iter.next());
                 i++;
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error("Exception occurred '" + e.toString() + "' while saving shortcuts to options!");
-            WandoraOptionPane.showMessageDialog(wandora,"Exception occurred '" + e.toString() + "' while saving shortcuts to options!");
+            WandoraOptionPane.showMessageDialog(wandora,
+                    "Exception occurred '" + e.toString() + "' while saving shortcuts to options!");
         }
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // ---- Shortcut menu listener opens topics selected from menu. ------------
     // -------------------------------------------------------------------------
-    
-    
+
+
     private class ShortcutMenuListener implements ActionListener {
-        
-        
-        
+
+
+
         @Override
         public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
             try {
@@ -345,11 +361,11 @@ public class Shortcuts implements ActionListener {
                 Topic t = null;
                 TopicMap topicMap = wandora.getTopicMap();
 
-                t = topicMap.getTopicWithBaseName(c);   // base name
-                if(t == null) {
+                t = topicMap.getTopicWithBaseName(c); // base name
+                if (t == null) {
                     t = topicMap.getTopic(c); // subject identifier
                 }
-                if(t == null) {
+                if (t == null) {
                     wandora.applyChangesAndOpen(new Locator(c));
                 }
                 else {
@@ -360,42 +376,134 @@ public class Shortcuts implements ActionListener {
                 wandora.handleError(e);
             }
         }
-        
+
     }
-    
-    
-    
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // --- Shortcut's manage dialog --------------------------------------------
     // -------------------------------------------------------------------------
-    
-    
-    
-    
-    private class ManageDialog extends JDialog implements ActionListener {
-        
-        
-		private static final long serialVersionUID = 1L;
 
-		
-		Object[] fileMenuStructure = new Object[] {
-            "File",
+
+
+    private class ManageDialog extends JDialog implements ActionListener {
+
+
+        private static final long serialVersionUID = 1L;
+
+
+        Object[] fileMenuStructure = new Object[] {
+                "File",
                 new Object[] {
-                    "Import...",
-                    "Merge...",
-                    "Export...",
-                    "---",
-                    "Close",
-            }
+                        "Import...",
+                        "Merge...",
+                        "Export...",
+                        "---",
+                        "Close",
+                }
         };
-        
+
         Object[] editMenuStructure = new Object[] {
-            "Edit",
+                "Edit",
                 new Object[] {
+                        "Open",
+                        "---",
+                        "Cut",
+                        "Copy",
+                        "Paste",
+                        "---",
+                        "Delete",
+                        "---",
+                        "Move up",
+                        "Move down",
+                        "Move top",
+                        "Move bottom"
+                }
+        };
+
+
+        JList<String> list = null;
+        Wandora wandora = null;
+
+
+
+        public ManageDialog(Wandora w, boolean modal, Shortcuts parent) {
+            super((JFrame) w, modal);
+            this.setTitle("Manage shortcuts");
+            this.wandora = w;
+
+            JMenuBar menuBar = new JMenuBar();
+            menuBar.add(UIBox.makeMenu(fileMenuStructure, this));
+            menuBar.add(UIBox.makeMenu(editMenuStructure, this));
+            setJMenuBar(menuBar);
+
+            this.getContentPane().setLayout(new java.awt.BorderLayout());
+            list = new SimpleList<>(shortcuts);
+            list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+            list.setFont(UIConstants.plainFont);
+            list.setComponentPopupMenu(getPopupMenu(this));
+            JScrollPane scrollPane = new JScrollPane();
+            scrollPane.setPreferredSize(new java.awt.Dimension(500, 300));
+            scrollPane.setViewportView(list);
+
+            this.getContentPane().add(scrollPane, java.awt.BorderLayout.CENTER);
+            JPanel panel = new JPanel();
+
+            JButton okButton = new SimpleButton("Close");
+            okButton.setFont(UIConstants.buttonLabelFont);
+            okButton.setPreferredSize(new Dimension(80, 23));
+            okButton.setActionCommand("Close");
+            okButton.addActionListener(this);
+
+            JButton importButton = new SimpleButton("Import");
+            importButton.setPreferredSize(new Dimension(80, 23));
+            importButton.setFont(UIConstants.buttonLabelFont);
+            importButton.setActionCommand("Import");
+            importButton.addActionListener(this);
+
+            JButton saveButton = new SimpleButton("Export");
+            saveButton.setPreferredSize(new Dimension(80, 23));
+            saveButton.setFont(UIConstants.buttonLabelFont);
+            saveButton.setActionCommand("Export");
+            saveButton.addActionListener(this);
+
+            JButton removeButton = new SimpleButton("Delete");
+            removeButton.setFont(UIConstants.buttonLabelFont);
+            removeButton.setPreferredSize(new Dimension(80, 23));
+            removeButton.setActionCommand("Delete");
+            removeButton.addActionListener(this);
+
+            JButton openButton = new SimpleButton("Open");
+            openButton.setPreferredSize(new Dimension(80, 23));
+            openButton.setFont(UIConstants.buttonLabelFont);
+            openButton.setActionCommand("Open");
+            openButton.addActionListener(this);
+
+            panel.add(openButton);
+            panel.add(removeButton);
+            panel.add(importButton);
+            panel.add(saveButton);
+            panel.add(okButton);
+
+            this.getContentPane().add(panel, java.awt.BorderLayout.SOUTH);
+            this.pack();
+        }
+
+
+
+        public void update() {
+            list.setListData((String[]) shortcuts.toArray());
+            list.clearSelection();
+            repaint();
+            if (wandora != null)
+                saveShortcuts(wandora.options);
+        }
+
+
+
+        public JPopupMenu getPopupMenu(ActionListener listener) {
+            Object[] menuStructure = new Object[] {
                     "Open",
                     "---",
                     "Cut",
@@ -408,251 +516,155 @@ public class Shortcuts implements ActionListener {
                     "Move down",
                     "Move top",
                     "Move bottom"
-            }
-        };
-        
-        
-        JList<String> list = null;
-        Wandora wandora = null;
-
-        
-        
-        public ManageDialog(Wandora w, boolean modal, Shortcuts parent) {
-            super((JFrame) w, modal);
-            this.setTitle("Manage shortcuts");
-            this.wandora = w;
-
-            JMenuBar menuBar = new JMenuBar();
-            menuBar.add(UIBox.makeMenu(fileMenuStructure, this));
-            menuBar.add(UIBox.makeMenu(editMenuStructure, this));
-            setJMenuBar(menuBar);
-            
-            this.getContentPane().setLayout(new java.awt.BorderLayout());
-            list=new SimpleList<>(shortcuts);
-            list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-            list.setFont(UIConstants.plainFont);
-            list.setComponentPopupMenu(getPopupMenu(this));
-            JScrollPane scrollPane = new JScrollPane();
-            scrollPane.setPreferredSize(new java.awt.Dimension(500,300));
-            scrollPane.setViewportView(list);
-            
-            this.getContentPane().add(scrollPane, java.awt.BorderLayout.CENTER);
-            JPanel panel=new JPanel();
-            
-            JButton okButton=new SimpleButton("Close");
-            okButton.setFont(UIConstants.buttonLabelFont);
-            okButton.setPreferredSize(new Dimension(80, 23));
-            okButton.setActionCommand("Close");
-            okButton.addActionListener(this);
-            
-            JButton importButton=new SimpleButton("Import");
-            importButton.setPreferredSize(new Dimension(80, 23));
-            importButton.setFont(UIConstants.buttonLabelFont);
-            importButton.setActionCommand("Import");
-            importButton.addActionListener(this);
-            
-            JButton saveButton=new SimpleButton("Export");
-            saveButton.setPreferredSize(new Dimension(80, 23));
-            saveButton.setFont(UIConstants.buttonLabelFont);
-            saveButton.setActionCommand("Export");
-            saveButton.addActionListener(this);
-            
-            JButton removeButton=new SimpleButton("Delete");
-            removeButton.setFont(UIConstants.buttonLabelFont);
-            removeButton.setPreferredSize(new Dimension(80, 23));
-            removeButton.setActionCommand("Delete");
-            removeButton.addActionListener(this);
-            
-            JButton openButton=new SimpleButton("Open");
-            openButton.setPreferredSize(new Dimension(80, 23));
-            openButton.setFont(UIConstants.buttonLabelFont);
-            openButton.setActionCommand("Open");
-            openButton.addActionListener(this);
-            
-            panel.add(openButton);
-            panel.add(removeButton);
-            panel.add(importButton); 
-            panel.add(saveButton); 
-            panel.add(okButton);
-
-            this.getContentPane().add(panel,java.awt.BorderLayout.SOUTH);
-            this.pack();
-        }
-        
-        
-        
-        
-        public void update() {
-            list.setListData((String[]) shortcuts.toArray());
-            list.clearSelection();
-            repaint();
-            if(wandora != null) saveShortcuts(wandora.options);
-        }
-        
-        
-        
-        public JPopupMenu getPopupMenu(ActionListener listener) {
-            Object[] menuStructure = new Object[] {
-                "Open",
-                "---",
-                "Cut",
-                "Copy",
-                "Paste",
-                "---",
-                "Delete",
-                "---",
-                "Move up",
-                "Move down",
-                "Move top",
-                "Move bottom"
             };
             return UIBox.makePopupMenu(menuStructure, listener);
         }
-        
-        
-        
+
+
+
         @Override
         public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
             String c = actionEvent.getActionCommand();
-            
-             if("Move up".equalsIgnoreCase(c)) {
-                int[] selected=manageDialog.list.getSelectedIndices();
-                for(int i=0; i<selected.length; i++) {
-                    shortcuts.add(selected[i]-1 < 0 ? 0 : selected[i]-1, shortcuts.get(selected[i]));
-                    shortcuts.remove(selected[i]+1);
+
+            if ("Move up".equalsIgnoreCase(c)) {
+                int[] selected = manageDialog.list.getSelectedIndices();
+                for (int i = 0; i < selected.length; i++) {
+                    shortcuts.add(selected[i] - 1 < 0 ? 0 : selected[i] - 1, shortcuts.get(selected[i]));
+                    shortcuts.remove(selected[i] + 1);
                 }
                 update();
             }
-            else if("Move down".equalsIgnoreCase(c)) {
-                int[] selected=manageDialog.list.getSelectedIndices();
-                for(int i=selected.length-1; i>=0; i--) {
-                    shortcuts.add(selected[i]+2 >= shortcuts.size() ? shortcuts.size() : selected[i]+2, shortcuts.get(selected[i]));
+            else if ("Move down".equalsIgnoreCase(c)) {
+                int[] selected = manageDialog.list.getSelectedIndices();
+                for (int i = selected.length - 1; i >= 0; i--) {
+                    shortcuts.add(selected[i] + 2 >= shortcuts.size() ? shortcuts.size() : selected[i] + 2,
+                            shortcuts.get(selected[i]));
                     shortcuts.remove(selected[i]);
                 }
                 update();
             }
-            else if("Move bottom".equalsIgnoreCase(c)) {
-                int[] selected=manageDialog.list.getSelectedIndices();
+            else if ("Move bottom".equalsIgnoreCase(c)) {
+                int[] selected = manageDialog.list.getSelectedIndices();
                 int p = 0;
-                for(int i=selected.length-1; i>=0; i--) {
-                    shortcuts.add(shortcuts.size()-p, shortcuts.get(selected[i]));
+                for (int i = selected.length - 1; i >= 0; i--) {
+                    shortcuts.add(shortcuts.size() - p, shortcuts.get(selected[i]));
                     p++;
                     shortcuts.remove(selected[i]);
                 }
                 update();
             }
-             if("Move top".equalsIgnoreCase(c)) {
-                int[] selected=manageDialog.list.getSelectedIndices();
-                for(int i=0; i<selected.length; i++) {
+            if ("Move top".equalsIgnoreCase(c)) {
+                int[] selected = manageDialog.list.getSelectedIndices();
+                for (int i = 0; i < selected.length; i++) {
                     shortcuts.add(i, shortcuts.get(selected[i]));
-                    shortcuts.remove(selected[i]+1);
+                    shortcuts.remove(selected[i] + 1);
                 }
                 update();
             }
-            if("Cut".equalsIgnoreCase(c)) {
-                int[] selected=manageDialog.list.getSelectedIndices();
+            if ("Cut".equalsIgnoreCase(c)) {
+                int[] selected = manageDialog.list.getSelectedIndices();
                 StringBuilder sb = new StringBuilder("");
-                for(int i=0; i<selected.length; i++) {
+                for (int i = 0; i < selected.length; i++) {
                     String si = (String) shortcuts.get(selected[i]);
                     sb.append(si).append("\n");
                 }
                 ClipboardBox.setClipboard(sb.toString());
-                for(int i=selected.length-1; i>=0; i--) {
+                for (int i = selected.length - 1; i >= 0; i--) {
                     shortcuts.remove(selected[i]);
                 }
                 update();
             }
-            else if("Copy".equalsIgnoreCase(c)) {
-                int[] selected=manageDialog.list.getSelectedIndices();
+            else if ("Copy".equalsIgnoreCase(c)) {
+                int[] selected = manageDialog.list.getSelectedIndices();
                 StringBuilder sb = new StringBuilder("");
-                for(int i=0; i<selected.length; i++) {
+                for (int i = 0; i < selected.length; i++) {
                     String si = (String) shortcuts.get(selected[i]);
                     sb.append(si).append("\n");
                 }
                 ClipboardBox.setClipboard(sb.toString());
             }
-            else if("Paste".equalsIgnoreCase(c)) {
+            else if ("Paste".equalsIgnoreCase(c)) {
                 String shortcutString = ClipboardBox.getClipboard();
                 parseShortcuts(shortcutString);
                 update();
             }
-            else if("Delete".equalsIgnoreCase(c)) {
-                int[] selected=manageDialog.list.getSelectedIndices();
-                for(int i=selected.length-1;i>=0;i--){
+            else if ("Delete".equalsIgnoreCase(c)) {
+                int[] selected = manageDialog.list.getSelectedIndices();
+                for (int i = selected.length - 1; i >= 0; i--) {
                     shortcuts.remove(selected[i]);
                 }
                 update();
             }
-            else if("Export".equalsIgnoreCase(c) || "Export...".equalsIgnoreCase(c)) {
-                JFileChooser chooser=new JFileChooser();
+            else if ("Export".equalsIgnoreCase(c) || "Export...".equalsIgnoreCase(c)) {
+                JFileChooser chooser = new JFileChooser();
                 chooser.setDialogTitle("Export shortcuts...");
-                if(wandora != null) {
+                if (wandora != null) {
                     String currentDirectoryString = wandora.options.get("current.directory");
-                    if(currentDirectoryString != null) {
+                    if (currentDirectoryString != null) {
                         chooser.setCurrentDirectory(new File(currentDirectoryString));
                     }
                 }
-                if(chooser.showDialog(this, "Export")==JFileChooser.APPROVE_OPTION) {
-                    if(wandora != null) {
+                if (chooser.showDialog(this, "Export") == JFileChooser.APPROVE_OPTION) {
+                    if (wandora != null) {
                         wandora.options.put("current.directory", chooser.getCurrentDirectory().getPath());
                     }
                     saveShortcuts(chooser.getSelectedFile().getPath());
                 }
             }
-            else if("Import".equalsIgnoreCase(c) || "Import...".equalsIgnoreCase(c)) {
-                JFileChooser chooser=new JFileChooser();
+            else if ("Import".equalsIgnoreCase(c) || "Import...".equalsIgnoreCase(c)) {
+                JFileChooser chooser = new JFileChooser();
                 chooser.setDialogTitle("Import shortcuts...");
-                if(wandora != null) {
+                if (wandora != null) {
                     String currentDirectoryString = wandora.options.get("current.directory");
-                    if(currentDirectoryString != null) {
+                    if (currentDirectoryString != null) {
                         chooser.setCurrentDirectory(new File(currentDirectoryString));
                     }
                 }
-                if(chooser.showDialog(this, "Import")==JFileChooser.APPROVE_OPTION){
+                if (chooser.showDialog(this, "Import") == JFileChooser.APPROVE_OPTION) {
                     shortcuts = new ArrayList<>();
-                    if(wandora != null) {
+                    if (wandora != null) {
                         wandora.options.put("current.directory", chooser.getCurrentDirectory().getPath());
                     }
                     loadShortcuts(chooser.getSelectedFile().getPath());
                 }
                 update();
             }
-            else if("Merge".equalsIgnoreCase(c) || "Merge...".equalsIgnoreCase(c)) {
-                JFileChooser chooser=new JFileChooser();
+            else if ("Merge".equalsIgnoreCase(c) || "Merge...".equalsIgnoreCase(c)) {
+                JFileChooser chooser = new JFileChooser();
                 chooser.setDialogTitle("Merge shortcuts...");
-                if(wandora != null) {
+                if (wandora != null) {
                     String currentDirectoryString = wandora.options.get("current.directory");
-                    if(currentDirectoryString != null) {
+                    if (currentDirectoryString != null) {
                         chooser.setCurrentDirectory(new File(currentDirectoryString));
                     }
                 }
-                if(chooser.showDialog(this, "Merge")==JFileChooser.APPROVE_OPTION){
-                    if(wandora != null) {
+                if (chooser.showDialog(this, "Merge") == JFileChooser.APPROVE_OPTION) {
+                    if (wandora != null) {
                         wandora.options.put("current.directory", chooser.getCurrentDirectory().getPath());
                     }
                     loadShortcuts(chooser.getSelectedFile().getPath());
                 }
                 update();
             }
-            else if("Open".equalsIgnoreCase(c)) {
-                int[] selected=manageDialog.list.getSelectedIndices();
-                for(int i=selected.length-1;i>=0;i--) {
+            else if ("Open".equalsIgnoreCase(c)) {
+                int[] selected = manageDialog.list.getSelectedIndices();
+                for (int i = selected.length - 1; i >= 0; i--) {
                     wandora.openTopic(new Locator((String) shortcuts.get(selected[i])));
                 }
                 manageDialog.repaint();
             }
-            else if("Close".equalsIgnoreCase(c)) {
+            else if ("Close".equalsIgnoreCase(c)) {
                 this.setVisible(false);
                 try {
                     wandora.shortcutsChanged();
                 }
-                catch(TopicMapException tme) {
+                catch (TopicMapException tme) {
                     wandora.handleError(tme);
                 }
             }
         }
-        
-        
+
+
     }
 
 }

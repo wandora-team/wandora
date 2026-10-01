@@ -39,7 +39,7 @@ import java.util.Set;
  * @author akivela
  */
 public class WandoraToolType {
-    
+
     public static final String WANDORA_BUTTON_TYPE = "Default buttons";
     public static final String BROWSER_EXTRACTOR_TYPE = "Browser extractors";
 
@@ -49,100 +49,119 @@ public class WandoraToolType {
     public static final String EXPORT_TYPE = "export";
     public static final String EXTRACT_TYPE = "extract";
     public static final String GENERATOR_TYPE = "generator";
-    
-    
+
+
     private Set<String> types = new LinkedHashSet<>();
-    
-    
+
+
     public WandoraToolType(String type) {
         types.add(type);
     }
+
+
     public WandoraToolType(String type1, String type2) {
         types.add(type1);
         types.add(type2);
     }
+
+
     public WandoraToolType(String type1, String type2, String type3) {
         types.add(type1);
         types.add(type2);
         types.add(type3);
     }
-    
-    
+
+
     public Set<String> asSet() {
         return types;
     }
-    
-    
-    
+
+
+
     public String oneType() {
-        if(!types.isEmpty())
+        if (!types.isEmpty())
             return types.iterator().next();
-        else 
+        else
             return null;
     }
-    
-    
+
+
     // ------------------------------------------------------ TEST THIS TYPE ---
-    
+
+
     public boolean isOfType(String t) {
         return types.contains(t);
     }
-    
+
+
     public boolean isOfType(String t1, String t2) {
         return (types.contains(t1) && types.contains(t2));
     }
-    
+
+
     public boolean isOfType(String t1, String t2, String t3) {
         return (types.contains(t1) && types.contains(t2) && types.contains(t3));
     }
-    
-    
+
+
     // --------------------------------------------------------- MODIFY TYPE ---
-    
-    
-    
+
+
+
     public void addType(String t) {
         types.add(t);
     }
+
+
     public void removeType(String t) {
         types.remove(t);
     }
-    
-    
+
+
     // ---------------------------------------------------- STATIC FACTORIES ---
-    
-    
-    
+
+
+
     public static WandoraToolType createGenericType() {
         return new WandoraToolType(GENERIC_TYPE);
     }
+
+
     public static WandoraToolType createImportType() {
         return new WandoraToolType(IMPORT_TYPE);
     }
+
+
     public static WandoraToolType createExportType() {
         return new WandoraToolType(EXPORT_TYPE);
     }
+
+
     public static WandoraToolType createExtractType() {
         return new WandoraToolType(EXTRACT_TYPE);
     }
+
+
     public static WandoraToolType createGeneratorType() {
         return new WandoraToolType(GENERATOR_TYPE);
     }
+
+
     public static WandoraToolType createImportExportType() {
         return new WandoraToolType(IMPORT_TYPE, EXPORT_TYPE);
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(""); 
-        for( Iterator<String> typeIterator = types.iterator(); typeIterator.hasNext(); ) {
+        StringBuilder sb = new StringBuilder("");
+        for (Iterator<String> typeIterator = types.iterator(); typeIterator.hasNext();) {
             sb.append(typeIterator.next());
-            if(typeIterator.hasNext()) {
+            if (typeIterator.hasNext()) {
                 sb.append(", ");
             }
         }

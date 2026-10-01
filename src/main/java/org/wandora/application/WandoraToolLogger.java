@@ -65,8 +65,8 @@ public interface WandoraToolLogger extends TopicMapLogger {
      * once again visible after temporal invisibility.
      */
     public static final int VISIBLE = 401;
-    
-       
+
+
     /**
      * Logs given string but doesn't add the string to logger history. The
      * method is used to log repetitive logs such as progress meter that would
@@ -76,7 +76,7 @@ public interface WandoraToolLogger extends TopicMapLogger {
      */
     @Override
     public void hlog(String message); // Historyless log == log is not saved to history!
-    
+
     /**
      * Logs given string and adds the string to log history. History can be
      * browsed later when logging has ended.
@@ -85,7 +85,7 @@ public interface WandoraToolLogger extends TopicMapLogger {
      */
     @Override
     public void log(String message);
-    
+
     /**
      * Logs given string and exception.
      * 
@@ -94,7 +94,7 @@ public interface WandoraToolLogger extends TopicMapLogger {
      */
     @Override
     public void log(String message, Exception e);
-    
+
     /**
      * Logs given exception.
      * 
@@ -102,7 +102,7 @@ public interface WandoraToolLogger extends TopicMapLogger {
      */
     @Override
     public void log(Exception e);
-    
+
     /**
      * Logs given error.
      * 
@@ -120,7 +120,7 @@ public interface WandoraToolLogger extends TopicMapLogger {
      */
     @Override
     public void setProgress(int n);
-    
+
     /**
      * Set the progress point where operation is ready. Default value is 100.
      * 
@@ -128,7 +128,7 @@ public interface WandoraToolLogger extends TopicMapLogger {
      */
     @Override
     public void setProgressMax(int maxn);
-    
+
     /**
      * Logging system may have a title. Normally title is the dialog window's
      * title. Method changes the title.
@@ -137,8 +137,8 @@ public interface WandoraToolLogger extends TopicMapLogger {
      */
     @Override
     public void setLogTitle(String title);
-    
-    
+
+
     /**
      * Should the logger change current log message? If true, the log should
      * keep the current message visible although new log data is generated.
@@ -148,15 +148,15 @@ public interface WandoraToolLogger extends TopicMapLogger {
      * @param lock boolean variable that locks or unlocks logger.
      */
     public void lockLog(boolean lock);
-    
-    
+
+
     /**
      * Returns all collected logs as a string.
      * 
      * @return String containing all logged messages.
      */
     public String getHistory();
-    
+
     /**
      * Sets logger's current state. Supported logger states are EXECUTE,
      * WAIT, CLOSE, INVISIBLE, VISIBLE.
@@ -165,7 +165,7 @@ public interface WandoraToolLogger extends TopicMapLogger {
      */
     public void setState(int state);
 
-    
+
     /**
      * Returns logger's current state. Supported logger states are EXECUTE,
      * WAIT, CLOSE, INVISIBLE, VISIBLE.
@@ -173,8 +173,8 @@ public interface WandoraToolLogger extends TopicMapLogger {
      * @return Integer value representing current state of logger.
      */
     public int getState();
-    
-    
+
+
     /**
      * <p>
      * Logger should have a mechanism to receive user interruption. Typically this
@@ -192,6 +192,6 @@ public interface WandoraToolLogger extends TopicMapLogger {
     */
     @Override
     public boolean forceStop();
-    
-    
+
+
 }

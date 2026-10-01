@@ -61,62 +61,67 @@ import org.wandora.utils.logger.Log4j2Logger;
  **/
 
 public class TopicHilights {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicHilights.class);
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicHilights.class);
+
     private Wandora wandora = null;
     private Map<String, Color> hilighted = new LinkedHashMap<>();
     private Map<Topic, Color> hilightedTopics = new LinkedHashMap<>();
-    
+
     public static final Color removedTopicColor = new Color(0xa00000);
     public static final Color notActiveLayerColor = new Color(0x800000);
-    
-    
-    
+
+
+
     /** Creates a new instance of TopicHilights */
     public TopicHilights(Wandora w) {
         this.wandora = w;
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
-    
+
+
+
     public void add(String si, Color color) throws TopicMapException {
-        if(si == null || color == null) return;
+        if (si == null || color == null)
+            return;
         hilighted.put(si, color);
         Topic t = wandora.getTopicMap().getTopic(si);
-        if(t != null) hilightedTopics.put(t, color);
+        if (t != null)
+            hilightedTopics.put(t, color);
     }
-    
+
+
     public void add(Topic topic, Color color) throws TopicMapException {
-        if(topic != null) {
+        if (topic != null) {
             remove(topic);
-            if(color != null) {
+            if (color != null) {
                 hilighted.put(topic.getOneSubjectIdentifier().toExternalForm(), color);
                 hilightedTopics.put(topic, color);
             }
         }
     }
-    
-    public void add(Topic[] topics, Color color) throws TopicMapException  {
-        if(topics != null && topics.length > 0) {
-            for(int i=0; i<topics.length; i++) {
+
+
+    public void add(Topic[] topics, Color color) throws TopicMapException {
+        if (topics != null && topics.length > 0) {
+            for (int i = 0; i < topics.length; i++) {
                 add(topics[i], color);
             }
         }
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public Color get(String si) {
         try {
-            if(si == null) return null;
-            else return hilighted.get(si);
+            if (si == null)
+                return null;
+            else
+                return hilighted.get(si);
         }
         catch (Exception e) {
             logger.error("Exception occurred while getting topic hilight color!");
@@ -124,175 +129,204 @@ public class TopicHilights {
         }
         return null;
     }
-    
-    public Color getBaseNameColor(Topic topic) throws TopicMapException {
-        if(topic instanceof LayeredTopic){
-            LayeredTopic lt=(LayeredTopic)topic;
-            
-            Topic t=lt.getBaseNameSource();
-            Layer l=lt.getLayerStack().getLayer(t);
-            if(t==null) return null;
-            while(t instanceof LayeredTopic){
-                Topic t2=((LayeredTopic)t).getBaseNameSource();
-                if(t2==null) return null;
-                l=((LayeredTopic)t).getLayerStack().getLayer(t2);
-                t=t2;
-            }
-            
-            if(l==null) return null;
-            if(lt.getLayerStack().getSelectedTreeLayer()!=l) return notActiveLayerColor;
-            return null;
-        }
-        else return null;
-    }
-    
-    
-    
-    public Color getSubjectLocatorColor(Topic topic) throws TopicMapException {
-        if(topic instanceof LayeredTopic){
-            LayeredTopic lt=(LayeredTopic)topic;
-            
-            Topic t=lt.getSubjectLocatorSource();
-            Layer l=lt.getLayerStack().getLayer(t);
-            if(t==null) return null;
-            while(t instanceof LayeredTopic){
-                Topic t2=((LayeredTopic)t).getSubjectLocatorSource();
-                if(t2==null) return null;
-                l=((LayeredTopic)t).getLayerStack().getLayer(t2);
-                t=t2;
-            }
-            
-            if(l==null) return null;
-            if(lt.getLayerStack().getSelectedTreeLayer()!=l) return notActiveLayerColor;
-            return null;
-        }
-        else return null;        
-    }
-    
-    
-    
-    public Color getVariantColor(Topic topic,Set<Topic> scope) throws TopicMapException {
-        if(topic instanceof LayeredTopic){
-            LayeredTopic lt=(LayeredTopic)topic;
-            
-            T2<Topic,Set<Topic>> source=lt.getVariantSource(scope);
-            if(source==null) return null;
-            Layer l=lt.getLayerStack().getLayer(source.e1);
-            while(source.e1 instanceof LayeredTopic){
-                T2<Topic,Set<Topic>> source2=((LayeredTopic)source.e1).getVariantSource(source.e2);
-                if(source2==null) return null;
-                l=((LayeredTopic)source.e1).getLayerStack().getLayer(source2.e1);
-                source=source2;
-            }
-            if(l==null) return null;
-            if(lt.getLayerStack().getSelectedTreeLayer()!=l) return notActiveLayerColor;
-            return null;
-        }
-        else return null;
-    }
-    
 
-    public Color getSIColor(Topic topic,Locator l) throws TopicMapException {
-        if(l==null) return null;
-        if(topic instanceof LayeredTopic){
-            LayeredTopic lt=(LayeredTopic)topic;
-            Collection<Topic> c=lt.getLayerStack().getTopicsForSelectedTreeLayer(lt);
-            for(Topic t : c){
-                if(t.getSubjectIdentifiers().contains(l)) return null;
+
+    public Color getBaseNameColor(Topic topic) throws TopicMapException {
+        if (topic instanceof LayeredTopic) {
+            LayeredTopic lt = (LayeredTopic) topic;
+
+            Topic t = lt.getBaseNameSource();
+            Layer l = lt.getLayerStack().getLayer(t);
+            if (t == null)
+                return null;
+            while (t instanceof LayeredTopic) {
+                Topic t2 = ((LayeredTopic) t).getBaseNameSource();
+                if (t2 == null)
+                    return null;
+                l = ((LayeredTopic) t).getLayerStack().getLayer(t2);
+                t = t2;
+            }
+
+            if (l == null)
+                return null;
+            if (lt.getLayerStack().getSelectedTreeLayer() != l)
+                return notActiveLayerColor;
+            return null;
+        }
+        else
+            return null;
+    }
+
+
+
+    public Color getSubjectLocatorColor(Topic topic) throws TopicMapException {
+        if (topic instanceof LayeredTopic) {
+            LayeredTopic lt = (LayeredTopic) topic;
+
+            Topic t = lt.getSubjectLocatorSource();
+            Layer l = lt.getLayerStack().getLayer(t);
+            if (t == null)
+                return null;
+            while (t instanceof LayeredTopic) {
+                Topic t2 = ((LayeredTopic) t).getSubjectLocatorSource();
+                if (t2 == null)
+                    return null;
+                l = ((LayeredTopic) t).getLayerStack().getLayer(t2);
+                t = t2;
+            }
+
+            if (l == null)
+                return null;
+            if (lt.getLayerStack().getSelectedTreeLayer() != l)
+                return notActiveLayerColor;
+            return null;
+        }
+        else
+            return null;
+    }
+
+
+
+    public Color getVariantColor(Topic topic, Set<Topic> scope) throws TopicMapException {
+        if (topic instanceof LayeredTopic) {
+            LayeredTopic lt = (LayeredTopic) topic;
+
+            T2<Topic, Set<Topic>> source = lt.getVariantSource(scope);
+            if (source == null)
+                return null;
+            Layer l = lt.getLayerStack().getLayer(source.e1);
+            while (source.e1 instanceof LayeredTopic) {
+                T2<Topic, Set<Topic>> source2 = ((LayeredTopic) source.e1).getVariantSource(source.e2);
+                if (source2 == null)
+                    return null;
+                l = ((LayeredTopic) source.e1).getLayerStack().getLayer(source2.e1);
+                source = source2;
+            }
+            if (l == null)
+                return null;
+            if (lt.getLayerStack().getSelectedTreeLayer() != l)
+                return notActiveLayerColor;
+            return null;
+        }
+        else
+            return null;
+    }
+
+
+    public Color getSIColor(Topic topic, Locator l) throws TopicMapException {
+        if (l == null)
+            return null;
+        if (topic instanceof LayeredTopic) {
+            LayeredTopic lt = (LayeredTopic) topic;
+            Collection<Topic> c = lt.getLayerStack().getTopicsForSelectedTreeLayer(lt);
+            for (Topic t : c) {
+                if (t.getSubjectIdentifiers().contains(l))
+                    return null;
             }
             return notActiveLayerColor;
         }
-        else return null;
+        else
+            return null;
     }
-    
-    
-    
-    public Color getOccurrenceColor(Topic topic,Topic type,Topic lang) throws TopicMapException {
 
-        if(topic instanceof LayeredTopic){
-            LayeredTopic lt=(LayeredTopic)topic;
-            
-            T3<Topic,Topic,Topic> source=lt.getDataSource(type,lang);
-            if(source==null) return null;
-            Layer l=lt.getLayerStack().getLayer(source.e1);
-            while(source.e1 instanceof LayeredTopic){
-                T3<Topic,Topic,Topic> source2=((LayeredTopic)source.e1).getDataSource(source.e2,source.e3);
-                if(source2==null) return null;
-                l=((LayeredTopic)source.e1).getLayerStack().getLayer(source2.e1);
-                source=source2;
+
+
+    public Color getOccurrenceColor(Topic topic, Topic type, Topic lang) throws TopicMapException {
+
+        if (topic instanceof LayeredTopic) {
+            LayeredTopic lt = (LayeredTopic) topic;
+
+            T3<Topic, Topic, Topic> source = lt.getDataSource(type, lang);
+            if (source == null)
+                return null;
+            Layer l = lt.getLayerStack().getLayer(source.e1);
+            while (source.e1 instanceof LayeredTopic) {
+                T3<Topic, Topic, Topic> source2 = ((LayeredTopic) source.e1).getDataSource(source.e2, source.e3);
+                if (source2 == null)
+                    return null;
+                l = ((LayeredTopic) source.e1).getLayerStack().getLayer(source2.e1);
+                source = source2;
             }
-            if(l==null) return null;
-            if(lt.getLayerStack().getSelectedTreeLayer()!=l) return notActiveLayerColor;
+            if (l == null)
+                return null;
+            if (lt.getLayerStack().getSelectedTreeLayer() != l)
+                return notActiveLayerColor;
             return null;
         }
-        else return null;
+        else
+            return null;
     }
-    
+
 
     public Color get(Topic topic) {
         try {
-            if(topic == null) return null;
-            else if(topic.isRemoved()) return removedTopicColor;
-            else return hilightedTopics.get(topic);
+            if (topic == null)
+                return null;
+            else if (topic.isRemoved())
+                return removedTopicColor;
+            else
+                return hilightedTopics.get(topic);
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error("Exception occurred while getting topic hilight color!");
             logger.error(e);
         }
         return null;
     }
-    
-    
 
-    
+
 
     public Color getLayerColor(Topic topic) {
         try {
-            if(topic == null || !(topic.getTopicMap() instanceof ContainerTopicMap)) return null;
+            if (topic == null || !(topic.getTopicMap() instanceof ContainerTopicMap))
+                return null;
             else {
-                if(((ContainerTopicMap) topic.getTopicMap()).getTopicForSelectedTreeLayer(topic) == null) {
+                if (((ContainerTopicMap) topic.getTopicMap()).getTopicForSelectedTreeLayer(topic) == null) {
                     return notActiveLayerColor;
                 }
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error("Exception occurred while getting topic hilight color!");
             logger.error(e);
         }
         return null;
     }
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-    public void remove(Topic topic)  throws TopicMapException {
-        if(topic != null) {
-            for(Iterator<Locator> i = topic.getSubjectIdentifiers().iterator(); i.hasNext();) {
+
+
+    public void remove(Topic topic) throws TopicMapException {
+        if (topic != null) {
+            for (Iterator<Locator> i = topic.getSubjectIdentifiers().iterator(); i.hasNext();) {
                 try {
                     String si = i.next().toExternalForm();
                     hilighted.remove(si);
                     hilightedTopics.remove(topic);
                 }
-                catch(Exception e) {
-                	logger.error(e);
+                catch (Exception e) {
+                    logger.error(e);
                 }
             }
         }
     }
-    public void remove(Topic[] topics)  throws TopicMapException {
-        if(topics != null && topics.length > 0) {
-            for(int i=0; i<topics.length; i++) {
+
+
+    public void remove(Topic[] topics) throws TopicMapException {
+        if (topics != null && topics.length > 0) {
+            for (int i = 0; i < topics.length; i++) {
                 remove(topics[i]);
             }
         }
     }
+
+
     public void removeAll() {
         hilighted.clear();
         hilightedTopics.clear();
     }
-    
-    
+
+
 }

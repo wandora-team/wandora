@@ -44,19 +44,19 @@ import org.wandora.utils.logger.Log4j2Logger;
  */
 public class WandoraToolActionListener implements java.awt.event.ActionListener {
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolActionListener.class);
-    
+
     private final WandoraTool tool;
     private final Wandora wandora;
-    
-    
-    
+
+
+
     public WandoraToolActionListener(Wandora wandora, WandoraTool tool) {
         this.wandora = wandora;
         this.tool = tool;
     }
 
-    
-    
+
+
     /**
      * Invokes tool's execute method by SwingUtilities.invokeLater.
      * 
@@ -64,21 +64,21 @@ public class WandoraToolActionListener implements java.awt.event.ActionListener 
      */
     @Override
     public void actionPerformed(final java.awt.event.ActionEvent event) {
-        if(wandora != null && tool != null) {
+        if (wandora != null && tool != null) {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    try { 
-                        wandora.applyChanges(); 
+                    try {
+                        wandora.applyChanges();
                     }
-                    catch(CancelledException ce) { 
-                        return; 
+                    catch (CancelledException ce) {
+                        return;
                     }
 
                     try {
                         tool.execute(wandora, event);
                     }
-                    catch(TopicMapException tme) {
+                    catch (TopicMapException tme) {
                         wandora.handleError(tme);
                     }
                 }
@@ -88,5 +88,5 @@ public class WandoraToolActionListener implements java.awt.event.ActionListener 
             logger.warn("No Wandora or tool object specified in WandoraToolActionListener. Can't execute.");
         }
     }
-    
+
 }

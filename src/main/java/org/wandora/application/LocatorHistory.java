@@ -1,5 +1,5 @@
 /*
- * WANDORA
+a * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
  * https://wandora.org
  * 
@@ -58,131 +58,135 @@ import org.wandora.utils.logger.Log4j2Logger;
  * </p>
  */
 public class LocatorHistory {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LocatorHistory.class);
-	
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(LocatorHistory.class);
+
     private static final int DEFAULT_MAX_SIZE = 999;
-    
-    private List<T2<Locator,Integer>> history;
-    
+
+    private List<T2<Locator, Integer>> history;
+
     // location of history "cursor"
     private int index;
     // Size of current history
     private int top;
-    
+
     private int maxsize;
 
-    
-    
+
+
     public LocatorHistory() {
         this(DEFAULT_MAX_SIZE);
     }
-    
-    
+
+
     /** Creates a new instance of LocatorHistory */
     public LocatorHistory(int max) {
         maxsize = max;
         clear();
     }
-    
-    
+
+
     public void clear() {
         history = new ArrayList<>(maxsize);
-        for(int i=0; i<maxsize; i++) history.add(null);
+        for (int i = 0; i < maxsize; i++)
+            history.add(null);
         index = 0;
         top = 0;
     }
-    
-    public void setCurrentViewPosition(int pos){
-        T2<Locator,Integer> page=peekCurrent();
-        if(page==null) return;
-        history.set(index-1, t2(page.e1,pos));
+
+
+    public void setCurrentViewPosition(int pos) {
+        T2<Locator, Integer> page = peekCurrent();
+        if (page == null)
+            return;
+        history.set(index - 1, t2(page.e1, pos));
     }
-    
+
+
     public void add(Locator o) {
-        add(o,0);
+        add(o, 0);
     }
-    public void add(Locator o,int pos) {
-        if(index == 0 || (o != null && !o.equals( history.get(index-1).e1 ))) {
-            if(index >= history.size()) {
+
+
+    public void add(Locator o, int pos) {
+        if (index == 0 || (o != null && !o.equals(history.get(index - 1).e1))) {
+            if (index >= history.size()) {
                 history.remove(0);
                 history.add(null);
                 index--;
             }
-            history.set(index++, t2(o,pos));
+            history.set(index++, t2(o, pos));
             top = index;
-            //Logger.println("history: " + index + ", " + top);
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    public T2<Locator,Integer> getPrevious() {
-        if(index > 1) {
+
+
+    public T2<Locator, Integer> getPrevious() {
+        if (index > 1) {
             index = index - 2;
             return history.get(index++);
         }
         return null;
     }
-    
-    
-    public T2<Locator,Integer> getNext() {
-        if(top > index) {
+
+
+    public T2<Locator, Integer> getNext() {
+        if (top > index) {
             return history.get(index++);
         }
         return null;
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    public T2<Locator,Integer> peekPrevious() {
-        if(index > 1) {
-            return history.get(index-2);
+
+
+    public T2<Locator, Integer> peekPrevious() {
+        if (index > 1) {
+            return history.get(index - 2);
         }
-        return null;      
+        return null;
     }
-    
-    
-    public T2<Locator,Integer> peekNext() {
-        if(top > index) {
+
+
+    public T2<Locator, Integer> peekNext() {
+        if (top > index) {
             return history.get(index);
         }
         return null;
     }
-    
-    public T2<Locator,Integer> peekCurrent(){
-        if(index > 0) {
-            return history.get(index-1);
+
+
+    public T2<Locator, Integer> peekCurrent() {
+        if (index > 0) {
+            return history.get(index - 1);
         }
-        return null;      
+        return null;
     }
-    
-    
+
+
     public boolean isEmpty() {
         return top == 0;
     }
-    
-    
-    
+
+
+
     public Collection<Locator> getLocators() {
         Collection<Locator> locs = new ArrayList<>();
         Locator l = null;
-        for(int i=0; i<top; i++) {
+        for (int i = 0; i < top; i++) {
             l = history.get(i).e1;
-            if(l != null) {
+            if (l != null) {
                 locs.add(l);
             }
         }
         return locs;
     }
-    
-    
-    
-    
-    
+
+
+
     public Object[] getBackPopupStruct(Wandora admin) {
         Collection<Object> struct = new ArrayList<>();
         Locator l = null;
@@ -190,14 +194,14 @@ public class LocatorHistory {
         String name = null;
         Icon icon = UIBox.getIcon("gui/icons/shortcut.png");
         int max = 10;
-        for(int i=index-2; i>=0 && max-- >= 0; i--) {
+        for (int i = index - 2; i >= 0 && max-- >= 0; i--) {
             l = history.get(i).e1;
-            if(l != null) {
+            if (l != null) {
                 try {
                     t = admin.getTopicMap().getTopic(l);
-                    if(t != null) {
+                    if (t != null) {
                         name = t.getBaseName();
-                        if(name != null && name.length() > 0) {
+                        if (name != null && name.length() > 0) {
                             struct.add(name);
                         }
                         else {
@@ -207,17 +211,16 @@ public class LocatorHistory {
                         struct.add(icon);
                     }
                 }
-                catch(Exception e) {
-                	logger.error(e);
+                catch (Exception e) {
+                    logger.error(e);
                 }
             }
         }
         return struct.toArray();
     }
-    
-    
-    
-    
+
+
+
     public Object[] getForwardPopupStruct(Wandora admin) {
         Collection<Object> struct = new ArrayList<>();
         Locator l = null;
@@ -225,14 +228,14 @@ public class LocatorHistory {
         String name = null;
         Icon icon = UIBox.getIcon("gui/icons/shortcut.png");
         int max = 10;
-        for(int i=index; i<top && max-- >= 0; i++) {
+        for (int i = index; i < top && max-- >= 0; i++) {
             l = history.get(i).e1;
-            if(l != null) {
+            if (l != null) {
                 try {
                     t = admin.getTopicMap().getTopic(l);
-                    if(t != null) {
+                    if (t != null) {
                         name = t.getBaseName();
-                        if(name != null && name.length() > 0) {
+                        if (name != null && name.length() > 0) {
                             struct.add(name);
                         }
                         else {
@@ -242,12 +245,12 @@ public class LocatorHistory {
                         struct.add(icon);
                     }
                 }
-                catch(Exception e) {
-                	logger.error(e);
+                catch (Exception e) {
+                    logger.error(e);
                 }
             }
         }
         return struct.toArray();
     }
-    
+
 }
