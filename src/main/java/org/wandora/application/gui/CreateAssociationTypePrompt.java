@@ -28,8 +28,9 @@ package org.wandora.application.gui;
 
 
 import java.awt.GridBagConstraints;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -51,53 +52,62 @@ import org.wandora.utils.swing.GuiTools;
  * @author  olli
  */
 public class CreateAssociationTypePrompt extends javax.swing.JDialog {
-	private static final long serialVersionUID = 1L;
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(CreateAssociationTypePrompt.class);
-	
-    private GetTopicButton typeButton;    
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(CreateAssociationTypePrompt.class);
+
+    private GetTopicButton typeButton;
     private Wandora wandora;
-    private Vector<T2<GetTopicButton,GetTopicButton>> roles;
+    private List<T2<GetTopicButton, GetTopicButton>> roles;
+
+    
     
     /** Creates new form CreateAssociationTypePrompt */
     public CreateAssociationTypePrompt(Wandora wandora) throws TopicMapException {
-        super(wandora,true);
-        this.wandora=wandora;
-        initialize();        
+        super(wandora, true);
+        this.wandora = wandora;
+        initialize();
         addPlayer();
-        addPlayer();        
+        addPlayer();
     }
-    public CreateAssociationTypePrompt(Wandora wandora,Association a) throws TopicMapException {
-        super(wandora,true);
-        this.wandora=wandora;
+
+
+    public CreateAssociationTypePrompt(Wandora wandora, Association a) throws TopicMapException {
+        super(wandora, true);
+        this.wandora = wandora;
         initialize();
         typeButton.setTopic(a.getType());
-        for(Topic role : a.getRoles()){
-            Topic player=a.getPlayer(role);
-            Topic roleClass=null;
-            if(!player.isOfType(role)){
-                Collection<Topic> types=player.getTypes();
-                if(!types.isEmpty()) roleClass=types.iterator().next();
+        for (Topic role : a.getRoles()) {
+            Topic player = a.getPlayer(role);
+            Topic roleClass = null;
+            if (!player.isOfType(role)) {
+                Collection<Topic> types = player.getTypes();
+                if (!types.isEmpty())
+                    roleClass = types.iterator().next();
             }
-            addPlayer(role,roleClass);
+            addPlayer(role, roleClass);
         }
     }
-    public CreateAssociationTypePrompt(Wandora wandora,Collection<Topic> roles) throws TopicMapException {
-        super(wandora,true);
-        this.wandora=wandora;
+
+
+    public CreateAssociationTypePrompt(Wandora wandora, Collection<Topic> roles) throws TopicMapException {
+        super(wandora, true);
+        this.wandora = wandora;
         initialize();
-        for(Topic t : roles){
-            addPlayer(t,null);
+        for (Topic t : roles) {
+            addPlayer(t, null);
         }
     }
-    
+
+
     private void initialize() throws TopicMapException {
-        roles=new Vector<T2<GetTopicButton,GetTopicButton>>();
-        typeButton=new GetTopicButton(wandora,this);
+        roles = new ArrayList<>();
+        typeButton = new GetTopicButton(wandora, this);
         initComponents();
         typeButton.updateText();
-        GuiTools.centerWindow(this,wandora);        
+        GuiTools.centerWindow(this, wandora);
     }
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -194,128 +204,142 @@ public class CreateAssociationTypePrompt extends javax.swing.JDialog {
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-429)/2, (screenSize.height-340)/2, 429, 340);
+        setBounds((screenSize.width - 429) / 2, (screenSize.height - 340) / 2, 429, 340);
     }// </editor-fold>//GEN-END:initComponents
+
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        try{
+        try {
             createAssociationType();
-        }catch(TopicMapException tme){
-        	logger.error(tme);
+        }
+        catch (TopicMapException tme) {
+            logger.error(tme);
         }
         this.setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
 
+
     private void addPlayerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPlayerButtonActionPerformed
-        try{
+        try {
             addPlayer();
-        }catch(TopicMapException tme){
-        	logger.error(tme);
+        }
+        catch (TopicMapException tme) {
+            logger.error(tme);
         }
     }//GEN-LAST:event_addPlayerButtonActionPerformed
-    
+
+
     public void createAssociationType() throws TopicMapException {
-        TopicMap tm=wandora.getTopicMap();
-        boolean cont=true;
-        if(typeButton.getTopic()==null) cont=false;
-        for(T2<GetTopicButton,GetTopicButton> t : roles){
-            if(t.e1.getTopic()==null) cont=false;
+        TopicMap tm = wandora.getTopicMap();
+        boolean cont = true;
+        if (typeButton.getTopic() == null)
+            cont = false;
+        for (T2<GetTopicButton, GetTopicButton> t : roles) {
+            if (t.e1.getTopic() == null)
+                cont = false;
         }
-        if(!cont){
-            JOptionPane.showMessageDialog(this,"You must select topic for association type and all roles.");
+        if (!cont) {
+            JOptionPane.showMessageDialog(this, "You must select topic for association type and all roles.");
             return;
-        }        
-        
-        Topic selectedType=typeButton.getTopic();
-        
-        Topic associationType=tm.getTopic(SchemaBox.ASSOCIATIONTYPE_SI);
-        Topic role=tm.getTopic(SchemaBox.ROLE_SI);
-        Topic roleClass=tm.getTopic(SchemaBox.ROLECLASS_SI);
-        Topic contentType=tm.getTopic(SchemaBox.CONTENTTYPE_SI);
-        
+        }
+
+        Topic selectedType = typeButton.getTopic();
+
+        Topic associationType = tm.getTopic(SchemaBox.ASSOCIATIONTYPE_SI);
+        Topic role = tm.getTopic(SchemaBox.ROLE_SI);
+        Topic roleClass = tm.getTopic(SchemaBox.ROLECLASS_SI);
+        Topic contentType = tm.getTopic(SchemaBox.CONTENTTYPE_SI);
+
         selectedType.addType(associationType);
-        
-        for(T2<GetTopicButton,GetTopicButton> t : roles){
-            Association a=tm.createAssociation(role);
-            a.addPlayer(selectedType,associationType);
-            Topic selectedRole=t.e1.getTopic();
+
+        for (T2<GetTopicButton, GetTopicButton> t : roles) {
+            Association a = tm.createAssociation(role);
+            a.addPlayer(selectedType, associationType);
+            Topic selectedRole = t.e1.getTopic();
             selectedRole.addType(role);
-            a.addPlayer(selectedRole,role);
-            Topic selectedRoleClass=t.e2.getTopic();
-            if(selectedRoleClass!=null){
-                a=tm.createAssociation(roleClass);
-                a.addPlayer(selectedRole,role);
-                a.addPlayer(selectedRoleClass,roleClass);
-                
+            a.addPlayer(selectedRole, role);
+            Topic selectedRoleClass = t.e2.getTopic();
+            if (selectedRoleClass != null) {
+                a = tm.createAssociation(roleClass);
+                a.addPlayer(selectedRole, role);
+                a.addPlayer(selectedRoleClass, roleClass);
+
                 selectedRoleClass.addType(contentType);
-                a=tm.createAssociation(associationType);
-                a.addPlayer(selectedRoleClass,contentType);
-                a.addPlayer(selectedType,associationType);
+                a = tm.createAssociation(associationType);
+                a.addPlayer(selectedRoleClass, contentType);
+                a.addPlayer(selectedType, associationType);
             }
-            else{
+            else {
                 selectedRole.addType(contentType);
-                a=tm.createAssociation(associationType);
-                a.addPlayer(selectedRole,contentType);
-                a.addPlayer(selectedType,associationType);
+                a = tm.createAssociation(associationType);
+                a.addPlayer(selectedRole, contentType);
+                a.addPlayer(selectedType, associationType);
             }
         }
     }
 
-    private void refreshPlayersPanel(){
+
+    private void refreshPlayersPanel() {
         playersPanel.removeAll();
-        int counter=0;
-        GridBagConstraints gbc=new GridBagConstraints();
-        gbc.insets=new java.awt.Insets(5,5,5,5);
-        gbc.weightx=1.0;
-        gbc.anchor=GridBagConstraints.CENTER;
-        gbc.gridx=1;
-        gbc.gridy=1;
-        playersPanel.add(new SimpleLabel("Role"),gbc);
-        gbc.gridx=2;
-        playersPanel.add(new SimpleLabel("Class"),gbc);
-        for(T2<GetTopicButton,GetTopicButton> t : roles){            
-            gbc.gridx=1;
-            gbc.gridy=counter+2;
-            gbc.fill=GridBagConstraints.HORIZONTAL;
-            playersPanel.add(t.e1,gbc);
-            gbc.gridx=2;
-            playersPanel.add(t.e2,gbc);
-            SimpleButton deleteButton=new SimpleButton("Remove");
-            final int fcounter=counter;
-            deleteButton.addActionListener(new java.awt.event.ActionListener(){
-                public void actionPerformed(java.awt.event.ActionEvent e){
+        int counter = 0;
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new java.awt.Insets(5, 5, 5, 5);
+        gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        playersPanel.add(new SimpleLabel("Role"), gbc);
+        gbc.gridx = 2;
+        playersPanel.add(new SimpleLabel("Class"), gbc);
+        for (T2<GetTopicButton, GetTopicButton> t : roles) {
+            gbc.gridx = 1;
+            gbc.gridy = counter + 2;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            playersPanel.add(t.e1, gbc);
+            gbc.gridx = 2;
+            playersPanel.add(t.e2, gbc);
+            SimpleButton deleteButton = new SimpleButton("Remove");
+            final int fcounter = counter;
+            deleteButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
                     roles.remove(fcounter);
                     refreshPlayersPanel();
                 }
             });
-            gbc.gridx=3;
-            gbc.weightx=0.0;
-            gbc.fill=GridBagConstraints.NONE;
-            playersPanel.add(deleteButton,gbc);
+            gbc.gridx = 3;
+            gbc.weightx = 0.0;
+            gbc.fill = GridBagConstraints.NONE;
+            playersPanel.add(deleteButton, gbc);
             counter++;
         }
-        gbc.gridx=1;
-        gbc.gridy=counter+2;
-        gbc.weighty=1.0;
-        playersPanel.add(new JPanel(),gbc);
-        
+        gbc.gridx = 1;
+        gbc.gridy = counter + 2;
+        gbc.weighty = 1.0;
+        playersPanel.add(new JPanel(), gbc);
+
         playersPanel.revalidate();
         playersPanel.repaint();
     }
-    
+
+
     public void addPlayer() throws TopicMapException {
-        addPlayer(null,null);
+        addPlayer(null, null);
     }
-    public void addPlayer(Topic role,Topic roleClass) throws TopicMapException {
-        T2<GetTopicButton,GetTopicButton> t=new T2<>(new GetTopicButton(role,wandora,this),new GetTopicButton(roleClass,wandora,this,true));
+
+
+    public void addPlayer(Topic role, Topic roleClass) throws TopicMapException {
+        T2<GetTopicButton, GetTopicButton> t = new T2<>(
+                new GetTopicButton(role, wandora, this),
+                new GetTopicButton(roleClass, wandora, this, true));
         roles.add(t);
         refreshPlayersPanel();
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton _typeButton;
     private javax.swing.JButton addPlayerButton;
@@ -326,5 +350,5 @@ public class CreateAssociationTypePrompt extends javax.swing.JDialog {
     private javax.swing.JButton okButton;
     private javax.swing.JPanel playersPanel;
     // End of variables declaration//GEN-END:variables
-    
+
 }

@@ -38,65 +38,55 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author olli, akivela
  */
 public class TopicGuiWrapper {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicGuiWrapper.class);
-	
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicGuiWrapper.class);
+
     public static final String PROCESSING_TYPE = "PROCESSING_TYPE";
-    
+
     public Topic topic;
     public String icon;
     public String associationType;
     public TreePath path;
-    
-    
-    
-    
+
+
+
     public TopicGuiWrapper(Topic t, String icon, String associationType, TreePath parent) {
-        this.topic=t;
-        this.icon=icon;
-        this.associationType=associationType;
-        if(parent==null) path=new TreePath(this);
-        else path=parent.pathByAddingChild(this);
+        this.topic = t;
+        this.icon = icon;
+        this.associationType = associationType;
+        if (parent == null) {
+            path = new TreePath(this);
+        }
+        else {
+            path = parent.pathByAddingChild(this);
+        }
     }
+
+
     public TopicGuiWrapper(Topic t, String icon) {
-        this(t,icon,"",null);
+        this(t, icon, "", null);
     }
+
+
     public TopicGuiWrapper(Topic t) {
-        this(t,null,"",null);
+        this(t, null, "", null);
     }
-    
-    
+
+
     @Override
     public String toString() {
         try {
-            if(PROCESSING_TYPE.equals(associationType)) {
+            if (PROCESSING_TYPE.equals(associationType)) {
                 return "Processing...";
             }
             else {
                 return TopicToString.toString(topic);
             }
         }
-        catch(Exception e){
-        	logger.error(e);
-            return "[Exception retrieving name]";
-        }
-    }
-    
-    /*
-    public String toString(int stringType) throws TopicMapException {
-        try {
-            if(PROCESSING_TYPE.equals(associationType)) {
-                return "Processing...";
-            }
-            else {
-                return TopicToString.toString(topic, stringType);
-            }
-        }
-        catch(Exception e){
+        catch (Exception e) {
             logger.error(e);
             return "[Exception retrieving name]";
         }
     }
-     * 
-     */
-   
+
+
 }

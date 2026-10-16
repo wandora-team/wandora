@@ -39,40 +39,40 @@ import org.wandora.utils.Textbox;
  * @author  akivela
  */
 public class NewTopicPanel extends javax.swing.JPanel {
-	
-	private static final long serialVersionUID = 1L;
-	
-    
+
+    private static final long serialVersionUID = 1L;
+
+
     private boolean accepted = false;
     private JDialog parent = null;
-    
-    
+
+
     /** Creates new form NewTopicPanel */
     public NewTopicPanel(JDialog parent) {
         this.parent = parent;
         initComponents();
-        if(parent != null) {
+        if (parent != null) {
             parent.add(this);
             parent.setVisible(true);
         }
-        
     }
-    
-    
+
+
     public boolean getAccepted() {
         return accepted;
     }
-    
-    
+
+
     public String getBasename() {
         return Textbox.trimExtraSpaces(basenameTextField.getText());
     }
-    
-    
+
+
     public String getSI() {
         return Textbox.trimExtraSpaces(SITextField.getText());
     }
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -193,36 +193,44 @@ public class NewTopicPanel extends javax.swing.JPanel {
         add(buttonPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
     private void accepted(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accepted
         accepted = true;
-        if(parent != null) parent.setVisible(false);
+        if (parent != null) {
+            parent.setVisible(false);
+        }
     }//GEN-LAST:event_accepted
+
 
     private void cancelled(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelled
         accepted = false;
-        if(parent != null) parent.setVisible(false);
+        if (parent != null) {
+            parent.setVisible(false);
+        }
     }//GEN-LAST:event_cancelled
 
+
     private void basenameTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_basenameTextFieldKeyReleased
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             accepted(null);
         }
     }//GEN-LAST:event_basenameTextFieldKeyReleased
 
+
     private void SITextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SITextFieldKeyReleased
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             accepted(null);
         }
     }//GEN-LAST:event_SITextFieldKeyReleased
 
+
     private void okButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_okButtonKeyReleased
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             accepted(null);
         }
     }//GEN-LAST:event_okButtonKeyReleased
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel SILabel;
     private javax.swing.JTextField SITextField;
@@ -234,5 +242,5 @@ public class NewTopicPanel extends javax.swing.JPanel {
     private javax.swing.JPanel fieldPanel;
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables
-    
+
 }

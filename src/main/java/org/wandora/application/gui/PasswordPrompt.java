@@ -38,44 +38,44 @@ import org.wandora.application.gui.simple.SimpleLabel;
 
 
 
-
 /**
  *
  * @author  olli, ak
  */
 public class PasswordPrompt extends javax.swing.JDialog {
-    
 
 
-	private static final long serialVersionUID = 1L;
 
-	
-	private boolean cancelled;
+    private static final long serialVersionUID = 1L;
+
+
+    private boolean cancelled;
     public static Icon lockIcon = UIBox.getIcon("gui/icons/dialog/lock.gif");
-    
-    
+
+
     /** Creates new form PasswordPrompt */
     public PasswordPrompt(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        cancelled=false;
-        
-        if(parent.isVisible()) {
-            this.setLocation(parent.getLocation().x+parent.getWidth()/2-this.getWidth()/2, 
-                             parent.getLocation().y+parent.getHeight()/2-this.getHeight()/2);
+        cancelled = false;
+
+        if (parent.isVisible()) {
+            this.setLocation(
+                    parent.getLocation().x + parent.getWidth() / 2 - this.getWidth() / 2,
+                    parent.getLocation().y + parent.getHeight() / 2 - this.getHeight() / 2);
         }
         else {
             UIBox.centerScreen(this);
         }
         this.setAlwaysOnTop(true);
     }
-    
-    
+
+
     public void setLabelText(String str) {
         this.passwordInfoLabel.setText(str);
     }
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -227,23 +227,26 @@ public class PasswordPrompt extends javax.swing.JDialog {
         setBounds(0, 0, 437, 187);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void passwordFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordFieldKeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            cancelled=false;
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            cancelled = false;
             this.setVisible(false);
         }
-}//GEN-LAST:event_passwordFieldKeyPressed
+    }//GEN-LAST:event_passwordFieldKeyPressed
+
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        cancelled=false;
+        cancelled = false;
         this.setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
 
+
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        cancelled=true;
+        cancelled = true;
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
-        
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel fieldPanel;
@@ -260,14 +263,18 @@ public class PasswordPrompt extends javax.swing.JDialog {
     private javax.swing.JTextField usernameField;
     private javax.swing.JLabel usernameLabel;
     // End of variables declaration//GEN-END:variables
-    
-    public String getUsername(){
+
+    public String getUsername() {
         return usernameField.getText();
     }
-    public char[] getPassword(){
+
+
+    public char[] getPassword() {
         return passwordField.getPassword();
     }
-    public boolean wasCancelled(){
+
+
+    public boolean wasCancelled() {
         return cancelled;
     }
 }

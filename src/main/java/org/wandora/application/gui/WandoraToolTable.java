@@ -60,70 +60,72 @@ import org.wandora.utils.swing.TableSorter;
  *
  * @author akivela
  */
-public class WandoraToolTable extends JTable implements MouseListener, ActionListener /*, DragSourceListener , DragGestureListener*/ {
-	private static final long serialVersionUID = 1L;
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolTable.class);
+public class WandoraToolTable extends JTable implements MouseListener, ActionListener {
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolTable.class);
 
-	private Wandora wandora = null;
-    
+    private Wandora wandora = null;
+
     private Object[] cols = {
-        "Name",
-        "Class",
-        "Types",
-        "Source"
+            "Name",
+            "Class",
+            "Types",
+            "Source"
     };
     private int[] colsWidths = {
-        170,
-        400,
-        80,
-        200
+            170,
+            400,
+            80,
+            200
     };
 
     private String[] descriptions;
-    
+
     private Object[][] data;
 
     private TableModel tableModel;
     private WandoraTool[] tools = null;
-    
+
     private Object[] popupStruct = new Object[] {
-        "Info...",
-        "---",
-        "Execute...",
-        "Configure...",
-        "Release tool locks...",
-        "Kill threads...",
+            "Info...",
+            "---",
+            "Execute...",
+            "Configure...",
+            "Release tool locks...",
+            "Kill threads...",
     };
     private JPopupMenu toolTableMenu = null;
     private TableSorter sorter;
-    
-    
+
     private MouseEvent mouseEvent;
-    
-    
+
+
     public WandoraToolTable(Wandora w) {
         this.wandora = w;
     }
-    
-    
- 
+
+
+
     public void initialize(WandoraTool[] t) {
-        WandoraToolManager2 toolManager=wandora.getToolManager();
+        WandoraToolManager2 toolManager = wandora.getToolManager();
         try {
-            if(t == null) return;
+            if (t == null) {
+                return;
+            }
             tools = t;
-            this.setAutoCreateColumnsFromModel(false); 
-                        
+            this.setAutoCreateColumnsFromModel(false);
+
             descriptions = new String[tools.length];
             data = new Object[tools.length][4];
-            for(int i=0; i<tools.length; i++) {
-                data[i][0]=tools[i].getName();
-                data[i][1]=tools[i].getClass().getName();
-                data[i][2]=tools[i].getType().toString();
-                data[i][3]="unknown";
-                if(toolManager!=null){
-                    ToolInfo info=toolManager.getToolInfo(tools[i]);
-                    if(info!=null) data[i][3]=info.sourceType+":"+info.source;
+            for (int i = 0; i < tools.length; i++) {
+                data[i][0] = tools[i].getName();
+                data[i][1] = tools[i].getClass().getName();
+                data[i][2] = tools[i].getType().toString();
+                data[i][3] = "unknown";
+                if (toolManager != null) {
+                    ToolInfo info = toolManager.getToolInfo(tools[i]);
+                    if (info != null)
+                        data[i][3] = info.sourceType + ":" + info.source;
                 }
                 descriptions[i] = tools[i].getDescription();
             }
@@ -132,126 +134,139 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
             sorter = new TopicTableSorter(tableModel);
             sorter.setTableHeader(this.getTableHeader());
             this.setModel(sorter);
-            
+
             this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             this.setRowSelectionAllowed(true);
             this.setColumnSelectionAllowed(false);
-            
-            for(int i=0; i<cols.length; i++) {
-                this.addColumn(new TableColumn(i,colsWidths[i],new ToolTableCellRenderer(),null));
+
+            for (int i = 0; i < cols.length; i++) {
+                this.addColumn(new TableColumn(i, colsWidths[i], new ToolTableCellRenderer(), null));
             }
             this.addMouseListener(this);
-            
+
             toolTableMenu = UIBox.makePopupMenu(popupStruct, this);
             this.setComponentPopupMenu(toolTableMenu);
         }
-        catch(Exception e) {
-            if(wandora != null) wandora.handleError(e);
-            else logger.error(e);
+        catch (Exception e) {
+            if (wandora != null)
+                wandora.handleError(e);
+            else
+                logger.error(e);
         }
-        
+
     }
-    
-    
-    
+
+
+
     public WandoraTool getSelectedTool() {
         int row = this.getSelectedRow();
-        if(row >= 0 && row < tools.length) {
+        if (row >= 0 && row < tools.length) {
             return tools[mapRowIndexToModel(row)];
         }
         return null;
     }
-    
+
+
     public WandoraTool getToolAt(MouseEvent e) {
         return getToolAt(e.getPoint());
     }
+
+
     public WandoraTool getToolAt(int x, int y) {
-        return getToolAt(new Point(x,y));
+        return getToolAt(new Point(x, y));
     }
+
+
     public WandoraTool getToolAt(Point point) {
-        int row=rowAtPoint(point);
+        int row = rowAtPoint(point);
         return tools[mapRowIndexToModel(row)];
     }
-    
-    public int mapRowIndexToModel(int row){
-        //return row;
+
+
+    public int mapRowIndexToModel(int row) {
         return sorter.modelIndex(row);
     }
-    public int mapRowIndexToView(int row){
-        //return row;
+
+
+    public int mapRowIndexToView(int row) {
         return sorter.viewIndex(row);
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-        
+
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
-        if(mouseEvent.getClickCount()>=2){
-            WandoraToolManager2 toolManager=wandora.getToolManager();
-            ToolInfo info=null;
-            WandoraTool tool=getToolAt(mouseEvent);
-            if(toolManager!=null) info=toolManager.getToolInfo(tool);
-            
+        if (mouseEvent.getClickCount() >= 2) {
+            WandoraToolManager2 toolManager = wandora.getToolManager();
+            ToolInfo info = null;
+            WandoraTool tool = getToolAt(mouseEvent);
+            if (toolManager != null) {
+                info = toolManager.getToolInfo(tool);
+            }
+
             new WandoraToolInfoDialog(wandora, tool, info);
         }
     }
-    
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
 
     }
-    
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
     }
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
     }
-    
-    
-    
-    
-    
+
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String c = e.getActionCommand();
-        if(c == null) return;
+        if (c == null)
+            return;
         c = c.toLowerCase();
-        
+
         // ***** EXECUTE *****
-        if(c.startsWith("execute")) {
+        if (c.startsWith("execute")) {
             try {
                 WandoraTool t = getSelectedTool();
-                if(t != null) {
+                if (t != null) {
                     t.execute(wandora);
                 }
             }
-            catch(Exception ex) {
-            	logger.error(ex);
+            catch (Exception ex) {
+                logger.error(ex);
             }
-            catch(Error er) {
-            	logger.error(er);
+            catch (Error er) {
+                logger.error(er);
             }
         }
-        
+
         // ***** CONFIGURE *****
-        else if(c.startsWith("configure")) {
+        else if (c.startsWith("configure")) {
             try {
                 WandoraTool t = getSelectedTool();
-                if(t != null) {
-                    if(t.isConfigurable()) {
+                if (t != null) {
+                    if (t.isConfigurable()) {
                         t.configure(wandora, wandora.getOptions(), wandora.getToolManager().getOptionsPrefix(t));
                     }
                     else {
@@ -259,196 +274,214 @@ public class WandoraToolTable extends JTable implements MouseListener, ActionLis
                     }
                 }
             }
-            catch(Exception ex) {
-            	logger.error(ex);
+            catch (Exception ex) {
+                logger.error(ex);
             }
-            catch(Error er) {
-            	logger.error(er);
+            catch (Error er) {
+                logger.error(er);
             }
         }
-        
-        
+
+
         // ***** RELEASE TOOL LOCKS *****
-        else if(c.startsWith("release tool locks")) {
+        else if (c.startsWith("release tool locks")) {
             try {
                 WandoraTool t = getSelectedTool();
-                if(t != null) {
+                if (t != null) {
                     String className = t.getClass().getSimpleName();
-                    if(t instanceof AbstractWandoraTool && !((AbstractWandoraTool) t).allowMultipleInvocations()) {
-                        int a = WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to release tool lock for class '"+className+"'", "Release tool lock");
-                        if(a == WandoraOptionPane.YES_OPTION) {
+                    if (t instanceof AbstractWandoraTool && !((AbstractWandoraTool) t).allowMultipleInvocations()) {
+                        int a = WandoraOptionPane.showConfirmDialog(wandora,
+                                "Are you sure you want to release tool lock for class '" + className + "'",
+                                "Release tool lock");
+                        if (a == WandoraOptionPane.YES_OPTION) {
                             boolean released = ((AbstractWandoraTool) t).clearToolLock();
-                            if(!released) WandoraOptionPane.showMessageDialog(wandora, "Tool class '"+className+"' was not locked. Couldn't release tool locks.");
+                            if (!released)
+                                WandoraOptionPane.showMessageDialog(wandora,
+                                        "Tool class '" + className + "' was not locked. Couldn't release tool locks.");
                         }
                     }
                     else {
-                        WandoraOptionPane.showMessageDialog(wandora, "Tool class '"+className+"' doesn't support tool locks. Can't release tool locks.");
+                        WandoraOptionPane.showMessageDialog(wandora,
+                                "Tool class '" + className + "' doesn't support tool locks. Can't release tool locks.");
                     }
                 }
             }
-            catch(Exception ex) {
-            	logger.error(ex);
+            catch (Exception ex) {
+                logger.error(ex);
             }
-            catch(Error er) {
-            	logger.error(er);
+            catch (Error er) {
+                logger.error(er);
             }
         }
-        
+
         // ***** KILL TOOL THREADS *****
-        else if(c.startsWith("kill threads")) {
+        else if (c.startsWith("kill threads")) {
             try {
                 WandoraTool t = getSelectedTool();
-                if(t != null) {
+                if (t != null) {
                     String className = t.getClass().getSimpleName();
-                    if(t instanceof AbstractWandoraTool && ((AbstractWandoraTool) t).runInOwnThread()) {
-                        int a = WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to interrupt tool threads for class '"+className+"'", "Interrupt tool threads");
-                        if(a == WandoraOptionPane.YES_OPTION) {
+                    if (t instanceof AbstractWandoraTool && ((AbstractWandoraTool) t).runInOwnThread()) {
+                        int a = WandoraOptionPane.showConfirmDialog(wandora,
+                                "Are you sure you want to interrupt tool threads for class '" + className + "'",
+                                "Interrupt tool threads");
+                        if (a == WandoraOptionPane.YES_OPTION) {
                             ((AbstractWandoraTool) t).interruptThreads();
                         }
                     }
                     else {
-                        WandoraOptionPane.showMessageDialog(wandora, "Tool class '"+className+"' doesn't support interrups. Can't kill tool threads.");
+                        WandoraOptionPane.showMessageDialog(wandora,
+                                "Tool class '" + className + "' doesn't support interrups. Can't kill tool threads.");
                     }
                 }
             }
-            catch(Exception ex) {
-            	logger.error(ex);
+            catch (Exception ex) {
+                logger.error(ex);
             }
-            catch(Error er) {
-            	logger.error(er);
+            catch (Error er) {
+                logger.error(er);
             }
         }
-        
+
         // ***** TOOL INFO *****
-        else if(c.startsWith("info")) {
+        else if (c.startsWith("info")) {
             try {
                 WandoraTool t = getSelectedTool();
-                if(t != null) {
-                    WandoraToolManager2 toolManager=wandora.getToolManager();
-                    ToolInfo info=null;
-                    if(toolManager!=null) info=toolManager.getToolInfo(t);
-                    
+                if (t != null) {
+                    WandoraToolManager2 toolManager = wandora.getToolManager();
+                    ToolInfo info = null;
+                    if (toolManager != null) {
+                        info = toolManager.getToolInfo(t);
+                    }
+
                     new WandoraToolInfoDialog(wandora, t, info);
                 }
             }
-            catch(Exception ex) {
-            	logger.error(ex);
+            catch (Exception ex) {
+                logger.error(ex);
             }
         }
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // ------------------------------------------------------ ToolTableModel --- 
     // -------------------------------------------------------------------------
-    
-    
-    
-        
+
+
+
     protected class ToolTableModel extends AbstractTableModel {
-        
-        
-        
+
+
+
         private static final long serialVersionUID = 1L;
 
 
-		@Override
+        @Override
         public int getColumnCount() {
-            if(cols != null) return cols.length;
+            if (cols != null) {
+                return cols.length;
+            }
             return 0;
         }
-        
-        
-        
+
+
+
         @Override
         public int getRowCount() {
-            if(data != null) return data.length;
+            if (data != null) {
+                return data.length;
+            }
             return 0;
         }
-        
-        
-        
+
+
+
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             try {
-                if(data != null && rowIndex >= 0 && columnIndex >= 0) {
+                if (data != null && rowIndex >= 0 && columnIndex >= 0) {
                     return data[rowIndex][columnIndex];
                 }
             }
             catch (Exception e) {
-                if(wandora != null) wandora.handleError(e);
-                else logger.error(e);
+                if (wandora != null)
+                    wandora.handleError(e);
+                else
+                    logger.error(e);
             }
             return null;
         }
-        
+
+
         @Override
-        public String getColumnName(int columnIndex){
+        public String getColumnName(int columnIndex) {
             try {
-                if(cols != null && columnIndex >= 0 && cols.length > columnIndex && cols[columnIndex] != null) {
+                if (cols != null && columnIndex >= 0 && cols.length > columnIndex && cols[columnIndex] != null) {
                     return cols[columnIndex].toString();
                 }
                 return "";
             }
             catch (Exception e) {
-                if(wandora != null) wandora.handleError(e);
+                if (wandora != null)
+                    wandora.handleError(e);
                 logger.error(e);
             }
             return "ERROR";
         }
-        
-        
+
+
         @Override
-        public boolean isCellEditable(int row,int col){
+        public boolean isCellEditable(int row, int col) {
             return false;
         }
-        
+
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public class ToolTableCellRenderer extends DefaultTableCellRenderer {
 
 
         private static final long serialVersionUID = 1L;
 
-		@Override
+        @Override
         public Component getTableCellRendererComponent(
-                            JTable table, Object value,
-                            boolean isSelected, boolean hasFocus,
-                            int row, int column) {
+                JTable table, Object value,
+                boolean isSelected, boolean hasFocus,
+                int row, int column) {
 
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            if(c instanceof JLabel) {
+            if (c instanceof JLabel) {
                 JLabel l = (JLabel) c;
-                if(column == 0) {
+                if (column == 0) {
                     l.setIcon(tools[mapRowIndexToModel(row)].getIcon());
                 }
-                //l.setToolTipText(Textbox.makeHTMLParagraph(descriptions[row], 40));
             }
             return c;
         }
 
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public class ToolTableSorter extends TableSorter {
 
         private static final long serialVersionUID = 1L;
 
-		public ToolTableSorter() {
+        public ToolTableSorter() {
             super();
         }
+
 
         public ToolTableSorter(TableModel tableModel) {
             super(tableModel);
         }
+
 
         public ToolTableSorter(TableModel tableModel, JTableHeader tableHeader) {
             super(tableModel, tableHeader);

@@ -35,7 +35,6 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureListener;
-import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -68,29 +67,28 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 
-
 /**
  *
  * @author  akivela
  */
-public class DropExtractPanel extends JPanel implements ComponentListener, ActionListener, MouseListener, DropTargetListener, DragGestureListener, WandoraToolLogger {
-	private static final long serialVersionUID = 1L;
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DropExtractPanel.class);
-	
-	private Wandora wandora = null;
+public class DropExtractPanel extends JPanel implements ComponentListener, ActionListener, MouseListener,
+        DropTargetListener, DragGestureListener, WandoraToolLogger {
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(DropExtractPanel.class);
+
+    private Wandora wandora = null;
     private WandoraTool tool = null;
-    private DropTarget dt;
     private JPopupMenu popup = null;
     private WandoraToolSet extractTools = null;
-    
-    
-    private Color mouseOverColor = new Color(0,0,0);
-    private Color mouseOutColor = new Color(102,102,102);
+
+
+    private Color mouseOverColor = new Color(0, 0, 0);
+    private Color mouseOutColor = new Color(102, 102, 102);
 
     private boolean forceStop = false;
-    
-    
-    
+
+
+
     /** Creates new form DropExtractPanel */
     public DropExtractPanel() {
         this.wandora = Wandora.getWandora();
@@ -98,12 +96,11 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
         extractorPanel.addMouseListener(this);
         addComponentListener(this);
         updateMenu();
-        dt = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
         String toolName = wandora.options.get("dropExtractor.currentTool");
-        if(toolName == null) {
+        if (toolName == null) {
             toolName = "Simple File Extractor";
         }
-        if(toolName != null) {
+        if (toolName != null) {
             setTool(toolName);
         }
         try {
@@ -115,54 +112,56 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
             });
             setCurrentPanel(extractorPanel);
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
-    
+
+
 
     private void setCurrentPanel(Component p) {
-        if(p != null) {
-            if(p.equals(extractorPanel)) {
+        if (p != null) {
+            if (p.equals(extractorPanel)) {
                 logTextPane.setText("");
             }
-            else if(p.equals(loggerPanel)) {
+            else if (p.equals(loggerPanel)) {
                 logTextPane.setText(log.toString());
             }
             this.revalidate();
         }
     }
-    
-    
-    
+
+
+
     public void setTool(String toolName) {
         forceStop = false;
         WandoraTool t = extractTools.getToolForName(toolName);
-        if(t == null) t = extractTools.getToolForRealName(toolName);
-        if(t != null) {
+        if (t == null) {
+            t = extractTools.getToolForRealName(toolName);
+        }
+        if (t != null) {
             setTool(t, toolName);
         }
         else {
             extractorNameLabel.setText("No tool available");
         }
     }
-    
-    
+
+
     public void setTool(WandoraTool tool, String toolName) {
         forceStop = false;
         this.tool = tool;
-        if(tool != null) {
+        if (tool != null) {
             extractorNameLabel.setText(toolName);
         }
         wandora.options.put("dropExtractor.currentTool", toolName);
     }
-    
-    
+
+
     public void updateMenu() {
         this.setComponentPopupMenu(getPopupMenu());
     }
-    
+
 
     public JPopupMenu getPopupMenu() {
         extractTools = wandora.toolManager.getToolSet("extract");
@@ -170,27 +169,27 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
         popup = UIBox.makePopupMenu(menuItems, this);
         return popup;
     }
-    
-    
+
+
     public Object[] getPopupMenu(WandoraToolSet tools) {
         final ActionListener popupListener = this;
         return tools.getAsObjectArray(
-            tools.new ToolFilter() {
-                @Override
-                public boolean acceptTool(WandoraTool tool) {
-                    return (tool instanceof DropExtractor);
-                }
-                @Override
-                public Object[] addAfterTool(WandoraTool tool) {
-                    return new Object[] { tool.getIcon(), popupListener };
-                }
-             }
-        );
+                tools.new ToolFilter() {
+                    @Override
+                    public boolean acceptTool(WandoraTool tool) {
+                        return (tool instanceof DropExtractor);
+                    }
+
+
+                    @Override
+                    public Object[] addAfterTool(WandoraTool tool) {
+                        return new Object[] { tool.getIcon(), popupListener };
+                    }
+                });
     }
-    
-    
-    
-    
+
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -238,7 +237,8 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
         infoLabel.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
         infoLabel.setForeground(new java.awt.Color(102, 102, 102));
         infoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        infoLabel.setText("<html><p align=\"center\">Drop extractor applies selected \nextractor to dropped files/text. First, select \nextractor in the popup menu. Then, drop a file/text here to start \nextraction.</p></html>\n");
+        infoLabel.setText(
+                "<html><p align=\"center\">Drop extractor applies selected \nextractor to dropped files/text. First, select \nextractor in the popup menu. Then, drop a file/text here to start \nextraction.</p></html>\n");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 2;
@@ -276,8 +276,8 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
         gridBagConstraints.weighty = 1.0;
         add(tabbedPane, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel centeringPanel;
     private javax.swing.JLabel extractorNameLabel;
@@ -290,80 +290,84 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
     private javax.swing.JPanel loggerPanel;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
-    
-    
-    
-    
+
+
+
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String toolName = actionEvent.getActionCommand();
         logger.debug("action performed in Drop extract panel");
         setTool(toolName);
     }
-    
 
-    
-    
+
+
     // ------------------------------------------------------------- mouse -----
-    
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
-        if(popup != null && !popup.isVisible()) {
+        if (popup != null && !popup.isVisible()) {
             popup.show(this, mouseEvent.getX(), mouseEvent.getY());
         }
-    }    
-    
+    }
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
-    }    
-    
+    }
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
-        if(popup != null && !popup.isVisible()) {
+        if (popup != null && !popup.isVisible()) {
             popup.show(this, mouseEvent.getX(), mouseEvent.getY());
         }
     }
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
 
     // --------------------------------------------------------------- dnd -----
-    
+
+
     @Override
     public void dragEnter(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
         extractorNameLabel.setForeground(mouseOverColor);
         iconLabel.setIcon(UIBox.getIcon("gui/drop_extract_on.gif"));
         this.revalidate();
     }
-    
-    
+
+
     @Override
     public void dragExit(java.awt.dnd.DropTargetEvent dropTargetEvent) {
         extractorNameLabel.setForeground(mouseOutColor);
         iconLabel.setIcon(UIBox.getIcon("gui/drop_extract.gif"));
         this.revalidate();
     }
-    
-    
+
+
     @Override
     public void dragOver(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
 
     }
-    
- 
-    
+
+
+
     private void setLogger(WandoraTool tool) {
         tool.setToolLogger(this);
     }
-    
-    
-    
+
+
+
     @Override
     public void drop(final java.awt.dnd.DropTargetDropEvent e) {
         try {
@@ -373,101 +377,102 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
             DataFlavor stringFlavor = DataFlavor.stringFlavor;
             DataFlavor uriListFlavor = new DataFlavor("text/uri-list;class=java.lang.String");
             DataFlavor htmlFlavor = new DataFlavor("text/html; class=java.lang.String");
-            
+
             e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
             Transferable tr = e.getTransferable();
-            
+
             java.util.List<File> fileListTransfer = null;
-            if(tr.isDataFlavorSupported(fileListFlavor)) {
+            if (tr.isDataFlavorSupported(fileListFlavor)) {
                 fileListTransfer = (java.util.List<File>) tr.getTransferData(fileListFlavor);
             }
             final java.util.List<File> files = fileListTransfer;
-            
+
             Collection<URI> uriListTransfer = null;
-            if(tr.isDataFlavorSupported(uriListFlavor)) {
+            if (tr.isDataFlavorSupported(uriListFlavor)) {
                 String urisString = (String) tr.getTransferData(uriListFlavor);
                 uriListTransfer = getURIs(urisString);
             }
             final Collection<URI> uris = uriListTransfer;
-            
+
             String stringTransfer = null;
-            if(tr.isDataFlavorSupported(stringFlavor)) {
+            if (tr.isDataFlavorSupported(stringFlavor)) {
                 stringTransfer = (String) tr.getTransferData(stringFlavor);
             }
             final String string = stringTransfer;
-            
-            
+
+
             String htmlTransfer = null;
-            if(tr.isDataFlavorSupported(htmlFlavor)) {
+            if (tr.isDataFlavorSupported(htmlFlavor)) {
                 htmlTransfer = (String) tr.getTransferData(htmlFlavor);
             }
             final String html = htmlTransfer;
-            
+
             byte[] dataTransfer = null;
-            if(tool instanceof AbstractExtractor) {
-                AbstractExtractor atool = (AbstractExtractor) tool;
+            if (tool instanceof AbstractExtractor atool) {
                 String[] contentTypes = atool.getContentTypes();
-                for(String contentType : contentTypes) {
-                    DataFlavor contentTypeFlavor = new DataFlavor(contentType+"; class=java.lang.String");
-                    if(tr.isDataFlavorSupported(contentTypeFlavor)) {
+                for (String contentType : contentTypes) {
+                    DataFlavor contentTypeFlavor = new DataFlavor(contentType + "; class=java.lang.String");
+                    if (tr.isDataFlavorSupported(contentTypeFlavor)) {
                         dataTransfer = (byte[]) tr.getTransferData(contentTypeFlavor);
                         break;
                     }
                 }
             }
             final byte[] data = dataTransfer;
-            
-            
+
+
             /**
              * Actual drop extraction is handled in a separate thread. Thread
              * is required because drop-thread can't use blocking swing
              * dialogs properly (in single-thread systems).
              */
             Thread dropThread = new Thread() {
-                
+
                 public void run() {
                     try {
-                        if(tool != null) {
+                        if (tool != null) {
                             setLogger(tool);
-                            if(tool instanceof DropExtractor) {
-                                DropExtractor dropTool = (DropExtractor) tool;
-                                
+                            if (tool instanceof DropExtractor dropTool) {
                                 forceStop = false;
 
-                                if(files != null) {
+                                if (files != null) {
                                     dropTool.dropExtract(files.toArray(new File[files.size()]));
                                 }
-                                else if(uris != null) {
+                                else if (uris != null) {
                                     Collection<File> fileURIs = substractFileURIs(uris);
-                                    if(fileURIs != null) {
+                                    if (fileURIs != null) {
                                         dropTool.dropExtract(files.toArray(new File[files.size()]));
                                     }
                                     dropTool.dropExtract(getURIStrings(uris).toArray(new String[uris.size()]));
                                 }
-                                else if(data != null) {
+                                else if (data != null) {
                                     // dropTool.dropExtract(data);
                                 }
-                                else if(html != null) {
+                                else if (html != null) {
                                     dropTool.dropExtract(html);
                                 }
-                                else if(string != null) {
+                                else if (string != null) {
                                     dropTool.dropExtract(string);
                                 }
                             }
                             else {
-                                WandoraOptionPane.showMessageDialog(wandora, "Selected tool does not support drag and drop feature!", "Drag'n'drop not supported", WandoraOptionPane.WARNING_MESSAGE);
+                                WandoraOptionPane.showMessageDialog(wandora,
+                                        "Selected tool does not support drag and drop feature!",
+                                        "Drag'n'drop not supported", WandoraOptionPane.WARNING_MESSAGE);
                             }
                         }
                         else {
-                            WandoraOptionPane.showMessageDialog(wandora, "No extractor selected. Can't extract. Select extractor first.", "No extractor selected", WandoraOptionPane.WARNING_MESSAGE);
+                            WandoraOptionPane.showMessageDialog(wandora,
+                                    "No extractor selected. Can't extract. Select extractor first.",
+                                    "No extractor selected", WandoraOptionPane.WARNING_MESSAGE);
                         }
                     }
 
-                    catch(Exception ex) {
-                    	logger.error(ex);
+                    catch (Exception ex) {
+                        logger.error(ex);
                     }
-                    catch(Error err) {
-                    	logger.error(err);
+                    catch (Error err) {
+                        logger.error(err);
                     }
                     extractorNameLabel.setForeground(mouseOutColor);
                     iconLabel.setIcon(UIBox.getIcon("gui/drop_extract.gif"));
@@ -477,93 +482,107 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
             dropThread.start();
             e.dropComplete(true);
         }
-        catch(IOException ioe) {
-        	logger.error(ioe);
+        catch (IOException ioe) {
+            logger.error(ioe);
         }
-        catch(UnsupportedFlavorException ufe) {
-        	logger.error(ufe);
+        catch (UnsupportedFlavorException ufe) {
+            logger.error(ufe);
         }
-        catch(Exception ex) {
-        	logger.error(ex);
+        catch (Exception ex) {
+            logger.error(ex);
         }
-        catch(Error err) {
-        	logger.error(err);
+        catch (Error err) {
+            logger.error(err);
         }
     }
-    
+
+
     @Override
     public void dropActionChanged(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
     }
 
+
     @Override
     public void dragGestureRecognized(java.awt.dnd.DragGestureEvent dragGestureEvent) {
-    }    
-    
-    
-    
+    }
+
+
+
     public Collection<URI> getURIs(String urisString) {
         String[] split = urisString.split("\n");
         Collection<URI> uris = new ArrayList<URI>();
         for (String splitPart : split) {
             try {
                 URI u = new URI(splitPart.trim());
-                if(u.getScheme()==null) continue;
+                if (u.getScheme() == null) {
+                    continue;
+                }
                 uris.add(u);
             }
-            catch(java.net.URISyntaxException ue) {}
+            catch (java.net.URISyntaxException ue) {
+            }
         }
         return uris;
     }
-    
-    
+
+
     public Collection<String> getURIStrings(Collection<URI> uris) {
-        if(uris == null) return null;
+        if (uris == null) {
+            return null;
+        }
         Collection<String> uriStrings = new ArrayList<String>();
-        for(URI uri : uris) {
+        for (URI uri : uris) {
             try {
                 uriStrings.add(uri.toURL().toExternalForm());
             }
-            catch(Exception e) {}
+            catch (Exception e) {
+            }
         }
         return uriStrings;
     }
 
+
     public Collection<File> substractFileURIs(Collection<URI> uris) {
-        if(uris == null) return null;
+        if (uris == null) {
+            return null;
+        }
         Collection<File> files = new ArrayList<>();
         Collection<URI> urisCopy = new ArrayList<>();
         urisCopy.addAll(uris);
-        for(URI uri : urisCopy) {
+        for (URI uri : urisCopy) {
             try {
-                if("file".equals(uri.getScheme())) {
+                if ("file".equals(uri.getScheme())) {
                     files.add(new File(uri.toURL().getFile()));
                     uris.remove(uri);
                 }
             }
-            catch(Exception e) {}
+            catch (Exception e) {
+            }
         }
         return files.isEmpty() ? null : files;
     }
-    
+
     // --------------------------------------------------------- tool logger ---
-    
+
     // DropExtractorPanel overrides logger in used tool as the default logger
     // usually popups annoying messages that we don't want to show the user
     // during drop aextraction.
 
-    
+
     private StringBuilder log = new StringBuilder("");
-    
+
 
     @Override
     public void hlog(String message) {
         dolog(message);
     }
 
+
     @Override
     public void log(String message) {
         dolog(message);
     }
+
 
     @Override
     public void log(String message, Exception e) {
@@ -574,6 +593,7 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
         dolog(sw.getBuffer().toString());
     }
 
+
     @Override
     public void log(Exception e) {
         StringWriter sw = new StringWriter();
@@ -581,6 +601,7 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
         e.printStackTrace(pw);
         dolog(sw.getBuffer().toString());
     }
+
 
     @Override
     public void log(Error e) {
@@ -590,87 +611,98 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
         dolog(sw.getBuffer().toString());
     }
 
+
     @Override
     public void setProgress(int n) {
-        
+
     }
+
 
     @Override
     public void setProgressMax(int maxn) {
-        
+
     }
+
 
     @Override
     public void setLogTitle(String title) {
-        
+
     }
+
 
     @Override
     public void lockLog(boolean lock) {
-        
+
     }
+
 
     @Override
     public String getHistory() {
         return "";
     }
 
+
     @Override
     public void setState(int state) {
-        
+
     }
+
 
     @Override
     public int getState() {
-       return WandoraToolLogger.EXECUTE;
+        return WandoraToolLogger.EXECUTE;
     }
+
 
     @Override
     public boolean forceStop() {
         return forceStop;
     }
-    
-    
+
+
     private void dolog(String str) {
-        if(str.length() > 50000) {
+        if (str.length() > 50000) {
             str = str.substring(str.indexOf('\n'));
         }
         log.append("\n").append(str);
     }
-    
-    
+
+
 
     // -------------------------------------------------------------------------
-    
-    
+
+
     @Override
     public void componentResized(ComponentEvent e) {
         handleComponentEvent(e);
     }
 
+
     @Override
     public void componentMoved(ComponentEvent e) {
     }
+
 
     @Override
     public void componentShown(ComponentEvent e) {
         handleComponentEvent(e);
     }
 
+
     @Override
     public void componentHidden(ComponentEvent e) {
     }
-    
-    
+
+
     public void handleComponentEvent(ComponentEvent e) {
         try {
             Dimension size = getSize();
             Component c = this.getParent().getParent().getParent();
-            if(c != null) {
-                if(!(c instanceof JScrollPane)) {
+            if (c != null) {
+                if (!(c instanceof JScrollPane)) {
                     size = c.getSize();
                 }
-                if(!size.equals(getSize())) {
+                if (!size.equals(getSize())) {
                     setPreferredSize(size);
                     setMinimumSize(size);
                     setSize(size);
@@ -679,10 +711,10 @@ public class DropExtractPanel extends JPanel implements ComponentListener, Actio
             revalidate();
             repaint();
         }
-        catch(Exception ex) {
+        catch (Exception ex) {
             // SKIP
         }
     }
-    
-    
+
+
 }

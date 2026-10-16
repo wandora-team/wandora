@@ -39,6 +39,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -429,7 +430,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     public static void clearThreads(Class<? extends AbstractWandoraTool> c) {
         if(c == null) return;
         synchronized(toolThreads) {
-            ArrayList<Thread> threadList = new ArrayList<Thread>();
+            List<Thread> threadList = new ArrayList<>();
             try {
                 T2<Class<? extends AbstractWandoraTool>, Long> timedClass = null;
                 for( Thread toolThread : toolThreads.keySet() ) {
@@ -451,7 +452,7 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     
     public static void clearAllThreads() {
         synchronized(toolThreads) {
-            ArrayList<Thread> threadList = new ArrayList<Thread>();
+            List<Thread> threadList = new ArrayList<>();
             try {
                 for( Thread toolThread : toolThreads.keySet() ) {
                     threadList.add(toolThread);
@@ -466,12 +467,12 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
         }
     }
     
-    public ArrayList<T2<Thread,Long>> getThreads() {
+    public List<T2<Thread,Long>> getThreads() {
         return getThreads(this.getClass());
     }
             
-    public static ArrayList<T2<Thread,Long>> getThreads(Class<? extends AbstractWandoraTool> c) {
-        ArrayList<T2<Thread, Long>> threadList = new ArrayList<T2<Thread, Long>>();
+    public static List<T2<Thread,Long>> getThreads(Class<? extends AbstractWandoraTool> c) {
+        List<T2<Thread, Long>> threadList = new ArrayList<>();
         if(c != null) {
             synchronized(toolThreads) {
                 try {

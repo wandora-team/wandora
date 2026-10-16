@@ -99,112 +99,119 @@ import org.wandora.utils.logger.Log4j2Logger;
  *
  * @author  olli, akivela
  */
-public class OccurrenceTableSingleType extends SimpleTable implements OccurrenceTable{
-	private static final long serialVersionUID = 1L;
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(OccurrenceTableSingleType.class);
+public class OccurrenceTableSingleType extends SimpleTable implements OccurrenceTable {
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(OccurrenceTableSingleType.class);
 
-	
-	public String tableType = VIEW_SCHEMA;
-    
+
+    public String tableType = VIEW_SCHEMA;
+
     private Topic topic;
     private Topic[] langs;
     private Topic type;
     private String[] data;
     private Color[] colors;
     private TableRowSorter sorter;
-    private Wandora wandora;    
+    private Wandora wandora;
 
     private String[] originalData;
     private int defaultRowHeight = 0;
-    
+
     private Object[] popupStruct;
     private MouseEvent mouseEvent;
-    
-    
+
+
     /** Creates a new instance of OccurrenceTableSingleType */
-    public OccurrenceTableSingleType(Topic topic, Topic type, Options options, Wandora wandora) throws TopicMapException {
-        this.wandora=wandora;
-        this.topic=topic;
+    public OccurrenceTableSingleType(Topic topic, Topic type, Options options, Wandora wandora)
+            throws TopicMapException {
+        this.wandora = wandora;
+        this.topic = topic;
         TopicMap tm = wandora.getTopicMap();
-        
+
         try {
             Options opts = options;
-            if(opts == null) opts = wandora.getOptions();
-            if(opts != null) {
+            if (opts == null) {
+                opts = wandora.getOptions();
+            }
+            if (opts != null) {
                 tableType = opts.get(VIEW_OPTIONS_KEY);
-                if(tableType == null || tableType.length() == 0) tableType = VIEW_SCHEMA;
-                
+                if (tableType == null || tableType.length() == 0) {
+                    tableType = VIEW_SCHEMA;
+                }
                 defaultRowHeight = opts.getInt(ROW_HEIGHT_OPTIONS_KEY);
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error(e);
         }
-        
+
         this.type = type;
 
         Set<Topic> langSet = new LinkedHashSet<>();
-        if(VIEW_USED.equalsIgnoreCase(tableType) || VIEW_USED_AND_SCHEMA.equalsIgnoreCase(tableType)) {
-            Hashtable<Topic,String> occs = null;
+        if (VIEW_USED.equalsIgnoreCase(tableType) || VIEW_USED_AND_SCHEMA.equalsIgnoreCase(tableType)) {
+            Hashtable<Topic, String> occs = null;
             Topic langTopic = null;
             occs = topic.getData(type);
-            for(Enumeration<Topic> keys = occs.keys(); keys.hasMoreElements(); ) {
+            for (Enumeration<Topic> keys = occs.keys(); keys.hasMoreElements();) {
                 langTopic = keys.nextElement();
                 langSet.add(langTopic);
             }
         }
-        if(VIEW_SCHEMA.equalsIgnoreCase(tableType) || VIEW_USED_AND_SCHEMA.equalsIgnoreCase(tableType)) {
+        if (VIEW_SCHEMA.equalsIgnoreCase(tableType) || VIEW_USED_AND_SCHEMA.equalsIgnoreCase(tableType)) {
             Collection<Topic> langTopics = tm.getTopicsOfType(LANGUAGE_SI);
-            langSet.addAll( langTopics );
+            langSet.addAll(langTopics);
         }
-        
-        langs=langSet.toArray( new Topic[langSet.size()] );
-        data=new String[langs.length];
-        originalData=new String[langs.length];
-        colors=new Color[langs.length];
 
-        for(int j=0;j<langs.length;j++){
-            if(langs[j] != null) {
-                data[j]=topic.getData(type,langs[j]);
-                if(data[j]==null) data[j]="";
-                originalData[j]=data[j];
-                colors[j]=wandora.topicHilights.getOccurrenceColor(topic,type,langs[j]);
+        langs = langSet.toArray(new Topic[langSet.size()]);
+        data = new String[langs.length];
+        originalData = new String[langs.length];
+        colors = new Color[langs.length];
+
+        for (int j = 0; j < langs.length; j++) {
+            if (langs[j] != null) {
+                data[j] = topic.getData(type, langs[j]);
+                if (data[j] == null)
+                    data[j] = "";
+                originalData[j] = data[j];
+                colors[j] = wandora.topicHilights.getOccurrenceColor(topic, type, langs[j]);
             }
         }
 
         dataModel = new DataTableModel();
         sorter = new TableRowSorter<>(dataModel);
 
-        final TableCellRenderer oldRenderer=this.getTableHeader().getDefaultRenderer();
-        
+        final TableCellRenderer oldRenderer = this.getTableHeader().getDefaultRenderer();
+
         this.getTableHeader().setPreferredSize(new Dimension(100, 23));
-        this.getTableHeader().setDefaultRenderer(new TableCellRenderer(){
+        this.getTableHeader().setDefaultRenderer(new TableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table,Object value,boolean isSelected,boolean hasFocus, int row, int column){
-                Component c=oldRenderer.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                Component c = oldRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+                        column);
                 return c;
             }
         });
-        
+
         this.setAutoCreateColumnsFromModel(false);
-        
-        TableColumn column=new TableColumn(0,40,new TopicCellRenderer(),new TopicCellEditor());
+
+        TableColumn column = new TableColumn(0, 40, new TopicCellRenderer(), new TopicCellEditor());
         this.addColumn(column);
-        column = new TableColumn(1,400,new DataCellRenderer(),new DataCellEditor());
+        column = new TableColumn(1, 400, new DataCellRenderer(), new DataCellEditor());
         this.addColumn(column);
         this.setTableHeader(this.getTableHeader());
 
         this.setModel(dataModel);
         this.setRowSorter(sorter);
         sorter.setSortsOnUpdates(true);
-        
+
         updateRowHeights();
-        
+
         popupStruct = WandoraMenuManager.getOccurrenceTableMenu(this, options);
         JPopupMenu popup = UIBox.makePopupMenu(popupStruct, wandora);
         this.setComponentPopupMenu(popup);
         this.addMouseListener(this);
-        
+
         this.setColumnSelectionAllowed(false);
         this.setRowSelectionAllowed(false);
         this.setDragEnabled(true);
@@ -212,15 +219,14 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         this.setDropMode(DropMode.ON);
         this.createDefaultTableSelectionModel();
     }
-    
 
-    
-    
+
+
     protected void updateRowHeights() {
-        for(int row=0; row<data.length; row++) {
+        for (int row = 0; row < data.length; row++) {
             try {
                 int rowHeight = 16;
-                if(defaultRowHeight == 0) {
+                if (defaultRowHeight == 0) {
                     Component comp = this.prepareRenderer(this.getCellRenderer(row, 1), row, 1);
                     rowHeight = Math.min(2000, Math.max(rowHeight, comp.getPreferredSize().height));
                 }
@@ -228,35 +234,36 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                     rowHeight = rowHeight * defaultRowHeight + 6;
                 }
 
-                setRowHeight(row, rowHeight+2);
+                setRowHeight(row, rowHeight + 2);
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 logger.error(e);
             }
         }
     }
-    
-    
+
+
     @Override
     public boolean applyChanges(Topic t, Wandora parent) throws TopicMapException {
-        boolean changed=false;
-        for(int j=0; j<langs.length; j++){
-            String text=data[j];
-            if(text != null) {
-                // String orig=topic.getData(types[i],langs[j]);
-                String orig=originalData[j];
-                if(orig==null) orig="";
-                if(!orig.equals(text)) {
-                    changed=true;
+        boolean changed = false;
+        for (int j = 0; j < langs.length; j++) {
+            String text = data[j];
+            if (text != null) {
+                String orig = originalData[j];
+                if (orig == null) {
+                    orig = "";
+                }
+                if (!orig.equals(text)) {
+                    changed = true;
                     try {
-                        if(text.length()==0) {
-                            topic.removeData(type,langs[j]);
+                        if (text.length() == 0) {
+                            topic.removeData(type, langs[j]);
                         }
                         else {
-                            topic.setData(type, langs[j], text );
+                            topic.setData(type, langs[j], text);
                         }
                     }
-                    catch(Exception e) {
+                    catch (Exception e) {
                         wandora.handleError(e);
                     }
                 }
@@ -264,208 +271,210 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         }
         return changed;
     }
-    
-    
+
+
     @Override
     public Topic getTopic() {
         return topic;
     }
-    
-    
+
+
     @Override
     public String getToolTipText(java.awt.event.MouseEvent e) {
         try {
             Object o = getValueAt(e);
-            if(o != null) {
+            if (o != null) {
                 String tooltipText = o.toString();
-                if(!DataURL.isDataURL(tooltipText)) {
-                    if(tooltipText != null && tooltipText.length() > 5) {
-                        if(tooltipText.length() > 200) tooltipText = tooltipText.substring(0,199)+"...";
+                if (!DataURL.isDataURL(tooltipText)) {
+                    if (tooltipText != null && tooltipText.length() > 5) {
+                        if (tooltipText.length() > 200) {
+                            tooltipText = tooltipText.substring(0, 199) + "...";
+                        }
                         return Textbox.makeHTMLParagraph(tooltipText, 40);
                     }
                 }
             }
         }
-        catch(Exception ex) {
+        catch (Exception ex) {
             // Sometimes swing throws index out of bounds exceptions if the table has not initialized yet.
         }
         return null;
     }
-    
-    
-    
+
+
+
     @Override
     public int getRowHeightOption() {
         return defaultRowHeight;
     }
-    
-    
-    
-    
+
+
+
     @Override
     public Object getOccurrenceTableType() {
         return tableType;
     }
 
-        
 
-  
-    
-    
-    
+
     @Override
     public String getPointedOccurrence() {
         try {
             Point p = getTableModelPoint();
-            if(p != null) {
+            if (p != null) {
                 return topic.getData(type, langs[p.y]);
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error(e);
         }
         return null;
     }
-    
-    
+
+
     @Override
     public Topic getPointedOccurrenceType() {
         return type;
     }
-    
-    
-    
-    
+
+
+
     @Override
     public Topic getPointedOccurrenceLang() {
         try {
             Point p = getTableModelPoint();
-            if(p != null) {
+            if (p != null) {
                 return langs[p.y];
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error(e);
         }
         return null;
     }
-    
-    
-    
-    
-    
+
+
+
     @Override
     public void cut() {
         try {
             copy();
             Point p = getTableModelPoint();
-            if(p != null) {
+            if (p != null) {
                 topic.removeData(type, langs[p.y]);
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error(e);
-            if(wandora != null) wandora.handleError(e);
+            if (wandora != null) {
+                wandora.handleError(e);
+            }
         }
     }
-    
-    
-    
-    
-    
-    
+
+
+
     @Override
     public void paste() {
         try {
             Point p = getTableModelPoint();
-            if(p != null) {
+            if (p != null) {
                 topic.setData(type, langs[p.y], ClipboardBox.getClipboard());
             }
         }
-        catch(Exception e) {
-            if(wandora != null) wandora.handleError(e);
+        catch (Exception e) {
+            if (wandora != null) {
+                wandora.handleError(e);
+            }
         }
     }
-    
-    
-    
+
+
+
     @Override
     public void append() {
         try {
             Point p = getTableModelPoint();
-            if(p != null) {
+            if (p != null) {
                 String oldOccurrence = topic.getData(type, langs[p.y]);
-                if(oldOccurrence == null) oldOccurrence = "";
+                if (oldOccurrence == null) {
+                    oldOccurrence = "";
+                }
                 topic.setData(type, langs[p.y], oldOccurrence + ClipboardBox.getClipboard());
             }
         }
-        catch(Exception e) {
-            if(wandora != null) wandora.handleError(e);
+        catch (Exception e) {
+            if (wandora != null) {
+                wandora.handleError(e);
+            }
         }
     }
-    
-    
-    
+
+
+
     @Override
     public void copy() {
         ClipboardBox.setClipboard(getCopyString());
     }
-    
-    
-    
+
+
+
     @Override
     public String getCopyString() {
         try {
             Point p = getTableModelPoint();
-            if(p != null) {
+            if (p != null) {
                 return topic.getData(type, langs[p.y]);
             }
         }
-        catch(Exception e) {}
+        catch (Exception e) {
+        }
         return "";
     }
 
-    
-    
+
+
     @Override
     public void delete() {
         try {
             Point p = getTableModelPoint();
-            if(p != null) {
+            if (p != null) {
                 topic.removeData(type, langs[p.y]);
             }
         }
-        catch(Exception e) {
-            if(wandora != null) wandora.handleError(e);
+        catch (Exception e) {
+            if (wandora != null) {
+                wandora.handleError(e);
+            }
         }
     }
-    
-    
-    
+
+
+
     @Override
     public void changeType() {
         try {
             Point p = getTableModelPoint();
-            if(p != null) {
+            if (p != null) {
                 Topic selectedScope = langs[p.y];
-                if(type != null && !type.isRemoved()) {
+                if (type != null && !type.isRemoved()) {
                     Topic newType = wandora.showTopicFinder("Select new occurrence type");
-                    if(newType != null && !newType.isRemoved()) {
-                        Hashtable<Topic,String> os = topic.getData(type);
-                        if(os != null && !os.isEmpty()) {
-                            for(Topic scope : os.keySet()) {
-                                if(scope != null && !scope.isRemoved()) {
-                                    if(selectedScope == null) {
+                    if (newType != null && !newType.isRemoved()) {
+                        Hashtable<Topic, String> os = topic.getData(type);
+                        if (os != null && !os.isEmpty()) {
+                            for (Topic scope : os.keySet()) {
+                                if (scope != null && !scope.isRemoved()) {
+                                    if (selectedScope == null) {
                                         String occurrenceText = os.get(scope);
                                         topic.setData(newType, scope, occurrenceText);
                                     }
-                                    else if(selectedScope.mergesWithTopic(scope)) {
+                                    else if (selectedScope.mergesWithTopic(scope)) {
                                         String occurrenceText = os.get(scope);
                                         topic.setData(newType, scope, occurrenceText);
                                     }
                                 }
                             }
-                            if(selectedScope == null) {
+                            if (selectedScope == null) {
                                 topic.removeData(type);
                             }
                             else {
@@ -476,31 +485,33 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                 }
             }
         }
-        catch(Exception e) {
-            if(wandora != null) wandora.handleError(e);
+        catch (Exception e) {
+            if (wandora != null) {
+                wandora.handleError(e);
+            }
         }
     }
-    
-    
-    
+
+
+
     @Override
     public void duplicateType() {
         try {
             Point p = getTableModelPoint();
-            if(p != null) {
+            if (p != null) {
                 Topic selectedScope = langs[p.y];
-                if(type != null && !type.isRemoved()) {
+                if (type != null && !type.isRemoved()) {
                     Topic newType = wandora.showTopicFinder("Select new occurrence type");
-                    if(newType != null && !newType.isRemoved()) {
-                        Hashtable<Topic,String> os = topic.getData(type);
-                        if(os != null && !os.isEmpty()) {
-                            for(Topic scope : os.keySet()) {
-                                if(scope != null && !scope.isRemoved()) {
-                                    if(selectedScope == null) {
+                    if (newType != null && !newType.isRemoved()) {
+                        Hashtable<Topic, String> os = topic.getData(type);
+                        if (os != null && !os.isEmpty()) {
+                            for (Topic scope : os.keySet()) {
+                                if (scope != null && !scope.isRemoved()) {
+                                    if (selectedScope == null) {
                                         String occurrenceText = os.get(scope);
                                         topic.setData(newType, scope, occurrenceText);
                                     }
-                                    else if(selectedScope.mergesWithTopic(scope)) {
+                                    else if (selectedScope.mergesWithTopic(scope)) {
                                         String occurrenceText = os.get(scope);
                                         topic.setData(newType, scope, occurrenceText);
                                     }
@@ -511,76 +522,87 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                 }
             }
         }
-        catch(Exception e) {
-            if(wandora != null) wandora.handleError(e);
+        catch (Exception e) {
+            if (wandora != null) {
+                wandora.handleError(e);
+            }
         }
     }
-    
-    
-    
+
+
+
     @Override
     public void openURLOccurrence() {
         try {
             String errorMessage = null;
             Point p = getTableModelPoint();
-            if(p != null) {
+            if (p != null) {
                 String occurrence = topic.getData(type, langs[p.y]);
-                if(occurrence != null) {
+                if (occurrence != null) {
                     occurrence = occurrence.trim();
-                    if(occurrence.length() > 0) {
+                    if (occurrence.length() > 0) {
                         try {
-                            if(!DataURL.isDataURL(occurrence)) {
+                            if (!DataURL.isDataURL(occurrence)) {
                                 Desktop desktop = Desktop.getDesktop();
                                 desktop.browse(new URI(occurrence));
                             }
                             else {
-                                errorMessage = "Due to security restrictions Wandora can't open data-urls with desktop browser. "+
-                                               "Copy data-url to clipboard and paste it to browser's address field.";
+                                errorMessage = "Due to security restrictions Wandora can't open data-urls with desktop browser. "
+                                        + "Copy data-url to clipboard and paste it to browser's address field.";
                             }
                         }
-                        catch(IOException ioe) {
-                            errorMessage = "IOException occurred while starting external browser for occurrence: "+ioe.getMessage();
+                        catch (IOException ioe) {
+                            errorMessage = "IOException occurred while starting external browser for occurrence: "
+                                    + ioe.getMessage();
                         }
-                        catch(Exception e) {
-                            if(occurrence.length() > 80) occurrence = occurrence.substring(0, 80)+"...";
-                            errorMessage = "Exception '"+e.getMessage()+"' occurred while starting external browser for occurrence. Check if the occurrence text is a valid URL.";
+                        catch (Exception e) {
+                            if (occurrence.length() > 80)
+                                occurrence = occurrence.substring(0, 80) + "...";
+                            errorMessage = "Exception '" + e.getMessage()
+                                    + "' occurred while starting external browser for occurrence. Check if the occurrence text is a valid URL.";
                             logger.error(e);
                         }
                     }
                 }
             }
-            if(errorMessage != null) {
+            if (errorMessage != null) {
                 WandoraOptionPane.showMessageDialog(Wandora.getWandora(), errorMessage, "Error while opening URL");
             }
         }
-        catch(Exception e) {
-            if(wandora != null) wandora.handleError(e);
+        catch (Exception e) {
+            if (wandora != null) {
+                wandora.handleError(e);
+            }
         }
     }
-    
-    
-    
+
+
+
     @Override
     public void downloadURLOccurrence() {
         try {
             Point p = getTableModelPoint();
-            if(p != null) {
+            if (p != null) {
                 String occurrence = topic.getData(type, langs[p.y]);
-                if(occurrence != null) {
+                if (occurrence != null) {
                     occurrence = occurrence.trim();
-                    if(occurrence.length() > 0) {
+                    if (occurrence.length() > 0) {
                         try {
                             URL url = new URI(occurrence).toURL();
-                            int a = WandoraOptionPane.showConfirmDialog(wandora, "Make data-url instead of text occurrence?", "Make data-url", WandoraOptionPane.INFORMATION_MESSAGE);
-                            if(a == WandoraOptionPane.YES_OPTION) {
+                            int a = WandoraOptionPane.showConfirmDialog(
+                                    wandora,
+                                    "Make data-url instead of text occurrence?", 
+                                    "Make data-url",
+                                    WandoraOptionPane.INFORMATION_MESSAGE);
+                            if (a == WandoraOptionPane.YES_OPTION) {
                                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                                 connection.setRequestMethod("HEAD");
                                 connection.connect();
                                 String contentType = connection.getContentType();
                                 connection.disconnect();
-                                
+
                                 InputStream is = url.openStream();
-                                
+
                                 byte[] dataBytes = IOUtils.toByteArray(is);
                                 DataURL dataURL = new DataURL(contentType, dataBytes);
                                 topic.setData(type, langs[p.y], dataURL.toExternalForm());
@@ -590,99 +612,124 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                                 topic.setData(type, langs[p.y], occurrenceContent);
                             }
                         }
-                        catch(MalformedURLException mue) {
-                            WandoraOptionPane.showMessageDialog(wandora, "The occurrence is invalid URL. Can't download.", "Invalid URL exception", WandoraOptionPane.ERROR_MESSAGE);
+                        catch (MalformedURLException mue) {
+                            WandoraOptionPane.showMessageDialog(wandora,
+                                    "The occurrence is invalid URL. Can't download.", 
+                                    "Invalid URL exception",
+                                    WandoraOptionPane.ERROR_MESSAGE);
                         }
-                        catch(IOException ioe) {
-                            WandoraOptionPane.showMessageDialog(wandora, "Can't read the occurrence URL. IOException occurred ('"+ioe.getMessage()+"').", "Can't read the URL", WandoraOptionPane.ERROR_MESSAGE);
+                        catch (IOException ioe) {
+                            WandoraOptionPane.showMessageDialog(wandora,
+                                    "Can't read the occurrence URL. IOException occurred ('" + ioe.getMessage() + "').",
+                                    "Can't read the URL", 
+                                    WandoraOptionPane.ERROR_MESSAGE);
                         }
-                        catch(TopicMapException tme) {
-                            WandoraOptionPane.showMessageDialog(wandora, "Can't set the occurrence because of a topic map exception. Topic map doesn't function as intended", "Topic map exception occurred", WandoraOptionPane.ERROR_MESSAGE);
+                        catch (TopicMapException tme) {
+                            WandoraOptionPane.showMessageDialog(wandora,
+                                    "Can't set the occurrence because of a topic map exception. Topic map doesn't function as intended",
+                                    "Topic map exception occurred", 
+                                    WandoraOptionPane.ERROR_MESSAGE);
                         }
-                        catch(Exception e) {
-                            WandoraOptionPane.showMessageDialog(wandora, "Exception '"+e.getMessage()+"' occurred while downloading URL '"+occurrence+"'.", "Error downloading URL", WandoraOptionPane.ERROR_MESSAGE);
+                        catch (Exception e) {
+                            WandoraOptionPane.showMessageDialog(
+                                    wandora, "Exception '" + e.getMessage() + "' occurred while downloading URL '"
+                                            + occurrence + "'.",
+                                    "Error downloading URL", 
+                                    WandoraOptionPane.ERROR_MESSAGE);
                             logger.error(e);
                         }
                     }
                 }
             }
         }
-        catch(Exception e) {
-            if(wandora != null) wandora.handleError(e);
+        catch (Exception e) {
+            if (wandora != null) {
+                wandora.handleError(e);
+            }
         }
     }
-    
-    
+
+
     @Override
     public void spread() {
         try {
             Point p = getTableModelPoint();
-            if(p != null) {
+            if (p != null) {
                 boolean overrideAll = false;
-                if(mouseEvent != null && mouseEvent.isAltDown()) overrideAll = true;
+                if (mouseEvent != null && mouseEvent.isAltDown()) {
+                    overrideAll = true;
+                }
                 String occurrenceText = topic.getData(type, langs[p.y]);
-                for(int i=0; i<langs.length; i++) {
-                    if(i != p.y) {
+                for (int i = 0; i < langs.length; i++) {
+                    if (i != p.y) {
                         int override = WandoraOptionPane.YES_OPTION;
-                        if(!overrideAll && topic.getData(type, langs[i]) != null) {
-                            override = WandoraOptionPane.showConfirmDialog(wandora, "Override existing "+langs[i].getDisplayName()+" occurrence?", "Override existing occurrence?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
-                            if(override == WandoraOptionPane.YES_TO_ALL_OPTION) overrideAll = true;
-                            if(override == WandoraOptionPane.CANCEL_OPTION) return;
+                        if (!overrideAll && topic.getData(type, langs[i]) != null) {
+                            override = WandoraOptionPane.showConfirmDialog(wandora,
+                                    "Override existing " + langs[i].getDisplayName() + " occurrence?",
+                                    "Override existing occurrence?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
+                            if (override == WandoraOptionPane.YES_TO_ALL_OPTION)
+                                overrideAll = true;
+                            if (override == WandoraOptionPane.CANCEL_OPTION)
+                                return;
                         }
-                        if(override == WandoraOptionPane.YES_OPTION || override == WandoraOptionPane.YES_TO_ALL_OPTION) {
+                        if (override == WandoraOptionPane.YES_OPTION
+                                || override == WandoraOptionPane.YES_TO_ALL_OPTION) {
                             topic.setData(type, langs[i], occurrenceText);
                         }
                     }
                 }
             }
         }
-        catch(Exception e) {
-            if(wandora != null) wandora.handleError(e);
+        catch (Exception e) {
+            if (wandora != null) {
+                wandora.handleError(e);
+            }
         }
     }
 
-    
+
     // -------------------------------------------------------------------------
-    
+
+
     public Point getTableModelPoint(Point coords) {
         try {
             int col = columnAtPoint(coords);
             int row = rowAtPoint(coords);
             int modelCol = convertColumnIndexToModel(columnAtPoint(coords));
             int modelRow = convertRowIndexToModel(rowAtPoint(coords));
-            
-            logger.info("getTableModelPoint: "+col+","+row+" -> "+modelCol+","+modelRow);
-            
+
+            logger.info("getTableModelPoint: " + col + "," + row + " -> " + modelCol + "," + modelRow);
+
             return new Point(modelCol, modelRow);
         }
-        catch(Exception ex) {
+        catch (Exception ex) {
             return null;
         }
     }
-    
-    
-    
+
+
+
     public Point getTableModelPoint(java.awt.event.MouseEvent event) {
         try {
             Point coords = event.getPoint();
             return getTableModelPoint(coords);
         }
-        catch(Exception ex) {
+        catch (Exception ex) {
             return null;
         }
     }
-    
-    
+
+
     public Point getTableModelPoint() {
         return getTableModelPoint(mouseEvent);
     }
-    
-    
+
+
     public Point getTablePoint() {
         return getTablePoint(mouseEvent);
     }
-    
-    
+
+
     public Point getTablePoint(java.awt.event.MouseEvent e) {
         try {
             java.awt.Point p = e.getPoint();
@@ -696,143 +743,146 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
         }
     }
 
-    
+
     public Object getValueAt(MouseEvent e) {
         return getValueAt(getTablePoint(e));
     }
-    
-    
+
+
     public Object getValueAt(Point p) {
         return getValueAt(p.y, p.x);
     }
-    
-    
+
+
     @Override
     public Object getValueAt(int y, int x) {
-        try { 
+        try {
             int cx = convertColumnIndexToModel(x);
             int cy = convertRowIndexToModel(y);
             return dataModel.getValueAt(cy, cx);
         }
-        catch (Exception e) { 
-            logger.error(e); 
+        catch (Exception e) {
+            logger.error(e);
         }
         return null;
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-        
+
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
     }
-    
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
 
     }
-    
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
     }
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
     }
-    
-    
-    
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     private class DataCellRenderer implements TableCellRenderer {
         private SimpleTextPane occurrenceTextField = null;
         private SimpleLabel occurrenceInfoLabel = null;
         private JPanel occurrencePanel = null;
 
         private Color noOccurrenceColor = UIConstants.noContentBackgroundColor;
-        private Color occurrenceInfoTextColor = new Color(150,150,150);
-        private Color dataOccurrenceColor = new Color(240,255,250);
-        
+        private Color occurrenceInfoTextColor = new Color(150, 150, 150);
+        private Color dataOccurrenceColor = new Color(240, 255, 250);
+
         public DataCellRenderer() {
             occurrenceTextField = new SimpleTextPane();
             occurrenceTextField.setOpaque(true);
-            occurrenceTextField.setMargin(new Insets(0,0,0,0));
+            occurrenceTextField.setMargin(new Insets(0, 0, 0, 0));
             Font f = occurrenceTextField.getFont();
-            occurrenceTextField.setFont(new Font(f.getName(),Font.PLAIN,f.getSize()));
+            occurrenceTextField.setFont(new Font(f.getName(), Font.PLAIN, f.getSize()));
             occurrenceTextField.setBackground(Color.WHITE);
             occurrenceTextField.putClientProperty("html.disable", Boolean.TRUE);
             occurrenceTextField.setBorder(UIConstants.defaultTableCellLabelBorder);
-            
+
             occurrenceInfoLabel = new SimpleLabel();
             occurrenceInfoLabel.setOpaque(true);
             occurrenceInfoLabel.setBackground(Color.WHITE);
-            occurrenceInfoLabel.setPreferredSize(new Dimension(60,16));
+            occurrenceInfoLabel.setPreferredSize(new Dimension(60, 16));
             occurrenceInfoLabel.setAlignmentY(SimpleLabel.TOP_ALIGNMENT);
             occurrenceInfoLabel.setAlignmentX(SimpleLabel.RIGHT_ALIGNMENT);
             occurrenceInfoLabel.setHorizontalTextPosition(SimpleLabel.RIGHT);
             occurrenceInfoLabel.setHorizontalAlignment(SimpleLabel.RIGHT);
             occurrenceInfoLabel.setVerticalAlignment(SimpleLabel.TOP);
             occurrenceInfoLabel.setFocusable(false);
-            
+
             BorderLayout layout = new BorderLayout();
 
             occurrencePanel = new JPanel();
-            
+
             occurrencePanel.setLayout(layout);
             occurrencePanel.add(occurrenceTextField, BorderLayout.CENTER);
             occurrencePanel.add(occurrenceInfoLabel, BorderLayout.EAST);
         }
-        
-        
+
+
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            if(value == null) value = "";
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
+            if (value == null)
+                value = "";
             String occurrenceText = value.toString();
             String viewedOccurrenceText = occurrenceText;
             boolean isDataOccurrence = false;
-            if(DataURL.isDataURL(viewedOccurrenceText)) {
+            if (DataURL.isDataURL(viewedOccurrenceText)) {
                 try {
                     Component preview = UIBox.getPreview(new DataURL(viewedOccurrenceText));
-                    if(preview != null) {
+                    if (preview != null) {
                         return preview;
                     }
                 }
-                catch(MalformedURLException mue) {
+                catch (MalformedURLException mue) {
                     logger.error("Warning: Malformed data-url found.");
                 }
-                catch(Exception e) {
+                catch (Exception e) {
                     logger.error(e);
                 }
                 isDataOccurrence = true;
-                viewedOccurrenceText = viewedOccurrenceText.substring(0, Math.max(5, viewedOccurrenceText.indexOf(',')));
+                viewedOccurrenceText = viewedOccurrenceText.substring(0,
+                        Math.max(5, viewedOccurrenceText.indexOf(',')));
             }
             else {
-                if(viewedOccurrenceText.length() > 9999) {
-                    viewedOccurrenceText = viewedOccurrenceText.substring(0, 9999)+"...";
+                if (viewedOccurrenceText.length() > 9999) {
+                    viewedOccurrenceText = viewedOccurrenceText.substring(0, 9999) + "...";
                 }
             }
             occurrenceTextField.setText(viewedOccurrenceText);
-            String occurrenceInfoText = (occurrenceText.length() > 0 ? " "+occurrenceText.length()+" " : "");
+            String occurrenceInfoText = (occurrenceText.length() > 0 ? " " + occurrenceText.length() + " " : "");
             occurrenceInfoLabel.setText(occurrenceInfoText);
-            Color c=colors[row];
-            if(c != null) {
+            Color c = colors[row];
+            if (c != null) {
                 occurrenceTextField.setForeground(c);
                 occurrenceInfoLabel.setForeground(occurrenceInfoTextColor);
             }
@@ -840,11 +890,11 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                 occurrenceTextField.setForeground(Color.BLACK);
                 occurrenceInfoLabel.setForeground(occurrenceInfoTextColor);
             }
-            if(occurrenceText.length() == 0) {
+            if (occurrenceText.length() == 0) {
                 occurrenceTextField.setBackground(noOccurrenceColor);
                 occurrenceInfoLabel.setBackground(noOccurrenceColor);
             }
-            else if(isDataOccurrence) {
+            else if (isDataOccurrence) {
                 occurrenceTextField.setBackground(dataOccurrenceColor);
                 occurrenceInfoLabel.setBackground(dataOccurrenceColor);
             }
@@ -855,294 +905,329 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             return occurrencePanel;
         }
     }
-        
-    
-    
-    
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
-    
-    
-    private class DataCellEditor extends AbstractCellEditor implements TableCellEditor, java.awt.event.MouseListener {        
 
 
-		private static final long serialVersionUID = 1L;
-		
-		
-		private Topic scope;
+
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+
+
+    private class DataCellEditor extends AbstractCellEditor implements TableCellEditor, java.awt.event.MouseListener {
+
+
+        private static final long serialVersionUID = 1L;
+
+
+        private Topic scope;
         private SimpleTextPane label;
         private String editedText;
-        
-        
-        public DataCellEditor(){
-            label=new SimpleTextPane();
-            label.setMargin(new Insets(0,0,0,0));
-            Font f=label.getFont();
-            label.setFont(new Font(f.getName(),Font.PLAIN,f.getSize()));
+
+
+        public DataCellEditor() {
+            label = new SimpleTextPane();
+            label.setMargin(new Insets(0, 0, 0, 0));
+            Font f = label.getFont();
+            label.setFont(new Font(f.getName(), Font.PLAIN, f.getSize()));
             label.addMouseListener(this);
             label.putClientProperty("html.disable", Boolean.TRUE);
             label.setBorder(UIConstants.defaultTableCellLabelBorder);
         }
-        
-        
-        
-        
+
+
+
         @Override
         public Object getCellEditorValue() {
             return editedText;
         }
-        
-        
+
+
         @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            if(value == null) value="";
-            
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+                int column) {
+            if (value == null) {
+                value = "";
+            }
+
             String viewedOccurrenceText = value.toString();
-            if(viewedOccurrenceText.length() > 9999) {
-                viewedOccurrenceText = viewedOccurrenceText.substring(0, 9999)+"...";
+            if (viewedOccurrenceText.length() > 9999) {
+                viewedOccurrenceText = viewedOccurrenceText.substring(0, 9999) + "...";
             }
             label.setText(viewedOccurrenceText);
-            
-            editedText=value.toString();
+
+            editedText = value.toString();
             return label;
         }
-        
-        
+
+
         @Override
         public void mouseReleased(java.awt.event.MouseEvent e) {
             Point p = getTableModelPoint();
-            if(p != null && label.contains(e.getPoint())) {
+            if (p != null && label.contains(e.getPoint())) {
                 OccurrenceTextEditor ed = new OccurrenceTextEditor(wandora, true, editedText, topic, type, scope);
                 String typeName = TopicToString.toString(type);
                 String topicName = TopicToString.toString(topic);
                 String scopeName = TopicToString.toString(langs[p.y]);
-                ed.setTitle("Edit occurrence text of '"+typeName+"' and '"+scopeName+"' attached to '"+topicName+"'");
+                ed.setTitle("Edit occurrence text of '" + typeName + "' and '" + scopeName + "' attached to '"
+                        + topicName + "'");
                 ed.setVisible(true);
-                
-                if(ed.acceptChanges()) {
-                    if(ed.getText() != null) {
-                        editedText=ed.getText();
-                        data[p.y]=editedText;
+
+                if (ed.acceptChanges()) {
+                    if (ed.getText() != null) {
+                        editedText = ed.getText();
+                        data[p.y] = editedText;
                     }
                     try {
                         boolean changed = applyChanges(topic, wandora);
-                        if(changed) {
+                        if (changed) {
                             wandora.doRefresh();
                         }
                     }
-                    catch(Exception ex) {
-                    	logger.error(ex);
+                    catch (Exception ex) {
+                        logger.error(ex);
                     }
                 }
             }
             fireEditingStopped();
         }
-        
+
+
         @Override
-        public void mouseClicked(java.awt.event.MouseEvent e) {}
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+        }
+
+
         @Override
-        public void mouseEntered(java.awt.event.MouseEvent e) {}
+        public void mouseEntered(java.awt.event.MouseEvent e) {
+        }
+
+
         @Override
-        public void mouseExited(java.awt.event.MouseEvent e) {}
+        public void mouseExited(java.awt.event.MouseEvent e) {
+        }
+
+
         @Override
-        public void mousePressed(java.awt.event.MouseEvent e) {}
+        public void mousePressed(java.awt.event.MouseEvent e) {
+        }
 
     }
-    
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     private class TopicCellRenderer implements TableCellRenderer {
         private JLabel label;
 
-        
-        public TopicCellRenderer(){
-            label=new JLabel("");
+
+        public TopicCellRenderer() {
+            label = new JLabel("");
             label.setOpaque(true);
-            Font f=label.getFont();
-            label.setFont(new Font(f.getName(),Font.PLAIN,f.getSize()));
+            Font f = label.getFont();
+            label.setFont(new Font(f.getName(), Font.PLAIN, f.getSize()));
             label.setVerticalAlignment(JLabel.TOP);
             label.setBorder(UIConstants.defaultTableCellLabelBorder);
         }
-        
+
+
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
             int modelRow = convertRowIndexToModel(row);
             Topic scope = langs[modelRow];
             label.setText(TopicToString.toString(scope));
-            
-            Color c=wandora.topicHilights.get(scope);
-            if(c==null) c=wandora.topicHilights.getLayerColor(scope);
-            if(c!=null) label.setForeground(c);
-            else label.setForeground(Color.BLACK);
-            if(column > 0) {
+
+            Color c = wandora.topicHilights.get(scope);
+            if (c == null)
+                c = wandora.topicHilights.getLayerColor(scope);
+            if (c != null)
+                label.setForeground(c);
+            else
+                label.setForeground(Color.BLACK);
+            if (column > 0) {
                 label.setBackground(Color.WHITE);
             }
             return label;
         }
     }
-    
-    
-    private class TopicCellEditor extends AbstractCellEditor implements TableCellEditor, java.awt.event.MouseListener {        
 
 
-		private static final long serialVersionUID = 1L;
-		
-		
-		private JLabel label;
-        
-        public TopicCellEditor(){
-            label= new JLabel();
+    private class TopicCellEditor extends AbstractCellEditor implements TableCellEditor, java.awt.event.MouseListener {
+
+
+        private static final long serialVersionUID = 1L;
+
+
+        private JLabel label;
+
+        public TopicCellEditor() {
+            label = new JLabel();
             label.setOpaque(true);
-            Font f=label.getFont();
-            label.setFont(new Font(f.getName(),Font.PLAIN,f.getSize()));
+            Font f = label.getFont();
+            label.setFont(new Font(f.getName(), Font.PLAIN, f.getSize()));
             label.addMouseListener(this);
         }
-        
+
+
         @Override
         public Object getCellEditorValue() {
             return TopicToString.toString(topic);
         }
 
+
         @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+                int column) {
             int modelRow = convertRowIndexToModel(row);
             Topic scope = langs[modelRow];
             label.setText(TopicToString.toString(scope));
-            Color c=wandora.topicHilights.get(scope);
-            if(c==null) c=wandora.topicHilights.getLayerColor(scope);
-            if(c!=null) label.setForeground(c);
-            else label.setForeground(Color.BLACK);
-            if(column > 0) {
+            Color c = wandora.topicHilights.get(scope);
+            if (c == null)
+                c = wandora.topicHilights.getLayerColor(scope);
+            if (c != null)
+                label.setForeground(c);
+            else
+                label.setForeground(Color.BLACK);
+            if (column > 0) {
                 label.setBackground(Color.WHITE);
             }
             return label;
         }
-        
+
+
         @Override
         public void mouseReleased(java.awt.event.MouseEvent e) {
             fireEditingStopped();
             Point p = getTableModelPoint();
-            if(p != null && label.contains(e.getPoint())) {
+            if (p != null && label.contains(e.getPoint())) {
                 wandora.openTopic(langs[p.y]);
             }
         }
-        
+
+
         @Override
-        public void mouseClicked(java.awt.event.MouseEvent e) {}
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+        }
+
+
         @Override
-        public void mouseEntered(java.awt.event.MouseEvent e) {}
+        public void mouseEntered(java.awt.event.MouseEvent e) {
+        }
+
+
         @Override
-        public void mouseExited(java.awt.event.MouseEvent e) {}
+        public void mouseExited(java.awt.event.MouseEvent e) {
+        }
+
+
         @Override
-        public void mousePressed(java.awt.event.MouseEvent e) {}
-        
+        public void mousePressed(java.awt.event.MouseEvent e) {
+        }
+
     }
-    
+
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
-    
-    
+
+
     private class DataTableModel extends AbstractTableModel {
-        
-
-		private static final long serialVersionUID = 1L;
 
 
-		@Override
+        private static final long serialVersionUID = 1L;
+
+
+        @Override
         public int getColumnCount() {
             return 2;
         }
-        
+
+
         @Override
         public int getRowCount() {
-            if(langs == null) return 0;
+            if (langs == null)
+                return 0;
             return langs.length;
         }
-        
-        
-        
+
+
+
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            if(columnIndex==0) {
+            if (columnIndex == 0) {
                 return langs[rowIndex];
             }
             else {
                 return data[rowIndex];
             }
         }
-        
-        
-        
-        
+
+
+
         @Override
-        public String getColumnName(int columnIndex){
-            if(columnIndex==0) {
+        public String getColumnName(int columnIndex) {
+            if (columnIndex == 0) {
                 return "Occurrence scope";
             }
-            else if(columnIndex==1) {
+            else if (columnIndex == 1) {
                 return "Occurrence data";
             }
             else {
                 return "";
             }
         }
-        
-        
+
+
         @Override
-        public boolean isCellEditable(int row,int col) {
+        public boolean isCellEditable(int row, int col) {
             return true;
         }
-        
+
     }
-    
-   
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     private class OccurrencesTableTransferHandler extends TransferHandler {
 
 
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-		
-		@Override
+
+        @Override
         public boolean canImport(TransferSupport support) {
-            if(!support.isDrop()) return false;
+            if (!support.isDrop())
+                return false;
             return support.isDataFlavorSupported(DataFlavor.javaFileListFlavor) ||
-                   support.isDataFlavorSupported(DataFlavor.stringFlavor) ||
-                   support.isDataFlavorSupported(DnDHelper.topicDataFlavor);
+                    support.isDataFlavorSupported(DataFlavor.stringFlavor) ||
+                    support.isDataFlavorSupported(DnDHelper.topicDataFlavor);
         }
 
-        
-        
+
+
         @Override
         protected Transferable createTransferable(JComponent c) {
             String occurrenceText = null;
             try {
                 Point p = getTableModelPoint();
-                if(p != null) {
+                if (p != null) {
                     Topic sourceLangTopic = langs[p.y];
                     occurrenceText = topic.getData(type, sourceLangTopic);
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 logger.error(e);
             }
-            
-            if(occurrenceText == null) {
+
+            if (occurrenceText == null) {
                 return null;
             }
             else {
@@ -1150,33 +1235,37 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
             }
         }
 
+
         @Override
         public int getSourceActions(JComponent c) {
             return TransferHandler.COPY_OR_MOVE;
         }
 
+
         @Override
         public boolean importData(TransferSupport support) {
-            if(!support.isDrop()) return false;
+            if (!support.isDrop())
+                return false;
             try {
                 Transferable transferable = support.getTransferable();
                 Point p = getTableModelPoint(support.getDropLocation().getDropPoint());
-                if(p != null) {
-                    if(transferable.isDataFlavorSupported(DnDHelper.topicDataFlavor)) {
-                        TopicMap tm=wandora.getTopicMap();
-                        List<Topic> topics=DnDHelper.getTopicList(support, tm, true);
-                        if(topics==null) return false;
-                        
+                if (p != null) {
+                    if (transferable.isDataFlavorSupported(DnDHelper.topicDataFlavor)) {
+                        TopicMap tm = wandora.getTopicMap();
+                        List<Topic> topics = DnDHelper.getTopicList(support, tm, true);
+                        if (topics == null)
+                            return false;
+
                         // DROP ON TYPE COLUMN ==> DUPLICATE/CHANGE TYPE
-                        if(p.x == 0 && p.y == 0) {
-                            if(type != null && !type.isRemoved()) {
-                                Hashtable<Topic,String> os = topic.getData(type);
-                                if(os != null && !os.isEmpty()) {
-                                    for(Topic scope : os.keySet()) {
-                                        if(scope != null && !scope.isRemoved()) {
+                        if (p.x == 0 && p.y == 0) {
+                            if (type != null && !type.isRemoved()) {
+                                Hashtable<Topic, String> os = topic.getData(type);
+                                if (os != null && !os.isEmpty()) {
+                                    for (Topic scope : os.keySet()) {
+                                        if (scope != null && !scope.isRemoved()) {
                                             String occurrenceText = os.get(scope);
-                                            for(Topic newType : topics) {
-                                                if(newType != null && !newType.isRemoved()) {
+                                            for (Topic newType : topics) {
+                                                if (newType != null && !newType.isRemoved()) {
                                                     topic.setData(newType, scope, occurrenceText);
                                                 }
                                             }
@@ -1185,33 +1274,35 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                                 }
                             }
                         }
-                                
-                        else if(p.x > 0) {
+
+                        else if (p.x > 0) {
                             Topic scope = langs[p.y];
-                            
-                            if(type != null && scope != null && !type.isRemoved() && !scope.isRemoved()) {
-                                for(Topic t : topics) {
-                                    if(t != null && !t.isRemoved()) {
+
+                            if (type != null && scope != null && !type.isRemoved() && !scope.isRemoved()) {
+                                for (Topic t : topics) {
+                                    if (t != null && !t.isRemoved()) {
                                         String occurrenceText = t.getData(type, scope);
-                                        if(occurrenceText != null) {
+                                        if (occurrenceText != null) {
                                             topic.setData(type, scope, occurrenceText);
                                         }
                                     }
                                 }
                             }
                         }
-                        
+
                     }
-                    else if(transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                    else if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                         try {
-                            java.util.List<File> fileList = (java.util.List<File>) support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                            if(fileList != null && !fileList.isEmpty()) {
-                                
-                                int a = WandoraOptionPane.showConfirmDialog(wandora, "Make data-url occurrence?", "Make data-url occurrence?", WandoraOptionPane.QUESTION_MESSAGE);
+                            java.util.List<File> fileList = (java.util.List<File>) support.getTransferable()
+                                    .getTransferData(DataFlavor.javaFileListFlavor);
+                            if (fileList != null && !fileList.isEmpty()) {
+
+                                int a = WandoraOptionPane.showConfirmDialog(wandora, "Make data-url occurrence?",
+                                        "Make data-url occurrence?", WandoraOptionPane.QUESTION_MESSAGE);
                                 boolean makeDataURLOccurrence = (a == WandoraOptionPane.YES_OPTION ? true : false);
-                                
-                                for( File occurrenceFile : fileList ) {
-                                    if(makeDataURLOccurrence) {
+
+                                for (File occurrenceFile : fileList) {
+                                    if (makeDataURLOccurrence) {
                                         DataURL dataUrl = new DataURL(occurrenceFile);
                                         topic.setData(type, langs[p.y], dataUrl.toExternalForm());
                                     }
@@ -1219,51 +1310,50 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                                         String content = null;
 
                                         String filename = occurrenceFile.getPath().toLowerCase();
-                                        String suffix = filename.substring(Math.max(filename.lastIndexOf(".")+1, 0));
+                                        String suffix = filename.substring(Math.max(filename.lastIndexOf(".") + 1, 0));
 
                                         // --- handle rtf files ---
-                                        if("rtf".equals(suffix)) {
+                                        if ("rtf".equals(suffix)) {
                                             content = Textbox.RTF2PlainText(new FileInputStream(occurrenceFile));
                                         }
 
                                         // --- handle pdf files ---
-                                        else if("pdf".equals(suffix)) {
+                                        else if ("pdf".equals(suffix)) {
                                             try {
                                                 PDDocument doc = PDDocument.load(occurrenceFile);
                                                 PDFTextStripper stripper = new PDFTextStripper();
                                                 content = stripper.getText(doc);
                                                 doc.close();
                                             }
-                                            catch(Exception e) {
+                                            catch (Exception e) {
                                                 logger.warn("No PDF support!");
                                             }
                                         }
 
                                         // --- handle MS office files ---
-                                        else if("doc".equals(suffix) ||
-                                           "ppt".equals(suffix) ||
-                                           "xsl".equals(suffix) ||
-                                           "vsd".equals(suffix) 
-                                           ) {
-                                                content = MSOfficeBox.getText(occurrenceFile);
+                                        else if ("doc".equals(suffix) ||
+                                                "ppt".equals(suffix) ||
+                                                "xsl".equals(suffix) ||
+                                                "vsd".equals(suffix)) {
+                                            content = MSOfficeBox.getText(occurrenceFile);
                                         }
 
-                                        else if("docx".equals(suffix)) {
+                                        else if ("docx".equals(suffix)) {
                                             content = MSOfficeBox.getDocxText(occurrenceFile);
                                         }
-                                        
-                                        else if("txt".equals(suffix)) {
+
+                                        else if ("txt".equals(suffix)) {
                                             FileReader inputReader = new FileReader(occurrenceFile);
                                             content = IObox.loadFile(inputReader);
                                         }
 
                                         // --- handle everything else ---
-                                        if(content == null) {
+                                        if (content == null) {
                                             FileReader inputReader = new FileReader(occurrenceFile);
                                             content = IObox.loadFile(inputReader);
                                         }
-                                        
-                                        if(content != null) {
+
+                                        if (content != null) {
                                             topic.setData(type, langs[p.y], content);
                                         }
 
@@ -1271,31 +1361,34 @@ public class OccurrenceTableSingleType extends SimpleTable implements Occurrence
                                 }
                             }
                         }
-                        catch(Exception e) {
+                        catch (Exception e) {
                             logger.error(e);
                         }
                     }
-                    else if(transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+                    else if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
                         try {
                             Object occurrenceText = support.getTransferable().getTransferData(DataFlavor.stringFlavor);
-                            if(occurrenceText != null) {
+                            if (occurrenceText != null) {
                                 topic.setData(type, langs[p.y], occurrenceText.toString());
                             }
                         }
-                        catch(Exception e) {
+                        catch (Exception e) {
                             logger.error(e);
                         }
                     }
-                    
+
                     wandora.doRefresh();
                 }
             }
-            catch(TopicMapException tme){ logger.error(tme); }
-            catch(Exception ce){}
+            catch (TopicMapException tme) {
+                logger.error(tme);
+            }
+            catch (Exception ce) {
+            }
             return false;
         }
 
     }
-    
-    
+
+
 }

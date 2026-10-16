@@ -58,10 +58,10 @@ import org.wandora.topicmap.XTMPSI;
 public class VariantNameEditor extends javax.swing.JPanel {
 
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	
-	private JDialog myDialog = null;
+
+    private JDialog myDialog = null;
     private boolean wasAccepted = false;
     private List<Topic> scopeTopics = new ArrayList<>();
     private Wandora wandora = null;
@@ -74,10 +74,14 @@ public class VariantNameEditor extends javax.swing.JPanel {
         initComponents();
     }
 
-    
+
     public void initialize(Set<Topic> scope, String variantString) {
-        if(variantString != null) variantTextField.setText(variantString);
-        else variantTextField.setText("");
+        if (variantString != null) {
+            variantTextField.setText(variantString);
+        }
+        else {
+            variantTextField.setText("");
+        }
         scopeTopics.addAll(scope);
         wasAccepted = false;
     }
@@ -85,10 +89,10 @@ public class VariantNameEditor extends javax.swing.JPanel {
 
     public void openEditor(String title) {
         wandora = Wandora.getWandora();
-        
+
         myDialog = new JDialog(wandora, true);
         myDialog.add(this);
-        myDialog.setSize(800,300);
+        myDialog.setSize(800, 300);
         myDialog.setTitle(title);
         wandora.centerWindow(myDialog);
 
@@ -103,12 +107,14 @@ public class VariantNameEditor extends javax.swing.JPanel {
         return wasAccepted;
     }
 
+
     public String getVariantString() {
         return variantTextField.getText();
     }
 
+
     public Set<Topic> getVariantScope() {
-        Set<Topic> set =  new LinkedHashSet<>();
+        Set<Topic> set = new LinkedHashSet<>();
         set.addAll(scopeTopics);
         return set;
     }
@@ -117,15 +123,15 @@ public class VariantNameEditor extends javax.swing.JPanel {
     private void setScope(String[] scopeLocators) {
         TopicMap tm = Wandora.getWandora().getTopicMap();
         Topic t;
-        for(String l : scopeLocators) {
+        for (String l : scopeLocators) {
             try {
-                if(l != null) {
+                if (l != null) {
                     t = tm.getTopic(l);
-                    if(t != null && !t.isRemoved()) {
+                    if (t != null && !t.isRemoved()) {
                         scopeTopics.add(t);
                     }
                 }
-            } 
+            }
             catch (TopicMapException ex) {
                 Logger.getLogger(VariantNameEditor.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -285,13 +291,11 @@ public class VariantNameEditor extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
         jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -329,46 +333,50 @@ public class VariantNameEditor extends javax.swing.JPanel {
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         wasAccepted = false;
-        if(myDialog != null) myDialog.setVisible(false);
+        if (myDialog != null)
+            myDialog.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        if(scopeTopics != null && !scopeTopics.isEmpty()) {
+        if (scopeTopics != null && !scopeTopics.isEmpty()) {
             lastScopeSubjects = new ArrayList<Locator>();
-            for(Topic t : scopeTopics) {
+            for (Topic t : scopeTopics) {
                 try {
-                    if(t != null && !t.isRemoved()) {
+                    if (t != null && !t.isRemoved()) {
                         lastScopeSubjects.add(t.getOneSubjectIdentifier());
                     }
-                } 
+                }
                 catch (TopicMapException ex) {
                     Logger.getLogger(VariantNameEditor.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
         wasAccepted = true;
-        if(myDialog != null) myDialog.setVisible(false);
+        if (myDialog != null)
+            myDialog.setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
 
+
     private void addEnglishDisplayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEnglishDisplayButtonActionPerformed
-        setScope( new String[] {
+        setScope(new String[] {
                 XTMPSI.DISPLAY,
                 XTMPSI.getLang("en")
-            }
-        );
+        });
     }//GEN-LAST:event_addEnglishDisplayButtonActionPerformed
 
+
     private void addSameAsPreviousButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSameAsPreviousButtonActionPerformed
-        if(lastScopeSubjects != null && !lastScopeSubjects.isEmpty()) {
+        if (lastScopeSubjects != null && !lastScopeSubjects.isEmpty()) {
             TopicMap tm = Wandora.getWandora().getTopicMap();
             Topic t;
-            for(Locator l : lastScopeSubjects) {
+            for (Locator l : lastScopeSubjects) {
                 try {
                     t = tm.getTopic(l);
-                    if(t != null && !t.isRemoved()) {
+                    if (t != null && !t.isRemoved()) {
                         scopeTopics.add(t);
                     }
-                } 
+                }
                 catch (TopicMapException ex) {
                     Logger.getLogger(VariantNameEditor.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -377,40 +385,42 @@ public class VariantNameEditor extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_addSameAsPreviousButtonActionPerformed
 
+
     private void removeScopeTopicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeScopeTopicButtonActionPerformed
         try {
             int[] selection = scopeTopicList.getSelectedIndices();
             List<Topic> removeScopeTopics = new ArrayList<>();
-            for(int i=0; i<selection.length; i++) {
+            for (int i = 0; i < selection.length; i++) {
                 removeScopeTopics.add(scopeTopics.get(selection[i]));
             }
             scopeTopics.removeAll(removeScopeTopics);
             scopeTopicList.setModel(new VariantScopeListModel());
         }
-        catch(Exception e) {
+        catch (Exception e) {
             Logger.getLogger(VariantNameEditor.class.getName()).log(Level.SEVERE, null, e);
         }
     }//GEN-LAST:event_removeScopeTopicButtonActionPerformed
 
+
     private void addScopeTopicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addScopeTopicButtonActionPerformed
         try {
             Topic addedScope = wandora.showTopicFinder("Select variant scope topic...");
-            if(addedScope != null) {
+            if (addedScope != null) {
                 scopeTopics.add(addedScope);
                 scopeTopicList.setModel(new VariantScopeListModel());
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             Logger.getLogger(VariantNameEditor.class.getName()).log(Level.SEVERE, null, e);
         }
     }//GEN-LAST:event_addScopeTopicButtonActionPerformed
 
+
     private void addLangndepDisplayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLangndepDisplayButtonActionPerformed
-        setScope( new String[] {
+        setScope(new String[] {
                 XTMPSI.DISPLAY,
                 XTMPSI.LANG_INDEPENDENT
-            }
-        );
+        });
     }//GEN-LAST:event_addLangndepDisplayButtonActionPerformed
 
 
@@ -435,16 +445,14 @@ public class VariantNameEditor extends javax.swing.JPanel {
 
 
 
-
-
     private class VariantScopeListModel extends DefaultListModel<Topic> {
 
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
 
-		@Override
+        @Override
         public int getSize() {
-            if(scopeTopics != null) {
+            if (scopeTopics != null) {
                 return scopeTopics.size();
             }
             else {
@@ -452,11 +460,11 @@ public class VariantNameEditor extends javax.swing.JPanel {
             }
         }
 
-        
+
         @Override
         public Topic getElementAt(int index) {
-            if(scopeTopics != null) {
-                if(index >= 0 && index < scopeTopics.size()) {
+            if (scopeTopics != null) {
+                if (index >= 0 && index < scopeTopics.size()) {
                     return scopeTopics.get(index);
                 }
             }

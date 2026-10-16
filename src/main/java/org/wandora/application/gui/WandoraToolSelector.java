@@ -42,47 +42,45 @@ import org.wandora.application.WandoraTool;
 public class WandoraToolSelector extends javax.swing.JDialog {
 
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Wandora wandora = null;
     private boolean selectToolAccepted = false;
     private WandoraToolTable toolTable = null;
-    
-    
-    
+
+
+
     /** Creates new form WandoraToolSelector */
     public WandoraToolSelector(Wandora wandora) {
         super(wandora, true);
-        this.wandora = wandora;
         initComponents();
         List<WandoraTool> allTools = wandora.getToolManager().getAllTools();
         toolTable = new WandoraToolTable(wandora);
-        toolTable.initialize(allTools.toArray( new WandoraTool[] {} ));
+        toolTable.initialize(allTools.toArray(new WandoraTool[] {}));
         selectToolAccepted = false;
-        
+
         toolSelectTablePanel.removeAll();
         toolSelectTablePanel.add(toolTable, BorderLayout.NORTH);
         toolSelectScrollPane.setColumnHeaderView(toolTable.getTableHeader());
-//        toolSelectTitlePanel.add(toolTable.getTableHeader(), BorderLayout.CENTER);
-        
+
         this.setSize(700, 350);
         wandora.centerWindow(this);
         this.setVisible(true);
     }
 
-    
+
     public boolean selectToolAccepted() {
         return selectToolAccepted;
     }
-    
+
+
     public WandoraTool getSelectedTool() {
-        if(selectToolAccepted() && toolTable != null) {
+        if (selectToolAccepted() && toolTable != null) {
             return toolTable.getSelectedTool();
         }
         return null;
     }
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -139,13 +137,11 @@ public class WandoraToolSelector extends javax.swing.JDialog {
         javax.swing.GroupLayout toolSelectFillerPanelLayout = new javax.swing.GroupLayout(toolSelectFillerPanel);
         toolSelectFillerPanel.setLayout(toolSelectFillerPanelLayout);
         toolSelectFillerPanelLayout.setHorizontalGroup(
-            toolSelectFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                toolSelectFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
         toolSelectFillerPanelLayout.setVerticalGroup(
-            toolSelectFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                toolSelectFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -190,15 +186,17 @@ public class WandoraToolSelector extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-private void toolSelectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toolSelectButtonActionPerformed
-    this.selectToolAccepted = true;
-    this.setVisible(false);
-}//GEN-LAST:event_toolSelectButtonActionPerformed
 
-private void toolSelectCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toolSelectCancelButtonActionPerformed
-    this.selectToolAccepted = false;
-    this.setVisible(false);
-}//GEN-LAST:event_toolSelectCancelButtonActionPerformed
+    private void toolSelectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toolSelectButtonActionPerformed
+        this.selectToolAccepted = true;
+        this.setVisible(false);
+    }//GEN-LAST:event_toolSelectButtonActionPerformed
+
+
+    private void toolSelectCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toolSelectCancelButtonActionPerformed
+        this.selectToolAccepted = false;
+        this.setVisible(false);
+    }//GEN-LAST:event_toolSelectCancelButtonActionPerformed
 
 
 

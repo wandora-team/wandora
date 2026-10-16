@@ -30,29 +30,31 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.topicmap.database2.DatabaseConfiguration;
 import org.wandora.utils.swing.GuiTools;
+
 /**
  *
  * @author  olli
  */
 public class DatabaseConfigurationDialog extends javax.swing.JDialog {
-	
-	private static final long serialVersionUID = 1L;
-    
+
+    private static final long serialVersionUID = 1L;
+
     private Wandora wandora;
-    private boolean cancelled=true;
+    private boolean cancelled = true;
     private DatabaseConfigurationPanel databaseConfigurationPanel;
-    
+
     /** Creates new form DatabaseConfigurationDialog */
     public DatabaseConfigurationDialog(Wandora wandora, boolean modal) {
         super(wandora, modal);
-        this.wandora=wandora;
+        this.wandora = wandora;
         initComponents();
-        databaseConfigurationPanel=new DatabaseConfigurationPanel(wandora);
+        databaseConfigurationPanel = new DatabaseConfigurationPanel(wandora);
         databaseConfigurationPanel.setConnections(DatabaseConfiguration.parseConnections(wandora.getOptions()));
         container.add(databaseConfigurationPanel);
-        GuiTools.centerWindow(this,wandora);
+        GuiTools.centerWindow(this, wandora);
     }
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -114,28 +116,35 @@ public class DatabaseConfigurationDialog extends javax.swing.JDialog {
         setBounds(0, 0, 411, 328);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        DatabaseConfiguration.writeOptions(wandora.getOptions(),databaseConfigurationPanel);
-        cancelled=true;
+        DatabaseConfiguration.writeOptions(wandora.getOptions(), databaseConfigurationPanel);
+        cancelled = true;
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        DatabaseConfiguration.writeOptions(wandora.getOptions(),databaseConfigurationPanel);
-        cancelled=false;
+        DatabaseConfiguration.writeOptions(wandora.getOptions(), databaseConfigurationPanel);
+        cancelled = false;
         this.setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
 
-    public boolean wasCancelled(){return cancelled;};
-    public DatabaseConfigurationPanel.StoredConnection getSelection(){
+
+    public boolean wasCancelled() {
+        return cancelled;
+    };
+
+
+    public DatabaseConfigurationPanel.StoredConnection getSelection() {
         return databaseConfigurationPanel.getSelectedConnection();
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel container;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables
-    
+
 }

@@ -64,62 +64,64 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 public class RegularExpressionEditor extends javax.swing.JDialog implements ActionListener {
-	private static final long serialVersionUID = 1L;
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RegularExpressionEditor.class);
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(RegularExpressionEditor.class);
 
-	
-	public static final String OPTIONS_PREFIX = "regexp.";
-    
+
+    public static final String OPTIONS_PREFIX = "regexp.";
+
     public static final String DEFAULT_PATTERN_NAME = "User expression";
-    
-    public static Color TEST_ERROR = new Color(255,220,220);
-    public static Color TEST_MATCH = new Color(220,255,220);
-    public static Color TEST_MISMATCH = new Color(240,220,220);
-     
+
+    public static Color TEST_ERROR = new Color(255, 220, 220);
+    public static Color TEST_MATCH = new Color(220, 255, 220);
+    public static Color TEST_MISMATCH = new Color(240, 220, 220);
+
     private Wandora wandora;
-    private HashMap<String,EasyReplaceExpression> patterns;
+    private HashMap<String, EasyReplaceExpression> patterns;
     public boolean approve;
     private EasyReplaceExpression originalPattern;
-    
+
     private static RegularExpressionEditor editor = null;
     private static RegularExpressionEditor matchEditor = null;
-    
-    
+
+
     public RegularExpressionEditor() {
         this(null);
     }
-    
+
+
     /** Creates new form RegularExpressionEditor */
     public RegularExpressionEditor(Wandora w) {
         super(w, true);
         this.wandora = w;
         patterns = new LinkedHashMap<>();
-        if(wandora != null) {
+        if (wandora != null) {
             parsePatternOptions(wandora.options);
-            //setIconImage(wandora.getIconImage());
         }
         originalPattern = null;
         initGui();
         refresh();
     }
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // RegularExpressionEditor should be used as singleton!
     // Instead of creating new instances of RegularExpressionEditor you should
     // get RegularExpressionEditor instance with next!
     // -------------------------------------------------------------------------
-    
+
+
     public static RegularExpressionEditor getReplaceExpressionEditor(Wandora w) {
-        if(editor == null) {
+        if (editor == null) {
             editor = new RegularExpressionEditor(w);
         }
         return editor;
     }
+
+
     public static RegularExpressionEditor getMatchExpressionEditor(Wandora w) {
-        if(matchEditor == null) {
+        if (matchEditor == null) {
             matchEditor = new RegularExpressionEditor(w);
             matchEditor.replacementLabel.setVisible(false);
             matchEditor.replacementScrollPane.setVisible(false);
@@ -127,48 +129,47 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
         }
         return matchEditor;
     }
-    
-    
-    
-    
+
+
+
     public void initGui() {
         initComponents();
         nameComboBox.setEditable(false);
         initPatternsComboBox();
     }
-    
-    
+
+
     public void initPatternsComboBox() {
-        ((SimpleComboBox<String>) nameComboBox).setOptions(patterns.keySet()); 
+        ((SimpleComboBox<String>) nameComboBox).setOptions(patterns.keySet());
     }
 
-    
+
 
     @Override
     public void setVisible(boolean v) {
-        if(v == true) {
+        if (v == true) {
             refresh();
             approve = false;
         }
         super.setVisible(v);
     }
-    
+
+
     public void refresh() {
-        if(wandora != null) {
+        if (wandora != null) {
             wandora.centerWindow(this);
         }
     }
-    
-    
-    
+
+
+
     @Override
     public Container getParent() {
         return wandora;
     }
-    
-    
-    
-    
+
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -469,140 +470,154 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void comboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxActionPerformed
         selectPattern();
     }//GEN-LAST:event_comboBoxActionPerformed
-    
+
+
     /** Exit the Application */
     private void exitForm(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_exitForm
         tryExit();
     }//GEN-LAST:event_exitForm
-    
+
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         new RegularExpressionEditor().setVisible(true);
     }
-    
 
-    
+
+
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
-        if(c == null) return;
-        logger.debug("Regular expression editor action command: " +c);
-        
-        if("New expression".equalsIgnoreCase(c)) {
+        if (c == null) {
+            return;
+        }
+        logger.debug("Regular expression editor action command: " + c);
+
+        if ("New expression".equalsIgnoreCase(c)) {
             this.regexPane.setText("");
             this.replacementPane.setText("");
             this.testStringPane.setText("");
             this.testResultPane.setText("");
-            testResultPane.setBackground(new Color(255,255,255));
+            testResultPane.setBackground(new Color(255, 255, 255));
         }
-        
-        else if("Cancel".equalsIgnoreCase(c) || "Exit".equalsIgnoreCase(c) || "Close".equalsIgnoreCase(c)) {
+
+        else if ("Cancel".equalsIgnoreCase(c) || "Exit".equalsIgnoreCase(c) || "Close".equalsIgnoreCase(c)) {
             approve = false;
             tryExit();
         }
-        else if("Apply".equalsIgnoreCase(c)) {
+        else if ("Apply".equalsIgnoreCase(c)) {
             approve = true;
             tryExit();
         }
-        else if("Store current expression...".equalsIgnoreCase(c)) {
+        else if ("Store current expression...".equalsIgnoreCase(c)) {
             savePattern();
         }
-        else if(c.startsWith("Test")) {
+        else if (c.startsWith("Test")) {
             testPattern();
         }
-        else if("Import expressions...".equalsIgnoreCase(c)) {
+        else if ("Import expressions...".equalsIgnoreCase(c)) {
             importPatterns();
         }
-        else if("Export expressions...".equalsIgnoreCase(c)) {
+        else if ("Export expressions...".equalsIgnoreCase(c)) {
             exportPatterns();
         }
-        else if("Delete all expressions...".equalsIgnoreCase(c)) {
+        else if ("Delete all expressions...".equalsIgnoreCase(c)) {
             patterns = new LinkedHashMap<>();
             wandora.options.removeAll(OPTIONS_PREFIX);
             initPatternsComboBox();
         }
     }
-    
-    
+
+
     public void tryExit() {
-        if(wandora != null) {
+        if (wandora != null) {
             this.savePatternsToOptions(wandora.options);
         }
         this.setVisible(false);
     }
-    
-    
+
+
     public void show(Object o, int column, EasyReplaceExpression pattern, boolean isAnd) {
         originalPattern = pattern;
         approve = false;
-        if(pattern != null) {
+        if (pattern != null) {
             String name = pattern.getName();
-            if(name == null) name = DEFAULT_PATTERN_NAME;
-            if(patterns.isEmpty() || !patterns.containsKey(name)) {
+            if (name == null) {
+                name = DEFAULT_PATTERN_NAME;
+            }
+            if (patterns.isEmpty() || !patterns.containsKey(name)) {
                 patterns.put(name, pattern);
-                ((SimpleComboBox<String>) nameComboBox).setOptions(patterns.keySet()); 
+                ((SimpleComboBox<String>) nameComboBox).setOptions(patterns.keySet());
             }
             nameComboBox.setSelectedItem(name);
             caseSensitivityCheckBox.setSelected(!pattern.isCaseInsensitive());
             matchCheckBox.setSelected(!pattern.findInsteadMatch());
             regexPane.setText(pattern.getPatternString());
         }
-        //andCheckBox.setSelected(isAnd);
         this.setVisible(false);
     }
-    
-    
-   
-    
-    
+
+
+
     public boolean findInsteadMatch() {
-        if(matchCheckBox.isSelected()) return false;
-        else return true;
+        if (matchCheckBox.isSelected()) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
-    
-    
-    
+
+
+
     // --- THE REPLACER --------------------------------------------------------   
-    
+
+
+
     public String replace(String target) {
         try {
-            if(target != null && target.length() > 0) {
+            if (target != null && target.length() > 0) {
                 int flags = 0;
-                if(caseSensitivityCheckBox.isSelected()) flags |= Pattern.CASE_INSENSITIVE;
+                if (caseSensitivityCheckBox.isSelected()) {
+                    flags |= Pattern.CASE_INSENSITIVE;
+                }
                 Pattern pattern = Pattern.compile(regexPane.getText(), flags);
                 Matcher matcher = pattern.matcher(target);
                 boolean match = false;
-                if(!matchCheckBox.isSelected() == true) {
+                if (!matchCheckBox.isSelected() == true) {
                     match = matcher.find();
                 }
                 else {
                     match = matcher.matches();
                 }
-                if(match) {
+                if (match) {
                     return matcher.replaceAll(replacementPane.getText());
                 }
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
         return null;
     }
-    
-    
+
+
     public boolean matches(String target) {
         try {
-            if(target != null && target.length() > 0) {
+            if (target != null && target.length() > 0) {
                 int flags = 0;
-                if(caseSensitivityCheckBox.isSelected()) flags |= Pattern.CASE_INSENSITIVE;
+                if (caseSensitivityCheckBox.isSelected()) {
+                    flags |= Pattern.CASE_INSENSITIVE;
+                }
                 Pattern pattern = Pattern.compile(regexPane.getText(), flags);
                 Matcher matcher = pattern.matcher(target);
-                if(!matchCheckBox.isSelected() == true) {
+                if (!matchCheckBox.isSelected() == true) {
                     return matcher.find();
                 }
                 else {
@@ -610,28 +625,29 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
                 }
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
         return false;
     }
-    
-    
-    
-    
+
+
+
     // --- HANDLE PATTERNS -----------------------------------------------------
-    
-    
-    
-    
+
+
+
     public EasyReplaceExpression getCurrentPattern() {
-        if(approve == true) {
-            try { 
+        if (approve == true) {
+            try {
                 Pattern.compile(regexPane.getText()); // TRYING
                 String name = (String) nameComboBox.getSelectedItem();
-                if(name == null) name = DEFAULT_PATTERN_NAME;
-                return new EasyReplaceExpression((String) nameComboBox.getSelectedItem(), regexPane.getText(), replacementPane.getText(), !matchCheckBox.isSelected(), !caseSensitivityCheckBox.isSelected()); }
-            catch (Exception e) { 
+                if (name == null)
+                    name = DEFAULT_PATTERN_NAME;
+                return new EasyReplaceExpression((String) nameComboBox.getSelectedItem(), regexPane.getText(),
+                        replacementPane.getText(), !matchCheckBox.isSelected(), !caseSensitivityCheckBox.isSelected());
+            }
+            catch (Exception e) {
                 testResultPane.setBackground(TEST_ERROR);
                 testResultPane.setText("Syntax error in regular expression!\n\n" + e.toString());
                 return null;
@@ -641,17 +657,14 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
             return originalPattern;
         }
     }
-    
-    
-    
-   
-    
-    
+
+
+
     public void selectPattern() {
         try {
-            if(nameComboBox.getSelectedItem() != null) {
+            if (nameComboBox.getSelectedItem() != null) {
                 EasyReplaceExpression currentPattern = patterns.get(nameComboBox.getSelectedItem().toString());
-                if(currentPattern != null) {
+                if (currentPattern != null) {
                     regexPane.setText(currentPattern.getPatternString());
                     replacementPane.setText(currentPattern.getReplacementString());
                     matchCheckBox.setSelected(!currentPattern.findInsteadMatch());
@@ -660,61 +673,69 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
             }
         }
         catch (Exception e) {
-        	logger.error(e);
+            logger.error(e);
         }
     }
-    
-    
-    
+
+
+
     public void savePattern() {
         String n = "New pattern";
-        if(nameComboBox.getSelectedItem() != null) n =  nameComboBox.getSelectedItem().toString();
-        String patternNameString=WandoraOptionPane.showInputDialog(this, "Enter name for the regular expression", n);
+        if (nameComboBox.getSelectedItem() != null) {
+            n = nameComboBox.getSelectedItem().toString();
+        }
+        String patternNameString = WandoraOptionPane.showInputDialog(this, "Enter name for the regular expression", n);
 
         String patternString = regexPane.getText();
-        if(patternNameString != null && patternNameString.length() > 0) {
-            if(patternString != null && patternString.length() > 0) {
+        if (patternNameString != null && patternNameString.length() > 0) {
+            if (patternString != null && patternString.length() > 0) {
                 try {
                     Pattern.compile(regexPane.getText()); // TESTING!
-                    EasyReplaceExpression kp = new EasyReplaceExpression(patternNameString, regexPane.getText(), replacementPane.getText(), !matchCheckBox.isSelected(), !caseSensitivityCheckBox.isSelected());
+                    EasyReplaceExpression kp = new EasyReplaceExpression(patternNameString, regexPane.getText(),
+                            replacementPane.getText(), !matchCheckBox.isSelected(),
+                            !caseSensitivityCheckBox.isSelected());
                     patterns.put(patternNameString, kp);
                     initPatternsComboBox();
                     nameComboBox.setSelectedItem(patternNameString);
                 }
                 catch (Exception e) {
                     testResultPane.setBackground(TEST_ERROR);
-                    testResultPane.setText("Storing regular expression failed! Syntax error in regular expression!\n\n" + e.toString());
+                    testResultPane.setText("Storing regular expression failed! Syntax error in regular expression!\n\n"
+                            + e.toString());
                 }
             }
             else {
-                if(patterns.get(patternString) != null) patterns.remove(patternString);
+                if (patterns.get(patternString) != null) {
+                    patterns.remove(patternString);
+                }
             }
         }
     }
-    
-    
-    
-    
+
+
+
     public void testPattern() {
         String patternString = regexPane.getText();
         String replacement = replacementPane.getText();
         String testString = testStringPane.getText();
-        
-        if(patternString != null && patternString.length() > 0) {
-            if(testString != null && testString.length() > 0) {
+
+        if (patternString != null && patternString.length() > 0) {
+            if (testString != null && testString.length() > 0) {
                 try {
                     int flags = 0;
-                    if(caseSensitivityCheckBox.isSelected()) flags |= Pattern.CASE_INSENSITIVE;
+                    if (caseSensitivityCheckBox.isSelected()) {
+                        flags |= Pattern.CASE_INSENSITIVE;
+                    }
                     Pattern pattern = Pattern.compile(patternString, flags);
                     Matcher matcher = pattern.matcher(testString);
                     boolean match = false;
-                    if(!matchCheckBox.isSelected() == true) {
+                    if (!matchCheckBox.isSelected() == true) {
                         match = matcher.find();
                     }
                     else {
                         match = matcher.matches();
                     }
-                    if(match) {
+                    if (match) {
                         testResultPane.setBackground(TEST_MATCH);
                         testResultPane.setText(matcher.replaceAll(replacement));
                     }
@@ -748,80 +769,80 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
         }
     }
 
-    
-    
-    
+
+
     // --- IMPORT PATTERNS -----------------------------------------------------
-    
-    
+
+
     public void importPatterns() {
-        SimpleFileChooser chooser=UIConstants.getFileChooser();
+        SimpleFileChooser chooser = UIConstants.getFileChooser();
         chooser.setDialogTitle("Loading regular expressions");
         chooser.setApproveButtonText("Load");
         chooser.setFileSelectionMode(SimpleFileChooser.FILES_ONLY);
 
-        if(chooser.open(wandora) == SimpleFileChooser.APPROVE_OPTION) {
+        if (chooser.open(wandora) == SimpleFileChooser.APPROVE_OPTION) {
             importPatterns(chooser.getSelectedFile());
             initPatternsComboBox();
         }
     }
-    
-    
-    
+
+
+
     public void importPatterns(File file) {
         patterns = new LinkedHashMap<>();
         mergePatterns(file);
     }
-    
-    
-    
+
+
+
     public void mergePatterns(File file) {
-        if(file != null) {
+        if (file != null) {
             try {
                 String s = IObox.loadFile(file);
                 parsePatterns(s);
             }
             catch (Exception e) {
-            	logger.error(e);
+                logger.error(e);
             }
         }
     }
-    
-    
+
+
     public void importPatterns(String resourceName) {
         patterns = new LinkedHashMap<>();
         mergePatterns(resourceName);
     }
-    
-    
+
+
     public void mergePatterns(String resourceName) {
-        if(resourceName != null) {
+        if (resourceName != null) {
             try {
                 String s = IObox.loadResource(resourceName);
                 parsePatterns(s);
             }
             catch (Exception e) {
-            	logger.error(e);
+                logger.error(e);
             }
         }
     }
-    
-    
+
+
     public void parsePatterns(String s) {
-        if(s != null) {
+        if (s != null) {
             try {
                 StringTokenizer lines = new StringTokenizer(s, "\n");
-                while(lines.hasMoreTokens()) {
+                while (lines.hasMoreTokens()) {
                     String line = lines.nextToken();
                     StringTokenizer parts = new StringTokenizer(line, "\t");
-                    if(parts.countTokens()>4) {
+                    if (parts.countTokens() > 4) {
                         String name = parts.nextToken();
                         String pattern = parts.nextToken();
                         String replacement = parts.nextToken();
                         String findInstead = parts.nextToken();
                         String caseSensitivity = parts.nextToken();
-                        if(name != null && name.length() > 0 && pattern != null && pattern.length() > 0) {
-                            patterns.put(name, new EasyReplaceExpression(name, pattern, replacement, "true".equalsIgnoreCase(findInstead), "true".equalsIgnoreCase(caseSensitivity)));
+                        if (name != null && name.length() > 0 && pattern != null && pattern.length() > 0) {
+                            patterns.put(name, new EasyReplaceExpression(name, pattern, replacement,
+                                    "true".equalsIgnoreCase(findInstead), "true".equalsIgnoreCase(caseSensitivity)));
                         }
                     }
                     else {
@@ -830,28 +851,28 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
                 }
             }
             catch (Exception e) {
-            	logger.error(e);
+                logger.error(e);
             }
         }
     }
-    
-    
-    
-    
-    public void parsePatternOptions(Options opts) {
-        if(opts != null) {
-            boolean noRejects = true;
-            int i=0;
-            try {
-                while(noRejects) {
-                    String name = opts.get(OPTIONS_PREFIX+"expression["+i+"].name");
-                    String pattern = opts.get(OPTIONS_PREFIX+"expression["+i+"].pattern");
-                    String replacement = opts.get(OPTIONS_PREFIX+"expression["+i+"].replacement");
-                    String findInstead = opts.get(OPTIONS_PREFIX+"expression["+i+"].partialMatch");
-                    String caseSensitivity = opts.get(OPTIONS_PREFIX+"expression["+i+"].caseSensitive");
 
-                    if(name != null && name.length() > 0 && pattern != null && pattern.length() > 0) {
-                        patterns.put(name, new EasyReplaceExpression(name, pattern, replacement, "true".equalsIgnoreCase(findInstead), "true".equalsIgnoreCase(caseSensitivity)));
+
+
+    public void parsePatternOptions(Options opts) {
+        if (opts != null) {
+            boolean noRejects = true;
+            int i = 0;
+            try {
+                while (noRejects) {
+                    String name = opts.get(OPTIONS_PREFIX + "expression[" + i + "].name");
+                    String pattern = opts.get(OPTIONS_PREFIX + "expression[" + i + "].pattern");
+                    String replacement = opts.get(OPTIONS_PREFIX + "expression[" + i + "].replacement");
+                    String findInstead = opts.get(OPTIONS_PREFIX + "expression[" + i + "].partialMatch");
+                    String caseSensitivity = opts.get(OPTIONS_PREFIX + "expression[" + i + "].caseSensitive");
+
+                    if (name != null && name.length() > 0 && pattern != null && pattern.length() > 0) {
+                        patterns.put(name, new EasyReplaceExpression(name, pattern, replacement,
+                                "true".equalsIgnoreCase(findInstead), "true".equalsIgnoreCase(caseSensitivity)));
                     }
                     else {
                         logger.warn("Rejecting pattern!");
@@ -861,22 +882,23 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
                 }
             }
             catch (Exception e) {
-            	logger.error(e);
+                logger.error(e);
             }
         }
     }
-    
+
+
     public void savePatternsToOptions(Options opts) {
-        if(opts != null) {
+        if (opts != null) {
             int i = 0;
-            for(String key : patterns.keySet()) {
+            for (String key : patterns.keySet()) {
                 try {
                     EasyReplaceExpression kp = (EasyReplaceExpression) patterns.get(key);
-                    opts.put(OPTIONS_PREFIX+"expression["+i+"].name", kp.getName());
-                    opts.put(OPTIONS_PREFIX+"expression["+i+"].pattern", kp.getPatternString());
-                    opts.put(OPTIONS_PREFIX+"expression["+i+"].replacement", kp.getReplacementString());
-                    opts.put(OPTIONS_PREFIX+"expression["+i+"].partialMatch", kp.findInsteadMatch() ? "true" : "false");
-                    opts.put(OPTIONS_PREFIX+"expression["+i+"].caseSensitive", kp.isCaseInsensitive() ? "true" : "false");
+                    opts.put(OPTIONS_PREFIX + "expression[" + i + "].name", kp.getName());
+                    opts.put(OPTIONS_PREFIX + "expression[" + i + "].pattern", kp.getPatternString());
+                    opts.put(OPTIONS_PREFIX + "expression[" + i + "].replacement", kp.getReplacementString());
+                    opts.put(OPTIONS_PREFIX + "expression[" + i + "].partialMatch", kp.findInsteadMatch() ? "true" : "false");
+                    opts.put(OPTIONS_PREFIX + "expression[" + i + "].caseSensitive", kp.isCaseInsensitive() ? "true" : "false");
                     i++;
                 }
                 catch (Exception ex) {
@@ -885,26 +907,26 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
             }
         }
     }
-    
-    
-    
+
+
+
     // --- EXPORT PATTERNS -----------------------------------------------------
-   
-    
-    
+
+
+
     public void exportPatterns() {
-        SimpleFileChooser chooser=UIConstants.getFileChooser();
+        SimpleFileChooser chooser = UIConstants.getFileChooser();
         chooser.setDialogTitle("Saving regular expressions");
         chooser.setApproveButtonText("Save");
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-        if(chooser.open(wandora, SimpleFileChooser.SAVE_DIALOG) == SimpleFileChooser.APPROVE_OPTION) {
+        if (chooser.open(wandora, SimpleFileChooser.SAVE_DIALOG) == SimpleFileChooser.APPROVE_OPTION) {
             exportPatterns(chooser.getSelectedFile());
         }
     }
-    
-    
-    
+
+
+
     public void exportPatterns(File file) {
         try {
             IObox.saveFile(file, patterns2String());
@@ -913,16 +935,24 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
             logger.error(e);
         }
     }
-    
-    
-    
+
+
+
     public String patterns2String() {
         StringBuilder sb = new StringBuilder("");
-        for(String key : patterns.keySet()) {
+        for (String key : patterns.keySet()) {
             try {
                 EasyReplaceExpression kp = patterns.get(key);
-                sb.append(key).append("\t").append(kp.getPatternString()).append("\t").append(kp.getReplacementString()).append("\t").append(kp.findInsteadMatch()).append("\t").append(kp.isCaseInsensitive());
-                sb.append("\n");
+                sb.append(key)
+                    .append("\t")
+                    .append(kp.getPatternString())
+                    .append("\t")
+                    .append(kp.getReplacementString())
+                    .append("\t")
+                    .append(kp.findInsteadMatch())
+                    .append("\t")
+                    .append(kp.isCaseInsensitive())
+                    .append("\n");
             }
             catch (Exception ex) {
                 logger.error(ex);
@@ -930,14 +960,13 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
         }
         return sb.toString();
     }
-    
 
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
-    
+
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton applyButton;
     private javax.swing.JPanel buttonPanel;
@@ -974,5 +1003,5 @@ public class RegularExpressionEditor extends javax.swing.JDialog implements Acti
     private javax.swing.JTextPane testStringPane;
     private javax.swing.JScrollPane testStringScrollPane;
     // End of variables declaration//GEN-END:variables
-    
+
 }

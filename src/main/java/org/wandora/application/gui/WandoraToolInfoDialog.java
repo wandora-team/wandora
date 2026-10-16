@@ -30,8 +30,8 @@ package org.wandora.application.gui;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
@@ -52,46 +52,47 @@ import org.wandora.utils.Tuples.T2;
 public class WandoraToolInfoDialog extends javax.swing.JDialog {
 
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	
-	private Wandora wandora;
-    
-    
+
+    private Wandora wandora;
+
+
     /** Creates new form WandoraToolInfoDialog */
     public WandoraToolInfoDialog(Wandora w, WandoraTool tool, ToolInfo toolInfo) {
         super(w, true);
         wandora = w;
         initComponents();
-        initToolInfo(tool,toolInfo);
+        initToolInfo(tool, toolInfo);
         initToolLogs(tool);
         this.setSize(500, 250);
         org.wandora.utils.swing.GuiTools.centerWindow(this, wandora);
         this.setVisible(true);
     }
-    
-    
-    
 
-    public void initToolInfo(WandoraTool tool,ToolInfo toolInfo) {
+
+
+    public void initToolInfo(WandoraTool tool, ToolInfo toolInfo) {
         StringBuilder toolInfoText = new StringBuilder("");
         toolInfoText.append("Name:\n").append(tool.getName()).append("\n\n");
         toolInfoText.append("Class:\n").append(tool.getClass().toString()).append("\n\n");
-        if(toolInfo!=null) toolInfoText.append("Source: ").append(toolInfo.sourceType).append(":").append(toolInfo.source).append("\n\n");
+        if (toolInfo != null)
+            toolInfoText.append("Source: ").append(toolInfo.sourceType).append(":").append(toolInfo.source)
+                    .append("\n\n");
         toolInfoText.append("Description:\n").append(tool.getDescription()).append("\n\n");
         toolInfoText.append("Types:\n").append(tool.getType().toString()).append("\n\n");
         toolInfoText.append("Is configurable:\n").append(tool.isConfigurable()).append("\n\n");
-        
-        if(tool instanceof AbstractWandoraTool) {
+
+        if (tool instanceof AbstractWandoraTool) {
             AbstractWandoraTool at = (AbstractWandoraTool) tool;
             toolInfoText.append("Allow multiple invocations:\n").append(at.allowMultipleInvocations()).append("\n\n");
-            ArrayList<T2<Thread,Long>> threads = at.getThreads();
-            if(threads.size() > 0) {
+            List<T2<Thread, Long>> threads = at.getThreads();
+            if (threads.size() > 0) {
                 toolInfoText.append("Running threads:\n");
                 String dateStr = "";
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-                for( T2<Thread,Long> timedThread : threads ) {
-                    if(timedThread != null) {
+                for (T2<Thread, Long> timedThread : threads) {
+                    if (timedThread != null) {
                         dateStr = df.format(new Date(timedThread.e2.longValue()));
                         toolInfoText.append(timedThread.e1.toString() + " since " + dateStr + "\n");
                     }
@@ -101,19 +102,19 @@ public class WandoraToolInfoDialog extends javax.swing.JDialog {
                 toolInfoText.append("No threads running at the moment.\n");
             }
         }
-        
+
         toolInfoTextPane.setText(toolInfoText.toString());
         toolInfoTextPane.setCaretPosition(0);
     }
 
-    
+
     public void initToolLogs(WandoraTool tool) {
-        if(tool instanceof AbstractWandoraTool) {
+        if (tool instanceof AbstractWandoraTool) {
             AbstractWandoraTool at = (AbstractWandoraTool) tool;
             WandoraToolLogger logger = at.getLastLogger();
-            if(logger != null) {
+            if (logger != null) {
                 String logs = logger.getHistory();
-                if(logs != null && logs.length() > 0) {
+                if (logs != null && logs.length() > 0) {
                     logTextPane.setText(logs);
                 }
                 else {
@@ -128,7 +129,7 @@ public class WandoraToolInfoDialog extends javax.swing.JDialog {
             logTextPane.setText("Unable to restore tool logs!");
         }
     }
-    
+
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -209,9 +210,10 @@ public class WandoraToolInfoDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-private void toolInfoCloseButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_toolInfoCloseButtonMousePressed
-    this.setVisible(false);
-}//GEN-LAST:event_toolInfoCloseButtonMousePressed
+
+    private void toolInfoCloseButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_toolInfoCloseButtonMousePressed
+        this.setVisible(false);
+    }//GEN-LAST:event_toolInfoCloseButtonMousePressed
 
 
 

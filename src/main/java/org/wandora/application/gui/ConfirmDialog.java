@@ -37,21 +37,24 @@ import org.wandora.utils.swing.GuiTools;
  * @author  olli
  */
 public class ConfirmDialog extends javax.swing.JDialog {
-    
-	private static final long serialVersionUID = 1L;
-	
-	private ConfirmResult result=ConfirmResult.cancel;
-    
+
+    private static final long serialVersionUID = 1L;
+
+    private ConfirmResult result = ConfirmResult.cancel;
+
     /** Creates new form ConfirmDialog */
     private ConfirmDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
+
+
     private ConfirmDialog(java.awt.Dialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -171,58 +174,78 @@ public class ConfirmDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void noToAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noToAllButtonActionPerformed
-        result=ConfirmResult.notoall;
+        result = ConfirmResult.notoall;
         setVisible(false);
     }//GEN-LAST:event_noToAllButtonActionPerformed
 
+
     private void noButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noButtonActionPerformed
-        result=ConfirmResult.no;
-        setVisible(false);        
+        result = ConfirmResult.no;
+        setVisible(false);
     }//GEN-LAST:event_noButtonActionPerformed
 
+
     private void yesToAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yesToAllButtonActionPerformed
-        result=ConfirmResult.yestoall;
-        setVisible(false);        
+        result = ConfirmResult.yestoall;
+        setVisible(false);
     }//GEN-LAST:event_yesToAllButtonActionPerformed
 
+
     private void yesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yesButtonActionPerformed
-        result=ConfirmResult.yes;
-        setVisible(false);        
+        result = ConfirmResult.yes;
+        setVisible(false);
     }//GEN-LAST:event_yesButtonActionPerformed
-    
-    private ConfirmResult getResult(){
+
+
+    private ConfirmResult getResult() {
         return result;
     }
-    
-    private static java.awt.Window getWindow(java.awt.Component parent){
-        if (parent instanceof java.awt.Frame || parent instanceof java.awt.Dialog) return (java.awt.Window)parent;
+
+
+    private static java.awt.Window getWindow(java.awt.Component parent) {
+        if (parent instanceof java.awt.Frame || parent instanceof java.awt.Dialog)
+            return (java.awt.Window) parent;
         return getWindow(parent.getParent());
     }
 
-    public static ConfirmResult showConfirmDialog(java.awt.Component parent,String title,String message,boolean simple){
-        if(simple) return showConfirmDialog(parent,title,message,true,false,true,false);
-        else return showConfirmDialog(parent,title,message,true,true,true,true);
+
+    public static ConfirmResult showConfirmDialog(java.awt.Component parent, String title, String message,
+            boolean simple) {
+        if (simple)
+            return showConfirmDialog(parent, title, message, true, false, true, false);
+        else
+            return showConfirmDialog(parent, title, message, true, true, true, true);
     }
-    public static ConfirmResult showConfirmDialog(java.awt.Component parent,String title,String message,boolean yes,boolean yesToAll,boolean no,boolean noToAll){
-        ConfirmDialog cd=null;
-        java.awt.Window w=getWindow(parent);
-        if(w instanceof java.awt.Dialog) cd=new ConfirmDialog((java.awt.Dialog)w,true);
-        else cd=new ConfirmDialog((java.awt.Frame)w,true);
+
+
+    public static ConfirmResult showConfirmDialog(java.awt.Component parent, String title, String message, boolean yes,
+            boolean yesToAll, boolean no, boolean noToAll) {
+        ConfirmDialog cd = null;
+        java.awt.Window w = getWindow(parent);
+        if (w instanceof java.awt.Dialog d)
+            cd = new ConfirmDialog(d, true);
+        else
+            cd = new ConfirmDialog((java.awt.Frame) w, true);
         cd.setTitle(title);
-        message=message.replace("\n","<br>");
-        cd.label.setText("<html>"+message+"</html>");
-        if(!yes) cd.yesButton.setVisible(false);
-        if(!yesToAll) cd.yesToAllButton.setVisible(false);
-        if(!no) cd.noButton.setVisible(false);
-        if(!noToAll) cd.noToAllButton.setVisible(false);
+        message = message.replace("\n", "<br>");
+        cd.label.setText("<html>" + message + "</html>");
+        if (!yes)
+            cd.yesButton.setVisible(false);
+        if (!yesToAll)
+            cd.yesToAllButton.setVisible(false);
+        if (!no)
+            cd.noButton.setVisible(false);
+        if (!noToAll)
+            cd.noToAllButton.setVisible(false);
         cd.iconLabel.setIcon(UIBox.getIcon("gui/icons/dialog/inform.gif"));
         cd.pack();
-        GuiTools.centerWindow(cd,parent);
+        GuiTools.centerWindow(cd, parent);
         cd.setVisible(true);
         return cd.getResult();
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel iconLabel;
     private javax.swing.JPanel iconPanel;
@@ -233,5 +256,5 @@ public class ConfirmDialog extends javax.swing.JDialog {
     private javax.swing.JButton yesButton;
     private javax.swing.JButton yesToAllButton;
     // End of variables declaration//GEN-END:variables
-    
+
 }

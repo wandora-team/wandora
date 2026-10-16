@@ -42,8 +42,8 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 public class MixedTopicGuiWrapper {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MixedTopicGuiWrapper.class);
-	
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(MixedTopicGuiWrapper.class);
+
     public static final String TOPIC_RENDERS_OPTION_KEY = "gui.topicRenders";
 
     public static final int TOPIC_RENDERS_SL = 100;
@@ -52,48 +52,58 @@ public class MixedTopicGuiWrapper {
     public static final int TOPIC_RENDERS_BASENAME = 130;
     public static final int TOPIC_RENDERS_BASENAME_WITH_SL_ICON = 140;
 
-    public static final String PROCESSING_TYPE="PROCESSING_TYPE";
+    public static final String PROCESSING_TYPE = "PROCESSING_TYPE";
 
     public Object content;
     public String icon;
     public String associationType;
     public TreePath path;
 
-    
-    
-    
-    
-    
-    public MixedTopicGuiWrapper(Object content, String icon,String associationType,TreePath parent) {
-        this.content=content;
-        this.icon=icon;
-        this.associationType=associationType;
-        if(parent==null) path=new TreePath(this);
-        else path=parent.pathByAddingChild(this);
+
+
+    public MixedTopicGuiWrapper(Object content, String icon, String associationType, TreePath parent) {
+        this.content = content;
+        this.icon = icon;
+        this.associationType = associationType;
+        if (parent == null) {
+            path = new TreePath(this);
+        }
+        else {
+            path = parent.pathByAddingChild(this);
+        }
     }
+
+
     public MixedTopicGuiWrapper(Object content, String icon) {
-        this(content,icon,"",null);
+        this(content, icon, "", null);
     }
+
+
     public MixedTopicGuiWrapper(Object content) {
-        this(content,null,"",null);
+        this(content, null, "", null);
     }
+
 
     public Object getContent() {
         return content;
     }
 
+
     @Override
     public String toString() {
         try {
-            if(associationType.equals(PROCESSING_TYPE))return "Processing...";
-            else if(content == null) return "[null]";
-            else if(content instanceof Topic) {
-                Topic topic = (Topic) content;
-                if(topic.isRemoved()) {
+            if (associationType.equals(PROCESSING_TYPE)) {
+                return "Processing...";
+            }
+            else if (content == null) {
+                return "[null]";
+            }
+            else if (content instanceof Topic topic) {
+                if (topic.isRemoved()) {
                     return "[removed]";
                 }
                 else {
-                    if(topic.getBaseName() != null) {
+                    if (topic.getBaseName() != null) {
                         return topic.getBaseName();
                     }
                     else {
@@ -105,7 +115,7 @@ public class MixedTopicGuiWrapper {
                 return content.toString();
             }
         }
-        catch(Exception e){
+        catch (Exception e) {
             logger.error(e);
             return "[Exception retrieving name]";
         }
@@ -114,20 +124,24 @@ public class MixedTopicGuiWrapper {
 
     public String toString(int stringType) throws TopicMapException {
         try {
-            if(associationType.equals(PROCESSING_TYPE)) return "Processing...";
-            else if(content == null) return "[null]";
-            else if(content instanceof Topic) {
-                Topic topic=(Topic)content;
-
-                if(topic.isRemoved()) return "[removed]";
+            if (associationType.equals(PROCESSING_TYPE)) {
+                return "Processing...";
+            }
+            else if (content == null) {
+                return "[null]";
+            }
+            else if (content instanceof Topic topic) {
+                if (topic.isRemoved()) {
+                    return "[removed]";
+                }
                 else {
-                    switch(stringType) {
+                    switch (stringType) {
                         case TOPIC_RENDERS_BASENAME: {
-                            if(topic.getBaseName() == null) {
+                            if (topic.getBaseName() == null) {
                                 return topic.getOneSubjectIdentifier().toExternalForm();
                             }
-                            else { 
-                                return topic.getBaseName(); 
+                            else {
+                                return topic.getBaseName();
                             }
                         }
                         case TOPIC_RENDERS_SI: {
@@ -137,27 +151,29 @@ public class MixedTopicGuiWrapper {
                             String urlString = topic.getOneSubjectIdentifier().toExternalForm();
                             URL url = new URI(urlString).toURL();
                             urlString = url.getFile();
-                            if(url.getRef() != null) urlString += "#" + url.getRef();
+                            if (url.getRef() != null) {
+                                urlString += "#" + url.getRef();
+                            }
                             return urlString;
                         }
 
                         case TOPIC_RENDERS_SL: {
-                            if(topic.getSubjectLocator() == null) {
+                            if (topic.getSubjectLocator() == null) {
                                 return "";
                             }
-                            else { 
-                                return topic.getSubjectLocator().toExternalForm(); 
+                            else {
+                                return topic.getSubjectLocator().toExternalForm();
                             }
                         }
 
 
                         // BY DEFAULT TOPIC RENDERS AS THE BASE NAME
                         default: {
-                            if(topic.getBaseName() == null) {
+                            if (topic.getBaseName() == null) {
                                 return topic.getOneSubjectIdentifier().toExternalForm();
                             }
-                            else { 
-                                return topic.getBaseName(); 
+                            else {
+                                return topic.getBaseName();
                             }
                         }
                     }
@@ -167,8 +183,8 @@ public class MixedTopicGuiWrapper {
                 return content.toString();
             }
         }
-        catch(Exception e){
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
             return "[Exception retrieving name]";
         }
     }

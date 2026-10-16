@@ -45,74 +45,87 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author  olli
  */
 public class NewTopicMapPanel extends javax.swing.JPanel {
-	private static final long serialVersionUID = 1L;
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(NewTopicMapPanel.class);
-	
-    
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(NewTopicMapPanel.class);
+
     private Wandora wandora;
-    private Delegate<Object,NewTopicMapPanel> okDelegate;
-    private Delegate<Object,NewTopicMapPanel> cancelDelegate;
-    private TopicMapConfigurationPanel confPanel=null;
+    private Delegate<Object, NewTopicMapPanel> okDelegate;
+    private Delegate<Object, NewTopicMapPanel> cancelDelegate;
+    private TopicMapConfigurationPanel confPanel = null;
     private boolean acceptNamePropositions = true;
-    
-    
+
+
+
     /** Creates new form NewTopicMapPanel */
-    public NewTopicMapPanel(Wandora wandora,Delegate<Object,NewTopicMapPanel> okDelegate,Delegate<Object,NewTopicMapPanel> cancelDelegate) {
-        this.wandora=wandora;
-        this.okDelegate=okDelegate;
-        this.cancelDelegate=cancelDelegate;
+    public NewTopicMapPanel(
+            Wandora wandora, 
+            Delegate<Object, NewTopicMapPanel> okDelegate,
+            Delegate<Object, NewTopicMapPanel> cancelDelegate) {
+        
+        this.wandora = wandora;
+        this.okDelegate = okDelegate;
+        this.cancelDelegate = cancelDelegate;
         initComponents();
-        
+
         typeComboBox.setEditable(false);
-        
+
         Options options = wandora.getOptions();
-        if(options != null) {
-            int i=0;
-            while(options.get("layers.layer["+i+"]") != null) {
-                String layerTypeClassName = options.get("layers.layer["+i+"]");
+        if (options != null) {
+            int i = 0;
+            while (options.get("layers.layer[" + i + "]") != null) {
+                String layerTypeClassName = options.get("layers.layer[" + i + "]");
                 try {
-                    if(layerTypeClassName != null) {
+                    if (layerTypeClassName != null) {
                         layerTypeClassName = layerTypeClassName.trim();
-                        if(layerTypeClassName.length() > 0) {
+                        if (layerTypeClassName.length() > 0) {
                             Class<?> layerTypeClass = Class.forName(layerTypeClassName);
-                            if(layerTypeClass != null) {
+                            if (layerTypeClass != null) {
                                 Object layerType = layerTypeClass.getDeclaredConstructor().newInstance();
-                                if(layerType instanceof TopicMapType layerTopicMapType) {
+                                if (layerType instanceof TopicMapType layerTopicMapType) {
                                     typeComboBox.addItem(layerTopicMapType);
                                 }
                             }
                         }
                     }
                 }
-                catch(Exception e) {
-                    logger.error("Warning: Can't create topic map layer type with class name '"+layerTypeClassName+"'.");
+                catch (Exception e) {
+                    logger.error(
+                            "Warning: Can't create topic map layer type with class name '" + layerTypeClassName + "'.");
                     logger.error(e);
                 }
                 i++;
             }
         }
-        
-        if(okDelegate==null) okButton.setVisible(false);
-        if(cancelDelegate==null) cancelButton.setVisible(false);
-        //this.setName("NewTopicMapPanel");
+
+        if (okDelegate == null) {
+            okButton.setVisible(false);
+        }
+        if (cancelDelegate == null) {
+            cancelButton.setVisible(false);
+        }
     }
-    
-    public String getName(){
+
+
+    public String getName() {
         return nameTextField.getText();
     }
-    
+
+
     public TopicMap createTopicMap() throws TopicMapException {
-        TopicMapType type=(TopicMapType)typeComboBox.getSelectedItem();
-        Object params=confPanel.getParameters();
-        TopicMap tm=type.createTopicMap(params);
+        TopicMapType type = (TopicMapType) typeComboBox.getSelectedItem();
+        Object params = confPanel.getParameters();
+        TopicMap tm = type.createTopicMap(params);
         return tm;
     }
-    
+
+
     public void proposeName(String proposedName) {
-        if(acceptNamePropositions) nameTextField.setText(proposedName);
+        if (acceptNamePropositions) {
+            nameTextField.setText(proposedName);
+        }
     }
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -245,34 +258,39 @@ public class NewTopicMapPanel extends javax.swing.JPanel {
         add(buttonPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void rejectNamePropositionsAfterEdit(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rejectNamePropositionsAfterEdit
         acceptNamePropositions = false;
     }//GEN-LAST:event_rejectNamePropositionsAfterEdit
+
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         cancelDelegate.invoke(this);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         okDelegate.invoke(this);
     }//GEN-LAST:event_okButtonActionPerformed
 
+
     private void typeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeComboBoxActionPerformed
-        TopicMapType type=(TopicMapType)typeComboBox.getSelectedItem();
+        TopicMapType type = (TopicMapType) typeComboBox.getSelectedItem();
         confContainerPanel.removeAll();
-        confPanel=type.getConfigurationPanel(wandora, wandora.getOptions());
+        confPanel = type.getConfigurationPanel(wandora, wandora.getOptions());
         confContainerPanel.add(confPanel);
         confContainerPanel.revalidate();
         confContainerPanel.repaint();
     }//GEN-LAST:event_typeComboBoxActionPerformed
 
+
     private void nameTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameTextFieldKeyReleased
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             okButtonActionPerformed(null);
         }
     }//GEN-LAST:event_nameTextFieldKeyReleased
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
@@ -285,5 +303,5 @@ public class NewTopicMapPanel extends javax.swing.JPanel {
     private javax.swing.JButton okButton;
     private javax.swing.JComboBox<TopicMapType> typeComboBox;
     // End of variables declaration//GEN-END:variables
- 
+
 }

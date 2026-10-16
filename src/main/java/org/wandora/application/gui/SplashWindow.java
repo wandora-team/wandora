@@ -46,62 +46,62 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author akivela
  */
 public class SplashWindow extends JWindow {
-	private static final long serialVersionUID = 1L;
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SplashWindow.class);
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SplashWindow.class);
 
-	
-	protected JLabel splashLabel = null;
+
+    protected JLabel splashLabel = null;
     protected JPanel splashPanel = null;
-    
-    
-    
+
+
+
     /** Creates a new instance of SplashWindow */
     public SplashWindow() {
         this.setLayout(new BorderLayout());
         this.setSize(450, 186);
         this.setPreferredSize(this.getSize());
-        
+
         this.splashPanel = new SplashPanel();
         this.splashPanel.setLayout(new BorderLayout());
         this.splashPanel.setSize(450, 186);
         this.splashPanel.setPreferredSize(this.getSize());
-        
+
         this.splashLabel = new JLabel();
         this.splashLabel.setIcon(UIBox.getIcon("gui/splash.gif"));
         this.splashPanel.add(splashLabel);
-        
+
         this.add(splashPanel);
-        
+
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation((dim.width - this.getWidth()) / 2, (dim.height - this.getHeight()) / 2);
         this.pack();
-        
+
         this.setVisible(true);
     }
-    
-    
-    
-    public class SplashPanel extends JPanel {
-	    private static final long serialVersionUID = 1L;
 
-		@Override
-	    public void paint(Graphics g) {
-			super.paint(g);
-	        
-	        try {
-	            String[] texts = Wandora.getVersionLicenseInfo();
-	            g.setColor(UIConstants.wandoraBlueColorAlt);
-	            g.setFont(UIConstants.wandoraVersionInfoFont);
-	            for (int i=0; i<texts.length; i++) {
-		            int viWidth = g.getFontMetrics().stringWidth(texts[i]);
-		            int vix = this.getWidth() / 2 - viWidth / 2;
-		            int viy = this.getHeight() - 50 + 10 * i;
-		            g.drawString(texts[i], vix, viy);
-	            }
-	        }
-	        catch(Exception e) {
-	        	logger.error(e);
-	        }
-	    }
-    }    
+
+
+    public class SplashPanel extends JPanel {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void paint(Graphics g) {
+            super.paint(g);
+
+            try {
+                String[] texts = Wandora.getVersionLicenseInfo();
+                g.setColor(UIConstants.wandoraBlueColorAlt);
+                g.setFont(UIConstants.wandoraVersionInfoFont);
+                for (int i = 0; i < texts.length; i++) {
+                    int viWidth = g.getFontMetrics().stringWidth(texts[i]);
+                    int vix = this.getWidth() / 2 - viWidth / 2;
+                    int viy = this.getHeight() - 50 + 10 * i;
+                    g.drawString(texts[i], vix, viy);
+                }
+            }
+            catch (Exception e) {
+                logger.error(e);
+            }
+        }
+    }
 }

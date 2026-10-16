@@ -28,7 +28,7 @@ package org.wandora.application.gui;
 
 
 import java.awt.Component;
-import java.util.Vector;
+import java.util.Collection;
 
 import javax.swing.DefaultListModel;
 
@@ -47,11 +47,13 @@ public class TopicListSelector extends javax.swing.JPanel implements TopicSelect
 	private DefaultListModel<TopicListWrapper> listModel;
     private String name;
     
+    
     /** Creates new form TopicListSelector */
-    public TopicListSelector(Vector<Topic> topics) {
+    public TopicListSelector(Collection<Topic> topics) {
         this(topics,"Suggested topics");
     }
-    public TopicListSelector(Vector<Topic> topics,String name) {
+    
+    public TopicListSelector(Collection<Topic> topics,String name) {
         this.name=name;
         listModel=new DefaultListModel<>();
         for(Topic t : topics){
@@ -61,6 +63,9 @@ public class TopicListSelector extends javax.swing.JPanel implements TopicSelect
         if(listModel.size()>0) list.setSelectedIndex(0);
     }
 
+    
+    
+    
     @Override
     public void init() {
     }

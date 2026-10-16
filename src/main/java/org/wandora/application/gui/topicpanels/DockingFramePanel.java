@@ -1126,11 +1126,11 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     
     
     private void processFileList(java.util.List<File> files) throws Exception {
-        ArrayList<WandoraTool> importTools = new ArrayList<>();
+        List<WandoraTool> importTools = new ArrayList<>();
         boolean yesToAll = false;
         
         for(File file : files) {
-            ArrayList<WandoraTool> importToolsForFile = WandoraToolManager.getImportTools(file, orders);
+            List<WandoraTool> importToolsForFile = WandoraToolManager.getImportTools(file, orders);
             if(importToolsForFile != null && !importToolsForFile.isEmpty()) {
                 importTools.addAll(importToolsForFile);
             }

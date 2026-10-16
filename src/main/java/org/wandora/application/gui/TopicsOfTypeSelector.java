@@ -25,6 +25,7 @@
  */
 
 package org.wandora.application.gui;
+
 import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
@@ -44,116 +45,156 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author  olli
  */
 public class TopicsOfTypeSelector extends javax.swing.JPanel implements TopicSelector, Runnable {
-	private static final long serialVersionUID = 1L;
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicsOfTypeSelector.class);
-	
-	private DefaultListModel<ListWrapper> listModel;
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicsOfTypeSelector.class);
+
+    private DefaultListModel<ListWrapper> listModel;
     private Topic typeTopic;
     private Thread thread;
     private boolean running;
     private Collection<Topic> topicsOfType;
-    private long lastTyped=0;
-    private long lastPopulated=0;
+    private long lastTyped = 0;
+    private long lastPopulated = 0;
     private String name;
-    private boolean forcePopulate=false;
-    
+    private boolean forcePopulate = false;
     private boolean useSchema;
+
     
     /** Creates new form TopicsOfTypeSelector */
     public TopicsOfTypeSelector(Topic typeTopic) {
-        this(typeTopic,null,true);
+        this(typeTopic, null, true);
     }
-    public TopicsOfTypeSelector(Topic typeTopic,String name) {
-        this(typeTopic,name,true);
+
+
+    public TopicsOfTypeSelector(Topic typeTopic, String name) {
+        this(typeTopic, name, true);
     }
-    public TopicsOfTypeSelector(Topic typeTopic,String name,boolean useSchema) {
-        this.typeTopic=typeTopic;
-        if(name==null) {
-            try{
-                this.name=typeTopic.getDisplayName("en");
-            }catch(TopicMapException tme){logger.error(tme);}
+
+
+    public TopicsOfTypeSelector(Topic typeTopic, String name, boolean useSchema) {
+        this.typeTopic = typeTopic;
+        if (name == null) {
+            try {
+                this.name = typeTopic.getDisplayName("en");
+            }
+            catch (TopicMapException tme) {
+                logger.error(tme);
+            }
         }
-        else this.name=name;
-        this.useSchema=useSchema;
-        listModel=new DefaultListModel<>();
+        else {
+            this.name = name;
+        }
+        this.useSchema = useSchema;
+        listModel = new DefaultListModel<>();
         initComponents();
         textField.setFocusTraversalKeysEnabled(false);
     }
-    
-    private void populateList(){
-//        listModel.clear();
-        DefaultListModel<ListWrapper> newModel=new DefaultListModel<>();
-        String written=textField.getText().toLowerCase();
-        try{
-            for(Topic t : topicsOfType){
-                String bn=t.getBaseName();
-                if(bn==null) continue;
-                if(bn.toLowerCase().startsWith(written)){
+
+
+    private void populateList() {
+        DefaultListModel<ListWrapper> newModel = new DefaultListModel<>();
+        String written = textField.getText().toLowerCase();
+        try {
+            for (Topic t : topicsOfType) {
+                String bn = t.getBaseName();
+                if (bn == null) {
+                    continue;
+                }
+                if (bn.toLowerCase().startsWith(written)) {
                     newModel.addElement(new ListWrapper(t));
                 }
             }
         }
-        catch(TopicMapException tme){logger.error(tme);}
+        catch (TopicMapException tme) {
+            logger.error(tme);
+        }
         list.setModel(newModel);
     }
 
+
     public void init() {
-        thread=new Thread(this);
-        running=true;
+        thread = new Thread(this);
+        running = true;
         thread.start();
     }
+
 
     public String getSelectorName() {
         return name;
     }
 
+
     public Topic[] getSelectedTopics() {
-        Topic t=getSelectedTopic();
-        if(t==null) return new Topic[0];
-        else return new Topic[]{t};
+        Topic t = getSelectedTopic();
+        if (t == null) {
+            return new Topic[0];
+        }
+        else {
+            return new Topic[] { t };
+        }
     }
 
+
     public Topic getSelectedTopic() {
-        return ((ListWrapper)list.getSelectedValue()).t;
+        return list.getSelectedValue().t;
     }
+
 
     public Component getPanel() {
         return this;
     }
 
+
     public void cleanup() {
-        running=false;
+        running = false;
     }
 
+
     public void run() {
-        try{
+        try {
             Collection<Topic> temp;
-            if(useSchema) temp=SchemaBox.getInstancesOf(typeTopic);
-            else temp=typeTopic.getTopicMap().getTopicsOfType(typeTopic);
-            topicsOfType=TMBox.sortTopics(temp,null);
-            if(topicsOfType.size()<100) forcePopulate=true;
-        }catch(TopicMapException tme){logger.error(tme);}
-        while(running){
-            long delay=0;
-            long t=System.currentTimeMillis();
-            if( (lastTyped>0 && t>=lastTyped+1000 && 
-                    lastPopulated<lastTyped && textField.getText().length()>=3) || forcePopulate){
-                forcePopulate=false;
+            if (useSchema) {
+                temp = SchemaBox.getInstancesOf(typeTopic);
+            }
+            else {
+                temp = typeTopic.getTopicMap().getTopicsOfType(typeTopic);
+            }
+            topicsOfType = TMBox.sortTopics(temp, null);
+            if (topicsOfType.size() < 100) {
+                forcePopulate = true;
+            }
+        }
+        catch (TopicMapException tme) {
+            logger.error(tme);
+        }
+        while (running) {
+            long delay = 0;
+            long t = System.currentTimeMillis();
+            if ((lastTyped > 0 && t >= lastTyped + 1000 &&
+                    lastPopulated < lastTyped && textField.getText().length() >= 3) || forcePopulate) {
+                forcePopulate = false;
                 populateList();
-                lastPopulated=t;
+                lastPopulated = t;
             }
-            else if(lastTyped>0 && lastPopulated<lastTyped && textField.getText().length()>=3){
-                delay=lastTyped+1000-t;
+            else if (lastTyped > 0 && lastPopulated < lastTyped && textField.getText().length() >= 3) {
+                delay = lastTyped + 1000 - t;
             }
-            synchronized(this){
-                try{
-                    if(delay==0) this.wait();
-                    else this.wait(delay);
-                }catch(InterruptedException ie){}
+            synchronized (this) {
+                try {
+                    if (delay == 0) {
+                        this.wait();
+                    }
+                    else {
+                        this.wait(delay);
+                    }
+                }
+                catch (InterruptedException ie) {
+                }
             }
         }
     }
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -174,6 +215,8 @@ public class TopicsOfTypeSelector extends javax.swing.JPanel implements TopicSel
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 textFieldKeyReleased(evt);
             }
+
+
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 textFieldKeyTyped(evt);
             }
@@ -218,65 +261,82 @@ public class TopicsOfTypeSelector extends javax.swing.JPanel implements TopicSel
         add(findButton, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void listKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listKeyReleased
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             // select topic and close dialog
             // current topic selector doesn't have a mechanism to close the dialog
         }
     }//GEN-LAST:event_listKeyReleased
 
+
     private void textFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldKeyReleased
-        if(evt.getKeyCode()==KeyEvent.VK_DOWN){
-            if(listModel.size()>0){
+        if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            if (listModel.size() > 0) {
                 list.setSelectedIndex(0);
                 list.requestFocus();
             }
         }
-        else if(evt.getKeyCode()==KeyEvent.VK_UP){
-            if(listModel.size()>0){
-                list.setSelectedIndex(listModel.size()-1);
+        else if (evt.getKeyCode() == KeyEvent.VK_UP) {
+            if (listModel.size() > 0) {
+                list.setSelectedIndex(listModel.size() - 1);
                 list.requestFocus();
             }
         }
-        else if(evt.getKeyCode()==KeyEvent.VK_TAB){
-            forcePopulate=true;
-            synchronized(this){
+        else if (evt.getKeyCode() == KeyEvent.VK_TAB) {
+            forcePopulate = true;
+            synchronized (this) {
                 this.notifyAll();
             }
         }
     }//GEN-LAST:event_textFieldKeyReleased
 
+
     private void findButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findButtonActionPerformed
-        forcePopulate=true;
-        synchronized(this){
+        forcePopulate = true;
+        synchronized (this) {
             this.notifyAll();
         }
     }//GEN-LAST:event_findButtonActionPerformed
 
+
     private void textFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldKeyTyped
-        lastTyped=System.currentTimeMillis();
-        synchronized(this){
+        lastTyped = System.currentTimeMillis();
+        synchronized (this) {
             this.notifyAll();
         }
     }//GEN-LAST:event_textFieldKeyTyped
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton findButton;
     private javax.swing.JList<ListWrapper> list;
     private javax.swing.JScrollPane scrollPane;
     private javax.swing.JTextField textField;
     // End of variables declaration//GEN-END:variables
-    
-    private static class ListWrapper{
+
+    private static class ListWrapper {
         public Topic t;
-        public ListWrapper(Topic t){this.t=t;};
-        public String toString(){
-            try{
-                String r=t.getBaseName();
-                if(r!=null) return r;
-                else return t.getOneSubjectIdentifier().toExternalForm();
-          }catch(TopicMapException tme){logger.error(tme); return "Exception";}    
+
+        public ListWrapper(Topic t) {
+            this.t = t;
+        };
+
+
+        public String toString() {
+            try {
+                String r = t.getBaseName();
+                if (r != null) {
+                    return r;
+                }
+                else {
+                    return t.getOneSubjectIdentifier().toExternalForm();
+                }
+            }
+            catch (TopicMapException tme) {
+                logger.error(tme);
+                return "Exception";
+            }
         }
     }
 }
