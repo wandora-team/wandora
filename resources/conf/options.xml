@@ -1483,6 +1483,6 @@ MERGE test:testctype, test:testatype</query>
 #</currentScript>
    </rpanel>
    <ollamapanel>
-      <currentPrompt>What is Turku?</currentPrompt>
+      <currentPrompt>What is Wandora?</currentPrompt>
    </ollamapanel>
 </options>
