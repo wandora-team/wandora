@@ -19,7 +19,7 @@ We use Eclipse, preferably Eclipse IDE for Java Developers version 2026-06 (4.40
 
 Wandora was originally developed early 2000. Wandora is now going through a process where we try to modernize many of the underlying technologies and throw away deprecated features. There is no schedule for the next Wandora release yet.
 
-If you wish to look at the old version of Wandora checkout git tag 'master-old'.
+If you wish to look at the old version of Wandora checkout git tag 'master-legacy'.
 
 ### Running Wandora in local development
 
