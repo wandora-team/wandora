@@ -2,7 +2,7 @@
 <options>
    <window>
       <x>162</x>
-      <y>76</y>
+      <y>75</y>
       <width>1351</width>
       <height>835</height>
       <horizontalsplitter>250</horizontalsplitter>
@@ -1483,6 +1483,6 @@ MERGE test:testctype, test:testatype</query>
 #</currentScript>
    </rpanel>
    <ollamapanel>
-      <currentPrompt>What is Turku?</currentPrompt>
+      <currentPrompt>What is Wandora?</currentPrompt>
    </ollamapanel>
 </options>
