@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ public class Last extends Directive implements DirectiveUIHints.Provider {
     public ResultIterator queryIterator(QueryContext context, ResultRow input) throws QueryException {
         ResultIterator iter=directive.queryIterator(context, input);
         if(count>1){
-            LinkedList<ResultRow> history=new LinkedList<ResultRow>();
+            LinkedList<ResultRow> history=new LinkedList<>();
             while(iter.hasNext()){
                 history.add(iter.next());
                 while(history.size()>count) history.removeFirst();

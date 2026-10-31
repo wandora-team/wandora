@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ package org.wandora.application.tools.extractors;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -41,7 +40,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class JsoupHTMLLinkStructureExtractor extends AbstractJsoupExtractor implements WandoraTool, BrowserPluginExtractor {
+public class JsoupHTMLLinkStructureExtractor extends AbstractJsoupExtractor implements BrowserPluginExtractor {
 
 
 	private static final long serialVersionUID = 1L;
@@ -49,8 +48,8 @@ public class JsoupHTMLLinkStructureExtractor extends AbstractJsoupExtractor impl
 	private TopicMap tm;
     private Topic wandoraClass;
     
-    private static final String LINK_TYPE = "http://wandora.org/si/link";
-    private static final String DOC_TYPE = "http://wandora.org/si/document";
+    private static final String LINK_TYPE = "https://wandora.org/si/link";
+    private static final String DOC_TYPE = "https://wandora.org/si/document";
 
     
     

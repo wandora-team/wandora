@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ package org.wandora.application.tools.statistics;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.Icon;
 
@@ -73,7 +74,7 @@ public class AssetWeights extends AbstractWandoraTool {
     public AssetWeights(int context) {
         forcedContext = context;
     }
-    public AssetWeights(Context preferredContext) {
+    public AssetWeights(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -102,8 +103,8 @@ public class AssetWeights extends AbstractWandoraTool {
     
 
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
-        ArrayList<Topic> topics = new ArrayList<Topic>();
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
+        List<Topic> topics = new ArrayList<>();
         String topicMapName = null;
         TopicMap tm = null;
         if(forcedContext == CONTEXT_IS_TOPICMAP) {
@@ -116,8 +117,8 @@ public class AssetWeights extends AbstractWandoraTool {
         else if(forcedContext == CONTEXT_IS_GIVEN) {
             tm = wandora.getTopicMap();
             int c = 0;
-            Iterator<Topic> i = context.getContextObjects();
-            while(i.hasNext()) { topics.add(i.next()); c++; }
+            Iterator<?> i = context.getContextObjects();
+            while(i.hasNext()) { topics.add((Topic) i.next()); c++; }
             topicMapName = "Selection of "+c+" topics";
         }
         if(!topics.isEmpty()) {

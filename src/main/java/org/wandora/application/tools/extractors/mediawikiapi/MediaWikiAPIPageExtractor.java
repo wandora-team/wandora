@@ -1,9 +1,9 @@
  /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ package org.wandora.application.tools.extractors.mediawikiapi;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -56,8 +58,8 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 
 
 public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MediaWikiAPIPageExtractor.class);
 	
 	private int nExtracted;
     private String baseURL;
@@ -67,7 +69,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
     
     
     private int progress;
-    private WandoraToolLogger logger;
+    private WandoraToolLogger toolLogger;
     
     
     
@@ -177,7 +179,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
             
             
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
             log(e.getMessage());
             return false;
         }
@@ -204,9 +206,9 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
             throw new Exception("Failed to get the continuation parameter");            
         }
         
-        System.out.println(this.queryURL + cont);
+        logger.info(this.queryURL + cont);
         
-        URL u = new URL(this.queryURL + cont);
+        URL u = new URI(this.queryURL + cont).toURL();
         extractTopicsFromURL(u,t);
         
     }
@@ -215,7 +217,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
     private JSONObject parse(JSONObject body, TopicMap tm)
             throws JSONException, TopicMapException, IOException{
         
-        logger = getDefaultLogger();
+        toolLogger = getDefaultLogger();
         progress = 0;
 
         if(body.has("error")){
@@ -237,8 +239,8 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         
         JSONObject page;
         
-        logger.setProgressMax(pages.length());
-        logger.setProgress(0);
+        toolLogger.setProgressMax(pages.length());
+        toolLogger.setProgress(0);
         for (int i = 0; i < pages.length(); i++) {
             if(forceStop()) break;
             page = pages.getJSONObject(i);
@@ -307,7 +309,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
     private String getArticleBody(String title) throws IOException{
         StringBuilder queryBuilder = new StringBuilder(this.baseURL)
             .append("/index.php?action=raw&title=")
-            .append(URLEncoder.encode(title));
+            .append(URLEncoder.encode(title, "UTF-8"));
 
         HttpResponse<InputStream> resp;
         try {
@@ -319,7 +321,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
         }
 
         InputStream body = resp.getBody();
-        String bodyString = IOUtils.toString(body,"UTF-8"); 
+        String bodyString = IOUtils.toString(body, "UTF-8"); 
         
         return bodyString;
     }
@@ -370,7 +372,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
             }
             
         } catch (JSONException jse) {
-            jse.printStackTrace();
+            logger.error(jse);
             log(jse.getMessage());
         }
                 
@@ -424,7 +426,7 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
             }
             
         } catch (JSONException jse) {
-            jse.printStackTrace();
+        	logger.error(jse);
             log(jse.getMessage());
         }
                 
@@ -440,13 +442,13 @@ public class MediaWikiAPIPageExtractor extends AbstractMediaWikiAPIExtractor{
     
     private void printWarnings(JSONObject body) throws JSONException{
         JSONObject warnings = body.getJSONObject("warnings");
-        Iterator warningCategoryKeys = warnings.keys();
+        Iterator<String> warningCategoryKeys = warnings.keys();
         String categoryKey;
         JSONObject category;
         while(warningCategoryKeys.hasNext()){
             categoryKey = (String)warningCategoryKeys.next();
             category = warnings.getJSONObject(categoryKey);
-            Iterator warningKeys = category.keys();
+            Iterator<String> warningKeys = category.keys();
             String warningKey;
             String warning;
             while(warningKeys.hasNext()){

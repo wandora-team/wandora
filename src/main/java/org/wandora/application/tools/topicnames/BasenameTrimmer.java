@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
@@ -47,7 +46,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class BasenameTrimmer extends AbstractWandoraTool implements WandoraTool {
+public class BasenameTrimmer extends AbstractWandoraTool {
 
 
 
@@ -56,7 +55,7 @@ public class BasenameTrimmer extends AbstractWandoraTool implements WandoraTool 
 
 	public BasenameTrimmer() {
     }
-    public BasenameTrimmer(Context preferredContext) {
+    public BasenameTrimmer(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -74,31 +73,26 @@ public class BasenameTrimmer extends AbstractWandoraTool implements WandoraTool 
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Removing surrounding white space characters in basenames");
             log("Removing surrounding white space characters in basenames");
             
-            Iterator<Topic> topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;
             String basename = null;
             String newBasename = null;
-            int c = 0;
-            int changed = 0;
-            int progress = 0;
             Map<Topic,String> changeTopics = new HashMap<Topic,String>();
             
             while(topics.hasNext() && !forceStop()) {
                 try {
                     topic = (Topic) topics.next();
-                    c++;
                     if(topic != null) {
                         basename = topic.getBaseName();
                         if(basename != null) {
-                            progress++;
                             hlog("Investigating topic '" + basename + "'.");
                             newBasename = basename.trim();
                             if(!basename.equals(newBasename)) {
@@ -121,7 +115,6 @@ public class BasenameTrimmer extends AbstractWandoraTool implements WandoraTool 
                     newBasename = changeTopics.get(t);
                     t.setBaseName(newBasename);
                     log("Changed base name to '"+newBasename + "'.");
-                    changed++;
                 }
                 catch(Exception e) {
                     log(e);

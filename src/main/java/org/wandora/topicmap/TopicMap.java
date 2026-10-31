@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -53,6 +52,7 @@ import org.wandora.topicmap.parser.JTMParser;
 import org.wandora.topicmap.parser.LTMParser;
 import org.wandora.topicmap.parser.XTMAdaptiveParser;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -87,12 +87,14 @@ import org.xml.sax.XMLReader;
 
 
 public abstract class TopicMap implements TopicMapLogger {
-    protected TopicMapLogger logger = null;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicMap.class);
+	
+    protected TopicMapLogger topicMapLogger = null;
     protected boolean consistencyCheck = true;
     protected boolean consistencyCheckWhenXTMImport = false;
     protected boolean isReadOnly = false;
     
-    public static final String EDITTIME_SI="http://wandora.org/si/core/edittime";
+    public static final String EDITTIME_SI="https://wandora.org/si/core/edittime";
 
     protected TopicMap parentTopicMap;
         
@@ -355,7 +357,7 @@ public abstract class TopicMap implements TopicMapLogger {
      * association. If several such associations exist all but one of them need
      * to be removed.
      */
-    public void checkAssociationConsistency(TopicMapLogger logger) throws TopicMapException {
+    public void checkAssociationConsistency(TopicMapLogger topicMapLogger) throws TopicMapException {
 
     }
     
@@ -492,57 +494,78 @@ public abstract class TopicMap implements TopicMapLogger {
     // ---------------------------------------------------- TOPIC MAP LOGGER ---
     
     
-    public void setLogger(TopicMapLogger logger) {
-        this.logger = logger;
+    public void setLogger(TopicMapLogger topicMapLogger) {
+        this.topicMapLogger = topicMapLogger;
     }
+    
     public TopicMapLogger getLogger() {
-        return this.logger;
+        return this.topicMapLogger;
     }
     
     
     public void hlog(String message) {
-        if(logger != null) logger.hlog(message);
+        if(topicMapLogger != null) {
+        	topicMapLogger.hlog(message);
+        }
         else {
-            System.out.println(message);
+            logger.info(message);
         }
     }
+    
     public void log(String message) {
-        if(logger != null) logger.log(message);
+        if(topicMapLogger != null) {
+        	topicMapLogger.log(message);
+        }
         else {
-            System.out.println(message);
+        	logger.info(message);
         }
     }
+    
     public void log(String message, Exception e) {
-        if(logger != null) logger.log(message, e);
+        if(topicMapLogger != null) {
+        	topicMapLogger.log(message, e);
+        }
         else {
-            System.out.println(message);
-            e.printStackTrace();
+            logger.error(message);
+            logger.error(e);
         }
     }
+    
     public void log(Exception e) {
-        if(logger != null) logger.log(e);
+        if(topicMapLogger != null) {
+        	topicMapLogger.log(e);
+        }
         else {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
 
     public void setProgress(int n) {
-        if(logger != null) logger.setProgress(n);
+        if(topicMapLogger != null) {
+        	topicMapLogger.setProgress(n);
+        }
     }
+    
     public void setProgressMax(int maxn) {
-        if(logger != null) logger.setProgressMax(maxn);
+        if(topicMapLogger != null) {
+        	topicMapLogger.setProgressMax(maxn);
+        }
     }
     
     public void setLogTitle(String title) {
-        if(logger != null) logger.setLogTitle(title);
+        if(topicMapLogger != null) {
+        	topicMapLogger.setLogTitle(title);
+        }
         else {
-            System.out.println(title);
+        	logger.info(title);
         }
     }
     
     
     public boolean forceStop() {
-        if(logger != null) return logger.forceStop();
+        if(topicMapLogger != null) {
+        	return topicMapLogger.forceStop();
+        }
         else {
             return false;
         }
@@ -556,14 +579,14 @@ public abstract class TopicMap implements TopicMapLogger {
     public void importTopicMap(String file) throws IOException,TopicMapException {
         importTopicMap(file, this);
     }
-    public void importTopicMap(String file, TopicMapLogger logger) throws IOException,TopicMapException {
+    public void importTopicMap(String file, TopicMapLogger topicMapLogger) throws IOException,TopicMapException {
         importTopicMap(file, this, false);
     }
-    public void importTopicMap(String file, TopicMapLogger logger, boolean checkConsistency) throws IOException,TopicMapException {
+    public void importTopicMap(String file, TopicMapLogger topicMapLogger, boolean checkConsistency) throws IOException,TopicMapException {
         if(file != null) {
-            if(file.toLowerCase().endsWith("ltm")) importLTM(file, logger);
-            else if(file.toLowerCase().endsWith("jtm")) importJTM(file, logger);
-            else importXTM(file, logger);
+            if(file.toLowerCase().endsWith("ltm")) importLTM(file, topicMapLogger);
+            else if(file.toLowerCase().endsWith("jtm")) importJTM(file, topicMapLogger);
+            else importXTM(file, topicMapLogger);
         }
     }
     
@@ -572,15 +595,15 @@ public abstract class TopicMap implements TopicMapLogger {
         exportTopicMap(file, this);
     }
 
-    public void exportTopicMap(String file, TopicMapLogger logger) throws IOException, TopicMapException  {
+    public void exportTopicMap(String file, TopicMapLogger topicMapLogger) throws IOException, TopicMapException  {
         if(file != null) {
             String lfile = file.toLowerCase();
-            if(lfile.endsWith("ltm")) exportLTM(file, logger);
-            else if(lfile.endsWith("jtm")) exportJTM(file, logger);
-            else if(lfile.endsWith("xtm10")) exportXTM10(file, logger);
-            else if(lfile.endsWith("xtm1")) exportXTM10(file, logger);
-            else if(lfile.endsWith("xt1")) exportXTM10(file, logger);
-            else exportXTM(file, logger);
+            if(lfile.endsWith("ltm")) exportLTM(file, topicMapLogger);
+            else if(lfile.endsWith("jtm")) exportJTM(file, topicMapLogger);
+            else if(lfile.endsWith("xtm10")) exportXTM10(file, topicMapLogger);
+            else if(lfile.endsWith("xtm1")) exportXTM10(file, topicMapLogger);
+            else if(lfile.endsWith("xt1")) exportXTM10(file, topicMapLogger);
+            else exportXTM(file, topicMapLogger);
         }
     }
     
@@ -595,9 +618,9 @@ public abstract class TopicMap implements TopicMapLogger {
         exportLTM(file, this);
     }
     
-    public void exportLTM(String file, TopicMapLogger logger) throws IOException, TopicMapException  {
+    public void exportLTM(String file, TopicMapLogger topicMapLogger) throws IOException, TopicMapException  {
         FileOutputStream fos=new FileOutputStream(file);
-        exportLTM(fos, logger);
+        exportLTM(fos, topicMapLogger);
         fos.close();
     }
     
@@ -606,18 +629,18 @@ public abstract class TopicMap implements TopicMapLogger {
     }
     
     
-    public void exportLTM(OutputStream out, TopicMapLogger logger) throws IOException, TopicMapException {
-        if(logger == null) logger = this;
+    public void exportLTM(OutputStream out, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
+        if(topicMapLogger == null) topicMapLogger = this;
         PrintWriter writer=new PrintWriter(new OutputStreamWriter(out,"UTF-8"));
         writer.println("@\"utf-8\"");
         int totalCount = this.getNumTopics() + this.getNumAssociations();
-        logger.setProgressMax(totalCount);
+        topicMapLogger.setProgressMax(totalCount);
         int count = 0;
         Iterator<Topic> iter=getTopics();
-        while(iter.hasNext() && !logger.forceStop()) {
+        while(iter.hasNext() && !topicMapLogger.forceStop()) {
             Topic t=iter.next();
             if(t == null || t.isRemoved()) continue;
-            logger.setProgress(count++);
+            topicMapLogger.setProgress(count++);
             writer.print("[ "+makeLTMTopicId(t));
             if(t.getTypes().size()>0){
                 Iterator<Topic> iter2=t.getTypes().iterator();
@@ -685,10 +708,10 @@ public abstract class TopicMap implements TopicMapLogger {
                 }
             }
         }
-        if(!logger.forceStop()) {
+        if(!topicMapLogger.forceStop()) {
             Iterator<Association> aiter=getAssociations();
-            while(aiter.hasNext() && !logger.forceStop()) {
-                logger.setProgress(count++);
+            while(aiter.hasNext() && !topicMapLogger.forceStop()) {
+                topicMapLogger.setProgress(count++);
                 Association a=aiter.next();
                 if(a.getType()!=null) {
                     writer.print( makeLTMTopicId(a.getType()) + " " );
@@ -766,24 +789,24 @@ public abstract class TopicMap implements TopicMapLogger {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         importLTM(file, this);
     }
-    public void importLTM(InputStream in, TopicMapLogger logger) throws IOException, TopicMapException {
+    public void importLTM(InputStream in, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
-        LTMParser parser = new LTMParser(this, logger);
+        LTMParser parser = new LTMParser(this, topicMapLogger);
         parser.parse(in);
         parser.init();
     }
-    public void importLTM(File inFile, TopicMapLogger logger) throws IOException, TopicMapException {
+    public void importLTM(File inFile, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
-        if(logger == null) logger = this;
-        logger.log("Merging LTM file");
-        LTMParser parser = new LTMParser(this, logger);
+        if(topicMapLogger == null) topicMapLogger = this;
+        topicMapLogger.log("Merging LTM file");
+        LTMParser parser = new LTMParser(this, topicMapLogger);
         parser.parse(inFile);
         parser.init();
     }
-    public void importLTM(String fileName, TopicMapLogger logger) throws IOException, TopicMapException {
+    public void importLTM(String fileName, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         File file=new File(fileName);
-        importLTM(file, logger);
+        importLTM(file, topicMapLogger);
     }
 
 
@@ -796,9 +819,9 @@ public abstract class TopicMap implements TopicMapLogger {
         exportJTM(file, this);
     }
 
-    public void exportJTM(String file, TopicMapLogger logger) throws IOException, TopicMapException  {
+    public void exportJTM(String file, TopicMapLogger topicMapLogger) throws IOException, TopicMapException  {
         FileOutputStream fos=new FileOutputStream(file);
-        exportJTM(fos, logger);
+        exportJTM(fos, topicMapLogger);
         fos.close();
     }
 
@@ -807,15 +830,15 @@ public abstract class TopicMap implements TopicMapLogger {
     }
 
 
-    public void exportJTM(OutputStream out, TopicMapLogger logger) throws IOException, TopicMapException {
-        if(logger == null) logger = this;
+    public void exportJTM(OutputStream out, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
+        if(topicMapLogger == null) topicMapLogger = this;
 
         PrintWriter writer=new PrintWriter(new OutputStreamWriter(out,"UTF-8"));
         List<T2<Topic,Topic>> typeAssociations = new ArrayList<T2<Topic,Topic>>();
         int numberOfTopics = this.getNumTopics();
         int numberOfAssociations = this.getNumAssociations();
         int totalCount = numberOfTopics + numberOfAssociations;
-        logger.setProgressMax(totalCount);
+        topicMapLogger.setProgressMax(totalCount);
         int count = 0;
         writer.println("{\"version\":\"1.0\",");
         writer.print(" \"item_type\":\"topicmap\"");
@@ -824,10 +847,10 @@ public abstract class TopicMap implements TopicMapLogger {
             writer.println(" \"topics\":[");
         }
         Iterator<Topic> topics=getTopics();
-        while(topics.hasNext() && !logger.forceStop()) {
+        while(topics.hasNext() && !topicMapLogger.forceStop()) {
             Topic t=topics.next();
             if(t == null || t.isRemoved()) continue;
-            logger.setProgress(count++);
+            topicMapLogger.setProgress(count++);
             writer.println("  {");
             if(t.getSubjectIdentifiers().size()>0) {
                 writer.println("   \"subject_identifiers\":[");
@@ -959,7 +982,7 @@ public abstract class TopicMap implements TopicMapLogger {
             writer.print(" ]");
         }
         
-        if(!logger.forceStop()) {
+        if(!topicMapLogger.forceStop()) {
             if(numberOfAssociations>0 || typeAssociations.size()>0) {
                 writer.println(",");
                 writer.println(" \"associations\":[");
@@ -970,7 +993,7 @@ public abstract class TopicMap implements TopicMapLogger {
             Iterator<Association> associations=getAssociations();
             
             T2<Topic,Topic> typeAssociation = null;
-            for(Iterator<T2<Topic,Topic>> types = typeAssociations.iterator(); types.hasNext() && !logger.forceStop(); ) {
+            for(Iterator<T2<Topic,Topic>> types = typeAssociations.iterator(); types.hasNext() && !topicMapLogger.forceStop(); ) {
                 typeAssociation = types.next();
                 Topic type = typeAssociation.e1;
                 Topic instance = typeAssociation.e2;
@@ -996,8 +1019,8 @@ public abstract class TopicMap implements TopicMapLogger {
                 }
             }
             
-            while(associations.hasNext() && !logger.forceStop()) {               
-                logger.setProgress(count++);
+            while(associations.hasNext() && !topicMapLogger.forceStop()) {               
+                topicMapLogger.setProgress(count++);
                 writer.println("  {");
                 Association a=(Association)associations.next();
                 if(a.getType()!=null) {
@@ -1097,23 +1120,23 @@ public abstract class TopicMap implements TopicMapLogger {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         importJTM(file, this);
     }
-    public void importJTM(InputStream in, TopicMapLogger logger) throws IOException, TopicMapException {
+    public void importJTM(InputStream in, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
-        JTMParser parser = new JTMParser(this, logger);
+        JTMParser parser = new JTMParser(this, topicMapLogger);
         parser.parse(in);
-        //logger.log("JTM support not available yet!");
+        //topicMapLogger.log("JTM support not available yet!");
     }
-    public void importJTM(File inFile, TopicMapLogger logger) throws IOException, TopicMapException {
+    public void importJTM(File inFile, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
-        if(logger == null) logger = this;
-        //logger.log("JTM support not available yet!");
-        JTMParser parser = new JTMParser(this, logger);
+        if(topicMapLogger == null) topicMapLogger = this;
+        //topicMapLogger.log("JTM support not available yet!");
+        JTMParser parser = new JTMParser(this, topicMapLogger);
         parser.parse(inFile);
     }
-    public void importJTM(String fileName, TopicMapLogger logger) throws IOException, TopicMapException {
+    public void importJTM(String fileName, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         File file=new File(fileName);
-        importJTM(file, logger);
+        importJTM(file, topicMapLogger);
     }
 
 
@@ -1127,27 +1150,27 @@ public abstract class TopicMap implements TopicMapLogger {
         exportXTM20(out, this);
     }
     
-    public void exportXTM(OutputStream out, TopicMapLogger logger) throws IOException, TopicMapException {
-        exportXTM20(out,logger);
+    public void exportXTM(OutputStream out, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
+        exportXTM20(out,topicMapLogger);
     }
 
     public void exportXTM10(OutputStream out) throws IOException, TopicMapException {
         exportXTM10(out, this);
     }
     
-    public void exportXTM10(OutputStream out, TopicMapLogger logger) throws IOException, TopicMapException {
-        if(logger == null) logger = this;
+    public void exportXTM10(OutputStream out, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
+        if(topicMapLogger == null) topicMapLogger = this;
         int totalCount = this.getNumTopics() + this.getNumAssociations();
-        logger.setProgressMax(totalCount);
+        topicMapLogger.setProgressMax(totalCount);
         int count = 0;
         PrintWriter writer=new PrintWriter(new OutputStreamWriter(out,"UTF-8"));
         writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         writer.println("<topicMap xmlns=\"http://www.topicmaps.org/xtm/1.0/\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">");
         Iterator<Topic> iter=getTopics();
-        while(iter.hasNext() && !logger.forceStop()) {
+        while(iter.hasNext() && !topicMapLogger.forceStop()) {
             Topic t=iter.next();
             if(t.isRemoved()) continue;
-            logger.setProgress(count++);
+            topicMapLogger.setProgress(count++);
             writer.println("\t<topic id=\""+t.getID()+"\">");
             if(t.getTypes().size()>0){
                 Iterator<Topic> iter2=t.getTypes().iterator();
@@ -1220,10 +1243,10 @@ public abstract class TopicMap implements TopicMapLogger {
             }
             writer.println("\t</topic>");
         }
-        if(!logger.forceStop()) {
+        if(!topicMapLogger.forceStop()) {
             Iterator<Association> aiter=getAssociations();
-            while(aiter.hasNext() && !logger.forceStop()) {
-                logger.setProgress(count++);
+            while(aiter.hasNext() && !topicMapLogger.forceStop()) {
+                topicMapLogger.setProgress(count++);
                 Association a=aiter.next();
                 writer.println("\t<association>");
                 if(a.getType()!=null){
@@ -1250,19 +1273,19 @@ public abstract class TopicMap implements TopicMapLogger {
     
     
 
-    public void exportXTM20(OutputStream out, TopicMapLogger logger) throws IOException, TopicMapException {
-        if(logger == null) logger = this;
+    public void exportXTM20(OutputStream out, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
+        if(topicMapLogger == null) topicMapLogger = this;
         int totalCount = this.getNumTopics() + this.getNumAssociations();
-        logger.setProgressMax(totalCount);
+        topicMapLogger.setProgressMax(totalCount);
         int count = 0;
         PrintWriter writer=new PrintWriter(new OutputStreamWriter(out,"UTF-8"));
         writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         writer.println("<topicMap xmlns=\"http://www.topicmaps.org/xtm/\" version=\"2.0\">");
         Iterator<Topic> iter=getTopics();
-        while(iter.hasNext() && !logger.forceStop()) {
+        while(iter.hasNext() && !topicMapLogger.forceStop()) {
             Topic t=iter.next();
             if(t.isRemoved()) continue;
-            logger.setProgress(count++);
+            topicMapLogger.setProgress(count++);
             writer.println("\t<topic id=\""+t.getID()+"\">");
             
             if(t.getSubjectLocator()!=null) writer.println("\t\t<subjectLocator href=\""+escapeXML(t.getSubjectLocator().toExternalForm())+"\"/>");
@@ -1334,10 +1357,10 @@ public abstract class TopicMap implements TopicMapLogger {
             }
             writer.println("\t</topic>");
         }
-        if(!logger.forceStop()) {
+        if(!topicMapLogger.forceStop()) {
             Iterator<Association> aiter=getAssociations();
-            while(aiter.hasNext() && !logger.forceStop()) {
-                logger.setProgress(count++);
+            while(aiter.hasNext() && !topicMapLogger.forceStop()) {
+                topicMapLogger.setProgress(count++);
                 Association a=aiter.next();
                 writer.println("\t<association>");
                 if(a.getType()!=null){
@@ -1368,16 +1391,16 @@ public abstract class TopicMap implements TopicMapLogger {
         importXTM(in, this);
     }
     
-    public void importXTM(InputStream in, TopicMapLogger logger) throws IOException, TopicMapException {
+    public void importXTM(InputStream in, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
-        importXTM(in, logger, consistencyCheckWhenXTMImport);
+        importXTM(in, topicMapLogger, consistencyCheckWhenXTMImport);
     }
-    public void importXTM(InputStream in, TopicMapLogger logger, boolean checkConsistency) throws IOException, TopicMapException {
+    public void importXTM(InputStream in, TopicMapLogger topicMapLogger, boolean checkConsistency) throws IOException, TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
-        if(logger == null) logger = this;
+        if(topicMapLogger == null) topicMapLogger = this;
         boolean oldCheck = getConsistencyCheck();
         if(checkConsistency != oldCheck) {
-            logger.log("Changing consistency check to '"+checkConsistency +"'.");
+            topicMapLogger.log("Changing consistency check to '"+checkConsistency +"'.");
             setConsistencyCheck(checkConsistency);
         }
         try {
@@ -1386,36 +1409,28 @@ public abstract class TopicMap implements TopicMapLogger {
             factory.setValidating(false);
             javax.xml.parsers.SAXParser parser=factory.newSAXParser();
             XMLReader reader=parser.getXMLReader();
-            XTMParser xtm1parser = new XTMParser(logger);
+            XTMParser xtm1parser = new XTMParser(topicMapLogger);
             // adaptive parser either uses xtm 1.0 or 2.0 parser depending on the version attribute
-            XTMAdaptiveParser parserHandler=new XTMAdaptiveParser(this,logger,xtm1parser);
+            XTMAdaptiveParser parserHandler=new XTMAdaptiveParser(this,topicMapLogger,xtm1parser);
             reader.setContentHandler(parserHandler);
             reader.setErrorHandler(parserHandler);
 
             reader.parse(new InputSource(in));
-            
-          // Debugging            
-/*            Iterator iter=getTopics();
-            while(iter.hasNext()){
-                Topic t=(Topic)iter.next();
-                if(t.getSubjectIdentifiers().size()==0) System.out.println("Parsed topic doesn't have subject identifiers");
-//                else System.out.println(t.getSubjectIdentifiers().iterator().next());
-            }*/
         }
         catch(org.xml.sax.SAXParseException se) {
-            logger.log("Position "+se.getLineNumber()+":"+se.getColumnNumber(), se);
+            topicMapLogger.log("Position "+se.getLineNumber()+":"+se.getColumnNumber(), se);
         }
         catch(org.xml.sax.SAXException saxe) {
             if(! "user_interrupt".equals(saxe.getMessage())) {
-                logger.log(saxe);
+                topicMapLogger.log(saxe);
             }
         }
         catch(Exception e){
-            logger.log(e);
+            topicMapLogger.log(e);
         }
         finally {
             if(checkConsistency != oldCheck) {
-                logger.log("Restoring consistency check to '"+oldCheck+"'.");
+                topicMapLogger.log("Restoring consistency check to '"+oldCheck+"'.");
                 setConsistencyCheck(oldCheck);
             }
         }
@@ -1423,10 +1438,10 @@ public abstract class TopicMap implements TopicMapLogger {
     
     
     
-    public void importXTM(String file, TopicMapLogger logger) throws IOException, TopicMapException {
+    public void importXTM(String file, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         FileInputStream fis=new FileInputStream(file);
-        importXTM(fis, logger);
+        importXTM(fis, topicMapLogger);
         fis.close();
     }
     public void importXTM(String file) throws IOException, TopicMapException {
@@ -1440,14 +1455,14 @@ public abstract class TopicMap implements TopicMapLogger {
     public void exportXTM20(String file) throws IOException, TopicMapException {
         exportXTM(file, this);
     }
-    public void exportXTM(String file, TopicMapLogger logger) throws IOException, TopicMapException {
+    public void exportXTM(String file, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
         FileOutputStream fos=new FileOutputStream(file);
-        exportXTM(fos, logger);
+        exportXTM(fos, topicMapLogger);
         fos.close();
     }
-    public void exportXTM10(String file, TopicMapLogger logger) throws IOException, TopicMapException {
+    public void exportXTM10(String file, TopicMapLogger topicMapLogger) throws IOException, TopicMapException {
         FileOutputStream fos=new FileOutputStream(file);
-        exportXTM10(fos, logger);
+        exportXTM10(fos, topicMapLogger);
         fos.close();
     }
     
@@ -1468,7 +1483,7 @@ public abstract class TopicMap implements TopicMapLogger {
      * in this topic map.
      */
     public String makeSubjectIndicator() {
-        String si="http://wandora.org/si/temp/";
+        String si="https://wandora.org/si/temp/";
         si += System.currentTimeMillis();
         si += "-" + SICounter;
         if( SICounter++ > 10000000 ) SICounter = 0;
@@ -1570,24 +1585,21 @@ public abstract class TopicMap implements TopicMapLogger {
         
         private Map<String,Topic> idmapping;
         
-        private Hashtable mergemap;
-        
-        private TopicMapLogger logger;
+        private TopicMapLogger topicMapLogger;
         private int count;
         private int topicCount;
         private int associationCount;
         private int occurrenceCount;
         
         
-        public XTMParser(TopicMapLogger logger) {
-            if(logger != null) this.logger = logger;
-            else logger = TopicMap.this;
+        public XTMParser(TopicMapLogger topicMapLogger) {
+            if(topicMapLogger != null) this.topicMapLogger = topicMapLogger;
+            else topicMapLogger = TopicMap.this;
             count = 0;
             topicCount = 0;
             associationCount = 0;
             occurrenceCount = 0;
             idmapping=new LinkedHashMap<>();
-            mergemap=new Hashtable<>();
             state=STATE_START;
             stateStack=new IntegerStack();
         }
@@ -1609,7 +1621,7 @@ public abstract class TopicMap implements TopicMapLogger {
         
         @Override
         public void startElement(String uri, String localName, String qName, org.xml.sax.Attributes attributes) throws org.xml.sax.SAXException {
-            if(logger.forceStop()) {
+            if(topicMapLogger.forceStop()) {
                 throw new org.xml.sax.SAXException("user_interrupt");
             }
             try {
@@ -1620,7 +1632,7 @@ public abstract class TopicMap implements TopicMapLogger {
                             state=STATE_TOPICMAP;
                             allOccurrences=new Hashtable<>();
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_TOPIC_MAP); // TODO: throw exception
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_TOPIC_MAP); // TODO: throw exception
                         break;
                     case STATE_TOPICMAP:
                         if(qName.equals(TAG_TOPIC)){
@@ -1644,7 +1656,7 @@ public abstract class TopicMap implements TopicMapLogger {
                             parsedMembers=new LinkedHashSet<>();
                             associationCount++;
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_TOPIC+" or "+TAG_ASSOCIATION+" got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_TOPIC+" or "+TAG_ASSOCIATION+" got "+qName);
                         break;
                     case STATE_TOPIC:
                         if(qName.equals(TAG_INSTANCEOF)){
@@ -1671,7 +1683,7 @@ public abstract class TopicMap implements TopicMapLogger {
                             parsedOccurrenceRef=null;
                             occurrenceCount++;
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_INSTANCEOF+", "+TAG_SUBJECTIDENTITY+", "+TAG_BASENAME+" or "+TAG_OCCURRENCE+" got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_INSTANCEOF+", "+TAG_SUBJECTIDENTITY+", "+TAG_BASENAME+" or "+TAG_OCCURRENCE+" got "+qName);
                         break;
                     case STATE_INSTANCEOF:
                         if(qName.equals(TAG_TOPICREF)){
@@ -1687,7 +1699,7 @@ public abstract class TopicMap implements TopicMapLogger {
                             }
                             parsedType.add(t);
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_TOPICREF+" or "+TAG_SUBJECTINDICATORREF);                    
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_TOPICREF+" or "+TAG_SUBJECTINDICATORREF);                    
                         break;
                     case STATE_SUBJECTIDENTITY:
                         if(qName.equals(TAG_SUBJECTINDICATORREF)){
@@ -1698,7 +1710,7 @@ public abstract class TopicMap implements TopicMapLogger {
                             String href=attributes.getValue(XMLNS_XLINK,"href");
                             parsedSubjectLocator=createLocator(href);                        
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_SUBJECTINDICATORREF+" or "+TAG_RESOURCEREF);                    
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_SUBJECTINDICATORREF+" or "+TAG_RESOURCEREF);                    
                         // TODO: topicRef
                         break;
                     case STATE_BASENAME:
@@ -1717,10 +1729,10 @@ public abstract class TopicMap implements TopicMapLogger {
                             stateStack.push(state);
                             state=STATE_SCOPE;
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_BASENAMESTRING+", "+TAG_VARIANT+" or "+TAG_SCOPE);                    
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_BASENAMESTRING+", "+TAG_VARIANT+" or "+TAG_SCOPE);                    
                         break;
                     case STATE_BASENAMESTRING:
-                        logger.log("Parse exception: Expecting char data!");                    
+                        topicMapLogger.log("Parse exception: Expecting char data!");                    
                         break;
                     case STATE_VARIANT:
                         if(qName.equals(TAG_PARAMETERS)){
@@ -1731,7 +1743,7 @@ public abstract class TopicMap implements TopicMapLogger {
                             stateStack.push(state);
                             state=STATE_VARIANTNAME;
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_PARAMETERS+" or "+TAG_VARIANTNAME);                    
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_PARAMETERS+" or "+TAG_VARIANTNAME);                    
                         break;
                     case STATE_PARAMETERS:
                         if(qName.equals(TAG_TOPICREF)){
@@ -1747,7 +1759,7 @@ public abstract class TopicMap implements TopicMapLogger {
                             }
                             parsedParameters.add(t);
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_TOPICREF+" or "+TAG_SUBJECTINDICATORREF);                    
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_TOPICREF+" or "+TAG_SUBJECTINDICATORREF);                    
                         break;
                     case STATE_VARIANTNAME:
                         if(qName.equals(TAG_RESOURCEDATA)){
@@ -1755,10 +1767,10 @@ public abstract class TopicMap implements TopicMapLogger {
                             state=STATE_VARIANTRESOURCEDATA;
                             parsedVariantName="";
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_RESOURCEDATA);
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_RESOURCEDATA);
                         break;
                     case STATE_VARIANTRESOURCEDATA:
-                        logger.log("Parse exception: Expecting char data");
+                        topicMapLogger.log("Parse exception: Expecting char data");
                         break;
                     case STATE_SCOPE:
                         if(qName.equals(TAG_TOPICREF)){
@@ -1774,7 +1786,7 @@ public abstract class TopicMap implements TopicMapLogger {
                             }
                             parsedScope.add(t);
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_TOPICREF+" or "+TAG_SUBJECTINDICATORREF);                    
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_TOPICREF+" or "+TAG_SUBJECTINDICATORREF);                    
                         //TODO: resourceRef
                         break;
                     case STATE_OCCURRENCE:
@@ -1795,7 +1807,7 @@ public abstract class TopicMap implements TopicMapLogger {
                             state=STATE_RESOURCEDATA;
                             parsedOccurrenceData="";
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_SCOPE+", "+TAG_INSTANCEOF+" or "+TAG_RESOURCEDATA+" got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_SCOPE+", "+TAG_INSTANCEOF+" or "+TAG_RESOURCEDATA+" got "+qName);
                         break;
                     case STATE_OCCURRENCEINSTANCEOF:
                         if(qName.equals(TAG_TOPICREF)){
@@ -1811,10 +1823,10 @@ public abstract class TopicMap implements TopicMapLogger {
                             }
                             parsedOccurrenceType=t;
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_TOPICREF+" or "+TAG_SUBJECTINDICATORREF);                    
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_TOPICREF+" or "+TAG_SUBJECTINDICATORREF);                    
                         break;
                     case STATE_RESOURCEDATA:
-                        logger.log("Parse exception: Expecting char data!");
+                        topicMapLogger.log("Parse exception: Expecting char data!");
                         break;
                     case STATE_ASSOCIATION:
                         if(qName.equals(TAG_INSTANCEOF)){
@@ -1824,7 +1836,7 @@ public abstract class TopicMap implements TopicMapLogger {
                         else if(qName.equals(TAG_SCOPE)){
                             stateStack.push(state);
                             state=STATE_SCOPE;
-                            logger.log("Warning: Scope not supported in associations. AssociationID=\""+associationID+"\"");
+                            topicMapLogger.log("Warning: Scope not supported in associations. AssociationID=\""+associationID+"\"");
                         }
                         else if(qName.equals(TAG_MEMBER)){
                             stateStack.push(state);
@@ -1832,7 +1844,7 @@ public abstract class TopicMap implements TopicMapLogger {
                             parsedRole=null;
                             parsedPlayers=new LinkedHashSet<>();
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_INSTANCEOF+", "+TAG_SCOPE+" or "+TAG_MEMBER+" got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_INSTANCEOF+", "+TAG_SCOPE+" or "+TAG_MEMBER+" got "+qName);
                         break;
                     case STATE_MEMBER:
                         if(qName.equals(TAG_TOPICREF)){
@@ -1852,7 +1864,7 @@ public abstract class TopicMap implements TopicMapLogger {
                             stateStack.push(state);
                             state=STATE_ROLESPEC;
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_TOPICREF+", "+TAG_SUBJECTINDICATORREF+" or "+TAG_ROLESPEC);                    
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_TOPICREF+", "+TAG_SUBJECTINDICATORREF+" or "+TAG_ROLESPEC);                    
                         break;
                     case STATE_ROLESPEC:
                         if(qName.equals(TAG_TOPICREF)){
@@ -1868,15 +1880,15 @@ public abstract class TopicMap implements TopicMapLogger {
                             }
                             parsedRole=t;
                         }
-                        else logger.log("Parse exception: Expecting "+TAG_TOPICREF+" or "+TAG_SUBJECTINDICATORREF);
+                        else topicMapLogger.log("Parse exception: Expecting "+TAG_TOPICREF+" or "+TAG_SUBJECTINDICATORREF);
                         break;
                 }
             }
             catch(Exception e){
-                logger.log(e);
+                topicMapLogger.log(e);
             }
             if(count++ % 10000 == 9999) {
-                logger.hlog("Importing XTM topic map.\nFound " + topicCount + " topics, " + associationCount + " associations and "+ occurrenceCount + " occurrences.");
+                topicMapLogger.hlog("Importing XTM topic map.\nFound " + topicCount + " topics, " + associationCount + " associations and "+ occurrenceCount + " occurrences.");
             }
         }
         
@@ -1885,7 +1897,7 @@ public abstract class TopicMap implements TopicMapLogger {
         
         @Override
         public void endElement(String uri, String localName, String qName) throws org.xml.sax.SAXException {
-            if(logger.forceStop()) {
+            if(topicMapLogger.forceStop()) {
                 throw new org.xml.sax.SAXException("user_interrupt");
             }
 
@@ -1902,10 +1914,10 @@ public abstract class TopicMap implements TopicMapLogger {
                                 Map.Entry<Topic,Collection<Occurrence>> e=iter.next();
                                 topic=(Topic)e.getKey();
                                 if(topic.isRemoved()){
-                                    logger.log("Warning: Occurrence topic is removed (probably merged), topic map was inconsistent!");
+                                    topicMapLogger.log("Warning: Occurrence topic is removed (probably merged), topic map was inconsistent!");
                                     topic=getTopic(topic.getOneSubjectIdentifier());
                                     if(topic==null){
-                                        logger.log("Error: Couldn't find other version of topic, skipping occurrence!");
+                                        topicMapLogger.log("Error: Couldn't find other version of topic, skipping occurrence!");
                                         break;
                                     }
                                 }
@@ -1913,13 +1925,13 @@ public abstract class TopicMap implements TopicMapLogger {
                                 Iterator<Occurrence> iter2=c.iterator();
                                 while(iter2.hasNext()){
                                     Occurrence o=iter2.next();
-                                    if(o.type==null) logger.log("Warning: Occurrence has no type!");
+                                    if(o.type==null) topicMapLogger.log("Warning: Occurrence has no type!");
                                     if(o.type.getSubjectIdentifiers().contains(eloc)){
                                         topic.setEditTime(Long.parseLong(o.data));
                                     }
                                     else{
                                         if(o.version==null) {
-                                            logger.log("Warning: Occurrence has no version, adding a generic one!");
+                                            topicMapLogger.log("Warning: Occurrence has no version, adding a generic one!");
                                             o.version=getTopic(TMBox.LANGINDEPENDENT_SI);
                                             if(o.version==null){
                                                 o.version=createTopic();
@@ -1929,26 +1941,26 @@ public abstract class TopicMap implements TopicMapLogger {
                                         }
                                         if(o.version!=null){
                                             if(o.data!=null){
-                                                if(o.type.isRemoved()) logger.log("!!!! type is removed");
-                                                if(o.version.isRemoved()) logger.log("!!!! version is removed");
+                                                if(o.type.isRemoved()) topicMapLogger.log("!!!! type is removed");
+                                                if(o.version.isRemoved()) topicMapLogger.log("!!!! version is removed");
                                                 topic.setData(o.type,o.version, o.data);
                                             }
                                             if(o.ref!=null){
-                                                logger.log("Converting resourceRef occurrence to new topic and an association");
+                                                topicMapLogger.log("Converting resourceRef occurrence to new topic and an association");
                                                 Topic t=createTopic();
                                                 t.addSubjectIdentifier(createLocator(makeSubjectIndicator()));
                                                 t.setBaseName("Occurrence file: "+o.ref);
                                                 t.setSubjectLocator(createLocator(o.ref));
-                                                Topic orole=getTopic("http://wandora.org/si/compatibility/occurrence-role-reference");
+                                                Topic orole=getTopic("https://wandora.org/si/compatibility/occurrence-role-reference");
                                                 if(orole==null){
                                                     orole=createTopic();
-                                                    orole.addSubjectIdentifier(createLocator("http://wandora.org/si/compatibility/occurrence-role-reference"));
+                                                    orole.addSubjectIdentifier(createLocator("https://wandora.org/si/compatibility/occurrence-role-reference"));
                                                     orole.setBaseName("Occurrence role reference");
                                                 }
-                                                Topic trole=getTopic("http://wandora.org/si/compatibility/occurrence-role-topic");
+                                                Topic trole=getTopic("https://wandora.org/si/compatibility/occurrence-role-topic");
                                                 if(trole==null){
                                                     trole=createTopic();
-                                                    trole.addSubjectIdentifier(createLocator("http://wandora.org/si/compatibility/occurrence-role-topic"));
+                                                    trole.addSubjectIdentifier(createLocator("https://wandora.org/si/compatibility/occurrence-role-topic"));
                                                     trole.setBaseName("Occurrence role topic");
                                                 }
                                                 Association a=createAssociation(o.type);
@@ -1956,10 +1968,10 @@ public abstract class TopicMap implements TopicMapLogger {
                                                 a.addPlayer(t,orole);
                                             }    
                                             if(o.data==null && o.ref==null){
-                                                logger.log("Warning: Occurrence has no data and no reference!");
+                                                topicMapLogger.log("Warning: Occurrence has no data and no reference!");
                                             }
                                         }
-                                        else logger.log("Warning: Occurrence still has no version (weird)!");
+                                        else topicMapLogger.log("Warning: Occurrence still has no version (weird)!");
                                     }                                
                                 }
                             }
@@ -1971,14 +1983,14 @@ public abstract class TopicMap implements TopicMapLogger {
                                 String key=e.getKey();
                                 Topic t=e.getValue();
                                 if(t.isRemoved()){
-                                    logger.log("Topic was removed, XTM file was probably inconsistent, id was \""+key+"\".");
+                                    topicMapLogger.log("Topic was removed, XTM file was probably inconsistent, id was \""+key+"\".");
                                 }
                                 else if(t.getOneSubjectIdentifier()==null){
-                                    logger.log("No subject identifier for topic, id was \""+key+"\".");
+                                    topicMapLogger.log("No subject identifier for topic, id was \""+key+"\".");
                                 }
                             }
                         }
-                        else logger.log("Parse exception: Expecting end of "+TAG_TOPIC_MAP+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_TOPIC_MAP+" but got "+qName);
                         break;
                     case STATE_TOPIC:
                         if(qName.equalsIgnoreCase(TAG_TOPIC)){
@@ -1989,14 +2001,14 @@ public abstract class TopicMap implements TopicMapLogger {
                                 Topic t=titer.next();
                                 topic.addType(t);
                             }
-//                            if(parsedSubjectIdentifiers.size()==0) logger.log("Warning, couldn't find any subject identifiers for topic "+parsedBaseName);
+//                            if(parsedSubjectIdentifiers.size()==0) topicMapLogger.log("Warning, couldn't find any subject identifiers for topic "+parsedBaseName);
                             Iterator<Locator> liter=parsedSubjectIdentifiers.iterator();
                             while(liter.hasNext()){
                                 Locator l=liter.next();
                                 topic.addSubjectIdentifier(l);
                             }
                             if(parsedSubjectIdentifiers.isEmpty()){
-//                                logger.log("Warning topic has no subject identifiers, creating one.");
+//                                topicMapLogger.log("Warning topic has no subject identifiers, creating one.");
                                 topic.addSubjectIdentifier(createLocator(makeSubjectIndicator()));
                             }
                             Iterator<VariantName> viter=parsedVariants.iterator();
@@ -2009,13 +2021,13 @@ public abstract class TopicMap implements TopicMapLogger {
                             allOccurrences.put(topic,parsedOccurrences);
                             state=stateStack.pop();
                         }
-                        else logger.log("Parse exception: Expecting end of "+TAG_TOPIC+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_TOPIC+" but got "+qName);
                         break;
                     case STATE_ASSOCIATION:
                         if(qName.equalsIgnoreCase(TAG_ASSOCIATION)){
-                            if(parsedType.isEmpty()) logger.log("No association type");
+                            if(parsedType.isEmpty()) topicMapLogger.log("No association type");
                             else{
-                                if(parsedType.size()>1) logger.log("Multiple types for association, using first!");
+                                if(parsedType.size()>1) topicMapLogger.log("Multiple types for association, using first!");
                                 topic = parsedType.iterator().next();
                                 Association a=createAssociation(topic);
                                 Iterator<Member> miter=parsedMembers.iterator();
@@ -2027,7 +2039,7 @@ public abstract class TopicMap implements TopicMapLogger {
                             }
                             state=stateStack.pop();
                         }
-                        else logger.log("Parse exception: Expecting end of "+TAG_ASSOCIATION+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_ASSOCIATION+" but got "+qName);
                         break;
                     case STATE_INSTANCEOF:
                         if(qName.equals(TAG_INSTANCEOF)){
@@ -2035,7 +2047,7 @@ public abstract class TopicMap implements TopicMapLogger {
                         }                    
                         else if(qName.equals(TAG_TOPICREF)){}
                         else if(qName.equals(TAG_SUBJECTINDICATORREF)){}
-                        else logger.log("Parse exception: Expecting end of "+TAG_INSTANCEOF+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_INSTANCEOF+" but got "+qName);
                         break;
                     case STATE_SUBJECTIDENTITY:
                         if(qName.equals(TAG_SUBJECTIDENTITY)){
@@ -2043,7 +2055,7 @@ public abstract class TopicMap implements TopicMapLogger {
                         }
                         else if(qName.equals(TAG_SUBJECTINDICATORREF)){}
                         else if(qName.equals(TAG_RESOURCEREF)){}
-                        else logger.log("Parse exception: Expecting end of "+TAG_SUBJECTIDENTITY+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_SUBJECTIDENTITY+" but got "+qName);
                         break;
                     case STATE_BASENAME:
                         if(qName.equals(TAG_BASENAME)){
@@ -2057,13 +2069,13 @@ public abstract class TopicMap implements TopicMapLogger {
 
                             state=stateStack.pop();
                         }
-                        else logger.log("Parse exception: Expecting end of "+TAG_BASENAME+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_BASENAME+" but got "+qName);
                         break;
                     case STATE_BASENAMESTRING:
                         if(qName.equals(TAG_BASENAMESTRING)){
                             state=stateStack.pop();
                         }
-                        else logger.log("Parse exception: Expecting end of "+TAG_BASENAMESTRING+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_BASENAMESTRING+" but got "+qName);
                         break;
                     case STATE_VARIANT:
                         if(qName.equals(TAG_VARIANT)){
@@ -2071,11 +2083,11 @@ public abstract class TopicMap implements TopicMapLogger {
                                 parsedBaseNameVariants.add(new VariantName(parsedVariantName,parsedParameters));
                             }
                             else {
-                                logger.log("parsedVariantName == " + parsedVariantName + "(topic " + topicID + ")");
+                                topicMapLogger.log("parsedVariantName == " + parsedVariantName + "(topic " + topicID + ")");
                             }
                             state=stateStack.pop();
                         }
-                        else logger.log("Parse exception: Expecting end of "+TAG_VARIANT+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_VARIANT+" but got "+qName);
                         break;
                     case STATE_PARAMETERS:
                         if(qName.equals(TAG_PARAMETERS)){
@@ -2083,32 +2095,32 @@ public abstract class TopicMap implements TopicMapLogger {
                         }
                         else if(qName.equals(TAG_TOPICREF)){}
                         else if(qName.equals(TAG_SUBJECTINDICATORREF)){}
-                        else logger.log("Parse exception: Expecting end of "+TAG_PARAMETERS+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_PARAMETERS+" but got "+qName);
                         break;
                     case STATE_VARIANTNAME:
                         if(qName.equals(TAG_VARIANTNAME)){
                             state=stateStack.pop();
                         }
-                        else logger.log("Parse exception: Expecting end of "+TAG_VARIANTNAME+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_VARIANTNAME+" but got "+qName);
                         break;
                     case STATE_VARIANTRESOURCEDATA:
                         if(qName.equals(TAG_RESOURCEDATA)){
                             state=stateStack.pop();
                         }
-                        else logger.log("Parse exception: Expecting end of "+TAG_RESOURCEDATA+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_RESOURCEDATA+" but got "+qName);
                         break;
                     case STATE_OCCURRENCE:
                         if(qName.equals(TAG_OCCURRENCE)){
-                            if(parsedOccurrenceType==null) logger.log("No occurrence type");
+                            if(parsedOccurrenceType==null) topicMapLogger.log("No occurrence type");
                             else{
-                                if(parsedScope.size()>1) logger.log("Occurrence scope contains more than one topic, using only first!");
+                                if(parsedScope.size()>1) topicMapLogger.log("Occurrence scope contains more than one topic, using only first!");
                                 Occurrence o=new Occurrence(parsedOccurrenceType,(parsedScope.size()>=1?(Topic)parsedScope.iterator().next():null),parsedOccurrenceData,parsedOccurrenceRef);
                                 parsedOccurrences.add(o);
                             }
                             state=stateStack.pop();
                         }                    
                         else if(qName.equals(TAG_RESOURCEREF)){}
-                        else logger.log("Parse exception: Expecting end of "+TAG_OCCURRENCE+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_OCCURRENCE+" but got "+qName);
                         break;
                     case STATE_OCCURRENCEINSTANCEOF:
                         if(qName.equals(TAG_INSTANCEOF)){
@@ -2116,13 +2128,13 @@ public abstract class TopicMap implements TopicMapLogger {
                         }                    
                         else if(qName.equals(TAG_TOPICREF)){}
                         else if(qName.equals(TAG_SUBJECTINDICATORREF)){}
-                        else logger.log("Parse exception: Expecting end of "+TAG_INSTANCEOF+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_INSTANCEOF+" but got "+qName);
                         break;
                     case STATE_RESOURCEDATA:
                         if(qName.equals(TAG_RESOURCEDATA)){
                             state=stateStack.pop();
                         }                    
-                        else logger.log("Parse exception: Expecting end of "+TAG_RESOURCEDATA+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_RESOURCEDATA+" but got "+qName);
                         break;
                     case STATE_SCOPE:
                         if(qName.equals(TAG_SCOPE)){
@@ -2130,20 +2142,20 @@ public abstract class TopicMap implements TopicMapLogger {
                         }
                         else if(qName.equals(TAG_TOPICREF)){}
                         else if(qName.equals(TAG_SUBJECTINDICATORREF)){}
-                        else logger.log("Parse exception: Expecting end of "+TAG_SCOPE+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_SCOPE+" but got "+qName);
                         break;
                     case STATE_MEMBER:
                         if(qName.equals(TAG_MEMBER)){
                             if(parsedPlayers.size()>0){
-                                if(parsedPlayers.size()>1) logger.log("Warning: Only one player per member. Association id=\""+associationID+"\"!");
+                                if(parsedPlayers.size()>1) topicMapLogger.log("Warning: Only one player per member. Association id=\""+associationID+"\"!");
                                 parsedMembers.add(new Member((Topic)parsedPlayers.iterator().next(),parsedRole));
                             }
-                            else logger.log("No players found"); // TODO: warning no player found
+                            else topicMapLogger.log("No players found"); // TODO: warning no player found
                             state=stateStack.pop();
                         }
                         else if(qName.equals(TAG_TOPICREF)){}
                         else if(qName.equals(TAG_SUBJECTINDICATORREF)){}
-                        else logger.log("Parse exception: Expecting end of "+TAG_MEMBER+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_MEMBER+" but got "+qName);
                         break;
                     case STATE_ROLESPEC:
                         if(qName.equals(TAG_ROLESPEC)){
@@ -2151,15 +2163,15 @@ public abstract class TopicMap implements TopicMapLogger {
                         }
                         else if(qName.equals(TAG_TOPICREF)){}
                         else if(qName.equals(TAG_SUBJECTINDICATORREF)){}
-                        else logger.log("Parse exception: Expecting end of "+TAG_ROLESPEC+" but got "+qName);
+                        else topicMapLogger.log("Parse exception: Expecting end of "+TAG_ROLESPEC+" but got "+qName);
                         break;
                     default:
-                        logger.log("Parse exception: Not expecting end of tag but got "+qName);
+                        topicMapLogger.log("Parse exception: Not expecting end of tag but got "+qName);
                         break;
                 }
             }
             catch(Exception e){
-                logger.log(e);
+                topicMapLogger.log(e);
             }
         }
         
@@ -2167,7 +2179,7 @@ public abstract class TopicMap implements TopicMapLogger {
             Topic t=idmapping.get(href);
             if(t!=null) {
                 if(t.isRemoved()) {
-                    logger.log("ID mapping found for \""+href+"\" but topic has been deleted (or merged). XTM is probably inconsistent. Getting new version of the topic.");
+                    topicMapLogger.log("ID mapping found for \""+href+"\" but topic has been deleted (or merged). XTM is probably inconsistent. Getting new version of the topic.");
                     Locator l=t.getOneSubjectIdentifier();
                     if(l==null) t=null;
                     else t=getTopic(l);
@@ -2175,7 +2187,7 @@ public abstract class TopicMap implements TopicMapLogger {
                         idmapping.put(href,t);
                     }
                     else{
-                        logger.log("Couldn't find new version of deleted topic. This will probably cause problems. Creating new.");
+                        topicMapLogger.log("Couldn't find new version of deleted topic. This will probably cause problems. Creating new.");
                         t=createTopic();
                         idmapping.put(href,t);
                     }
@@ -2193,7 +2205,7 @@ public abstract class TopicMap implements TopicMapLogger {
         
         @Override
         public void endDocument() throws SAXException {
-            logger.log("Found total " + topicCount + " topics, " + associationCount + " associations and "+ occurrenceCount + " occurrences.");
+            topicMapLogger.log("Found total " + topicCount + " topics, " + associationCount + " associations and "+ occurrenceCount + " occurrences.");
         }        
         
         @Override
@@ -2236,7 +2248,7 @@ public abstract class TopicMap implements TopicMapLogger {
         }
         @Override
         public void warning(SAXParseException e) {
-            logger.log(e);
+            topicMapLogger.log(e);
         }
         
         

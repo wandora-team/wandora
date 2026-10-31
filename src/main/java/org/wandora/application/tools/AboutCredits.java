@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ import java.awt.Dimension;
 
 import javax.swing.Icon;
 
+import org.joda.time.LocalDate;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleButton;
@@ -46,7 +46,7 @@ import org.wandora.utils.swing.MultiLineLabel;
  *
  * @author  akivela
  */
-public class AboutCredits extends AbstractWandoraTool implements WandoraTool {
+public class AboutCredits extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -70,15 +70,16 @@ public class AboutCredits extends AbstractWandoraTool implements WandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             aboutDialog=new javax.swing.JDialog(wandora,"Wandora credits",true);
             aboutDialog.getContentPane().setLayout(new java.awt.BorderLayout(20,0));
             ImagePanel titleLabel = new ImagePanel("gui/label_about_wandora.png");
             aboutDialog.getContentPane().add(titleLabel,java.awt.BorderLayout.NORTH);
-
+            int yearNow = LocalDate.now().getYear();
+            
             String text =
-                    "Copyright (C) 2004-2023 Wandora Team\n"+
+                    "Copyright \u00a9 2004-"+yearNow+" Wandora Team\n"+
                     " \n"+
                     "Wandora Team would like to thank Olli Lyytinen, \n" +
                     "Eero Lehtonen, Elias Tertsunen, Niko Laitinen, \n"+
@@ -90,7 +91,7 @@ public class AboutCredits extends AbstractWandoraTool implements WandoraTool {
                     "talented people around the world. Wandora Team would like to\n"+
                     "express gratitude to all contributing open source projects.\n"+
                     " \n"+
-                    "For more information see http://wandora.org\n";
+                    "For more information see https://wandora.org\n";
             
             textLabel=new MultiLineLabel(text);
             textLabel.setVisible(true);

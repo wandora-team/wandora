@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Locator;
@@ -53,7 +52,7 @@ import org.wandora.topicmap.Topic;
  */
 
 
-public class MakeBasenameFromSubjectIdentifier extends AbstractWandoraTool implements WandoraTool {
+public class MakeBasenameFromSubjectIdentifier extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -66,7 +65,7 @@ public class MakeBasenameFromSubjectIdentifier extends AbstractWandoraTool imple
     public MakeBasenameFromSubjectIdentifier() {
     }
     
-    public MakeBasenameFromSubjectIdentifier(Context preferredContext) {
+    public MakeBasenameFromSubjectIdentifier(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -83,13 +82,13 @@ public class MakeBasenameFromSubjectIdentifier extends AbstractWandoraTool imple
     }
 
     
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Copying SI to base name");
             log("Copying subject identifier file name to topic base name");
             
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;
@@ -97,7 +96,7 @@ public class MakeBasenameFromSubjectIdentifier extends AbstractWandoraTool imple
             Collection<Locator> sis = null;
             int progress = 0;
 
-            List<Object> dt = new ArrayList<Object>();
+            List<Object> dt = new ArrayList<>();
             while(topics.hasNext() && !forceStop()) {
                 dt.add(topics.next());
             }

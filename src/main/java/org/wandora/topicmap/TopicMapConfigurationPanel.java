@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,9 @@ package org.wandora.topicmap;
  */
 public abstract class TopicMapConfigurationPanel extends javax.swing.JPanel {
 
-    /**
+    private static final long serialVersionUID = 1L;
+
+	/**
      * Get the parameters user entered. The returned object may be of any type,
      * usually determined by the TopicMapType used to create the configuration
      * panel. The TopicMapType is used to construct a new topic map with the

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,11 +36,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -48,6 +50,7 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class DefaultGraphStyle implements GraphStyle {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DefaultGraphStyle.class);
     
     private static Color defaultNodeColor = Color.GRAY;
     private static Color defaultEdgeColor = Color.GRAY;
@@ -58,19 +61,18 @@ public class DefaultGraphStyle implements GraphStyle {
     
     private static Stroke defaultNodeBorderStroke = new BasicStroke(1);
     private static Stroke defaultPinnedNodeBorderStroke = new BasicStroke(2);
-    private static HashMap<Integer,Font> nodeFonts=new HashMap<Integer,Font>();
-    private static HashMap<Integer,Font> edgeFonts=new HashMap<Integer,Font>();
+    private static Map<Integer,Font> nodeFonts=new HashMap<>();
+    private static Map<Integer,Font> edgeFonts=new HashMap<>();
     
     private static Stroke defaultEdgeLabelStroke = new BasicStroke(1);
     
-    private static HashMap<Integer,Stroke> edgeStrokes=new HashMap<Integer,Stroke>();
-    private static HashMap<Integer,Stroke> occurrenceEdgeStrokes=new HashMap<Integer,Stroke>();
+    private static Map<Integer,Stroke> edgeStrokes=new HashMap<>();
+    private static Map<Integer,Stroke> occurrenceEdgeStrokes=new HashMap<>();
     
     private static Color[] colors;
     static {
         int step=64;
-        ArrayList<Color> cs=new ArrayList<>();
-        int counter=0;
+        List<Color> cs=new ArrayList<>();
         for(int r=0;r<=256;r+=step){
             for(int g=0;g<=256;g+=step){
                 for(int b=0;b<=256;b+=step){
@@ -103,7 +105,7 @@ public class DefaultGraphStyle implements GraphStyle {
                 Collection<Topic> types=topic.getTypes();
                 if(types.size()==0) nodeColor=Color.GRAY;
                 else nodeColor=model.getTypeColorForTopic(types.iterator().next());
-            }catch(TopicMapException tme){tme.printStackTrace();}
+            }catch(TopicMapException tme){logger.error(tme);}
         }
         return nodeColor;
     }
@@ -113,7 +115,9 @@ public class DefaultGraphStyle implements GraphStyle {
     @Override
     public Color getNodeColor(VNode vn) {
         Color c = defaultNodeColor;
-        if(vn.selected) c = this.selectedNodeColor;
+        if(vn.selected) {
+        	c = this.selectedNodeColor;
+        }
         else {
             c = getNodeColor(vn.getNode());
         }
@@ -122,6 +126,7 @@ public class DefaultGraphStyle implements GraphStyle {
         }
         return c;
     }
+    
     public Color getNodeColor(Node n) {
         if(n instanceof TopicNode) {
             return getNodeColor((TopicNode) n);
@@ -142,7 +147,7 @@ public class DefaultGraphStyle implements GraphStyle {
                 c = getTypeTopicColor(t);
             }
             catch(TopicMapException tme) {
-                tme.printStackTrace(); 
+            	logger.error(tme);
                 return Color.GRAY;
             }
         }
@@ -155,8 +160,7 @@ public class DefaultGraphStyle implements GraphStyle {
             return getTopicColor(t);
         }
         catch(Exception tme) {
-            tme.printStackTrace(); 
-            
+        	logger.error(tme);
         }
         return Color.GRAY;
     }
@@ -289,7 +293,7 @@ public class DefaultGraphStyle implements GraphStyle {
             c = c.darker();
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
         return c;
     }
@@ -304,7 +308,7 @@ public class DefaultGraphStyle implements GraphStyle {
             c = c.darker();
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
         return c;
     }

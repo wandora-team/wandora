@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,14 +26,13 @@
 
 package org.wandora.application.tools.associations;
 
-import java.util.ArrayList;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -49,7 +48,7 @@ import org.wandora.topicmap.TopicMapException;
  * @see InsertPlayer
  * @author akivela
  */
-public class RemovePlayer extends AbstractWandoraTool implements WandoraTool {
+public class RemovePlayer extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -63,7 +62,7 @@ public class RemovePlayer extends AbstractWandoraTool implements WandoraTool {
     }
     
     
-    public RemovePlayer(Context preferredContext) {
+    public RemovePlayer(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -84,7 +83,7 @@ public class RemovePlayer extends AbstractWandoraTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             requiresRefresh = false;
             Map<Association,List<Topic>> associationsWithRoles = null;
@@ -98,15 +97,13 @@ public class RemovePlayer extends AbstractWandoraTool implements WandoraTool {
             setDefaultLogger();
             
             if(context instanceof AssociationContext) { // ASSOCIATION CONTEXT!!
-                Iterator associations = context.getContextObjects();
                 AssociationTable associationTable = null;
                 Object contextSource = context.getContextSource();
                 if(contextSource instanceof AssociationTable) {
                     associationTable = (AssociationTable) context.getContextSource();
                 }
                 if(associationTable != null) {
-                    associationsWithRoles = associationTable.getSelectedAssociationsWithSelectedRoles();
-                            
+                    associationsWithRoles = associationTable.getSelectedAssociationsWithSelectedRoles();    
                 }
                 
                 if(associationsWithRoles != null && associationsWithRoles.size() > 0) {

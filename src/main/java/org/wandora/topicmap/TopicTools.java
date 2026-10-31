@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ import java.util.List;
 import org.wandora.topicmap.layered.ContainerTopicMap;
 import org.wandora.topicmap.layered.Layer;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * This class is a collection of static helpers for accessing
@@ -47,7 +48,7 @@ import org.wandora.utils.DataURL;
  * @author akivela
  */
 public class TopicTools {
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicTools.class);
     
     
     
@@ -71,7 +72,7 @@ public class TopicTools {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -86,20 +87,20 @@ public class TopicTools {
      * @throws org.wandora.topicmap.TopicMapException
      */
     public static List<Topic> getPlayersWithRole(Topic topic, String roleSI) throws TopicMapException  {
-        List<Topic> players = new ArrayList<Topic>();
+        List<Topic> players = new ArrayList<>();
         if(topic != null && roleSI != null) {
             Topic role = topic.getTopicMap().getTopic(roleSI);
 
             if(role != null) {
-                Collection associations = topic.getAssociations();
+                Collection<Association> associations = topic.getAssociations();
                 if(associations != null) {
-                    for(Iterator iter = associations.iterator(); iter.hasNext(); ) {
+                    for(Iterator<Association> iter = associations.iterator(); iter.hasNext(); ) {
                         try {
-                            Association a = (Association) iter.next();
+                            Association a = iter.next();
                             if(a.getPlayer(role) != null) players.add(a.getPlayer(role));
                         }
                         catch (Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                 }
@@ -118,17 +119,17 @@ public class TopicTools {
      * @param roleSI
      * @return 
      */
-    public static List<Topic> getPlayersWithRole(Collection topics, String roleSI) {
-        List<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayersWithRole(Collection <Topic>topics, String roleSI) {
+        List<Topic> players = new ArrayList<>();
         
         if(topics != null) {
-            for(Iterator i = topics.iterator(); i.hasNext(); ) {
+            for(Iterator<Topic> i = topics.iterator(); i.hasNext(); ) {
                 try {
-                    Topic topic = (Topic) i.next();
+                    Topic topic = i.next();
                     players.addAll(getPlayersWithRole(topic, roleSI));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -144,7 +145,7 @@ public class TopicTools {
      * @return 
      */
     public static List<Topic> getPlayersWithRoles(Topic topic, String[] roleSIs) {
-        List<Topic> players = new ArrayList<Topic>();
+        List<Topic> players = new ArrayList<>();
         if(topic != null && roleSIs != null) {
             String roleSI = null;
             for(int i=0; i<roleSIs.length; i++) {
@@ -153,7 +154,7 @@ public class TopicTools {
                     players.addAll(getPlayersWithRole( topic, roleSI ));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -169,17 +170,17 @@ public class TopicTools {
      * @param roleSIs
      * @return 
      */
-    public static List<Topic> getPlayersWithRoles(Topic topic, Collection roleSIs) {
-        List<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayersWithRoles(Topic topic, Collection<String> roleSIs) {
+        List<Topic> players = new ArrayList<>();
         if(topic != null) {
             String roleSI = null;
-            for(Iterator i=roleSIs.iterator(); i.hasNext(); ) {
+            for(Iterator<String> i=roleSIs.iterator(); i.hasNext(); ) {
                 try {
-                    roleSI = (String) i.next();
+                    roleSI = i.next();
                     players.addAll(getPlayersWithRole( topic, roleSI ));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -196,17 +197,17 @@ public class TopicTools {
      * @param roleSIs
      * @return 
      */
-    public static List<Topic> getPlayersWithRoles(Collection topics, Collection roleSIs) {
-        List<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayersWithRoles(Collection<Topic> topics, Collection<String> roleSIs) {
+        List<Topic> players = new ArrayList<>();
         
         if(topics != null) {
-            for(Iterator i = topics.iterator(); i.hasNext(); ) {
+            for(Iterator<Topic> i = topics.iterator(); i.hasNext(); ) {
                 try {
-                    Topic topic = (Topic) i.next();
+                    Topic topic = i.next();
                     players.addAll(getPlayersWithRoles(topic, roleSIs));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -223,17 +224,17 @@ public class TopicTools {
      * @param roleSIs
      * @return 
      */
-    public static List<Topic> getPlayersWithRoles(Collection topics, String[] roleSIs) {
-        List<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayersWithRoles(Collection<Topic> topics, String[] roleSIs) {
+        List<Topic> players = new ArrayList<>();
         
         if(topics != null) {
-            for(Iterator i = topics.iterator(); i.hasNext(); ) {
+            for(Iterator<Topic> i = topics.iterator(); i.hasNext(); ) {
                 try {
-                    Topic topic = (Topic) i.next();
+                    Topic topic = i.next();
                     players.addAll(getPlayersWithRoles(topic, roleSIs));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -250,23 +251,23 @@ public class TopicTools {
      * @throws org.wandora.topicmap.TopicMapException
      */
     public static List<Topic> getPlayers(Topic topic, String associationTypeSI) throws TopicMapException  {
-        List<Topic> players = new ArrayList<Topic>();
+        List<Topic> players = new ArrayList<>();
         if(topic != null && associationTypeSI != null) {
             Topic type = topic.getTopicMap().getTopic(associationTypeSI);
 
             if(type != null) {
-                Collection associations = topic.getAssociations(type);
-                for(Iterator iter = associations.iterator(); iter.hasNext(); ) {
+                Collection<Association> associations = topic.getAssociations(type);
+                for(Iterator<Association> iter = associations.iterator(); iter.hasNext(); ) {
                     try {
-                        Association a = (Association) iter.next();
-                        Collection roles = a.getRoles();
-                        for(Iterator iterRoles = roles.iterator(); iterRoles.hasNext(); ) {
-                            Topic role = (Topic) iterRoles.next();
+                        Association a = iter.next();
+                        Collection<Topic> roles = a.getRoles();
+                        for(Iterator<Topic> iterRoles = roles.iterator(); iterRoles.hasNext(); ) {
+                            Topic role = iterRoles.next();
                             if(a.getPlayer(role) != topic) players.add(a.getPlayer(role));
                         }
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -290,7 +291,7 @@ public class TopicTools {
             if(!players.isEmpty()) return players.get(0);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -307,20 +308,20 @@ public class TopicTools {
      * @throws TopicMapException 
      */
     public static List<Topic> getPlayers(Topic topic, String associationTypeSI, String roleSI)  throws TopicMapException {
-        List<Topic> players = new ArrayList<Topic>();
+        List<Topic> players = new ArrayList<>();
         if(topic != null && associationTypeSI != null && roleSI != null) {
             Topic type = topic.getTopicMap().getTopic(associationTypeSI);
             Topic role = topic.getTopicMap().getTopic(roleSI);
 
             if(type != null && role != null) {
-                Collection associations = topic.getAssociations(type);
-                for(Iterator iter = associations.iterator(); iter.hasNext(); ) {
+                Collection<Association> associations = topic.getAssociations(type);
+                for(Iterator<Association> iter = associations.iterator(); iter.hasNext(); ) {
                     try {
-                        Association a = (Association) iter.next();
+                        Association a = iter.next();
                         if(a.getPlayer(role) != null) players.add(a.getPlayer(role));
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -341,16 +342,16 @@ public class TopicTools {
      * @throws TopicMapException 
      */
     public static List<Topic> getPlayers(Topic topic, Topic associationType, Topic role)  throws TopicMapException {
-        List<Topic> players = new ArrayList<Topic>();
+        List<Topic> players = new ArrayList<>();
         if(topic != null && associationType != null && role != null) {
-            Collection associations = topic.getAssociations(associationType);
-            for(Iterator iter = associations.iterator(); iter.hasNext(); ) {
+            Collection<Association> associations = topic.getAssociations(associationType);
+            for(Iterator<Association> iter = associations.iterator(); iter.hasNext(); ) {
                 try {
-                    Association a = (Association) iter.next();
+                    Association a = iter.next();
                     if(a.getPlayer(role) != null) players.add(a.getPlayer(role));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -367,17 +368,17 @@ public class TopicTools {
      * @param roleSI
      * @return 
      */
-    public static List<Topic> getPlayers(Collection topics, String associationTypeSI, String roleSI) {
-        List<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayers(Collection<Topic> topics, String associationTypeSI, String roleSI) {
+        List<Topic> players = new ArrayList<>();
         
         if(topics != null) {
-            for(Iterator i = topics.iterator(); i.hasNext(); ) {
+            for(Iterator<Topic> i = topics.iterator(); i.hasNext(); ) {
                 try {
-                    Topic topic = (Topic) i.next();
+                    Topic topic = i.next();
                     players.addAll(getPlayers(topic, associationTypeSI, roleSI));
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -401,7 +402,7 @@ public class TopicTools {
      * @throws TopicMapException
      */
     public static List<Topic> getPlayers(Topic topic, String associationTypeSI, String roleSI, String hasRole, String hasPlayer) throws TopicMapException  {
-        List<Topic> players = new ArrayList<Topic>();
+        List<Topic> players = new ArrayList<>();
         if(topic != null && associationTypeSI != null && roleSI != null && hasRole != null && hasPlayer != null) {
             Topic type = topic.getTopicMap().getTopic(associationTypeSI);
             Topic role = topic.getTopicMap().getTopic(roleSI);
@@ -409,10 +410,10 @@ public class TopicTools {
             Topic hasPlayerTopic = topic.getTopicMap().getTopic(hasPlayer);
 
             if(type != null && role != null && hasRoleTopic != null && hasPlayerTopic != null) {
-                Collection associations = topic.getAssociations(type);
-                for(Iterator iter = associations.iterator(); iter.hasNext(); ) {
+                Collection<Association> associations = topic.getAssociations(type);
+                for(Iterator<Association> iter = associations.iterator(); iter.hasNext(); ) {
                     try {
-                        Association a = (Association) iter.next();
+                        Association a = iter.next();
                         if(a.getPlayer(role) != null) {
                             if(a.getPlayer(hasRoleTopic).equals(hasPlayerTopic)) {
                                 players.add(a.getPlayer(role));
@@ -420,7 +421,7 @@ public class TopicTools {
                         }
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
@@ -444,12 +445,12 @@ public class TopicTools {
      * @throws TopicMapException
      */
     public static List<Topic> getPlayers(Topic topic, Topic type, Topic role, Topic hasRole, Topic hasPlayer)  throws TopicMapException {
-        List<Topic> players = new ArrayList<Topic>();
+        List<Topic> players = new ArrayList<>();
         if(topic != null && type != null && role != null && hasRole != null && hasPlayer != null) {
-            Collection associations = topic.getAssociations(type);
-            for(Iterator iter = associations.iterator(); iter.hasNext(); ) {
+            Collection<Association> associations = topic.getAssociations(type);
+            for(Iterator<Association> iter = associations.iterator(); iter.hasNext(); ) {
                 try {
-                    Association a = (Association) iter.next();
+                    Association a = iter.next();
                     if(a.getPlayer(role) != null) {
                         if(a.getPlayer(hasRole).equals(hasPlayer)) {
                             players.add(a.getPlayer(role));
@@ -457,7 +458,7 @@ public class TopicTools {
                     }
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -481,16 +482,16 @@ public class TopicTools {
      * @return
      * @throws TopicMapException
      */
-    public static List<Topic> getPlayers(Collection topics, String associationTypeSI, String roleSI, String hasRole, String hasPlayer)  throws TopicMapException {
-        List<Topic> players = new ArrayList<Topic>();
+    public static List<Topic> getPlayers(Collection<Topic> topics, String associationTypeSI, String roleSI, String hasRole, String hasPlayer)  throws TopicMapException {
+        List<Topic> players = new ArrayList<>();
         
-        for(Iterator i = topics.iterator(); i.hasNext(); ) {
+        for(Iterator<Topic> i = topics.iterator(); i.hasNext(); ) {
             try {
-                Topic topic = (Topic) i.next();
+                Topic topic = i.next();
                 players.addAll(getPlayers(topic, associationTypeSI, roleSI, hasRole, hasPlayer));
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return players;
@@ -510,25 +511,25 @@ public class TopicTools {
      * @throws TopicMapException
      */
     public static List<Topic> getSortedPlayers(Topic topic, String associationTypeSI, String roleSI, String sortRole, String lang) throws TopicMapException {
-        List players = new ArrayList();
-        List<Topic> sortedPlayers = new ArrayList<Topic>();
+        List<Topic[]> players = new ArrayList<>();
+        List<Topic> sortedPlayers = new ArrayList<>();
         if(topic != null && associationTypeSI != null && roleSI != null && sortRole != null) {
             Topic type = topic.getTopicMap().getTopic(associationTypeSI);
             Topic role = topic.getTopicMap().getTopic(roleSI);
             Topic sortRoleTopic = topic.getTopicMap().getTopic(sortRole);
 
             if(type != null && role != null && sortRole != null) {
-                Collection associations = topic.getAssociations(type);
-                for(Iterator iter = associations.iterator(); iter.hasNext(); ) {
+                Collection<Association> associations = topic.getAssociations(type);
+                for(Iterator<Association> iter = associations.iterator(); iter.hasNext(); ) {
                     try {
-                        Association a = (Association) iter.next();
+                        Association a = iter.next();
                         Topic player = a.getPlayer(role);
                         if(player != null) {
                             Topic sortPlayer = a.getPlayer(sortRoleTopic);
                             if(sortPlayer != null) {
                                 int i=0;
                                 while(i<players.size()) {
-                                    Topic[] tc = (Topic[]) players.get(i);
+                                    Topic[] tc = players.get(i);
                                     Topic anotherSortPlayer = tc[0];
                                     if(anotherSortPlayer != null) {
                                         String sortName = sortPlayer.getSortName(lang);
@@ -549,14 +550,13 @@ public class TopicTools {
                         }
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
         }
-        //System.out.println("players.size() == " + players.size());
         for(int i=0; i<players.size(); i++) {
-            Topic[] tc = (Topic[]) players.get(i);
+            Topic[] tc = players.get(i);
             if(tc != null && tc.length == 2) {
                 Topic player = tc[1];
                 if(player != null) {
@@ -564,7 +564,6 @@ public class TopicTools {
                 }
             }
         }
-        //System.out.println("sortedPlayers.size() == " + sortedPlayers.size());
         return sortedPlayers;
     }
     
@@ -583,33 +582,33 @@ public class TopicTools {
      * @return
      * @throws TopicMapException
      */
-    public static List<Topic> getSortedPlayers(Topic topic, Collection associationTypesSI, Collection rolesSI, String sortRole, String lang)  throws TopicMapException {
-        List players = new ArrayList();
-        List<Topic> sortedPlayers = new ArrayList<Topic>();
+    public static List<Topic> getSortedPlayers(Topic topic, Collection<String> associationTypesSI, Collection<String> rolesSI, String sortRole, String lang)  throws TopicMapException {
+        List<Topic[]> players = new ArrayList<>();
+        List<Topic> sortedPlayers = new ArrayList<>();
         
-        Iterator ai = associationTypesSI.iterator();
-        Iterator ri = rolesSI.iterator();
+        Iterator<String> ai = associationTypesSI.iterator();
+        Iterator<String> ri = rolesSI.iterator();
         
         while(ai.hasNext() && ri.hasNext()) {
-            String associationTypeSI = (String) ai.next();
-            String roleSI = (String) ri.next();
+            String associationTypeSI = ai.next();
+            String roleSI = ri.next();
             if(topic != null && associationTypeSI != null && roleSI != null && sortRole != null) {
                 Topic type = topic.getTopicMap().getTopic(associationTypeSI);
                 Topic role = topic.getTopicMap().getTopic(roleSI);
                 Topic sortRoleTopic = topic.getTopicMap().getTopic(sortRole);
 
                 if(type != null && role != null && sortRole != null) {
-                    Collection associations = topic.getAssociations(type);
-                    for(Iterator iter = associations.iterator(); iter.hasNext(); ) {
+                    Collection<Association> associations = topic.getAssociations(type);
+                    for(Iterator<Association> iter = associations.iterator(); iter.hasNext(); ) {
                         try {
-                            Association a = (Association) iter.next();
+                            Association a = iter.next();
                             Topic player = a.getPlayer(role);
                             if(player != null) {
                                 Topic sortPlayer = a.getPlayer(sortRoleTopic);
                                 if(sortPlayer != null) {
                                     int i=0;
                                     while(i<players.size()) {
-                                        Topic[] tc = (Topic[]) players.get(i);
+                                        Topic[] tc = players.get(i);
                                         Topic anotherSortPlayer = tc[0];
                                         if(anotherSortPlayer != null) {
                                             String sortName = sortPlayer.getSortName(lang);
@@ -630,13 +629,12 @@ public class TopicTools {
                             }
                         }
                         catch (Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                 }
             }
         }
-        //System.out.println("players.size() == " + players.size());
         for(int i=0; i<players.size(); i++) {
             Topic[] tc = (Topic[]) players.get(i);
             if(tc != null && tc.length == 2) {
@@ -646,7 +644,6 @@ public class TopicTools {
                 }
             }
         }
-        //System.out.println("sortedPlayers.size() == " + sortedPlayers.size());
         return sortedPlayers;
     }
     
@@ -664,11 +661,11 @@ public class TopicTools {
         List<Topic> selectedTypes = new ArrayList<Topic>();
         if(topic != null && requiredTypeSI != null) {
             try {
-                Collection types = topic.getTypes();
+                Collection<Topic> types = topic.getTypes();
                 Topic requiredType = topic.getTopicMap().getTopic(requiredTypeSI);
                 if(requiredType != null) {
-                    for(Iterator iter = types.iterator(); iter.hasNext(); ) {
-                        Topic type = (Topic) iter.next();
+                    for(Iterator<Topic> iter = types.iterator(); iter.hasNext(); ) {
+                        Topic type = iter.next();
                         if(type.getTypes().contains(requiredType)) {
                             selectedTypes.add(type);
                         }
@@ -676,7 +673,7 @@ public class TopicTools {
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return selectedTypes;
@@ -691,7 +688,7 @@ public class TopicTools {
     
     public static List<String> getSubjectLocatorsOfPlayers(Topic topic, String associationTypeSI, String roleSI) throws TopicMapException {
         List<Topic> players = getPlayers(topic, associationTypeSI, roleSI);
-        List<String> locators = new ArrayList<String>();
+        List<String> locators = new ArrayList<>();
         
         for(int i=0; i<players.size(); i++) {
             if(players.get(i) != null) {
@@ -713,7 +710,7 @@ public class TopicTools {
      * @param topics
      * @return
      */
-    public static List<String> getSLsOfTopics(Collection topics) {
+    public static List<String> getSLsOfTopics(Collection<Topic> topics) {
         return getSubjectLocatorsOfTopics(topics);
     }
     
@@ -724,19 +721,19 @@ public class TopicTools {
      * @param topics
      * @return
      */
-    public static List<String> getSubjectLocatorsOfTopics(Collection topics) {
-        List<String> locators = new ArrayList<String>();
+    public static List<String> getSubjectLocatorsOfTopics(Collection<Topic> topics) {
+        List<String> locators = new ArrayList<>();
         if(topics != null) {
-            for(Iterator iter=topics.iterator(); iter.hasNext(); ) {
+            for(Iterator<Topic> iter=topics.iterator(); iter.hasNext(); ) {
                 try {
-                    Topic topic = (Topic) iter.next();
+                    Topic topic = iter.next();
                     String sl = topic.getSubjectLocator().toExternalForm();
                     if(sl != null && sl.length() > 0) {
                         locators.add(sl);
                     }
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -758,7 +755,7 @@ public class TopicTools {
      * @return 
      */
     public static Collection<Topic> getEdgeTopics(Collection<Topic> source, Topic associationType, Topic baseRole, Topic outRole) {
-        List<Topic> rootTopics = new ArrayList<Topic>();
+        List<Topic> rootTopics = new ArrayList<>();
         Iterator<Topic> sourceIterator = source.iterator();
         while(sourceIterator.hasNext()) {
             Topic base = sourceIterator.next();
@@ -781,7 +778,7 @@ public class TopicTools {
      * @return 
      */
     public static Topic getEdgeTopic(Topic base, Topic associationType, Topic baseRole, Topic outRole) {
-        List<Topic> pathTopics = new ArrayList<Topic>();
+        List<Topic> pathTopics = new ArrayList<>();
         int MAXDEPTH = 9999;
                 
         while(true && --MAXDEPTH > 0) {
@@ -808,7 +805,7 @@ public class TopicTools {
                 else break;
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return base;
@@ -828,7 +825,7 @@ public class TopicTools {
      * @return
      */
     public static List<Topic> getSinglePath(Topic base, Topic associationType, Topic baseRole, Topic outRole) {
-        List<Topic> pathTopics = new ArrayList<Topic>();
+        List<Topic> pathTopics = new ArrayList<>();
         int MAXDEPTH = 9999;
                 
         while(true && --MAXDEPTH > 0) {
@@ -855,7 +852,7 @@ public class TopicTools {
                 else break;
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return pathTopics;
@@ -874,8 +871,8 @@ public class TopicTools {
      * @return
      */
     public static List<List<Topic>> getCyclePaths(Topic base, Topic associationType, Topic baseRole, Topic outRole) {
-        List<List<Topic>> cycles = new ArrayList<List<Topic>>();
-        List<Topic> path = new ArrayList<Topic>();
+        List<List<Topic>> cycles = new ArrayList<>();
+        List<Topic> path = new ArrayList<>();
         path.add(base);
         getCyclePaths(cycles, path, base, associationType, baseRole, outRole);
         return cycles;
@@ -915,7 +912,7 @@ public class TopicTools {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
     
@@ -987,7 +984,6 @@ public class TopicTools {
         }
         else {
             StringBuilder sb = new StringBuilder();
-            int i = 0;
             for(int k=0; k<s.length(); k++) {
                 char c = s.charAt(k);
                 if(isDirtyLocatorCharacter(c)) {
@@ -1014,16 +1010,15 @@ public class TopicTools {
      * Returns a default locator that can be given to a topic and it
      * is very likely (but not sure) that the subject identifier doesn't
      * cause accidental merge. Default locator is created with a prefix
-     * "http://wandora.org/si/temp/", timestamp and locator counter.
+     * "https://wandora.org/si/temp/", timestamp and locator counter.
      * 
      * @return 
      */
     public static Locator createDefaultLocator() {
         locatorCounter++;
         long stamp = System.currentTimeMillis();
-        String defaultSIprefix = "http://wandora.org/si/temp/";
+        String defaultSIprefix = "https://wandora.org/si/temp/";
         Locator newLocator = new Locator(defaultSIprefix + stamp + "-" + locatorCounter);
-        // System.out.println("Creating default SI '"+newLocator.toExternalForm());
         return newLocator;
     }
     
@@ -1056,7 +1051,7 @@ public class TopicTools {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return name;
     }
@@ -1111,7 +1106,7 @@ public class TopicTools {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return triplets.toArray( new String[] {} );
     }
@@ -1161,7 +1156,7 @@ public class TopicTools {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return tuples.toArray( new String[] {} );
     }
@@ -1190,7 +1185,7 @@ public class TopicTools {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return triplet.toArray( new String[] {} );
     }

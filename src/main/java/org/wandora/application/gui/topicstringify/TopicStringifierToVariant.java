@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ import org.wandora.application.tools.GenericOptionsDialog;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -47,6 +48,8 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class TopicStringifierToVariant implements TopicStringifier {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicStringifierToVariant.class);
+	
     private Set<Topic> scope = null;
     
     
@@ -61,7 +64,7 @@ public class TopicStringifierToVariant implements TopicStringifier {
     
     
     @Override
-    public boolean initialize(Wandora wandora, Context context) {
+    public boolean initialize(Wandora wandora, Context<?> context) {
         try {
             GenericOptionsDialog god=new GenericOptionsDialog(wandora,
                 "Select variant name scope to be viewed",
@@ -85,7 +88,7 @@ public class TopicStringifierToVariant implements TopicStringifier {
             return true;
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return false;
     }

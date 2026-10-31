@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,12 +26,12 @@ package org.wandora.application.tools.occurrences;
 
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.OccurrenceTable;
 import org.wandora.application.gui.UIConstants;
@@ -43,6 +43,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -51,9 +52,10 @@ import org.wandora.utils.IObox;
  *
  * @author akivela
  */
-public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTool {
+public class DownloadOccurrence extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DownloadOccurrence.class);
 
 	public static final int TARGET_FILE = 1;
     public static final int TARGET_OCCURRENCE = 2;
@@ -67,7 +69,7 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
 
     public DownloadOccurrence() {
     }
-    public DownloadOccurrence(Context preferredContext) {
+    public DownloadOccurrence(Context<?> preferredContext) {
         this(preferredContext, false);
     }
 
@@ -79,7 +81,7 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
         this.target = t;
         this.changeOccurrence = changeOccurrence;
     }
-    public DownloadOccurrence(Context preferredContext, boolean changeOccurrence) {
+    public DownloadOccurrence(Context<?> preferredContext, boolean changeOccurrence) {
         setContext(preferredContext);
         this.changeOccurrence = changeOccurrence;
     }
@@ -91,7 +93,7 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Object contextSource = context.getContextSource();
         
         // ***** TARGET OCCURRENCE ***** 
@@ -136,7 +138,7 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
                 }
             }
             else {
-                Iterator topics = context.getContextObjects();
+                Iterator<?> topics = context.getContextObjects();
                 File targetPath = null;
                 TopicMap tm = wandora.getTopicMap();
 
@@ -206,7 +208,7 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
         occurrence = occurrence.trim();
         if(occurrence.length() == 0) return null;
         try {
-            URL u = new URL(occurrence);
+            new URI(occurrence).toURL();
             return occurrence;
         }
         catch(Exception e) {
@@ -219,7 +221,7 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
 
     public boolean download(Wandora admin, Topic topic, String url, File target) {
         try {
-            URL subjectUrl = new URL(url);
+            URL subjectUrl = new URI(url).toURL();
             String filename = subjectUrl.getPath();
             String filenameWithoutExtension = filename;
             String filenameExtension = "";
@@ -278,7 +280,7 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return currentDirectory;
     }
@@ -302,7 +304,7 @@ public class DownloadOccurrence extends AbstractWandoraTool implements WandoraTo
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return currentFile;
     }

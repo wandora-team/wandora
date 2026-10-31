@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ package org.wandora.application.tools.generators;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -42,6 +41,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 
@@ -49,13 +49,13 @@ import org.wandora.utils.swing.GuiTools;
  *
  * @author akivela
  */
-public class FiniteGroupGenerator extends AbstractGenerator implements WandoraTool {
-
+public class FiniteGroupGenerator extends AbstractGenerator {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(FiniteGroupGenerator.class);
 
-	public static String FINITE_GROUP_SI = "http://wandora.org/si/finite-group";
+	public static String FINITE_GROUP_SI = "https://wandora.org/si/finite-group";
 
-    public static String siPattern = "http://wandora.org/si/finite-group/node/__n__";
+    public static String siPattern = "https://wandora.org/si/finite-group/node/__n__";
     public static String basenamePattern = "Topic __n__";
     public static boolean connectWithWandoraClass = true;
     public static int topicCounterOffset = 0;
@@ -77,7 +77,7 @@ public class FiniteGroupGenerator extends AbstractGenerator implements WandoraTo
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(wandora, context);
         
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,
@@ -201,7 +201,7 @@ public class FiniteGroupGenerator extends AbstractGenerator implements WandoraTo
                 t.addType(graphInstanceTopic);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return t;

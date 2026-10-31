@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,6 @@
 package org.wandora.application.gui.previews.formats;
 
 
-
-
 import static org.wandora.application.gui.previews.PreviewUtils.startsWithAny;
 
 import java.awt.BorderLayout;
@@ -46,6 +44,7 @@ import java.awt.event.MouseListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Map;
 
@@ -68,7 +67,7 @@ import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
-
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -76,6 +75,10 @@ import org.wandora.utils.DataURL;
  * @author akivela
  */
 public class AudioWav extends JPanel implements Runnable, MouseListener, ActionListener, PreviewPanel {
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AudioWav.class);
+
+    private static final long serialVersionUID = 1L;
+
     private static final String OPTIONS_PREFIX = "gui.audioSamplePreviewPanel.";
 
     private Map<String, String> options;
@@ -85,19 +88,21 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
     private JPanel wrapperPanel = null;
     private WaveformPanel waveformPanel = null;
     private long frameLength = 0;
-    
-    
-    /** Creates a new instance of AudioSample */
+
+
+    /** Creates a new instance of AudioWav */
     public AudioWav(String audioLocator) {
         this.audioLocator = audioLocator;
         initialize();
     }
-    
+
+
     @Override
     public boolean isHeavy() {
         return false;
     }
-    
+
+
     public void initialize() {
         this.options = Wandora.getWandora().getOptions().asMap();
 
@@ -108,12 +113,12 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
         this.addMouseListener(this);
         this.setLayout(new BorderLayout());
         this.add(waveformPanel, BorderLayout.CENTER);
-        
+
         wrapperPanel = new JPanel();
-        wrapperPanel.setLayout(new BorderLayout(8,8));
+        wrapperPanel.setLayout(new BorderLayout(8, 8));
         wrapperPanel.add(this, BorderLayout.CENTER);
         wrapperPanel.add(controllerPanel, BorderLayout.SOUTH);
-        
+
         repaint();
         revalidate();
         updateAudioMenu();
@@ -123,33 +128,35 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
     @Override
     public void finish() {
         isPlaying = false;
-       if(waveformPanel != null) {
+        if (waveformPanel != null) {
             waveformPanel.stop();
         }
-        if(player != null) {
+        if (player != null) {
             player.stop();
             player.flush();
         }
     }
 
+
     @Override
     public void stop() {
         isPlaying = false;
-        if(waveformPanel != null) {
+        if (waveformPanel != null) {
             waveformPanel.stop();
         }
-        if(player != null) {
+        if (player != null) {
             player.stop();
             player.flush();
         }
     }
-    
+
+
     @Override
     public JPanel getGui() {
         return wrapperPanel;
     }
-    
-    
+
+
 
     @Override
     public void run() {
@@ -157,24 +164,33 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
             isPlaying = true;
             playSample(audioLocator);
         }
-        catch (MalformedURLException e)  { e.printStackTrace();  }
-        catch (IOException e)  { e.printStackTrace();  }
-        catch (LineUnavailableException e)  { e.printStackTrace();  }
-        catch (UnsupportedAudioFileException e) { e.printStackTrace();  }
-        
-        catch (Exception e) { e.printStackTrace(); }
+        catch (MalformedURLException e) {
+            logger.error(e);
+        }
+        catch (IOException e) {
+            logger.error(e);
+        }
+        catch (LineUnavailableException e) {
+            logger.error(e);
+        }
+        catch (UnsupportedAudioFileException e) {
+            logger.error(e);
+        }
+        catch (Exception e) {
+            logger.error(e);
+        }
         isPlaying = false;
     }
 
-    
+
     private void playSample(String audioLocator) throws Exception {
         AudioInputStream audioStream = null;
-        if(DataURL.isDataURL(audioLocator)) {
+        if (DataURL.isDataURL(audioLocator)) {
             DataURL dataURL = new DataURL(audioLocator);
             audioStream = AudioSystem.getAudioInputStream(new ByteArrayInputStream(dataURL.getData()));
         }
         else {
-            URL audioURL = new URL(audioLocator);
+            URL audioURL = new URI(audioLocator).toURL();
             audioStream = AudioSystem.getAudioInputStream(audioURL);
         }
         AudioFormat format = audioStream.getFormat();
@@ -191,162 +207,168 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
         int numRead = 0;
         int offset = 0;
 
-        while(isPlaying && (numRead = audioStream.read(audioBuffer)) >= 0) {
+        while (isPlaying && (numRead = audioStream.read(audioBuffer)) >= 0) {
             offset = 0;
             while (offset < numRead) {
-                offset += player.write(audioBuffer, offset, numRead-offset);
+                offset += player.write(audioBuffer, offset, numRead - offset);
             }
         }
         player.drain();
         player.stop();
     }
-    
-    
+
+
     public void play() {
-        if(!isPlaying) {
-            if(audioLocator != null && audioLocator.length() > 0) {
+        if (!isPlaying) {
+            if (audioLocator != null && audioLocator.length() > 0) {
                 Thread audioThread = new Thread(this);
                 audioThread.start();
             }
         }
     }
-    
-    
+
+
     public long getFramePosition() {
-        if(player != null && isPlaying) {
+        if (player != null && isPlaying) {
             int fp = player.getFramePosition();
             return fp;
         }
         return 0;
     }
-    
-    
+
+
     public long getFrameLength() {
         return frameLength;
     }
-    
-    
 
-    
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
-        if(mouseEvent.getButton() == MouseEvent.BUTTON1 && mouseEvent.getClickCount() >= 2) {
+        if (mouseEvent.getButton() == MouseEvent.BUTTON1 && mouseEvent.getClickCount() >= 2) {
             play();
         }
     }
-    
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
     // -------------------------------------------------------------------------
-    
-    
+
+
     public void updateAudioMenu() {
-        if(audioLocator != null && audioLocator.length() > 0) {
+        if (audioLocator != null && audioLocator.length() > 0) {
             this.setComponentPopupMenu(getImageMenu());
         }
         else {
             this.setComponentPopupMenu(null);
         }
     }
-    
+
+
     public JPopupMenu getImageMenu() {
         Object[] menuStructure = new Object[] {
-            "Play",
-            "Stop",
-            "---",
-            "Open in external player...",
-            "---",
-            "Copy audio location",
-            "---",
-            "Save audio as...",
-           
+                "Play",
+                "Stop",
+                "---",
+                "Open in external player...",
+                "---",
+                "Copy audio location",
+                "---",
+                "Save audio as...",
+
         };
         return UIBox.makePopupMenu(menuStructure, this);
     }
-    
-    
+
+
     private JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Play", PreviewUtils.ICON_PLAY, this,
-            // "Pause", PreviewUtils.ICON_PAUSE, this,
-            "Stop", PreviewUtils.ICON_STOP, this,
-            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
-            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
-            "Save as", PreviewUtils.ICON_SAVE, this,
+                "Play", PreviewUtils.ICON_PLAY, this,
+                // "Pause", PreviewUtils.ICON_PAUSE, this,
+                "Stop", PreviewUtils.ICON_STOP, this,
+                "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+                "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+                "Save as", PreviewUtils.ICON_SAVE, this,
         }, this);
     }
-    
-    
+
+
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
-        if(c == null) return;
-        
-        if(startsWithAny(c, "Play")) {
+        if (c == null)
+            return;
+
+        if (startsWithAny(c, "Play")) {
             play();
         }
-        else if(startsWithAny(c, "Stop")) {
+        else if (startsWithAny(c, "Stop")) {
             isPlaying = false;
-            if(player != null) {
+            if (player != null) {
                 player.drain();
                 player.stop();
             }
         }
-        else if(startsWithAny(c, "Open in external", "Open ext")) {
+        else if (startsWithAny(c, "Open in external", "Open ext")) {
             PreviewUtils.forkExternalPlayer(audioLocator);
         }
-        else if(startsWithAny(c, "Copy audio location", "Copy location")) {
-            if(audioLocator != null) {
+        else if (startsWithAny(c, "Copy audio location", "Copy location")) {
+            if (audioLocator != null) {
                 ClipboardBox.setClipboard(audioLocator);
             }
         }
-        else if(startsWithAny(c, "Save")) {
+        else if (startsWithAny(c, "Save")) {
             PreviewUtils.saveToFile(audioLocator);
         }
     }
 
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { 
-                    "audio/x-aiff",
-                    "audio/basic",
-                    "audio/x-wav"
-                }, 
-                new String[] { 
-                    "aif", 
-                    /*"mp3", */
-                    "wav", 
-                    "au"
-                }
-        );
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "audio/x-aiff",
+                        "audio/basic",
+                        "audio/x-wav"
+                },
+                new String[] {
+                        "aif",
+                        /*"mp3", */
+                        "wav",
+                        "au"
+                });
     }
-    
-   
+
+
     // -------------------------------------------------------------------------
     // ------------------------------------------------------- WaveformPanel ---
     // -------------------------------------------------------------------------
 
-    
-    
-    public class WaveformPanel extends JPanel implements Runnable, LineListener, ComponentListener {    
+
+
+    public class WaveformPanel extends JPanel implements Runnable, LineListener, ComponentListener {
+        private static final long serialVersionUID = 1L;
+
         private int[][] waveformData = null;
         private int[][][] waveformView = null;
         private String audioLocator = null;
@@ -357,147 +379,147 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
         private AudioFormat format = null;
         private boolean isRunning = false;
         private boolean requiresRefresh = true;
-        
-        
-	public WaveformPanel(String audioLocator) {
+
+
+        public WaveformPanel(String audioLocator) {
             this.addComponentListener(this);
             this.audioLocator = audioLocator;
             isRunning = true;
             waveformThread = new Thread(this);
             waveformThread.start();
-	}
-        
-        
-        
+        }
+
+
+
         public void stop() {
             isRunning = false;
         }
-        
-        
-        
+
+
+
         @Override
         public void run() {
             try {
                 AudioInputStream audioStream = null;
-                if(DataURL.isDataURL(audioLocator)) {
+                if (DataURL.isDataURL(audioLocator)) {
                     DataURL dataURL = new DataURL(audioLocator);
                     audioStream = AudioSystem.getAudioInputStream(new ByteArrayInputStream(dataURL.getData()));
                 }
                 else {
-                    URL audioURL = new URL(audioLocator);
+                    URL audioURL = new URI(audioLocator).toURL();
                     audioStream = AudioSystem.getAudioInputStream(audioURL);
                 }
                 format = audioStream.getFormat();
                 frameLength = audioStream.getFrameLength();
-                byte[] waveformRawData = new byte[(int) frameLength*format.getFrameSize()];
+                byte[] waveformRawData = new byte[(int) frameLength * format.getFrameSize()];
                 int bytesRead = audioStream.read(waveformRawData);
                 waveformData = sortAudioBytes(waveformRawData, format);
 
-                if(audioStream != null) {
+                if (audioStream != null) {
                     audioStream.close();
                 }
             }
-            catch(Exception e) {
-                e.printStackTrace();
+            catch (Exception e) {
+                logger.error(e);
             }
-            
-            while(isRunning) {
+
+            while (isRunning) {
                 try {
                     long newFramePosition = getFramePosition();
-                    if(newFramePosition != framePosition) {
+                    if (newFramePosition != framePosition) {
                         framePosition = newFramePosition;
                         requiresRefresh = true;
                     }
-                    if(requiresRefresh) {
+                    if (requiresRefresh) {
                         repaint();
                         requiresRefresh = false;
                     }
                     Thread.sleep(50);
                 }
-                catch(Exception e) {
-                    
+                catch (Exception e) {
+
                 }
             }
         }
-        
 
-        
+
+
         private int[][] sortAudioBytes(byte[] raw, AudioFormat format) {
             int numChannels = format.getChannels();
             int[][] waveform = new int[numChannels][(int) frameLength];
             int sampleIndex = 0;
             boolean isBigEndian = format.isBigEndian();
             boolean isSigned = true;
-            
-            if(format.getSampleSizeInBits() == 8) {
-                for(int t=0; t<raw.length;) {
-                    for(int channel=0; channel<numChannels; channel++) {
+
+            if (format.getSampleSizeInBits() == 8) {
+                for (int t = 0; t < raw.length;) {
+                    for (int channel = 0; channel < numChannels; channel++) {
                         int sample = 0;
-                        if(isSigned) {
-                            sample = (raw[t] << 8) ;
+                        if (isSigned) {
+                            sample = (raw[t] << 8);
                         }
                         else {
                             sample = ((raw[t] ^ 0x80) << 8);
                         }
                         waveform[channel][sampleIndex] = sample;
-                        t = t+1;
+                        t = t + 1;
                     }
                     sampleIndex++;
                 }
             }
-            else if(format.getSampleSizeInBits() == 16) {
-                for(int t=0; t<raw.length;) {
-                    for(int channel=0; channel<numChannels; channel++) {
+            else if (format.getSampleSizeInBits() == 16) {
+                for (int t = 0; t < raw.length;) {
+                    for (int channel = 0; channel < numChannels; channel++) {
                         int low = (int) raw[t];
-                        int high = (int) raw[t+1];
+                        int high = (int) raw[t + 1];
                         int sample = 0;
-                        if(isBigEndian) {
+                        if (isBigEndian) {
                             sample = (low << 8) | (high & 0x00ff);
                         }
                         else {
                             sample = (low & 0x00ff) | (high << 8);
                         }
                         waveform[channel][sampleIndex] = sample;
-                        t = t+2;
+                        t = t + 2;
                     }
                     sampleIndex++;
                 }
             }
-            else if(format.getSampleSizeInBits() == 24) {
-                for(int t=0; t<raw.length;) {
-                    for(int channel=0; channel<numChannels; channel++) {
+            else if (format.getSampleSizeInBits() == 24) {
+                for (int t = 0; t < raw.length;) {
+                    for (int channel = 0; channel < numChannels; channel++) {
                         int low = (int) raw[t];
-                        int mid = (int) raw[t+1];
-                        int high = (int) raw[t+2];
+                        int mid = (int) raw[t + 1];
+                        int high = (int) raw[t + 2];
                         int sample = 0;
-                        if(isBigEndian) {
+                        if (isBigEndian) {
                             sample = (low << 16) | ((mid & 0xFF) << 8) | (high & 0x00ff);
                         }
                         else {
                             sample = (low & 0x00ff) | ((mid & 0xFF) << 8) | (high << 16);
                         }
                         waveform[channel][sampleIndex] = sample;
-                        t = t+3;
+                        t = t + 3;
                     }
                     sampleIndex++;
                 }
             }
-            else if(format.getSampleSizeInBits() == 32) {
-                for(int t=0; t<raw.length;) {
-                    for(int channel=0; channel<numChannels; channel++) {
+            else if (format.getSampleSizeInBits() == 32) {
+                for (int t = 0; t < raw.length;) {
+                    for (int channel = 0; channel < numChannels; channel++) {
                         int low = (int) raw[t];
-                        int mid1 = (int) raw[t+1];
-                        int mid2 = (int) raw[t+2];
-                        int high = (int) raw[t+3];
+                        int mid1 = (int) raw[t + 1];
+                        int mid2 = (int) raw[t + 2];
+                        int high = (int) raw[t + 3];
                         int sample = 0;
-                        if(isBigEndian) {
+                        if (isBigEndian) {
                             sample = (low << 24) | ((mid1 & 0xFF) << 16) | ((mid2 & 0xFF) << 8) | (high & 0x00ff);
                         }
                         else {
                             sample = (low & 0x00ff) | ((mid1 & 0xFF) << 8) | ((mid1 & 0xFF) << 16) | (high << 24);
                         }
                         waveform[channel][sampleIndex] = sample;
-                        t = t+4;
+                        t = t + 4;
                     }
                     sampleIndex++;
                 }
@@ -505,104 +527,107 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
 
             return waveform;
         }
-        
-        
+
+
         private void makeWaveformView() {
             int w = this.getWidth();
             int h = this.getHeight();
             int numberOfChannels = waveformData.length;
             waveformView = new int[numberOfChannels][w][2];
-            for(int channel=0; channel<numberOfChannels; channel++) {
+            for (int channel = 0; channel < numberOfChannels; channel++) {
                 int step = waveformData[channel].length / w;
-                if(step == 0) step = 1;
-                int o = (channel+1) * h/numberOfChannels - (h/numberOfChannels)/2;
+                if (step == 0)
+                    step = 1;
+                int o = (channel + 1) * h / numberOfChannels - (h / numberOfChannels) / 2;
 
-                int y = 0;
-                for(int x=0; x<w; x++) {
-                    int xstep = x*step;
+                for (int x = 0; x < w; x++) {
+                    int xstep = x * step;
                     int max = waveformData[channel][xstep];
                     int min = waveformData[channel][xstep];
-                    for(int s=1; s<step; s++) {
-                        if(waveformData[channel][xstep+s] > max) {
-                            max = waveformData[channel][xstep+s];
+                    for (int s = 1; s < step; s++) {
+                        if (waveformData[channel][xstep + s] > max) {
+                            max = waveformData[channel][xstep + s];
                         }
-                        if(waveformData[channel][xstep+s] < min) {
-                            min = waveformData[channel][xstep+s];
+                        if (waveformData[channel][xstep + s] < min) {
+                            min = waveformData[channel][xstep + s];
                         }
                     }
-                    int ymax = o + (max / (256*numberOfChannels));
-                    int ymin = o + (min / (256*numberOfChannels));
-                    
+                    int ymax = o + (max / (256 * numberOfChannels));
+                    int ymin = o + (min / (256 * numberOfChannels));
+
                     waveformView[channel][x][0] = ymin;
                     waveformView[channel][x][1] = ymax;
                 }
             }
         }
-        
-        
+
+
         @Override
         public void update(LineEvent event) {
-            if(isPlaying) {
+            if (isPlaying) {
                 //framePosition = event.getFramePosition();
                 //repaint();
             }
         }
-    
-    
+
+
         @Override
         public void paint(Graphics g) {
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(Color.WHITE);
             g.setFont(infoFont);
-            if(waveformData == null) {
+            if (waveformData == null) {
                 String text = "Preparing waveform";
                 byte[] textBytes = text.getBytes();
                 FontMetrics fontMetrics = g.getFontMetrics(infoFont);
                 int w = fontMetrics.bytesWidth(textBytes, 0, 0);
                 int h = fontMetrics.getHeight();
-                g.drawString(text, getWidth()/2-w/2, getHeight()/2-h/2);
+                g.drawString(text, getWidth() / 2 - w / 2, getHeight() / 2 - h / 2);
             }
-            else if(waveformView == null) {
+            else if (waveformView == null) {
                 makeWaveformView();
             }
-            if(waveformView != null) {
+            if (waveformView != null) {
                 int h = this.getHeight();
                 int numberOfChannels = waveformData.length;
                 int w = waveformView[0].length;
-                for(int channel=0; channel<numberOfChannels; channel++) {
-                    int o = (channel+1) * h/numberOfChannels - (h/numberOfChannels)/2;
+                for (int channel = 0; channel < numberOfChannels; channel++) {
+                    int o = (channel + 1) * h / numberOfChannels - (h / numberOfChannels) / 2;
                     w = waveformView[channel].length;
                     g.drawLine(0, o, w, o);
-                    for(int x=0; x<w; x++) {
+                    for (int x = 0; x < w; x++) {
                         int ymax = waveformView[channel][x][0];
                         int ymin = waveformView[channel][x][1];
                         g.drawLine(x, ymin, x, ymax);
                     }
                 }
-                
-                if(framePosition > 0 && frameLength > 0) {
+
+                if (framePosition > 0 && frameLength > 0) {
                     int playPositionOnScreen = (int) ((framePosition * w) / frameLength);
                     g.drawLine(playPositionOnScreen, 0, playPositionOnScreen, h);
                 }
             }
         }
 
-        
+
         @Override
         public Dimension getMinimumSize() {
             return new Dimension(320, 256);
         }
-        
+
+
         @Override
         public Dimension getPreferredSize() {
             return new Dimension(320, 256);
         }
-        
+
+
         @Override
         public Dimension getMaximumSize() {
             return new Dimension(320, 256);
         }
+
 
         @Override
         public void componentResized(ComponentEvent e) {
@@ -610,11 +635,13 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
             requiresRefresh = true;
         }
 
+
         @Override
         public void componentMoved(ComponentEvent e) {
             makeWaveformView();
             requiresRefresh = true;
         }
+
 
         @Override
         public void componentShown(ComponentEvent e) {
@@ -622,11 +649,12 @@ public class AudioWav extends JPanel implements Runnable, MouseListener, ActionL
             requiresRefresh = true;
         }
 
+
         @Override
         public void componentHidden(ComponentEvent e) {
             //makeWaveformView();
             //requiresRefresh = true;
         }
     }
-    
+
 }

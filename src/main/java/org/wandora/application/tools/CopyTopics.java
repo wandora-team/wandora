@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,6 @@ import java.util.TreeSet;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicstringify.TopicToString;
@@ -54,7 +53,6 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
-import org.wandora.topicmap.XTMPSI;
 import org.wandora.topicmap.layered.ContainerTopicMap;
 import org.wandora.topicmap.layered.Layer;
 import org.wandora.topicmap.layered.LayeredTopic;
@@ -66,7 +64,7 @@ import org.wandora.utils.ClipboardBox;
  *
  * @author akivela
  */
-public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
+public class CopyTopics extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -114,46 +112,46 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
     List<Topic> allOccurrenceTypes = null;
     Set<Topic> scopeMemory = null;
     Wandora wandora = null;
-    Iterator topics = null;
+    Iterator<?> topics = null;
     
     
     public CopyTopics() throws TopicMapException {
-        this((Collection) null, COPY_BASENAMES, INCLUDE_NOTHING);
+        this((Collection<Topic>) null, COPY_BASENAMES, INCLUDE_NOTHING);
     }
     
-    public CopyTopics(Wandora admin, Collection topics)  throws TopicMapException {
+    public CopyTopics(Wandora admin, Collection<Topic> topics)  throws TopicMapException {
         this(admin, topics, COPY_BASENAMES, INCLUDE_NOTHING);
     }
-    public CopyTopics(Wandora admin, Collection topics, int includeOrders)  throws TopicMapException {
+    public CopyTopics(Wandora admin, Collection<Topic> topics, int includeOrders)  throws TopicMapException {
         this(admin, topics, COPY_BASENAMES, includeOrders);
     }
-    public CopyTopics(Wandora admin, Collection topics, int copyOrders, int includeOrders) throws TopicMapException {
+    public CopyTopics(Wandora admin, Collection<Topic> topics, int copyOrders, int includeOrders) throws TopicMapException {
         this.topics = topics.iterator();
         initialize(copyOrders, includeOrders);
         execute(admin);
     }
     
     
-    public CopyTopics(Collection topics, int includeOrders) {
+    public CopyTopics(Collection<Topic> topics, int includeOrders) {
         this(topics, COPY_BASENAMES, includeOrders);
     }
-    public CopyTopics(Collection topics, int copyOrders, int includeOrders) {
+    public CopyTopics(Collection<Topic> topics, int copyOrders, int includeOrders) {
         if(topics != null) this.topics = topics.iterator();
         initialize(copyOrders, includeOrders);
     }
     public CopyTopics(int copyOrders, int includeOrders) {
-        this((Collection) null, copyOrders, includeOrders);
+        this((Collection<Topic>) null, copyOrders, includeOrders);
     }
     public CopyTopics(int includeOrders) {
-        this((Collection) null, COPY_BASENAMES, includeOrders);
+        this((Collection<Topic>) null, COPY_BASENAMES, includeOrders);
     }
     
     
-    public CopyTopics(Context context, int copyOrders, int includeOrders) {
+    public CopyTopics(Context<?> context, int copyOrders, int includeOrders) {
         if(context != null) setContext(context);
         initialize(copyOrders, includeOrders);
     }
-    public CopyTopics(Context context, int includeOrders) {
+    public CopyTopics(Context<?> context, int includeOrders) {
         if(context != null) setContext(context);
         initialize(COPY_BASENAMES, includeOrders);
     }
@@ -216,7 +214,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
     
     
 
-    public void setTopics(Collection topics) {
+    public void setTopics(Collection<Topic> topics) {
         this.topics = topics.iterator();
     }
     public void setTopics(Topic[] topicArray) {
@@ -233,7 +231,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         this.wandora = wandora;
         try {
             if(wandora != null) {
@@ -280,14 +278,13 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
         if(OUTPUT_LOG) setDefaultLogger();
         
         try {
-            Collection countCollection = null;
             List<String> lines = new ArrayList<>();
             if(OUTPUT_LOG) log("Copying "+ getTopicTypeName() +" to clipboard...");
             Topic topic = null;
             if(topics == null) {
                 topics = getContext().getContextObjects();
             }
-            if(topics == null) topics = (new ArrayList()).iterator();
+            if(topics == null) topics = (new ArrayList<Topic>()).iterator();
             int count = 0;
             
             
@@ -335,7 +332,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                                 break;
                             }
                             case INCLUDE_SI_COUNT: {
-                                countCollection = topic.getSubjectIdentifiers();
+                                Collection<Locator> countCollection = topic.getSubjectIdentifiers();
                                 if(countCollection != null) {
                                     sb.append("\t").append(countCollection.size());
                                 }
@@ -355,7 +352,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                                 break;
                             }
                             case INCLUDE_CLASS_COUNT: {
-                                countCollection = topic.getTypes();
+                                Collection<Topic> countCollection = topic.getTypes();
                                 if(countCollection != null) {
                                     sb.append("\t").append(countCollection.size());
                                 }
@@ -376,7 +373,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                             }
                             
                             case INCLUDE_INSTANCE_COUNT: {
-                                countCollection = topic.getTopicMap().getTopicsOfType(topic);
+                                Collection<Topic> countCollection = topic.getTopicMap().getTopicsOfType(topic);
                                 if(countCollection != null) {
                                     sb.append("\t").append(countCollection.size());
                                 }
@@ -467,7 +464,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                             }
                                 
                             case INCLUDE_OCCURRENCE_TYPES: {
-                                ArrayList<Topic> occurrenceTypes = new ArrayList(topic.getDataTypes());
+                                ArrayList<Topic> occurrenceTypes = new ArrayList<>(topic.getDataTypes());
                                 Collections.sort(occurrenceTypes, new TMBox.TopicBNAndSIComparator());
                                 for(Topic t : occurrenceTypes) {
                                     sb.append("\t").append(TopicToString.toString(t));
@@ -537,7 +534,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                             }
                             
                             case INCLUDE_ASSOCIATION_COUNT: {
-                                countCollection = topic.getAssociations();
+                                Collection<Association> countCollection = topic.getAssociations();
                                 if(countCollection != null) {
                                     sb.append("\t").append(countCollection.size());
                                 }
@@ -548,7 +545,7 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
                             }
                             
                             case INCLUDE_TYPED_ASSOCIATION_COUNT: {
-                                countCollection = topic.getAssociations(associationType);
+                            	Collection<Association> countCollection = topic.getAssociations(associationType);
                                 if(countCollection != null) {
                                     sb.append("\t").append(countCollection.size());
                                 }
@@ -630,27 +627,6 @@ public class CopyTopics extends AbstractWandoraTool implements WandoraTool {
         return sb.toString();
     }
     
-    
-    
-    private String getDisplayName(Topic t, String lang)  throws TopicMapException {
-        String langsi=XTMPSI.getLang(lang);
-        Topic langT =t.getTopicMap().getTopic(langsi);
-        String dispsi=XTMPSI.DISPLAY;
-        Topic dispT=t.getTopicMap().getTopic(dispsi);
-        Set<Topic> scope=new LinkedHashSet<>();
-        if(langT!=null) scope.add(langT);
-        if(dispT!=null) scope.add(dispT);
-        String variantName = t.getVariant(scope);
-        return (variantName == null ? "" : variantName);
-    }
-    
-    
-    private String getTextData(Topic t, Topic type, String versions)  throws TopicMapException {
-        String langsi=XTMPSI.getLang(versions);
-        Topic version=t.getTopicMap().getTopic(langsi);
-        String textData = t.getData(type, version);
-        return (textData == null ? "" : textData);
-    }
     
     
     

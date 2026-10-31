@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -97,6 +96,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -107,6 +107,7 @@ import org.wandora.utils.IObox;
 public class PrintTopic extends AbstractWandoraTool implements ActionListener, KeyListener {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PrintTopic.class);
 	
 	private static final int NO_SORT = 0;
     private static final int SORT_DESC = -1;
@@ -119,8 +120,8 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     SimpleButton printBtn;
     SimpleButton copyBtn;
     SimpleButton saveBtn;
-    SimpleComboBox templateSelector;
-    SimpleComboBox pageSelector;
+    SimpleComboBox<String> templateSelector;
+    SimpleComboBox<String> pageSelector;
     JPanel previewPanel;
     Preview preview;
     JScrollPane scrollArea;
@@ -168,7 +169,7 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context)  throws TopicMapException {
         this.parent = admin;
         if(frame == null) {
             initializeGui();
@@ -220,8 +221,8 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
         printBtn = new SimpleButton("Print");
         copyBtn = new SimpleButton("Copy");
         saveBtn = new SimpleButton("Save");
-        templateSelector = new SimpleComboBox();
-        pageSelector = new SimpleComboBox();
+        templateSelector = new SimpleComboBox<>();
+        pageSelector = new SimpleComboBox<>();
         pageSelector.setEditable(false);
         pageSelector.setPreferredSize(new Dimension(50,21));
               
@@ -365,13 +366,11 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
         }
         
         else if(evtSource.equals(templateSelector)) {
-            //System.out.println("----------------------- Updating preview!");
             parent.options.put(OPTIONS_PREFIX+"currentTemplate", templateSelector.getSelectedItem().toString());
             updatePreview();
         }
         
         else if(evtSource.equals(pageSelector)) {
-            //System.out.println("----------------------- Page change!");
             String pageString = (String) pageSelector.getSelectedItem();
             if(pageString != null && pageString.length() > 0) {
                 try {
@@ -386,7 +385,7 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
         }
         
         else {
-            System.out.println("Unknown action event source: " +evtSource);
+            logger.info("Unknown action event source: " +evtSource);
         }
     }
     
@@ -409,20 +408,16 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     };
     
     public void keyTyped(KeyEvent e) {
-        //System.out.println("keyTyped "+e);
     }
     public void keyPressed(KeyEvent e) {
-        //System.out.println("keyPressed "+e);
     }
     public void keyReleased(KeyEvent e) {
-        //System.out.println("keyReleased "+e);
         if(e == null) return;
         for(int i=0; i<keyMap.length; i+=2) {
             if(keyMap[i].equals(e.getKeyCode())) {
                 int pn = ((Integer) keyMap[i+1]).intValue();
                 if(pn < preview.numberOfPages) {
                     //preview.setPage(pn);
-                    //System.out.println("changing page to "+pn);
                     pageSelector.setSelectedIndex(pn);
                 }
                 break;
@@ -459,7 +454,6 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     
     
     public void setPreview(Topic t, String template, Wandora admin) {
-        //System.out.println("setPreview()");
         try {
             String text = getTopicAsText(admin, t, template, SORT);
             if(preview != null) { 
@@ -475,7 +469,6 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     
     
     public void updatePageSelector() {
-        //System.out.println("updatePageSelector()");
         String[] pageNumbers = preview.getPageNumbers();
         pageSelector.setOptions(pageNumbers);
         if(pageNumbers.length > 0) {
@@ -659,28 +652,20 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     
     
     
-    public String getVelocityString(Wandora wandora, Map hash, String templateFile) {
+    public String getVelocityString(Wandora wandora, Map<String, Object> hash, String templateFile) {
         VelocityContext context;
         Template template;
         StringWriter writer;
         VelocityEngine velocityEngine;
         String templateEncoding = "UTF-8";
-        Object codec = null;
 
         try {           
-            //templateFile = new File(templateName);
-            //templatePath = templateFile.getParent();
             writer = new StringWriter();
             velocityEngine = new VelocityEngine();
-            //velocityEngine.setProperty("file.resource.loader.path", templatePath );
-            //velocityEngine.setProperty("runtime.log.error.stacktrace", "false" );
-            //velocityEngine.setProperty("runtime.log.warn.stacktrace", "false" );
-            //velocityEngine.setProperty("runtime.log.info.stacktrace", "false" );
             velocityEngine.init();
             context = new VelocityContext();
             context.put("topic", hash);
             context.put("date" , DateFormat.getDateTimeInstance().format(new Date()));
-            if(codec != null) context.put("codec", codec);
             if(templateEncoding != null && templateEncoding.length()>0) template = velocityEngine.getTemplate(templateFile, templateEncoding);
             else template = velocityEngine.getTemplate(templateFile);
             template.merge( context, writer );
@@ -747,11 +732,10 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
     
     public void solveTemplates() {
         try {
-            HashSet<String> templateFiles = IObox.getFilesAsHash("gui/printtemplates", ".+\\.vhtml", 1, 999);
+            Set<String> templateFiles = IObox.getFilesAsHash("gui/printtemplates", ".+\\.vhtml", 1, 999);
             for(String templateFilename : templateFiles) {
                 if(templateFilename != null) {
                     try {
-                        //System.out.println("found template: " + templateFilename );
                         boolean nameFound = false;
                         BufferedReader reader = new BufferedReader(new FileReader(templateFilename));
                         String firstLine = reader.readLine();
@@ -825,18 +809,6 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
         }
         
         
-        /*
-        public Dimension getPreferredSize() {
-            if(pageFormat != null) {
-                return new Dimension((int) pageFormat.getWidth(), (int) pageFormat.getHeight());
-            }
-            else {
-                return new Dimension((int) (72*8.27), (int) (72*11.69));
-            }
-        }
-         * */
-        
-        
         @Override
         public void setText(String newText) {
             setEditorKit(new HTMLEditorKit() );
@@ -878,7 +850,6 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
                 
         public int print(java.awt.Graphics g, java.awt.print.PageFormat pageFormat, int p) throws java.awt.print.PrinterException {
             if(p < getPageCount(g, pageFormat)) {
-                //System.out.println("Printing page " + p);
                 page = p;
                 Graphics2D g2d = (Graphics2D)g;
                 RepaintManager currentManager = RepaintManager.currentManager(this);    
@@ -912,7 +883,7 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
             g.setColor(new Color(245,245,245));
             g.drawRect((int) iX-1, (int) iY-1, (int) iWidth+1, (int) iHeight+1);
             
-            if(g instanceof Graphics2D) {
+            if(g instanceof Graphics2D g2d) {
                 RenderingHints qualityHints = new RenderingHints(
                     RenderingHints.KEY_RENDERING,
                     RenderingHints.VALUE_RENDER_QUALITY);
@@ -923,16 +894,12 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
                     RenderingHints.KEY_FRACTIONALMETRICS,
                     RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
 
-                ((Graphics2D) g).addRenderingHints(qualityHints);
-                ((Graphics2D) g).addRenderingHints(antialiasHints);
-                ((Graphics2D) g).addRenderingHints(metricsHints);
+                g2d.addRenderingHints(qualityHints);
+                g2d.addRenderingHints(antialiasHints);
+                g2d.addRenderingHints(metricsHints);
                 
-                ((Graphics2D) g).translate(pageFormat.getImageableX(), pageFormat.getImageableY()-(page*iHeight));
-                ((Graphics2D) g).clipRect(0, (int) (page*iHeight), (int) iWidth, (int) (iHeight));
-                //System.out.println("printing=="+(page*iHeight)+"-"+((page+1)*iHeight));
-                //System.out.println("((page+1)*iHeight)=="+((page+1)*iHeight));
-                //g.setColor(Color.WHITE);
-                //g.fillRect(0, (int) (page*iHeight), (int) iWidth, (int) iHeight);
+                g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY()-(page*iHeight));
+                g2d.clipRect(0, (int) (page*iHeight), (int) iWidth, (int) (iHeight));
             }
             
             super.paint(g);
@@ -960,7 +927,6 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
         
     
         public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
-            //System.out.println("actionPerformed at Preview");
             String c = actionEvent.getActionCommand();
             if(c.equals("Copy")) {
                 ClipboardBox.setClipboard(getTopicAsText(parent));
@@ -977,7 +943,7 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
                 try{
                     print();
                 }catch(java.awt.print.PrinterException pe){
-                    pe.printStackTrace();
+                    logger.error(pe);
                 }
             }
             else if(c.startsWith("Close")) {
@@ -998,15 +964,13 @@ public class PrintTopic extends AbstractWandoraTool implements ActionListener, K
 
         public void save(File textFile) {
             if(textFile != null) {
-                String newText = "";
                 try {
                     FileWriter writer=new FileWriter(textFile);
                     write(writer);
                     writer.close();
-                    //IObox.saveFile(textFile, textPane.getText());
                 }
                 catch(Exception e) {
-                    System.out.println("Exception '" + e.toString() + "' occurred while saving file '" + textFile.getPath() + "'.");
+                    logger.error("Exception '" + e.toString() + "' occurred while saving file '" + textFile.getPath() + "'.");
                 }
             }
         }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.LinkedHashSet;
 
@@ -66,9 +65,8 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
-
-
 
 
 
@@ -79,13 +77,13 @@ import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 public class TopicTable extends SimpleTable implements MouseListener, ActionListener, Clipboardable {
 
     private static final long serialVersionUID = 1L;
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicTable.class);
+
     private Wandora wandora = null;
     private MouseEvent mouseEvent;
 
-    
-    
-    
+
+
     public TopicTable(Wandora w) {
         super();
         this.wandora = w;
@@ -93,46 +91,44 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
         this.setDragEnabled(true);
         this.setTransferHandler(new TopicTableTransferHandler());
     }
-    
 
-    
-    
+
+
     // -------------------------------------------------------------------------
 
+
     public void initialize(Collection<Topic> tableTopics) {
-        initialize(tableTopics.toArray( new Topic[] {} ), "");
+        initialize(tableTopics.toArray(new Topic[] {}), "");
     }
-    
-    
-    
+
+
+
     public void initialize(Collection<Topic> tableTopics, Object columnTopic) {
-        initialize(tableTopics.toArray( new Topic[] {} ), columnTopic);
+        initialize(tableTopics.toArray(new Topic[] {}), columnTopic);
     }
-    
-    
-    
+
+
+
     public void initialize(Topic[] tableTopics, Object columnTopic) {
         Topic[][] extendedTableTopics = new Topic[tableTopics.length][1];
-        for(int i=0; i<tableTopics.length; i++) {
+        for (int i = 0; i < tableTopics.length; i++) {
             extendedTableTopics[i][0] = tableTopics[i];
         }
-        initialize(extendedTableTopics, new Object[] { columnTopic } );
+        initialize(extendedTableTopics, new Object[] { columnTopic });
     }
-    
-    
-    
 
-    
-    
+
+
     public void initialize(Topic[][] tableTopics, Object[] columnObjects) {
         try {
-            if(tableTopics == null || columnObjects == null) return;
+            if (tableTopics == null || columnObjects == null)
+                return;
 
-            setDefaultRenderer(Topic.class, new TopicTableCellRenderer(this)); 
-            
+            setDefaultRenderer(Topic.class, new TopicTableCellRenderer(this));
+
             TopicTableModel model = new TopicTableModel(tableTopics, columnObjects);
             this.setModel(model);
-            
+
             TopicTableRowSorter rowSorter = new TopicTableRowSorter(this, model);
             this.setRowSorter(rowSorter);
             rowSorter.setSortsOnUpdates(true);
@@ -145,58 +141,62 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
                 public void mousePressed(java.awt.event.MouseEvent e) {
                     mouseClicked(e);
                 }
+
+
                 @Override
                 public void mouseReleased(java.awt.event.MouseEvent e) {
                     mouseClicked(e);
                 }
+
+
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                     mouseEvent = e;
-                    if(e.isPopupTrigger()) {
+                    if (e.isPopupTrigger()) {
                         Point loc = getTablePoint(mouseEvent);
                         Object o = getColumnAt(loc.x);
-                        if(o != null && o instanceof Topic) {
+                        if (o != null && o instanceof Topic) {
                             JPopupMenu rolePopup = UIBox.makePopupMenu(getHeaderPopupStruct(), wandora);
-                            rolePopup.show(e.getComponent(),e.getX(),e.getY());
+                            rolePopup.show(e.getComponent(), e.getX(), e.getY());
                         }
                         e.consume();
                     }
                 }
             });
         }
-        catch(Exception e) {
+        catch (Exception e) {
             wandora.handleError(e);
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
+
 
 
     @Override
     public void sorterChanged(RowSorterEvent e) {
         List<int[]> modelCells = new ArrayList<>();
-        
-        if(e.getType().equals(RowSorterEvent.Type.SORTED)) {
+
+        if (e.getType().equals(RowSorterEvent.Type.SORTED)) {
             List<int[]> selectedCells = getSelectedCells();
-            if(selectedCells != null && !selectedCells.isEmpty()) {
+            if (selectedCells != null && !selectedCells.isEmpty()) {
                 modelCells = new ArrayList<>();
-                for(int[] cell : selectedCells) {
+                for (int[] cell : selectedCells) {
                     int i = e.convertPreviousRowIndexToModel(cell[0]);
                     cell[0] = (i != -1 ? i : cell[0]);
                     modelCells.add(cell);
                 }
             }
         }
-        
+
         super.sorterChanged(e);
 
-        if(e.getType().equals(RowSorterEvent.Type.SORTED)) {
-            if(modelCells != null && !modelCells.isEmpty()) {
+        if (e.getType().equals(RowSorterEvent.Type.SORTED)) {
+            if (modelCells != null && !modelCells.isEmpty()) {
                 clearSelection();
                 List<int[]> viewCells = new ArrayList<>();
-                for(int[] cell : modelCells) {
+                for (int[] cell : modelCells) {
                     cell[0] = convertRowIndexToView(cell[0]);
                     cell[1] = convertColumnIndexToView(cell[1]);
                     viewCells.add(cell);
@@ -206,136 +206,136 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
         }
     }
 
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     protected Object[] getHeaderPopupStruct() {
         Object header = this.getTableHeader();
         return new Object[] {
-            "Open topic", new OpenTopic(),
-            "Open topic in",
-            WandoraMenuManager.getOpenInMenu(),
-            "---",
-            "Duplicate topic", new DuplicateTopics(),
-            "Split topic", new Object[] {
-                "Split topic with subject identifiers", new SplitTopics(),
-                "Split topic with base name...", new SplitTopicsWithBasename(),
-            },
-            "---",
-            "Add to topic", WandoraMenuManager.getDefaultAddToTopicMenuStruct(wandora, header),
-            "Delete from topic", WandoraMenuManager.getDefaultDeleteFromTopicMenuStruct(wandora, header),
-            "---",
-            "Copy", WandoraMenuManager.getDefaultCopyMenuStruct(wandora, header),
-            "Copy also", WandoraMenuManager.getDefaultCopyAlsoMenuStruct(wandora, header),
-            "Paste", WandoraMenuManager.getDefaultPasteMenuStruct(wandora, header),
-            "Paste also", WandoraMenuManager.getDefaultPasteAlsoMenuStruct(wandora, header),
-            "---",
-            "Subject locators", WandoraMenuManager.getDefaultSLMenuStruct(wandora, header),
-            "Subject identifiers", WandoraMenuManager.getDefaultSIMenuStruct(wandora, header),
-            "Base names", WandoraMenuManager.getDefaultBasenameMenuStruct(wandora, header),
-            "Variant names", WandoraMenuManager.getDefaultVariantNameMenuStruct(wandora, header),
-            "Associations", WandoraMenuManager.getDefaultAssociationMenuStruct(wandora, header),
-            "Occurrences", WandoraMenuManager.getDefaultOccurrenceMenuStruct(wandora, header),
+                "Open topic", new OpenTopic(),
+                "Open topic in",
+                WandoraMenuManager.getOpenInMenu(),
+                "---",
+                "Duplicate topic", new DuplicateTopics(),
+                "Split topic", new Object[] {
+                        "Split topic with subject identifiers", new SplitTopics(),
+                        "Split topic with base name...", new SplitTopicsWithBasename(),
+                },
+                "---",
+                "Add to topic", WandoraMenuManager.getDefaultAddToTopicMenuStruct(wandora, header),
+                "Delete from topic", WandoraMenuManager.getDefaultDeleteFromTopicMenuStruct(wandora, header),
+                "---",
+                "Copy", WandoraMenuManager.getDefaultCopyMenuStruct(wandora, header),
+                "Copy also", WandoraMenuManager.getDefaultCopyAlsoMenuStruct(wandora, header),
+                "Paste", WandoraMenuManager.getDefaultPasteMenuStruct(wandora, header),
+                "Paste also", WandoraMenuManager.getDefaultPasteAlsoMenuStruct(wandora, header),
+                "---",
+                "Subject locators", WandoraMenuManager.getDefaultSLMenuStruct(wandora, header),
+                "Subject identifiers", WandoraMenuManager.getDefaultSIMenuStruct(wandora, header),
+                "Base names", WandoraMenuManager.getDefaultBasenameMenuStruct(wandora, header),
+                "Variant names", WandoraMenuManager.getDefaultVariantNameMenuStruct(wandora, header),
+                "Associations", WandoraMenuManager.getDefaultAssociationMenuStruct(wandora, header),
+                "Occurrences", WandoraMenuManager.getDefaultOccurrenceMenuStruct(wandora, header),
         };
     }
-    
-    
-    
+
+
+
     protected Object[] getPopupStruct() {
         return new Object[] {
-            "Open topic", new OpenTopic(),
-            "Open topic in",
-            WandoraMenuManager.getOpenInMenu(),
-            "---",
-            "Select", WandoraMenuManager.getDefaultSelectMenuStruct(wandora, this),
-            "Topics", WandoraMenuManager.getDefaultTopicMenuStruct(wandora, this),
+                "Open topic", new OpenTopic(),
+                "Open topic in",
+                WandoraMenuManager.getOpenInMenu(),
+                "---",
+                "Select", WandoraMenuManager.getDefaultSelectMenuStruct(wandora, this),
+                "Topics", WandoraMenuManager.getDefaultTopicMenuStruct(wandora, this),
         };
     }
-    
-    
-    
-    
+
+
+
     protected Object[] getPopupStruct(Object[] subStruct) {
-        int i=0;
+        int i = 0;
         Object[] popupStruct = new Object[] {
-            "Open topic", new OpenTopic(),
-            "Open topic in",
-            WandoraMenuManager.getOpenInMenu(),
-            "---",
-            "Select", WandoraMenuManager.getDefaultSelectMenuStruct(wandora, this),
-            "Topics", WandoraMenuManager.getDefaultTopicMenuStruct(wandora, this),
+                "Open topic", new OpenTopic(),
+                "Open topic in",
+                WandoraMenuManager.getOpenInMenu(),
+                "---",
+                "Select", WandoraMenuManager.getDefaultSelectMenuStruct(wandora, this),
+                "Topics", WandoraMenuManager.getDefaultTopicMenuStruct(wandora, this),
         };
         Object[] newPopupStruct = new Object[popupStruct.length + subStruct.length];
-        for(; i<popupStruct.length; i++) {
+        for (; i < popupStruct.length; i++) {
             newPopupStruct[i] = popupStruct[i];
         }
-        for(int subi=0; subi<subStruct.length; subi++) {
-            newPopupStruct[i+subi] = subStruct[subi];
+        for (int subi = 0; subi < subStruct.length; subi++) {
+            newPopupStruct[i + subi] = subStruct[subi];
         }
         return newPopupStruct;
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public void selectTopics(Topic[] topics) {
-        if(topics == null || topics.length == 0) return;
+        if (topics == null || topics.length == 0)
+            return;
 
         Set<Topic> topicHash = new LinkedHashSet<>();
-        for(int i=0; i<topics.length; i++) {
+        for (int i = 0; i < topics.length; i++) {
             topicHash.add(topics[i]);
         }
 
         int c = this.getColumnCount();
         int r = this.getRowCount();
         Topic tableTopic = null;
-        for(int x=0; x<c; x++) {
-            for(int y=0; y<r; y++) {
+        for (int x = 0; x < c; x++) {
+            for (int y = 0; y < r; y++) {
                 tableTopic = this.getTopicAt(y, x);
                 try {
-                    if(tableTopic != null && !tableTopic.isRemoved()) {
-                        if(topicHash.contains(tableTopic)) {
+                    if (tableTopic != null && !tableTopic.isRemoved()) {
+                        if (topicHash.contains(tableTopic)) {
                             selectCell(x, y);
                         }
                     }
                 }
-                catch(Exception e) {
-                    e.printStackTrace();
+                catch (Exception e) {
+                    logger.error(e);
                 }
             }
         }
     }
-    
-    
-    
+
+
+
     public void selectTopic(Topic topic) {
         int c = this.getColumnCount();
         int r = this.getRowCount();
         Topic tableTopic = null;
-        for(int x=0; x<c; x++) {
-            for(int y=0; y<r; y++) {
+        for (int x = 0; x < c; x++) {
+            for (int y = 0; y < r; y++) {
                 tableTopic = this.getTopicAt(y, x);
                 try {
-                    if(tableTopic != null && !tableTopic.isRemoved()) {
-                        if(tableTopic.mergesWithTopic(topic)) {
+                    if (tableTopic != null && !tableTopic.isRemoved()) {
+                        if (tableTopic.mergesWithTopic(topic)) {
                             selectCell(x, y);
                         }
                     }
                 }
-                catch(Exception e) {
-                    e.printStackTrace();
+                catch (Exception e) {
+                    logger.error(e);
                 }
             }
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     @Override
     public String getToolTipText(MouseEvent e) {
         Point p = getTablePoint(e);
@@ -343,57 +343,56 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
         String tooltipText = TopicToString.toString(t);
         return Textbox.makeHTMLParagraph(tooltipText, 60);
     }
-    
-   
-    
-    
+
+
+
     public void toggleSortOrder(int s) {
-        RowSorter sorter = getRowSorter();
-        if(sorter != null) {
+        RowSorter<?> sorter = getRowSorter();
+        if (sorter != null) {
             sorter.toggleSortOrder(s);
         }
     }
-    
-    
-    
-    
-    
-    
-    
+
+
+
     @Override
     public void cut() {
         copy();
     }
-    
+
+
     @Override
     public void paste() {
     }
-    
+
+
     @Override
     public void copy() {
         ClipboardBox.setClipboard(getCopyString());
     }
+
+
     public String getCopyString() {
         StringBuilder copyString = new StringBuilder("");
         try {
             Object[][] selectedValues = getSelectedValues();
-            if(selectedValues.length > 0) {
-                for(int col=0; col<selectedValues.length; col++) {
+            if (selectedValues.length > 0) {
+                for (int col = 0; col < selectedValues.length; col++) {
                     boolean rowHasContent = false;
                     StringBuilder rawString = new StringBuilder("");
-                    for(int row=0; row<selectedValues[col].length; row++) {
-                        if(selectedValues[col][row] != null) {
+                    for (int row = 0; row < selectedValues[col].length; row++) {
+                        if (selectedValues[col][row] != null) {
                             rawString.append(TopicToString.toString((Topic) selectedValues[col][row]));
                             rowHasContent = true;
                         }
-                        if(rowHasContent && row+1<selectedValues[col].length) {
+                        if (rowHasContent && row + 1 < selectedValues[col].length) {
                             rawString.append("\t");
                         }
                     }
-                    if(rowHasContent) {
+                    if (rowHasContent) {
                         copyString.append(rawString);
                         copyString.append("\n");
-                    };
+                    }
                 }
             }
             else {
@@ -401,24 +400,28 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
                 Topic t = getTopicAt(loc);
                 copyString.append(TopicToString.toString(t));
             }
-        } 
-        catch(Exception tme){
+        }
+        catch (Exception tme) {
             wandora.handleError(tme);
         }
         return copyString.toString();
     }
-    
-    
-    
+
+
+
     public Point getTablePoint() {
         return getTablePoint(mouseEvent);
     }
+
+
     public Point getTablePoint(java.awt.event.MouseEvent e) {
-        if(e == null) return null;
+        if (e == null) {
+            return null;
+        }
         try {
-            java.awt.Point p=e.getPoint();
-            int y=rowAtPoint(p);
-            int x=columnAtPoint(p);
+            java.awt.Point p = e.getPoint();
+            int y = rowAtPoint(p);
+            int x = columnAtPoint(p);
             return new Point(x, y);
         }
         catch (Exception ex) {
@@ -426,279 +429,288 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
             return null;
         }
     }
-    
-    
-    
 
-    
-    
-    
+
+
     public List<int[]> getSelectedCells() {
         List<int[]> selected = new ArrayList<>();
-        
+
         TableSelectionModel selection = getTableSelectionModel();
         int colCount = this.getColumnCount();
         int rowCount = this.getRowCount();
-        //System.out.println("----");
-        for(int c=0; c<colCount; c++) {
+        for (int c = 0; c < colCount; c++) {
             int cc = convertColumnIndexToModel(c);
             ListSelectionModel columnSelectionModel = selection.getListSelectionModelAt(cc);
-            if(columnSelectionModel != null && !columnSelectionModel.isSelectionEmpty()) {
-                for(int r=0; r<rowCount; r++) {
-                    if(columnSelectionModel.isSelectedIndex(r)) {
-                        selected.add( new int[] { r, c } );
-                        //System.out.println("found cell "+cc+","+r);
+            if (columnSelectionModel != null && !columnSelectionModel.isSelectionEmpty()) {
+                for (int r = 0; r < rowCount; r++) {
+                    if (columnSelectionModel.isSelectedIndex(r)) {
+                        selected.add(new int[] { r, c });
                     }
                 }
             }
         }
         return selected;
     }
-    
-    
-    
+
+
+
     public Object[][] getSelectedValues() {
         List<int[]> selectedCells = getSelectedCells();
         int rlen = 0;
         int clen = 0;
-        for(int[] cell : selectedCells) {
-            if(clen < cell[0]) clen = cell[0];
-            if(rlen < cell[1]) rlen = cell[1];
+        for (int[] cell : selectedCells) {
+            if (clen < cell[0])
+                clen = cell[0];
+            if (rlen < cell[1])
+                rlen = cell[1];
         }
-        Object[][] selectedValues = new Object[clen+1][rlen+1];
-        for(int[] cell : selectedCells) {
-            selectedValues[cell[0]][cell[1]] = getValueAt( cell[0], cell[1] );
+        Object[][] selectedValues = new Object[clen + 1][rlen + 1];
+        for (int[] cell : selectedCells) {
+            selectedValues[cell[0]][cell[1]] = getValueAt(cell[0], cell[1]);
         }
         return selectedValues;
     }
-    
-    
-    
-    
+
+
+
     public Topic[] getSelectedTopics() {
         List<Topic> topics = new ArrayList<>();
         List<int[]> selectedCells = getSelectedCells();
-        for(int[] cell : selectedCells) {
+        for (int[] cell : selectedCells) {
             Topic t = getTopicAt(cell[0], cell[1]);
             try {
-                if( t != null && !t.isRemoved() ) {
-                    topics.add( t );
+                if (t != null && !t.isRemoved()) {
+                    topics.add(t);
                 }
             }
-            catch(Exception e) {
-                e.printStackTrace();
+            catch (Exception e) {
+                logger.error(e);
             }
         }
-        if(topics.isEmpty()) {
+        if (topics.isEmpty()) {
             Point loc = getTablePoint();
             Topic t = getTopicAt(loc);
             try {
-                if(t != null && !t.isRemoved() ) {
-                    topics.add( t );
+                if (t != null && !t.isRemoved()) {
+                    topics.add(t);
                 }
             }
-            catch(Exception e) {
-                e.printStackTrace();
+            catch (Exception e) {
+                logger.error(e);
             }
         }
-        return topics.toArray( new Topic[] {} );
+        return topics.toArray(new Topic[] {});
     }
-    
-    
-    
-    
+
+
+
     public Topic getSelectedHeaderTopic() {
-        if(mouseEvent != null) {
+        if (mouseEvent != null) {
             int c = this.getTableHeader().columnAtPoint(mouseEvent.getPoint());
             int realc = convertColumnIndexToModel(c);
             Object o = ((TopicTableModel) getModel()).getColumnObjectAt(realc);
-            if(o instanceof Topic) return (Topic) o;
+            if (o instanceof Topic)
+                return (Topic) o;
         }
         return null;
     }
-    
-    
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-     public Object getValueAt(MouseEvent e) {
+
+
+    public Object getValueAt(MouseEvent e) {
         return getValueAt(getTablePoint(e));
     }
-     public Object getValueAt(Point p) {
+
+
+    public Object getValueAt(Point p) {
         return getValueAt(p.y, p.x);
     }
+
+
     @Override
     public Object getValueAt(int y, int x) {
         try {
-            if(x >= 0 && x < getModel().getColumnCount() && y >= 0 && y < getModel().getRowCount()) {
+            if (x >= 0 && x < getModel().getColumnCount() && y >= 0 && y < getModel().getRowCount()) {
                 int cx = convertColumnIndexToModel(x);
                 int cy = convertRowIndexToModel(y);
                 return getModel().getValueAt(cy, cx);
             }
         }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) {
+            logger.error(e);
+        }
         return null;
     }
-    
+
+
     public Object getColumnAt(int x) {
         return ((TopicTableModel) getModel()).getColumnObjectAt(x);
     }
-    
-    
+
+
     public Topic getTopicAt(MouseEvent e) {
-        if(e == null) return null;
+        if (e == null)
+            return null;
         return getTopicAt(getTablePoint(e));
     }
+
+
     public Topic getTopicAt(Point point) {
-        if(point == null) return null;
+        if (point == null)
+            return null;
         return getTopicAt(point.y, point.x);
     }
+
+
     public Topic getTopicAt(int y, int x) {
         Object object = getValueAt(y, x);
-        if(object instanceof Topic) {
+        if (object instanceof Topic) {
             return (Topic) object;
         }
-        if(object instanceof TopicGuiWrapper) {
+        if (object instanceof TopicGuiWrapper) {
             TopicGuiWrapper wrapper = (TopicGuiWrapper) object;
-            if(wrapper != null) return wrapper.topic;
+            if (wrapper != null)
+                return wrapper.topic;
         }
         return null;
     }
-    
-    
-    
+
+
+
     @Override
     public int convertRowIndexToModel(int row) {
         return getRowSorter().convertRowIndexToModel(row);
     }
+
+
     @Override
     public int convertRowIndexToView(int row) {
         return getRowSorter().convertRowIndexToView(row);
     }
+
+
     @Override
     public int convertColumnIndexToModel(int col) {
         return super.convertColumnIndexToModel(col);
     }
+
+
     @Override
     public int convertColumnIndexToView(int col) {
         return super.convertColumnIndexToView(col);
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public void refreshGUI() {
         try {
             wandora.doRefresh();
         }
-        catch(Exception ce) { 
-            //ce.printStackTrace();
+        catch (Exception ce) {
+            // Ignore
         }
     }
-    
+
     // -------------------------------------------------------------------------
-    
-    
-        
+
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent e) {
         this.mouseEvent = e;
-        if(e.getClickCount()>=2){
+        if (e.getClickCount() >= 2) {
             wandora.applyChangesAndOpen(getTopicAt(e));
         }
-        if(e.isPopupTrigger()) {
+        if (e.isPopupTrigger()) {
             JPopupMenu popup = UIBox.makePopupMenu(getPopupStruct(), wandora);
             popup.show(e.getComponent(), e.getX(), e.getY());
             e.consume();
         }
     }
-    
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent e) {
     }
-    
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent e) {
     }
-    
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
         this.mouseEvent = e;
         mouseClicked(mouseEvent);
     }
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent e) {
         this.mouseEvent = e;
         mouseClicked(mouseEvent);
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
-    
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
     }
-    
 
-    
+
+
     protected Topic getTopicForIdentifier(String id) {
         TopicMap tm = wandora.getTopicMap();
         Topic t = null;
         try {
             t = tm.getTopicWithBaseName(id);
-            if(t == null) {
+            if (t == null) {
                 t = tm.getTopic(id);
-                if(t == null) {
+                if (t == null) {
                     t = tm.getTopicBySubjectLocator(new Locator(id));
                 }
             }
         }
-        catch(Exception e) {
-            
+        catch (Exception e) {
+
         }
         return t;
     }
-    
 
-    
 
-    
 
     // -------------------------------------------------------------------------
     // ----------------------------------------------------------------- DND ---
     // -------------------------------------------------------------------------
 
-    
+
     private class TopicTableTransferHandler extends TransferHandler {
+
+        private static final long serialVersionUID = 1L;
 
         @Override
         public boolean canImport(TransferSupport support) {
             return false;
         }
 
+
         @Override
         protected Transferable createTransferable(JComponent c) {
             return DnDHelper.makeTopicTableTransferable(TopicTable.this);
         }
 
+
         @Override
         public int getSourceActions(JComponent c) {
             return TransferHandler.COPY_OR_MOVE;
         }
+
 
         @Override
         public boolean importData(TransferSupport support) {
@@ -706,5 +718,5 @@ public class TopicTable extends SimpleTable implements MouseListener, ActionList
         }
 
     }
-    
+
 }

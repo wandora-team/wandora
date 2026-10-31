@@ -5,13 +5,13 @@
 #set( $count = 0 )##
 #set( $lang = "en")##
 ##
-#set( $linkTypeSI = "http://wandora.org/si/reddit/link" )##
+#set( $linkTypeSI = "https://wandora.org/si/reddit/link" )##
 #set( $linkType = $topicmap.getTopic( $linkTypeSI ) )##
 ##
-#set( $linkCreatedTypeSI = "http://wandora.org/si/reddit/created" )##
+#set( $linkCreatedTypeSI = "https://wandora.org/si/reddit/created" )##
 #set( $linkCreatedType = $topicmap.getTopic( $linkCreatedTypeSI ) )##
 ##
-#set( $destinationTypeSI = "http://wandora.org/si/reddit/destination")##
+#set( $destinationTypeSI = "https://wandora.org/si/reddit/destination")##
 #set( $destinationType = $topicmap.getTopic( $destinationTypeSI ) )##
 ##
 ##

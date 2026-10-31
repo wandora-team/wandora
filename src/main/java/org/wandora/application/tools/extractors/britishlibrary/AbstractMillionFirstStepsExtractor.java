@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ public abstract class AbstractMillionFirstStepsExtractor extends AbstractExtract
     
     public static final String BRITISH_LIBRARY_SI = "http://www.bl.uk/";
     
-    public static final String BASE_SI = "http://wandora.org/si/british-libary/";
+    public static final String BASE_SI = "https://wandora.org/si/british-libary/";
     
     public static final String BOOK_SI = BASE_SI + "book";
     public static final String AUTHOR_SI = BASE_SI + "author";

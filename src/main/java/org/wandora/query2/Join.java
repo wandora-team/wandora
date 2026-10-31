@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
  */
 package org.wandora.query2;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -32,12 +33,12 @@ import java.util.NoSuchElementException;
  * @author olli
  */
 public class Join extends Directive implements DirectiveUIHints.Provider {
-    private ArrayList<Directive> directives;
+    private List<Directive> directives;
 
     public Join(){}
     
     public Join(Directive[] directives){
-        this.directives=new ArrayList<Directive>();
+        this.directives=new ArrayList<>();
         for(int i=0;i<directives.length;i++){
             this.directives.add(directives[i]);
         }
@@ -164,7 +165,7 @@ public class Join extends Directive implements DirectiveUIHints.Provider {
             this.context=context;
             this.input=input;
 
-            iterators=new ArrayList<ResultIterator>();
+            iterators=new ArrayList<>();
             
             for(int i=0;i<directives.size();i++){
                 ResultIterator iter=directives.get(i).queryIterator(context,input);
@@ -205,12 +206,6 @@ public class Join extends Directive implements DirectiveUIHints.Provider {
             }
             if(row==null) return false;
             nextRow=row;
-//            counter++;
-//            if((counter%50000)==0){
-//                double speed=50000.0/(double)(System.currentTimeMillis()-startTime)*1000.0;
-//                System.out.println("Join counter "+counter+" "+speed);
-//                startTime=System.currentTimeMillis();
-//            }
 
             for(int i=iterators.size()-1;i>=0;i--){
                 ResultIterator iter=iterators.get(i);

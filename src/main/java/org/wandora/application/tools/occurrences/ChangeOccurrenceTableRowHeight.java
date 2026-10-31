@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
 package org.wandora.application.tools.occurrences;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.OccurrenceTable;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -37,7 +36,7 @@ import org.wandora.utils.Options;
  */
 
 
-public class ChangeOccurrenceTableRowHeight extends AbstractWandoraTool implements WandoraTool {
+public class ChangeOccurrenceTableRowHeight extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -67,7 +66,7 @@ public class ChangeOccurrenceTableRowHeight extends AbstractWandoraTool implemen
 
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         if(localOptions != null) {
             localOptions.put(OccurrenceTable.ROW_HEIGHT_OPTIONS_KEY, ""+rowHeight);
         }

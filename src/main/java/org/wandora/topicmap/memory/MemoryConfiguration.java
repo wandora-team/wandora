@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,32 +34,37 @@ import javax.swing.JFileChooser;
 
 import org.wandora.application.Wandora;
 import org.wandora.topicmap.TopicMapConfigurationPanel;
+
 /**
  *
  * @author  olli
  */
 public class MemoryConfiguration extends TopicMapConfigurationPanel {
+    private static final long serialVersionUID = 1L;
+
     public static final String LOAD_MINI_SCHEMA_PARAM = "LOAD_MINI_SCHEMA_PARAM";
-    
+
     Wandora admin = null;
-    
-    
-    
+
+
+
     /** Creates new form MemoryConfiguration */
     public MemoryConfiguration(Wandora admin) {
         initComponents();
     }
 
+
     public String getParameters() {
-        if(loadMiniSchemaRadioButton.isSelected()) {
+        if (loadMiniSchemaRadioButton.isSelected()) {
             return LOAD_MINI_SCHEMA_PARAM;
         }
-        if(loadRadioButton.isSelected())
+        if (loadRadioButton.isSelected())
             return sourceTextField.getText();
-        else return "";
+        else
+            return "";
     }
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -175,31 +180,35 @@ public class MemoryConfiguration extends TopicMapConfigurationPanel {
         add(loadXTMPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void loadMiniSchemaRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadMiniSchemaRadioButtonActionPerformed
         sourceTextField.setEnabled(false);
-        browseButton.setEnabled(false);  
+        browseButton.setEnabled(false);
     }//GEN-LAST:event_loadMiniSchemaRadioButtonActionPerformed
+
 
     private void loadRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadRadioButtonActionPerformed
         sourceTextField.setEnabled(true);
         browseButton.setEnabled(true);
     }//GEN-LAST:event_loadRadioButtonActionPerformed
 
+
     private void emptyRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emptyRadioButtonActionPerformed
         sourceTextField.setEnabled(false);
-        browseButton.setEnabled(false);        
+        browseButton.setEnabled(false);
     }//GEN-LAST:event_emptyRadioButtonActionPerformed
 
+
     private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonActionPerformed
-        JFileChooser fc=new JFileChooser();
-        int c=fc.showOpenDialog(this.getParent());
-        if(c==JFileChooser.APPROVE_OPTION){
+        JFileChooser fc = new JFileChooser();
+        int c = fc.showOpenDialog(this.getParent());
+        if (c == JFileChooser.APPROVE_OPTION) {
             sourceTextField.setText(fc.getSelectedFile().getAbsolutePath());
         }
     }//GEN-LAST:event_browseButtonActionPerformed
 
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton browseButton;
     private javax.swing.ButtonGroup buttonGroup1;
@@ -210,5 +219,5 @@ public class MemoryConfiguration extends TopicMapConfigurationPanel {
     private javax.swing.JPanel loadXTMPanel;
     private javax.swing.JTextField sourceTextField;
     // End of variables declaration//GEN-END:variables
-    
+
 }

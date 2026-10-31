@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -54,7 +53,7 @@ import org.wandora.topicmap.TopicMap;
 
 
 
-public class InsertPlayer extends AbstractWandoraTool implements WandoraTool {
+public class InsertPlayer extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -67,7 +66,7 @@ public class InsertPlayer extends AbstractWandoraTool implements WandoraTool {
     }
     
     
-    public InsertPlayer(Context preferredContext) {
+    public InsertPlayer(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -88,7 +87,7 @@ public class InsertPlayer extends AbstractWandoraTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             requiresRefresh = false;
             Topic player = null;
@@ -99,9 +98,8 @@ public class InsertPlayer extends AbstractWandoraTool implements WandoraTool {
             setDefaultLogger();
             
             if(context instanceof AssociationContext) { // ASSOCIATION CONTEXT!!
-                Iterator associations = context.getContextObjects();
+                Iterator<?> associations = context.getContextObjects();
                 if(associations.hasNext()) {
-                    //System.out.println("wandora == "+wandora);
                     GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Select player and role","Select player and it's role in associations. Selecting existing role overrides old player.",true,new String[][]{
                         new String[]{"Role","topic",null},
                         new String[]{"Player","topic",null},

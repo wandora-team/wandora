@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,9 +33,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -79,7 +79,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class CollectBinaryToNary extends AbstractWandoraTool implements WandoraTool {
+public class CollectBinaryToNary extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -98,7 +98,7 @@ public class CollectBinaryToNary extends AbstractWandoraTool implements WandoraT
     
     
     
-    public CollectBinaryToNary(Context preferredContext) {
+    public CollectBinaryToNary(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -118,10 +118,10 @@ public class CollectBinaryToNary extends AbstractWandoraTool implements WandoraT
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             requiresRefresh = false;
-            Iterator<Association> associations = null;
+            Iterator<?> associations = null;
             Topic baseTopic = null;
             Association association = null;
             int counter = 0;
@@ -163,13 +163,12 @@ public class CollectBinaryToNary extends AbstractWandoraTool implements WandoraT
                 Topic newAssociationType = addressedAssociationType;
                 if(askNewAssociationType) {
                 	wandora.showTopicFinder("Select new type of associations...");
-                    if(newAssociationType == null) return;
                 }
                 
-                Iterator<Topic> baseTopics = context.getContextObjects();
+                Iterator<?> baseTopics = context.getContextObjects();
                 baseTopic = null;
                 associations = null;
-                Collection associationCollection = null;
+                Collection<Association> associationCollection = null;
                 setDefaultLogger();
                 long startTime = System.currentTimeMillis();
 
@@ -230,10 +229,8 @@ public class CollectBinaryToNary extends AbstractWandoraTool implements WandoraT
         Iterator<Topic> roleIterator = null;
         Topic baseRole = null;
         Topic associationType = null;
-        HashMap<Topic, Topic> newMembers = new HashMap<Topic, Topic>();
+        Map<Topic, Topic> newMembers = new HashMap<>();
         
-        
-        System.out.println("-------------in");
         try {
             if(association != null && baseTopic != null) {
                 ArrayList<Topic> playerTopics = new ArrayList<Topic>();
@@ -248,12 +245,10 @@ public class CollectBinaryToNary extends AbstractWandoraTool implements WandoraT
                         playerTopic = association.getPlayer(roleTopic);
                         if(playerTopic.mergesWithTopic(baseTopic)) {
                             baseRole = roleTopic;
-                            System.out.println("1 Adding player '"+getTopicName(baseTopic)+"'  with role '"+roleTopic.getBaseName()+"'.");
                             newMembers.put(roleTopic, baseTopic);
                         }
                         else {
                             playerTopics.add(playerTopic);
-                            System.out.println("3 Investigating player: " + getTopicName(playerTopic));
                         }
                     }
                 }
@@ -261,8 +256,6 @@ public class CollectBinaryToNary extends AbstractWandoraTool implements WandoraT
                 Iterator<Topic> playerIterator = playerTopics.iterator();
                 while(playerIterator.hasNext()) {
                     playerTopic = playerIterator.next();
-
-                    System.out.println("4 Investigating player: " + getTopicName(playerTopic));
                     playerAssociations = playerTopic.getAssociations();
                     playerAssociationIterator = playerAssociations.iterator();
                     while(playerAssociationIterator.hasNext()) {
@@ -274,9 +267,7 @@ public class CollectBinaryToNary extends AbstractWandoraTool implements WandoraT
                                 playerAssociationRole = playerAssociationRoleIterator.next();
                                 if(!playerAssociationRole.mergesWithTopic(baseRole) && !playerAssociationRole.mergesWithTopic(roleTopic)) {
                                     playerAssociationPlayer = playerAssociation.getPlayer(playerAssociationRole);
-                                    //System.out.println("2 Checking '"+getTopicName(playerAssociationPlayer)+"'  with role '"+getTopicName(playerAssociationRole)+"'.");
                                     if(!playerAssociationPlayer.mergesWithTopic(playerTopic) && !playerAssociationPlayer.mergesWithTopic(baseTopic)) {
-                                        //System.out.println("2 Adding player '"+getTopicName(playerAssociationPlayer)+"'  with role '"+getTopicName(playerAssociationRole)+"'.");
                                         newMembers.put(playerAssociationRole, playerAssociationPlayer);
                                     }
                                 }
@@ -289,7 +280,6 @@ public class CollectBinaryToNary extends AbstractWandoraTool implements WandoraT
                     newAssociation = baseTopic.getTopicMap().createAssociation(newAssociationType);
                     newAssociation.addPlayers(newMembers);
                     requiresRefresh = true;
-                    //if(deleteOld) topicsToDelete.add(playerTopic);
                 }
             }
         }
@@ -304,7 +294,6 @@ public class CollectBinaryToNary extends AbstractWandoraTool implements WandoraT
         catch(Exception e) {
             log(e);
         }
-        System.out.println("-------------out");
     }
  
     

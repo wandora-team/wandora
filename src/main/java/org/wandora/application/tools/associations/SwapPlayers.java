@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@
 package org.wandora.application.tools.associations;
 
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,7 +36,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.table.AssociationTable;
@@ -73,7 +71,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class SwapPlayers extends AbstractWandoraTool implements WandoraTool {
+public class SwapPlayers extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -83,7 +81,7 @@ public class SwapPlayers extends AbstractWandoraTool implements WandoraTool {
     public SwapPlayers() {
         setContext(new AssociationContext());
     }
-    public SwapPlayers(Context preferredContext) {
+    public SwapPlayers(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -104,9 +102,9 @@ public class SwapPlayers extends AbstractWandoraTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         requiresRefresh = false;
-        Iterator associations = context.getContextObjects();
+        Iterator<?> associations = context.getContextObjects();
         Association association = null;
         int count = 0;
         Set<Topic> swapRoles = new HashSet<Topic>();

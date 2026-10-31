@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,9 +31,9 @@ package org.wandora.application.tools.associations;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -53,7 +53,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class ChangeAssociationRole extends AbstractWandoraTool implements WandoraTool {
+public class ChangeAssociationRole extends AbstractWandoraTool {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -64,7 +64,7 @@ public class ChangeAssociationRole extends AbstractWandoraTool implements Wandor
     public ChangeAssociationRole() {
         setContext(new AssociationContext());
     }
-    public ChangeAssociationRole(Context preferredContext) {
+    public ChangeAssociationRole(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -85,9 +85,9 @@ public class ChangeAssociationRole extends AbstractWandoraTool implements Wandor
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         requiresRefresh = false;
-        Iterator<Association> associations = context.getContextObjects();
+        Iterator<?> associations = context.getContextObjects();
         Association association = null;
         int count = 0;
         Collection<Topic> oldRoles = new ArrayList<Topic>();
@@ -115,7 +115,7 @@ public class ChangeAssociationRole extends AbstractWandoraTool implements Wandor
                 }
             
                 // Then solve names of the roles. Notice duplicate removal....
-                ArrayList<String> oldRoleNames = new ArrayList<String>();
+                List<String> oldRoleNames = new ArrayList<>();
                 role = null;
                 String roleName = null;
                 for(Iterator<Topic> it=oldRoles.iterator(); it.hasNext(); ) {

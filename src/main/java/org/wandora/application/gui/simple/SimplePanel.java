@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,29 +44,29 @@ import org.wandora.application.gui.UIConstants;
 public class SimplePanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    
-    
+
+
     /** Creates a new instance of SimplePanel */
     public SimplePanel() {
     }
-    
-    
+
+
 
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);
         super.paint(g);
     }
-    
-    
-    
+
+
+
     @Override
     public void setBorder(Border border) {
-        if(border instanceof TitledBorder) {
+        if (border instanceof TitledBorder) {
             TitledBorder titledBorder = (TitledBorder) border;
-            titledBorder.setTitleFont(UIConstants.panelTitleFont); 
+            titledBorder.setTitleFont(UIConstants.panelTitleFont);
         }
-        super.setBorder(border);        
+        super.setBorder(border);
     }
-    
+
 }

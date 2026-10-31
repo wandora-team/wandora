@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ package org.wandora.application.tools.extractors.nyt;
 import java.awt.Component;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.ListModel;
@@ -44,6 +45,7 @@ import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleList;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -52,20 +54,17 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class NYTExtractorUI extends javax.swing.JPanel {
 
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(NYTExtractorUI.class);
+
 	private static final long serialVersionUID = 1L;
 
-	private Wandora wandora = null;
     private boolean accepted = false;
     private JDialog dialog = null;
-    private Context context = null;
-    private static final String NYT_API_BASE = "http://api.nytimes.com/svc/search/v2/";
-    private static final String NYT_API_EVENT_BASE = "http://api.nytimes.com/svc/events/v2/listings.json";
+    private static final String NYT_API_BASE = "https://api.nytimes.com/svc/search/v2/";
+    private static final String NYT_API_EVENT_BASE = "https://api.nytimes.com/svc/events/v2/listings.json";
 
     /**
-     * Creates
-     * new
-     * form
-     * NYTExtractorUI
+     * Creates new form NYTExtractorUI
      */
     public NYTExtractorUI() {
         initComponents();
@@ -79,8 +78,7 @@ public class NYTExtractorUI extends javax.swing.JPanel {
         accepted = b;
     }
 
-    public void open(Wandora w, Context c) {
-        context = c;
+    public void open(Wandora w, Context<?> c) {
         accepted = false;
         dialog = new JDialog(w, true);
         dialog.setSize(550, 500);
@@ -98,7 +96,7 @@ public class NYTExtractorUI extends javax.swing.JPanel {
     public WandoraTool[] getExtractors(NYTExtractor tool) throws TopicMapException {
         Component component = nytTabbedPane.getSelectedComponent();
         WandoraTool wt;
-        ArrayList<WandoraTool> wts = new ArrayList<>();
+        List<WandoraTool> wts = new ArrayList<>();
 
         // ***** SEARCH ARTICLES *****
         if (articleSearchPanel.equals(component)) {
@@ -117,7 +115,7 @@ public class NYTExtractorUI extends javax.swing.JPanel {
             }
 
             int[] fieldIndexes = fieldsList.getSelectedIndices();
-            ListModel listModel = fieldsList.getModel();
+            ListModel<String> listModel = fieldsList.getModel();
             StringBuilder fieldValues = new StringBuilder("");
             for (int i = 0; i < fieldIndexes.length; i++) {
                 if (i > 0) {
@@ -148,13 +146,15 @@ public class NYTExtractorUI extends javax.swing.JPanel {
                 extractUrl += "&sort=" + urlEncode(rank);
             }
 
-            System.out.println("URL: " + extractUrl);
+            logger.info("URL: " + extractUrl);
 
             NYTArticleSearchExtractor ex = new NYTArticleSearchExtractor();
             ex.setForceUrls(new String[]{extractUrl});
             wt = ex;
             wts.add(wt);
-        } // ***** SEARCH EVENTS *****
+        } 
+        
+        // ***** SEARCH EVENTS *****
         else if (eventSearchPanel.equals(component)) {
             String eventKey = solveAPIKey();
             
@@ -260,7 +260,7 @@ public class NYTExtractorUI extends javax.swing.JPanel {
             
             extractUrl += "&api-key=" + eventKey;
 
-            System.out.println(extractUrl);
+            logger.info(extractUrl);
 
             NYTEventSearchExtractor ex = new NYTEventSearchExtractor();
             ex.setForceUrls(new String[]{extractUrl});
@@ -270,14 +270,19 @@ public class NYTExtractorUI extends javax.swing.JPanel {
         return wts.toArray(new WandoraTool[]{});
     }
 
+    
     protected static String urlEncode(String str) {
         try {
             str = URLEncoder.encode(str, "utf-8");
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
         return str;
     }
+    
+    
     // ------------------------------------------------------------ API-KEY ----
+    
+    
+    
     private static String articleapikey = null;
     private static String eventapikey = null;
 
@@ -318,39 +323,11 @@ public class NYTExtractorUI extends javax.swing.JPanel {
     }
 
     // -------------------------------------------------------------------------
-    /**
-     * This
-     * method
-     * is
-     * called
-     * from
-     * within
-     * the
-     * constructor
-     * to
-     * initialize
-     * the
-     * form.
-     * WARNING:
-     * Do
-     * NOT
-     * modify
-     * this
-     * code.
-     * The
-     * content
-     * of
-     * this
-     * method
-     * is
-     * always
-     * regenerated
-     * by
-     * the
-     * Form
-     * Editor.
-     */
-    @SuppressWarnings("unchecked")
+	/**
+	 * This method is called from within the constructor to initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is always
+	 * regenerated by the Form Editor.
+	 */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
@@ -365,7 +342,7 @@ public class NYTExtractorUI extends javax.swing.JPanel {
         optionalArticleSearchFieldsPanel = new javax.swing.JPanel();
         fieldsLabel = new SimpleLabel();
         fieldsListScrollPane = new javax.swing.JScrollPane();
-        fieldsList = new SimpleList();
+        fieldsList = new SimpleList<>();
         beginDateLabel = new SimpleLabel();
         beginDateTextField = new SimpleField();
         endDateLabel = new SimpleLabel();
@@ -373,7 +350,7 @@ public class NYTExtractorUI extends javax.swing.JPanel {
         pageLabel = new SimpleLabel();
         pageTextField = new SimpleField();
         sortLabel = new SimpleLabel();
-        sortComboBox = new javax.swing.JComboBox();
+        sortComboBox = new javax.swing.JComboBox<>();
         eventSearchPanel = new javax.swing.JPanel();
         eventSearchInnerPanel = new javax.swing.JPanel();
         eventQueryLabel = new SimpleLabel();
@@ -476,10 +453,10 @@ public class NYTExtractorUI extends javax.swing.JPanel {
         fieldsListScrollPane.setMinimumSize(new java.awt.Dimension(23, 150));
         fieldsListScrollPane.setPreferredSize(new java.awt.Dimension(125, 150));
 
-        fieldsList.setModel(new javax.swing.AbstractListModel() {
+        fieldsList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "abstract", "author", "body", "byline", "date", "dbpedia_resource_url", "lead_paragraph", "title" };
             public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+            public String getElementAt(int i) { return strings[i]; }
         });
         fieldsListScrollPane.setViewportView(fieldsList);
 
@@ -539,7 +516,7 @@ public class NYTExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
         optionalArticleSearchFieldsPanel.add(sortLabel, gridBagConstraints);
 
-        sortComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "newest", "oldest" }));
+        sortComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "newest", "oldest" }));
         sortComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sortComboBoxActionPerformed(evt);
@@ -1173,7 +1150,7 @@ public class NYTExtractorUI extends javax.swing.JPanel {
     private javax.swing.JLabel facetsLabel;
     private javax.swing.JTextField facetsTextField;
     private javax.swing.JLabel fieldsLabel;
-    private javax.swing.JList fieldsList;
+    private javax.swing.JList<String> fieldsList;
     private javax.swing.JScrollPane fieldsListScrollPane;
     private javax.swing.JLabel filterLabel;
     private javax.swing.JButton forgetButton;
@@ -1185,7 +1162,7 @@ public class NYTExtractorUI extends javax.swing.JPanel {
     private javax.swing.JTextField pageTextField;
     private javax.swing.JLabel searchLabel;
     private javax.swing.JTextField searchQueryTextField;
-    private javax.swing.JComboBox sortComboBox;
+    private javax.swing.JComboBox<String> sortComboBox;
     private javax.swing.JLabel sortLabel;
     // End of variables declaration//GEN-END:variables
 }

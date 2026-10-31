@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -44,6 +43,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 
@@ -53,9 +53,9 @@ import org.wandora.utils.swing.GuiTools;
  * 
  * @author akivela
  */
-public class TilingGenerator extends AbstractGenerator implements WandoraTool {
-
+public class TilingGenerator extends AbstractGenerator {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TilingGenerator.class);
 
 	public static String globalSiPattern = "";
     public static String globalBasenamePattern = "";
@@ -78,7 +78,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(wandora, context);
         
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,
@@ -224,7 +224,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
                                 a.addPlayer(node2, role2);
                             }
                             catch(Exception e) {
-                                e.printStackTrace();
+                            	logger.error(e);
                             }
                         }
                         setProgress(progress++);
@@ -291,7 +291,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
                     t.addType(graphTopic);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             return t;
@@ -309,7 +309,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
                     atype = topicmap.getTopic(atypeStr);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             if(atype == null) {
@@ -331,7 +331,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
                     role = topicmap.getTopic(roleStr);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             if(role == null) {
@@ -353,7 +353,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
                     role = topicmap.getTopic(roleStr);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             if(role == null) {
@@ -367,7 +367,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
     // -------------------------------------------------------------------------
     
     
-    private class SquareTiling extends AbstractTiling implements Tiling {
+    private class SquareTiling extends AbstractTiling {
         private int size = 0;
         private int width = 0;
         private int height = 0;
@@ -381,7 +381,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
         
         @Override
         public String getSIPrefix() {
-            return "http://wandora.org/si/tiling/square/";
+            return "https://wandora.org/si/tiling/square/";
         }
         
         @Override
@@ -437,7 +437,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
     
     
     
-    private class TriangularTiling extends AbstractTiling implements Tiling {
+    private class TriangularTiling extends AbstractTiling {
         private int depth = 0;
         
         
@@ -447,7 +447,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
         
         @Override
         public String getSIPrefix() {
-            return "http://wandora.org/si/tiling/triangular/";
+            return "https://wandora.org/si/tiling/triangular/";
         }
         
         @Override
@@ -500,7 +500,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
     
     
     
-    private class HexagonalTiling extends AbstractTiling implements Tiling {
+    private class HexagonalTiling extends AbstractTiling {
         private int depth = 0;
         
         public HexagonalTiling(int d) {
@@ -509,7 +509,7 @@ public class TilingGenerator extends AbstractGenerator implements WandoraTool {
         
         @Override
         public String getSIPrefix() {
-            return "http://wandora.org/si/tiling/hexagonal/";
+            return "https://wandora.org/si/tiling/hexagonal/";
         }
         
         @Override

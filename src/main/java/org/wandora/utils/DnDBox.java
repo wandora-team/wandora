@@ -1,9 +1,9 @@
 /* 
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,118 +31,121 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 /**
  *
  * @author olli
  */
 public class DnDBox {
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(DnDBox.class);
 
     // At least Ubuntu uses this data flavor
     public static final DataFlavor uriListFlavor;
     static {
-        DataFlavor f=null;
+        DataFlavor f = null;
         try {
-             f = new DataFlavor("text/uri-list; class=java.lang.String");
+            f = new DataFlavor("text/uri-list; class=java.lang.String");
         }
-        catch(ClassNotFoundException cnfe) {
-            cnfe.printStackTrace();
+        catch (ClassNotFoundException cnfe) {
+            logger.error(cnfe);
         }
-        uriListFlavor=f;
+        uriListFlavor = f;
     }
-    
-    
+
+
     public static List<File> acceptFileList(java.awt.dnd.DropTargetDropEvent e) {
         try {
             DataFlavor fileListFlavor = DataFlavor.javaFileListFlavor;
             DataFlavor stringFlavor = DataFlavor.stringFlavor;
             Transferable tr = e.getTransferable();
-            if(e.isDataFlavorSupported(fileListFlavor)) {
+            if (e.isDataFlavorSupported(fileListFlavor)) {
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                 java.util.List<File> files = (java.util.List<File>) tr.getTransferData(fileListFlavor);
                 e.dropComplete(true);
                 return files;
             }
-            else if(e.isDataFlavorSupported(stringFlavor) ||
-                    e.isDataFlavorSupported(uriListFlavor)) {                   
+            else if (e.isDataFlavorSupported(stringFlavor) ||
+                    e.isDataFlavorSupported(uriListFlavor)) {
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                 String data = null;
-                if(e.isDataFlavorSupported(stringFlavor)) {
-                    data = (String)tr.getTransferData(stringFlavor);
+                if (e.isDataFlavorSupported(stringFlavor)) {
+                    data = (String) tr.getTransferData(stringFlavor);
                 }
                 else {
-                    data = (String)tr.getTransferData(uriListFlavor);
+                    data = (String) tr.getTransferData(uriListFlavor);
                 }
                 try {
                     String[] split = data.split("\n");
                     List<URI> uris = new ArrayList<>();
-                    for(int i=0; i<split.length; i++){
+                    for (int i = 0; i < split.length; i++) {
                         try {
                             URI uri = new URI(split[i].trim());
-                            uris.add( uri );
+                            uris.add(uri);
                         }
-                        catch(Exception ex) {
+                        catch (Exception ex) {
                             // Silently ignore illegal URIs.
                         }
                     }
                     List<File> files = new ArrayList<File>();
-                    for(URI uri : uris) {
-                        try{
+                    for (URI uri : uris) {
+                        try {
                             files.add(new File(uri));
                         }
-                        catch(Exception exc){
+                        catch (Exception exc) {
                             // Silently ignore illegal file URIs.
                         }
                     }
-                    if(!files.isEmpty()) {
+                    if (!files.isEmpty()) {
                         e.dropComplete(true);
                     }
                     return files;
                 }
-                catch(Exception ex){
-                    ex.printStackTrace();
+                catch (Exception ex) {
+                    logger.error(ex);
                 }
                 return new ArrayList<File>();
             }
         }
-        catch(IOException ioe) {
-            ioe.printStackTrace();
+        catch (IOException ioe) {
+            logger.error(ioe);
         }
-        catch(UnsupportedFlavorException ufe) {
-            ufe.printStackTrace();
+        catch (UnsupportedFlavorException ufe) {
+            logger.error(ufe);
         }
-        catch(Exception ex) {
-            ex.printStackTrace();
+        catch (Exception ex) {
+            logger.error(ex);
         }
-        catch(Error err) {
-            err.printStackTrace();
+        catch (Error err) {
+            logger.error(err);
         }
         return null;
     }
-    
-    
+
+
     public static Image acceptImage(java.awt.dnd.DropTargetDropEvent e) {
         try {
             Transferable tr = e.getTransferable();
-            if(e.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+            if (e.isDataFlavorSupported(DataFlavor.imageFlavor)) {
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                 Image image = (Image) tr.getTransferData(DataFlavor.imageFlavor);
                 e.dropComplete(true);
                 return image;
             }
         }
-        catch(IOException ioe) {
-            ioe.printStackTrace();
+        catch (IOException ioe) {
+            logger.error(ioe);
         }
-        catch(UnsupportedFlavorException ufe) {
-            ufe.printStackTrace();
+        catch (UnsupportedFlavorException ufe) {
+            logger.error(ufe);
         }
-        catch(Exception ex) {
-            ex.printStackTrace();
+        catch (Exception ex) {
+            logger.error(ex);
         }
-        catch(Error err) {
-            err.printStackTrace();
+        catch (Error err) {
+            logger.error(err);
         }
         return null;
     }
-    
+
 }

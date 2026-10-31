@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
@@ -53,6 +54,7 @@ import org.wandora.application.gui.simple.SimpleTabbedPane;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -62,16 +64,15 @@ import com.mashape.unirest.http.JsonNode;
  * @author Eero Lehtonen
  */
 public class RedditExtractorUI extends javax.swing.JPanel {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RedditExtractorUI.class);
 
-	private Wandora wandora = null;
     private boolean accepted = false;
     private JDialog dialog = null;
-    private Context context = null;
+    private Context<?> context = null;
     private DateFormat dateFormat = DateFormat.getDateTimeInstance();
     private String apiRoot = AbstractRedditExtractor.apiRoot;
-    private DefaultListModel linkModel;
+    private DefaultListModel<String> linkModel;
     private JSONArray threadResults = new JSONArray();
     private JSONArray subredditResults = new JSONArray();
 
@@ -90,9 +91,8 @@ public class RedditExtractorUI extends javax.swing.JPanel {
         accepted = b;
     }
 
-    public void open(Wandora w, Context c) {
+    public void open(Wandora w, Context<?> c) {
         context = c;
-        wandora = w;
         accepted = false;
         dialog = new JDialog(w, true);
         dialog.setSize(800, 500);
@@ -108,9 +108,8 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
     public WandoraTool[] getExtractors(RedditExtractor tool) throws TopicMapException {
 
-        ArrayList<WandoraTool> wts = new ArrayList();
+        List<WandoraTool> wts = new ArrayList<>();
         String id;
-        String query = "";
         String extractUrl = null;
 
         Component selectedTab = redditTabs.getSelectedComponent();
@@ -155,7 +154,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             }  
         } 
         catch (JSONException jse) {
-            jse.printStackTrace();
+        	logger.error(jse);
         }
 
         return wts.toArray(new WandoraTool[]{});
@@ -185,14 +184,14 @@ public class RedditExtractorUI extends javax.swing.JPanel {
         try {
             str = URLEncoder.encode(str, "utf-8");
         } catch (Exception e) {
-          System.out.println(e.getMessage());
+          logger.error(e.getMessage());
         }
         return str;
     }
 
     
     private void threadPopulationCallback(HttpResponse<JsonNode> response) {
-        DefaultListModel model = new DefaultListModel();
+        DefaultListModel<String> model = new DefaultListModel<>();
         try {
             
             JSONObject resJson = response.getBody().getObject();
@@ -207,7 +206,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
                     .getJSONArray("children");
             JSONObject r;
 
-            model = new DefaultListModel();
+            model = new DefaultListModel<>();
             for (int i = 0; i < threadResults.length(); i++) {
                 r = threadResults.getJSONObject(i).getJSONObject("data");
 
@@ -246,7 +245,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             }
             @Override
             protected void error(Exception e, String body) {
-                DefaultListModel model = new DefaultListModel();
+                DefaultListModel<String> model = new DefaultListModel<>();
                 model.add(0, e.getMessage());
                 threadResList.setModel(model);
                 threadSearchSubmit.setText("Search");
@@ -265,7 +264,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
 
     
     private void subredditPopulationCallback(HttpResponse<JsonNode> response) {
-        DefaultListModel model = new DefaultListModel();
+        DefaultListModel<String> model = new DefaultListModel<>();
         try {
             JSONObject resJson = response.getBody()
                     .getObject();
@@ -280,7 +279,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
                     .getJSONArray("children");
             JSONObject r;
 
-            model = new DefaultListModel();
+            model = new DefaultListModel<>();
             for (int i = 0; i < subredditResults.length(); i++) {
                 r = subredditResults.getJSONObject(i).getJSONObject("data");
                 StringBuilder titleBuilder = new StringBuilder();
@@ -314,7 +313,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             }
             @Override
             protected void error(Exception e, String body) {
-                DefaultListModel model = new DefaultListModel();
+                DefaultListModel<String> model = new DefaultListModel<>();
                 model.add(0, e.getMessage());
                 subredditResList.setModel(model);
                 subredditSearchSubmit.setText("Search");
@@ -348,7 +347,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             threadSearchDetails.setText(sb.toString());
         } 
         catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -362,13 +361,13 @@ public class RedditExtractorUI extends javax.swing.JPanel {
             subredditDetailTextArea.setLineWrap(true);
         } 
         catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
     
     private void addContextSLs() {
-        Iterator iter = context.getContextObjects();
+        Iterator<?> iter = context.getContextObjects();
         Object o;
         Topic t;
         Locator locator;
@@ -389,7 +388,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -400,7 +399,6 @@ public class RedditExtractorUI extends javax.swing.JPanel {
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
@@ -410,20 +408,20 @@ public class RedditExtractorUI extends javax.swing.JPanel {
         threadSearchField = new SimpleField();
         threadSearchSubmit = new SimpleButton();
         threadResScrollPane = new javax.swing.JScrollPane();
-        threadResList = new SimpleList();
+        threadResList = new SimpleList<>();
         threadSearchDetails = new javax.swing.JLabel();
         subredditSearchTab = new javax.swing.JPanel();
         subredditSearchField = new SimpleField();
         subredditSearchSubmit = new SimpleButton();
         subredditResScrollPane = new javax.swing.JScrollPane();
-        subredditResList = new SimpleList();
+        subredditResList = new SimpleList<>();
         subredditDetailTextArea = new javax.swing.JTextArea();
         subredditTitleLabel = new javax.swing.JLabel();
         linkSearchTab = new javax.swing.JPanel();
         linkField = new SimpleField();
         linkLabel = new SimpleLabel();
         linkScrollpane = new javax.swing.JScrollPane();
-        linkSearchList = new javax.swing.JList();
+        linkSearchList = new javax.swing.JList<>();
         linkAddUrlButton = new SimpleButton();
         linkAddSLsButton = new SimpleButton();
         linkClearButton = new SimpleButton();
@@ -610,7 +608,7 @@ public class RedditExtractorUI extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(9, 8, 8, 0);
         linkSearchTab.add(linkLabel, gridBagConstraints);
 
-        linkModel = new DefaultListModel();
+        linkModel = new DefaultListModel<>();
         linkSearchList.setModel(linkModel);
         linkScrollpane.setViewportView(linkSearchList);
 
@@ -898,18 +896,18 @@ public class RedditExtractorUI extends javax.swing.JPanel {
     private javax.swing.JTextField linkField;
     private javax.swing.JLabel linkLabel;
     private javax.swing.JScrollPane linkScrollpane;
-    private javax.swing.JList linkSearchList;
+    private javax.swing.JList<String> linkSearchList;
     private javax.swing.JPanel linkSearchTab;
     private javax.swing.JButton okButton;
     private javax.swing.JTabbedPane redditTabs;
     private javax.swing.JTextArea subredditDetailTextArea;
-    private javax.swing.JList subredditResList;
+    private javax.swing.JList<String> subredditResList;
     private javax.swing.JScrollPane subredditResScrollPane;
     private javax.swing.JTextField subredditSearchField;
     private javax.swing.JButton subredditSearchSubmit;
     private javax.swing.JPanel subredditSearchTab;
     private javax.swing.JLabel subredditTitleLabel;
-    private javax.swing.JList threadResList;
+    private javax.swing.JList<String> threadResList;
     private javax.swing.JScrollPane threadResScrollPane;
     private javax.swing.JLabel threadSearchDetails;
     private javax.swing.JTextField threadSearchField;

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ import java.util.Iterator;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.table.TopicGrid;
 import org.wandora.application.gui.table.TopicTable;
@@ -50,7 +49,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public abstract class DoTopicSelection extends DoSelection implements WandoraTool {
+public abstract class DoTopicSelection extends DoSelection {
     
 
 	private static final long serialVersionUID = 1L;
@@ -99,8 +98,8 @@ public abstract class DoTopicSelection extends DoSelection implements WandoraToo
                 model.deselectAll();
                 VNode vnode = null;
                 Topic t = null;
-                for(Iterator vnodes = model.getNodes().iterator(); vnodes.hasNext(); ) {
-                    vnode = (VNode) vnodes.next();
+                for(Iterator<VNode> vnodes = model.getNodes().iterator(); vnodes.hasNext(); ) {
+                    vnode = vnodes.next();
                     if(vnode != null) {
                         Node n = vnode.getNode();
                         if(n instanceof TopicNode) {

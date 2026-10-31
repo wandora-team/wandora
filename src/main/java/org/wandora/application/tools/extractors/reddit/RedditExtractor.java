@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,11 +34,12 @@ import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 public class RedditExtractor extends AbstractWandoraTool{
-    
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RedditExtractor.class);
 	
 	private RedditExtractorUI ui = null;
 
@@ -75,7 +76,7 @@ public class RedditExtractor extends AbstractWandoraTool{
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             if(ui == null) {
                 ui = new RedditExtractorUI();
@@ -94,7 +95,6 @@ public class RedditExtractor extends AbstractWandoraTool{
                 }
                 if(extrs != null && extrs.length > 0) {
                     setDefaultLogger();
-                    int c = 0;
                     if(extrs.length > 1) {
                         log("Requested operation requires "+extrs.length+" Reddit extractions.");
                     }
@@ -107,7 +107,6 @@ public class RedditExtractor extends AbstractWandoraTool{
                             e.setToolLogger(getDefaultLogger());
                             e.execute(wandora,context);
                             log("Finished extraction "+(i+1)+".");
-                            c++;
                         }
                         catch(Exception e) {
                             log(e);
@@ -122,7 +121,7 @@ public class RedditExtractor extends AbstractWandoraTool{
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
             singleLog(e);
         } 
         finally {

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -45,8 +46,8 @@ import org.wandora.utils.Options;
  */
 public class XSLImportDialog extends javax.swing.JDialog {
     
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(XSLImportDialog.class);
 
 	private Wandora wandora;
     public boolean accept = false;
@@ -241,7 +242,7 @@ public class XSLImportDialog extends javax.swing.JDialog {
             wandora.getOptions().put("XSLImport.xsl", getXSL());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         accept = true;
         setVisible(false);

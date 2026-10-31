@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
@@ -53,7 +52,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool implements WandoraTool {
+public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -70,7 +69,7 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool impl
     
     public static boolean CASE_INSENSITIVE = true;
     
-    public static String BASE_SI = "http://wandora.org/si/schema/";
+    public static String BASE_SI = "https://wandora.org/si/schema/";
     
     
     
@@ -79,7 +78,7 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool impl
     public FindAssociationsInOccurrenceSimple() {
     }
     
-    public FindAssociationsInOccurrenceSimple(Context preferredContext) {
+    public FindAssociationsInOccurrenceSimple(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -149,10 +148,10 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool impl
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {  
+    public void execute(Wandora wandora, Context<?> context) {  
         try {
             int associationCount = 0;
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             String occurrence = null;
             Topic occurrenceType = null;
@@ -196,7 +195,6 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool impl
 
             Topic occurrenceTopic = null;
             Topic oldTopic = null;
-            int progress = 0;
             TopicMap map = wandora.getTopicMap();
             Association a = null;
 
@@ -211,7 +209,6 @@ public class FindAssociationsInOccurrenceSimple extends AbstractWandoraTool impl
                 try {
                     occurrenceTopic = (Topic) topics.next();
                     if(occurrenceTopic != null && !occurrenceTopic.isRemoved()) {
-                        progress++;
                         hlog("Inspecting topic's '"+getTopicName(occurrenceTopic)+"' occurrence");
 
                         occurrenceType = occurrenceTopic.getTopicMap().getTopic(occurrenceTypeLocator);

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
@@ -47,7 +46,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class VariantNewlineRemover extends AbstractWandoraTool implements WandoraTool {
+public class VariantNewlineRemover extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -58,7 +57,7 @@ public class VariantNewlineRemover extends AbstractWandoraTool implements Wandor
      */
     public VariantNewlineRemover() {
     }
-    public VariantNewlineRemover(Context preferredContext) {
+    public VariantNewlineRemover(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -74,13 +73,13 @@ public class VariantNewlineRemover extends AbstractWandoraTool implements Wandor
     }
     
   
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Removing new line characters in variant names");
             log("Removing new line characters in variant names");
             
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;
@@ -90,13 +89,11 @@ public class VariantNewlineRemover extends AbstractWandoraTool implements Wandor
             Collection<Set<Topic>> scopes = null;
             Iterator<Set<Topic>> scopeIterator = null;
             Set<Topic> scope = null;
-            int progress = 0;
-            
+
             while(topics.hasNext() && !forceStop()) {
                 try {
                     topic = (Topic) topics.next();
                     if(topic != null && !topic.isRemoved()) {
-                        progress++;
                         scopes = topic.getVariantScopes();
                         if(scopes != null) {
                             scopeIterator = scopes.iterator();

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,31 +40,38 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author akivela
  */
-public class TopicTableHeaderRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+public class TopicTableHeaderRenderer extends DefaultTableCellRenderer {
     private static final long serialVersionUID = 1L;
 
     private Color[] columnColors = null;
     private TableCellRenderer oldRenderer = null;
-       
-    
-    
+
+
+
     /** Creates a new instance of TopicTableHeaderRenderer */
     public TopicTableHeaderRenderer(TableCellRenderer renderer, Color[] columnColors) {
         this.columnColors = columnColors;
         this.oldRenderer = renderer;
     }
-    
+
 
     @Override
-    public Component getTableCellRendererComponent(JTable table,Object value,boolean isSelected,boolean hasFocus, int row, int column){
-        Component c = oldRenderer.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
-        
-        column=table.convertColumnIndexToModel(column);
-        if(columnColors != null && columnColors[column]!=null) {
+    public Component getTableCellRendererComponent(
+            JTable table,
+            Object value,
+            boolean isSelected,
+            boolean hasFocus,
+            int row,
+            int column) {
+
+        Component c = oldRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+        column = table.convertColumnIndexToModel(column);
+        if (columnColors != null && columnColors[column] != null) {
             c.setForeground(columnColors[column]);
         }
         return c;
     }
 
-    
+
 }

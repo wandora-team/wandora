@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,11 +57,11 @@ public class BookmarkExtractor extends AbstractExtractor {
 
 	private static final long serialVersionUID = 1L;
 
-	private String ROOT_SI = "http://wandora.org/si/bookmark";
-    private String HREF_SI = "http://wandora.org/si/bookmark/href";
-    private String ADD_SI  = "http://wandora.org/si/bookmark/added";
-    private String MOD_SI  = "http://wandora.org/si/bookmark/modified";
-    private String ICON_SI = "http://wandora.org/si/bookmark/icon";
+	private String ROOT_SI = "https://wandora.org/si/bookmark";
+    private String HREF_SI = "https://wandora.org/si/bookmark/href";
+    private String ADD_SI  = "https://wandora.org/si/bookmark/added";
+    private String MOD_SI  = "https://wandora.org/si/bookmark/modified";
+    private String ICON_SI = "https://wandora.org/si/bookmark/icon";
 
     private String LANG = XTMPSI.getLang("en");
     private Topic langTopic;

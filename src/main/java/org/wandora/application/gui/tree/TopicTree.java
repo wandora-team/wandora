@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -76,6 +76,7 @@ import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.GripCollections;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -91,10 +92,8 @@ import org.wandora.utils.Tuples.T2;
 
 
 public class TopicTree extends SimpleTree implements Clipboardable, MouseListener, TopicMapListener /*, DragSourceListener, DragGestureListener*/ {
-   
-
 	private static final long serialVersionUID = 1L;
-	
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicTree.class);
 	
 	private boolean needsRefresh;
     private ArrayList<TopicTreeRelation> selectedAs;
@@ -351,28 +350,18 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
         if(rootTopicSI != null) {
             rootTopic=topicMap.getTopic(rootTopicSI);
             if(rootTopic==null){
-                System.out.println("Topic tree root topic not found ("+rootTopicSI+")");
-    /*            System.out.println("Root topic not found in topic map. Trying default root '"+WandoraManager.WANDORACLASS_SI+"'.");
-                rootTopic=topicMap.getTopic(WandoraManager.WANDORACLASS_SI);
-                if(rootTopic == null) {
-                    System.out.println("Default root not found. Trying XTM base '"+XTMPSI.XTM1_BASE+"'.");
-                    rootTopic=topicMap.getTopic(XTMPSI.XTM1_BASE);
-                    if(rootTopic == null) {
-                        // TODO: WHAT NOW! THERE IS NO SUFFICIENT ROOT FOR THE TREE!!!
-                    }
-                }*/
+                logger.warn("Topic tree root topic not found ("+rootTopicSI+")");
             }
         }
         if(rootTopic!=null){
             TopicTreeModel newModel=new TopicTreeModel(rootTopic,selectedAs,this);
             this.model=newModel;
-            // System.out.println("Resetting tree model "+selectedAs.size());
             setModel(newModel); 
             needsRefresh=false;
             if(chooser!=null) chooser.setTreeEnabled(true);
         }
         else{
-            System.out.println("Root topic not found for topic tree. Disabling tree.");
+            logger.warn("Root topic not found for topic tree. Disabling tree.");
             if(chooser!=null) chooser.setTreeEnabled(false);
             this.model=null;
             // setModel(null);
@@ -414,8 +403,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
     
     public boolean selectTopic(Topic t) {
         TreePath path = model.getPathFor(t);
-        if(path != null) {  
-            // System.out.println(path.toString());    // Able to get the exact node here    
+        if(path != null) {    
             setExpandsSelectedPaths(true);                  
             setSelectionPath(path);
             scrollPathToVisible(path);
@@ -539,7 +527,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
             //this.setSelectionModel(sm);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
          **/
     }
@@ -593,7 +581,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
                                 if(tm != null) {
                                     boolean identifierIsURL = false;
                                     try {
-                                        URL u = new URL(topicIdentifier);
+                                        new URI(topicIdentifier).toURL();
                                         identifierIsURL = true;
                                     }
                                     catch(Exception e) {}
@@ -676,7 +664,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
             }
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
     }
 
@@ -694,7 +682,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
             handlePopupMouseEvent(mouseEvent);
         }
@@ -802,7 +790,9 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
     
     private class TopicTreeTransferHandler extends TransferHandler {
 
-        @Override
+        private static final long serialVersionUID = 1L;
+
+		@Override
         public boolean canImport(TransferSupport support) {
             if(!support.isDrop()) return false;
             return support.isDataFlavorSupported(TopicTreeTransferable.treeDataFlavor) ||
@@ -897,7 +887,7 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
                         }
                     }
                     catch(TopicMapException tme){
-                        tme.printStackTrace();
+                    	logger.error(tme);
                         return false;
                     }
                     doRefresh();
@@ -923,13 +913,13 @@ public class TopicTree extends SimpleTree implements Clipboardable, MouseListene
                         return true;
                     }
                     catch(TopicMapException tme){
-                        tme.printStackTrace();
+                    	logger.error(tme);
                         return false;
                     }
                 }
             }
-            catch(UnsupportedFlavorException ufe){ufe.printStackTrace();}
-            catch(IOException ioe){ioe.printStackTrace();}
+            catch(UnsupportedFlavorException ufe){ logger.error(ufe); }
+            catch(IOException ioe){ logger.error(ioe); }
             return false;
         }
 

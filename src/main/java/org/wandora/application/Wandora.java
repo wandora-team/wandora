@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,12 +47,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -64,6 +66,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 import javax.swing.JViewport;
 
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.LocalDate;
 import org.wandora.application.gui.ErrorDialog;
 import org.wandora.application.gui.LayerTree;
 import org.wandora.application.gui.LogoAnimation;
@@ -114,9 +118,9 @@ import org.wandora.utils.Delegate;
 import org.wandora.utils.Options;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.Tuples.T2;
-import org.wandora.utils.logger.Logger;
-import org.wandora.utils.logger.SystemOutLogger;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.ImagePanel;
+import org.wandora.utils.swing.WandoraStartupImagePanel;
 
 
 
@@ -130,9 +134,13 @@ import org.wandora.utils.swing.ImagePanel;
  * @author  olli, akivela
  */
 public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionListener, MouseListener, TopicMapListener {
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(Wandora.class);
+	
+	
     private static final long serialVersionUID = 1L;
 
+    private static final String COPYRIGHT_CHARACTER = "\u00a9";
+    
 	/*
      * If the application makes URL requests and the URL stream is initialized
      * properly, USER_AGENT is a user agent string for Wandora application.
@@ -284,11 +292,9 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
      */
     private boolean skipTopicMapListenerEvents = false;
 
-
-    
-    
     private TabbedTopicSelector topicSelector = null;
     
+    private static Properties versionProperties = new Properties();
     
     
     
@@ -299,11 +305,19 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     
     
     public Wandora(CMDParamParser cmdparams) {
+    	logger.info("*****************************************");
+    	logger.info("*****      Wandora application      *****");
+    	logger.info("*****************************************");
+    	logger.info("Starting up.");
+    	
         Wandora.wandora = this;
         if(cmdparams != null && cmdparams.isSet("options")) {
-            this.options = new Options(cmdparams.get("options"));
+        	String optionsFilename = cmdparams.get("options");
+        	logger.info("Reading options from '{}'.", optionsFilename);
+            this.options = new Options(optionsFilename);
         }
         else {
+        	logger.info("Reading options from 'conf/options.xml'.");
             this.options = new Options("conf/options.xml");
         }
         
@@ -316,14 +330,16 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
             wandoraIcons.add( UIBox.getImage("gui/appicon/icon.gif") );
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error("Wandora failed to load application icons.", e);
         }
+        
+        logger.info("Reading version properties.");
+        loadVersionProperties();
 
         try {
+        	logger.info("Initializing ui.");
             topicMapListeners=new LinkedHashSet<>();
             refreshListeners=new LinkedHashSet<>();
-	    
-	    //JPopupMenu.setDefaultLightWeightPopupEnabled(false);
             initComponents();
             initializeWandora();
         }
@@ -336,8 +352,6 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
     public WandoraModulesServer getHTTPServer(){
         if(httpServer==null) {
             try {
-                // httpServer=new WandoraHttpServer(this);
-                // httpServer=new WandoraWebAppServer(this);
                 httpServer=new WandoraModulesServer(this);
                 httpServer.setStatusComponent(serverButton,"gui/icons/server_start.png","gui/icons/server_stop.png","gui/icons/server_hit.png");
             }
@@ -670,7 +684,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error("Wandora failed to refresh topic trees.", e);
         }
     }
     
@@ -768,8 +782,6 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         menuManager.refreshGeneratorMenu();
         menuManager.refreshExportMenu();
         menuManager.refreshExtractMenu();
-        // this.validateTree(); // TRIGGERS EXCEPTION IN JAVA 1.7
-        //repaint();
         refresh();
     }
     
@@ -937,7 +949,7 @@ public class Wandora extends javax.swing.JFrame implements ErrorHandler, ActionL
         contentScrollPane = new org.wandora.application.gui.simple.SimpleScrollPane();
         editorPanel = new TopicEditorPanel(this, this);
         startupPanel = new javax.swing.JPanel();
-        titlePanel = new ImagePanel("gui/startup_image.gif");
+        titlePanel = new WandoraStartupImagePanel();
         infoBar = new javax.swing.JToolBar();
         infobarPanel = new javax.swing.JPanel();
         numberOfTopicAssociationsLabel = new SimpleLabel();
@@ -1316,14 +1328,6 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         catch(Exception ce){
             return;
         }
-        /* // note that manager.isUnsaved always returned false, uncomment this when unsaved tracking works
-        if(manager.isUnsaved()){
-            if(WandoraOptionPane.showConfirmDialog(this,"Unsaved changes exist. Are you sure you want to exit?","Unsaved changes",WandoraOptionPane.YES_NO_OPTION)
-                ==WandoraOptionPane.YES_OPTION){
-                doExit();
-            }
-        }
-        else*/
         doExit();
     }
 
@@ -1414,6 +1418,56 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     // End of variables declaration//GEN-END:variables
     
     
+    
+    // --- VERSION ---
+    
+    public static void loadVersionProperties() {
+    	if (versionProperties.isEmpty()) {
+	        try (FileInputStream input = new FileInputStream("resources/version.properties")) {
+	        	versionProperties.load(input);
+	        } 
+	        catch (Exception e) {
+	        	logger.error(e);
+	        }
+    	}
+    }
+    
+
+    public static String getVersion() {
+    	loadVersionProperties();
+    	return versionProperties.getProperty("version");
+    }
+    
+    
+    
+    public static String getVersionInfo() {
+    	loadVersionProperties();
+    	String version = versionProperties.getProperty("version");
+    	if (StringUtils.isBlank(version)) {
+    		version = "UNKNOWN";
+    	}
+    	String yearNow = ""+LocalDate.now().getYear();
+    	return COPYRIGHT_CHARACTER+" WANDORA TEAM 2004-"+yearNow+". BUILD "+version+".";
+    }
+    
+    
+    
+    public static String[] getVersionLicenseInfo() {
+    	loadVersionProperties();
+    	String version = versionProperties.getProperty("version");
+    	String yearNow = ""+LocalDate.now().getYear();
+    	
+    	return new String[] {
+    			"COPYRIGHT "+COPYRIGHT_CHARACTER+" WANDORA TEAM 2004-"+yearNow+". BUILD "+version+".",
+    			"THIS PROGRAM IS FREE SOFTWARE. YOU CAN REDISTRIBUTE AND/OR MODIFY IT",
+    			"UNDER THE TERMS OF THE GNU GENERAL PUBLIC LICENSE AS",
+    			"PUBLISHED BY THE FREE SOFTWARE FOUNDATION."
+    	};
+    }
+    
+    
+    // ----------
+    
     /**
      * Returns the <code>options</code> object containing all application options.
      * Options are persistent, they are saved when application exits and loaded
@@ -1465,7 +1519,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error("Wandora failed to add topic to the history.", e);
         }
     }
     
@@ -1691,7 +1745,8 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
      */
     public void handleError(Throwable throwable) {
         synchronized(errorHandlerLock){
-            /*debug*/ throwable.printStackTrace();
+        	logger.error("Error handler captured error.");
+        	logger.error(throwable);
             if(!handleErrors) return;
             new ErrorDialog(this, throwable);
         }
@@ -1710,7 +1765,6 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
      * Refreshes the main window and main panels.
      */
     public void refresh() {
-        //System.out.println("Wandora - refresh");
         Dimension d = super.getSize();
         Point l = super.getLocation();
 
@@ -1864,8 +1918,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             }
         }
         catch(Exception e) {
-            System.out.println("Exception '"+ e.toString() +"' thrown while updating layer info!");
-            //e.printStackTrace();
+            logger.error("Exception '{}' thrown while updating layer info!", e.toString());
         }
     }
     
@@ -1885,7 +1938,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             }
         }
         catch(Exception e) {
-            System.out.println("Exception '"+ e.toString() +"' thrown while updating topic distribution info!");
+        	logger.error("Exception '{}' thrown while updating topic distribution info!", e.toString());
         }
     }
     
@@ -1901,8 +1954,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             topicLabel.setText(name);
         }
         catch(Exception e) {
-            System.out.println("Exception '"+ e.toString() +"' thrown while updating topic status panel!");
-            //e.printStackTrace();
+            logger.error("Exception '{}' thrown while updating topic status panel!", e.toString());
         }
     }
     
@@ -2019,20 +2071,20 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     
-    
+
     
     
     
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
-        System.out.println("Wandora catched action command '" + c + "'.");
+        logger.info("Wandora catched action command '" + c + "'.");
         
         if("Reset".equalsIgnoreCase(c)) {
             resetWandora();
         }
         else {
-            System.out.println("Warning: Action command " + c + " NOT processed!");
+            logger.warn("Warning: Action command " + c + " NOT processed!");
         }
     }    
     
@@ -2096,7 +2148,7 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             }
         }
         catch (Exception e) { 
-            System.out.println("Couldn't solve Wandora with component '"+c+"'. Exception '"+e.toString()+"' occurred."); 
+            logger.error("Couldn't solve Wandora with component '"+c+"'. Exception '"+e.toString()+"' occurred."); 
         }
         return w;
     }
@@ -2128,7 +2180,6 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     
     public void gainFocus(Component c) {
         focusOwner = c;
-        // System.out.println("gain focus for "+(c==null?"null":c.getClass()));
     }
     
     public void looseFocus(Component c) {
@@ -2318,7 +2369,6 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         CMDParamParser cmdparams=new CMDParamParser(args);
         UIConstants.initializeGUI();
         SplashWindow splashWindow = new SplashWindow();
-        Logger.setLogger(new SystemOutLogger());
 
         do {
             Wandora wandoraApplication = new Wandora(cmdparams);
@@ -2336,8 +2386,14 @@ private void serverButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             while(exitCode == WAIT_FOR_APPLICATION);
             wandoraApplication.setVisible(false);
             wandoraApplication.dispose();
+            
+            if(exitCode == RESTART_APPLICATION) {
+            	logger.info("Restarting application.");
+            }
         }
         while(exitCode == RESTART_APPLICATION);
+        
+        logger.info("Exiting. Bye.");
         
         System.exit(0);
     }

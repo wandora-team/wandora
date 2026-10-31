@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -47,7 +46,7 @@ import org.wandora.topicmap.TopicMap;
  * 
  * @author akivela
  */
-public class OccurrenceScopeCopier extends AbstractWandoraTool implements WandoraTool {
+public class OccurrenceScopeCopier extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -60,14 +59,14 @@ public class OccurrenceScopeCopier extends AbstractWandoraTool implements Wandor
     public OccurrenceScopeCopier() {
         REMOVE_AFTER_COPY = false;
     }
-    public OccurrenceScopeCopier(Context preferredContext) {
+    public OccurrenceScopeCopier(Context<?> preferredContext) {
         REMOVE_AFTER_COPY = false;
         setContext(preferredContext);
     }
     public OccurrenceScopeCopier(boolean removeAfterCopy) {
         REMOVE_AFTER_COPY = false;
     }
-    public OccurrenceScopeCopier(boolean removeAfterCopy, Context preferredContext) {
+    public OccurrenceScopeCopier(boolean removeAfterCopy, Context<?> preferredContext) {
         REMOVE_AFTER_COPY = removeAfterCopy;
         setContext(preferredContext);
     }
@@ -85,9 +84,9 @@ public class OccurrenceScopeCopier extends AbstractWandoraTool implements Wandor
     }
     
   
-    public void execute(Wandora wandora, Context context) {   
+    public void execute(Wandora wandora, Context<?> context) {   
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             
             GenericOptionsDialog god=new GenericOptionsDialog(wandora,
@@ -123,7 +122,6 @@ public class OccurrenceScopeCopier extends AbstractWandoraTool implements Wandor
             if( OVERWRITE_OLDIES ) log("Overwriting existing occurrences.");
             if( COPY_NULLS ) log("Copying also null occurrences.");
             
-            int progress = 0;
             int processed = 0;
             Topic topic = null;
             String occurrence = "";
@@ -148,7 +146,6 @@ public class OccurrenceScopeCopier extends AbstractWandoraTool implements Wandor
                         catch(Exception e) { }
 
                         if(sourceTypeTopic != null && sourceScopeTopic != null && targetTypeTopic != null && targetScopeTopic != null) {
-                            progress++;
                             occurrence = topic.getData(sourceTypeTopic, sourceScopeTopic);
                             targetOccurrence = topic.getData(targetTypeTopic, targetScopeTopic);
                             if(occurrence != null) {

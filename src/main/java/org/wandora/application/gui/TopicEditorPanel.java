@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,59 +44,87 @@ import org.wandora.application.Wandora;
  * @author olli
  */
 public class TopicEditorPanel extends EditorPanel implements Scrollable {
-    
+    private static final long serialVersionUID = 1L;
 
-	private static final long serialVersionUID = 1L;
 
-	/** Creates a new instance of TopicEditorPanel */
+
+    /** Creates a new instance of TopicEditorPanel */
     public TopicEditorPanel(Wandora wandora, Object dc) {
-        super(wandora,dc);
+        super(wandora, dc);
     }
-    
-    
+
+
     /** Creates a new instance of EditorPanel */
     public TopicEditorPanel(Wandora wandora, int o, Object dc) {
-        super(wandora,o,dc);
+        super(wandora, o, dc);
     }
-    
+
+
+
     @Override
     public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
         return 10;
     }
 
+
     @Override
     public boolean getScrollableTracksViewportWidth() {
-        if(this.getComponentCount()>0){
-            Component co=this.getComponent(0);
-            if(co!=null && co instanceof Scrollable) return ((Scrollable)co).getScrollableTracksViewportWidth();
+        if (this.getComponentCount() > 0) {
+            Component co = this.getComponent(0);
+            if (co != null && co instanceof Scrollable) {
+                return ((Scrollable) co).getScrollableTracksViewportWidth();
+            }
         }
-        Container c=this.getParent();
-        if(c==null) return true;
-        if(c.getWidth()>500) return true;
-        else return false;
+        Container c = this.getParent();
+        if (c == null) {
+            return true;
+        }
+        if (c.getWidth() > 500) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
+
 
     @Override
     public boolean getScrollableTracksViewportHeight() {
-        if(this.getComponentCount()==0) return false;
-        Component c=this.getComponent(0);
-        if(c==null) return false;
-        if(c instanceof Scrollable) return ((Scrollable)c).getScrollableTracksViewportHeight();
-        if(c==parent.getStartupPanel()) return true;
-        else return false;
+        if (this.getComponentCount() == 0) {
+            return false;
+        }
+        Component c = this.getComponent(0);
+        if (c == null) {
+            return false;
+        }
+        if (c instanceof Scrollable) {
+            return ((Scrollable) c).getScrollableTracksViewportHeight();
+        }
+        if (c == parent.getStartupPanel()) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
+
 
     @Override
     public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
-        if(orientation==SwingConstants.VERTICAL) return visibleRect.height;
-        else return visibleRect.width;
+        if (orientation == SwingConstants.VERTICAL) {
+            return visibleRect.height;
+        }
+        else {
+            return visibleRect.width;
+        }
     }
+
 
     @Override
     public Dimension getPreferredScrollableViewportSize() {
         return getPreferredSize();
     }
-    
-    
-    
+
+
+
 }

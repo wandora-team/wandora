@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ package org.wandora.application.tools.occurrences.refine;
 
 
 
-import java.net.URL;
+import java.net.URI;
 import java.net.URLEncoder;
 
 import org.wandora.application.Wandora;
@@ -35,6 +35,7 @@ import org.wandora.application.tools.extractors.geonames.GeoNamesExtractorSelect
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.xml.sax.SAXException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -42,6 +43,8 @@ import org.xml.sax.SAXException;
  * @author akivela
  */
 public class FindNearByGeoNamesOccurrence extends AbstractOccurrenceExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(FindNearByGeoNamesOccurrence.class);
 
 	private static final long serialVersionUID = 1L;
 	private static int rows = 1000;
@@ -54,7 +57,7 @@ public class FindNearByGeoNamesOccurrence extends AbstractOccurrenceExtractor {
 
     public FindNearByGeoNamesOccurrence() {
     }
-    public FindNearByGeoNamesOccurrence(Context preferredContext) {
+    public FindNearByGeoNamesOccurrence(Context<?> preferredContext) {
         super(preferredContext);
     }
 
@@ -96,11 +99,11 @@ public class FindNearByGeoNamesOccurrence extends AbstractOccurrenceExtractor {
                         urlStr += "&radius="+radius;
 
                         log("Finding geolocations near by "+coords[0]+", "+coords[1]);
-                        System.out.println("Extracting: "+urlStr);
+                        logger.info("Extracting: "+urlStr);
 
                         e.setForceUrls( new String[] { urlStr } );
                         e.setToolLogger(getDefaultLogger());
-                        e._extractTopicsFrom(new URL(urlStr), topicMap);
+                        e._extractTopicsFrom(new URI(urlStr).toURL(), topicMap);
 
                     }
                     catch (Exception e) {

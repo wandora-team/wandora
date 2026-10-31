@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,32 +43,30 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleTextPane;
-import org.wandora.topicmap.TopicMapLogger;
 import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author  akivela
  */
-public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLogger, ActionListener, MouseListener {
-    
-	private static final long serialVersionUID = 1L;
-	
-    private Wandora wandora;
+public class InfoDialog extends JDialog implements WandoraToolLogger, ActionListener, MouseListener {
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(InfoDialog.class);
+
     private boolean locked = false;
     private boolean forceStop = false;
     private int state = 0;
-    
+
     private StringBuilder history = null;
-    
+
     private long startTime = 0;
     private long endTime = 0;
     private int maximumProgress = 100;
 
     private Thread dialogThread;
-    
-    
+
 
 
     /**
@@ -77,7 +75,6 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
     public InfoDialog(Wandora wandora) {
         super(wandora, true);
         this.history = new StringBuilder();
-        this.wandora = wandora;
         initComponents();
         this.setSize(600, 300);
         wandora.centerWindow(this);
@@ -87,10 +84,10 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
         textArea.setText("");
         iconLabel.setIcon(UIBox.getIcon("gui/icons/dialog/cogwheel.gif"));
     }
-    
-    
+
+
     private void open() {
-        if(!isVisible()) {
+        if (!isVisible()) {
             dialogThread = new Thread() {
                 @Override
                 public void run() {
@@ -100,49 +97,61 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
             dialogThread.start();
         }
     }
-    
-    
-    
+
+
+
     private void waitUntilVisible() {
         try {
             int c = 0;
             do {
                 c++;
-                try { Thread.sleep(250); }
-                catch(Exception e) {};
+                try {
+                    Thread.sleep(250);
+                }
+                catch (Exception e) {
+                }
             }
-            while(!isVisible() && c < 10);
+            while (!isVisible() && c < 10);
         }
-        catch(Exception e) {}
+        catch (Exception e) {
+        }
     }
-    
-    
-   
+
+
+
     @Override
     public void lockLog(boolean lock) {
         locked = lock;
     }
-    
-    
+
+
     @Override
     public void hlog(String message) {
         try {
-            if(!locked) textArea.setText("<html>"+message+"</html>");
+            if (!locked) {
+                textArea.setText("<html>" + message + "</html>");
+            }
         }
-        catch(Exception e) {} 
+        catch (Exception e) {
+            // Ignore
+        }
     }
-    
-    
+
+
     @Override
     public void log(String message) {
         try {
-            if(!locked) textArea.setText("<html>"+message+"</html>");
+            if (!locked) {
+                textArea.setText("<html>" + message + "</html>");
+            }
         }
-        catch(Exception e) {}       
+        catch (Exception e) {
+            // Ignore
+        }
         history.append(message).append("\n");
     }
-    
-    
+
+
     @Override
     public void log(String message, Exception e) {
         StringWriter sw = new StringWriter();
@@ -150,7 +159,8 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
         e.printStackTrace(pw);
         log(message + "\n" + sw.toString());
     }
-    
+
+
     @Override
     public void log(Exception e) {
         StringWriter sw = new StringWriter();
@@ -158,7 +168,8 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
         e.printStackTrace(pw);
         log(sw.toString());
     }
-    
+
+
     @Override
     public void log(Error e) {
         StringWriter sw = new StringWriter();
@@ -166,56 +177,61 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
         e.printStackTrace(pw);
         log(sw.toString());
     }
-    
 
-    
+
+
     @Override
     public void setLogTitle(String title) {
         this.setTitle(title);
     }
-    
-    
-    
+
+
+
     @Override
     public void setProgress(int n) {
-        if(progressBar.isIndeterminate()) progressBar.setIndeterminate(false);
-        if(n > maximumProgress) n = n % maximumProgress;
+        if (progressBar.isIndeterminate()) {
+            progressBar.setIndeterminate(false);
+        }
+        if (n > maximumProgress) {
+            n = n % maximumProgress;
+        }
         progressBar.setValue(n);
     }
-    
+
+
     @Override
     public void setProgressMax(int maxn) {
         maximumProgress = Math.max(1, maxn);
         progressBar.setMaximum(maxn);
     }
-    
-    
-    
+
+
+
     @Override
     public String getHistory() {
         return history.toString();
     }
-    
-    
- 
-    
-    
+
+
+
     public long getExecuteTime() {
         return endTime - startTime;
     }
-    
-    
+
+
     @Override
     public boolean forceStop() {
         return forceStop;
     }
-    
-    
+
+
     @Override
     public void setState(int state) {
-        if(this.state == state) return;
+        if (this.state == state) {
+            return;
+        }
         this.state = state;
-        switch(state) {
+        switch (state) {
             case EXECUTE: {
                 try {
                     startTime = System.currentTimeMillis();
@@ -229,7 +245,9 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
                     open();
                     waitUntilVisible();
                 }
-                catch(Exception e) {}
+                catch (Exception e) {
+                    // Ignore
+                }
                 return;
             }
             case WAIT: {
@@ -242,17 +260,18 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
                             try {
                                 containerPanel.removeAll();
                             }
-                            catch(Exception e) {
-                                // e.printStackTrace();
+                            catch (Exception e) {
+                                logger.error(e);
                             }
                             containerPanel.add(waitPanel, BorderLayout.CENTER);
                             String historyString = getHistory();
-                            //history = new StringBuffer();
                             logTextPane.setText(historyString);
                             logTextPane.setCaretPosition(logTextPane.getDocument().getLength());
                             containerPanel.revalidate();
                         }
-                        catch(Exception e) {}
+                        catch (Exception e) {
+                            // Ignore
+                        }
                     }
                 });
                 return;
@@ -264,10 +283,11 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
                         try {
                             setVisible(false);
                             logTextPane.setText("");
-                            //history = new StringBuffer();
                             forceStop = false;
                         }
-                        catch(Exception e) {}
+                        catch (Exception e) {
+                            // Ignore
+                        }
                     }
                 });
                 return;
@@ -279,7 +299,9 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
                         try {
                             setVisible(false);
                         }
-                        catch(Exception e) {}
+                        catch (Exception e) {
+                            // Ignore
+                        }
                     }
                 });
                 return;
@@ -291,21 +313,23 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
             }
         }
     }
+
+
     @Override
     public int getState() {
         return state;
     }
-    
-    
-    
+
+
+
     public JPopupMenu getCopyMenu() {
         Object[] copyMenuObjects = new Object[] {
-            "Copy", UIBox.getIcon("gui/icons/copy.png"),
+                "Copy", UIBox.getIcon("gui/icons/copy.png"),
         };
         return UIBox.makePopupMenu(copyMenuObjects, this);
     }
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -435,6 +459,7 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -442,17 +467,19 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
                 try {
                     setVisible(false);
                 }
-                catch(Exception e) {}
+                catch (Exception e) {
+                }
             }
         });
     }//GEN-LAST:event_closeButtonActionPerformed
 
+
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
         forceStop = true;
     }//GEN-LAST:event_stopButtonActionPerformed
-    
 
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton closeButton;
@@ -468,43 +495,46 @@ public class InfoDialog extends JDialog implements WandoraToolLogger, TopicMapLo
     private javax.swing.JPanel waitButtonPanel;
     private javax.swing.JPanel waitPanel;
     // End of variables declaration//GEN-END:variables
-    
-    
-    
-    
-    
+
+
+
     // ---- actions -----
-    
-    
+
+
     @Override
     public void actionPerformed(ActionEvent event) {
         String c = event.getActionCommand();
-        
-        if("Copy".equalsIgnoreCase(c)) {
+
+        if ("Copy".equalsIgnoreCase(c)) {
             ClipboardBox.setClipboard(textArea.getText());
         }
     }
-    
+
     // ---- mouse -----
-    
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
-    }    
-    
+    }
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
-    }    
-    
+    }
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
 }

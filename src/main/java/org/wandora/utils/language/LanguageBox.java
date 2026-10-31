@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,13 +34,14 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class LanguageBox {
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LanguageBox.class);
 
 
     public static final String[] languageNamesAndCodes = new String[] {
@@ -279,7 +280,7 @@ public class LanguageBox {
                 t.addType(tm.getTopic(TMBox.LANGUAGE_SI));
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return t;
@@ -302,7 +303,7 @@ public class LanguageBox {
                 t.addType(tm.getTopic(TMBox.LANGUAGE_SI));
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return t;
@@ -331,7 +332,7 @@ public class LanguageBox {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
 
         }
@@ -361,7 +362,7 @@ public class LanguageBox {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
 
         }

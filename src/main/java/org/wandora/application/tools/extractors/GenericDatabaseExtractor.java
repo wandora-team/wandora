@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,6 +58,7 @@ import org.wandora.topicmap.XTMPSI;
 import org.wandora.topicmap.database2.DatabaseTopicMap;
 import org.wandora.topicmap.layered.LayerStack;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -72,9 +73,9 @@ import org.wandora.utils.Tuples.T2;
  */
 public class GenericDatabaseExtractor extends AbstractWandoraTool {
     
-
 	private static final long serialVersionUID = 1L;
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GenericDatabaseExtractor.class);
+	
 	/** Creates a new instance of GenericDatabaseExtractor */
     public GenericDatabaseExtractor() {
     }
@@ -97,7 +98,7 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
     }
 
     
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         setDefaultLogger();        
         DatabaseConfigurationDialog d=new DatabaseConfigurationDialog(wandora,true);
         d.setTitle("Select extracted database");
@@ -117,7 +118,7 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
             DatabaseSchema schema=getDatabaseSchema(metadata,null,sc.user);
                                 
             setDefaultBaseNameColumns(schema);
-            System.out.println("Found tables:");
+            logger.info("Found tables:");
             schema.print(System.out);
             
             if(!configureSchema(wandora,schema)){ return; }
@@ -152,7 +153,9 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
         finally{
             try{
                 if(con!=null) con.close();
-            }catch(SQLException sqle){sqle.printStackTrace();}
+            }catch(SQLException sqle){
+            	logger.error(sqle);
+            }
         }
     }    
     
@@ -169,9 +172,9 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
         ResultSetMetaData rsmd=rs.getMetaData();
         while(rs.next()){
             for(int i=0;i<rsmd.getColumnCount();i++){
-                System.out.println(rsmd.getColumnLabel(i+1)+": "+rs.getObject(i+1));
+                logger.info(rsmd.getColumnLabel(i+1)+": "+rs.getObject(i+1));
             }
-            System.out.println("--------------------------");
+            logger.info("--------------------------");
         }        
     }
     
@@ -242,43 +245,43 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
             }
             if(!includedColumns) continue;
             if(hasNonReferences){
-                Topic type=getOrCreateTopic(tm,"http://wandora.org/si/dbimport/type/"+table);
+                Topic type=getOrCreateTopic(tm,"https://wandora.org/si/dbimport/type/"+table);
                 type.setBaseName(table+" (type)");
                 for(DBColumn column : columns){
                     if(!column.include) continue;
                     if(column.references!=null) continue;
                     if(column.makeTopics){
-                        Topic atype=getOrCreateTopic(tm,"http://wandora.org/si/dbimport/type/"+table+"/"+column.column);
+                        Topic atype=getOrCreateTopic(tm,"https://wandora.org/si/dbimport/type/"+table+"/"+column.column);
                         atype.setBaseName(table+"/"+column.column+" (association type)");
-                        Topic otherRole=getOrCreateTopic(tm,"http://wandora.org/si/dbimport/role/"+table+"/"+column.column);
+                        Topic otherRole=getOrCreateTopic(tm,"https://wandora.org/si/dbimport/role/"+table+"/"+column.column);
                         otherRole.setBaseName(table+"/"+column.column+" (role)");
-                        Topic thisRole=getOrCreateTopic(tm,"http://wandora.org/si/dbimport/role/"+table);
+                        Topic thisRole=getOrCreateTopic(tm,"https://wandora.org/si/dbimport/role/"+table);
                         thisRole.setBaseName(table+" (role)");
                     }
                     else{
-                        Topic dataType=getOrCreateTopic(tm,"http://wandora.org/si/dbimport/datatype/"+table+"/"+column.column);
+                        Topic dataType=getOrCreateTopic(tm,"https://wandora.org/si/dbimport/datatype/"+table+"/"+column.column);
                         dataType.setBaseName(column.column+" (data type)");
                     }
                 }                
             }
             if(hasReferences && !hasNonReferences){
-                Topic associationType=getOrCreateTopic(tm,"http://wandora.org/si/dbimport/association/"+table);
+                Topic associationType=getOrCreateTopic(tm,"https://wandora.org/si/dbimport/association/"+table);
                 associationType.setBaseName(table+" (association type)");
                 for(DBColumn column : columns){
                     if(!column.include) continue;
-                    Topic role=getOrCreateTopic(tm,"http://wandora.org/si/dbimport/role/"+table+"/"+column.column);
+                    Topic role=getOrCreateTopic(tm,"https://wandora.org/si/dbimport/role/"+table+"/"+column.column);
                     role.setBaseName(table+"/"+column.column+" (role)");
                 }
             }
             else if(hasReferences) {
-                Topic thisRole=getOrCreateTopic(tm,"http://wandora.org/si/dbimport/role/"+table);
+                Topic thisRole=getOrCreateTopic(tm,"https://wandora.org/si/dbimport/role/"+table);
                 thisRole.setBaseName(table+" (role)");
                 for(DBColumn column : columns){
                     if(!column.include) continue;
                     if(column.references==null) continue;
-                    Topic type=getOrCreateTopic(tm,"http://wandora.org/si/dbimport/type/"+table+"/"+column.column);
+                    Topic type=getOrCreateTopic(tm,"https://wandora.org/si/dbimport/type/"+table+"/"+column.column);
                     type.setBaseName(table+"/"+column.column+" (association type)");
-                    Topic otherRole=getOrCreateTopic(tm,"http://wandora.org/si/dbimport/role/"+column.references.table+"/"+column.references.column);
+                    Topic otherRole=getOrCreateTopic(tm,"https://wandora.org/si/dbimport/role/"+column.references.table+"/"+column.references.column);
                     otherRole.setBaseName(column.references.table+"/"+column.references.column+" (role)");
                 }
             }            
@@ -366,12 +369,12 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
                         row[i]=rs.getString(i+1);
                     }
                     String ids=makeIdentifier(row,columns,table);
-                    String identifier="http://wandora.org/si/dbimport/"+table+"/"+ids;
-                    if(extendsTable!=null) identifier="http://wandora.org/si/dbimport/"+extendsTable+"/"+ids;
-                    if(identifier.length()>255) System.out.println("WARNING! Locator over 255 characters");
+                    String identifier="https://wandora.org/si/dbimport/"+table+"/"+ids;
+                    if(extendsTable!=null) identifier="https://wandora.org/si/dbimport/"+extendsTable+"/"+ids;
+                    if(identifier.length()>255) logger.info("WARNING! Locator over 255 characters");
                     if(hasNonReferences){
                         Topic t=getOrCreateTopic(tm,identifier);
-                        Topic type=getOrCreateCached(tm,"http://wandora.org/si/dbimport/type/"+table);
+                        Topic type=getOrCreateCached(tm,"https://wandora.org/si/dbimport/type/"+table);
                         t.addType(type);
                         for(int i=0;i<numColumns;i++){
                             DBColumn column=columns[i];
@@ -381,10 +384,10 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
                             if(column.references!=null) continue; 
                             if(column.baseName && value!=null) t.setBaseName(cropBaseName(value,ids));
                             if(column.makeTopics && value!=null){
-                                Topic atype=getOrCreateCached(tm,"http://wandora.org/si/dbimport/type/"+table+"/"+column.column);
-                                Topic otherRole=getOrCreateCached(tm,"http://wandora.org/si/dbimport/role/"+table+"/"+column.column);
-                                Topic thisRole=getOrCreateCached(tm,"http://wandora.org/si/dbimport/role/"+table);
-                                Topic other=getOrCreateTopic(tm,"http://wandora.org/si/dbimport/"+table+"/"+column.column+"/"+value);
+                                Topic atype=getOrCreateCached(tm,"https://wandora.org/si/dbimport/type/"+table+"/"+column.column);
+                                Topic otherRole=getOrCreateCached(tm,"https://wandora.org/si/dbimport/role/"+table+"/"+column.column);
+                                Topic thisRole=getOrCreateCached(tm,"https://wandora.org/si/dbimport/role/"+table);
+                                Topic other=getOrCreateTopic(tm,"https://wandora.org/si/dbimport/"+table+"/"+column.column+"/"+value);
                                 other.addType(atype);
                                 other.setBaseName(cropBaseName(value,column.column));
                                 Association a=tm.createAssociation(atype);
@@ -392,14 +395,14 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
                                 a.addPlayer(other,otherRole);                                
                             }
                             else if(value!=null) {
-                                Topic dataType=getOrCreateCached(tm,"http://wandora.org/si/dbimport/datatype/"+table+"/"+column.column);
+                                Topic dataType=getOrCreateCached(tm,"https://wandora.org/si/dbimport/datatype/"+table+"/"+column.column);
                                 Topic version=getOrCreateCached(tm,XTMPSI.getLang(null));
                                 t.setData(dataType,version,value);
                             }
                         }
                     }
                     if(hasReferences && !hasNonReferences){
-                        Topic associationType=getOrCreateCached(tm,"http://wandora.org/si/dbimport/association/"+table);
+                        Topic associationType=getOrCreateCached(tm,"https://wandora.org/si/dbimport/association/"+table);
                         Association a=tm.createAssociation(associationType);
                         for(int i=0;i<numColumns;i++){
                             DBColumn column=columns[i];
@@ -407,14 +410,14 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
                             if(extendsTable!=null && column.primaryKey) continue;
                             String value=row[i];
                             if(value==null) continue;
-                            Topic other=getOrCreateTopic(tm,"http://wandora.org/si/dbimport/"+column.references.table+"/"+value);
-                            Topic role=getOrCreateCached(tm,"http://wandora.org/si/dbimport/role/"+table+"/"+column.column);
+                            Topic other=getOrCreateTopic(tm,"https://wandora.org/si/dbimport/"+column.references.table+"/"+value);
+                            Topic role=getOrCreateCached(tm,"https://wandora.org/si/dbimport/role/"+table+"/"+column.column);
                             a.addPlayer(other,role);
                         }
                     }
                     else if(hasReferences) {
                         Topic t=getOrCreateTopic(tm,identifier);
-                        Topic thisRole=getOrCreateTopic(tm,"http://wandora.org/si/dbimport/role/"+table);
+                        Topic thisRole=getOrCreateTopic(tm,"https://wandora.org/si/dbimport/role/"+table);
                         for(int i=0;i<numColumns;i++){
                             DBColumn column=columns[i];
                             if(!column.include) continue;
@@ -422,9 +425,9 @@ public class GenericDatabaseExtractor extends AbstractWandoraTool {
                             if(extendsTable!=null && column.primaryKey) continue;
                             String value=row[i];
                             if(value==null) continue;
-                            Topic other=getOrCreateTopic(tm,"http://wandora.org/si/dbimport/"+column.references.table+"/"+value);
-                            Topic type=getOrCreateCached(tm,"http://wandora.org/si/dbimport/type/"+table+"/"+column.column);
-                            Topic otherRole=getOrCreateCached(tm,"http://wandora.org/si/dbimport/role/"+column.references.table);
+                            Topic other=getOrCreateTopic(tm,"https://wandora.org/si/dbimport/"+column.references.table+"/"+value);
+                            Topic type=getOrCreateCached(tm,"https://wandora.org/si/dbimport/type/"+table+"/"+column.column);
+                            Topic otherRole=getOrCreateCached(tm,"https://wandora.org/si/dbimport/role/"+column.references.table);
                             Association a=tm.createAssociation(type);
                             a.addPlayer(t,thisRole);
                             a.addPlayer(other,otherRole);

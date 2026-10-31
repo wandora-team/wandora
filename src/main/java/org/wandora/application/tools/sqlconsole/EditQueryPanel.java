@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,9 @@
 package org.wandora.application.tools.sqlconsole;
 
 import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.text.JTextComponent;
 /**
  *
  * @author  olli
@@ -36,7 +39,8 @@ public class EditQueryPanel extends javax.swing.JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private SQLConsolePanel parent;
-    private HashMap paramMap=new HashMap();
+    private Map<String,JTextComponent> paramMap=new HashMap<>();
+    
     
     /** Creates new form EditQueryPanel */
     public EditQueryPanel(SQLConsolePanel parent,StoredQuery query) {

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,9 +35,9 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -102,7 +102,7 @@ import org.wandora.topicmap.XTMPSI;
  *
  * @author akivela
  */
-public class ExtractIconclassKeywords extends AbstractExtractor implements WandoraTool {
+public class ExtractIconclassKeywords extends AbstractExtractor {
     
 
 	private static final long serialVersionUID = 1L;
@@ -202,7 +202,7 @@ public class ExtractIconclassKeywords extends AbstractExtractor implements Wando
             Topic iconclassTopic = null;
             String iconclassDisplayName = null;
             Association iconclassAssociation = null;
-            HashMap players = null;
+            Map<Topic,Topic> players = null;
             
             line = breader.readLine();
             while(line != null && !forceStop()) {
@@ -331,7 +331,7 @@ public class ExtractIconclassKeywords extends AbstractExtractor implements Wando
                     superClass.setBaseName(sup + " (iconclass)");
                 }
                 
-                HashMap players = new HashMap();
+                Map<Topic,Topic> players = new LinkedHashMap<>();
                 players.put(superclassType, superClass);
                 players.put(subclassType, subClass);
                 Association supeclassAssociation = topicMap.createAssociation(supersubclassType);
@@ -383,7 +383,7 @@ public class ExtractIconclassKeywords extends AbstractExtractor implements Wando
     
     public Locator getLocatorForIconclass(String iconclassCode) {
         try {
-            return new Locator( TopicTools.cleanDirtyLocator("http://wandora.org/si/iconclass/" + iconclassCode) );
+            return new Locator( TopicTools.cleanDirtyLocator("https://wandora.org/si/iconclass/" + iconclassCode) );
         }
         catch(Exception e) {
             log(e);

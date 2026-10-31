@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ public class XMLBigHugeThesaurusExtractor  extends AbstractExtractor {
     protected String SIMILAR_TYPE_SI = SI_BASE+"similar";
     protected String USERSUGGESTION_TYPE_SI = SI_BASE+"user-suggested";
 
-    protected String SOURCE_SI = "http://wandora.org/si/source";
+    protected String SOURCE_SI = "https://wandora.org/si/source";
 
     private String defaultEncoding = "ISO-8859-1";
 
@@ -161,7 +161,6 @@ public class XMLBigHugeThesaurusExtractor  extends AbstractExtractor {
     public boolean _extractTopicsFrom(String in, TopicMap topicMap) throws Exception {
         try {
             String result = in;
-            //System.out.println("Result = "+result);
 
             // ---- Parse results ----
             javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();

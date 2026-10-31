@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,6 @@ import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.parser.mp3.Mp3Parser;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Locator;
@@ -58,15 +57,14 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author  akivela
  */
 
-public class SimpleMP3Extractor extends AbstractExtractor implements WandoraTool {
+public class SimpleMP3Extractor extends AbstractExtractor {
 
 	private static final long serialVersionUID = 1L;
 
 	private String tempFilename = "temp/wandora_temp.tmp";
 
-    private String baseLocator = "http://wandora.org/si/mp3";
+    private String baseLocator = "https://wandora.org/si/mp3";
 
-    private int extractionCounter = 0;
     private int foundCounter = 0;
 
     
@@ -141,7 +139,6 @@ public class SimpleMP3Extractor extends AbstractExtractor implements WandoraTool
                 t.addSubjectIdentifier(new Locator(urlString));
                 t.removeSubjectIdentifier(l);
                 topicMap.mergeIn(tempMap);
-                extractionCounter++;
             }
             else {
                 log("Found no valid metadata in '"+croppedUrlString(urlString)+"'");
@@ -178,17 +175,11 @@ public class SimpleMP3Extractor extends AbstractExtractor implements WandoraTool
             if(metadata != null) {
 
                 String length = metadata.get("xmpDM:duration");
-                String bpm = null;
-                String lan = null;
-                String media = null;
-                String frequency = null;
-                String bitrate = null;
 
                 String album = metadata.get("xmpDM:album");
                 String artist = metadata.get("xmpDM:artist");
                 String genre = metadata.get("xmpDM:genre");
                 String title = metadata.get("title");
-                String identifier = null;
                 String year = metadata.get("xmpDM:releaseDate");
 
                 if(title != null) {
@@ -197,17 +188,12 @@ public class SimpleMP3Extractor extends AbstractExtractor implements WandoraTool
                     wandoraClass.setBaseName("Wandora class");
 
                     Topic lengthType = createTopic(topicMap, "length");
-                    Topic frequencyType = createTopic(topicMap, "frequency");
-                    Topic bitrateType = createTopic(topicMap, "bitrate");
-                    Topic isVariableBitRateType = createTopic(topicMap, "isVariableBitRate");
-                    Topic isCopyProtectedType = createTopic(topicMap, "isCopyProtected");
 
                     Topic containsType = createTopic(topicMap, "contains");
                     Topic hasAlbumType = createTopic(topicMap, "hasAlbum");
                     Topic hasTitleType = createTopic(topicMap, "hasTitle");
                     Topic isGenreType = createTopic(topicMap, "isGenre");
                     Topic timeType = createTopic(topicMap, "timeApellation");
-                    Topic identifiesType = createTopic(topicMap, "identifies");
 
                     Topic mp3Type = createTopic(topicMap, "MP3", wandoraClass);
                     Topic albumType = createTopic(topicMap, "album", mp3Type);
@@ -215,13 +201,11 @@ public class SimpleMP3Extractor extends AbstractExtractor implements WandoraTool
                     Topic genreType = createTopic(topicMap, "genre", mp3Type);
                     Topic titleType = createTopic(topicMap, "title", mp3Type);
                     Topic yearType = createTopic(topicMap, "year", mp3Type);
-                    Topic identifierType = createTopic(topicMap, "identifier", mp3Type);
 
                     Topic albumT = null;
                     Topic artistT = null;
                     Topic genreT = null;
                     Topic yearT = null;
-                    Topic identifierT = null;
                     Topic titleT = null;
 
                     if(title != null && title.length()>0) titleT = createTopic(topicMap, "title/" + title, " (title)", title, titleType);
@@ -230,13 +214,11 @@ public class SimpleMP3Extractor extends AbstractExtractor implements WandoraTool
                     if(artist != null && artist.length()>0) artistT = createTopic(topicMap, "artist/" + artist, " (artist)", artist, artistType);
                     if(genre != null) genreT = createTopic(topicMap, "genre/" + genre, " (genre)", "" + genre, genreType);
                     if(year != null && year.length()>0) yearT = createTopic(topicMap, "year/" + year, " (year)", year, yearType);
-                    if(identifier != null && identifier.length()>0) identifierT = createTopic(topicMap, "identifier/" + identifier, " (identifier)", identifier, identifierType);
 
                     if(titleT != null && albumT != null) createAssociation(topicMap, containsType, new Topic[] { titleT, albumT } );
                     if(artistT != null && albumT != null) createAssociation(topicMap, hasAlbumType, new Topic[] { artistT, albumT } );
                     if(artistT != null && titleT != null) createAssociation(topicMap, hasTitleType, new Topic[] { artistT, titleT } );
                     if(titleT != null && genreT != null) createAssociation(topicMap, isGenreType, new Topic[] { titleT, genreT } );
-                    if(titleT != null && identifierT != null) createAssociation(topicMap, identifiesType, new Topic[] { titleT, identifierT } );
                     if(titleT != null && yearT != null) createAssociation(topicMap, timeType, new Topic[] { titleT, yearT } );
 
                     if(titleT != null) {
@@ -249,23 +231,10 @@ public class SimpleMP3Extractor extends AbstractExtractor implements WandoraTool
                             lanT.setBaseName("Language independent");
                         }
 
-                        Hashtable hash = null;
-                        if(frequency != null) {
-                            hash = new Hashtable();
-                            hash.put(lanT, frequency);
-                            titleT.setData(frequencyType,hash);
-                        }
-
-                        if(bitrate != null) {
-                            hash = new Hashtable();
-                            hash.put(lanT, bitrate);
-                            titleT.setData(bitrateType,hash);
-                        }
-
                         if(length != null) {
-                            hash = new Hashtable();
-                            hash.put(lanT, length);
-                            titleT.setData(lengthType,hash);
+                        	Hashtable<Topic,String> lengthOccurrence = new Hashtable<>();
+                        	lengthOccurrence.put(lanT, length);
+                            titleT.setData(lengthType,lengthOccurrence);
                         }
                     }
                     return true;

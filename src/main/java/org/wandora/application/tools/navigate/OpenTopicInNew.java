@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ import java.util.Iterator;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -38,14 +37,16 @@ import org.wandora.application.gui.topicpanels.TraditionalTopicPanel;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author  akivela
  */
-public class OpenTopicInNew extends AbstractWandoraTool implements WandoraTool {
+public class OpenTopicInNew extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(OpenTopicInNew.class);
 
 	public final static int ASK_USER = 100;
     public final static int SOLVE_USING_CONTEXT = 102;
@@ -57,24 +58,24 @@ public class OpenTopicInNew extends AbstractWandoraTool implements WandoraTool {
     
     /** Creates a new instance of OpenTopicAt */
     public OpenTopicInNew(Class<Component> c) {
-        dockableClass = c;
+        dockableClass = (Class<Component>) c;
     }
-    public OpenTopicInNew(Class<Component> c, Context preferredContext) {
-        dockableClass = c;
+    public OpenTopicInNew(Class<Component> c, Context<?> preferredContext) {
+        dockableClass = (Class<Component>) c;
         setContext(preferredContext);
     }
     public OpenTopicInNew(Class<Component> c, int preferredOptions) {
-        dockableClass = c;
+        dockableClass = (Class<Component>) c;
         this.options = preferredOptions;
     }
             
             
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         try {
             DockingFramePanel dockingPanel = (DockingFramePanel) wandora.topicPanelManager.getTopicPanel();
-            Iterator contextTopics = context.getContextObjects();
+            Iterator<?> contextTopics = context.getContextObjects();
             if(options == SOLVE_USING_CONTEXT && contextTopics != null && contextTopics.hasNext()) {
                 int count = 0;
                 while(contextTopics.hasNext()) {
@@ -118,7 +119,7 @@ public class OpenTopicInNew extends AbstractWandoraTool implements WandoraTool {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,15 +28,16 @@ package org.wandora.application.tools.subjects;
 
 
 
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.wandora.application.CancelledException;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.SIContext;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -57,7 +58,7 @@ import org.wandora.utils.DataURL;
  *
  * @author akivela
  */
-public class PasteSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
+public class PasteSubjectIdentifiers extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -66,7 +67,7 @@ public class PasteSubjectIdentifiers extends AbstractWandoraTool implements Wand
     
     
     public PasteSubjectIdentifiers() {}
-    public PasteSubjectIdentifiers(Context context) {
+    public PasteSubjectIdentifiers(Context<?> context) {
         setContext(context);
     }
     
@@ -87,7 +88,7 @@ public class PasteSubjectIdentifiers extends AbstractWandoraTool implements Wand
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         
         try {
             Collection<Topic> targetTopics = getTargetTopics(context);
@@ -140,16 +141,16 @@ public class PasteSubjectIdentifiers extends AbstractWandoraTool implements Wand
     
 
 
-    protected Collection<Topic> getTargetTopics(Context context) {
-        ArrayList<Topic> topics = new ArrayList<>();
+    protected Collection<Topic> getTargetTopics(Context<?> context) {
+        List<Topic> topics = new ArrayList<>();
         if(context instanceof SIContext) {
-            Iterator<Locator> sis = context.getContextObjects();
+            Iterator<?> sis = context.getContextObjects();
             TopicMap topicmap = Wandora.getWandora().getTopicMap();
             Locator si = null;
             Topic t = null;
             while(sis.hasNext()) {
                 try {
-                    si = sis.next();
+                    si = (Locator) sis.next();
                     t = topicmap.getTopic(si);
                     if(!topics.contains(t)) {
                         topics.add(t);
@@ -161,9 +162,9 @@ public class PasteSubjectIdentifiers extends AbstractWandoraTool implements Wand
             }
         }
         else {
-            Iterator<Topic> topicIterator = context.getContextObjects();
+            Iterator<?> topicIterator = context.getContextObjects();
             while(topicIterator.hasNext()) {
-                topics.add(topicIterator.next());
+                topics.add((Topic) topicIterator.next());
             }
         }
         return topics;
@@ -198,10 +199,10 @@ public class PasteSubjectIdentifiers extends AbstractWandoraTool implements Wand
                     }
                     else {
                         try {
-                            new URL(str);
+                            new URI(str).toURL();
                             isValid = true;
                         }
-                        catch(java.net.MalformedURLException mue) {
+                        catch(java.net.MalformedURLException | URISyntaxException e) {
                             
                         }
                     }

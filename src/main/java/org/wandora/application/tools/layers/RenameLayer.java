@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@ package org.wandora.application.tools.layers;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.LayerTree;
 import org.wandora.application.gui.UIBox;
@@ -46,7 +45,7 @@ import org.wandora.topicmap.layered.Layer;
  *
  * @author akivela
  */
-public class RenameLayer extends AbstractLayerTool implements WandoraTool {
+public class RenameLayer extends AbstractLayerTool {
     
 	private static final long serialVersionUID = 1L;
 
@@ -71,7 +70,7 @@ public class RenameLayer extends AbstractLayerTool implements WandoraTool {
     
    
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             LayerTree layerTree = wandora.layerTree;           
             Layer selected = solveContextLayer(wandora, context);

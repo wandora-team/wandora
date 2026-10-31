@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,9 +31,9 @@ package org.wandora.application.tools.associations;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Association;
@@ -52,7 +52,7 @@ import org.wandora.topicmap.TopicMap;
 
 
 
-public class MakeAssociationWithClassInstance extends AbstractWandoraTool implements WandoraTool {
+public class MakeAssociationWithClassInstance extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -65,7 +65,7 @@ public class MakeAssociationWithClassInstance extends AbstractWandoraTool implem
     public MakeAssociationWithClassInstance() {
     }
     
-    public MakeAssociationWithClassInstance(Context preferredContext) {
+    public MakeAssociationWithClassInstance(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -86,9 +86,9 @@ public class MakeAssociationWithClassInstance extends AbstractWandoraTool implem
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {   
+    public void execute(Wandora wandora, Context<?> context) {   
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
                         
             Topic associationType=wandora.showTopicFinder("Select association type...");                
@@ -105,11 +105,10 @@ public class MakeAssociationWithClassInstance extends AbstractWandoraTool implem
             log("Making associations from default class-instance relations");
             
             Topic topic = null;
-            int progress = 0;
             TopicMap map = wandora.getTopicMap();
             Association a = null;
 
-            ArrayList<Topic> dtopics = new ArrayList<Topic>();
+            List<Topic> dtopics = new ArrayList<>();
             while(topics.hasNext() && !forceStop()) {
                 dtopics.add((Topic) topics.next());
             }
@@ -120,10 +119,9 @@ public class MakeAssociationWithClassInstance extends AbstractWandoraTool implem
                 try {
                     topic = (Topic) topics.next();
                     if(topic != null && !topic.isRemoved()) {
-                        progress++;
                         hlog("Inspecting topic '"+getTopicName(topic)+"'");
                         
-                        Collection<Topic> types = new ArrayList<Topic>(topic.getTypes());
+                        Collection<Topic> types = new ArrayList<>(topic.getTypes());
 
                         // Ok, if topic has types...
                         if(!types.isEmpty()) {

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 package org.wandora.query2;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -73,7 +74,7 @@ public class As extends Directive implements DirectiveUIHints.Provider  {
     }
 
     @Override
-    public ArrayList<ResultRow> query(QueryContext context,ResultRow input) throws QueryException {
+    public List<ResultRow> query(QueryContext context,ResultRow input) throws QueryException {
         ArrayList<String> roles=new ArrayList<String>(input.getRoles());
         ArrayList<Object> values=new ArrayList<Object>(input.getValues());
         int i;

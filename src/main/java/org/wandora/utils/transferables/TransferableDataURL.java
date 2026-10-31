@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,31 +32,33 @@ import java.nio.ByteBuffer;
 
 import org.wandora.utils.Base64;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class TransferableDataURL implements Transferable {
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TransferableDataURL.class);
 
     private DataURL transferableData = null;
 
-    
-    public TransferableDataURL( DataURL transferableData ) {
+
+    public TransferableDataURL(DataURL transferableData) {
         this.transferableData = transferableData;
     }
-    
+
 
     @Override
-    public Object getTransferData( DataFlavor flavor ) throws UnsupportedFlavorException, IOException {
-        if(transferableData != null) {
-            if(flavor.getMimeType().contains(transferableData.getMimetype())) {
+    public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+        if (transferableData != null) {
+            if (flavor.getMimeType().contains(transferableData.getMimetype())) {
                 return transferableData.getData();
             }
-            else if(flavor.equals( DataFlavor.stringFlavor )) {
+            else if (flavor.equals(DataFlavor.stringFlavor)) {
                 return transferableData.toExternalForm(Base64.DONT_BREAK_LINES);
             }
-            else if(flavor.isRepresentationClassByteBuffer()) {
+            else if (flavor.isRepresentationClassByteBuffer()) {
                 return ByteBuffer.wrap(transferableData.getData());
             }
             else {
@@ -64,35 +66,35 @@ public class TransferableDataURL implements Transferable {
                 return transferableData.toExternalForm(Base64.DONT_BREAK_LINES);
             }
         }
-        throw new UnsupportedFlavorException( flavor );
+        throw new UnsupportedFlavorException(flavor);
     }
 
-    
+
     @Override
     public DataFlavor[] getTransferDataFlavors() {
         DataFlavor[] flavors = null;
-        if(transferableData != null) {
+        if (transferableData != null) {
             try {
                 flavors = new DataFlavor[2];
                 flavors[0] = new DataURLFlavor(transferableData.getMimetype());
                 flavors[1] = DataFlavor.stringFlavor;
                 return flavors;
             }
-            catch(Exception e) {
-                e.printStackTrace();
+            catch (Exception e) {
+                logger.error(e);
             }
         }
-        
+
         flavors = new DataFlavor[0];
         return flavors;
     }
 
-    
+
     @Override
-    public boolean isDataFlavorSupported( DataFlavor flavor ) {
+    public boolean isDataFlavorSupported(DataFlavor flavor) {
         DataFlavor[] flavors = getTransferDataFlavors();
-        for( int i = 0; i < flavors.length; i++) {
-            if( flavor.equals( flavors[ i ] )) {
+        for (int i = 0; i < flavors.length; i++) {
+            if (flavor.equals(flavors[i])) {
                 return true;
             }
         }
@@ -100,24 +102,24 @@ public class TransferableDataURL implements Transferable {
         return false;
     }
 
-    
+
     // ------------------------------------------------------ DataURLFlavor ----
-    
-    
+
+
     public class DataURLFlavor extends DataFlavor {
         public DataURLFlavor(String mimeType) throws ClassNotFoundException {
             super(mimeType);
         }
 
-        
+
         @Override
-        public Class getRepresentationClass() {
+        public Class<?> getRepresentationClass() {
             try {
-                Class c = Class.forName("[B"); // byte array i.e. byte[]
+                Class<?> c = Class.forName("[B"); // byte array i.e. byte[]
                 return c;
             }
-            catch(Exception e) {
-                e.printStackTrace();
+            catch (Exception e) {
+                logger.error(e);
             }
             return null;
         }

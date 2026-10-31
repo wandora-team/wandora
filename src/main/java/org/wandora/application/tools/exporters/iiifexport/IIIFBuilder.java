@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,6 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public interface IIIFBuilder {
-    public Manifest buildIIIF(Wandora wandora, Context context,IIIFExport tool) throws TopicMapException;
+    public Manifest buildIIIF(Wandora wandora, Context<?> context,IIIFExport tool) throws TopicMapException;
     public String getBuilderName();
 }

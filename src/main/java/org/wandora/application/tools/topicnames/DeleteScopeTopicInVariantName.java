@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -40,6 +41,7 @@ import org.wandora.topicmap.Topic;
 public class DeleteScopeTopicInVariantName extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DeleteScopeTopicInVariantName.class);
 
 	private Topic t = null;
     private Set<Topic> scope = null;
@@ -64,7 +66,7 @@ public class DeleteScopeTopicInVariantName extends AbstractWandoraTool {
 
 
 
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             if(t != null && !t.isRemoved() && scopeTopic != null && !scopeTopic.isRemoved()) {
                 if(scope != null) {
@@ -80,7 +82,7 @@ public class DeleteScopeTopicInVariantName extends AbstractWandoraTool {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
 }

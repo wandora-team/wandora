@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ package org.wandora.application;
 
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -49,56 +50,58 @@ import org.wandora.utils.IObox;
  * @author akivela
  */
 public class WandoraHttpAuthorizer extends HttpAuthorizer {
-    
+
     Wandora admin = null;
-    
-    
+
+
     /**
-     * Creates a new instance of HttpAuthorizer
+     * Creates a new instance of WandoraHttpAuthorizer
      */
     public WandoraHttpAuthorizer(Wandora admin) {
         this.admin = admin;
     }
-    
+
+
     public WandoraHttpAuthorizer(Wandora admin, String storeResource) {
         super(storeResource);
         this.admin = admin;
     }
 
-        
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     @Override
     public URLConnection getAuthorizedAccess(URL url) throws Exception {
-        if(url.toExternalForm().startsWith("https://")) {
+        if (url.toExternalForm().startsWith("https://")) {
             IObox.disableHTTPSCertificateValidation();
             try {
-                url = new URL(url.toExternalForm());
+                url = new URI(url.toExternalForm()).toURL();
             }
             catch (MalformedURLException e) {
             }
         }
         // -------------------------------------
-        
+
         URLConnection uc = url.openConnection();
         Wandora.initUrlConnection(uc);
-        if(uc instanceof HttpURLConnection) {
-            int res = ((HttpURLConnection) uc).getResponseCode();
+        if (uc instanceof HttpURLConnection httpUc) {
+            int res = httpUc.getResponseCode();
             boolean tried = false;
-            while(res == HttpURLConnection.HTTP_UNAUTHORIZED) {
+            while (res == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 String authUser = quessAuthorizedUserFor(url);
                 String authPassword = quessAuthorizedPasswordFor(url);
-                
-                if("__IGNORE".equals(authUser) && "__IGNORE".equals(authPassword)) continue;
 
-                if(authUser == null || authPassword == null || tried == true) {
+                if ("__IGNORE".equals(authUser) && "__IGNORE".equals(authPassword))
+                    continue;
+
+                if (authUser == null || authPassword == null || tried == true) {
                     PasswordPrompt pp = new PasswordPrompt(admin, true);
                     pp.setTitle(uc.getURL().toExternalForm());
                     admin.centerWindow(pp);
                     pp.setVisible(true);
-                    if(!pp.wasCancelled()) {
+                    if (!pp.wasCancelled()) {
                         authUser = pp.getUsername();
                         authPassword = new String(pp.getPassword());
                         addAuthorization(url, authUser, authPassword);
@@ -108,14 +111,14 @@ public class WandoraHttpAuthorizer extends HttpAuthorizer {
                         continue;
                     }
                 }
-                
-                if(authUser != null && authPassword != null) {
+
+                if (authUser != null && authPassword != null) {
                     String userPassword = authUser + ":" + authPassword;
                     String encodedUserPassword = Base64.encodeBytes(userPassword.getBytes());
                     uc = (HttpURLConnection) uc.getURL().openConnection();
                     Wandora.initUrlConnection(uc);
                     uc.setUseCaches(false);
-                    uc.setRequestProperty ("Authorization", "Basic " + encodedUserPassword);
+                    uc.setRequestProperty("Authorization", "Basic " + encodedUserPassword);
                 }
                 tried = true;
                 res = ((HttpURLConnection) uc).getResponseCode();
@@ -123,7 +126,7 @@ public class WandoraHttpAuthorizer extends HttpAuthorizer {
         }
         return uc;
     }
-    
-    
-    
+
+
+
 }

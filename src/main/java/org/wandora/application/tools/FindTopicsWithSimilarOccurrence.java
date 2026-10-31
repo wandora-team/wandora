@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.search.SearchTopicsResults;
 import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
@@ -46,7 +45,7 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
  *
  * @author akivela
  */
-public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool implements WandoraTool {
+public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -63,11 +62,11 @@ public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool impleme
     public FindTopicsWithSimilarOccurrence() {
         stringMetric = new Levenshtein();
     }
-    public FindTopicsWithSimilarOccurrence(Context preferredContext) {
+    public FindTopicsWithSimilarOccurrence(Context<?> preferredContext) {
         stringMetric = new Levenshtein();
         this.setContext(preferredContext);
     }
-    public FindTopicsWithSimilarOccurrence(Context preferredContext, InterfaceStringMetric stringMetric, float threshold) {
+    public FindTopicsWithSimilarOccurrence(Context<?> preferredContext, InterfaceStringMetric stringMetric, float threshold) {
         this.setContext(preferredContext);
         this.stringMetric = stringMetric;
         this.similarityThreshold = threshold;
@@ -137,7 +136,7 @@ public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool impleme
     
     private void setMetricByClassName(String metric) throws Exception {
         if(metric != null){
-            Class metricClass = Class.forName(metric);
+            Class<?> metricClass = Class.forName(metric);
             if(metricClass != null) {
                 stringMetric = (InterfaceStringMetric) metricClass.getConstructor().newInstance();
             }
@@ -158,8 +157,8 @@ public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool impleme
     
 
     @Override
-    public void execute(Wandora wandora, Context context) {
-        Iterator topics = context.getContextObjects();
+    public void execute(Wandora wandora, Context<?> context) {
+        Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         String o1 = null;
         Topic o1Type = null;

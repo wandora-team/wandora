@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ package org.wandora.application.tools.subjects;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.TopicContext;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -49,7 +48,7 @@ import org.wandora.topicmap.Topic;
  */
 
 
-public class DeleteSubjectLocator extends AbstractWandoraTool implements WandoraTool {
+public class DeleteSubjectLocator extends AbstractWandoraTool {
 
 
     /**
@@ -61,7 +60,7 @@ public class DeleteSubjectLocator extends AbstractWandoraTool implements Wandora
 	public DeleteSubjectLocator() {
         setContext(new TopicContext());
     }
-    public DeleteSubjectLocator(Context preferredContext) {
+    public DeleteSubjectLocator(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -79,9 +78,9 @@ public class DeleteSubjectLocator extends AbstractWandoraTool implements Wandora
     
   
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora admin, Context<?> context) {   
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

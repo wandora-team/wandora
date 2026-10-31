@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -76,6 +76,7 @@ import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 
 /**
@@ -86,233 +87,215 @@ import org.wandora.utils.swing.anyselectiontable.TableSelectionModel;
 
 public class TopicGrid extends SimpleTable implements Clipboardable, MouseListener, ActionListener {
     private static final long serialVersionUID = 1L;
-    
-    
-	public static final int LEFT = 201;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicGrid.class);
+
+    public static final int LEFT = 201;
     public static final int UP = 202;
     public static final int RIGHT = 203;
     public static final int DOWN = 204;
-    
-    
-    
+
+
+
     private Wandora wandora;
     private MouseEvent mouseEvent;
     private int gridWidth = 0;
     private int gridHeight = 0;
-    Map<T2<Integer,Integer>, Topic> gridData;
+    Map<T2<Integer, Integer>, Topic> gridData;
 
-    
-    
+
+
     public TopicGrid(Wandora w) {
         wandora = w;
         gridData = new HashMap<>();
-        
+
         this.setDragEnabled(true);
         this.setTransferHandler(new TopicGridTransferHandler());
     }
-    
+
 
     public void initialize(int width, int height) {
         try {
             this.gridWidth = width;
             this.gridHeight = height;
-            
-            setDefaultRenderer(Topic.class, new TopicGridCellRenderer(this)); 
-            
+
+            setDefaultRenderer(Topic.class, new TopicGridCellRenderer(this));
+
             TopicGridModel model = new TopicGridModel(this);
             this.setModel(model);
 
             this.addMouseListener(this);
-            //gridPopup = UIBox.makePopupMenu(getPopupStruct(), this);
-            //this.setComponentPopupMenu(popup);
 
-            //final JPopupMenu rolePopup = UIBox.makePopupMenu(getRolePopupStruct(), wandora);
-            //this.getTableHeader().setComponentPopupMenu(rolePopup);
-            
             this.getTableHeader().setReorderingAllowed(false);
-            
+
             this.getTableHeader().addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mousePressed(java.awt.event.MouseEvent e) {
                     mouseClicked(e);
                 }
+
+
                 @Override
                 public void mouseReleased(java.awt.event.MouseEvent e) {
                     mouseClicked(e);
                 }
-                
+
+
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                     mouseEvent = e;
-                    /*
-                    int columnNumber = convertColumnIndexToModel(columnAtPoint(e.getPoint()));
-                    if(!e.isPopupTrigger()) {
-                        if(e.isShiftDown()) {
-                            deselectColumn(columnNumber);
-                        }
-                        else {
-                            selectColumn(columnNumber);
-                        }
-                    }
-                    */
-                    
-                    /*if(e.isPopupTrigger()) {
-                        Object o=getColumnAt(e.getX());
-                        if(o instanceof Topic){
-                            rolePopup.show(e.getComponent(),e.getX(),e.getY());
-                        }
-                        e.consume();
-                    }*/
                 }
             });
         }
-        catch(Exception e) {
+        catch (Exception e) {
             wandora.handleError(e);
         }
     }
-    
-    
+
+
     private Object[] getPopupStruct() {
         return new Object[] {
-            "Open in",
-            WandoraMenuManager.getOpenInMenu(),
-            "---",
-            "Cut",
-            "Copy",
-            "Paste",
-            "---",
-            "Select", WandoraMenuManager.getDefaultSelectMenuStruct(wandora, this),
-            "Selection info", new SelectionInfo(),
-            "---",
-            "Insert rows",
-            "Insert columns",
-            "Delete rows",
-            "Delete columns",
-            "---",
-            "Clear selected",
-            "Clear all",
-            "---",
-            "Rotate CV",
-            "Rotate CCV",
-            "Flip horizontal",
-            "Flip vertical",
-            "---",
-            "Sort rows",
-            "Sort columns",
-            "---",
-            "Expand",
-            new Object[] {
-                "Expand instances",
-                "Expand classes",
-                "Expand superclasses",
-                "Expand subclasses",
-                "Expand association types",
-                "Expand associated topics",
-                "Expand association roles",
-            },
-
-            //"---",
-            //"Add to topic", WandoraMenuManager.getDefaultAddToTopicMenuStruct(wandora, this),
-            //"Delete from topic", WandoraMenuManager.getDefaultDeleteFromTopicMenuStruct(wandora, this),
-            "---",
-            "Make associations",
-            new Object[] {
-                "Make class-instance chain",
-                "Make class-instances using tree layout",
+                "Open in",
+                WandoraMenuManager.getOpenInMenu(),
                 "---",
-                "Make associations using Wandora layout",
-                "Make associations using LTM layout",
-                "Make associations using RDF triplet layout",
-                "Make associations using player layout",
-            },
-            "Topics", WandoraMenuManager.getDefaultTopicMenuStruct(wandora, this),
-            "---",
-            "Import grid...",
-            "Merge grid...",
-            "Export grid...",
+                "Cut",
+                "Copy",
+                "Paste",
+                "---",
+                "Select", WandoraMenuManager.getDefaultSelectMenuStruct(wandora, this),
+                "Selection info", new SelectionInfo(),
+                "---",
+                "Insert rows",
+                "Insert columns",
+                "Delete rows",
+                "Delete columns",
+                "---",
+                "Clear selected",
+                "Clear all",
+                "---",
+                "Rotate CV",
+                "Rotate CCV",
+                "Flip horizontal",
+                "Flip vertical",
+                "---",
+                "Sort rows",
+                "Sort columns",
+                "---",
+                "Expand",
+                new Object[] {
+                        "Expand instances",
+                        "Expand classes",
+                        "Expand superclasses",
+                        "Expand subclasses",
+                        "Expand association types",
+                        "Expand associated topics",
+                        "Expand association roles",
+                },
+
+                //"---",
+                //"Add to topic", WandoraMenuManager.getDefaultAddToTopicMenuStruct(wandora, this),
+                //"Delete from topic", WandoraMenuManager.getDefaultDeleteFromTopicMenuStruct(wandora, this),
+                "---",
+                "Make associations",
+                new Object[] {
+                        "Make class-instance chain",
+                        "Make class-instances using tree layout",
+                        "---",
+                        "Make associations using Wandora layout",
+                        "Make associations using LTM layout",
+                        "Make associations using RDF triplet layout",
+                        "Make associations using player layout",
+                },
+                "Topics", WandoraMenuManager.getDefaultTopicMenuStruct(wandora, this),
+                "---",
+                "Import grid...",
+                "Merge grid...",
+                "Export grid...",
         };
     }
-    
-    
-    
-    
+
+
+
     public int getGridRowCount() {
         return gridHeight;
     }
-    
+
+
     public int getGridColumnCount() {
         return gridWidth;
     }
-    
+
+
     public void setCurrentTopic(Topic t) {
         List<int[]> cells = this.getSelectedCells();
-        for(int[] c : cells) {
+        for (int[] c : cells) {
             gridData.put(new T2<>(c[0], c[1]), t);
         }
     }
-    
+
+
     public void setTopicAt(Topic t, int column, int row) {
         gridData.put(new T2<>(row, column), t);
     }
-    
-    
-    
+
+
+
     public Topic[] getCurrentTopics() {
         List<int[]> cells = this.getSelectedCells();
         List<Topic> ts = new ArrayList<>();
         Topic t;
-        for(int[] c : cells) {
+        for (int[] c : cells) {
             t = gridData.get(new T2<>(c[0], c[1]));
-            if(t != null) {
+            if (t != null) {
                 ts.add(t);
             }
         }
         return ts.toArray(new Topic[] {});
     }
-    
-    
-    
+
+
 
     public void selectTopics(Topic[] topics) {
-        if(topics == null || topics.length == 0) return;
-        for(Topic t : topics) {
+        if (topics == null || topics.length == 0)
+            return;
+        for (Topic t : topics) {
             selectTopic(t);
         }
     }
-    
+
+
     public void selectTopic(Topic topic) {
         int c = this.getColumnCount();
         int r = this.getRowCount();
         Topic tableTopic = null;
-        for(int x=0; x<c; x++) {
-            for(int y=0; y<r; y++) {
+        for (int x = 0; x < c; x++) {
+            for (int y = 0; y < r; y++) {
                 tableTopic = this.getTopicAt(y, x);
                 try {
-                    if(tableTopic != null && !tableTopic.isRemoved()) {
-                        if(tableTopic.mergesWithTopic(topic)) {
+                    if (tableTopic != null && !tableTopic.isRemoved()) {
+                        if (tableTopic.mergesWithTopic(topic)) {
                             selectCell(x, y);
                         }
                     }
                 }
-                catch(Exception e) {
-                    e.printStackTrace();
+                catch (Exception e) {
+                    logger.error(e);
                 }
             }
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     private void moveSelection(int[] newOrigo) {
-        if(newOrigo != null) {
+        if (newOrigo != null) {
             List<int[]> selectedCells = getSelectedCells();
-            if(selectedCells != null && !selectedCells.isEmpty()) {
+            if (selectedCells != null && !selectedCells.isEmpty()) {
                 int[] oldOrigo = getOrigo(selectedCells);
                 clearSelection();
-                for(int[] c : selectedCells) {
+                for (int[] c : selectedCells) {
                     int n0 = c[0] - oldOrigo[0] + newOrigo[0];
                     int n1 = c[1] - oldOrigo[1] + newOrigo[1];
                     selectCell(n1, n0);
@@ -321,43 +304,41 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
         }
     }
 
-    
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     @Override
     public String getToolTipText(MouseEvent e) {
-        if(e != null) {
+        if (e != null) {
             Point p = getTablePoint(e);
             Topic t = getTopicAt(p);
-            if(t != null) {
+            if (t != null) {
                 String tooltipText = TopicToString.toString(t);
                 return Textbox.makeHTMLParagraph(tooltipText, 60);
             }
         }
         return null;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
 
     @Override
     public void cut() {
         copy();
         clearSelectedCells();
     }
-    
-    
-    
+
+
+
     private boolean autoCreateTopicsInPaste = false;
-    
-    
+
+
     @Override
     public void paste() {
         String tabText = ClipboardBox.getClipboard();
@@ -366,40 +347,44 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
         int orow = this.getSelectedRow();
         int row = orow;
         autoCreateTopicsInPaste = false;
-        while(tabLines.hasMoreTokens()) {
+        while (tabLines.hasMoreTokens()) {
             String tabLine = tabLines.nextToken();
             StringTokenizer topicIdentifiers = new StringTokenizer(tabLine, "\t");
             int col = ocol;
             try {
                 String topicIdentifier = null;
-                while(topicIdentifiers.hasMoreTokens()) {
+                while (topicIdentifiers.hasMoreTokens()) {
                     topicIdentifier = topicIdentifiers.nextToken();
-                    if(topicIdentifier != null && topicIdentifier.length() > 0) {
+                    if (topicIdentifier != null && topicIdentifier.length() > 0) {
                         Topic topic = getTopicForIdentifier(topicIdentifier);
-                        if(topic == null) {
+                        if (topic == null) {
                             boolean createTopicInPaste = false;
-                            if(!autoCreateTopicsInPaste) {
-                                int a = WandoraOptionPane.showConfirmDialog(wandora, "Can't find a topic for identifier '"+topicIdentifier+"'. Would you like to create a topic for '"+topicIdentifier+"'?", "Create new topic?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
-                                if(a == WandoraOptionPane.YES_OPTION) {
+                            if (!autoCreateTopicsInPaste) {
+                                int a = WandoraOptionPane.showConfirmDialog(wandora,
+                                        "Can't find a topic for identifier '" + topicIdentifier
+                                                + "'. Would you like to create a topic for '" + topicIdentifier + "'?",
+                                        "Create new topic?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
+                                if (a == WandoraOptionPane.YES_OPTION) {
                                     createTopicInPaste = true;
                                 }
-                                else if(a == WandoraOptionPane.YES_TO_ALL_OPTION) {
+                                else if (a == WandoraOptionPane.YES_TO_ALL_OPTION) {
                                     autoCreateTopicsInPaste = true;
                                 }
-                                else if(a == WandoraOptionPane.CANCEL_OPTION) {
+                                else if (a == WandoraOptionPane.CANCEL_OPTION) {
                                     return;
                                 }
                             }
-                            if(autoCreateTopicsInPaste || createTopicInPaste) {
+                            if (autoCreateTopicsInPaste || createTopicInPaste) {
                                 TopicMap tm = wandora.getTopicMap();
                                 boolean identifierIsURL = false;
                                 try {
-                                    URL u = new URL(topicIdentifier);
+                                    new URI(topicIdentifier).toURL();
                                     identifierIsURL = true;
                                 }
-                                catch(Exception e) {}
+                                catch (Exception e) {
+                                }
                                 topic = tm.createTopic();
-                                if(identifierIsURL) {
+                                if (identifierIsURL) {
                                     topic.addSubjectIdentifier(new Locator(topicIdentifier));
                                 }
                                 else {
@@ -408,86 +393,83 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                                 }
                             }
                         }
-                        if(topic != null) {
+                        if (topic != null) {
                             _setTopicAt(topic, row, col);
                         }
                     }
                     col++;
                 }
             }
-            catch(Exception e) {
-                
+            catch (Exception e) {
+
             }
             row++;
         }
     }
-    
-    
+
+
     @Override
     public void copy() {
         ClipboardBox.setClipboard(getCopyString());
     }
-    
-    
+
+
     public void clearSelectedCells() {
         List<int[]> cells = getSelectedCells();
-        for(int[] c : cells) {
+        for (int[] c : cells) {
             _setTopicAt(null, c[0], c[1]);
         }
     }
-    
-    
+
+
     public void clearAllCells() {
         gridData.clear();
     }
-    
-    
-    
-    
-    
-    
+
+
+
     protected Topic getTopicForIdentifier(String id) {
         TopicMap tm = wandora.getTopicMap();
         Topic t = null;
         try {
             t = tm.getTopicWithBaseName(id);
-            if(t == null) {
+            if (t == null) {
                 t = tm.getTopic(id);
-                if(t == null) {
+                if (t == null) {
                     t = tm.getTopicBySubjectLocator(new Locator(id));
                 }
             }
         }
-        catch(Exception e) {
-            
+        catch (Exception e) {
+
         }
         return t;
     }
-    
-    
-    
-    
+
+
+
     public String getCopyString() {
         StringBuilder copyString = new StringBuilder("");
         try {
             Object[][] selectedValues = getSelectedValues();
-            if(selectedValues.length > 0) {
-                for(int col=0; col<selectedValues.length; col++) {
+            if (selectedValues.length > 0) {
+                for (int col = 0; col < selectedValues.length; col++) {
                     boolean rowHasContent = false;
                     StringBuilder rawString = new StringBuilder("");
-                    for(int row=0; row<selectedValues[col].length; row++) {
-                        if(selectedValues[col][row] != null) {
+                    for (int row = 0; row < selectedValues[col].length; row++) {
+                        if (selectedValues[col][row] != null) {
                             rawString.append(TopicToString.toString((Topic) selectedValues[col][row]));
                             rowHasContent = true;
                         }
-                        if(row+1<selectedValues[col].length) {
+                        if (row + 1 < selectedValues[col].length) {
                             rawString.append("\t");
                         }
                     }
-                    if(rowHasContent) {
+                    if (rowHasContent) {
                         copyString.append(rawString);
                         copyString.append("\n");
-                    };
+                    }
+                    ;
                 }
             }
             else {
@@ -495,217 +477,217 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 Topic t = getTopicAt(loc);
                 copyString.append(TopicToString.toString(t));
             }
-        } 
-        catch(Exception tme){
+        }
+        catch (Exception tme) {
             wandora.handleError(tme);
         }
         return copyString.toString();
     }
-    
-    
-    
-    
-    
+
+
+
     public void insertRows() {
         List<int[]> cells = getSelectedCells();
         Map<Integer, List<Integer>> rowsByColumn = new LinkedHashMap<>();
-        for(int[] c : cells) {
+        for (int[] c : cells) {
             Integer column = c[1];
             Integer row = c[0];
             List<Integer> columnRows = rowsByColumn.get(column);
-            if(columnRows == null) {
+            if (columnRows == null) {
                 columnRows = new ArrayList<>();
             }
             columnRows.add(row);
             rowsByColumn.put(column, columnRows);
         }
 
-        for(Integer column : rowsByColumn.keySet()) {
+        for (Integer column : rowsByColumn.keySet()) {
             List<Integer> rows = rowsByColumn.get(column);
             Collections.sort(rows);
-            for(Integer row : rows) {
-                Map<T2<Integer,Integer>, Topic> subData = new LinkedHashMap<>();   
-                for(T2<Integer,Integer> coords : gridData.keySet()) {
-                    if(column.equals(coords.e2)) {
-                        if(row <= coords.e1) {
+            for (Integer row : rows) {
+                Map<T2<Integer, Integer>, Topic> subData = new LinkedHashMap<>();
+                for (T2<Integer, Integer> coords : gridData.keySet()) {
+                    if (column.equals(coords.e2)) {
+                        if (row <= coords.e1) {
                             subData.put(coords, gridData.get(coords));
                         }
                     }
                 }
-                for(T2<Integer,Integer> coords : subData.keySet()) {
+                for (T2<Integer, Integer> coords : subData.keySet()) {
                     gridData.remove(coords);
                 }
-                for(T2<Integer,Integer> coords : subData.keySet()) {
-                    gridData.put(new T2<>(coords.e1+1, coords.e2), subData.get(coords));
+                for (T2<Integer, Integer> coords : subData.keySet()) {
+                    gridData.put(new T2<>(coords.e1 + 1, coords.e2), subData.get(coords));
                 }
             }
         }
-        
+
         int numberOfNewRows = 0;
-        for(Integer column : rowsByColumn.keySet()) {
+        for (Integer column : rowsByColumn.keySet()) {
             List<Integer> rows = rowsByColumn.get(column);
-            if(rows.size() > numberOfNewRows) {
+            if (rows.size() > numberOfNewRows) {
                 numberOfNewRows = rows.size();
             }
         }
         gridHeight += numberOfNewRows;
     }
-    
-    
 
-    
-    
-    
+
+
     public void deleteRows() {
         List<int[]> cells = getSelectedCells();
         Map<Integer, List<Integer>> rowsByColumn = new LinkedHashMap<>();
-        for(int[] c : cells) {
+        for (int[] c : cells) {
             Integer column = c[1];
             Integer row = c[0];
             List<Integer> columnRows = rowsByColumn.get(column);
-            if(columnRows == null) {
+            if (columnRows == null) {
                 columnRows = new ArrayList<>();
             }
             columnRows.add(row);
             rowsByColumn.put(column, columnRows);
         }
 
-        for(Integer column : rowsByColumn.keySet()) {
+        for (Integer column : rowsByColumn.keySet()) {
             List<Integer> rows = rowsByColumn.get(column);
             Collections.sort(rows);
             Collections.reverse(rows);
-            for(Integer row : rows) {
-                Map<T2<Integer,Integer>, Topic> subData = new LinkedHashMap<>();   
-                for(T2<Integer,Integer> coords : gridData.keySet()) {
-                    if(column.equals(coords.e2)) {
-                        if(row < coords.e1) {
+            for (Integer row : rows) {
+                Map<T2<Integer, Integer>, Topic> subData = new LinkedHashMap<>();
+                for (T2<Integer, Integer> coords : gridData.keySet()) {
+                    if (column.equals(coords.e2)) {
+                        if (row < coords.e1) {
                             subData.put(coords, gridData.get(coords));
                         }
                     }
                 }
-                if(subData.isEmpty()) {
+                if (subData.isEmpty()) {
                     gridData.remove(new T2<>(row, column));
                 }
                 else {
-                    for(T2<Integer,Integer> coords : subData.keySet()) {
+                    for (T2<Integer, Integer> coords : subData.keySet()) {
                         gridData.remove(coords);
                     }
-                    for(T2<Integer,Integer> coords : subData.keySet()) {
-                        gridData.put(new T2<>(coords.e1-1, coords.e2), subData.get(coords));
+                    for (T2<Integer, Integer> coords : subData.keySet()) {
+                        gridData.put(new T2<>(coords.e1 - 1, coords.e2), subData.get(coords));
                     }
                 }
             }
         }
     }
-    
-    
-    
+
+
+
     public void insertColumns() {
         List<int[]> cells = getSelectedCells();
         Map<Integer, List<Integer>> columnsByRow = new LinkedHashMap<>();
-        for(int[] c : cells) {
+        for (int[] c : cells) {
             Integer column = c[1];
             Integer row = c[0];
             List<Integer> rowColumns = columnsByRow.get(row);
-            if(rowColumns == null) {
+            if (rowColumns == null) {
                 rowColumns = new ArrayList<>();
             }
             rowColumns.add(column);
             columnsByRow.put(row, rowColumns);
         }
 
-        for(Integer row : columnsByRow.keySet()) {
+        for (Integer row : columnsByRow.keySet()) {
             List<Integer> columns = columnsByRow.get(row);
             Collections.sort(columns);
-            for(Integer column : columns) {
-                Map<T2<Integer,Integer>, Topic> subData = new LinkedHashMap<>();   
-                for(T2<Integer,Integer> coords : gridData.keySet()) {
-                    if(row.equals(coords.e1)) {
-                        if(column <= coords.e2) {
+            for (Integer column : columns) {
+                Map<T2<Integer, Integer>, Topic> subData = new LinkedHashMap<>();
+                for (T2<Integer, Integer> coords : gridData.keySet()) {
+                    if (row.equals(coords.e1)) {
+                        if (column <= coords.e2) {
                             subData.put(coords, gridData.get(coords));
                         }
                     }
                 }
-                for(T2<Integer,Integer> coords : subData.keySet()) {
+                for (T2<Integer, Integer> coords : subData.keySet()) {
                     gridData.remove(coords);
                 }
-                for(T2<Integer,Integer> coords : subData.keySet()) {
-                    gridData.put(new T2<>(coords.e1, coords.e2+1), subData.get(coords));
+                for (T2<Integer, Integer> coords : subData.keySet()) {
+                    gridData.put(new T2<>(coords.e1, coords.e2 + 1), subData.get(coords));
                 }
             }
         }
-        
+
         int numberOfNewColumns = 0;
-        for(Integer row : columnsByRow.keySet()) {
+        for (Integer row : columnsByRow.keySet()) {
             List<Integer> columns = columnsByRow.get(row);
-            if(columns.size() > numberOfNewColumns) {
+            if (columns.size() > numberOfNewColumns) {
                 numberOfNewColumns = columns.size();
             }
         }
         gridWidth += numberOfNewColumns;
     }
-    
-    
-    
+
+
+
     public void deleteColumns() {
         List<int[]> cells = getSelectedCells();
         Map<Integer, List<Integer>> columnsByRow = new LinkedHashMap<>();
-        for(int[] c : cells) {
+        for (int[] c : cells) {
             Integer column = c[1];
             Integer row = c[0];
             List<Integer> rowColumns = columnsByRow.get(row);
-            if(rowColumns == null) {
+            if (rowColumns == null) {
                 rowColumns = new ArrayList<>();
             }
             rowColumns.add(column);
             columnsByRow.put(row, rowColumns);
         }
-        for(Integer row : columnsByRow.keySet()) {
+        for (Integer row : columnsByRow.keySet()) {
             List<Integer> columns = columnsByRow.get(row);
             Collections.sort(columns);
             Collections.reverse(columns);
-            for(Integer column : columns) {
-                Map<T2<Integer,Integer>, Topic> subData = new LinkedHashMap<>();   
-                for(T2<Integer,Integer> coords : gridData.keySet()) {
-                    if(row.equals(coords.e1)) {
-                        if(column < coords.e2) {
+            for (Integer column : columns) {
+                Map<T2<Integer, Integer>, Topic> subData = new LinkedHashMap<>();
+                for (T2<Integer, Integer> coords : gridData.keySet()) {
+                    if (row.equals(coords.e1)) {
+                        if (column < coords.e2) {
                             subData.put(coords, gridData.get(coords));
                         }
                     }
                 }
-                if(subData.isEmpty()) {
+                if (subData.isEmpty()) {
                     gridData.remove(new T2<>(row, column));
                 }
                 else {
-                    for(T2<Integer,Integer> coords : subData.keySet()) {
+                    for (T2<Integer, Integer> coords : subData.keySet()) {
                         gridData.remove(coords);
                     }
-                    for(T2<Integer,Integer> coords : subData.keySet()) {
-                        gridData.put(new T2<>(coords.e1, coords.e2-1), subData.get(coords));
+                    for (T2<Integer, Integer> coords : subData.keySet()) {
+                        gridData.put(new T2<>(coords.e1, coords.e2 - 1), subData.get(coords));
                     }
                 }
             }
         }
     }
-    
-    
-    
-    // -------------------------------------------------------------------------
-    
-    
 
-    
+
+
+    // -------------------------------------------------------------------------
+
+
+
     public Point getTablePoint() {
         return getTablePoint(mouseEvent);
     }
+
+
     public Point getTablePoint(java.awt.event.MouseEvent e) {
-        if(e == null) return null;
-        else return getTablePoint(e.getPoint());
+        if (e == null)
+            return null;
+        else
+            return getTablePoint(e.getPoint());
     }
+
+
     public Point getTablePoint(Point screenPoint) {
         try {
-            int y=rowAtPoint(screenPoint);
-            int x=columnAtPoint(screenPoint);
+            int y = rowAtPoint(screenPoint);
+            int x = columnAtPoint(screenPoint);
             return new Point(x, y);
         }
         catch (Exception ex) {
@@ -713,283 +695,293 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
             return null;
         }
     }
-    
-    
+
+
     public int[] getSelectionOrigo() {
         return getOrigo(getSelectedCells());
     }
 
-    
-    
+
+
     private int[] getOrigo(List<int[]> cells) {
         int[] o = null;
-        if(cells != null && !cells.isEmpty()) {
-            for(int[] c : cells) {
-                if(o == null) o = c;
+        if (cells != null && !cells.isEmpty()) {
+            for (int[] c : cells) {
+                if (o == null)
+                    o = c;
                 else {
                     try {
-                        if(c[0] < o[0]) o = c;
-                        else if(c[1] < o[1]) o = c;
+                        if (c[0] < o[0])
+                            o = c;
+                        else if (c[1] < o[1])
+                            o = c;
                     }
-                    catch(Exception e) {
-                        e.printStackTrace();
+                    catch (Exception e) {
+                        logger.error(e);
                     }
                 }
             }
         }
         return o;
     }
-    
-    
-    
+
+
+
     public List<int[]> getSelectedCells() {
         List<int[]> selected = new ArrayList<>();
-        
+
         TableSelectionModel selection = getTableSelectionModel();
         int colCount = this.getColumnCount();
         int rowCount = this.getRowCount();
-        //System.out.println("----");
-        for(int c=0; c<colCount; c++) {
+        for (int c = 0; c < colCount; c++) {
             int cc = convertColumnIndexToModel(c);
             ListSelectionModel columnSelectionModel = selection.getListSelectionModelAt(cc);
-            if(columnSelectionModel != null && !columnSelectionModel.isSelectionEmpty()) {
-                for(int r=0; r<rowCount; r++) {
-                    if(columnSelectionModel.isSelectedIndex(r)) {
-                        selected.add( new int[] { r, c } );
-                        //System.out.println("found cell "+cc+","+r);
+            if (columnSelectionModel != null && !columnSelectionModel.isSelectionEmpty()) {
+                for (int r = 0; r < rowCount; r++) {
+                    if (columnSelectionModel.isSelectedIndex(r)) {
+                        selected.add(new int[] { r, c });
                     }
                 }
             }
         }
         return selected;
     }
-    
-    
-    
+
+
+
     public Object[][] getSelectedValues() {
         List<int[]> selectedCells = getSelectedCells();
         int rlen = 0;
         int clen = 0;
-        for(int[] cell : selectedCells) {
-            if(clen < cell[0]) clen = cell[0];
-            if(rlen < cell[1]) rlen = cell[1];
+        for (int[] cell : selectedCells) {
+            if (clen < cell[0])
+                clen = cell[0];
+            if (rlen < cell[1])
+                rlen = cell[1];
         }
-        Object[][] selectedValues = new Object[clen+1][rlen+1];
-        for(int[] cell : selectedCells) {
-            selectedValues[cell[0]][cell[1]] = getValueAt( cell[0], cell[1] );
+        Object[][] selectedValues = new Object[clen + 1][rlen + 1];
+        for (int[] cell : selectedCells) {
+            selectedValues[cell[0]][cell[1]] = getValueAt(cell[0], cell[1]);
         }
         return selectedValues;
     }
-    
-    
-    
+
+
+
     public Topic[][] getSelectedTopicsNormalized() {
         List<int[]> selectedCells = getSelectedCells();
         int ymax = 0;
         int xmax = 0;
         int ymin = Integer.MAX_VALUE;
         int xmin = Integer.MAX_VALUE;
-        for(int[] cell : selectedCells) {
-            if(xmax < cell[0]) xmax = cell[0];
-            if(ymax < cell[1]) ymax = cell[1];
-            if(xmin > cell[0]) xmin = cell[0];
-            if(ymin > cell[1]) ymin = cell[1];
+        for (int[] cell : selectedCells) {
+            if (xmax < cell[0])
+                xmax = cell[0];
+            if (ymax < cell[1])
+                ymax = cell[1];
+            if (xmin > cell[0])
+                xmin = cell[0];
+            if (ymin > cell[1])
+                ymin = cell[1];
         }
-        Topic[][] selectedValues = new Topic[xmax-xmin+1][ymax-ymin+1];
-        for(int[] cell : selectedCells) {
-            selectedValues[cell[0]-xmin][cell[1]-ymin] = getTopicAt( cell[0], cell[1] );
+        Topic[][] selectedValues = new Topic[xmax - xmin + 1][ymax - ymin + 1];
+        for (int[] cell : selectedCells) {
+            selectedValues[cell[0] - xmin][cell[1] - ymin] = getTopicAt(cell[0], cell[1]);
         }
         return selectedValues;
     }
-    
-    
-    
-    
+
+
+
     public Topic[] getSelectedTopics() {
         List<Topic> topics = new ArrayList<>();
         List<int[]> selectedCells = getSelectedCells();
-        for(int[] cell : selectedCells) {
-            topics.add( getTopicAt(cell[0], cell[1]) );
+        for (int[] cell : selectedCells) {
+            topics.add(getTopicAt(cell[0], cell[1]));
         }
-        if(topics.isEmpty()) {
+        if (topics.isEmpty()) {
             Point loc = getTablePoint();
             Topic t = getTopicAt(loc);
-            if(t != null) {
-                topics.add( t );
+            if (t != null) {
+                topics.add(t);
             }
         }
-        return topics.toArray( new Topic[] {} );
+        return topics.toArray(new Topic[] {});
     }
-    
-    
-    
-    
 
-    
-     public Object getValueAt(MouseEvent e) {
+
+
+    public Object getValueAt(MouseEvent e) {
         return getValueAt(getTablePoint(e));
     }
-     public Object getValueAt(Point p) {
+
+
+    public Object getValueAt(Point p) {
         return getValueAt(p.y, p.x);
     }
+
+
     @Override
     public Object getValueAt(int y, int x) {
         try {
-            if(x >= 0 && x < getModel().getColumnCount() && y >= 0 && y < getModel().getRowCount()) {
+            if (x >= 0 && x < getModel().getColumnCount() && y >= 0 && y < getModel().getRowCount()) {
                 int cx = convertColumnIndexToModel(x);
                 int cy = convertRowIndexToModel(y);
                 return getModel().getValueAt(cy, cx);
             }
         }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception e) {
+            logger.error(e);
+        }
         return null;
     }
-    
+
+
     public Object getColumnAt(int x) {
         return ((TopicGridModel) getModel()).getColumnObjectAt(x);
     }
-    
-    
+
+
     public Topic getTopicAt(MouseEvent e) {
-        if(e == null) return null;
+        if (e == null)
+            return null;
         return getTopicAt(getTablePoint(e));
     }
+
+
     public Topic getTopicAt(Point point) {
-        if(point == null) return null;
+        if (point == null)
+            return null;
         return getTopicAt(point.y, point.x);
     }
+
+
     public Topic getTopicAt(int y, int x) {
         Object object = getValueAt(y, x);
-        if(object instanceof Topic) {
+        if (object instanceof Topic) {
             return (Topic) object;
         }
-        if(object instanceof TopicGuiWrapper) {
+        if (object instanceof TopicGuiWrapper) {
             TopicGuiWrapper wrapper = (TopicGuiWrapper) object;
-            if(wrapper != null) return wrapper.topic;
+            if (wrapper != null)
+                return wrapper.topic;
         }
         return null;
     }
-    
-    
 
-    
-    
+
+
     public Topic _getTopicAt(int col, int row) {
         return gridData.get(new T2<>(col, row));
     }
-    
+
+
     public void _setTopicAt(Topic t, int col, int row) {
-        if(t != null) {
+        if (t != null) {
             gridData.put(new T2<>(col, row), t);
         }
         else {
             gridData.remove(new T2<>(col, row));
         }
     }
-    
-    
-    
-      
+
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent e) {
         this.mouseEvent = e;
-        if(e != null) {
-            if(e.isPopupTrigger()) {
+        if (e != null) {
+            if (e.isPopupTrigger()) {
                 JPopupMenu pm = UIBox.makePopupMenu(getPopupStruct(), this);
                 pm.show(e.getComponent(), e.getX(), e.getY());
                 e.consume();
             }
         }
     }
-    
-    
-    
-    
+
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
 
     }
-    
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
-    
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
         mouseClicked(e);
     }
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent e) {
         mouseClicked(e);
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
-    
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e == null) return;
+        if (e == null)
+            return;
         boolean shouldRepaint = false;
         boolean shouldUpdateEverything = false;
         String c = e.getActionCommand();
-        if(c != null) {
+        if (c != null) {
             c = c.toLowerCase();
-            if("cut".equals(c)) {
+            if ("cut".equals(c)) {
                 cut();
                 shouldRepaint = true;
             }
-            else if("copy".equals(c)) {
+            else if ("copy".equals(c)) {
                 copy();
             }
-            else if("paste".equals(c)) {
+            else if ("paste".equals(c)) {
                 paste();
                 shouldRepaint = true;
             }
-            else if("clear selected".equals(c)) {
+            else if ("clear selected".equals(c)) {
                 clearSelectedCells();
                 shouldRepaint = true;
             }
-            else if("clear all".equals(c)) {
+            else if ("clear all".equals(c)) {
                 clearAllCells();
                 shouldRepaint = true;
             }
-            else if("insert rows".equals(c)) {
+            else if ("insert rows".equals(c)) {
                 insertRows();
                 shouldRepaint = true;
             }
-            else if("delete rows".equals(c)) {
+            else if ("delete rows".equals(c)) {
                 deleteRows();
                 shouldRepaint = true;
             }
-            else if("insert columns".equals(c)) {
+            else if ("insert columns".equals(c)) {
                 insertColumns();
                 shouldRepaint = true;
             }
-            else if("delete columns".equals(c)) {
+            else if ("delete columns".equals(c)) {
                 deleteColumns();
                 shouldRepaint = true;
             }
-            
-            
+
+
             // ***** EXPAND *****
-            
-            else if("expand instances".equals(c)) {
-                if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0 && (e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
+
+            else if ("expand instances".equals(c)) {
+                if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0
+                        && (e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
                     expandInstances(LEFT);
                 }
-                else if((e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
+                else if ((e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
                     expandInstances(RIGHT);
                 }
-                else if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
+                else if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
                     expandInstances(UP);
                 }
                 else {
@@ -997,14 +989,15 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 }
                 shouldRepaint = true;
             }
-            else if("expand classes".equals(c)) {
-                if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0 && (e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
+            else if ("expand classes".equals(c)) {
+                if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0
+                        && (e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
                     expandClasses(LEFT);
                 }
-                else if((e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
+                else if ((e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
                     expandClasses(RIGHT);
                 }
-                else if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
+                else if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
                     expandClasses(UP);
                 }
                 else {
@@ -1012,14 +1005,15 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 }
                 shouldRepaint = true;
             }
-            else if("expand superclasses".equals(c)) {
-                if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0 && (e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
+            else if ("expand superclasses".equals(c)) {
+                if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0
+                        && (e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
                     expandSuperclasses(LEFT);
                 }
-                else if((e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
+                else if ((e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
                     expandSuperclasses(RIGHT);
                 }
-                else if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
+                else if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
                     expandSuperclasses(UP);
                 }
                 else {
@@ -1027,14 +1021,15 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 }
                 shouldRepaint = true;
             }
-            else if("expand subclasses".equals(c)) {
-                if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0 && (e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
+            else if ("expand subclasses".equals(c)) {
+                if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0
+                        && (e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
                     expandSubclasses(LEFT);
                 }
-                else if((e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
+                else if ((e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
                     expandSubclasses(RIGHT);
                 }
-                else if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
+                else if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
                     expandSubclasses(UP);
                 }
                 else {
@@ -1042,14 +1037,15 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 }
                 shouldRepaint = true;
             }
-            else if("expand association types".equals(c)) {
-                if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0 && (e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
+            else if ("expand association types".equals(c)) {
+                if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0
+                        && (e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
                     expandAssociationTypes(LEFT);
                 }
-                else if((e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
+                else if ((e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
                     expandAssociationTypes(RIGHT);
                 }
-                else if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
+                else if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
                     expandAssociationTypes(UP);
                 }
                 else {
@@ -1057,14 +1053,15 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 }
                 shouldRepaint = true;
             }
-            else if("expand associated topics".equals(c)) {
-                if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0 && (e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
+            else if ("expand associated topics".equals(c)) {
+                if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0
+                        && (e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
                     expandAssociatedTopics(LEFT);
                 }
-                else if((e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
+                else if ((e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
                     expandAssociatedTopics(RIGHT);
                 }
-                else if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
+                else if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
                     expandAssociatedTopics(UP);
                 }
                 else {
@@ -1072,14 +1069,15 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 }
                 shouldRepaint = true;
             }
-            else if("expand association roles".equals(c)) {
-                if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0 && (e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
+            else if ("expand association roles".equals(c)) {
+                if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0
+                        && (e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
                     expandAssociationRoles(LEFT);
                 }
-                else if((e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
+                else if ((e.getModifiers() & ActionEvent.ALT_MASK) != 0) {
                     expandAssociationRoles(RIGHT);
                 }
-                else if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
+                else if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
                     expandAssociationRoles(UP);
                 }
                 else {
@@ -1087,12 +1085,12 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 }
                 shouldRepaint = true;
             }
-            
+
             // ***** MAKE ASSOCIATIONS *****
-            
-            
-            else if("make class-instance chain".equals(c)) {
-                if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
+
+
+            else if ("make class-instance chain".equals(c)) {
+                if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
                     makeClassInstanceChains(rotateCV(getSelectedTopicsNormalized()));
                 }
                 else {
@@ -1100,9 +1098,9 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 }
                 shouldUpdateEverything = true;
             }
-            
-            else if("make class-instances using tree layout".equals(c)) {
-                if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
+
+            else if ("make class-instances using tree layout".equals(c)) {
+                if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
                     makeClassInstancesUsingTreeLayout(rotateCV(getSelectedTopicsNormalized()));
                 }
                 else {
@@ -1111,8 +1109,8 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 shouldUpdateEverything = true;
             }
 
-            else if("make associations using wandora layout".equals(c)) {
-                if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
+            else if ("make associations using wandora layout".equals(c)) {
+                if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
                     makeAssociationsUsingWandoraLayout(flipVertical(rotateCV(getSelectedTopicsNormalized())));
                 }
                 else {
@@ -1120,8 +1118,8 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 }
                 shouldUpdateEverything = true;
             }
-            else if("make associations using ltm layout".equals(c)) {
-                if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
+            else if ("make associations using ltm layout".equals(c)) {
+                if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
                     makeAssociationsUsingLTMLayout(rotateCV(getSelectedTopicsNormalized()));
                 }
                 else {
@@ -1129,8 +1127,8 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 }
                 shouldUpdateEverything = true;
             }
-            else if("make associations using rdf triplet layout".equals(c)) {
-                if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
+            else if ("make associations using rdf triplet layout".equals(c)) {
+                if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
                     makeAssociationsUsingRDFLayout(rotateCV(getSelectedTopicsNormalized()));
                 }
                 else {
@@ -1138,8 +1136,8 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                 }
                 shouldUpdateEverything = true;
             }
-            else if("make associations using player layout".equals(c)) {
-                if((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
+            else if ("make associations using player layout".equals(c)) {
+                if ((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0) {
                     makeAssociationsUsingPlayerLayout(rotateCV(getSelectedTopicsNormalized()));
                 }
                 else {
@@ -1149,259 +1147,260 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
             }
 
             // ****** ROTATE AND FLIP TOPICS *****
-            
-            else if("flip vertical".equals(c)) {
+
+            else if ("flip vertical".equals(c)) {
                 Topic[][] selection = getSelectedTopicsNormalized();
                 int[] origo = getSelectionOrigo();
                 clearSelectedCells();
                 pasteAt(origo, flipVertical(selection));
                 shouldRepaint = true;
             }
-            else if("flip horizontal".equals(c)) {
+            else if ("flip horizontal".equals(c)) {
                 Topic[][] selection = getSelectedTopicsNormalized();
                 int[] origo = getSelectionOrigo();
                 clearSelectedCells();
                 pasteAt(origo, flipHorizontal(selection));
                 shouldRepaint = true;
             }
-            else if("rotate cv".equals(c)) {
+            else if ("rotate cv".equals(c)) {
                 Topic[][] selection = getSelectedTopicsNormalized();
                 int[] origo = getSelectionOrigo();
                 clearSelectedCells();
                 pasteAt(origo, rotateCV(selection));
                 shouldRepaint = true;
             }
-            else if("rotate ccv".equals(c)) {
+            else if ("rotate ccv".equals(c)) {
                 Topic[][] selection = getSelectedTopicsNormalized();
                 int[] origo = getSelectionOrigo();
                 clearSelectedCells();
                 pasteAt(origo, rotateCCV(selection));
                 shouldRepaint = true;
             }
-            else if("sort rows".equals(c)) {
+            else if ("sort rows".equals(c)) {
                 Topic[][] selection = getSelectedTopicsNormalized();
                 int[] origo = getSelectionOrigo();
                 pasteAt(origo, sortRows(selection));
                 shouldRepaint = true;
             }
-            
-            
+
+
             // ****** EXPORT AND IMPORT *****
-            
-            else if("export grid...".equals(c)) {
+
+            else if ("export grid...".equals(c)) {
                 save();
                 shouldRepaint = true;
             }
-            else if("import grid...".equals(c)) {
+            else if ("import grid...".equals(c)) {
                 load();
                 shouldRepaint = true;
             }
-            else if("merge grid...".equals(c)) {
+            else if ("merge grid...".equals(c)) {
                 merge();
                 shouldRepaint = true;
             }
         }
         wandora.addUndoMarker();
-        if(shouldUpdateEverything) {
+        if (shouldUpdateEverything) {
             wandora.doRefresh();
         }
-        else if(shouldRepaint) {
+        else if (shouldRepaint) {
             repaint();
         }
     }
-    
-    
-    
+
+
+
     public void expandInstances(int direction) {
         TopicMap tm = wandora.getTopicMap();
         List<int[]> selectedCells = getSelectedCells();
-        if(selectedCells != null && !selectedCells.isEmpty()) {
-            for(int[] cell : selectedCells) {
+        if (selectedCells != null && !selectedCells.isEmpty()) {
+            for (int[] cell : selectedCells) {
                 try {
                     Topic t = getTopicAt(cell[0], cell[1]);
-                    if(t != null) {
+                    if (t != null) {
                         Collection<Topic> instances = tm.getTopicsOfType(t);
                         paste(instances, cell[1], cell[0], direction);
                     }
                 }
-                catch(Exception e) {
+                catch (Exception e) {
 
                 }
             }
         }
     }
-    
-    
+
+
     public void expandClasses(int direction) {
         List<int[]> selectedCells = getSelectedCells();
-        if(selectedCells != null && !selectedCells.isEmpty()) {
-            for(int[] cell : selectedCells) {
+        if (selectedCells != null && !selectedCells.isEmpty()) {
+            for (int[] cell : selectedCells) {
                 try {
                     Topic t = getTopicAt(cell[0], cell[1]);
-                    if(t != null) {
+                    if (t != null) {
                         Collection<Topic> classes = t.getTypes();
                         paste(classes, cell[1], cell[0], direction);
                     }
                 }
-                catch(Exception e) {
+                catch (Exception e) {
 
                 }
             }
         }
     }
-    
-    
+
+
     public void expandAssociationTypes(int direction) {
         List<int[]> selectedCells = getSelectedCells();
-        if(selectedCells != null && !selectedCells.isEmpty()) {
-            for(int[] cell : selectedCells) {
+        if (selectedCells != null && !selectedCells.isEmpty()) {
+            for (int[] cell : selectedCells) {
                 try {
                     Topic t = getTopicAt(cell[0], cell[1]);
-                    if(t != null) {
+                    if (t != null) {
                         Collection<Topic> associationTypes = new LinkedHashSet<>();
                         Collection<Association> associations = t.getAssociations();
-                        for(Association a : associations) {
+                        for (Association a : associations) {
                             associationTypes.add(a.getType());
                         }
                         paste(associationTypes, cell[1], cell[0], direction);
                     }
                 }
-                catch(Exception e) {
+                catch (Exception e) {
 
                 }
             }
         }
     }
-    
-    
+
+
     public void expandAssociationRoles(int direction) {
         List<int[]> selectedCells = getSelectedCells();
-        if(selectedCells != null && !selectedCells.isEmpty()) {
-            for(int[] cell : selectedCells) {
+        if (selectedCells != null && !selectedCells.isEmpty()) {
+            for (int[] cell : selectedCells) {
                 try {
                     Topic t = getTopicAt(cell[0], cell[1]);
-                    if(t != null) {
+                    if (t != null) {
                         Collection<Topic> associationRoles = new LinkedHashSet<>();
                         Collection<Association> associations = t.getAssociations();
-                        for(Association a : associations) {
+                        for (Association a : associations) {
                             Collection<Topic> roles = a.getRoles();
-                            for(Topic role : roles) {
-                                if(t.mergesWithTopic(a.getPlayer(role))) {
-                                    associationRoles.add( role );
+                            for (Topic role : roles) {
+                                if (t.mergesWithTopic(a.getPlayer(role))) {
+                                    associationRoles.add(role);
                                 }
                             }
                         }
                         paste(associationRoles, cell[1], cell[0], direction);
                     }
                 }
-                catch(Exception e) {
+                catch (Exception e) {
 
                 }
             }
         }
     }
-    
-    
+
+
     public void expandAssociatedTopics(int direction) {
         try {
             Topic associationType = wandora.showTopicFinder(wandora, "Select association type topic");
-            if(associationType != null) {
+            if (associationType != null) {
                 Topic role = wandora.showTopicFinder(wandora, "Select role topic");
-                if(role != null) {
+                if (role != null) {
                     expandAssociatedTopics(direction, associationType, role);
                 }
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             wandora.handleError(e);
         }
     }
-    
-    
-    
+
+
+
     public void expandAssociatedTopics(int direction, Topic associationType, Topic role) {
         List<int[]> selectedCells = getSelectedCells();
-        if(selectedCells != null && !selectedCells.isEmpty()) {
-            for(int[] cell : selectedCells) {
+        if (selectedCells != null && !selectedCells.isEmpty()) {
+            for (int[] cell : selectedCells) {
                 try {
                     Topic t = getTopicAt(cell[0], cell[1]);
-                    if(t != null) {
+                    if (t != null) {
                         Collection<Topic> associatedTopics = new LinkedHashSet<>();
                         Collection<Association> associations = t.getAssociations(associationType);
-                        for(Association a : associations) {
+                        for (Association a : associations) {
                             Topic associatedTopic = a.getPlayer(role);
-                            if(associatedTopic != null) {
-                                
+                            if (associatedTopic != null) {
+
                                 // A special case when topic plays given role in association.
-                                if(associatedTopic.mergesWithTopic(t)) {
+                                if (associatedTopic.mergesWithTopic(t)) {
                                     Collection<Topic> roles = a.getRoles();
                                     boolean shouldAdd = false;
-                                    for(Topic r : roles) {
-                                        if(!r.mergesWithTopic(role) && t.mergesWithTopic(a.getPlayer(r))) {
+                                    for (Topic r : roles) {
+                                        if (!r.mergesWithTopic(role) && t.mergesWithTopic(a.getPlayer(r))) {
                                             shouldAdd = true;
                                         }
                                     }
-                                    if(shouldAdd) {
-                                        associatedTopics.add( associatedTopic );
+                                    if (shouldAdd) {
+                                        associatedTopics.add(associatedTopic);
                                     }
                                 }
                                 else {
-                                    associatedTopics.add( associatedTopic );
+                                    associatedTopics.add(associatedTopic);
                                 }
                             }
                         }
                         paste(associatedTopics, cell[1], cell[0], direction);
                     }
                 }
-                catch(Exception e) {
+                catch (Exception e) {
 
                 }
             }
         }
     }
-    
-    
-    
+
+
+
     public void expandSuperclasses(int direction) {
         try {
             TopicMap tm = wandora.getTopicMap();
             Topic associationType = tm.getTopic(new Locator(XTMPSI.SUPERCLASS_SUBCLASS));
-            if(associationType != null) {
+            if (associationType != null) {
                 Topic role = tm.getTopic(new Locator(XTMPSI.SUPERCLASS));
-                if(role != null) {
+                if (role != null) {
                     expandAssociatedTopics(direction, associationType, role);
                 }
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             wandora.handleError(e);
         }
     }
-    
-    
-    
+
+
+
     public void expandSubclasses(int direction) {
         try {
             TopicMap tm = wandora.getTopicMap();
             Topic associationType = tm.getTopic(new Locator(XTMPSI.SUPERCLASS_SUBCLASS));
-            if(associationType != null) {
+            if (associationType != null) {
                 Topic role = tm.getTopic(new Locator(XTMPSI.SUBCLASS));
-                if(role != null) {
+                if (role != null) {
                     expandAssociatedTopics(direction, associationType, role);
                 }
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             wandora.handleError(e);
         }
     }
-    
-    
-    
+
+
+
     public void paste(Collection<Topic> topics, int column, int row, int direction) {
-        if(topics == null || topics.isEmpty()) return;
-        
-        switch(direction) {
+        if (topics == null || topics.isEmpty())
+            return;
+
+        switch (direction) {
             case LEFT: {
                 pasteLeft(column, row, topics);
                 break;
@@ -1420,82 +1419,88 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
             }
         }
     }
-    
-    
+
+
     private void pasteDown(int column, int row, Collection<Topic> topics) {
-        for(Topic t : topics) {
+        for (Topic t : topics) {
             _setTopicAt(t, ++row, column);
         }
     }
-    
+
+
     private void pasteUp(int column, int row, Collection<Topic> topics) {
-        for(Topic t : topics) {
+        for (Topic t : topics) {
             _setTopicAt(t, --row, column);
         }
     }
-    
+
+
     private void pasteRight(int column, int row, Collection<Topic> topics) {
-        for(Topic t : topics) {
+        for (Topic t : topics) {
             _setTopicAt(t, row, ++column);
         }
     }
-    
+
+
     private void pasteLeft(int column, int row, Collection<Topic> topics) {
-        for(Topic t : topics) {
+        for (Topic t : topics) {
             _setTopicAt(t, row, --column);
         }
     }
-    
+
+
     public void pasteAt(int[] o, Topic[][] topics) {
-        if(o != null && o.length == 2 && topics != null) {
-            for(int r=0; r<topics.length; r++) {
-                for(int c=0; c<topics[r].length; c++) {
-                    _setTopicAt(topics[r][c], o[0]+r, o[1]+c);
+        if (o != null && o.length == 2 && topics != null) {
+            for (int r = 0; r < topics.length; r++) {
+                for (int c = 0; c < topics[r].length; c++) {
+                    _setTopicAt(topics[r][c], o[0] + r, o[1] + c);
                 }
             }
         }
     }
-    
-    
+
+
     public void pasteAt(int[] o, Topic[] topics) {
-        if(o != null && o.length == 2 && topics != null) {
-            for(int r=0; r<topics.length; r++) {
-                _setTopicAt(topics[r], o[0]+r, o[1]);
+        if (o != null && o.length == 2 && topics != null) {
+            for (int r = 0; r < topics.length; r++) {
+                _setTopicAt(topics[r], o[0] + r, o[1]);
             }
         }
     }
-    
+
+
     public void pasteAt(int[] o, List<Topic> topics) {
-        if(o != null && o.length == 2 && topics != null) {
+        if (o != null && o.length == 2 && topics != null) {
             int r = 0;
-            for(Topic t : topics) {
-                _setTopicAt(t, o[0]+r, o[1]);
+            for (Topic t : topics) {
+                _setTopicAt(t, o[0] + r, o[1]);
                 r++;
             }
         }
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // --------------------------------------------------- MAKE ASSOCIATIONS ---
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     public void makeClassInstanceChains(Topic[][] data) {
-        if(data != null && data.length > 0) {
-            for(int i=0; i<data.length; i++) {
+        if (data != null && data.length > 0) {
+            for (int i = 0; i < data.length; i++) {
                 Topic[] row = data[i];
-                if(row != null) {
+                if (row != null) {
                     Topic classTopic = null;
-                    for(int j=0; j<row.length; j++) {
+                    for (int j = 0; j < row.length; j++) {
                         Topic t = row[j];
-                        if(classTopic != null) {
+                        if (classTopic != null) {
                             try {
                                 t.addType(classTopic);
                             }
-                            catch(Exception e) {}
+                            catch (Exception e) {
+                            }
                         }
                         classTopic = t;
                     }
@@ -1503,29 +1508,30 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
             }
         }
     }
-    
-    
+
+
     public void makeClassInstancesUsingTreeLayout(Topic[][] data) {
-        if(data != null && data.length > 0) {
+        if (data != null && data.length > 0) {
             Topic[] hierarchy = new Topic[1000];
-            for(int i=0; i<data.length; i++) {
+            for (int i = 0; i < data.length; i++) {
                 Topic[] row = data[i];
-                if(row != null) {
-                    for(int j=0; j<row.length; j++) {
+                if (row != null) {
+                    for (int j = 0; j < row.length; j++) {
                         Topic t = row[j];
-                        if(t != null) {
-                            for(int k=j-1; k>=0; k--) {
+                        if (t != null) {
+                            for (int k = j - 1; k >= 0; k--) {
                                 Topic ct = hierarchy[k];
-                                if(ct != null) {
+                                if (ct != null) {
                                     try {
                                         t.addType(ct);
                                         break;
                                     }
-                                    catch(Exception e) {}
+                                    catch (Exception e) {
+                                    }
                                 }
                             }
                             hierarchy[j] = t;
-                            for(int k=j+1; k<1000; k++) {
+                            for (int k = j + 1; k < 1000; k++) {
                                 hierarchy[k] = null;
                             }
                         }
@@ -1534,41 +1540,40 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
             }
         }
     }
-    
-    
-    
-    
+
+
+
     public void makeAssociationsUsingWandoraLayout(Topic[][] data) {
         int associationCount = 0;
         TopicMap tm = wandora.getTopicMap();
-        if(data != null && data.length > 2) {
+        if (data != null && data.length > 2) {
             Topic associationType = null;
             Topic[] roles = null;
             try {
                 associationType = data[0][0];
-                if(associationType != null) {
+                if (associationType != null) {
                     roles = data[1];
-                    if(roles != null) {
-                        for(int i=2; i<data.length; i++) {
+                    if (roles != null) {
+                        for (int i = 2; i < data.length; i++) {
                             Topic[] players = data[i];
-                            if(players != null && players.length == roles.length) {
+                            if (players != null && players.length == roles.length) {
                                 Association a = tm.createAssociation(associationType);
-                                if(a != null) {
+                                if (a != null) {
                                     boolean hasPlayers = false;
-                                    for(int j=0; j<roles.length; j++) {
+                                    for (int j = 0; j < roles.length; j++) {
                                         try {
                                             Topic role = roles[j];
                                             Topic player = players[j];
-                                            if(role != null && player != null) {
+                                            if (role != null && player != null) {
                                                 a.addPlayer(player, role);
                                                 hasPlayers = true;
                                             }
                                         }
-                                        catch(Exception e) {
-                                            e.printStackTrace();
+                                        catch (Exception e) {
+                                            logger.error(e);
                                         }
                                     }
-                                    if(hasPlayers) {
+                                    if (hasPlayers) {
                                         associationCount++;
                                     }
                                     else {
@@ -1580,161 +1585,161 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                     }
                 }
             }
-            catch(Exception e) {
-                e.printStackTrace();
+            catch (Exception e) {
+                logger.error(e);
             }
         }
         else {
-            System.out.println("Has less than three rows. Can't build an association.");
+            logger.info("Has less than three rows. Can't build an association.");
         }
-        System.out.println("Created "+associationCount+" associations.");
+        logger.info("Created " + associationCount + " associations.");
     }
-    
-    
-    
-    
-    
+
+
+
     public void makeAssociationsUsingLTMLayout(Topic[][] data) {
         int associationCount = 0;
         TopicMap tm = wandora.getTopicMap();
-        if(data != null && data.length > 0) {
-            for(int i=0; i<data.length; i++) {
+        if (data != null && data.length > 0) {
+            for (int i = 0; i < data.length; i++) {
                 Topic[] associationData = data[i];
-                if(associationData != null && associationData.length > 0) {
+                if (associationData != null && associationData.length > 0) {
                     Topic associationType = associationData[0];
-                    if(associationType != null) {
+                    if (associationType != null) {
                         try {
                             Association a = tm.createAssociation(associationType);
                             boolean hasPlayers = false;
-                            for(int j=1; j+1<associationData.length; j=j+2) {
+                            for (int j = 1; j + 1 < associationData.length; j = j + 2) {
                                 try {
-                                    Topic role = associationData[j+1];
+                                    Topic role = associationData[j + 1];
                                     Topic player = associationData[j];
-                                    if(role != null && player != null) {
+                                    if (role != null && player != null) {
                                         a.addPlayer(player, role);
                                         hasPlayers = true;
                                     }
                                 }
-                                catch(Exception e) {
-                                    e.printStackTrace();
+                                catch (Exception e) {
+                                    logger.error(e);
                                 }
                             }
-                            if(hasPlayers) {
+                            if (hasPlayers) {
                                 associationCount++;
                             }
                             else {
                                 a.remove();
                             }
                         }
-                        catch(Exception e) {
-                            e.printStackTrace();
+                        catch (Exception e) {
+                            logger.error(e);
                         }
                     }
                 }
             }
         }
         else {
-            System.out.println("Has no rows. Can't build an association.");
+            logger.info("Has no rows. Can't build an association.");
         }
-        System.out.println("Created "+associationCount+" associations.");
+        logger.info("Created " + associationCount + " associations.");
     }
-    
-    
+
+
 
     public void makeAssociationsUsingRDFLayout(Topic[][] data) {
         int associationCount = 0;
         TopicMap tm = wandora.getTopicMap();
-        if(data != null && data.length > 0) {
-            for(int i=0; i<data.length; i++) {
+        if (data != null && data.length > 0) {
+            for (int i = 0; i < data.length; i++) {
                 Topic[] associationData = data[i];
-                if(associationData != null && associationData.length > 2) {
+                if (associationData != null && associationData.length > 2) {
                     Topic subject = associationData[0];
                     Topic predicate = associationData[1];
                     Topic object = associationData[2];
-                    if(subject != null && predicate != null && object != null) {
+                    if (subject != null && predicate != null && object != null) {
                         Association a = null;
                         try {
                             a = tm.createAssociation(predicate);
-                            
+
                             Topic subjectRole = tm.createTopic();
                             subjectRole.addSubjectIdentifier(new Locator(SimpleRDFImport.subjectTypeSI));
                             Topic objectRole = tm.createTopic();
                             objectRole.addSubjectIdentifier(new Locator(SimpleRDFImport.objectTypeSI));
-                            
+
                             a.addPlayer(subject, subjectRole);
                             a.addPlayer(object, objectRole);
-                            
+
                             associationCount++;
                         }
-                        catch(Exception e) {
+                        catch (Exception e) {
                             try {
-                                if(a != null) a.remove();
+                                if (a != null)
+                                    a.remove();
                             }
-                            catch(Exception ex) {}
-                            e.printStackTrace();
+                            catch (Exception ex) {
+                            }
+                            logger.error(e);
                         }
                     }
                 }
             }
         }
         else {
-            System.out.println("Has no rows. Can't build an association.");
+            logger.info("Has no rows. Can't build an association.");
         }
-        System.out.println("Created "+associationCount+" associations.");
+        logger.info("Created " + associationCount + " associations.");
     }
-    
 
-    
+
 
     public void makeAssociationsUsingPlayerLayout(Topic[][] data) {
         int associationCount = 0;
         TopicMap tm = wandora.getTopicMap();
-        if(data != null && data.length > 0) {
-            for(int i=0; i<data.length; i++) {
+        if (data != null && data.length > 0) {
+            for (int i = 0; i < data.length; i++) {
                 Topic[] associationData = data[i];
-                if(associationData != null && associationData.length > 0) {
+                if (associationData != null && associationData.length > 0) {
                     Association a = null;
                     try {
                         Topic defaultAssociationType = tm.createTopic();
-                        defaultAssociationType.addSubjectIdentifier(new Locator("http://wandora.org/si/core/default-association"));
+                        defaultAssociationType
+                                .addSubjectIdentifier(new Locator("https://wandora.org/si/core/default-association"));
                         a = tm.createAssociation(defaultAssociationType);
                         associationCount++;
-                        for(int j=0; j<associationData.length; j++) {
+                        for (int j = 0; j < associationData.length; j++) {
                             Topic player = associationData[j];
-                            if(player != null) {
+                            if (player != null) {
                                 Topic role = tm.createTopic();
-                                role.addSubjectIdentifier(new Locator("http://wandora.org/si/core/default-role-"+(j+1)));
+                                role.addSubjectIdentifier(
+                                        new Locator("https://wandora.org/si/core/default-role-" + (j + 1)));
                                 a.addPlayer(player, role);
                             }
                         }
                     }
-                    catch(Exception e) {
-                        e.printStackTrace();
+                    catch (Exception e) {
+                        logger.error(e);
                     }
                 }
             }
         }
         else {
-            System.out.println("Has no rows. Can't build an association.");
+            logger.info("Has no rows. Can't build an association.");
         }
-        System.out.println("Created "+associationCount+" associations.");
+        logger.info("Created " + associationCount + " associations.");
     }
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // ---------------------------------------------------------- ARRAY MODS ---
     // -------------------------------------------------------------------------
-    
-    
+
+
     public Topic[][] sortRows(Topic[][] data) {
-        if(data != null) {
+        if (data != null) {
             data = rotateCV(data);
-            for(int i=0; i<data.length; i++) {
-                for(int j=0; j<data[i].length-1; j++) {
-                    for(int k=j+1; k<data[i].length; k++) {
-                        if(compareTopics(data[i][j],data[i][k]) > 0) {
+            for (int i = 0; i < data.length; i++) {
+                for (int j = 0; j < data[i].length - 1; j++) {
+                    for (int k = j + 1; k < data[i].length; k++) {
+                        if (compareTopics(data[i][j], data[i][k]) > 0) {
                             Topic t = data[i][j];
                             data[i][j] = data[i][k];
                             data[i][k] = t;
@@ -1746,14 +1751,14 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
         }
         return data;
     }
-    
-    
+
+
     public Topic[][] sortColumns(Topic[][] data) {
-        if(data != null) {
-            for(int i=0; i<data.length; i++) {
-                for(int j=0; j<data[i].length-1; j++) {
-                    for(int k=j+1; k<data[i].length; k++) {
-                        if(compareTopics(data[i][j],data[i][k]) > 0) {
+        if (data != null) {
+            for (int i = 0; i < data.length; i++) {
+                for (int j = 0; j < data[i].length - 1; j++) {
+                    for (int k = j + 1; k < data[i].length; k++) {
+                        if (compareTopics(data[i][j], data[i][k]) > 0) {
                             Topic t = data[i][j];
                             data[i][j] = data[i][k];
                             data[i][k] = t;
@@ -1761,160 +1766,169 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                     }
                 }
             }
-            
+
         }
         return data;
     }
-    
+
+
     private int compareTopics(Topic t1, Topic t2) {
-        if(t1 == null && t2 == null) return 0;
-        if(t1 != null && t2 == null) return 1;
-        if(t1 == null && t2 != null) return -1;
-        if(t1 != null && t2 != null) {
+        if (t1 == null && t2 == null)
+            return 0;
+        if (t1 != null && t2 == null)
+            return 1;
+        if (t1 == null && t2 != null)
+            return -1;
+        if (t1 != null && t2 != null) {
             String s1 = TopicToString.toString(t1);
             String s2 = TopicToString.toString(t2);
-            if(s1 == null && s2 == null) return 0;
-            if(s1 != null && s2 == null) return 1;
-            if(s1 == null && s2 != null) return -1;
-            if(s1 != null && s2 != null) {
+            if (s1 == null && s2 == null)
+                return 0;
+            if (s1 != null && s2 == null)
+                return 1;
+            if (s1 == null && s2 != null)
+                return -1;
+            if (s1 != null && s2 != null) {
                 return s1.compareTo(s2);
             }
         }
         return 0;
     }
-    
-    
-    
+
+
+
     private Topic[][] rotateCCV(Topic[][] data) {
         Topic[][] newData = null;
-        if(data != null) {
+        if (data != null) {
             int maxLen = 0;
-            for(int i=0; i<data.length; i++) {
-                if(maxLen < data[i].length) maxLen = data[i].length;
+            for (int i = 0; i < data.length; i++) {
+                if (maxLen < data[i].length)
+                    maxLen = data[i].length;
             }
             newData = new Topic[maxLen][data.length];
-            for(int i=0; i<data.length; i++) {
-                for(int j=0; j<data[i].length; j++) {
-                    newData[maxLen-j-1][i] = data[i][j];
+            for (int i = 0; i < data.length; i++) {
+                for (int j = 0; j < data[i].length; j++) {
+                    newData[maxLen - j - 1][i] = data[i][j];
                 }
-                for(int j=data[i].length; j<maxLen; j++) {
-                    newData[maxLen-j-1][i] = null;
+                for (int j = data[i].length; j < maxLen; j++) {
+                    newData[maxLen - j - 1][i] = null;
                 }
             }
         }
         return newData;
     }
-    
-    
-    
+
+
+
     private Topic[][] rotateCV(Topic[][] data) {
         Topic[][] newData = null;
-        if(data != null) {
+        if (data != null) {
             int maxLen = 0;
-            for(int i=0; i<data.length; i++) {
-                if(maxLen < data[i].length) maxLen = data[i].length;
+            for (int i = 0; i < data.length; i++) {
+                if (maxLen < data[i].length)
+                    maxLen = data[i].length;
             }
             newData = new Topic[maxLen][data.length];
-            for(int i=0; i<data.length; i++) {
-                for(int j=0; j<data[i].length; j++) {
-                    newData[j][data.length-i-1] = data[i][j];
+            for (int i = 0; i < data.length; i++) {
+                for (int j = 0; j < data[i].length; j++) {
+                    newData[j][data.length - i - 1] = data[i][j];
                 }
-                for(int j=data[i].length; j<maxLen; j++) {
-                    newData[j][data.length-i-1] = null;
+                for (int j = data[i].length; j < maxLen; j++) {
+                    newData[j][data.length - i - 1] = null;
                 }
             }
         }
         return newData;
     }
-    
-        
-        
-    
+
+
+
     private Topic[][] flipDiagonally(Topic[][] data) {
         Topic[][] newData = null;
-        if(data != null) {
+        if (data != null) {
             int maxLen = 0;
-            for(int i=0; i<data.length; i++) {
-                if(maxLen < data[i].length) maxLen = data[i].length;
+            for (int i = 0; i < data.length; i++) {
+                if (maxLen < data[i].length)
+                    maxLen = data[i].length;
             }
             newData = new Topic[maxLen][data.length];
-            for(int i=0; i<data.length; i++) {
-                for(int j=0; j<data[i].length; j++) {
+            for (int i = 0; i < data.length; i++) {
+                for (int j = 0; j < data[i].length; j++) {
                     newData[j][i] = data[i][j];
                 }
-                for(int j=data[i].length; j<maxLen; j++) {
+                for (int j = data[i].length; j < maxLen; j++) {
                     newData[j][i] = null;
                 }
             }
         }
         return newData;
     }
-    
-    
-    
-    
+
+
+
     private Topic[][] flipHorizontal(Topic[][] data) {
         Topic[][] newData = null;
-        if(data != null) {
+        if (data != null) {
             int maxLen = 0;
-            for(int i=0; i<data.length; i++) {
-                if(maxLen < data[i].length) maxLen = data[i].length;
+            for (int i = 0; i < data.length; i++) {
+                if (maxLen < data[i].length)
+                    maxLen = data[i].length;
             }
             newData = new Topic[data.length][maxLen];
-            for(int i=0; i<data.length; i++) {
-                for(int j=0; j<data[i].length; j++) {
-                    newData[i][maxLen-j-1] = data[i][j];
+            for (int i = 0; i < data.length; i++) {
+                for (int j = 0; j < data[i].length; j++) {
+                    newData[i][maxLen - j - 1] = data[i][j];
                 }
-                for(int j=data[i].length; j<maxLen; j++) {
-                    newData[i][maxLen-j-1] = null;
+                for (int j = data[i].length; j < maxLen; j++) {
+                    newData[i][maxLen - j - 1] = null;
                 }
             }
         }
         return newData;
     }
-    
-    
-    
-    
+
+
+
     private Topic[][] flipVertical(Topic[][] data) {
         Topic[][] newData = null;
-        if(data != null) {
+        if (data != null) {
             newData = new Topic[data.length][];
-            for(int i=0; i<data.length; i++) {
-                newData[data.length-i-1] = new Topic[data[i].length];
-                for(int j=0; j<data[i].length; j++) {
-                    newData[data.length-i-1][j] = data[i][j];
+            for (int i = 0; i < data.length; i++) {
+                newData[data.length - i - 1] = new Topic[data[i].length];
+                for (int j = 0; j < data[i].length; j++) {
+                    newData[data.length - i - 1][j] = data[i][j];
                 }
             }
         }
         return newData;
     }
-    
-    
+
+
 
     // -------------------------------------------------------------------------
     // ----------------------------------------------------------------- DND ---
     // -------------------------------------------------------------------------
 
-    
+
     public static Component dragSourceComponent = null;
-    
+
     private class TopicGridTransferHandler extends TransferHandler {
 
-        
-        private static final long serialVersionUID = 1L;
 
+        private static final long serialVersionUID = 1L;
 
 
 
         @Override
         public boolean canImport(TransferHandler.TransferSupport support) {
-            if(!support.isDrop()) return false;
+            if (!support.isDrop())
+                return false;
             return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
-                   support.isDataFlavorSupported(DataFlavor.stringFlavor) ||
-                   support.isDataFlavorSupported(DnDHelper.topicArrayDataFlavor) ||
-                   support.isDataFlavorSupported(DnDHelper.topicGridDataFlavor);
+                    support.isDataFlavorSupported(DataFlavor.stringFlavor) ||
+                    support.isDataFlavorSupported(DnDHelper.topicArrayDataFlavor) ||
+                    support.isDataFlavorSupported(DnDHelper.topicGridDataFlavor);
         }
+
 
         @Override
         protected Transferable createTransferable(JComponent c) {
@@ -1923,70 +1937,77 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
             return trans;
         }
 
+
         @Override
         public int getSourceActions(JComponent c) {
             return TransferHandler.COPY_OR_MOVE;
         }
 
+
         @Override
         public boolean importData(TransferHandler.TransferSupport support) {
-            if(!support.isDrop()) return false;
+            if (!support.isDrop())
+                return false;
             try {
                 int action = support.getDropAction();
                 DropLocation dropLocation = support.getDropLocation();
                 Point tablePoint = getTablePoint(dropLocation.getDropPoint());
                 int dropColumn = tablePoint.x;
                 int dropRow = tablePoint.y;
-                TopicMap tm=Wandora.getWandora().getTopicMap();
-                if(support.isDataFlavorSupported(DnDHelper.topicGridDataFlavor)) {
-                    //System.out.println("Pasted topic grid");
+                TopicMap tm = Wandora.getWandora().getTopicMap();
+                if (support.isDataFlavorSupported(DnDHelper.topicGridDataFlavor)) {
                     Transferable trans = support.getTransferable();
                     Object transData = trans.getTransferData(DnDHelper.topicGridDataFlavor);
-                    if(transData == null) return false;
-                    
-                    if(transData instanceof Topic[][]) {
+                    if (transData == null)
+                        return false;
+
+                    if (transData instanceof Topic[][]) {
                         Topic[][] topics = (Topic[][]) transData;
-                        if(action == MOVE && TopicGrid.this.equals(dragSourceComponent)) {
+                        if (action == MOVE && TopicGrid.this.equals(dragSourceComponent)) {
                             clearSelectedCells();
                         }
-                        pasteAt(new int[] {dropRow,dropColumn}, topics);
+                        pasteAt(new int[] { dropRow, dropColumn }, topics);
                     }
-                    moveSelection(new int[] { dropRow,dropColumn } );
+                    moveSelection(new int[] { dropRow, dropColumn });
                 }
                 else {
-                    List<Topic> topics=DnDHelper.getTopicList(support, tm, true);
-                    if(topics==null) return false;
-                    pasteAt(new int[] {dropRow,dropColumn}, topics);
+                    List<Topic> topics = DnDHelper.getTopicList(support, tm, true);
+                    if (topics == null)
+                        return false;
+                    pasteAt(new int[] { dropRow, dropColumn }, topics);
                 }
                 Wandora.getWandora().doRefresh();
                 return true;
             }
-            catch(TopicMapException tme){ tme.printStackTrace(); }
-            catch(Exception ce){ ce.printStackTrace(); }
+            catch (TopicMapException tme) {
+                logger.error(tme);
+            }
+            catch (Exception ce) {
+                logger.error(ce);
+            }
             return false;
         }
-        
-        
-        
-        
+
+
+
         @Override
         protected void exportDone(JComponent c, Transferable t, int action) {
             dragSourceComponent = null;
         }
 
     }
-    
-    
+
+
     // --------------------------------------------------------- SAVE & LOAD ---
-    
-    
-    
+
+
+
     public void save() {
         StringBuilder data = new StringBuilder("");
-        for(T2<Integer,Integer> coord : gridData.keySet()) {
-            if(coord != null) {
+        for (T2<Integer, Integer> coord : gridData.keySet()) {
+            if (coord != null) {
                 Topic t = gridData.get(coord);
-                if(t != null) {
+                if (t != null) {
                     try {
                         data.append(coord.e1);
                         data.append("\t");
@@ -1994,87 +2015,90 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                         data.append("\t");
                         data.append(t.getOneSubjectIdentifier().toExternalForm());
                         data.append("\n");
-                    } 
+                    }
                     catch (TopicMapException ex) {
-                        ex.printStackTrace();
+                        logger.error(ex);
                     }
                 }
             }
         }
         SimpleFileChooser chooser = UIConstants.getWandoraProjectFileChooser();
         chooser.setDialogTitle("Save topic grid data");
-        if(chooser.open(wandora, SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
+        if (chooser.open(wandora, SimpleFileChooser.SAVE_DIALOG) == SimpleFileChooser.APPROVE_OPTION) {
             File f = IObox.addFileExtension(chooser.getSelectedFile(), "txt");
-            if(f.exists()) {
-                int overWrite = WandoraOptionPane.showConfirmDialog(wandora, "Overwrite existing file '"+f.getName()+"'?", "Overwrite file?", WandoraOptionPane.YES_NO_OPTION);
-                if(overWrite == WandoraOptionPane.NO_OPTION) return;
+            if (f.exists()) {
+                int overWrite = WandoraOptionPane.showConfirmDialog(wandora,
+                        "Overwrite existing file '" + f.getName() + "'?", "Overwrite file?",
+                        WandoraOptionPane.YES_NO_OPTION);
+                if (overWrite == WandoraOptionPane.NO_OPTION)
+                    return;
             }
             try {
                 IObox.saveFile(f, data.toString());
-            } 
+            }
             catch (IOException ex) {
-                ex.printStackTrace();
+                logger.error(ex);
             }
         }
     }
-    
-    
+
+
     public void load() {
         SimpleFileChooser chooser = UIConstants.getWandoraProjectFileChooser();
         chooser.setDialogTitle("Load topic grid data");
-        if(chooser.open(wandora, SimpleFileChooser.OPEN_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
+        if (chooser.open(wandora, SimpleFileChooser.OPEN_DIALOG) == SimpleFileChooser.APPROVE_OPTION) {
             File f = chooser.getSelectedFile();
-            if(f.exists()) {
+            if (f.exists()) {
                 try {
                     String data = IObox.loadFile(f);
-                    HashMap<T2<Integer,Integer>, Topic> newGridData = parse(data);
+                    Map<T2<Integer, Integer>, Topic> newGridData = parse(data);
                     gridData = newGridData;
-                } 
+                }
                 catch (FileNotFoundException ex) {
-                    ex.printStackTrace();
-                } 
+                    logger.error(ex);
+                }
                 catch (IOException ex) {
-                    ex.printStackTrace();
+                    logger.error(ex);
                 }
             }
         }
     }
-    
+
 
     public void merge() {
         SimpleFileChooser chooser = UIConstants.getWandoraProjectFileChooser();
         chooser.setDialogTitle("Merge topic grid data");
-        if(chooser.open(wandora, SimpleFileChooser.OPEN_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
+        if (chooser.open(wandora, SimpleFileChooser.OPEN_DIALOG) == SimpleFileChooser.APPROVE_OPTION) {
             File f = chooser.getSelectedFile();
-            if(f.exists()) {
+            if (f.exists()) {
                 try {
                     String data = IObox.loadFile(f);
-                    HashMap<T2<Integer,Integer>, Topic> newGridData = parse(data);
-                    for(T2<Integer,Integer> c : newGridData.keySet()) {
+                    Map<T2<Integer, Integer>, Topic> newGridData = parse(data);
+                    for (T2<Integer, Integer> c : newGridData.keySet()) {
                         gridData.put(c, newGridData.get(c));
                     }
-                } 
+                }
                 catch (FileNotFoundException ex) {
-                    ex.printStackTrace();
-                } 
+                    logger.error(ex);
+                }
                 catch (IOException ex) {
-                    ex.printStackTrace();
+                    logger.error(ex);
                 }
             }
         }
     }
-    
-    
-    
-    public HashMap<T2<Integer,Integer>, Topic> parse(String data) {
+
+
+
+    public Map<T2<Integer, Integer>, Topic> parse(String data) {
         TopicMap tm = wandora.getTopicMap();
-        HashMap<T2<Integer,Integer>, Topic> newGridData = new HashMap<>();
+        Map<T2<Integer, Integer>, Topic> newGridData = new HashMap<>();
 
         StringTokenizer dataLines = new StringTokenizer(data, "\n");
-        while(dataLines.hasMoreTokens()) {
+        while (dataLines.hasMoreTokens()) {
             String dataLine = dataLines.nextToken();
             StringTokenizer topicData = new StringTokenizer(dataLine, "\t");
-            if(topicData.countTokens() == 3) {
+            if (topicData.countTokens() == 3) {
                 String e1 = topicData.nextToken();
                 String e2 = topicData.nextToken();
                 String si = topicData.nextToken();
@@ -2084,21 +2108,21 @@ public class TopicGrid extends SimpleTable implements Clipboardable, MouseListen
                     int e2i = Integer.parseInt(e2);
                     Topic t = tm.getTopic(si);
 
-                    if(t != null && !t.isRemoved()) {
+                    if (t != null && !t.isRemoved()) {
                         newGridData.put(new T2<>(e1i, e2i), t);
                     }
                     else {
-                        System.out.println("Couldn't find a topic for subject identifier '"+si+"'. Skipping topic.");
+                        logger.warn("Couldn't find a topic for subject identifier '" + si + "'. Skipping topic.");
                     }
                 }
-                catch(Exception e) {
-                    e.printStackTrace();
+                catch (Exception e) {
+                    logger.error(e);
                 }
             }
         }
         return newGridData;
     }
-    
-    
-    
+
+
+
 }

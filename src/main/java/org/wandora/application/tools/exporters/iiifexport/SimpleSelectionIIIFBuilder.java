@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 package org.wandora.application.tools.exporters.iiifexport;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -63,7 +65,7 @@ public class SimpleSelectionIIIFBuilder implements IIIFBuilder {
         if(f instanceof URL) f=((URL)f).openStream();
         ImageInputStream in = ImageIO.createImageInputStream(f);
         try{
-            final Iterator readers = ImageIO.getImageReaders(in);
+            final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
             if(readers.hasNext()){
                     ImageReader reader=(ImageReader)readers.next();
                     try{
@@ -89,7 +91,7 @@ public class SimpleSelectionIIIFBuilder implements IIIFBuilder {
     }
 
     @Override
-    public Manifest buildIIIF(Wandora wandora, Context context,IIIFExport tool) throws TopicMapException {
+    public Manifest buildIIIF(Wandora wandora, Context<?> context,IIIFExport tool) throws TopicMapException {
         startBuild(wandora,context);
         
         Manifest manifest=prepareManifest(wandora, context, tool);
@@ -102,10 +104,10 @@ public class SimpleSelectionIIIFBuilder implements IIIFBuilder {
         return manifest;
     }    
     
-    protected void startBuild(Wandora wandora, Context context) throws TopicMapException {
+    protected void startBuild(Wandora wandora, Context<?> context) throws TopicMapException {
     }
         
-    protected Manifest prepareManifest(Wandora wandora,Context context,IIIFExport tool) throws TopicMapException {
+    protected Manifest prepareManifest(Wandora wandora,Context<?> context,IIIFExport tool) throws TopicMapException {
         Manifest manifest=new Manifest();
         manifest.addLabel(new LanguageString("Wandora IIIF Export"));
         // ID is required, create something
@@ -113,15 +115,15 @@ public class SimpleSelectionIIIFBuilder implements IIIFBuilder {
         return manifest;
     }
     
-    protected Sequence prepareSequence(Wandora wandora,Context context,Manifest manifest,IIIFExport tool) throws TopicMapException {
+    protected Sequence prepareSequence(Wandora wandora,Context<?> context,Manifest manifest,IIIFExport tool) throws TopicMapException {
         Sequence sequence=new Sequence();
         sequence.addLabel(new LanguageString("Default sequence"));
         manifest.addSequence(sequence);
         return sequence;
     }
     
-    protected void processTopics(Wandora wandora,Context context, Sequence sequence,IIIFExport tool) throws TopicMapException {
-        Iterator iter=context.getContextObjects();
+    protected void processTopics(Wandora wandora,Context<?> context, Sequence sequence,IIIFExport tool) throws TopicMapException {
+        Iterator<?> iter=context.getContextObjects();
         while(iter.hasNext()){
             Object o=iter.next();
             if(!(o instanceof Topic)) continue;
@@ -151,9 +153,9 @@ public class SimpleSelectionIIIFBuilder implements IIIFBuilder {
         
         int[] dimensions=null;
         try{
-            dimensions=getImageDimensions(new URL(urlAndFormat.e1));
-        }catch(IOException ioe){
-            tool.log("Unable to get image dimensions for "+urlAndFormat.e1,ioe);
+            dimensions=getImageDimensions(new URI(urlAndFormat.e1).toURL());
+        }catch(IOException | URISyntaxException e){
+            tool.log("Unable to get image dimensions for "+urlAndFormat.e1,e);
             return null;
         }
         

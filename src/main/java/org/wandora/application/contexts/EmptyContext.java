@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,15 +30,17 @@ package org.wandora.application.contexts;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.wandora.topicmap.Topic;
+
 /**
  *
  * @author olli
  */
-public class EmptyContext extends LayeredTopicContext implements Context {
+public class EmptyContext extends LayeredTopicContext {
     
     @Override
-    public Iterator getContextObjects() {
-        return new ArrayList().iterator();
+    public Iterator<Topic> getContextObjects() {
+        return new ArrayList<Topic>().iterator();
     }
     
 }

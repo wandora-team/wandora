@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -85,7 +84,7 @@ import org.wandora.topicmap.TopicMap;
  */
 
 
-public class CollectNary extends AbstractWandoraTool implements WandoraTool {
+public class CollectNary extends AbstractWandoraTool {
     
 
 
@@ -102,7 +101,7 @@ public class CollectNary extends AbstractWandoraTool implements WandoraTool {
     
     
     
-    public CollectNary(Context preferredContext) {
+    public CollectNary(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -122,10 +121,10 @@ public class CollectNary extends AbstractWandoraTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             requiresRefresh = false;
-            Iterator associations = null;
+            Iterator<?> associations = null;
             
             Topic newAssociationType = null;
             Topic groupingRole = null;
@@ -135,7 +134,6 @@ public class CollectNary extends AbstractWandoraTool implements WandoraTool {
             
             TopicMap tm = wandora.getTopicMap();
             Association association = null;
-            int counter = 0;
             
             if(context instanceof AssociationContext) { // ASSOCIATION CONTEXT!!
                 associations = context.getContextObjects();
@@ -222,7 +220,7 @@ public class CollectNary extends AbstractWandoraTool implements WandoraTool {
     
     public void collectAssociations(Collection<Association> associations, Topic groupingRole, Topic roleRole, Topic playerRole, Topic newAssociationType, boolean deleteSourceAssociations, TopicMap tm) throws Exception {
         // ***** Collect association groups
-        HashMap<Topic, Collection<Association>> collectedAssociations = new HashMap();
+        Map<Topic, Collection<Association>> collectedAssociations = new HashMap<>();
         for(Association a : associations) {
             if(a != null && !a.isRemoved()) {
                 Topic groupingPlayer = a.getPlayer(groupingRole);

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,8 @@ import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.rtf.RTFEditorKit;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 
 
 /**
@@ -52,46 +54,48 @@ import javax.swing.text.rtf.RTFEditorKit;
  * @author akikivela
  */
 public class Textbox {
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(Textbox.class);
+
+
     /** Creates a new instance of TextTools */
     public Textbox() {
     }
-    
-    
+
+
     /**
      * Makes a String representation of a map. Useful for debugging.
      * 
      * @param map
      * @return 
      */
-    public static String mapToString(Map map){
-        StringBuilder buf=new StringBuilder();
-        Iterator iter=map.entrySet().iterator();
-        while(iter.hasNext()){
-            Map.Entry e=(Map.Entry)iter.next();
+    public static String mapToString(Map<Object, Object> map) {
+        StringBuilder buf = new StringBuilder();
+        Iterator<Map.Entry<Object, Object>> iter = map.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<Object, Object> e = iter.next();
             buf.append(e.getKey().toString()).append(" => ").append(e.getValue().toString()).append(",\n");
         }
         return buf.toString();
     }
-    
-    
+
+
     public static java.util.List<String> capitalizeFirst(java.util.List<String> words) {
         java.util.List<String> newWords = new ArrayList<String>();
         if (words != null) {
-            for (int i=0; i<words.size(); i++) {
+            for (int i = 0; i < words.size(); i++) {
                 newWords.add(capitalizeFirst(words.get(i)));
             }
         }
         return newWords;
     }
-    
-    
+
+
 
     public static String capitalizeFirst(String word) {
-        if(word != null) {
-            if(word.length()>0) {
+        if (word != null) {
+            if (word.length() > 0) {
                 String first = word.substring(0, 1).toUpperCase();
-                if(word.length()>1) {
+                if (word.length() > 1) {
                     return first + word.substring(1);
                 }
                 else {
@@ -101,57 +105,57 @@ public class Textbox {
         }
         return word;
     }
-    
-    
-    
+
+
+
     public static String makeHTMLParagraph(String text, int width) {
-        if(text == null) return null;
+        if (text == null)
+            return null;
         int l = text.length();
         StringBuilder sb = new StringBuilder(l);
         int pl = 0;
-        for(int i=0; i<l; i++) {
-            if(pl++ < width) sb.append(text.charAt(i));
+        for (int i = 0; i < l; i++) {
+            if (pl++ < width)
+                sb.append(text.charAt(i));
             else {
                 int c = text.charAt(i);
-                if(c == ' ') {
+                if (c == ' ') {
                     sb.append("<br>");
                     pl = 0;
                 }
-                else sb.append((char) c);
+                else
+                    sb.append((char) c);
             }
         }
         return "<html>" + sb.toString() + "</html>";
     }
-    
 
-    
-    
-    
+
+
     public static String getSlice(String text, String delimiter, int sliceNumber) {
         String slice = "";
         try {
             java.util.List<String> slices = slice(text, delimiter);
-            if(slices.size() > sliceNumber) {
+            if (slices.size() > sliceNumber) {
                 slice = slices.get(sliceNumber);
             }
         }
-        catch (Exception e) {}
-        if("".equals(slice) && sliceNumber == 0) {
+        catch (Exception e) {
+        }
+        if ("".equals(slice) && sliceNumber == 0) {
             slice = text;
         }
         return slice;
     }
-    
-    
-    
-    
-    
+
+
+
     public static java.util.List<String> slice(String text, String delimiter) {
         java.util.List<String> slices = new ArrayList<String>();
         String slice;
-        
+
         if (text != null && delimiter != null) {
-            while(text.length() > delimiter.length()) {
+            while (text.length() > delimiter.length()) {
                 try {
                     if (text.contains(delimiter)) {
                         slice = text.substring(0, text.indexOf(delimiter));
@@ -159,115 +163,112 @@ public class Textbox {
                         text = text.substring(text.indexOf(delimiter) + delimiter.length());
                     }
                     else {
-                        //LogWriter.println("No more delimiters found!");
                         slices.add(text);
                         text = "";
                     }
                 }
                 catch (Exception e) {
-                    System.out.println("Exception '" + e.toString() + "' occurred while slicing text!");
+                    logger.error("Exception '" + e.toString() + "' occurred while slicing text!");
                 }
             }
         }
         else {
-            System.out.println("Either text or delimiter is null! Unable to slice given text!");
+            logger.warn("Either text or delimiter is null! Unable to slice given text!");
         }
         return slices;
     }
-   
 
-    
-    
-    
-    public static java.util.List sliceWithRE(String text, String regularExpression) {
+
+
+    public static java.util.List<String> sliceWithRE(String text, String regularExpression) {
         java.util.List<String> sliceList = new ArrayList<String>();
 
         try {
-            if(text != null && regularExpression != null) {
+            if (text != null && regularExpression != null) {
                 String[] slices = text.split(regularExpression);
 
-                for(String slice : slices) {
-                    if(slice != null && slice.length() > 0) {
+                for (String slice : slices) {
+                    if (slice != null && slice.length() > 0) {
                         sliceList.add(slice);
                     }
                 }
             }
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error(e);
         }
-        
+
         return sliceList;
     }
-    
-    
-    
 
-    
+
+
     public static String filterNonAlphaNums(String string) {
         StringBuilder newString = new StringBuilder();
         char c;
-        if(string != null) {
-            for(int i=0; i<string.length(); i++) {
+        if (string != null) {
+            for (int i = 0; i < string.length(); i++) {
                 c = string.charAt(i);
-                if(Character.isLetterOrDigit(c)) {
+                if (Character.isLetterOrDigit(c)) {
                     newString.append(c);
                 }
-                else newString.append('_');
+                else
+                    newString.append('_');
             }
         }
         return newString.toString();
     }
-    
-    
-    
-    
+
+
+
     public static String toLowerCase(String string) {
-        if(string != null) {
+        if (string != null) {
             return string.toLowerCase();
         }
         return null;
     }
-    
-    
-    
-    
-    
+
+
+
     public static java.util.List<String> encode(java.util.List<String> strings, String charset) {
         java.util.List<String> newStrings = new ArrayList<String>();
-        for (int i=0; i < strings.size(); i++) {
+        for (int i = 0; i < strings.size(); i++) {
             try {
                 newStrings.add(encode(strings.get(i), charset));
             }
             catch (Exception e) {
-                System.out.println("Exception '" + e.toString() + "' occurred while encoding vector of strings!");
+                logger.error("Exception '" + e.toString() + "' occurred while encoding vector of strings!");
             }
         }
         return newStrings;
     }
-    
-    
-    
-    
+
+
+
     public static String encode(String string, String charset) {
-        if (charset != null && charset.length()>0) {
-            if(charset.equalsIgnoreCase("UTF-8") || charset.equalsIgnoreCase("UNICODE")) {
+        if (charset != null && charset.length() > 0) {
+            if (charset.equalsIgnoreCase("UTF-8") || charset.equalsIgnoreCase("UNICODE")) {
                 try {
                     return new String(string.getBytes(), charset);
                 }
                 catch (Exception e) {
-                    System.out.println("Unable to convert '" + string + "' to '" + charset + ".");
+                    logger.error("Unable to convert '" + string + "' to '" + charset + ".");
                 }
             }
-            else if(charset.equalsIgnoreCase("URL_ENCODE")) {
-                return java.net.URLEncoder.encode(string);
+            else if (charset.equalsIgnoreCase("URL_ENCODE")) {
+                try {
+                    return java.net.URLEncoder.encode(string, "UTF-8");
+                }
+                catch (Exception e) {
+                    // Ignore.
+                }
             }
         }
-        return string;        
+        return string;
     }
-    
-    
-    
+
+
+
     /**
      * Transforms all XML specific characters to character entities and
      * Windows new line characters to simple unix style new line characters.
@@ -276,7 +277,7 @@ public class Textbox {
      * @return Encoded XML string.
      */
     public static String encodeXML(String s) {
-        if(s != null) {
+        if (s != null) {
             s = s.replace("&", "&amp;");
             s = s.replace(">", "&gt;");
             s = s.replace("<", "&lt;");
@@ -285,8 +286,8 @@ public class Textbox {
         return s;
     }
 
-    
-    
+
+
     /**
      * Reverses a name such as "Doe, John" to "John Doe".
      * 
@@ -294,19 +295,19 @@ public class Textbox {
      * @return Reversed name.
      */
     public static String firstNameFirst(String name) {
-        if(name != null) {
+        if (name != null) {
             int commaIndex = name.indexOf(",");
-            if(commaIndex > -1) {
-                String fname = name.substring(commaIndex+1);
+            if (commaIndex > -1) {
+                String fname = name.substring(commaIndex + 1);
                 String lname = name.substring(0, commaIndex);
-                
+
                 return fname.trim() + " " + lname.trim();
             }
         }
         return name;
     }
 
-    
+
     /**
      * Reverses a name such as "John Doe" to "Doe, John".
      * 
@@ -319,18 +320,18 @@ public class Textbox {
             if (name != null && name.length() > 0) {
                 java.util.List<String> nameSlices = Textbox.slice(name, " ");
                 String nameSlice = null;
-                if(nameSlices.size() > 1) {
+                if (nameSlices.size() > 1) {
                     nameSlice = (String) nameSlices.get(nameSlices.size() - 1);
-                    if(Character.isUpperCase(nameSlice.charAt(0))) {
+                    if (Character.isUpperCase(nameSlice.charAt(0))) {
                         reversedName = nameSlice;
                         String firstNames = "";
-                        for(int i=0; i<nameSlices.size()-1; i++) {
+                        for (int i = 0; i < nameSlices.size() - 1; i++) {
                             nameSlice = (String) nameSlices.get(i);
-                            if(Character.isUpperCase(nameSlice.charAt(0))) {
+                            if (Character.isUpperCase(nameSlice.charAt(0))) {
                                 firstNames = firstNames + " " + nameSlice;
                             }
                         }
-                        if(firstNames.length() > 0) {
+                        if (firstNames.length() > 0) {
                             reversedName = reversedName + "," + firstNames;
                         }
                     }
@@ -342,10 +343,9 @@ public class Textbox {
         }
         return reversedName;
     }
-    
-    
-    
-    
+
+
+
     /**
      * Checks if a string has any other characters than white space characters.
      * If the string has only white space characters, method returns true. The
@@ -357,7 +357,7 @@ public class Textbox {
     public static boolean meaningless(String string) {
         if (string != null) {
             if (string.length() > 0) {
-                for (int i=0; i<string.length(); i++) {
+                for (int i = 0; i < string.length(); i++) {
                     if (!Character.isWhitespace(string.charAt(i))) {
                         return false;
                     }
@@ -367,44 +367,44 @@ public class Textbox {
         return true;
     }
 
-    
+
     public static String removeQuotes(String quoted) {
         try {
             if (quoted != null) {
                 if (quoted.length() > 0) {
-                    if(quoted.startsWith("\"")) {
-                        if(quoted.endsWith("\"")) {
-                            quoted = quoted.substring(1, quoted.length()-1);
+                    if (quoted.startsWith("\"")) {
+                        if (quoted.endsWith("\"")) {
+                            quoted = quoted.substring(1, quoted.length() - 1);
                         }
                         else {
                             quoted = quoted.substring(1);
                         }
                     }
                 }
-             }
+            }
         }
-        catch (Exception e) { 
-            System.out.println("Catched exception in remove quotes (Textbox)");
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error("Catched exception in remove quotes (Textbox)");
+            logger.error(e);
         }
         return quoted;
     }
-    
-    
-    
+
+
+
     public static String[][] makeStringTable(String s) {
-        java.util.List<java.util.List<String>> lines = new ArrayList();
+        java.util.List<java.util.List<String>> lines = new ArrayList<>();
         java.util.List<String> linev;
         String line;
         StringTokenizer st = new StringTokenizer(s, "\n");
         StringTokenizer st2;
         int maxc = 0;
-        while(st.hasMoreTokens()) {
+        while (st.hasMoreTokens()) {
             line = st.nextToken();
-            linev = new ArrayList();
+            linev = new ArrayList<>();
             st2 = new StringTokenizer(line, "\t");
             int c = 0;
-            while(st2.hasMoreTokens()) {
+            while (st2.hasMoreTokens()) {
                 linev.add(st2.nextToken());
                 c++;
             }
@@ -413,41 +413,44 @@ public class Textbox {
         }
         int maxl = lines.size();
         String[][] table = new String[lines.size()][maxc];
-        for(int i=0; i<maxl; i++) {
+        for (int i = 0; i < maxl; i++) {
             java.util.List<String> v = lines.get(i);
-            for(int j=0; j<maxc; j++) {
-                try { table[i][j] = v.get(j); }
-                catch (Exception e) { table[i][j] = null; }
+            for (int j = 0; j < maxc; j++) {
+                try {
+                    table[i][j] = v.get(j);
+                }
+                catch (Exception e) {
+                    table[i][j] = null;
+                }
             }
         }
         return table;
     }
-    
-    
-    
 
-    public static String sortStringVector(Vector v) {
+
+
+    public static String sortStringVector(Vector<String> v) {
         String[] a = new String[v.size()];
         String t = null;
         v.toArray(a);
-        for(int i=a.length-1; i>0; i--) {
-            for(int j=0; j<i; j++) {
-                if(a[i].compareTo(a[j]) < 0) {
-                   t = a[i];
-                   a[i] = a[j];
-                   a[j] = t;
+        for (int i = a.length - 1; i > 0; i--) {
+            for (int j = 0; j < i; j++) {
+                if (a[i].compareTo(a[j]) < 0) {
+                    t = a[i];
+                    a[i] = a[j];
+                    a[j] = t;
                 }
             }
         }
         StringBuilder sb = new StringBuilder("");
-        for(int i=0; i<a.length; i++) {
+        for (int i = 0; i < a.length; i++) {
             sb.append(a[i] + "\n");
         }
         return sb.toString();
     }
-    
-    
-    
+
+
+
     /**
      * Method creates a string array from objects in given vector.
      * 
@@ -455,26 +458,28 @@ public class Textbox {
      * @return Method returns an array containing string picked out of given vector.
      * If vector contains no strings null is returned.
      */
-    public static String[] vectorToStringArray(Vector v) {
+    public static String[] vectorToStringArray(Vector<String> v) {
         String[] a = null;
         if (v != null && v.size() > 0) {
             a = new String[v.size()];
-            for (int i=0; i<v.size(); i++) {
+            for (int i = 0; i < v.size(); i++) {
                 try {
                     a[i] = (String) v.elementAt(i);
-                } catch (Exception e) { e.printStackTrace(); }
+                }
+                catch (Exception e) {
+                    logger.error(e);
+                }
             }
         }
         return a;
     }
-    
-    
-        
+
+
+
     // -------------------------------------------------------------------------
 
-    
-    
-    
+
+
     /**
      * Trims both starting and ending white space characters of a string.
      * This method is here for historical reasons.
@@ -485,7 +490,7 @@ public class Textbox {
     public static String trimExtraSpaces(String string) {
         return trimEndingSpaces(trimStartingSpaces(string));
     }
-    
+
 
     /**
      * Trims all ending white space characters of a string. Delegates the
@@ -497,8 +502,8 @@ public class Textbox {
     public static String chop(String text) {
         return trimEndingSpaces(text);
     }
-    
-    
+
+
     /**
      * Trims all ending white space characters of a string. This method is
      * here for historical reasons.
@@ -508,14 +513,15 @@ public class Textbox {
      */
     public static String trimEndingSpaces(String string) {
         if (string != null) {
-            int i = string.length()-1;
-            while(i > 0 && Character.isWhitespace(string.charAt(i))) i--;
-            string = string.substring(0, i+1);
+            int i = string.length() - 1;
+            while (i > 0 && Character.isWhitespace(string.charAt(i)))
+                i--;
+            string = string.substring(0, i + 1);
         }
         return string;
     }
 
-    
+
     /**
      * Trims all starting white space characters of a string. This method is
      * here for historical reasons.
@@ -526,18 +532,18 @@ public class Textbox {
     public static String trimStartingSpaces(String string) {
         if (string != null) {
             int i = 0;
-            while(i < string.length() && Character.isWhitespace(string.charAt(i))) i++;
+            while (i < string.length() && Character.isWhitespace(string.charAt(i)))
+                i++;
             string = string.substring(i);
         }
         return string;
     }
-    
-    
-    
+
+
 
     // -------------------------------------------------------------------------
-    
-    
+
+
     /**
      * Returns hexadecimal string representing a color. Color is given as
      * an argument. Hexadecimal string resembles color codes used in HTML and
@@ -553,21 +559,22 @@ public class Textbox {
         int green = color.getGreen();
         int blue = color.getBlue();
         String code = Integer.toHexString(red);
-        if(code.length() < 2) code = "0" + code;
+        if (code.length() < 2)
+            code = "0" + code;
         colorName.append(code);
         code = Integer.toHexString(green);
-        if(code.length() < 2) code = "0" + code;
+        if (code.length() < 2)
+            code = "0" + code;
         colorName.append(code);
         code = Integer.toHexString(blue);
-        if(code.length() < 2) code = "0" + code;
+        if (code.length() < 2)
+            code = "0" + code;
         colorName.append(code);
-        //System.out.println("color: " + colorName.toString());
         return colorName.toString();
     }
-    
-    
-    
-    
+
+
+
     /**
      * Reads RTF text from an input stream and returns plain text.
      * Method uses Java's RTFEditorKit for the transformation.
@@ -577,17 +584,17 @@ public class Textbox {
      * @throws IOException if the input stream doesn't resolve RTF document.
      */
     public static String RTF2PlainText(InputStream in) throws IOException {
-        StyledDocument doc=new DefaultStyledDocument();
-        RTFEditorKit kit=new RTFEditorKit();
+        StyledDocument doc = new DefaultStyledDocument();
+        RTFEditorKit kit = new RTFEditorKit();
         try {
-            kit.read(in,doc,0);
-            return doc.getText(0,doc.getLength());
+            kit.read(in, doc, 0);
+            return doc.getText(0, doc.getLength());
         }
-        catch(BadLocationException e) {
-            e.printStackTrace();
+        catch (BadLocationException e) {
+            logger.error(e);
             return null;
         }
     }
 
-    
+
 }

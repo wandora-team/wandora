@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,15 +39,15 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class BatchExtractMarcXML extends AbstractWandoraTool {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(BatchExtractMarcXML.class);
 
 
 	@Override
@@ -71,7 +71,7 @@ public class BatchExtractMarcXML extends AbstractWandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             SimpleFileChooser chooser=UIConstants.getFileChooser();
             chooser.setMultiSelectionEnabled(true);
@@ -118,7 +118,7 @@ public class BatchExtractMarcXML extends AbstractWandoraTool {
                     map.exportXTM(exportFileName, this.getCurrentLogger());
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
             long endtime = System.currentTimeMillis();
@@ -129,7 +129,7 @@ public class BatchExtractMarcXML extends AbstractWandoraTool {
             log("Ready.");
         }
         else {
-            System.out.println("No MARCXML files to import!");
+            logger.warn("No MARCXML files to import!");
         }
     }
 }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ import org.wandora.application.tools.sqlconsole.data.TableView;
 import org.wandora.application.tools.sqlconsole.gui.SQLTablePanel;
 import org.wandora.utils.Delegate;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -53,8 +54,9 @@ import org.wandora.utils.Options;
 public class SQLConsolePanel extends javax.swing.JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SQLConsolePanel.class);
 
-	private Map<String,StoredQuery> storedQueries=new TreeMap<String,StoredQuery>();
+	private Map<String,StoredQuery> storedQueries=new TreeMap<>();
     private Connection connection;
     private int resultMaxRows;
     private Options options;
@@ -107,7 +109,7 @@ public class SQLConsolePanel extends javax.swing.JPanel {
     public static Connection getConnection(String driver,String connectString,String user,String password)
                     throws ClassNotFoundException,SQLException {
         
-        System.out.println("Opening DB connection with driver " + driver);
+        logger.info("Opening DB connection with driver " + driver);
         Class.forName(driver);
         return DriverManager.getConnection(connectString,user,password);        
     }
@@ -155,7 +157,7 @@ public class SQLConsolePanel extends javax.swing.JPanel {
     }
     
     public static SQLQueryResult executeQueryLowLevel(String query,Connection connection,int resultMaxRows,Delegate<Integer,Integer> onOverflow) throws SQLException {
-        System.out.println("Excecuting query "+query);
+        logger.info("Excecuting query "+query);
         Statement statement=connection.createStatement();
         query=query.trim();
         boolean type=statement.execute(query);
@@ -184,10 +186,10 @@ public class SQLConsolePanel extends javax.swing.JPanel {
                     rows.add(row);
                     count++;
                     hasNext = resultSet.next();
-                    System.out.println("count == " + count);
+                    logger.info("count == " + count);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                     hasNext = true;
                 }
             }

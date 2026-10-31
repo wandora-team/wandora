@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,9 +29,9 @@ package org.wandora.application.tools.generators;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -40,6 +40,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 
@@ -47,13 +48,13 @@ import org.wandora.utils.swing.GuiTools;
  *
  * @author akivela
  */
-public class RandomGraphGenerator extends AbstractGenerator implements WandoraTool {
-
+public class RandomGraphGenerator extends AbstractGenerator {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RandomGraphGenerator.class);
 
-	public static String RANDOM_GRAPH_SI = "http://wandora.org/si/random-graph";
+	public static String RANDOM_GRAPH_SI = "https://wandora.org/si/random-graph";
 
-    public static String siPattern = "http://wandora.org/si/random-graph/node/__n__";
+    public static String siPattern = "https://wandora.org/si/random-graph/node/__n__";
     public static String basenamePattern = "Random graph node __n__";
     public static boolean connectWithWandoraClass = true;
     public static boolean ensureNumberOfAssociations = true;
@@ -75,7 +76,7 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(wandora, context);
         
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,
@@ -205,7 +206,7 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
         // Creating exact number of random associations!
         if(useAssociationNumber) {
             setProgressMax(an);
-            HashSet createdAssociations = new HashSet(an);
+            Set<String> createdAssociations = new HashSet<>(an);
             for(int j=0; j<an && !forceStop(); j++) {
                 int n1 = (int) Math.floor( Math.random() * n );
                 int n2 = (int) Math.floor( Math.random() * n );
@@ -280,7 +281,7 @@ public class RandomGraphGenerator extends AbstractGenerator implements WandoraTo
                 t.addType(graphInstanceTopic);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return t;

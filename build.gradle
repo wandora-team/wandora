@@ -1,13 +1,16 @@
 /*
  * WANDORA
- * 
+ * Knowledge Extraction, Management, and Publishing Application
+ *
+ * https://wandora.org
  */
+import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
   id 'java'
   id 'distribution'
   id 'application'
-  id 'org.openjfx.javafxplugin' version '0.0.13'
+  id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 repositories {
@@ -17,46 +20,51 @@ repositories {
   }
 }
 
+def getDate() {
+  return new Date().format('yyyy-MM-dd')
+}
+
+
 group = 'org.wandora'
-version = '2023-08-26'
+version = getDate()
 
 
 dependencies {
-    implementation 'com.google.guava:guava:31.1-jre'
+    implementation 'com.google.guava:guava:33.6.0-jre'
     implementation 'org.reflections:reflections:0.10.2'
-    implementation 'commons-io:commons-io:2.13.0'
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-	implementation 'uk.ac.shef.wit.simmetrics:simmetrics:1.6.2.20070207'
+    implementation 'commons-io:commons-io:2.22.0'
+    implementation 'org.apache.commons:commons-lang3:3.20.0'
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.6.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.22.1'
+    implementation 'uk.ac.shef.wit.simmetrics:simmetrics:1.6.2.20070207'
     implementation 'org.apache.poi:poi:5.2.3'
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
-	implementation 'org.apache.poi:poi-ooxml-schemas:4.1.2'
-	implementation 'org.apache.poi:poi-scratchpad:5.2.3'
-	implementation 'org.odftoolkit:odfdom-java:0.11.0'
-	implementation 'org.odftoolkit:simple-odf:0.9.0'
+    implementation 'org.apache.poi:poi-ooxml-schemas:4.1.2'
+    implementation 'org.apache.poi:poi-scratchpad:5.2.3'
+    implementation 'org.odftoolkit:odfdom-java:0.11.0'
+    implementation 'org.odftoolkit:simple-odf:0.9.0'
     implementation 'org.apache.pdfbox:pdfbox:2.0.29'
     implementation 'org.apache-extras.beanshell:bsh:2.0b6'
     implementation 'org.apache.commons:commons-dbcp2:2.9.0'
     
-    implementation 'org.apache.tika:tika-core:2.8.0'
-    implementation 'org.apache.tika:tika-parsers:2.8.0'
-    implementation 'org.apache.tika:tika-parser-audiovideo-module:2.8.0'
+    implementation 'org.apache.tika:tika-core:3.3.1'
+    implementation 'org.apache.tika:tika-parsers:3.3.1'
+    implementation 'org.apache.tika:tika-parser-audiovideo-module:3.3.1'
     
     implementation 'eu.medsea.mimeutil:mime-util:2.1.3'
-    implementation 'com.github.jtidy:jtidy:1.0.4'
-    implementation 'org.jsoup:jsoup:1.16.1'
-    implementation 'org.mnode.ical4j:ical4j:3.2.12'
+    implementation 'com.github.jtidy:jtidy:1.0.5'
+    implementation 'org.jsoup:jsoup:1.22.2'
+    implementation 'org.mnode.ical4j:ical4j:4.3.0'
     implementation 'org.apache.any23:apache-any23-core:2.7'
     implementation 'org.openrdf:openrdf-model:1.2.7'
-    implementation 'org.apache.jena:jena:4.9.0@pom'
-    implementation 'org.apache.jena:jena-arq:4.9.0'
+    implementation 'org.apache.jena:jena:6.1.0@pom'
+    implementation 'org.apache.jena:jena-arq:6.1.0'
 
     implementation 'uk.ac.gate:gate-core:9.0.1'
-    implementation 'edu.stanford.nlp:stanford-corenlp:4.5.4'
+    implementation 'edu.stanford.nlp:stanford-corenlp:4.5.10'
     implementation 'com.mashape.unirest:unirest-java:1.4.9'
     implementation 'org.mnode.mstor:mstor:1.0.3'
-    implementation 'org.apache.velocity:velocity-engine-core:2.3'
+    implementation 'org.apache.velocity:velocity-engine-core:2.4.1'
 
     implementation 'de.quippy:javamod:2.2'
     implementation 'javazoom:jlayer:1.0.1'
@@ -65,25 +73,27 @@ dependencies {
     implementation 'org.dockingframes:docking-frames-common:1.1.1'
     implementation 'de.sciss:syntaxpane:1.3.0'
     
-    implementation 'org.graalvm.js:js:23.0.1'
-    implementation 'org.graalvm.js:js-scriptengine:23.0.1'
+    implementation 'org.graalvm.js:js:25.1.3'
+    implementation 'org.graalvm.js:js-scriptengine:25.1.3'
     
     implementation 'javax.servlet:servlet-api:2.5'
     implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
-    implementation 'com.sun.mail:jakarta.mail:2.0.1'
-    implementation 'com.sun.mail:javax.mail:1.6.2'
+    implementation 'jakarta.mail:jakarta.mail-api:2.1.5'
     implementation 'xerces:xercesImpl:2.12.2'
     
     implementation 'net.ontopia.external.org.tmapi:tmapi:2.0.2'
-    implementation 'org.eclipse.jgit:org.eclipse.jgit:6.6.0.202305301015-r'
-	implementation 'org.eclipse.jdt:ecj:3.34.0'
-	implementation 'org.eclipse.jetty:jetty-http:11.0.15'
-	implementation 'org.eclipse.jetty:jetty-server:11.0.15'
+    implementation 'org.eclipse.jgit:org.eclipse.jgit:7.7.0.202606012155-r'
+    implementation 'org.eclipse.jdt:ecj:3.36.0'
+    implementation 'org.eclipse.jetty:jetty-http:11.0.6'
+    implementation 'org.eclipse.jetty:jetty-server:11.0.6'
+    
+    implementation 'io.github.ollama4j:ollama4j:1.1.7'
 	
-	implementation 'org.slf4j:slf4j-api:1.7.36'
-    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
-    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
-    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.20.0'
+    //implementation 'org.slf4j:slf4j-api:2.0.18'
+    implementation 'org.slf4j:slf4j-nop:2.0.18'
+    implementation 'org.apache.logging.log4j:log4j-api:2.26.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.26.1'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.26.1'
     
     // Embedded dependencies
     implementation files('libs/local/JSwingC64-1.10.4.jar')
@@ -105,8 +115,10 @@ configurations.all {
 
 java {
   toolchain {
-    languageVersion = JavaLanguageVersion.of(17)
+    languageVersion = JavaLanguageVersion.of(21)
   }
+  sourceCompatibility JavaVersion.VERSION_21
+  targetCompatibility JavaVersion.VERSION_21
 }
 
 javafx {
@@ -120,13 +132,31 @@ javafx {
   ]
 }
 
-
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
 }
 
+task deleteOldVersion(type: Delete) {
+  delete 'resources/version.properties'
+}
+
+task createVersion(type: Copy) {
+  from 'resources'
+  into 'resources'
+  include '*.template'
+  rename { String filename ->
+    filename.replace(".template", "")
+  }
+  filter(ReplaceTokens, tokens: [VERSION: version])
+  dependsOn deleteOldVersion
+}
+
 jar {
   processResources.exclude('*')
+  manifest {
+    attributes 'Implementation-Title': 'Wandora', 'Implementation-Version': version
+  }
+  dependsOn createVersion
 }
 
 test {
@@ -147,11 +177,11 @@ startScripts {
 }
 
 
-
 application {
   mainClass = 'org.wandora.application.Wandora'
   executableDir = 'bin'
 }
+
 
 distributions {
   main {
@@ -162,6 +192,7 @@ distributions {
       from('resources') {
         into 'resources'
       }
+      // exclude('version.properties.template')
     }
   }
 }

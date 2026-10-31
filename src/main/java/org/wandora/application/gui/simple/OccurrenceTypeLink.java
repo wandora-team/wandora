@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,21 +36,21 @@ import org.wandora.topicmap.Topic;
  * @author akivela
  */
 public class OccurrenceTypeLink extends TopicLink {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private OccurrenceTable occurrenceTable = null;
-    
-    
-    /** Creates a new instance of AssociationTypeLink */
+
+
+    /** Creates a new instance of OccurrenceTypeLink */
     public OccurrenceTypeLink(OccurrenceTable ot, Topic t, Wandora wandora) {
         super(t, wandora);
         occurrenceTable = ot;
     }
-    
-    
+
+
     public OccurrenceTable getOccurrenceTable() {
         return occurrenceTable;
     }
-    
+
 }

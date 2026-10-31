@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,24 +35,27 @@ import java.io.InputStreamReader;
 import java.io.PushbackReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author olli
  */
 public class BibtexParser {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(BibtexParser.class);
     
-    private ArrayList<BibtexEntry> entries;
+    private List<BibtexEntry> entries;
     
     /** Creates a new instance of BibtexParser */
     public BibtexParser() {
     }
     
-    public ArrayList<BibtexEntry> getEntries(){
+    public List<BibtexEntry> getEntries(){
         return entries;
     }
     
@@ -71,7 +74,7 @@ public class BibtexParser {
                     BibtexEntry e=readEntryBlock(reader,type);
                     if(e!=null) entries.add(e);
                 }catch(BibtexParseException bpe){
-                    bpe.printStackTrace();
+                	logger.error(bpe);
                 }
             }
         }
@@ -81,8 +84,6 @@ public class BibtexParser {
     private BibtexEntry readEntryBlock(PushbackReader reader,String type) throws IOException,BibtexParseException {
         BibtexEntry entry=new BibtexEntry();
         entry.setType(type);
-        StringBuffer key=null;
-        StringBuffer value=null;
         boolean first=true;
         
         while( true ){
@@ -108,12 +109,12 @@ public class BibtexParser {
         }
         
         if(key.equals("author") || key.equals("editor")) {
-            ArrayList<Object> values=readElementValue(reader,true);            
+            List<Object> values=readElementValue(reader,true);            
             if(values!=null && values.size()>0) return t2(key,(Object)values);
             else return null;
         }
         else {
-            ArrayList<Object> values=readElementValue(reader,false);
+            List<Object> values=readElementValue(reader,false);
             if(values!=null && values.size()>0) return t2(key,values.get(0));
             else return null;
         }
@@ -166,19 +167,19 @@ public class BibtexParser {
         }
     }
     
-    private ArrayList<Object> readElementValue(PushbackReader reader,boolean people) throws IOException,BibtexParseException{
+    private List<Object> readElementValue(PushbackReader reader,boolean people) throws IOException,BibtexParseException{
         int c;
         int openBraces=0;
         int openQuotes=0;
-        ArrayList<Object> parsed=new ArrayList<Object>();
-        StringBuffer read1=new StringBuffer();
-        StringBuffer read2=null;
-        StringBuffer read=read1;
+        List<Object> parsed=new ArrayList<Object>();
+        StringBuilder read1=new StringBuilder();
+        StringBuilder read2=null;
+        StringBuilder read=read1;
         while( (c=reader.read())!=-1 ){
             if(c=='{') {
                 if(people && read==read1 && openBraces+openQuotes==1 && 
                         read1.toString().trim().length()>0 && Character.isWhitespace(read1.charAt(read1.length()-1))){
-                    read2=new StringBuffer();
+                    read2=new StringBuilder();
                     read=read2;
                 }
                 openBraces++;
@@ -243,7 +244,7 @@ public class BibtexParser {
                         }
                         Object o=makeValueObject(r1,r2,true);
                         if(o!=null) parsed.add(o);
-                        read1=new StringBuffer();
+                        read1=new StringBuilder();
                         read2=null;
                         read=read1;
                     }
@@ -260,7 +261,7 @@ public class BibtexParser {
     
     private String readEscapeCommand(PushbackReader reader) throws IOException {
         int c;
-        StringBuffer read=new StringBuffer();
+        StringBuilder read=new StringBuilder();
         while( (c=reader.read())!=-1 ){
             if(Character.isLetterOrDigit((char)c)){
                 read.append((char)c);
@@ -276,7 +277,7 @@ public class BibtexParser {
     
     private String readUntil(PushbackReader reader,String chars) throws IOException,BibtexParseException {
         int c;
-        StringBuffer read=new StringBuffer();
+        StringBuilder read=new StringBuilder();
         while( (c=reader.read())!=-1 ){
             read.append((char)c);
             if(chars.indexOf((char)c)!=-1) break;
@@ -300,31 +301,34 @@ public class BibtexParser {
         BibtexParser parser=new BibtexParser();
 //        parser.parse(new InputStreamReader(System.in));
         parser.parse(new InputStreamReader(new FileInputStream("C:\\wandora\\build\\classes\\test.bib")));
+        StringBuilder sb = new StringBuilder();
         for(BibtexEntry e : parser.getEntries()){
-            System.out.print("@"+e.getType()+"{");
-            if(e.getID()!=null) System.out.print(e.getID()+",");
-            System.out.println();
+            sb.append("@"+e.getType()+"{");
+            if(e.getID()!=null) sb.append(e.getID()+",");
             Map<String,Object> values=e.getValues();
             for(String key : values.keySet()){
                 Object value=values.get(key);
-                if(value instanceof String) System.out.println("\t"+key+" = \""+value+"\",");
+                if(value instanceof String) {
+                    sb.append("\t"+key+" = \""+value+"\",");
+                }
                 else{
                     ArrayList<BibtexPerson> list=(ArrayList<BibtexPerson>)value;
-                    System.out.print("\t"+key+" = \"");
+                    sb.append("\t"+key+" = \"");
                     boolean first=true;
                     for(BibtexPerson p : list){
-                        if(!first) System.out.print(" and ");
+                        if(!first) sb.append(" and ");
                         else first=false;
-                        System.out.print(p.getLastName());
+                        sb.append(p.getLastName());
                         if(p.getFirstName()!=null){
-                            System.out.print(", "+p.getFirstName());
-                            if(p.getInitials()!=null) System.out.print(" "+p.getInitials());
+                            sb.append(", "+p.getFirstName());
+                            if(p.getInitials()!=null) sb.append(" "+p.getInitials());
                         }
                     }
-                    System.out.println("\",");
+                    sb.append("\",");
                 }
             }
-            System.out.println("}");
+            sb.append("}");
         }
+        logger.info(sb.toString());
     }
 }

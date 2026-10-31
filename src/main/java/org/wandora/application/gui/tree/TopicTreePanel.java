@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapListener;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -54,9 +55,8 @@ import org.wandora.topicmap.TopicMapListener;
  * @author  olli
  */
 public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapListener,RefreshListener {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicTreePanel.class);
 	
 	private String rootTopic;
     // private TopicTreeModel model;
@@ -173,7 +173,6 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
         jLabel1 = new org.wandora.application.gui.simple.SimpleLabel();
         newRootButton = new org.wandora.application.gui.simple.SimpleButton();
         scrollPane = new javax.swing.JScrollPane();
-        jTree = jTree;
 
         buttonPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -269,7 +268,7 @@ public class TopicTreePanel extends JPanel implements TopicSelector,TopicMapList
             wandora.refreshTopicTrees();
         }
         catch(TopicMapException tme) {
-            tme.printStackTrace();
+            logger.error(tme);
             wandora.displayException("Unable to create root topic.", tme);
         }
     }//GEN-LAST:event_newRootButtonActionPerformed

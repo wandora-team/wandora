@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,12 +32,11 @@ package org.wandora.application.tools.subjects;
 import java.awt.Desktop;
 import java.net.URI;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.LayeredTopicContext;
 import org.wandora.application.contexts.SIContext;
@@ -54,30 +53,30 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */   
-public class OpenSubjectIdentifier extends AbstractWandoraTool implements WandoraTool, Runnable {
+public class OpenSubjectIdentifier extends AbstractWandoraTool {
     
 	private static final long serialVersionUID = 1L;
 
 
 	public OpenSubjectIdentifier() {
     }
-    public OpenSubjectIdentifier(Context proposedContext) {
+    public OpenSubjectIdentifier(Context<?> proposedContext) {
         setContext(proposedContext);
     }
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         boolean errors = false;
         // setDefaultLogger();
         try {
             if(admin != null) {
-                Iterator contextSIs = null;
+                Iterator<?> contextSIs = null;
                 if(context instanceof SIContext) {
                     contextSIs = getContext().getContextObjects();
                 }
                 else if(context instanceof LayeredTopicContext) {
-                    HashSet<Locator> siSet = new LinkedHashSet<>();
-                    Iterator contextTopics = getContext().getContextObjects();
+                    Set<Locator> siSet = new LinkedHashSet<>();
+                    Iterator<?> contextTopics = getContext().getContextObjects();
                     if(contextTopics == null) return;
                     while(contextTopics.hasNext() && !forceStop()) {
                         Topic t = (Topic) (contextTopics.next());

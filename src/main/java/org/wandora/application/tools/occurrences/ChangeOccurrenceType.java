@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,9 +27,9 @@ package org.wandora.application.tools.occurrences;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.OccurrenceTable;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -43,7 +43,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
-public class ChangeOccurrenceType  extends AbstractWandoraTool implements WandoraTool {
+public class ChangeOccurrenceType  extends AbstractWandoraTool {
     
 	private static final long serialVersionUID = 1L;
 	
@@ -60,18 +60,18 @@ public class ChangeOccurrenceType  extends AbstractWandoraTool implements Wandor
     public ChangeOccurrenceType() {
         this.occurrenceType=null;
     }
-    public ChangeOccurrenceType(Context proposedContext) {
+    public ChangeOccurrenceType(Context<?> proposedContext) {
         this.setContext(proposedContext);
         this.occurrenceType=null;
     }
-    public ChangeOccurrenceType(Context proposedContext, Topic occurrenceType) {
+    public ChangeOccurrenceType(Context<?> proposedContext, Topic occurrenceType) {
         this.setContext(proposedContext);
         this.occurrenceType = occurrenceType;
     }
     public ChangeOccurrenceType(Topic occurrenceType) {
         this.occurrenceType = occurrenceType;
     }
-    public ChangeOccurrenceType(Context proposedContext, Topic occurrenceType, Topic masterTopic) {
+    public ChangeOccurrenceType(Context<?> proposedContext, Topic occurrenceType, Topic masterTopic) {
         this.setContext(proposedContext);
         this.occurrenceType = occurrenceType;
         this.masterTopic = masterTopic;
@@ -94,7 +94,7 @@ public class ChangeOccurrenceType  extends AbstractWandoraTool implements Wandor
 
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         Object contextSource = context.getContextSource();
         
         if(contextSource instanceof OccurrenceTable) {
@@ -102,9 +102,9 @@ public class ChangeOccurrenceType  extends AbstractWandoraTool implements Wandor
             ot.changeType();
         }
         else {
-            Iterator<Topic> topics = null;
+            Iterator<?> topics = null;
             if(masterTopic != null) {
-                ArrayList<Topic> topicArray = new ArrayList();
+                List<Topic> topicArray = new ArrayList<>();
                 topicArray.add(masterTopic);
                 topics = topicArray.iterator();
             }
@@ -121,7 +121,7 @@ public class ChangeOccurrenceType  extends AbstractWandoraTool implements Wandor
                     Topic newType = wandora.showTopicFinder("Select new occurrence type");
                     if(newType != null && !newType.isRemoved()) {
                         while(topics.hasNext()) {
-                            Topic topic = topics.next();
+                            Topic topic = (Topic) topics.next();
                             if(topic != null && !topic.isRemoved()) {
                                 Hashtable<Topic,String> os = topic.getData(type);
                                 if(os != null && !os.isEmpty()) {

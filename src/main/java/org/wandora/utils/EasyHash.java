@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,7 +65,9 @@ import java.util.HashMap;
  * number of Object. If it doesen't, the last Object will be ignored.
  */
 
-public class EasyHash<K,V> extends HashMap<K,V> {
+public class EasyHash<K, V> extends HashMap<K, V> {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates new EasyHash from an array of objects.
@@ -75,10 +77,11 @@ public class EasyHash<K,V> extends HashMap<K,V> {
      *          The number of elements in <code>a</code> should therefore be
      *          even. If it isn't, the last element will be ignored.
      */
-    public EasyHash(Object ... a) {
+    public EasyHash(Object... a) {
         setArray(a);
     }
-    
+
+
     /**
      * Adds the given objects to this EasyHash.
      *
@@ -87,9 +90,9 @@ public class EasyHash<K,V> extends HashMap<K,V> {
      *          The number of elements in <code>a</code> should therefore be
      *          even. If it isn't, the last element will be ignored.
      */
-    public void setArray(Object ... a){
-        for(int i=0;i+1<a.length;i+=2){
-            this.put((K)a[i],(V)a[i+1]);
+    public void setArray(Object... a) {
+        for (int i = 0; i + 1 < a.length; i += 2) {
+            this.put((K) a[i], (V) a[i + 1]);
         }
     }
 

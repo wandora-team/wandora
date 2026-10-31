@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@ package org.wandora.application.tools.exporters.simberg;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.wandora.application.tools.exporters.simberg.ModelField.Type;
 
@@ -35,7 +37,7 @@ import org.wandora.application.tools.exporters.simberg.ModelField.Type;
 
 public class ModelTopic {
     private ModelClass cls;
-    private final HashMap<ModelField,Object> fields=new HashMap<ModelField,Object>();
+    private final Map<ModelField,Object> fields=new HashMap<>();
 
     public ModelTopic() {
     }
@@ -76,9 +78,9 @@ public class ModelTopic {
                 fields.put(field,object.toString());
             }
             else if(type==Type.StringList) {
-                if(object instanceof Collection){
-                    ArrayList<String> l=new ArrayList<String>();
-                    for(Object o : (Collection)object){
+                if(object instanceof Collection co){
+                    List<String> l=new ArrayList<>();
+                    for(Object o : co){
                         if(o==null) l.add(null);
                         else l.add(o.toString());
                     }
@@ -93,13 +95,13 @@ public class ModelTopic {
                 else throw new ClassCastException("Field requires a ModelTopic but value is of type "+object.getClass().getName());
             }
             else if(type==Type.TopicList){
-                if(object instanceof Collection){
-                    for(Object o : (Collection)object){
+                if(object instanceof Collection co){
+                    for(Object o : co){
                         if(!(o instanceof ModelTopic)){
                             throw new ClassCastException("Field requires a ModelTopic list but value list element is of type "+o.getClass().getName());
                         }
                     }
-                    fields.put(field,new ArrayList<ModelTopic>((Collection)object));
+                    fields.put(field,new ArrayList<ModelTopic>(co));
                 }
                 else throw new ClassCastException("Field requires a ModelTopic list but value is of type "+object.getClass().getName());
             }

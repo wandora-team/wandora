@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
@@ -46,6 +47,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.utils.Tuples;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -54,14 +56,13 @@ import org.wandora.utils.Tuples;
  * @author  akivela
  */
 public class GeoNamesExtractorSelector extends javax.swing.JDialog {
-
-    
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GeoNamesExtractorSelector.class);
 	
 	
 	public static String BASE_URL = "http://api.geonames.org/";
     private Wandora wandora = null;
-    private Context context = null;
+    private Context<?> context = null;
     private boolean accepted = false;
     
     
@@ -87,7 +88,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         
         // **** COUNTRIES ****
         String [][] countryData = AbstractGeoNamesExtractor.getCountryData();
-        ArrayList<String> countryNames = new ArrayList();
+        List<String> countryNames = new ArrayList<>();
         for(int i=0; i<countryData.length; i++) {
             countryNames.add(countryData[i][1]);
         }
@@ -101,7 +102,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         
         // **** CONTINENTS ****
         String [][] continentData = AbstractGeoNamesExtractor.getContinentData();
-        ArrayList<String> continentNames = new ArrayList();
+        List<String> continentNames = new ArrayList<>();
         for(int i=0; i<continentData.length; i++) {
             continentNames.add(continentData[i][1]);
         }
@@ -113,7 +114,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         
         // **** FEATURE CLASSES ****
         String [][] featureClassData = AbstractGeoNamesExtractor.getFeatureClassData();
-        ArrayList<String> featureClassNames = new ArrayList();
+        List<String> featureClassNames = new ArrayList<>();
         for(int i=0; i<featureClassData.length; i++) {
             featureClassNames.add(featureClassData[i][1]);
         }
@@ -131,7 +132,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         this.wandora = w;
     }
     
-    public void setContext(Context context) {
+    public void setContext(Context<?> context) {
         this.context = context;
     }
     
@@ -275,7 +276,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         // ***** COUNTRY INFO *****
         else if(countryInfoPanel.equals(component)) {
             Object[] countryObjects = countryInfoComboBox.getSelectedObjects();
-            ArrayList<String> countries = new ArrayList<String>();
+            List<String> countries = new ArrayList<>();
                     
             if(countryObjects == null || countryObjects.length == 0) {
                 parentTool.log("No country codes given.");
@@ -496,14 +497,13 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         StringBuilder sb = new StringBuilder("");
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 Object o = null;
                 while(contextObjects.hasNext()) {
                     str = null;
                     o = contextObjects.next();
-                    if(o instanceof Topic) {
-                        Topic t = (Topic) o;
+                    if(o instanceof Topic t) {
                         str = t.getDisplayName(AbstractGeoNamesExtractor.LANG);
                         if(str != null) {
                             str = str.trim();
@@ -519,11 +519,11 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         String contextStr= sb.toString();
-        if(contextStr != null || contextStr.length() == 0) {
+        if(contextStr != null && contextStr.length() == 0) {
             countryInfoComboBox.addItem(contextStr);
             countryInfoComboBox.setSelectedItem(contextStr);
         }
@@ -533,16 +533,15 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
     
     
     
-    public Tuples.T2 solveGPSLocation() {
+    public Tuples.T2<String,String> solveGPSLocation() {
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 Object o = null;
                 boolean found = false;
                 while(contextObjects.hasNext() && !found) {
                     o = contextObjects.next();
-                    if(o instanceof Topic) {
-                        Topic t = (Topic) o;
+                    if(o instanceof Topic t) {
                         if(t != null && !t.isRemoved()) {
                             Collection<Association> as = t.getAssociations(AbstractGeoNamesExtractor.getLocationTypeTopic(t.getTopicMap()));
                             Association a = null;
@@ -557,7 +556,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
                                             String latStr = lat.getDisplayName(null);
                                             String lonStr = lon.getDisplayName(null);
 
-                                            return new Tuples.T2(latStr, lonStr);
+                                            return new Tuples.T2<>(latStr, lonStr);
                                     }
                                 }
                             }
@@ -566,7 +565,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return null;
@@ -575,16 +574,15 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
     
     
     
-    public Tuples.T4 solveGPSBoundingBox() {
+    public Tuples.T4<String,String,String,String> solveGPSBoundingBox() {
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 Object o = null;
                 boolean found = false;
                 while(contextObjects.hasNext() && !found) {
                     o = contextObjects.next();
-                    if(o instanceof Topic) {
-                        Topic t = (Topic) o;
+                    if(o instanceof Topic t) {
                         if(t != null && !t.isRemoved()) {
                             Collection<Association> as = t.getAssociations(AbstractGeoNamesExtractor.getBBoxTypeTopic(t.getTopicMap()));
                             Association a = null;
@@ -605,7 +603,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
                                             String ec = et.getDisplayName(null);
                                             String wc = wt.getDisplayName(null);
 
-                                            return new Tuples.T4(nc, wc, sc, ec);
+                                            return new Tuples.T4<>(nc, wc, sc, ec);
                                     }
                                 }
                             }
@@ -614,7 +612,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return null;
@@ -622,10 +620,10 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
     
     
     public String solveGeonameIdContext() {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         if(context != null) {
             try {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 String str = null;
                 String lstr = null;
                 Object o = null;
@@ -633,8 +631,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
                 while(contextObjects.hasNext()) {
                     str = null;
                     o = contextObjects.next();
-                    if(o instanceof Topic) {
-                        Topic t = (Topic) o;
+                    if(o instanceof Topic t) {
                         Collection<Locator> sis = t.getSubjectIdentifiers();
                         Locator l = null;
                         for(Iterator<Locator> sii = sis.iterator(); sii.hasNext(); ) {
@@ -673,7 +670,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return sb.toString();
@@ -698,7 +695,6 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
      * WARNING: Do NOT modify this code. The content of this method is
      * always regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
@@ -710,11 +706,11 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         searchTextField = new org.wandora.application.gui.simple.SimpleField();
         searchFilterPanel = new javax.swing.JPanel();
         searchContinentLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        searchContinentComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        searchContinentComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         searchCountryLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        searchCountryComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        searchCountryComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         searchFeatureLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        searchFeatureClassComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        searchFeatureClassComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         searchIsNameRequiredLabel = new org.wandora.application.gui.simple.SimpleLabel();
         searchIsNameRequiredCheckBox = new javax.swing.JCheckBox();
         findNearByPanel = new javax.swing.JPanel();
@@ -730,11 +726,11 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         findNearByradiusLabel = new SimpleLabel();
         findNearByRadiusTextField = new javax.swing.JTextField();
         findNearByFeatureLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        findNearByFeatureComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        findNearByFeatureComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         countryInfoPanel = new javax.swing.JPanel();
         countryInfoPanelInner = new javax.swing.JPanel();
         countryInfoLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        countryInfoComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        countryInfoComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         countryInfoButton = new org.wandora.application.gui.simple.SimpleButton();
         citiesPanel = new javax.swing.JPanel();
         citiesPanelInner = new javax.swing.JPanel();
@@ -1198,7 +1194,7 @@ public class GeoNamesExtractorSelector extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 6, 0);
         hierarchyPanelInner.add(hierarchyTextField, gridBagConstraints);
 
-        hierarchyGetContextButton.setLabel("Get context");
+        hierarchyGetContextButton.setText("Get context");
         hierarchyGetContextButton.setMargin(new java.awt.Insets(2, 6, 2, 6));
         hierarchyGetContextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1629,13 +1625,13 @@ private void childrenGetContextButtonActionPerformed(java.awt.event.ActionEvent 
 }//GEN-LAST:event_childrenGetContextButtonActionPerformed
 
 private void citiesGetContextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_citiesGetContextButtonActionPerformed
-    Tuples.T4 gpsRect = solveGPSBoundingBox();
+    Tuples.T4<String,String,String,String> gpsRect = solveGPSBoundingBox();
     if(gpsRect != null) {
         try {
-            citiesNorthTextField.setText(gpsRect.e1.toString());
-            citiesWestTextField.setText(gpsRect.e2.toString());
-            citiesSouthTextField.setText(gpsRect.e3.toString());
-            citiesEastTextField.setText(gpsRect.e4.toString());
+            citiesNorthTextField.setText(gpsRect.e1);
+            citiesWestTextField.setText(gpsRect.e2);
+            citiesSouthTextField.setText(gpsRect.e3);
+            citiesEastTextField.setText(gpsRect.e4);
         }
         catch(Exception e) {}
     }
@@ -1660,21 +1656,21 @@ private void siblingsGetContextButtonActionPerformed(java.awt.event.ActionEvent 
 }//GEN-LAST:event_siblingsGetContextButtonActionPerformed
 
 private void findNearByGetContextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findNearByGetContextButtonActionPerformed
-    Tuples.T2 geoLocation = solveGPSLocation();
+    Tuples.T2<String,String> geoLocation = solveGPSLocation();
     if(geoLocation != null) {
         try {
-            findNearByLatTextField.setText(geoLocation.e1.toString());
-            findNearByLonTextField.setText(geoLocation.e2.toString());
+            findNearByLatTextField.setText(geoLocation.e1);
+            findNearByLonTextField.setText(geoLocation.e2);
         }catch(Exception e) {}
     }
     else {
-        Tuples.T4 gpsRect = solveGPSBoundingBox();
+        Tuples.T4<String,String,String,String> gpsRect = solveGPSBoundingBox();
         if(gpsRect != null) {
             try {
-                double n = Double.parseDouble(gpsRect.e1.toString());
-                double w = Double.parseDouble(gpsRect.e2.toString());
-                double s = Double.parseDouble(gpsRect.e3.toString());
-                double e = Double.parseDouble(gpsRect.e4.toString());
+                double n = Double.parseDouble(gpsRect.e1);
+                double w = Double.parseDouble(gpsRect.e2);
+                double s = Double.parseDouble(gpsRect.e3);
+                double e = Double.parseDouble(gpsRect.e4);
                 
                 double lat = n + ((s-n)/2);
                 double lon = w + ((e-w)/2);
@@ -1688,21 +1684,21 @@ private void findNearByGetContextButtonActionPerformed(java.awt.event.ActionEven
 }//GEN-LAST:event_findNearByGetContextButtonActionPerformed
 
 private void weatherGetContextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weatherGetContextButtonActionPerformed
-    Tuples.T2 geoLocation = solveGPSLocation();
+    Tuples.T2<String,String> geoLocation = solveGPSLocation();
     if(geoLocation != null) {
         try {
-            weatherLatTextField.setText(geoLocation.e1.toString());
-            weatherLonTextField.setText(geoLocation.e2.toString());
+            weatherLatTextField.setText(geoLocation.e1);
+            weatherLonTextField.setText(geoLocation.e2);
         }catch(Exception e) {}
     }
     else {
-        Tuples.T4 gpsRect = solveGPSBoundingBox();
+        Tuples.T4<String,String,String,String> gpsRect = solveGPSBoundingBox();
         if(gpsRect != null) {
             try {
-                double n = Double.parseDouble(gpsRect.e1.toString());
-                double w = Double.parseDouble(gpsRect.e2.toString());
-                double s = Double.parseDouble(gpsRect.e3.toString());
-                double e = Double.parseDouble(gpsRect.e4.toString());
+                double n = Double.parseDouble(gpsRect.e1);
+                double w = Double.parseDouble(gpsRect.e2);
+                double s = Double.parseDouble(gpsRect.e3);
+                double e = Double.parseDouble(gpsRect.e4);
                 
                 double lat = n + ((s-n)/2);
                 double lon = w + ((e-w)/2);
@@ -1740,22 +1736,22 @@ private void wikiBoxWestTextFieldFocusGained(java.awt.event.FocusEvent evt) {//G
 }//GEN-LAST:event_wikiBoxWestTextFieldFocusGained
 
 private void wikiBoxGetContextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wikiBoxGetContextButtonActionPerformed
-    Tuples.T4 gpsRect = solveGPSBoundingBox();
+    Tuples.T4<String,String,String,String> gpsRect = solveGPSBoundingBox();
     if(gpsRect != null) {
         try {
-            wikiBoxNorthTextField.setText(gpsRect.e1.toString());
-            wikiBoxWestTextField.setText(gpsRect.e2.toString());
-            wikiBoxSouthTextField.setText(gpsRect.e3.toString());
-            wikiBoxEastTextField.setText(gpsRect.e4.toString());
+            wikiBoxNorthTextField.setText(gpsRect.e1);
+            wikiBoxWestTextField.setText(gpsRect.e2);
+            wikiBoxSouthTextField.setText(gpsRect.e3);
+            wikiBoxEastTextField.setText(gpsRect.e4);
         }
         catch(Exception e) {}
     }
     else {
-        Tuples.T2 geoLocation = solveGPSLocation();
+        Tuples.T2<String,String> geoLocation = solveGPSLocation();
         if(geoLocation != null) {
             try {
-                double c1 = Double.parseDouble(geoLocation.e1.toString());
-                double c2 = Double.parseDouble(geoLocation.e2.toString());
+                double c1 = Double.parseDouble(geoLocation.e1);
+                double c2 = Double.parseDouble(geoLocation.e2);
                 
                 String radiusStr = WandoraOptionPane.showInputDialog(wandora, "Found only single geo location. To convert found geo location to bounding box give radius:", "1.0", "Radius?");
                 if(radiusStr != null && radiusStr.length() > 0) {
@@ -1792,13 +1788,13 @@ private void wikiBoxGetContextButtonActionPerformed(java.awt.event.ActionEvent e
     private javax.swing.JTextField citiesSouthTextField;
     private javax.swing.JTextField citiesWestTextField;
     private javax.swing.JButton countryInfoButton;
-    private javax.swing.JComboBox countryInfoComboBox;
+    private javax.swing.JComboBox<String> countryInfoComboBox;
     private javax.swing.JLabel countryInfoLabel;
     private javax.swing.JPanel countryInfoPanel;
     private javax.swing.JPanel countryInfoPanelInner;
     private javax.swing.JPanel fillerPanel;
     private javax.swing.JPanel findNearByCoordinatesPanel;
-    private javax.swing.JComboBox findNearByFeatureComboBox;
+    private javax.swing.JComboBox<String> findNearByFeatureComboBox;
     private javax.swing.JLabel findNearByFeatureLabel;
     private javax.swing.JPanel findNearByFilterPanel;
     private javax.swing.JButton findNearByGetContextButton;
@@ -1827,11 +1823,11 @@ private void wikiBoxGetContextButtonActionPerformed(java.awt.event.ActionEvent e
     private javax.swing.JPanel neighboursPanelInner;
     private javax.swing.JTextField neighboursTextField;
     private javax.swing.JButton okButton;
-    private javax.swing.JComboBox searchContinentComboBox;
+    private javax.swing.JComboBox<String> searchContinentComboBox;
     private javax.swing.JLabel searchContinentLabel;
-    private javax.swing.JComboBox searchCountryComboBox;
+    private javax.swing.JComboBox<String> searchCountryComboBox;
     private javax.swing.JLabel searchCountryLabel;
-    private javax.swing.JComboBox searchFeatureClassComboBox;
+    private javax.swing.JComboBox<String> searchFeatureClassComboBox;
     private javax.swing.JLabel searchFeatureLabel;
     private javax.swing.JPanel searchFilterPanel;
     private javax.swing.JCheckBox searchIsNameRequiredCheckBox;

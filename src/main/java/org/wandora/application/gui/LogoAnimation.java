@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ import javax.swing.JPopupMenu;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.WandoraMenuManager;
-
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -49,16 +49,16 @@ import org.wandora.application.WandoraMenuManager;
  *
  * @author akivela
  */
-public class LogoAnimation extends JPanel implements Runnable, MouseListener, ImageObserver {
-	
-	private static final long serialVersionUID = 1L;
-	
+public class LogoAnimation extends JPanel implements Runnable, MouseListener {
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(LogoAnimation.class);
+
 
     public static final int PASSIVE_SLEEP_TIME = 200000;
     public static final int ACTIVE_SLEEP_TIME = 50;
-    
+
     public static final int ANIM_LENGTH = 59;
-    
+
     private BufferedImage[] images;
     private int currentImageIndex = 0;
     private int imageWidth;
@@ -67,41 +67,41 @@ public class LogoAnimation extends JPanel implements Runnable, MouseListener, Im
     private Graphics imageGraphics;
     private boolean animate;
     private Thread imageThread = null;
-    
-    
+
+
     /** Creates a new instance of LogoAnimation */
     public LogoAnimation(Wandora w) {
         initialize(w);
     }
-    
-    
+
+
     private void initialize(Wandora w) {
         this.wandora = w;
         this.addMouseListener(this);
 
         JPopupMenu logoMenu = UIBox.makePopupMenu(WandoraMenuManager.getLogoMenu(), w);
         this.setComponentPopupMenu(logoMenu);
-        
+
         images = new BufferedImage[ANIM_LENGTH];
         String imageLocator = null;
-        for(int i=0; i<ANIM_LENGTH; i++) {
-            imageLocator = "00" + (i+1);
-            if(imageLocator.length() < 4) imageLocator = "0" + imageLocator;
+        for (int i = 0; i < ANIM_LENGTH; i++) {
+            imageLocator = "00" + (i + 1);
+            if (imageLocator.length() < 4) {
+                imageLocator = "0" + imageLocator;
+            }
             imageLocator = "gui/logoanim/" + imageLocator + ".png";
             images[i] = UIBox.getThumbForLocator(imageLocator);
         }
         animate = false;
         repaint();
     }
-    
-    
-    
-    
-    
+
+
+
     public void animate(boolean shouldAnimate) {
-        if(shouldAnimate && !animate) {
+        if (shouldAnimate && !animate) {
             animate = shouldAnimate;
-            if(imageThread == null) {
+            if (imageThread == null) {
                 imageThread = new Thread(this);
                 imageThread.start();
             }
@@ -109,100 +109,101 @@ public class LogoAnimation extends JPanel implements Runnable, MouseListener, Im
                 imageThread.interrupt();
             }
         }
-        else if(!shouldAnimate && animate) {
+        else if (!shouldAnimate && animate) {
             animate = shouldAnimate;
         }
     }
-    
-    
 
-    
-    
+
+
     @Override
     public void run() {
-        while(true) {
-            while(animate) {
+        while (true) {
+            while (animate) {
                 try {
-                    imageThread.sleep(ACTIVE_SLEEP_TIME);
+                    Thread.sleep(ACTIVE_SLEEP_TIME);
                 }
-                catch(Exception e) {
+                catch (Exception e) {
                     // WAKE UP
                 }
                 currentImageIndex++;
-                if(currentImageIndex >= ANIM_LENGTH) currentImageIndex = 0; 
+                if (currentImageIndex >= ANIM_LENGTH) {
+                    currentImageIndex = 0;
+                }
                 repaint(10);
             }
             try {
-                imageThread.sleep(PASSIVE_SLEEP_TIME);
+                Thread.sleep(PASSIVE_SLEEP_TIME);
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 // WAKE UP
             }
         }
     }
-    
+
 
     @Override
     public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
-        if((infoflags & ImageObserver.ALLBITS) != 0) {
+        if ((infoflags & ImageObserver.ALLBITS) != 0) {
             repaint(10);
             return false;
         }
         return true;
     }
-    
-    
+
+
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         try {
-            g.drawImage(images[currentImageIndex],0,0,this);
+            g.drawImage(images[currentImageIndex], 0, 0, this);
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
-    
-    
+
+
+
     public void clearImage() {
         imageGraphics.setColor(getBackground());
         imageGraphics.fillRect(0, 0, imageWidth, imageHeight);
     }
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
-    
+
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
-        if(mouseEvent.getButton() == MouseEvent.BUTTON1 && mouseEvent.getClickCount() >= 2) {
+        if (mouseEvent.getButton() == MouseEvent.BUTTON1 && mouseEvent.getClickCount() >= 2) {
             animate = false;
         }
     }
-    
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
-    
-    
+
+
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
-        String c = actionEvent.getActionCommand();
     }
 }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,12 +58,15 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * 
  * @author anttirt
  */
 public class RISExtractor extends AbstractExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(RISExtractor.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -137,7 +140,7 @@ public class RISExtractor extends AbstractExtractor {
             }
             return t;
         }
-        System.out.println("Failed to create topic!");
+        logger.info("Failed to create topic!");
         return null;
     }
     
@@ -225,7 +228,7 @@ public class RISExtractor extends AbstractExtractor {
             wandoraClass.setBaseName("Wandora class");
 
             Topic RISClass = map.createTopic();
-            RISClass.addSubjectIdentifier(new Locator("http://wandora.org/si/ris/"));
+            RISClass.addSubjectIdentifier(new Locator("https://wandora.org/si/ris/"));
             RISClass.setBaseName("RIS");
             RISClass.addType(wandoraClass);
 
@@ -524,6 +527,8 @@ public class RISExtractor extends AbstractExtractor {
                         case N2:
                             titleT.setData(tyAbstract, enLangT, note.e2);
                             break;
+                        default:
+                        	break;
                     }
                 }
                 
@@ -578,15 +583,12 @@ public class RISExtractor extends AbstractExtractor {
             
         CharBuffer cb = null;
         {
-            FileInputStream fis = null;
             MappedByteBuffer mbb = null;
-
             Charset cs = Charset.forName(mEncoding);
             CharsetDecoder decoder = cs.newDecoder();
 
-            try
+            try(FileInputStream fis = new FileInputStream(f))
             {
-                fis = new FileInputStream(f);
                 FileChannel fc = fis.getChannel();
                 int fs = (int)fc.size(); 
                 mbb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fs);
@@ -641,24 +643,25 @@ public class RISExtractor extends AbstractExtractor {
     public static void main(String[] args) throws Exception {
         Charset cs = Charset.forName("UTF-8");
         CharsetDecoder decoder = cs.newDecoder();
-        FileInputStream fis = new FileInputStream("C:\\test.ris");
-        FileChannel fc = fis.getChannel();
-        int fs = (int)fc.size();
-        MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fs);
-        CharBuffer cb = decoder.decode(mbb);
-
-        try
-        {
-            for(;;)
-            {
-                RISReference ref = new RISReference(cb, null);
-                String refName = ref.titleTag;
-                String bar = refName + ".";
-            }
-        }
-        catch(IllegalArgumentException e)
-        {
-            System.out.println("foobar");
+        try(FileInputStream fis = new FileInputStream("C:\\test.ris")) {
+	        FileChannel fc = fis.getChannel();
+	        int fs = (int)fc.size();
+	        MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fs);
+	        CharBuffer cb = decoder.decode(mbb);
+	
+	        try
+	        {
+	            for(;;)
+	            {
+	                RISReference ref = new RISReference(cb, null);
+	                String refName = ref.titleTag;
+	                String bar = refName + ".";
+	            }
+	        }
+	        catch(IllegalArgumentException e)
+	        {
+	            logger.error("foobar");
+	        }
         }
     }
 

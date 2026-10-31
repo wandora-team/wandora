@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.net.URI;
 import java.net.URL;
 
 import javax.swing.Icon;
@@ -43,22 +44,21 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapReadOnlyException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author  olli, akivela
  */
-public class XSLImport extends AbstractImportTool implements WandoraTool {
-
-
+public class XSLImport extends AbstractImportTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(XSLImport.class);
 
 	String forceXSL = null;
     String forceXML = null;
@@ -79,7 +79,7 @@ public class XSLImport extends AbstractImportTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         String xmlIn = null;
         String xslIn = null;
         XSLImportDialog d = null;
@@ -211,11 +211,11 @@ public class XSLImport extends AbstractImportTool implements WandoraTool {
         if(streamSource == null) return null;
         if(streamSource.startsWith("http:/") || streamSource.startsWith("https:/") || streamSource.startsWith("ftp:/")  || streamSource.startsWith("ftps:/")) {
             try {
-                URL sourceURL = new URL(streamSource);
+                URL sourceURL = new URI(streamSource).toURL();
                 return sourceURL.openStream();
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         try {
@@ -223,7 +223,7 @@ public class XSLImport extends AbstractImportTool implements WandoraTool {
             return new FileInputStream(sourceFile);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }

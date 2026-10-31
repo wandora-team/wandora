@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,8 +84,8 @@ public class TopicOperand extends Operand {
             if(o==null) {
                 ret=t2(null,null);
             }
-            else if(o instanceof Topic){
-                ret=t2((Topic)o,((Topic)o).getOneSubjectIdentifier().toExternalForm());
+            else if(o instanceof Topic to){
+                ret=t2(to, to.getOneSubjectIdentifier().toExternalForm());
             }
             else {
                 Topic t=context.getTopicMap().getTopic(o.toString());

@@ -13,9 +13,10 @@
  */
 package org.wandora.application.gui.previews.formats.applicationz80;
 
-
+import org.wandora.utils.logger.Log4j2Logger;
 
 public final class Z80 {
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(Z80.class);
 
 	interface Env {
 		int m1(int pc, int ir);
@@ -1122,7 +1123,7 @@ public final class Z80 {
  case 0xBA:
  case 0xBB: inir_otir(c); break;
 // -------------- >8
-		default: System.out.println(PC+": Not emulated ED/"+c);
+		default: logger.info(PC+": Not emulated ED/"+c);
 		}
 	}
 

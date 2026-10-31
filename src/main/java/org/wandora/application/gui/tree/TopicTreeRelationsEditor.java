@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ import org.wandora.application.Wandora;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.GripCollections;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -46,9 +47,8 @@ import org.wandora.utils.Options;
  * @author  olli
  */
 public class TopicTreeRelationsEditor extends javax.swing.JPanel {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicTreeRelationsEditor.class);
 	
 	private TopicTreeRelation[] relations;
     private boolean cancelled=true;
@@ -108,7 +108,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
 
     public static void writeAssociationTypes(TopicTreeRelation[] associations) {
         Options options = Wandora.getWandora().getOptions();
-        System.out.println("Writing tree associations: "+associations.length);
+        logger.info("Writing tree associations: "+associations.length);
         if(options != null) {
             for(int i=0;i<associations.length;i++){
                 options.put("trees.type["+i+"].name",associations[i].name);
@@ -157,7 +157,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
                 relationsPanel.add(tatep,gbc);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         addFillerPanel();
@@ -214,7 +214,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
                 v.add(panel.getRelation());
             }
             catch(TopicMapException e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return GripCollections.collectionToArray(v, TopicTreeRelation.class);
@@ -340,7 +340,7 @@ public class TopicTreeRelationsEditor extends javax.swing.JPanel {
             relationsPanel.add(tatep,gbc);
         }
         catch(TopicMapException tme) {
-            tme.printStackTrace(); // TODO EXCEPTION
+        	logger.error(tme);
         }
         addFillerPanel();
         this.revalidate();

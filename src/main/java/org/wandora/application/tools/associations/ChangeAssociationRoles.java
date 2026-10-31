@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,12 +28,10 @@
 package org.wandora.application.tools.associations;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.table.AssociationTable;
@@ -55,7 +53,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class ChangeAssociationRoles extends AbstractWandoraTool implements WandoraTool {
+public class ChangeAssociationRoles extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -66,7 +64,7 @@ public class ChangeAssociationRoles extends AbstractWandoraTool implements Wando
     public ChangeAssociationRoles() {
         setContext(new AssociationContext());
     }
-    public ChangeAssociationRoles(Context preferredContext) {
+    public ChangeAssociationRoles(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -87,7 +85,7 @@ public class ChangeAssociationRoles extends AbstractWandoraTool implements Wando
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         requiresRefresh = false;
         Map<Association, List<Topic>> associationsWithOldRoles = null;
         
@@ -124,9 +122,7 @@ public class ChangeAssociationRoles extends AbstractWandoraTool implements Wando
                 if(association != null && !association.isRemoved()) {
                     List<Topic> oldRoles = associationsWithOldRoles.get(association);
                     for(Topic oldRole : oldRoles) {
-                        System.out.println("oldrole == "+oldRole);
                         player = association.getPlayer(oldRole);
-                        System.out.println("    player == "+player);
                         if(player != null) {
                             requiresRefresh = true;
                             association.addPlayer(player, newRole);

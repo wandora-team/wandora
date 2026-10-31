@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -60,14 +59,16 @@ import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import org.wandora.application.contexts.PreContext;
+import org.wandora.application.contexts.PresetContext;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicpanels.TreeMapTopicPanel;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.navigate.OpenTopic;
 import org.wandora.topicmap.Association;
+import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -78,9 +79,8 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class TreeMapComponent extends JComponent implements ComponentListener, MouseListener, MouseMotionListener, ActionListener, MouseWheelListener {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TreeMapComponent.class);
 	
 	
 	private static final int topicFontSize = 12;
@@ -177,7 +177,7 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
             initialize(topic);
         }
         else {
-            System.out.println("Illegal iteration depth used ("+d+"). Rejecting.");
+            logger.error("Illegal iteration depth used ("+d+"). Rejecting.");
         }
     }
     
@@ -335,8 +335,6 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
 
 
     public void drawNodeTree(DefaultMutableTreeNode node) {
-        //System.out.println("drawing node: "+node.getChildCount());
-
         int w=treeMapWidth;
         int h=treeMapHeight;
         int tx=treeMapX; 
@@ -350,7 +348,6 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
 
         TopicInfo ti = (TopicInfo)node.getUserObject();
         Rect r = ti.getBounds();
-        //System.out.println("bounds: "+r);
 
         if(r.x > zoomRect.x+zoomRect.w || r.y > zoomRect.y+zoomRect.h || r.x+r.w < zoomRect.x || r.y+r.h < zoomRect.y) {
             return;
@@ -598,11 +595,10 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
                         int index = j*2;
                         struct[index] = t2.name;
                         try {
-                            struct[index+1] = new OpenTopic(new PreContext( t2.t.getOneSubjectIdentifier() ));
+                            struct[index+1] = new OpenTopic(new PresetContext<Locator>( t2.t.getOneSubjectIdentifier() ));
                         } 
                         catch(Exception e){};
                     }
-                    //System.out.println("popup created!");
                     popup = UIBox.makePopupMenu(struct, this);
                     
                     Object[] optionsStruct = new Object[] {
@@ -662,7 +658,6 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
                     size = c.getSize();
                 }
                 if(!size.equals(getSize())) {
-                    //System.out.println("new size treemapcomponent: "+size);
                     setPreferredSize(size);
                     setMinimumSize(size);
                     setSize(size);
@@ -927,7 +922,6 @@ public class TreeMapComponent extends JComponent implements ComponentListener, M
     
     @Override
     public void actionPerformed(ActionEvent event) {
-        //System.out.println("TreeMapComponent captured action event '"+event+"'");
         if(event != null) {
             String eventName = event.getActionCommand();
             if("Add filter for classes".equalsIgnoreCase(eventName)) {

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,11 +28,11 @@
 package org.wandora.application.tools.mediawiki;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -44,7 +44,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class MediawikiSubjectLocatorUploader extends MediawikiHandler implements WandoraTool {
+public class MediawikiSubjectLocatorUploader extends MediawikiHandler {
     
 	private static final long serialVersionUID = 1L;
 	
@@ -58,7 +58,7 @@ public class MediawikiSubjectLocatorUploader extends MediawikiHandler implements
     public MediawikiSubjectLocatorUploader() {
     }
     
-    public MediawikiSubjectLocatorUploader(Context proposedContext) {
+    public MediawikiSubjectLocatorUploader(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
     
@@ -73,7 +73,7 @@ public class MediawikiSubjectLocatorUploader extends MediawikiHandler implements
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         requiresRefresh = false;
         isConfigured = false;
         cancelled = false;
@@ -82,7 +82,7 @@ public class MediawikiSubjectLocatorUploader extends MediawikiHandler implements
         Locator lo = null;
         
         try {    
-            Iterator contextObjects = context.getContextObjects();
+            Iterator<?> contextObjects = context.getContextObjects();
             if (!contextObjects.hasNext()) {
                 return;
             }
@@ -219,7 +219,7 @@ public class MediawikiSubjectLocatorUploader extends MediawikiHandler implements
                 url = file.toURI().toURL();
             } else {
                 try {
-                    url = new URL(fileString);
+                    url = new URI(fileString).toURL();
                 } catch (Exception e) {
                     log(e.getMessage());                
                 }

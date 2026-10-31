@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ import org.wandora.application.gui.GetTopicButton;
 import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -54,14 +55,12 @@ import org.wandora.utils.IObox;
  * @author  olli
  */
 public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicTreeRelationEditorPanel.class);
 	
 	private TopicTreeRelationsEditor parent;
     private static List<IconWrapper> icons;
     private Map<String,Integer> iconIndex;
-    private Wandora wandora;
-
 
 
 
@@ -73,8 +72,6 @@ public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
                 URL baseUrl=toolResources.nextElement();
                 if(baseUrl.toExternalForm().startsWith("file:")) {
                     String baseDir = IObox.getFileFromURL(baseUrl);
-                    //String baseDir = URLDecoder.decode(baseUrl.toExternalForm().substring(6), "UTF-8");
-                    //System.out.println("Basedir: " + baseDir);
                     Set<String> fileNames = IObox.getFilesAsHash(baseDir, ".*\\.png", 10, 1000);
                     for(String f : fileNames) {
                         int ind=f.lastIndexOf("/");
@@ -87,14 +84,13 @@ public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
             }
         }
         catch(java.io.IOException ioe) {
-            ioe.printStackTrace();
+        	logger.error(ioe);
         }
     }
     
-    /** Creates new form TreeAssociationTypePanel */
+    
+    /** Creates new form TopicTreeRelationEditorPanel */
     public TopicTreeRelationEditorPanel(String name,String subRole,String assocType,String superRole,String icon,TopicTreeRelationsEditor parent,Wandora wandora) throws TopicMapException {
-        this.wandora=wandora;
-
         subButton = new GetTopicButton(wandora);
         assocTypeButton = new GetTopicButton(wandora);
         superButton = new GetTopicButton(wandora);        
@@ -145,12 +141,10 @@ public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
         superRoleTextField = new org.wandora.application.gui.simple.SimpleField();
         associationTypeTextField = new org.wandora.application.gui.simple.SimpleField();
         subRoleTextField = new org.wandora.application.gui.simple.SimpleField();
-        iconComboBox = new org.wandora.application.gui.simple.SimpleComboBox();iconComboBox.setEditable(false);
+        iconComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
+        iconComboBox.setEditable(false);
         deleteButton = new org.wandora.application.gui.simple.SimpleButton();
         nameTextField = new SimpleField();
-        subButton = subButton; // These buttons initialized in constructor because of possible TopicMapException;
-        assocTypeButton = assocTypeButton;
-        superButton = superButton;
 
         superRoleTextField.setPreferredSize(new java.awt.Dimension(100, 20));
 
@@ -243,7 +237,7 @@ public class TopicTreeRelationEditorPanel extends javax.swing.JPanel {
     private javax.swing.JButton assocTypeButton;
     private javax.swing.JTextField associationTypeTextField;
     private javax.swing.JButton deleteButton;
-    private javax.swing.JComboBox iconComboBox;
+    private javax.swing.JComboBox<IconWrapper> iconComboBox;
     private javax.swing.JTextField nameTextField;
     private javax.swing.JButton subButton;
     private javax.swing.JTextField subRoleTextField;

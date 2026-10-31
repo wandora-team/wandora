@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,22 +29,19 @@ package org.wandora.application.gui.table;
 
 
 
-
 import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.TopicGuiWrapper;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.topicmap.Topic;
-
-
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -52,51 +49,62 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class TopicGridCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+public class TopicGridCellRenderer extends DefaultTableCellRenderer {
     private static final long serialVersionUID = 1L;
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicGridCellRenderer.class);
+
     private Wandora wandora = null;
     private Topic topic;
     private TopicGrid topicGrid;
 
-    
+
     public TopicGridCellRenderer(TopicGrid grid) {
         topicGrid = grid;
         wandora = Wandora.getWandora();
     }
-    
-    
-    
+
+
+
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+    public Component getTableCellRendererComponent(
+            JTable table,
+            Object value,
+            boolean isSelected,
+            boolean hasFocus,
+            int row,
+            int column) {
+
         Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
- 
+
         try {
-            if(value == null || value instanceof Topic) {
+            if (value == null || value instanceof Topic) {
                 topic = (Topic) value;
             }
-            else if(value instanceof TopicGuiWrapper) {
+            else if (value instanceof TopicGuiWrapper) {
                 TopicGuiWrapper topicWrapper = (TopicGuiWrapper) value;
                 topic = topicWrapper.topic;
             }
 
-            if(!isSelected && !hasFocus) {
+            if (!isSelected && !hasFocus) {
                 Color hilight = wandora.topicHilights.get(topic);
-                if(hilight != null) c.setForeground(hilight);
+                if (hilight != null)
+                    c.setForeground(hilight);
                 else {
                     Color layerColor = wandora.topicHilights.getLayerColor(topic);
-                    if(layerColor != null) c.setForeground(layerColor);
-                    else c.setForeground(Color.BLACK);
+                    if (layerColor != null)
+                        c.setForeground(layerColor);
+                    else
+                        c.setForeground(Color.BLACK);
                 }
             }
-            else if(topic != null && topic.isRemoved()) {
+            else if (topic != null && topic.isRemoved()) {
                 c.setForeground(Color.RED);
             }
 
-            if(c instanceof JLabel) {
+            if (c instanceof JLabel) {
                 JLabel label = (JLabel) c;
                 label.setBorder(UIConstants.defaultTableCellLabelBorder);
-                if(topic != null) {
+                if (topic != null) {
                     String topicName = TopicToString.toString(topic);
                     label.setText(topicName);
                 }
@@ -105,16 +113,13 @@ public class TopicGridCellRenderer extends DefaultTableCellRenderer implements T
                 }
             }
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error(e);
         }
-        
+
         return c;
     }
 
-    
 
-
-    
 
 }

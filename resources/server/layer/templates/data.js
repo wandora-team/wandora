@@ -1,4 +1,4 @@
-#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $wandoraClass = $topic.getTopicMap().getTopic("https://wandora.org/si/core/wandora-class") )##
 #set( $ctopic = $topic )##
 #if($request.getParameter("nl"))##
 #**##set($nl =  $request.getParameter("nl"))##

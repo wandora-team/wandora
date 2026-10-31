@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,6 @@ import java.util.Map;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -61,7 +60,7 @@ import org.wandora.utils.IObox;
  *
  * @author akivela
  */
-public class IncidenceMatrixExport  extends AbstractExportTool implements WandoraTool {
+public class IncidenceMatrixExport  extends AbstractExportTool {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -117,9 +116,9 @@ public class IncidenceMatrixExport  extends AbstractExportTool implements Wandor
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
 
-        Iterator<Topic> topics = null;
+        Iterator<?> topics = null;
         Iterator<Association> associations = null;
         String exportInfo = "";
         try {
@@ -127,7 +126,7 @@ public class IncidenceMatrixExport  extends AbstractExportTool implements Wandor
                 topics = context.getContextObjects();
                 HashSet<Association> as = new HashSet<Association>();
                 while(topics.hasNext()) {
-                    Topic t = topics.next();
+                    Topic t = (Topic) topics.next();
                     as.addAll( t.getAssociations() );
                 }
                 associations = as.iterator();
@@ -197,7 +196,7 @@ public class IncidenceMatrixExport  extends AbstractExportTool implements Wandor
 
 
 
-    public void exportMatrix(OutputStream out, Iterator<Association> associationIterator, Iterator<Topic> topicIterator, WandoraToolLogger logger) throws TopicMapException {
+    public void exportMatrix(OutputStream out, Iterator<Association> associationIterator, Iterator<?> topicIterator, WandoraToolLogger logger) throws TopicMapException {
         if(logger == null) logger = this;
         PrintWriter writer = null;
         try {
@@ -225,7 +224,7 @@ public class IncidenceMatrixExport  extends AbstractExportTool implements Wandor
 
         log("Collecting topics...");
         while(topicIterator.hasNext() && !logger.forceStop()) {
-            t = topicIterator.next();
+            t = (Topic) topicIterator.next();
             if(t != null && !t.isRemoved()) {
                 topics.add(t);
                 totalCount++;

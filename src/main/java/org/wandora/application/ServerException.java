@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,22 +37,28 @@ package org.wandora.application;
  * @author  olli
  */
 public class ServerException extends Exception {
-    
-	private static final long serialVersionUID = 1L;
-	
-	
+
+    private static final long serialVersionUID = 1L;
+
+
     /** Creates a new instance of ServerException */
-    public ServerException(){
+    public ServerException() {
         super();
     }
+
+
     public ServerException(String message) {
         super(message);
     }
-    public ServerException(Throwable cause){
+
+
+    public ServerException(Throwable cause) {
         super(cause);
     }
-    public ServerException(String message,Throwable cause){
-        super(message,cause);
+
+
+    public ServerException(String message, Throwable cause) {
+        super(message, cause);
     }
-    
+
 }

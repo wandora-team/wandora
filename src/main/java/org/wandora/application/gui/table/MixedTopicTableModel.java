@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,25 +36,25 @@ import org.wandora.topicmap.Topic;
 
 
 public class MixedTopicTableModel extends DefaultTableModel {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Object[] cols;
     private Object[][] data;
-    
 
-    
+
 
     public MixedTopicTableModel(Object[][] d, Object[] columnObjects) {
         data = d;
         cols = columnObjects;
     }
 
-    
+
 
     @Override
     public int getColumnCount() {
-        if(cols != null) return cols.length;
+        if (cols != null)
+            return cols.length;
         return 0;
     }
 
@@ -62,7 +62,8 @@ public class MixedTopicTableModel extends DefaultTableModel {
 
     @Override
     public int getRowCount() {
-        if(data != null) return data.length;
+        if (data != null)
+            return data.length;
         return 0;
     }
 
@@ -71,7 +72,8 @@ public class MixedTopicTableModel extends DefaultTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
-            if(data != null && rowIndex >= 0 && columnIndex >= 0 && rowIndex < getRowCount() && columnIndex < getColumnCount()) {
+            if (data != null && rowIndex >= 0 && columnIndex >= 0 && rowIndex < getRowCount()
+                    && columnIndex < getColumnCount()) {
                 return data[rowIndex][columnIndex];
             }
         }
@@ -83,12 +85,14 @@ public class MixedTopicTableModel extends DefaultTableModel {
 
 
     @Override
-    public String getColumnName(int columnIndex){
+    public String getColumnName(int columnIndex) {
         try {
-            if(cols != null && columnIndex >= 0 && cols.length > columnIndex && cols[columnIndex] != null) {
-                if(cols[columnIndex] instanceof Topic) return Wandora.getWandora().getTopicGUIName((Topic)cols[columnIndex]);
-                else return cols[columnIndex].toString();
-//                    return cols[columnIndex].getBaseName();
+            if (cols != null && columnIndex >= 0 && cols.length > columnIndex && cols[columnIndex] != null) {
+                if (cols[columnIndex] instanceof Topic)
+                    return Wandora.getWandora().getTopicGUIName((Topic) cols[columnIndex]);
+                else
+                    return cols[columnIndex].toString();
+                //                    return cols[columnIndex].getBaseName();
             }
             return "";
         }
@@ -99,19 +103,19 @@ public class MixedTopicTableModel extends DefaultTableModel {
     }
 
 
-    
+
     @Override
-    public Class getColumnClass(int c) {
-        if(data != null && data[0][c] instanceof Topic) {
+    public Class<?> getColumnClass(int c) {
+        if (data != null && data[0][c] instanceof Topic) {
             return Topic.class;
         }
         return String.class;
     }
-    
-    
+
+
 
     @Override
-    public boolean isCellEditable(int row,int col){
+    public boolean isCellEditable(int row, int col) {
         return false;
     }
 

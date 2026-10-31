@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -49,7 +48,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class AllVariantRemover extends AbstractWandoraTool implements WandoraTool {
+public class AllVariantRemover extends AbstractWandoraTool {
     
 
 
@@ -58,7 +57,7 @@ public class AllVariantRemover extends AbstractWandoraTool implements WandoraToo
 
 	public AllVariantRemover() {
     }
-    public AllVariantRemover(Context preferredContext) {
+    public AllVariantRemover(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -76,9 +75,9 @@ public class AllVariantRemover extends AbstractWandoraTool implements WandoraToo
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             
             if(WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to remove all variant names of selected topics?","Confirm variant name remove", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){
@@ -94,14 +93,11 @@ public class AllVariantRemover extends AbstractWandoraTool implements WandoraToo
                 Collection<Set<Topic>> scopes = null;
                 Iterator<Set<Topic>> scopeIterator = null;
                 Set<Topic> scope = null;
-                int progress = 0;
-                int deleted = 0;
 
                 while(topics.hasNext() && !forceStop()) {
                     try {
                         topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
-                            progress++;
                             scopes = topic.getVariantScopes();
                             if(scopes != null) {
                                 deleteScopes = new ArrayList<>();
@@ -123,7 +119,6 @@ public class AllVariantRemover extends AbstractWandoraTool implements WandoraToo
                                     try {
                                         scope = scopeIterator.next();
                                         topic.removeVariant(scope);
-                                        deleted++;
                                     }
                                     catch(Exception e) {
                                         log(e);

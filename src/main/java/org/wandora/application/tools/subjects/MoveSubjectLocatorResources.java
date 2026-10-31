@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Iterator;
@@ -57,14 +58,16 @@ import org.wandora.utils.fileserver.SimpleFileServerClient;
  */
 public class MoveSubjectLocatorResources extends AbstractWandoraTool {
 
-    private String host;
+    private static final long serialVersionUID = 1L;
+    
+	private String host;
     private int port;
     private String user;
     private String password;
     boolean useSSL;
     private String filePrefix;
     
-    public MoveSubjectLocatorResources(Context preferredContext) {
+    public MoveSubjectLocatorResources(Context<?> preferredContext) {
         this();
         setContext(preferredContext);
     }
@@ -146,20 +149,21 @@ public class MoveSubjectLocatorResources extends AbstractWandoraTool {
         options.put(prefix+"prefix",filePrefix);
     }    
     
-    public static String cleanFileName(String name){
-        StringBuffer sb=new StringBuffer(name);
-        for(int i=0;i<sb.length();i++){
-            char c=sb.charAt(i);
-            if("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-.~".indexOf(c)==-1){
-                sb.setCharAt(i,'_');
+
+    public static String cleanFileName(String name) {
+        StringBuilder sb = new StringBuilder(name);
+        for (int i = 0; i < sb.length(); i++) {
+            char c = sb.charAt(i);
+            if ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-.~".indexOf(c) == -1) {
+                sb.setCharAt(i, '_');
             }
         }
         return sb.toString();
     }
     
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         setDefaultLogger();        
-        Iterator iter=context.getContextObjects();
+        Iterator<?> iter=context.getContextObjects();
         java.net.Socket s=null;
         try{
             log("Connectiong to file server");
@@ -194,7 +198,7 @@ public class MoveSubjectLocatorResources extends AbstractWandoraTool {
                 URLConnection c=null;
                 InputStream urlIn=null;
                 try{
-                    url=new URL(t.getSubjectLocator().toExternalForm());
+                    url=new URI(t.getSubjectLocator().toExternalForm()).toURL();
                     c=authorizer.getAuthorizedAccess(url);
                     urlIn=c.getInputStream();
                 

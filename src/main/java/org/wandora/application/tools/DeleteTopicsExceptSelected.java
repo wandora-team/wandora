@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@ package org.wandora.application.tools;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.Topic;
@@ -39,7 +38,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class DeleteTopicsExceptSelected extends AbstractWandoraTool implements WandoraTool {
+public class DeleteTopicsExceptSelected extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -66,8 +65,8 @@ public class DeleteTopicsExceptSelected extends AbstractWandoraTool implements W
 
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
-        Iterator selectedTopics = getContext().getContextObjects();
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
+        Iterator<?> selectedTopics = getContext().getContextObjects();
         Topic selectedTopic = null;
         int count = 0;
 
@@ -76,7 +75,7 @@ public class DeleteTopicsExceptSelected extends AbstractWandoraTool implements W
         if(answer == WandoraOptionPane.YES_OPTION) {
 
             setDefaultLogger();
-            TopicMap contextTopicMap = wandora.getTopicMap(); // solveContextTopicMap(wandora, context);
+            TopicMap contextTopicMap = wandora.getTopicMap();
             Iterator<Topic> allTopics = contextTopicMap.getTopics();
 
             Topic atopic = null;

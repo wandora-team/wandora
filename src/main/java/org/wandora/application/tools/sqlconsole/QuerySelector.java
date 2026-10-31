@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ public class QuerySelector extends javax.swing.JDialog {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        queryList = new JList(queryNames);
+        queryList = new JList<>(queryNames);
         jPanel1 = new javax.swing.JPanel();
         selectButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
@@ -154,7 +154,7 @@ public class QuerySelector extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel messageLabel;
-    private javax.swing.JList queryList;
+    private javax.swing.JList<String> queryList;
     private javax.swing.JButton selectButton;
     // End of variables declaration//GEN-END:variables
     

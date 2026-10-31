@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,11 +49,11 @@ import org.wandora.utils.Tuples.T2;
  *
  * @author akivela
  */
-public class LSystemGraphGenerator extends AbstractGenerator implements WandoraTool {
+public class LSystemGraphGenerator extends AbstractGenerator {
 
 	private static final long serialVersionUID = 1L;
 
-	public static String DEFAULT_SI_PREFIX = "http://wandora.org/si/l-system/";
+	public static String DEFAULT_SI_PREFIX = "https://wandora.org/si/l-system/";
     public static String DEFAULT_ASSOCIATION_TYPE_SI = DEFAULT_SI_PREFIX+"association-type";
     public static String DEFAULT_ROLE1_SI = DEFAULT_SI_PREFIX+"role-1";
     public static String DEFAULT_ROLE2_SI = DEFAULT_SI_PREFIX+"role-2";
@@ -85,7 +85,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
     }
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context) throws TopicMapException {
         TopicMap tm = solveContextTopicMap(admin, context);
         topicCounter = 0;
         associationCounter = 0;
@@ -111,7 +111,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
 
             String[] systemArray = systemStr.split("\n");
             if(systemArray.length > 1) {
-                ArrayList<Rule> rules = new ArrayList<Rule>();
+                List<Rule> rules = new ArrayList<>();
                 String str = null;
                 Word initiator = null;
                 
@@ -286,9 +286,6 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
             role2.setBaseName(actualRole2Name);
         }
 
-        //System.out.println("create association: "+atype);
-        //System.out.println("  with player: "+t1+" and role "+role1);
-        //System.out.println("  with player: "+t2+" and role "+role2);
         
         Association a = tm.createAssociation(atype);
         a.addPlayer(t1, role1);
@@ -610,10 +607,10 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
     
     
     private class LSystem {
-        private ArrayList<Rule> rules = new ArrayList<Rule>();
+        private List<Rule> rules = new ArrayList<>();
         private Word state = new Word();
         
-        public LSystem(Word initial, ArrayList<Rule> ruleArray, int n) {
+        public LSystem(Word initial, List<Rule> ruleArray, int n) {
             initialize(initial, ruleArray.toArray( new Rule[] {} ), n);
         }
         public LSystem(Word initial, Rule[] ruleArray, int n) {
@@ -686,7 +683,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
     
     
     private class Word {
-        List<Alphabet> alphabets = new ArrayList<Alphabet>();
+        List<Alphabet> alphabets = new ArrayList<>();
         
         public Word() {
             
@@ -695,7 +692,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
             this.alphabets = w;
         }
         public Word(String[] str) {
-            this.alphabets = new ArrayList<Alphabet>();
+            this.alphabets = new ArrayList<>();
             for(int i=0; i<str.length; i++) {
                 alphabets.add(new Alphabet(str[i]));
             }
@@ -716,13 +713,11 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
         
         public boolean startsWith(Word otherWord, int index) {
             boolean found = false;
-            //System.out.println("startsWith-1");
             if(alphabets != null && otherWord != null && alphabets.size() >= index+otherWord.size() ) {
                 Alphabet as = null;
                 Alphabet aw = null;
                 int kmax = otherWord.size();
                 found = true;
-                //System.out.println("startsWith-2");
                 for(int j=0; j<kmax; j++) {
                     as = alphabets.get(index+j);
                     if(as.isFresh()) {
@@ -730,9 +725,7 @@ public class LSystemGraphGenerator extends AbstractGenerator implements WandoraT
                         break;
                     }
                     aw = otherWord.get(j);
-                    //System.out.println("startsWith-3");
                     if(!as.equals(aw)) {
-                        //System.out.println("startsWith-4");
                         found = false;
                         break;
                     }

@@ -30,6 +30,6 @@
     <em:name>Wandora Interface</em:name>
     <em:description>Interface to perform data extractions on web pages using Wandora knowledge management studio.</em:description>
     <em:creator>Wandora Team</em:creator>
-    <em:homepageURL>http://wandora.org/</em:homepageURL>
+    <em:homepageURL>https://wandora.org/</em:homepageURL>
   </Description>      
 </RDF>

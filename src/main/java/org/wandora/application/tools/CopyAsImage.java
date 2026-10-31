@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import java.awt.image.BufferedImage;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicpanels.GraphTopicPanel;
@@ -50,7 +49,7 @@ import org.wandora.utils.ClipboardBox;
 
 
 
-public class CopyAsImage extends AbstractWandoraTool implements WandoraTool {
+public class CopyAsImage extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -58,13 +57,13 @@ public class CopyAsImage extends AbstractWandoraTool implements WandoraTool {
 	/** Creates a new instance of CopyAsImage */
     public CopyAsImage() {
     }
-    public CopyAsImage(Context proposedContext) {
+    public CopyAsImage(Context<?> proposedContext) {
         setContext(proposedContext);
     }
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Object o = context.getContextSource();
         if(o instanceof Component) {
             try {

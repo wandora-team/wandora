@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@ package org.wandora.application.tools.associations;
 
 
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +32,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -75,7 +73,7 @@ import org.wandora.utils.ClipboardBox;
  */
 
 
-public class CopyEdgePath extends AbstractWandoraTool implements WandoraTool {
+public class CopyEdgePath extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -86,7 +84,7 @@ public class CopyEdgePath extends AbstractWandoraTool implements WandoraTool {
     }
     
     
-    public CopyEdgePath(Context preferredContext) {
+    public CopyEdgePath(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -108,7 +106,7 @@ public class CopyEdgePath extends AbstractWandoraTool implements WandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             Map<Association,List<Topic>> associationsWithRoles = null;
             Topic role = null;

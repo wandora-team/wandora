@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ package org.wandora.application;
 import javax.swing.SwingUtilities;
 
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -42,20 +43,20 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class WandoraToolActionListener implements java.awt.event.ActionListener {
-    
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolActionListener.class);
+
     private final WandoraTool tool;
     private final Wandora wandora;
-    
-    
-    
+
+
+
     public WandoraToolActionListener(Wandora wandora, WandoraTool tool) {
         this.wandora = wandora;
         this.tool = tool;
     }
 
-    
-    
+
+
     /**
      * Invokes tool's execute method by SwingUtilities.invokeLater.
      * 
@@ -63,29 +64,29 @@ public class WandoraToolActionListener implements java.awt.event.ActionListener 
      */
     @Override
     public void actionPerformed(final java.awt.event.ActionEvent event) {
-        if(wandora != null && tool != null) {
+        if (wandora != null && tool != null) {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    try { 
-                        wandora.applyChanges(); 
+                    try {
+                        wandora.applyChanges();
                     }
-                    catch(CancelledException ce) { 
-                        return; 
+                    catch (CancelledException ce) {
+                        return;
                     }
 
                     try {
                         tool.execute(wandora, event);
                     }
-                    catch(TopicMapException tme) {
+                    catch (TopicMapException tme) {
                         wandora.handleError(tme);
                     }
                 }
             });
         }
         else {
-            System.out.println("No Wandora or tool object specified in WandoraToolActionListener. Can't execute.");
+            logger.warn("No Wandora or tool object specified in WandoraToolActionListener. Can't execute.");
         }
     }
-    
+
 }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,8 @@ import java.awt.Cursor;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
+import java.nio.file.Path;
 
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
@@ -43,31 +44,31 @@ import org.wandora.utils.DataURL;
  * @author akivela
  */
 public class TextRTF extends Text {
-     
-    
+
+
     public TextRTF(String locator) {
         super(locator);
     }
-    
-    
+
+
     @Override
     protected JComponent getTextComponent(String locator) throws Exception {
         RTFEditorKit rtf = new RTFEditorKit();
         JEditorPane textComponent = new JEditorPane();
         textComponent.setEditorKit(rtf);
         textComponent.setBackground(Color.WHITE);
-        
-        if(locator.startsWith("file:")) {
-            FileInputStream in = new FileInputStream(new URL(locator).getFile());
+
+        if (locator.startsWith("file:")) {
+            FileInputStream in = new FileInputStream(Path.of(new URI(locator)).toFile());
             rtf.read(in, textComponent.getDocument(), 0);
         }
-        else if(DataURL.isDataURL(locator)) {
+        else if (DataURL.isDataURL(locator)) {
             DataURL dataUrl = new DataURL(locator);
             ByteArrayInputStream in = new ByteArrayInputStream(dataUrl.getData());
             rtf.read(in, textComponent.getDocument(), 0);
         }
         else {
-            InputStream in = new URL(locator).openStream();
+            InputStream in = new URI(locator).toURL().openStream();
             rtf.read(in, textComponent.getDocument(), 0);
         }
 
@@ -76,15 +77,14 @@ public class TextRTF extends Text {
         textComponent.setCaretPosition(0);
         return textComponent;
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { "text/rtf", "application/rtf" }, 
-                new String[] { "rtf" }
-        );
+        return PreviewUtils.isOfType(url,
+                new String[] { "text/rtf", "application/rtf" },
+                new String[] { "rtf" });
     }
 }

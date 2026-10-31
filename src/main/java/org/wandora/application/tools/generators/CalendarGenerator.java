@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,11 +29,11 @@ package org.wandora.application.tools.generators;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.GenericOptionsDialog;
 import org.wandora.topicmap.Association;
@@ -47,11 +47,11 @@ import org.wandora.topicmap.XTMPSI;
  *
  * @author akivela
  */
-public class CalendarGenerator extends AbstractGenerator implements WandoraTool {
+public class CalendarGenerator extends AbstractGenerator {
     
 	private static final long serialVersionUID = 1L;
 	
-	public static String CALENDAR_SI_BODY = "http://wandora.org/si/calendar/";
+	public static String CALENDAR_SI_BODY = "https://wandora.org/si/calendar/";
     
     
     /** Creates a new instance of CalendarGenerator */
@@ -69,7 +69,7 @@ public class CalendarGenerator extends AbstractGenerator implements WandoraTool 
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(wandora, context);
         
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,
@@ -83,7 +83,7 @@ public class CalendarGenerator extends AbstractGenerator implements WandoraTool 
         Map<String,String> values=god.getValues();
         
         int[] yearNumbers = null;
-        ArrayList<String> yearNumberArray = new ArrayList<String>();
+        List<String> yearNumberArray = new ArrayList<>();
         try {
             String years = values.get("Years");
             StringTokenizer st = new StringTokenizer(years, ",");
@@ -125,7 +125,7 @@ public class CalendarGenerator extends AbstractGenerator implements WandoraTool 
             return;
         }
 
-        if(yearNumbers == null) {
+        if(yearNumbers.length == 0) {
             singleLog("Invalid years given!");
             return;
         }

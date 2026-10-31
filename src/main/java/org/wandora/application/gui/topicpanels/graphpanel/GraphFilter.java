@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,13 +37,14 @@ import java.util.Set;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author olli, akivela
  */
 public class GraphFilter implements NodeFilter, EdgeFilter {
     
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GraphFilter.class);
     
     
     private Set<TopicNode> filteredNodes;
@@ -211,7 +212,7 @@ public class GraphFilter implements NodeFilter, EdgeFilter {
                 }
             } 
             catch(TopicMapException tme){
-                tme.printStackTrace();
+            	logger.error(tme);
             }
         }
         return false;
@@ -233,7 +234,7 @@ public class GraphFilter implements NodeFilter, EdgeFilter {
                     if(filteredEdgeTypes.contains(model.getNodeFor(a.getType()))) return true;
                 }
                 catch(TopicMapException tme){
-                    tme.printStackTrace();
+                	logger.error(tme);
                 }
             }
         }

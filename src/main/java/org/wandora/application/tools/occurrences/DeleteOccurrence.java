@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,9 +30,9 @@ package org.wandora.application.tools.occurrences;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.ComboBoxTopicWrapper;
 import org.wandora.application.gui.OccurrenceTable;
@@ -47,7 +47,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author olli
  */
-public class DeleteOccurrence extends AbstractWandoraTool implements WandoraTool {
+public class DeleteOccurrence extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -63,18 +63,18 @@ public class DeleteOccurrence extends AbstractWandoraTool implements WandoraTool
     public DeleteOccurrence() {
         this.occurrenceType=null;
     }
-    public DeleteOccurrence(Context proposedContext) {
+    public DeleteOccurrence(Context<?> proposedContext) {
         this.setContext(proposedContext);
         this.occurrenceType=null;
     }
-    public DeleteOccurrence(Context proposedContext, Topic occurrenceType) {
+    public DeleteOccurrence(Context<?> proposedContext, Topic occurrenceType) {
         this.setContext(proposedContext);
         this.occurrenceType=occurrenceType;
     }
     public DeleteOccurrence(Topic occurrenceType) {
         this.occurrenceType=occurrenceType;
     }
-    public DeleteOccurrence(Context proposedContext, Topic occurrenceType, Topic masterTopic) {
+    public DeleteOccurrence(Context<?> proposedContext, Topic occurrenceType, Topic masterTopic) {
         this.setContext(proposedContext);
         this.occurrenceType=occurrenceType;
         this.masterTopic=masterTopic;
@@ -97,7 +97,7 @@ public class DeleteOccurrence extends AbstractWandoraTool implements WandoraTool
 
     
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context)  throws TopicMapException {
         Object contextSource = context.getContextSource();
         deleteAll = false;
         forceStop = false;
@@ -107,9 +107,9 @@ public class DeleteOccurrence extends AbstractWandoraTool implements WandoraTool
             ot.delete();
         }
         else {
-            Iterator topics = null;
+            Iterator<?> topics = null;
             if(masterTopic != null && !masterTopic.isRemoved()) {
-                ArrayList<Topic> topicArray = new ArrayList<>();
+                List<Topic> topicArray = new ArrayList<>();
                 topicArray.add(masterTopic);
                 topics = topicArray.iterator();
                 deleteAll = true;
@@ -119,10 +119,9 @@ public class DeleteOccurrence extends AbstractWandoraTool implements WandoraTool
             }
             
             Topic topic = null;
-            int count = 0;
             Topic type = occurrenceType;
             
-            ArrayList<Topic> allOccurrenceTypes = new ArrayList<Topic>();
+            List<Topic> allOccurrenceTypes = new ArrayList<>();
             
             if(topics!= null && topics.hasNext()) {
                 if(type == null) {
@@ -166,7 +165,6 @@ public class DeleteOccurrence extends AbstractWandoraTool implements WandoraTool
                                     Topic version=(Topic)iter.next();
                                     topic.removeData(type,version);
                                 }
-                                count++;
                             }
                             catch(Exception e2) {
                                 log(e2);

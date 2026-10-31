@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ package org.wandora.application.tools.graph;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -68,7 +69,7 @@ public class CollapseTool extends AbstractGraphTool {
         else return "Collapse nodes "+depth+" links deep";
     }
     
-    public void collapse(VNode vn,VModel model, HashSet<VNode> processed,int depth){
+    public void collapse(VNode vn,VModel model, Set<VNode> processed,int depth){
         processed.add(vn);
         
         if(depth>1){
@@ -85,10 +86,10 @@ public class CollapseTool extends AbstractGraphTool {
     
     
     @Override
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         if(context != null) {
             VNode vn = null;
-            for(Iterator iter=context.getContextObjects(); iter.hasNext(); ) {
+            for(Iterator<?> iter=context.getContextObjects(); iter.hasNext(); ) {
                 try {
                     vn = (VNode) iter.next();
                     //TopicMapGraphPanel panel = vn.getPanel();

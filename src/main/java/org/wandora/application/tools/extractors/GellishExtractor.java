@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,6 @@ import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.TMBox;
@@ -46,16 +45,17 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author akivela
  */
-public class GellishExtractor extends AbstractExtractor implements WandoraTool {
-
+public class GellishExtractor extends AbstractExtractor {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GellishExtractor.class);
 
-	public String locatorPrefix = "http://wandora.org/si/gellish/";
+	public String locatorPrefix = "https://wandora.org/si/gellish/";
 
     public static String DEFAULT_LANG = "en";
     public static boolean EXTRACT_EXTRAS = true;
@@ -359,7 +359,7 @@ public class GellishExtractor extends AbstractExtractor implements WandoraTool {
     
     protected String removeSpacesIn(String str) {
         if(str == null) return null;
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         char ch = 0;
         for(int i=0; i<str.length(); i++) {
             ch = str.charAt(i);
@@ -388,7 +388,7 @@ public class GellishExtractor extends AbstractExtractor implements WandoraTool {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return false;
     }

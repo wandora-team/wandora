@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 package org.wandora.application.tools.occurrences;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -38,7 +39,6 @@ import java.util.Iterator;
  * @author akivela
  */
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -46,8 +46,8 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * <p>
@@ -57,9 +57,10 @@ import org.wandora.utils.IObox;
  * 
  * @author akivela
  */
-public class DownloadAllOccurrences extends AbstractWandoraTool implements  WandoraTool {
+public class DownloadAllOccurrences extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DownloadAllOccurrences.class);
 
 	public boolean changeOccurrence = false;
     public boolean overWriteAll = false;
@@ -68,14 +69,14 @@ public class DownloadAllOccurrences extends AbstractWandoraTool implements  Wand
 
     public DownloadAllOccurrences() {
     }
-    public DownloadAllOccurrences(Context preferredContext) {
+    public DownloadAllOccurrences(Context<?> preferredContext) {
         this(preferredContext, false);
     }
 
     public DownloadAllOccurrences(boolean changeOccurrence) {
         this.changeOccurrence = changeOccurrence;
     }
-    public DownloadAllOccurrences(Context preferredContext, boolean changeOccurrence) {
+    public DownloadAllOccurrences(Context<?> preferredContext, boolean changeOccurrence) {
         setContext(preferredContext);
         this.changeOccurrence = changeOccurrence;
     }
@@ -89,10 +90,9 @@ public class DownloadAllOccurrences extends AbstractWandoraTool implements  Wand
 
 
     @Override
-    public void execute(Wandora admin, Context context) {
-        Iterator topics = context.getContextObjects();
+    public void execute(Wandora admin, Context<?> context) {
+        Iterator<?> topics = context.getContextObjects();
         File targetPath = null;
-        TopicMap tm = admin.getTopicMap();
 
         if(topics != null && topics.hasNext()) {
             try {
@@ -164,7 +164,7 @@ public class DownloadAllOccurrences extends AbstractWandoraTool implements  Wand
 
     public boolean download(Wandora admin, Topic topic, String url, File target) {
         try {
-            URL subjectUrl = new URL(url);
+            URL subjectUrl = new URI(url).toURL();
             String filename = subjectUrl.getPath();
             String filenameWithoutExtension = filename;
             String filenameExtension = "";
@@ -223,7 +223,7 @@ public class DownloadAllOccurrences extends AbstractWandoraTool implements  Wand
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return currentDirectory;
     }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,11 +29,16 @@ package org.wandora.application.tools.subjects;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.SIContext;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
+
+import org.wandora.topicmap.Locator;
+import org.wandora.topicmap.Topic;
+import org.wandora.topicmap.TopicMap;
+import org.wandora.topicmap.TopicMapException;
+
 
 /**
  * <p>
@@ -51,14 +56,7 @@ import org.wandora.application.tools.AbstractWandoraTool;
  * 
  * @author akivela
  */
-import org.wandora.topicmap.Locator;
-import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.TopicMapException;
-
-
-
-public class DuplicateSubjectIdentifier extends AbstractWandoraTool implements WandoraTool {
+public class DuplicateSubjectIdentifier extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -69,7 +67,7 @@ public class DuplicateSubjectIdentifier extends AbstractWandoraTool implements W
     
     public DuplicateSubjectIdentifier() {
     }
-    public DuplicateSubjectIdentifier(Context context) {
+    public DuplicateSubjectIdentifier(Context<?> context) {
         setContext(context);
     }
     
@@ -88,7 +86,7 @@ public class DuplicateSubjectIdentifier extends AbstractWandoraTool implements W
     
     
     @Override
-    public void execute(Wandora w, Context context) throws TopicMapException {
+    public void execute(Wandora w, Context<?> context) throws TopicMapException {
         this.wandora = w;
         if(context.getContextObjects() == null || !context.getContextObjects().hasNext()) {
             return;
@@ -96,7 +94,7 @@ public class DuplicateSubjectIdentifier extends AbstractWandoraTool implements W
         
         if(context instanceof SIContext) {
             setDefaultLogger();
-            Iterator sii = context.getContextObjects();
+            Iterator<?> sii = context.getContextObjects();
             int count = 0;
             while(sii.hasNext() && !forceStop()) {
                 Locator si = (Locator) sii.next();
@@ -129,7 +127,7 @@ public class DuplicateSubjectIdentifier extends AbstractWandoraTool implements W
 
             setDefaultLogger();
             
-            Iterator topics = getContext().getContextObjects();
+            Iterator<?> topics = getContext().getContextObjects();
             Topic topic = null;
             int count = 0;
             int tcount = 0;

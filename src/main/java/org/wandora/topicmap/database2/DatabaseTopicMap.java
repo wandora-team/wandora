@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,6 @@ package org.wandora.topicmap.database2;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -56,6 +54,7 @@ import org.wandora.topicmap.TopicMapSearchOptions;
 import org.wandora.topicmap.TopicMapStatData;
 import org.wandora.topicmap.TopicMapStatOptions;
 import org.wandora.topicmap.TopicTools;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -64,6 +63,8 @@ import org.wandora.topicmap.TopicTools;
  * @author olli, akivela
  */
 public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DatabaseTopicMap.class);
+	
     
     protected boolean changed;
     
@@ -214,19 +215,18 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
 //        if(true) return; // consistency disabled
         if(logger != null) logger.log("Checking association consistency!");
-        int counter=0;
         int deleted=0;
         Collection<Map<String,Object>> res=executeQuery("select distinct PLAYER from MEMBER");
         for(Map<String,Object> row : res){
             String player=row.get("PLAYER").toString();
-            HashSet<ArrayList<String>> associations=new LinkedHashSet<>(500);
+            Set<List<String>> associations=new LinkedHashSet<>(500);
             Collection<Map<String,Object>> res2=executeQuery(
                     "select ASSOCIATION.*,M2.* from ASSOCIATION,MEMBER as M1, MEMBER as M2 "+
                     "where M1.PLAYER='"+escapeSQL(player)+"' and M1.ASSOCIATION=ASSOCIATIONID and "+
                     "M2.ASSOCIATION=ASSOCIATION.ASSOCIATIONID order by ASSOCIATION.ASSOCIATIONID,M2.ROLE"
                     );
             String associationid="";
-            ArrayList<String> v=new ArrayList<>(9);
+            List<String> v=new ArrayList<>(9);
             for(Map<String,Object> row2 : res2) {
                 String id=row2.get("ASSOCIATIONID").toString();
                 if(!associationid.equals(id)){
@@ -248,14 +248,11 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
                 v.add(r); v.add(p);
             }
             if(!associations.add(v)) {
-                logger.hlog("Deleting association with id "+associationid);
+            	if(logger != null) logger.hlog("Deleting association with id "+associationid);
                 executeUpdate("delete from MEMBER where ASSOCIATION='"+escapeSQL(associationid)+"'");
                 executeUpdate("delete from ASSOCIATION where ASSOCIATIONID='"+escapeSQL(associationid)+"'");
                 deleted++;
             }
-                    
-            counter++;
-//            System.out.println("Counter "+counter);
         }
         if(logger != null) logger.log("Association consistency deleted "+deleted+" associations!");
     }
@@ -540,7 +537,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
                     return buildTopic(row);
                 }
                 catch(TopicMapException tme) {
-                    tme.printStackTrace(); // TODO EXCEPTION
+                	logger.error(tme);
                     return null;
                 }
             }
@@ -593,7 +590,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
                     return buildAssociation(row);
                 }
                 catch(TopicMapException tme) {
-                    tme.printStackTrace(); // TODO EXCEPTION
+                	logger.error(tme);
                     return null;
                 }
             }
@@ -670,9 +667,9 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
         }
         
         if(nt.getSubjectIdentifiers().isEmpty()) {
-            System.out.println("Warning no subject indicators in topic. Creating default SI.");
+            logger.info("Warning no subject indicators in topic. Creating default SI.");
             long randomNumber = System.currentTimeMillis() + Math.round(Math.random() * 99999);
-            nt.addSubjectIdentifier(new Locator("http://wandora.org/si/temp/" + randomNumber));
+            nt.addSubjectIdentifier(new Locator("https://wandora.org/si/temp/" + randomNumber));
         }
         copied.put(t,(Locator)nt.getSubjectIdentifiers().iterator().next());
         
@@ -721,7 +718,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
         Topic type=a.getType();
         Topic ntype=null;
         if(type.getSubjectIdentifiers().isEmpty()) {
-            System.out.println("Warning, topic has no subject identifiers.");
+            logger.info("Warning, topic has no subject identifiers.");
         }
         else {
             ntype=getTopic(type.getSubjectIdentifiers().iterator().next()); 
@@ -733,8 +730,8 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
         for(Topic role : a.getRoles()) {
             Topic nrole = null;
             if(role.getSubjectIdentifiers().isEmpty()) {
-                System.out.println("Warning, topic has no subject identifiers. Creating default SI!");
-                //role.addSubjectIdentifier(new Locator("http://wandora.org/si/temp/" + System.currentTimeMillis()));
+                logger.info("Warning, topic has no subject identifiers. Creating default SI!");
+                //role.addSubjectIdentifier(new Locator("https://wandora.org/si/temp/" + System.currentTimeMillis()));
             }
             else {
                 nrole=getTopic((Locator)role.getSubjectIdentifiers().iterator().next());
@@ -743,8 +740,8 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
             Topic player=a.getPlayer(role);
             Topic nplayer = null;
             if(player.getSubjectIdentifiers().isEmpty()) {
-                System.out.println("Warning, topic has no subject identifiers. Creating default SI!");
-                //player.addSubjectIdentifier(new Locator("http://wandora.org/si/temp/" + System.currentTimeMillis()));
+                logger.info("Warning, topic has no subject identifiers. Creating default SI!");
+                //player.addSubjectIdentifier(new Locator("https://wandora.org/si/temp/" + System.currentTimeMillis()));
             }
             else {
                 nplayer=getTopic((Locator)player.getSubjectIdentifiers().iterator().next());
@@ -808,24 +805,24 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
     
     
     @Override
-    public void importXTM(java.io.InputStream in, TopicMapLogger logger) throws java.io.IOException,TopicMapException {
+    public void importXTM(java.io.InputStream in, TopicMapLogger tmLogger) throws java.io.IOException,TopicMapException {
         if(unconnected) return;
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         int numTopics=getNumTopics();
         if(numTopics==0) {
-            System.out.println("Merging to empty topic map");
+            logger.info("Merging to empty topic map");
             topicIndex.stopCleanerThread();
             completeIndexes=topicIndex.isFullIndex();
         }
         else {
-            System.out.println("Merging to non-empty topic map (numTopcis="+numTopics+")");
+            logger.info("Merging to non-empty topic map (numTopcis="+numTopics+")");
         }
 
         boolean old=getConsistencyCheck();
         setConsistencyCheck(false);
         boolean check=!getConsistencyCheck();            
 
-        super.importXTM(in, logger);
+        super.importXTM(in, tmLogger);
         topicIndex.clearTopicCache();
         topicIndex.startCleanerThread();
         completeIndexes=false;
@@ -836,24 +833,24 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
     
     
     @Override
-    public void importLTM(java.io.InputStream in, TopicMapLogger logger) throws java.io.IOException,TopicMapException {
+    public void importLTM(java.io.InputStream in, TopicMapLogger tmLogger) throws java.io.IOException,TopicMapException {
         if(unconnected) return;
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         int numTopics=getNumTopics();
         if(numTopics==0) {
-            System.out.println("Merging to empty topic map");
+            logger.info("Merging to empty topic map");
             topicIndex.stopCleanerThread();
             completeIndexes=topicIndex.isFullIndex();
         }
         else {
-            System.out.println("Merging to non-empty topic map (numTopcis="+numTopics+")");
+            logger.info("Merging to non-empty topic map (numTopcis="+numTopics+")");
         }
         
         boolean old=getConsistencyCheck();
         setConsistencyCheck(false);
         boolean check=!getConsistencyCheck();            
         
-        super.importLTM(in, logger);
+        super.importLTM(in, tmLogger);
         topicIndex.clearTopicCache();
         topicIndex.startCleanerThread();
         completeIndexes=false;
@@ -869,11 +866,11 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
         if(isReadOnly()) throw new TopicMapReadOnlyException();
         int numTopics=getNumTopics();
         if(numTopics==0) {
-            System.out.println("Merging to empty topic map");
+            logger.info("Merging to empty topic map");
             topicIndex.stopCleanerThread();
             completeIndexes=topicIndex.isFullIndex();
         }
-        else System.out.println("Merging to non-empty topic map (numTopcis="+numTopics+")");
+        else logger.info("Merging to non-empty topic map (numTopcis="+numTopics+")");
         
         boolean old=getConsistencyCheck();
         setConsistencyCheck(false);
@@ -1054,7 +1051,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
         }
         
         String dbquery = "%" + escapeSQL(query) + "%";
-        System.out.println("Search starts");
+        logger.info("Search starts");
         String union="";
         // --- Basename ---
         if(options.searchBasenames) {
@@ -1093,7 +1090,7 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
             int counter=0;
             for(Topic t : res){
                 if(t.getOneSubjectIdentifier() == null) {
-                    System.out.println("Warning: Topic '"+t.getBaseName()+"' has no SI!");
+                    logger.info("Warning: Topic '"+t.getBaseName()+"' has no SI!");
                 }
                 else {
                     searchResult.add(t);
@@ -1102,9 +1099,11 @@ public class DatabaseTopicMap extends AbstractDatabaseTopicMap {
                 }
             }
         }
-        catch(Exception e){e.printStackTrace();}
+        catch(Exception e){
+        	logger.error(e);
+    	}
         
-        System.out.println("Search ends with " + searchResult.size() + " hits.");
+        logger.info("Search ends with " + searchResult.size() + " hits.");
         return searchResult;
     }
  

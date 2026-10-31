@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,13 +28,12 @@ package org.wandora.application.tools.subjects;
 
 
 
-import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -53,7 +52,7 @@ import org.wandora.utils.IObox;
  * @author  akivela
  */
 
-public class CheckSubjectLocator extends AbstractWandoraTool implements WandoraTool {
+public class CheckSubjectLocator extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -70,25 +69,24 @@ public class CheckSubjectLocator extends AbstractWandoraTool implements WandoraT
      */
     String reportType = "mid";
 
-    private File currentDirectory = null;
-    private Iterator topicsToCheck;
+    private Iterator<?> topicsToCheck;
     
     
     public CheckSubjectLocator() {}
-    public CheckSubjectLocator(Context context) {
+    public CheckSubjectLocator(Context<?> context) {
         setContext(context);
     }
-    public CheckSubjectLocator(Collection topics) {
+    public CheckSubjectLocator(Collection<Topic> topics) {
         topicsToCheck = topics.iterator();
     }
-    public CheckSubjectLocator(Iterator topics) {
+    public CheckSubjectLocator(Iterator<Topic> topics) {
         topicsToCheck = topics;
     }
     
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         setDefaultLogger();
         
         if(topicsToCheck == null) {
@@ -177,8 +175,8 @@ public class CheckSubjectLocator extends AbstractWandoraTool implements WandoraT
         if(t != null) {
             String topicName = TopicToString.toString(t);
             Locator l = t.getSubjectLocator();
-            String locatorString = l.toExternalForm();
             if(l != null) {
+            	String locatorString = l.toExternalForm();
                 try {
                     if(DataURL.isDataURL(locatorString)) {
                         if(reportAbout('d')) {
@@ -187,7 +185,7 @@ public class CheckSubjectLocator extends AbstractWandoraTool implements WandoraT
                         return 2;
                     }
                     else {
-                        URL subjectUrl = new URL(locatorString);
+                        URL subjectUrl = new URI(locatorString).toURL();
                         if(IObox.urlExists(subjectUrl)) {
                             if(reportAbout('s')) {
                                 log("'"+topicName+"' - found subject locator resource "+locatorString);

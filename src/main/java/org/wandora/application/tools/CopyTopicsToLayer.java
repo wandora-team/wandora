@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@ import java.util.Set;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -59,7 +58,7 @@ import org.wandora.topicmap.undowrapper.UndoTopicMap;
 
 
 
-public class CopyTopicsToLayer extends AbstractWandoraTool implements WandoraTool {
+public class CopyTopicsToLayer extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -97,7 +96,7 @@ public class CopyTopicsToLayer extends AbstractWandoraTool implements WandoraToo
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(wandora == null) return;
         Layer l = wandora.getTopicMap().getSelectedLayer();
         TopicMap target = l.getTopicMap();
@@ -110,7 +109,7 @@ public class CopyTopicsToLayer extends AbstractWandoraTool implements WandoraToo
            mode == COPY_TOPIC_AS_A_STUB_WITH_VARIANTS ||
            mode == COPY_TOPIC_AS_A_STUB_WITH_OCCURRENCES) {
             setDefaultLogger();
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics != null && topics.hasNext()) {
                 Topic t = null;
                 log("Copying topics to topic map layer '"+layerName+"'.");
@@ -172,7 +171,7 @@ public class CopyTopicsToLayer extends AbstractWandoraTool implements WandoraToo
         else if(mode == COPY_TOPIC_AS_A_SINGLE_SI_STUB ||
                 mode == COPY_TOPIC_AS_A_SI_STUB) {
             setDefaultLogger();
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics != null && topics.hasNext()) {
                 Topic t = null;
                 log("Copying topics to topic map layer '"+layerName+"'.");
@@ -247,7 +246,7 @@ public class CopyTopicsToLayer extends AbstractWandoraTool implements WandoraToo
             myLogger = this;
             copyCount = 0;
             HashMap<Locator,Integer> copied = new HashMap<Locator,Integer>();
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics != null && topics.hasNext()) {
                 Topic t = null;
                 log("Copying topics to topic map layer '"+layerName+"'.");

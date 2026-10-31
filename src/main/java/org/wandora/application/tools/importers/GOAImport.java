@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@ import java.io.InputStreamReader;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -56,7 +55,7 @@ import org.wandora.topicmap.XTMPSI;
  *
  * @author akivela
  */
-public class GOAImport extends AbstractImportTool implements WandoraTool {
+public class GOAImport extends AbstractImportTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -169,9 +168,9 @@ public class GOAImport extends AbstractImportTool implements WandoraTool {
      */
     public class GOAParser {
         
-        public static final String SCHEMA_SI  = "http://wandora.org/si/goa/schema";
+        public static final String SCHEMA_SI  = "https://wandora.org/si/goa/schema";
         
-        public static final String GOA_SI = "http://wandora.org/si/goa/";
+        public static final String GOA_SI = "https://wandora.org/si/goa/";
         public static final String GOA_OBJECT_SI = GOA_SI + "object";
         public static final String GOA_DATABASE_SI = GOA_SI + "db";
         public static final String GOA_SYMBOL_SI = GOA_SI + "symbol";
@@ -193,9 +192,7 @@ public class GOAImport extends AbstractImportTool implements WandoraTool {
         private BufferedReader in;
         
         
-        private Topic root = null;
-        private Topic wandoraClass = null;
-        
+
         
         
         /**
@@ -221,7 +218,6 @@ public class GOAImport extends AbstractImportTool implements WandoraTool {
          * @param tm is the Topic Map where initialization is targeted.
          */
         public void initializeTopicMap(TopicMap tm) {
-            wandoraClass = getOrCreateTopic(TMBox.WANDORACLASS_SI, "Wandora class");
             getOrCreateTopic(XTMPSI.getLang(OBO.LANG));
             getOrCreateTopic(XTMPSI.DISPLAY, "Scope Display");
         }
@@ -430,7 +426,7 @@ public class GOAImport extends AbstractImportTool implements WandoraTool {
                     // ***** TAXONS *****
                     if(taxons != null && taxons.trim().length() > 0) {
                         String[] ts = null;
-                        if(objectSynonyms.indexOf("|") != -1) {
+                        if(objectSynonyms != null && objectSynonyms.indexOf("|") != -1) {
                             ts = taxons.split("|");
                         }
                         else {

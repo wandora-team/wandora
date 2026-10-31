@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.navigate.OpenTopic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.action.ActionContentModifier;
@@ -43,6 +44,7 @@ import bibliothek.gui.dock.action.actions.SimpleButtonAction;
 
 
 public class WandoraToolWrapperAction extends SimpleButtonAction {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolWrapperAction.class);
 
     private WandoraTool tool = new OpenTopic();
     
@@ -73,14 +75,14 @@ public class WandoraToolWrapperAction extends SimpleButtonAction {
 
     @Override
     public void action(Dockable dockable) {
-        System.out.println("ACTION TRIGGERED");
+        logger.debug("ACTION TRIGGERED");
         try {
             if(tool != null) {
                 tool.execute(Wandora.getWandora(), (ActionEvent) null);
             }
         }
         catch (TopicMapException ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
     }
     

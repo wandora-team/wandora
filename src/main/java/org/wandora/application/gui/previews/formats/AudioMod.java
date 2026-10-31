@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,36 +32,35 @@ import org.wandora.application.gui.previews.PreviewUtils;
  * @author akivela
  */
 public class AudioMod extends AudioAbstract {
-    
+
 
     public AudioMod(String locator) {
         super(locator);
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
+
 
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-            new String[] { 
-                "audio/mod",
-                "audio/xm",
-                "audio/wow",
-                "audio/it",
-                "audio/stm",
-                "audio/s3m",
-                "audio/xm"
-            }, 
-            new String[] { 
-                "mod", 
-                "wow", 
-                "it", 
-                "stm",
-                "s3m", 
-                "xm"
-            }
-        );
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "audio/mod",
+                        "audio/xm",
+                        "audio/wow",
+                        "audio/it",
+                        "audio/stm",
+                        "audio/s3m",
+                        "audio/xm"
+                },
+                new String[] {
+                        "mod",
+                        "wow",
+                        "it",
+                        "stm",
+                        "s3m",
+                        "xm"
+                });
     }
 }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import java.awt.Color;
 import javax.swing.JColorChooser;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.gui.table.TopicTable;
@@ -45,7 +44,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class TopicHilighter extends AbstractWandoraTool implements WandoraTool {
+public class TopicHilighter extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -63,7 +62,7 @@ public class TopicHilighter extends AbstractWandoraTool implements WandoraTool {
     }
     
     
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             TopicTable table = (TopicTable) getContext().getContextSource();
             switch(hilightOrders) {

@@ -7,10 +7,10 @@
 #set( $articleTypeSI = "http://api.nytimes.com/svc/search/v1/article" )##
 #set( $articleType = $topicmap.getTopic( $articleTypeSI ) )##
 ##
-#set( $articleDateTypeSI = "http://wandora.org/si/nytimes/date" )##
+#set( $articleDateTypeSI = "https://wandora.org/si/nytimes/date" )##
 #set( $articleDateType = $topicmap.getTopic( $articleDateTypeSI ) )##
 ##
-#set( $articleContentTypeSI = "http://wandora.org/si/nytimes/body" )##
+#set( $articleContentTypeSI = "https://wandora.org/si/nytimes/body" )##
 #set( $articleContentType = $topicmap.getTopic( $articleContentTypeSI ) )##
 ##
 #set( $articles = $topicmap.getTopicsOfType( $articleType ) )##

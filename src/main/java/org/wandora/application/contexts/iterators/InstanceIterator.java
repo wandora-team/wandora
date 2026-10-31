@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ import java.util.Iterator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -40,24 +41,24 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class InstanceIterator extends TopicIterator {
 
-
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(InstanceIterator.class);
 
 
     @Override
-    public Iterator solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator oldIterator) {
-        Iterator it = oldIterator;
-        if(topic != null && topicmap != null) {
-            try{
+    public Iterator<Topic> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<Topic> oldIterator) {
+        Iterator<Topic> it = oldIterator;
+        if (topic != null && topicmap != null) {
+            try {
                 collection = topicmap.getTopicsOfType(topic);
+            } catch (TopicMapException tme) {
+                logger.error(tme);
+                collection = null;
             }
-            catch(TopicMapException tme){
-                tme.printStackTrace(); // TODO EXCEPTION
-                collection=null;
-            }
-            if(collection != null) it = collection.iterator();
+            if (collection != null)
+                it = collection.iterator();
         }
         return it;
     }
 
-    
+
 }

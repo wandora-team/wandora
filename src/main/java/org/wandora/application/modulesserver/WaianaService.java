@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +53,7 @@ import org.wandora.modules.usercontrol.User;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.memory.TopicMapImpl;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -78,7 +79,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 public class WaianaService extends AbstractTopicWebApp {
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WaianaService.class);
     
     private WaianaStorage storage = null;
     private boolean allowURLParameterUsage = true;
@@ -161,7 +162,7 @@ public class WaianaService extends AbstractTopicWebApp {
                 JSONObject requestJSON = getRequestJSON(request);
                 if(requestJSON != null) {
 
-                    String api_key = WaianaAPIRequestUtils.getAPIKey(requestJSON);
+                    String apiKey = WaianaAPIRequestUtils.getAPIKey(requestJSON);
                     String command = WaianaAPIRequestUtils.getCommand(requestJSON);
 
                     if("show_local_file_list".equalsIgnoreCase(command) || "show_topic_map_list".equalsIgnoreCase(command) || "show_local_topic_map_list".equalsIgnoreCase(command)) {
@@ -180,7 +181,7 @@ public class WaianaService extends AbstractTopicWebApp {
                         boolean isEditable = WaianaAPIRequestUtils.getIsEditable(requestJSON);
                         boolean isSchema = WaianaAPIRequestUtils.getIsSchema(requestJSON);
 
-                        responseJSON = storage.putTopicMap(user, name, shortName, isPublic, isDownloadable, isEditable, isSchema, data, request.getRequestURL());
+                        responseJSON = storage.putTopicMap(user, name, shortName, isPublic, isDownloadable, isEditable, isSchema, data, new StringBuilder(request.getRequestURL().toString()));
                     }
                     else if("delete_local_file".equalsIgnoreCase(command) || "delete_topic_map".equalsIgnoreCase(command)) {
                         responseJSON = storage.deleteTopicMap(user, WaianaAPIRequestUtils.getShortName(requestJSON));
@@ -227,7 +228,7 @@ public class WaianaService extends AbstractTopicWebApp {
                             if(request.getParameter("isSchema") != null) {
                                 Boolean.parseBoolean(request.getParameter("isSchema"));
                             }
-                            responseJSON = storage.putTopicMap(user, name, shortName, isPublic, isDownloadable, isEditable, isSchema, data, request.getRequestURL());
+                            responseJSON = storage.putTopicMap(user, name, shortName, isPublic, isDownloadable, isEditable, isSchema, data, new StringBuilder(request.getRequestURL().toString()));
                         }
                         else if("delete_local_file".equalsIgnoreCase(command) || "delete_topic_map".equalsIgnoreCase(command)) {
                             String shortName = request.getParameter("shortName");
@@ -248,7 +249,7 @@ public class WaianaService extends AbstractTopicWebApp {
         }
         catch(Exception e) {
             responseJSON = createReply(1, "Exception '"+e.toString()+"' occurred while processing the maiana api request.");
-            e.printStackTrace();
+            logger.error(e);
         }
         if(responseJSON == null || !responseJSON.has("code")) {
             responseJSON = createReply(1, "The response JSON has not been set successfully.");
@@ -279,18 +280,15 @@ public class WaianaService extends AbstractTopicWebApp {
         }
         in.close();
         
-        // System.out.println("FOUND:\n"+sb.toString());
-        
         if(sb.length() > 0) {
             try {
                 JSONObject requestJSON = new JSONObject(sb.toString());
-                // System.out.println("requestJSON:" +requestJSON.toString());
                 return requestJSON;
             } 
             catch (JSONException ex) {
                 // This exception is not logged because the user may user URL 
                 // parameters instead of JSON data.
-                ex.printStackTrace();
+            	logger.error(ex);
             }
         }
         return null;
@@ -319,7 +317,7 @@ public class WaianaService extends AbstractTopicWebApp {
                 return json.getJSONObject("parameters");
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
             return null;
         }
@@ -372,7 +370,7 @@ public class WaianaService extends AbstractTopicWebApp {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
             return null;
         }
@@ -384,7 +382,7 @@ public class WaianaService extends AbstractTopicWebApp {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
             return defaultValue;
         }
@@ -467,7 +465,7 @@ public class WaianaService extends AbstractTopicWebApp {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         
@@ -482,7 +480,7 @@ public class WaianaService extends AbstractTopicWebApp {
                 IObox.saveFile(basePath+"/"+storageFilename, outStr);
             } 
             catch (Exception ex) {
-                ex.printStackTrace();
+            	logger.error(ex);
             }
         }
         
@@ -491,7 +489,7 @@ public class WaianaService extends AbstractTopicWebApp {
         
         
         
-        public JSONObject putTopicMap(User user, String name, String shortName, boolean isPublic, boolean isDownloadable, boolean isEditable, boolean isSchema, String topicMapData, StringBuffer url) {
+        public JSONObject putTopicMap(User user, String name, String shortName, boolean isPublic, boolean isDownloadable, boolean isEditable, boolean isSchema, String topicMapData, StringBuilder stringBuilder) {
             shortName = sanitizeShortName(shortName);
             
             JSONObject dataEntry = data.get(shortName);
@@ -524,7 +522,7 @@ public class WaianaService extends AbstractTopicWebApp {
 
                 if(saveAlwaysAfterChange) saveData();
 
-                return createReply(0, "Successfully created topic map '"+name+"'", url+"?command=stream&shortName="+shortName);
+                return createReply(0, "Successfully created topic map '"+name+"'", stringBuilder+"?command=stream&shortName="+shortName);
             }
             else {
                 return createReply(1, "Waiana storage already contains a topic map with a short name '"+shortName+"' and you have no sufficient rights to update it.");
@@ -544,7 +542,7 @@ public class WaianaService extends AbstractTopicWebApp {
                             IObox.deleteFile(basePath+"/"+topicMapsPath+"/"+shortName+".xtm");
                         } 
                         catch (Exception ex) {
-                            ex.printStackTrace();
+                        	logger.error(ex);
                         }
                     }
                     if(saveAlwaysAfterChange) saveData();
@@ -572,9 +570,6 @@ public class WaianaService extends AbstractTopicWebApp {
                         reply.put("code", 0);
                         try {
                             String topicMapData = readFile(basePath+"/"+topicMapsPath+"/"+shortName+".xtm");
-                            
-                            // System.out.println(topicMapData);
-                            
                             reply.put("data", topicMapData);
                             return reply;
                         } 
@@ -792,7 +787,7 @@ public class WaianaService extends AbstractTopicWebApp {
             reply.put("msg", msg);
             reply.put("data", data);
         }
-        catch(Exception e) { e.printStackTrace(); }
+        catch(Exception e) { logger.error(e); }
         return reply;
     }
 
@@ -802,7 +797,7 @@ public class WaianaService extends AbstractTopicWebApp {
             reply.put("code", code);
             reply.put("msg", msg);
         }
-        catch(Exception e) { e.printStackTrace(); }
+        catch(Exception e) { logger.error(e); }
         return reply;
     }
     
@@ -822,7 +817,7 @@ public class WaianaService extends AbstractTopicWebApp {
             out.close();
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -831,14 +826,14 @@ public class WaianaService extends AbstractTopicWebApp {
         File pf = new File(fname);
         if (pf.exists()) {
             pf.delete();
-            System.out.println("Deleting previously existing file '" + fname + "' before save file operation!");
+            logger.info("Deleting previously existing file '" + fname + "' before save file operation!");
         }
 
         PrintWriter writer=new PrintWriter(new OutputStreamWriter(new FileOutputStream(fname),"UTF-8"));
         writer.print(data);
         writer.flush();
         writer.close();
-        System.out.println("Saving a file '" + fname + "'");
+        logger.info("Saving a file '" + fname + "'");
     }
     
     

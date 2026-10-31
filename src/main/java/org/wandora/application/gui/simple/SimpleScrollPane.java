@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,21 +40,23 @@ import org.wandora.application.gui.UIConstants;
  * @author akivela
  */
 public class SimpleScrollPane extends JScrollPane {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * Creates a new instance of SimpleScrollPane 
      */
     public SimpleScrollPane() {
         getVerticalScrollBar().setUnitIncrement(20);
     }
-    
+
+
     public SimpleScrollPane(Component c) {
         super(c);
         getVerticalScrollBar().setUnitIncrement(20);
     }
-    
+
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);

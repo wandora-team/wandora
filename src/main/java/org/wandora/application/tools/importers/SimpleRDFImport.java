@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,6 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.rdf.rdfmappings.RDFMapping;
 import org.wandora.topicmap.Association;
@@ -55,6 +54,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapReadOnlyException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -66,11 +66,12 @@ import org.wandora.topicmap.XTMPSI;
  * 
  * @author akivela
  */
-public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
+public class SimpleRDFImport extends AbstractImportTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleRDFImport.class);
 
-	public static final String anonSIPrefix="http://wandora.org/si/rdf/anon/";
+	public static final String anonSIPrefix="https://wandora.org/si/rdf/anon/";
 
     /**
      * Creates a new instance of SimpleRDFLocalImport
@@ -97,7 +98,7 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
     
     @Override
     public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        System.out.println(prefix);
+        logger.info(prefix);
         ImportConfiguration dialog=new ImportConfiguration(wandora,true);
         dialog.setOptions(getOptions());
         dialog.setVisible(true);
@@ -189,11 +190,11 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
     
     
     public static final String occurrenceScopeSI = TMBox.LANGINDEPENDENT_SI;
-    public static final String subjectTypeSI = "http://wandora.org/si/core/rdf-subject";
-    public static final String objectTypeSI = "http://wandora.org/si/core/rdf-object";
-    public static final String predicateTypeSI = "http://wandora.org/si/core/rdf-predicate";
+    public static final String subjectTypeSI = "https://wandora.org/si/core/rdf-subject";
+    public static final String objectTypeSI = "https://wandora.org/si/core/rdf-object";
+    public static final String predicateTypeSI = "https://wandora.org/si/core/rdf-predicate";
     
-    public static final String RDF_LIST_ORDER="http://wandora.org/si/rdf/list_order";
+    public static final String RDF_LIST_ORDER="https://wandora.org/si/rdf/list_order";
     
     
     public void handleStatement(Statement stmt,TopicMap map,Topic subjectType,Topic predicateType,Topic objectType) throws TopicMapException {
@@ -291,24 +292,13 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
                 handleStatement(stmt,map,subjectType,predicateType,objectType);
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
             counter++;
             setProgress((counter/1000) % 100);
-            if(counter % 1000 == 0) hlog("RDF statements processed: " + counter);
-            
-            
-            /*
-            System.out.print(subject.toString());
-            System.out.print(" " + predicate.toString() + " ");
-            if (object instanceof Resource) {
-               System.out.print(object.toString());
-            } else {
-                // object is a literal
-                System.out.print(" \"" + object.toString() + "\"");
+            if(counter % 1000 == 0) {
+                hlog("RDF statements processed: " + counter);
             }
-            System.out.println(" .");
-             **/
         }
         log("Total RDF statements processed: " + counter);
     }
@@ -341,7 +331,7 @@ public class SimpleRDFImport extends AbstractImportTool implements WandoraTool {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return topic;
     }

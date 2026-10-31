@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 package org.wandora.application.tools.iot;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 /**
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 
 final class SourceMapping {
 
-    protected static final String BASE_URL = "http://wandora.org/si/iot/source/";
+    protected static final String BASE_URL = "https://wandora.org/si/iot/source/";
     
     private static final ArrayList<IoTSource> sources;
     
@@ -60,7 +61,7 @@ final class SourceMapping {
                     return source;
                 }
             } 
-            catch (MalformedURLException e) {
+            catch (MalformedURLException | URISyntaxException e) {
             }
             
         }

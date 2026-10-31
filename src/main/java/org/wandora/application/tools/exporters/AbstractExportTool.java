@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ import java.util.Iterator;
 
 import javax.swing.Icon;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -45,7 +44,7 @@ import org.wandora.topicmap.memory.TopicMapImpl;
  *
  * @author akivela
  */
-public abstract class AbstractExportTool extends AbstractWandoraTool implements WandoraTool {
+public abstract class AbstractExportTool extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -74,14 +73,14 @@ public abstract class AbstractExportTool extends AbstractWandoraTool implements 
     // -------------------------------------------------------------------------
 
 
-    protected TopicMap makeTopicMapWith(Context context) {
+    protected TopicMap makeTopicMapWith(Context<?> context) {
         return makeTopicMapWith(context, false);
     }
 
-    protected TopicMap makeTopicMapWith(Context context, boolean deepCopy) {
+    protected TopicMap makeTopicMapWith(Context<?> context, boolean deepCopy) {
         TopicMap tm = new TopicMapImpl();
         try {
-            Iterator contextObjects = context.getContextObjects();
+            Iterator<?> contextObjects = context.getContextObjects();
             Object contextObject = null;
             Topic contextTopic = null;
             while(contextObjects.hasNext()) {

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import java.io.FileOutputStream;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
@@ -56,7 +55,7 @@ import org.wandora.utils.IObox;
  *
  * @author akivela
  */
-public class SaveWandoraProject extends AbstractWandoraTool implements WandoraTool {
+public class SaveWandoraProject extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -73,7 +72,7 @@ public class SaveWandoraProject extends AbstractWandoraTool implements WandoraTo
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
 
         File f = null;
         boolean doSave = false;

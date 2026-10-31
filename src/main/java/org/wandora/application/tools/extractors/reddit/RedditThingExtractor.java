@@ -1,9 +1,9 @@
  /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,12 @@ package org.wandora.application.tools.extractors.reddit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -63,7 +67,7 @@ public class RedditThingExtractor extends AbstractRedditExtractor {
     @Override
     public boolean _extractTopicsFrom(File f, TopicMap tm) throws Exception {
         FileInputStream is = new FileInputStream(f);
-        String fileContent = IOUtils.toString(is);
+        String fileContent = IOUtils.toString(is, Charset.forName("UTF-8"));
         return _extractTopicsFrom(fileContent, tm);
     }
 
@@ -79,7 +83,7 @@ public class RedditThingExtractor extends AbstractRedditExtractor {
                 try {
                     TopicMap tm = getWandora().getTopicMap();
                     JSONArray respArray = response.getBody().getArray();
-                    final HashMap<String, Topic> thingTypes = getThingTypes(tm);
+                    final Map<String, Topic> thingTypes = getThingTypes(tm);
                     for(int i=0; i<respArray.length(); i++) {
                         parseThing(respArray.getJSONObject(i),tm,thingTypes, crawlSettings);
                     }
@@ -145,10 +149,10 @@ public class RedditThingExtractor extends AbstractRedditExtractor {
             urlString = urlString.trim();
             if(urlString.length() > 1) {
                 try {
-                    URL url = new URL(urlString);
+                    URL url = new URI(urlString).toURL();
                     _extractTopicsFrom(url, tm);
                 }
-                catch(MalformedURLException mfue) {
+                catch(MalformedURLException | URISyntaxException mfue) {
                     log("Found malformed URL '"+urlString+"' in text processed by RedditThingExtractor.");
                 }
             }

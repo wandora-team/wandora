@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ package org.wandora.application.tools.extractors.rdf.rdfmappings;
 public class SKOSMapping extends RDF2TopicMapsMapping {
     public static final String SKOS_NS = "http://www.w3.org/2004/02/skos/core#";
     public static final String SKOSXL_NS = "http://www.w3.org/2008/05/skos-xl#";
-    public static final String SKOS_ROLE_NS = "http://wandora.org/si/skos/role/";
+    public static final String SKOS_ROLE_NS = "https://wandora.org/si/skos/role/";
     
     
     public static final String[] SI_BASENAME_MAPPING = new String[] {

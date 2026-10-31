@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,6 +56,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -69,16 +70,16 @@ import org.wandora.topicmap.XTMPSI;
 
 
 public class Any23Extractor extends AbstractExtractor {
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Any23Extractor.class);
 	
 	private static final long serialVersionUID = 1L;
 
 	
-	public static final String SOURCE_TYPE = "http://wandora.org/si/any23/source"; // Used also as a role-topic.
+	public static final String SOURCE_TYPE = "https://wandora.org/si/any23/source"; // Used also as a role-topic.
 
-    public static final String ANY23_PREDICATE_TYPE = "http://wandora.org/si/any23/predicate";
-    public static final String ANY23_SUBJECT_TYPE = "http://wandora.org/si/any23/subject";
-    public static final String ANY23_OBJECT_TYPE = "http://wandora.org/si/any23/object";
+    public static final String ANY23_PREDICATE_TYPE = "https://wandora.org/si/any23/predicate";
+    public static final String ANY23_SUBJECT_TYPE = "https://wandora.org/si/any23/subject";
+    public static final String ANY23_OBJECT_TYPE = "https://wandora.org/si/any23/object";
     public static final String ANY23_BASE = "http://any23.org/";
     
     public static boolean SIGN_ALL_TRIPLETS = true;
@@ -365,18 +366,14 @@ public class Any23Extractor extends AbstractExtractor {
                             }
                         }
                         catch(Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
-                }
-
-                if(ec != null) {
-                    //System.out.println(" context: "+ec.getDocumentURI());
                 }
             }
             catch(Exception e) {
                 log(e);
-                e.printStackTrace();
+                logger.error(e);
             }
         }
 
@@ -422,7 +419,7 @@ public class Any23Extractor extends AbstractExtractor {
         if(namespace != null)
             return namespace;
         else
-            return "http://wandora.org/si/default";
+            return "https://wandora.org/si/default";
     }
 
 

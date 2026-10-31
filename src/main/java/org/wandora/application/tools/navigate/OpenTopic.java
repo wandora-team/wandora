@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ import java.util.Iterator;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -43,7 +42,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author  akivela
  */
-public class OpenTopic extends AbstractWandoraTool implements WandoraTool {
+public class OpenTopic extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	public final static int ASK_USER = 100;
@@ -56,7 +55,7 @@ public class OpenTopic extends AbstractWandoraTool implements WandoraTool {
     /** Creates a new instance of OpenTopic */
     public OpenTopic() {
     }
-    public OpenTopic(Context preferredContext) {
+    public OpenTopic(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     public OpenTopic(int preferredOptions) {
@@ -66,8 +65,8 @@ public class OpenTopic extends AbstractWandoraTool implements WandoraTool {
             
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
-        Iterator contextTopics = context.getContextObjects();
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
+        Iterator<?> contextTopics = context.getContextObjects();
         if(options == SOLVE_USING_CONTEXT && contextTopics != null && contextTopics.hasNext()) {
             Topic t = (Topic) (Topic) contextTopics.next();
             if(t != null && !t.isRemoved()) {

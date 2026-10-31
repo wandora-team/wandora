@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,94 +45,92 @@ import org.wandora.utils.ClipboardBox;
 
 
 
-
 /**
  *
  * @author  akivela
  */
 public class WandoraOptionPane extends javax.swing.JPanel implements ActionListener, MouseListener {
 
-	
-	private static final long serialVersionUID = 1L;
-	
-	
-	public static final int YES_OPTION = 1100;
+
+    private static final long serialVersionUID = 1L;
+
+
+    public static final int YES_OPTION = 1100;
     public static final int YES_TO_ALL_OPTION = 1102;
     public static final int NO_OPTION = 1110;
     public static final int CANCEL_OPTION = 1120;
     public static final int OK_OPTION = 1130;
     public static final int CLOSED_OPTION = 1190;
-    
+
     public static final int DEFAULT_OPTION = 1240;
     public static final int YES_NO_OPTION = 1200;
     public static final int YES_TO_ALL_NO_OPTION = 1202;
     public static final int YES_NO_CANCEL_OPTION = 1210;
     public static final int YES_TO_ALL_NO_CANCEL_OPTION = 1212;
     public static final int OK_CANCEL_OPTION = 1230;
-    
+
     public static final int ERROR_MESSAGE = 2100;
     public static final int INFORMATION_MESSAGE = 2200;
     public static final int WARNING_MESSAGE = 2300;
     public static final int PLAIN_MESSAGE = 2400;
     public static final int QUESTION_MESSAGE = 2500;
-    
-    
+
+
     public static Icon askIcon = UIBox.getIcon("gui/icons/dialog/ask.gif");
     public static Icon informIcon = UIBox.getIcon("gui/icons/dialog/inform.gif");
     public static Icon questionIcon = UIBox.getIcon("gui/icons/dialog/question.gif");
     public static Icon warnIcon = UIBox.getIcon("gui/icons/dialog/warn.gif");
-    
-    
+
+
     private static WandoraOptionPane optionPane = new WandoraOptionPane();
     private static JDialog dialog = null;
-    
-    
+
+
     private static int answer = 0;
     private static String inputAnswer = null;
     private static Object optionAnswer = null;
-    
-    
-    
+
+
+
     /** Creates new form WandoraOptionPane */
     public WandoraOptionPane() {
         initComponents();
         messageLabel.addMouseListener(this);
         messageLabel.setComponentPopupMenu(getCopyMenu());
     }
-    
-    
-    
+
+
+
     public JPopupMenu getCopyMenu() {
         Object[] copyMenuObjects = new Object[] {
-            "Copy", UIBox.getIcon("gui/icons/copy.png"),
+                "Copy", UIBox.getIcon("gui/icons/copy.png"),
         };
         return UIBox.makePopupMenu(copyMenuObjects, this);
     }
-    
-    
-  
+
+
+
     // -------------------------------------------------------------------------
     // ------------------------------------------------------- CONFIRM PANEL ---
     // -------------------------------------------------------------------------
-    
-    
-    
-    
-    
+
+
+
     public static int showConfirmDialog(Component parent, String message) {
         return showConfirmDialog(parent, message, "Confirm", DEFAULT_OPTION);
     }
-    
+
+
     public static int showConfirmDialog(Component parent, String message, String title) {
         return showConfirmDialog(parent, message, title, DEFAULT_OPTION);
     }
-    
-    
+
+
     public static int showConfirmDialog(Component parent, String message, String title, int type) {
         initConfirmPanel(parent, message);
         dialog.setTitle(title);
-                
-        switch(type) {
+
+        switch (type) {
             case YES_NO_OPTION: {
                 optionPane.confirmCancelButton.setVisible(false);
                 optionPane.confirmOkButton.setVisible(false);
@@ -175,30 +173,30 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
         centerDialog(parent, dialog);
         answer = CLOSED_OPTION;
         openDialogAndWait(parent, dialog);
-        
+
         return answer;
     }
-    
-    
-    
+
+
+
     protected static void initConfirmPanel(Component parent, String message) {
-        if(parent instanceof JDialog) {
+        if (parent instanceof JDialog) {
             dialog = new JDialog((JDialog) parent, true);
         }
-        else if(parent instanceof Frame) {
+        else if (parent instanceof Frame) {
             dialog = new JDialog((Frame) parent, true);
         }
         else {
             dialog = new JDialog((Frame) null, true);
         }
         setDialogSize(message);
-        
+
         centerDialog(parent, dialog);
         dialog.setLayout(new BorderLayout());
         dialog.add(optionPane.confirmPanel, BorderLayout.CENTER);
-        
-        optionPane.confirmMessageLabel.setText(makeHTML( message.toString() ));
-        
+
+        optionPane.confirmMessageLabel.setText(makeHTML(message.toString()));
+
         optionPane.confirmIconLabel.setIcon(questionIcon);
         optionPane.confirmOkButton.setVisible(true);
         optionPane.confirmCancelButton.setVisible(true);
@@ -207,78 +205,101 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
         optionPane.confirmNoButton.setVisible(true);
         dialog.toFront();
     }
-    
-    
 
-    
-    
+
+
     // -------------------------------------------------------------------------
     // ------------------------------------------------------ MESSAGE DIALOG ---
     // -------------------------------------------------------------------------
-    
-    
-    
-    
+
+
+
     public static void showMessageDialog(Component parent, String message, int type) {
         WandoraOptionPane.showMessageDialog(parent, message, null, type, null);
-    } 
+    }
+
+
     public static void showMessageDialog(Component parent, String message) {
         WandoraOptionPane.showMessageDialog(parent, message, null, INFORMATION_MESSAGE, null);
-    } 
+    }
+
+
     public static void showMessageDialog(Component parent, String message, String title) {
         WandoraOptionPane.showMessageDialog(parent, message, title, INFORMATION_MESSAGE, null);
-    } 
-    
+    }
+
+
     public static void showMessageDialog(Component parent, String message, String title, int type) {
         WandoraOptionPane.showMessageDialog(parent, message, title, type, null);
     }
-    
+
+
     public static void showMessageDialog(Component parent, String message, String title, int type, Icon icon) {
         initMessagePanel(parent, message);
-        if(title != null) {
+        if (title != null) {
             dialog.setTitle(title);
         }
-        if(icon != null) {
+        if (icon != null) {
             optionPane.messageIconLabel.setIcon(icon);
         }
-        switch(type) {
+        switch (type) {
             case ERROR_MESSAGE: {
-                if(icon == null) optionPane.messageIconLabel.setIcon(warnIcon);
-                if(title == null) dialog.setTitle("Error");
+                if (icon == null) {
+                    optionPane.messageIconLabel.setIcon(warnIcon);
+                }
+                if (title == null) {
+                    dialog.setTitle("Error");
+                }
                 break;
             }
             case WARNING_MESSAGE: {
-                if(icon == null) optionPane.messageIconLabel.setIcon(warnIcon);
-                if(title == null) dialog.setTitle("Warning");
+                if (icon == null) {
+                    optionPane.messageIconLabel.setIcon(warnIcon);
+                }
+                if (title == null) {
+                    dialog.setTitle("Warning");
+                }
                 break;
             }
             case PLAIN_MESSAGE: {
-                if(icon == null) optionPane.messageIconLabel.setIcon(informIcon);
-                if(title == null) dialog.setTitle("Message");
+                if (icon == null) {
+                    optionPane.messageIconLabel.setIcon(informIcon);
+                }
+                if (title == null) {
+                    dialog.setTitle("Message");
+                }
                 break;
             }
             case INFORMATION_MESSAGE: {
-                if(icon == null) optionPane.messageIconLabel.setIcon(informIcon);
-                if(title == null) dialog.setTitle("Message");
+                if (icon == null) {
+                    optionPane.messageIconLabel.setIcon(informIcon);
+                }
+                if (title == null) {
+                    dialog.setTitle("Message");
+                }
                 break;
             }
             default: {
-                if(icon == null) optionPane.messageIconLabel.setIcon(informIcon);
-                if(title == null) dialog.setTitle("Message");
+                if (icon == null) {
+                    optionPane.messageIconLabel.setIcon(informIcon);
+                }
+                if (title == null) {
+                    dialog.setTitle("Message");
+                }
                 break;
             }
         }
         centerDialog(parent, dialog);
         openDialogAndWait(parent, dialog);
     }
-    
-    
-       
+
+
+
     protected static void initMessagePanel(Component parent, String message) {
-        if(parent instanceof JDialog) {
+        if (parent instanceof JDialog) {
             dialog = new JDialog((JDialog) parent, true);
         }
-        else if(parent instanceof Frame) {
+        else if (parent instanceof Frame) {
             dialog = new JDialog((Frame) parent, true);
         }
         else {
@@ -289,39 +310,50 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
         centerDialog(parent, dialog);
         dialog.setLayout(new BorderLayout());
         dialog.add(optionPane.messagePanel, BorderLayout.CENTER);
-        
-        optionPane.messageLabel.setText(makeHTML( message.toString() ));
+
+        optionPane.messageLabel.setText(makeHTML(message.toString()));
         optionPane.messageIconLabel.setIcon(questionIcon);
         dialog.toFront();
         optionPane.messageOkButton.requestFocus();
     }
-        
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // -------------------------------------------------------- INPUT DIALOG ---
     // -------------------------------------------------------------------------
-    
-    
+
+
     public static String showInputDialog(Component parent, String message) {
         return WandoraOptionPane.showInputDialog(parent, message, "", "Input", QUESTION_MESSAGE);
     }
+
+
     public static String showInputDialog(String message) {
         return WandoraOptionPane.showInputDialog(null, message, "", "Input", QUESTION_MESSAGE);
     }
+
+
     public static String showInputDialog(String message, String initialText) {
         return WandoraOptionPane.showInputDialog(null, message, initialText, "Input", QUESTION_MESSAGE);
     }
+
+
     public static String showInputDialog(Component parent, String message, String initialText) {
         return WandoraOptionPane.showInputDialog(parent, message, initialText, "Input", QUESTION_MESSAGE);
     }
+
+
     public static String showInputDialog(Component parent, String message, String initialText, String title) {
         return WandoraOptionPane.showInputDialog(parent, message, initialText, title, QUESTION_MESSAGE);
     }
+
+
     public static String showInputDialog(Component parent, String message, String initialText, int type) {
         return WandoraOptionPane.showInputDialog(parent, message, initialText, "Input", type);
     }
+
+
     public static String showInputDialog(Component parent, String message, String initialText, String title, int type) {
         initInputPanel(parent, message, title, initialText);
         centerDialog(parent, dialog);
@@ -330,144 +362,153 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
         return inputAnswer;
     }
 
-    
+
     protected static void initInputPanel(Component parent, String message, String title, String initialText) {
-        if(parent instanceof JDialog) {
+        if (parent instanceof JDialog) {
             dialog = new JDialog((JDialog) parent, true);
         }
-        else if(parent instanceof Frame) {
+        else if (parent instanceof Frame) {
             dialog = new JDialog((Frame) parent, true);
         }
         else {
             dialog = new JDialog((Frame) null, true);
         }
-        if(title == null) title = "Input";
+        if (title == null)
+            title = "Input";
         dialog.setTitle(title);
         dialog.setSize(450, 180);
         centerDialog(parent, dialog);
         dialog.setLayout(new BorderLayout());
         dialog.add(optionPane.inputPanel, BorderLayout.CENTER);
-        
-        optionPane.inputMessageLabel.setText(makeHTML( message.toString() ));
-        if(initialText == null) initialText = "";
+
+        optionPane.inputMessageLabel.setText(makeHTML(message.toString()));
+        if (initialText == null)
+            initialText = "";
         optionPane.inputField.setText(initialText);
-        
+
         optionPane.inputIconLabel.setIcon(askIcon);
         dialog.toFront();
         optionPane.inputField.requestFocus();
     }
-        
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // ------------------------------------------------------- OPTION DIALOG ---
     // -------------------------------------------------------------------------
-    
-    
-    
-    
-     public static String showOptionDialog(Component parent, String message, String title, int type, String[] options, String initialValue) {
+
+
+
+    public static String showOptionDialog(Component parent, String message, String title, int type, String[] options,
+            String initialValue) {
         initOptionPanel(parent, message, title, options, initialValue);
         centerDialog(parent, dialog);
         optionAnswer = null;
         openDialogAndWait(parent, dialog);
-        return (String)optionAnswer;
-     }
-     
-     public static Object showOptionDialog(Component parent, String message, String title, int type, Object[] options, Object initialValue) {
+        return (String) optionAnswer;
+    }
+
+
+    public static Object showOptionDialog(Component parent, String message, String title, int type, Object[] options,
+            Object initialValue) {
         initOptionPanel(parent, message, title, options, initialValue);
         centerDialog(parent, dialog);
         optionAnswer = null;
         openDialogAndWait(parent, dialog);
         return optionAnswer;
-     }
+    }
 
-    
-    protected static void initOptionPanel(Component parent, String message, String title, Object[] options, Object initialValue) {
-        if(parent instanceof JDialog) {
+
+    protected static void initOptionPanel(Component parent, String message, String title, Object[] options,
+            Object initialValue) {
+        if (parent instanceof JDialog) {
             dialog = new JDialog((JDialog) parent, true);
         }
-        else if(parent instanceof Frame) {
+        else if (parent instanceof Frame) {
             dialog = new JDialog((Frame) parent, true);
         }
         else {
             dialog = new JDialog((Frame) null, true);
         }
-        if(title == null) title = "Select";
+        if (title == null)
+            title = "Select";
         dialog.setTitle(title);
         dialog.setSize(450, 180);
         centerDialog(parent, dialog);
         dialog.setLayout(new BorderLayout());
         dialog.add(optionPane.optionPanel, BorderLayout.CENTER);
-        
-        optionPane.optionMessageLabel.setText(makeHTML( message.toString() ));
-        
+
+        optionPane.optionMessageLabel.setText(makeHTML(message.toString()));
+
         optionPane.optionsComboBox.setEditable(false);
         optionPane.optionsComboBox.removeAllItems();
-        for(int i=0; i<options.length; i++) {
+        for (int i = 0; i < options.length; i++) {
             optionPane.optionsComboBox.addItem(options[i]);
         }
         optionPane.optionsComboBox.setSelectedItem(initialValue);
-        
+
         optionPane.optionsIconLabel.setIcon(questionIcon);
         dialog.toFront();
     }
-    
-    
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
-    
-    
-    
-    
+
+
+
     private static void setDialogSize(String message) {
-        if(dialog != null && message != null) {
-            if(message.length() > 1000) dialog.setSize(800, 500);
-            else if(message.length() > 500) dialog.setSize(650, 400);
-            else if(message.length() > 250) dialog.setSize(600, 200);
-            else if(message.length() > 150) dialog.setSize(550, 180);
-            else dialog.setSize(550, 180);
+        if (dialog != null && message != null) {
+            if (message.length() > 1000)
+                dialog.setSize(800, 500);
+            else if (message.length() > 500)
+                dialog.setSize(650, 400);
+            else if (message.length() > 250)
+                dialog.setSize(600, 200);
+            else if (message.length() > 150)
+                dialog.setSize(550, 180);
+            else
+                dialog.setSize(550, 180);
         }
     }
-    
-    
-    
+
+
+
     private static void centerDialog(Component parent, JDialog d) {
-        if(d != null) {
-            if(parent == null) parent = Wandora.getWandora();
-            if(parent != null) {
-                int x = parent.getX()+parent.getWidth()/2-d.getWidth()/2;
-                int y = parent.getY()+parent.getHeight()/2-d.getHeight()/2;
+        if (d != null) {
+            if (parent == null) {
+                parent = Wandora.getWandora();
+            }
+            if (parent != null) {
+                int x = parent.getX() + parent.getWidth() / 2 - d.getWidth() / 2;
+                int y = parent.getY() + parent.getHeight() / 2 - d.getHeight() / 2;
                 d.setLocation(x, y);
             }
             else {
                 try {
                     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-                    int x = dim.width/2-d.getWidth()/2;
-                    int y = dim.height/2-d.getHeight()/2;
+                    int x = dim.width / 2 - d.getWidth() / 2;
+                    int y = dim.height / 2 - d.getHeight() / 2;
                     d.setLocation(x, y);
                 }
-                catch(Exception e) { /*PASS SILENTLY*/}
+                catch (Exception e) {
+                    /*PASS SILENTLY*/}
             }
         }
     }
-    
-    
+
+
     private static String makeHTML(String txt) {
-        if(txt != null && txt.trim().startsWith("<html>")) return txt.trim();
-        else return "<html>" + txt + "</html>";
+        if (txt != null && txt.trim().startsWith("<html>"))
+            return txt.trim();
+        else
+            return "<html>" + txt + "</html>";
     }
-    
-    
-    
-    
-    
+
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -514,7 +555,7 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
         optionMessagePanel = new javax.swing.JPanel();
         optionMessageLabel = new org.wandora.application.gui.simple.SimpleLabel();
         optionOptionsPanel = new javax.swing.JPanel();
-        optionsComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        optionsComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         optionButtonPanel = new javax.swing.JPanel();
         optionEmptyPanel = new javax.swing.JPanel();
         optionsOkButton = new org.wandora.application.gui.simple.SimpleButton();
@@ -845,7 +886,8 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
 
         optionOptionsPanel.setLayout(new java.awt.GridBagLayout());
 
-        optionsComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        optionsComboBox.setModel(
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         optionsComboBox.setMinimumSize(new java.awt.Dimension(51, 21));
         optionsComboBox.setPreferredSize(new java.awt.Dimension(55, 21));
         optionsComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -896,108 +938,126 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
         setLayout(new java.awt.BorderLayout());
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void confirmYesToAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmYesToAllButtonActionPerformed
         answer = YES_TO_ALL_OPTION;
         dialog.setVisible(false);
     }//GEN-LAST:event_confirmYesToAllButtonActionPerformed
+
 
     private void optionsOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optionsOkButtonActionPerformed
         optionAnswer = optionPane.optionsComboBox.getSelectedItem();
         dialog.setVisible(false);
     }//GEN-LAST:event_optionsOkButtonActionPerformed
 
+
     private void confirmOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmOkButtonActionPerformed
         answer = OK_OPTION;
         dialog.setVisible(false);
     }//GEN-LAST:event_confirmOkButtonActionPerformed
 
+
     private void inputCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputCancelButtonActionPerformed
         dialog.setVisible(false);
     }//GEN-LAST:event_inputCancelButtonActionPerformed
+
 
     private void inputOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputOkButtonActionPerformed
         inputAnswer = optionPane.inputField.getText();
         dialog.setVisible(false);
     }//GEN-LAST:event_inputOkButtonActionPerformed
 
+
     private void messageOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_messageOkButtonActionPerformed
         dialog.setVisible(false);
     }//GEN-LAST:event_messageOkButtonActionPerformed
+
 
     private void confirmCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmCancelButtonActionPerformed
         answer = CANCEL_OPTION;
         dialog.setVisible(false);
     }//GEN-LAST:event_confirmCancelButtonActionPerformed
 
+
     private void confirmNoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmNoButtonActionPerformed
         answer = NO_OPTION;
         dialog.setVisible(false);
     }//GEN-LAST:event_confirmNoButtonActionPerformed
+
 
     private void confirmYesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmYesButtonActionPerformed
         answer = YES_OPTION;
         dialog.setVisible(false);
     }//GEN-LAST:event_confirmYesButtonActionPerformed
 
+
     private void messageOkButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_messageOkButtonKeyReleased
-        if(KeyEvent.VK_ENTER == evt.getKeyCode()) {
+        if (KeyEvent.VK_ENTER == evt.getKeyCode()) {
             dialog.setVisible(false);
         }
     }//GEN-LAST:event_messageOkButtonKeyReleased
 
+
     private void confirmOkButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_confirmOkButtonKeyReleased
-        if(KeyEvent.VK_ENTER == evt.getKeyCode()) {
+        if (KeyEvent.VK_ENTER == evt.getKeyCode()) {
             answer = OK_OPTION;
             dialog.setVisible(false);
         }
     }//GEN-LAST:event_confirmOkButtonKeyReleased
 
+
     private void confirmYesButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_confirmYesButtonKeyReleased
-        if(KeyEvent.VK_ENTER == evt.getKeyCode()) {
+        if (KeyEvent.VK_ENTER == evt.getKeyCode()) {
             answer = YES_OPTION;
             dialog.setVisible(false);
         }
     }//GEN-LAST:event_confirmYesButtonKeyReleased
 
+
     private void confirmYesToAllButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_confirmYesToAllButtonKeyReleased
-        if(KeyEvent.VK_ENTER == evt.getKeyCode()) {
+        if (KeyEvent.VK_ENTER == evt.getKeyCode()) {
             answer = YES_TO_ALL_OPTION;
             dialog.setVisible(false);
         }
     }//GEN-LAST:event_confirmYesToAllButtonKeyReleased
 
+
     private void inputFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputFieldKeyReleased
-        if(KeyEvent.VK_ENTER == evt.getKeyCode()) {
+        if (KeyEvent.VK_ENTER == evt.getKeyCode()) {
             inputAnswer = optionPane.inputField.getText();
             dialog.setVisible(false);
         }
     }//GEN-LAST:event_inputFieldKeyReleased
 
+
     private void inputOkButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputOkButtonKeyReleased
-        if(KeyEvent.VK_ENTER == evt.getKeyCode()) {
+        if (KeyEvent.VK_ENTER == evt.getKeyCode()) {
             inputAnswer = optionPane.inputField.getText();
             dialog.setVisible(false);
         }
     }//GEN-LAST:event_inputOkButtonKeyReleased
 
+
     private void optionsComboBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_optionsComboBoxKeyReleased
-        if(KeyEvent.VK_ENTER == evt.getKeyCode()) {
+        if (KeyEvent.VK_ENTER == evt.getKeyCode()) {
             optionAnswer = optionPane.optionsComboBox.getSelectedItem();
             dialog.setVisible(false);
         }
     }//GEN-LAST:event_optionsComboBoxKeyReleased
+
 
     private void confirmNoButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirmNoButtonMouseReleased
         answer = NO_OPTION;
         dialog.setVisible(false);
     }//GEN-LAST:event_confirmNoButtonMouseReleased
 
+
     private void confirmYesButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirmYesButtonMouseReleased
         answer = YES_OPTION;
         dialog.setVisible(false);
     }//GEN-LAST:event_confirmYesButtonMouseReleased
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel confirmButtonPanel;
     private javax.swing.JButton confirmCancelButton;
@@ -1037,53 +1097,53 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
     private javax.swing.JPanel optionMessagePanel;
     private javax.swing.JPanel optionOptionsPanel;
     private javax.swing.JPanel optionPanel;
-    private javax.swing.JComboBox optionsComboBox;
+    private javax.swing.JComboBox<Object> optionsComboBox;
     private javax.swing.JLabel optionsIconLabel;
     private javax.swing.JButton optionsOkButton;
     // End of variables declaration//GEN-END:variables
- 
-    
-    
-    
-    
-    
-    
-    
+
+
+
     // ---- actions -----
-    
-    
+
+
     @Override
     public void actionPerformed(ActionEvent event) {
         String c = event.getActionCommand();
-        
-        if("Copy".equalsIgnoreCase(c)) {
+
+        if ("Copy".equalsIgnoreCase(c)) {
             ClipboardBox.setClipboard(messageLabel.getText());
         }
     }
-    
+
     // ---- mouse -----
-    
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
-    }    
-    
+    }
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
-    }    
-    
+    }
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
-    
-    
+
+
     /**
      * Set the dialog visible and blocks. Current implementation relies on
      * dialog's own setVisible method. It may be necessary to handle the blocking
@@ -1098,6 +1158,6 @@ public class WandoraOptionPane extends javax.swing.JPanel implements ActionListe
     public static void openDialogAndWait(Component parent, final JDialog dialog) {
         dialog.setVisible(true);
     }
-    
-    
+
+
 }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,16 +32,15 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
-import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -56,16 +55,17 @@ import org.wandora.utils.DataURL;
  *
  * @author  akivela
  */
-public class FixSubjectIdentifiers2 extends AbstractWandoraTool implements WandoraTool {
+public class FixSubjectIdentifiers2 extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(FixSubjectIdentifiers2.class);
 
 	boolean quiet = false;
 
     public FixSubjectIdentifiers2() {
     }
-    public FixSubjectIdentifiers2(Context context) {
+    public FixSubjectIdentifiers2(Context<?> context) {
         setContext(context);
     }
 
@@ -82,9 +82,8 @@ public class FixSubjectIdentifiers2 extends AbstractWandoraTool implements Wando
     }
 
     @Override
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
-        Iterator<Topic> contextTopics = context.getContextObjects();
-        TopicMap tm = admin.getTopicMap();
+    public void execute(Wandora admin, Context<?> context)  throws TopicMapException {
+        Iterator<?> contextTopics = context.getContextObjects();
         if(contextTopics != null && contextTopics.hasNext()) {
             if(WandoraOptionPane.showConfirmDialog(admin, "Are you sure you want to fix subject identifiers?","Fix subject identifiers?", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){
                 setDefaultLogger();
@@ -99,7 +98,7 @@ public class FixSubjectIdentifiers2 extends AbstractWandoraTool implements Wando
 
                 while(contextTopics.hasNext() && !forceStop()) {
                     try {
-                        topic = contextTopics.next();
+                        topic = (Topic) contextTopics.next();
                         if(topic != null  && !topic.isRemoved()) {
                             setProgress(progress++);
                             subjectIdentifiers = topic.getSubjectIdentifiers();
@@ -153,13 +152,13 @@ public class FixSubjectIdentifiers2 extends AbstractWandoraTool implements Wando
                                                         topic.addSubjectIdentifier(new Locator(encodedsistr));
                                                     }
                                                     catch(Exception e) {
-                                                        e.printStackTrace();
+                                                    	logger.error(e);
                                                     }
                                                     try {
                                                         topic.removeSubjectIdentifier(subjectIdentifier);
                                                     }
                                                     catch(Exception e) {
-                                                        e.printStackTrace();
+                                                    	logger.error(e);
                                                     }
                                                     log("Fixed subject identifier " + encodedsistr);
                                                     fixCount++;

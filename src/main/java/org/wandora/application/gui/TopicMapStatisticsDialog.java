@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapStatOptions;
 import org.wandora.topicmap.layered.Layer;
 import org.wandora.utils.ClipboardBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -47,102 +48,102 @@ import org.wandora.utils.ClipboardBox;
  * @author  akivela
  */
 public class TopicMapStatisticsDialog extends javax.swing.JDialog {
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicMapStatisticsDialog.class);
 
-
-	private static final long serialVersionUID = 1L;
-
-	
-	private Wandora wandora = null;
     private TopicMap map = null;
-    private StringBuffer stats = null;
-    
-    
-    
+    private StringBuilder stats = null;
+
+
+
     /**
      * Creates new form TopicMapStatisticsDialog
      */
     public TopicMapStatisticsDialog(Wandora w, Layer layer) {
         super(w, true);
-        this.wandora = w;
         this.map = layer.getTopicMap();
         initComponents();
         initStatistics();
         setSize(500, 290);
-        if(w != null) w.centerWindow(this);
+        if (w != null) {
+            w.centerWindow(this);
+        }
         this.setTitle("Layer '" + layer.getName() + "' statistics");
     }
-    
-    
+
+
     public TopicMapStatisticsDialog(Wandora w, TopicMap map, String name) {
         super(w, true);
-        this.wandora = w;
         this.map = map;
         initComponents();
         initStatistics();
         setSize(450, 290);
-        if(w != null) w.centerWindow(this);
-        if(name != null) this.setTitle("Layer '" + name + "' statistics");
+        if (w != null) {
+            w.centerWindow(this);
+        }
+        if (name != null) {
+            this.setTitle("Layer '" + name + "' statistics");
+        }
     }
-    
-    
-    
+
+
+
     private void initStatistics() {
         int[] statOptions = TopicMapStatOptions.getAvailableOptions();
         int bagCount = 0;
-        stats = new StringBuffer();
+        stats = new StringBuilder();
         GridBagConstraints gbc = null;
         SimpleLabel statDescription = null;
         SimpleLabel statValue = null;
         String statDescriptionString = null;
         String statString = null;
-        gbc=new GridBagConstraints();
-        Insets rowInsets = new Insets(0, 9,0, 9);
-        gbc.insets = new Insets(9, 9,0, 9);
-        
-        for(int i=0; i<statOptions.length; i++) {
+        gbc = new GridBagConstraints();
+        Insets rowInsets = new Insets(0, 9, 0, 9);
+        gbc.insets = new Insets(9, 9, 0, 9);
+
+        for (int i = 0; i < statOptions.length; i++) {
             try {
-                gbc.gridy=bagCount++;
-                gbc.gridx=0;
-                gbc.weightx=0.5;
-                gbc.gridwidth=1;
-                gbc.fill=gbc.HORIZONTAL;
+                gbc.gridy = bagCount++;
+                gbc.gridx = 0;
+                gbc.weightx = 0.5;
+                gbc.gridwidth = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
 
                 statDescriptionString = TopicMapStatOptions.describeStatOption(statOptions[i]);
                 stats.append(statDescriptionString);
                 statDescription = new SimpleLabel(statDescriptionString);
                 statPanel.add(statDescription, gbc);
-               
-                gbc.gridx=1;
+
+                gbc.gridx = 1;
                 statString = "n.a.";
                 try {
                     statString = map.getStatistics(new TopicMapStatOptions(statOptions[i])).toString();
                 }
-                catch(Exception e) {
-                    e.printStackTrace();
+                catch (Exception e) {
+                    logger.error(e);
                 }
                 stats.append("\t").append(statString).append("\n");
                 statValue = new SimpleLabel(statString);
                 statValue.setHorizontalAlignment(SimpleLabel.RIGHT);
                 statPanel.add(statValue, gbc);
-                
-                gbc.gridy=bagCount++;
-                gbc.gridx=0;
-                gbc.weightx=1;
-                gbc.gridwidth=2;
+
+                gbc.gridy = bagCount++;
+                gbc.gridx = 0;
+                gbc.weightx = 1;
+                gbc.gridwidth = 2;
                 gbc.insets = rowInsets;
                 JSeparator js = new JSeparator(JSeparator.HORIZONTAL);
                 js.setForeground(new Color(0x909090));
-                statPanel.add(js, gbc);             
+                statPanel.add(js, gbc);
             }
-            catch(Exception e) {
-                e.printStackTrace();
+            catch (Exception e) {
+                logger.error(e);
             }
         }
     }
-    
-    
-    
-    
+
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -204,15 +205,17 @@ public class TopicMapStatisticsDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void copyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyButtonActionPerformed
         ClipboardBox.setClipboard(stats.toString());
     }//GEN-LAST:event_copyButtonActionPerformed
+
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         setVisible(false);
     }//GEN-LAST:event_closeButtonActionPerformed
 
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton closeButton;
@@ -221,5 +224,5 @@ public class TopicMapStatisticsDialog extends javax.swing.JDialog {
     private javax.swing.JPanel scrollPanel;
     private javax.swing.JPanel statPanel;
     // End of variables declaration//GEN-END:variables
-    
+
 }

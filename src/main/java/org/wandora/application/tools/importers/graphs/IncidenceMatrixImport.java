@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -42,18 +41,20 @@ import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author akivela
  */
-public class IncidenceMatrixImport extends AbstractWandoraTool implements WandoraTool {
+public class IncidenceMatrixImport extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(IncidenceMatrixImport.class);
 	
-	public final static String SI_PREFIX = "http://wandora.org/si/topic/";
+	public final static String SI_PREFIX = "https://wandora.org/si/topic/";
 
 
 
@@ -77,7 +78,7 @@ public class IncidenceMatrixImport extends AbstractWandoraTool implements Wandor
     }
 
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(wandora, context);
 
         IncidenceMatrixImportDialog matrixSourceDialog = new IncidenceMatrixImportDialog(wandora, this, true);
@@ -114,7 +115,7 @@ public class IncidenceMatrixImport extends AbstractWandoraTool implements Wandor
         }
         catch(Exception e) {
             log(e);
-            e.printStackTrace();
+            logger.error(e);
         }
         return topic;
     }
@@ -187,7 +188,7 @@ public class IncidenceMatrixImport extends AbstractWandoraTool implements Wandor
                                     }
                                 }
                                 catch(Exception e) {
-                                    e.printStackTrace();
+                                    logger.error(e);
                                 }
                             }
                         }
@@ -200,19 +201,17 @@ public class IncidenceMatrixImport extends AbstractWandoraTool implements Wandor
                 try {
                     Topic atype = getOrCreateTopic(topicmap, SI_PREFIX+"edge", "edge");
                     Association realAssociation = topicmap.createAssociation(atype);
-                    //System.out.println("Creating asso: ");
                     int roleCount = 0;
                     for(String playerStr : associationStruct) {
                         Topic player = getOrCreateTopic(topicmap, SI_PREFIX+playerStr, ""+playerStr);
                         Topic role = getOrCreateTopic(topicmap, SI_PREFIX+"role-"+roleCount, "role-"+roleCount);
-                        //System.out.println("    player: "+player+", role: "+role);
                         realAssociation.addPlayer(player, role);
                         roleCount++;
                     }
                     counter++;
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }

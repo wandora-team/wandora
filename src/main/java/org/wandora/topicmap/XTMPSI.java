@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,10 +95,10 @@ public class XTMPSI {
     /**
      * Language independent.
      */
-    public static final String LANG_INDEPENDENT = "http://wandora.org/si/core/lang-independent";
+    public static final String LANG_INDEPENDENT = "https://wandora.org/si/core/lang-independent";
     /**
      * Returns the subject identifier for the specified language or if a null
-     * http://wandora.orgsi/core/lang-independent
+     * https://wandora.orgsi/core/lang-independent
      * denoting a language independent version.
      */
     public static String getLang(String lang) {

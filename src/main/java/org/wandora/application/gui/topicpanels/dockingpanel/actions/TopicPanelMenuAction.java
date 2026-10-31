@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import javax.swing.JPopupMenu;
 
 import org.wandora.application.gui.topicpanels.TopicPanel;
 import org.wandora.application.gui.topicpanels.dockingpanel.WandoraDockable;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.action.ActionContentModifier;
@@ -43,6 +44,7 @@ import bibliothek.gui.dock.action.actions.SimpleButtonAction;
 
 
 public class TopicPanelMenuAction extends SimpleButtonAction {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicPanelMenuAction.class);
 
     private TopicPanel topicPanel = null;
     
@@ -83,15 +85,15 @@ public class TopicPanelMenuAction extends SimpleButtonAction {
 
     @Override
     public void action(Dockable dockable) {
-        System.out.println("ACTION Open topic panel options TRIGGERED");
+        logger.debug("ACTION Open topic panel options TRIGGERED");
         try {
             if(topicPanel != null) {
                 JPopupMenu popupMenu = topicPanel.getViewPopupMenu();
                 Point p = new Point(dockable.getComponent().getWidth(), 0);
                 if(dockable instanceof WandoraDockable) {
-                    System.out.println("Dockable is WandoraDockable");
+                    logger.debug("Dockable is WandoraDockable");
                     MouseEvent me = ((WandoraDockable) dockable).getLastMouseEvent();
-                    System.out.println("Dockable's last mousevent is "+me);
+                    logger.debug("Dockable's last mousevent is "+me);
                     if(me != null) {
                         p = me.getPoint();
                     }
@@ -100,7 +102,7 @@ public class TopicPanelMenuAction extends SimpleButtonAction {
             }
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
     }
     

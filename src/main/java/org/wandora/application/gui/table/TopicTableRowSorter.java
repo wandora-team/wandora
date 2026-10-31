@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,54 +44,53 @@ import org.wandora.topicmap.Topic;
 public class TopicTableRowSorter extends TableRowSorter {
 
     private static final long serialVersionUID = 1L;
-    
+
     private TopicTable table = null;
 
-    
+
 
     public TopicTableRowSorter(TopicTable table, TopicTableModel dm) {
         super(dm);
         this.table = table;
     }
 
-    
+
     @Override
     public void sort() {
         super.sort();
     }
-    
 
-    
-    
+
+
     @Override
     public Comparator<?> getComparator(int column) {
-        return new Comparator() {
+        return new Comparator<>() {
             public int compare(Object o1, Object o2) {
-                if(o1 == null || o2 == null) return 0;
-                if(o1 instanceof TopicGuiWrapper) {
+                if (o1 == null || o2 == null)
+                    return 0;
+                if (o1 instanceof TopicGuiWrapper) {
                     o1 = ((TopicGuiWrapper) o1).topic;
                 }
-                if(o2 instanceof TopicGuiWrapper) {
+                if (o2 instanceof TopicGuiWrapper) {
                     o2 = ((TopicGuiWrapper) o2).topic;
                 }
-                if(o1 instanceof Topic && o2 instanceof Topic) {
+                if (o1 instanceof Topic && o2 instanceof Topic) {
                     try {
                         String n1 = TopicToString.toString((Topic) o1);
                         String n2 = TopicToString.toString((Topic) o2);
-//                        System.out.println("comparing topics: "+n1+" and "+n2+"");
                         return n1.compareTo(n2);
                     }
-                    catch(Exception e) {
+                    catch (Exception e) {
                         return 0;
                     }
                 }
-                else if(o1 instanceof String && o2 instanceof String) {
+                else if (o1 instanceof String && o2 instanceof String) {
                     try {
                         int d = ((String) o1).compareTo((String) o2);
-//                        System.out.println("comparing strings: "+o1+" and "+o2+"");
                         return d;
                     }
-                    catch(Exception e) {}
+                    catch (Exception e) {
+                    }
                     return 0;
                 }
                 else {
@@ -101,8 +100,8 @@ public class TopicTableRowSorter extends TableRowSorter {
         };
     }
 
-    
-    
+
+
     @Override
     public boolean useToString(int column) {
         return false;

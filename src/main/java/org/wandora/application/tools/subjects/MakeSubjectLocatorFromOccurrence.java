@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -50,13 +49,13 @@ import org.wandora.topicmap.TopicTools;
  * 
  * @author akivela
  */
-public class MakeSubjectLocatorFromOccurrence extends AbstractWandoraTool implements WandoraTool {
+public class MakeSubjectLocatorFromOccurrence extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
 	private static int MAXLEN = 256;
     private String replacement = "";
-    private String SLTemplate = "http://wandora.org/si/%OCCURRENCE%";
+    private String SLTemplate = "https://wandora.org/si/%OCCURRENCE%";
     
     private boolean askTemplate = true;
     private boolean overWrite = true;
@@ -65,7 +64,7 @@ public class MakeSubjectLocatorFromOccurrence extends AbstractWandoraTool implem
     public MakeSubjectLocatorFromOccurrence() {
     }
     
-    public MakeSubjectLocatorFromOccurrence(Context preferredContext) {
+    public MakeSubjectLocatorFromOccurrence(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -82,9 +81,9 @@ public class MakeSubjectLocatorFromOccurrence extends AbstractWandoraTool implem
 
     
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora admin, Context<?> context) {   
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic occurrenceType=admin.showTopicFinder("Select occurrence type...");                
@@ -96,7 +95,7 @@ public class MakeSubjectLocatorFromOccurrence extends AbstractWandoraTool implem
             Locator occurrenceScopeLocator = occurrenceScope.getSubjectIdentifiers().iterator().next();
 
             if(SLTemplate == null || SLTemplate.length() == 0) {
-                SLTemplate = "http://wandora.org/si/%OCCURRENCE%";
+                SLTemplate = "https://wandora.org/si/%OCCURRENCE%";
             }
             if(askTemplate) {
                 SLTemplate = WandoraOptionPane.showInputDialog(admin, "Make subject locator using following template. String '%OCCURRENCE%' is replaced with topic's occurrence.", SLTemplate);

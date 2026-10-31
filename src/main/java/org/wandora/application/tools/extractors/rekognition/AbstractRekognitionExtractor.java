@@ -1,9 +1,9 @@
 /*
 * WANDORA
 * Knowledge Extraction, Management, and Publishing Application
-* http://wandora.org
+* https://wandora.org
 *
-* Copyright (C) 2004-2023 Wandora Team
+* Copyright (C) 2004-2026 Wandora Team
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -58,9 +58,9 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
     protected static final String FLATTENING_DELIMETER = ".";
     
     //Face detection data is language independent
-    private static final String LANG_SI = "http://wandora.org/si/core/lang-independent";
+    private static final String LANG_SI = "https://wandora.org/si/core/lang-independent";
     
-    protected static final String SI_ROOT = "http://wandora.org/si/rekognition/";
+    protected static final String SI_ROOT = "https://wandora.org/si/rekognition/";
     
     protected static final String IMAGE_SI = SI_ROOT + "image/";
     protected static final String DETECTION_SI = SI_ROOT + "detection/";
@@ -364,10 +364,10 @@ abstract class AbstractRekognitionExtractor extends AbstractExtractor {
             Topic detectionTypeTopic = getDetectionClass(tm);
             
             JSONObject numericValues = (JSONObject)values;
-            Iterator keys = numericValues.keys();
+            Iterator<String> keys = numericValues.keys();
             
             while(keys.hasNext()) {
-                String key = (String)keys.next();
+                String key = keys.next();
                 Topic keyTopic = getOrCreateTopic(tm, TYPE_SI + "/" + key, key);
                 keyTopic.addType(typeTopic);
                 

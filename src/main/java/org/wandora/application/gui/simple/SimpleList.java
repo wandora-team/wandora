@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 package org.wandora.application.gui.simple;
 
 import java.awt.Graphics;
+import java.util.Collection;
 
 import javax.swing.JList;
 import javax.swing.ListModel;
@@ -37,22 +38,30 @@ import org.wandora.application.gui.UIConstants;
  *
  * @author akivela
  */
-public class SimpleList extends JList {
-    
+public class SimpleList<T> extends JList<T> {
+
     private static final long serialVersionUID = 1L;
-    
+
     public SimpleList() {
         super();
     }
-    
-    public SimpleList(ListModel m) {
+
+
+    public SimpleList(ListModel<T> m) {
         super(m);
     }
-    
-    public SimpleList(Object[] a) {
+
+
+    public SimpleList(T[] a) {
         super(a);
     }
-    
+
+
+    public SimpleList(Collection<T> c) {
+        super((T[]) c.toArray());
+    }
+
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);

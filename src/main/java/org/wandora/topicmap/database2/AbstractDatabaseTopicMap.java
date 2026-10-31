@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ import java.util.NoSuchElementException;
 
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -50,6 +51,7 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public abstract class AbstractDatabaseTopicMap extends TopicMap {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractDatabaseTopicMap.class);
     
     private int queryCounter=1;
 
@@ -121,7 +123,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             }
         }
         catch(SQLException sqle){
-            sqle.printStackTrace();
+            logger.error(sqle);
             unconnected=true;
         }
     }
@@ -218,7 +220,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             return false;
         } 
         catch(SQLException sqle){
-//            sqle.printStackTrace();
+//            logger.error(sqle);
             return true;
         }
     }
@@ -263,15 +265,15 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                 return null;}
             try {
                 if(connection.isClosed()) {
-                    System.out.println("SQL connection closed. Opening new connection!");
+                    logger.info("SQL connection closed. Opening new connection!");
                     connection=createConnection(false);
                     isDBReadOnly=testReadOnly();
                 }
             }
             catch (SQLException sqle) {
-                System.out.println("SQL exception occurred while acquiring connection:");
-                sqle.printStackTrace();
-                System.out.println("Trying to open new connection!");
+                logger.error("SQL exception occurred while acquiring connection:");
+                logger.error(sqle);
+                logger.error("Trying to open new connection!");
                 connection=createConnection(true);
                 isDBReadOnly=testReadOnly();
             }
@@ -295,16 +297,15 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             else {
                 con.setAutoCommit(false);
             }
-            // System.out.println("Database connection created");
             return con;
         }
         catch(Exception e){
-            System.out.println("Database connection failed with");
-            System.out.println("Driver: " + dbDriver);
-            System.out.println("Connection string: " + dbConnectionString);
-            System.out.println("User: " + dbUser);
-            System.out.println("Password: " + dbPassword);
-            e.printStackTrace();
+            logger.error("Database connection failed with");
+            logger.error("Driver: " + dbDriver);
+            logger.error("Connection string: " + dbConnectionString);
+            logger.error("User: " + dbUser);
+            logger.error("Password: " + dbPassword);
+            logger.error(e);
             return null;
         }
     }
@@ -325,7 +326,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                 connection.close();
             }
             catch(SQLException sqle) {
-                sqle.printStackTrace();
+                logger.error(sqle);
             }
         }
     }
@@ -371,7 +372,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                 stmt.executeUpdate(query);
             }
             catch(SQLException sqle) {
-                sqle.printStackTrace();
+                logger.error(sqle);
                 throw new TopicMapException(sqle);
             }
             finally {
@@ -429,9 +430,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                     for(int i=0;i<columns;i++) {
                         // Column names are transformed to uppercase.
                         row.put(columnNames[i].toUpperCase(), rs.getObject(i+1));
-                        //System.out.println("  "+columnNames[i]+"="+rs.getObject(i+1));
                     }
-                    //System.out.println("---");
                     rows.add(row);
                 }
                 rs.close();
@@ -441,12 +440,12 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             catch(SQLException sqle) {
                 try {
                     if(rs != null) rs.close();
-                } catch(Exception e) { e.printStackTrace(); }
+                } catch(Exception e) { logger.error(e); }
                 try {
                     if(stmt != null) stmt.close();
-                } catch(Exception e) { e.printStackTrace(); }
+                } catch(Exception e) { logger.error(e); }
 
-                sqle.printStackTrace();
+                logger.error(sqle);
                 throw new TopicMapSQLException(sqle);
             }
         }
@@ -460,7 +459,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
             updateQueue.commit();
         }
         catch(TopicMapException | SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         int count = 0;
         
@@ -481,18 +480,18 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                     return count;
                 }
                 catch(SQLException sqle) {
-                    sqle.printStackTrace();
+                    logger.error(sqle);
                 }
                 finally {
                     if(rs != null) {
                         try {
                             rs.close();
-                        } catch(Exception e) { e.printStackTrace(); }
+                        } catch(Exception e) { logger.error(e); }
                     }
                     if(stmt != null) {
                         try {
                             stmt.close();
-                        } catch(Exception e) { e.printStackTrace(); }
+                        } catch(Exception e) { logger.error(e); }
                     }
                 }
             }
@@ -506,7 +505,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
     
     private void logQuery(String query) {
         if(query != null) {
-            System.out.println(query.substring(0, query.length() > 512 ? 512 : query.length()));
+            logger.info(query.substring(0, query.length() > 512 ? 512 : query.length()));
         }
     }
     
@@ -548,7 +547,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                         rowIndex = 0;
                     }
                     catch(Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                         hasNext = false;
                     }
                 }
@@ -678,7 +677,7 @@ public abstract class AbstractDatabaseTopicMap extends TopicMap {
                             queryQueue.clear();
                         }
                         catch(SQLException sqle) {
-                            sqle.printStackTrace();
+                            logger.error(sqle);
                             connection.rollback();
                             try {
                                 Thread.sleep(100);

@@ -268,7 +268,7 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <map>remote-wandora</map>
       </connection>
    </remoteconnections>
-   <helpviewer>http://wandora.org/wiki/__HELP__</helpviewer>
+   <helpviewer>https://wandora.org/wiki/__HELP__</helpviewer>
    <layers>
       <layer>org.wandora.topicmap.memory.MemoryTopicMapType</layer>
       <layer>org.wandora.topicmap.database2.DatabaseTopicMapType</layer>
@@ -1619,10 +1619,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    <basemap>conf/wandora.xtm</basemap>
    <shortcuts>
       <si>http://www.topicmaps.org/xtm/1.0/language.xtm</si>
-      <si>http://wandora.org/si/core/schema-type</si>
-      <si>http://wandora.org/si/core/variant-name-version</si>
+      <si>https://wandora.org/si/core/schema-type</si>
+      <si>https://wandora.org/si/core/variant-name-version</si>
    </shortcuts>
-   <defaultSIprefix>http://wandora.org/si/</defaultSIprefix>
+   <defaultSIprefix>https://wandora.org/si/</defaultSIprefix>
    <current>
       <directory>/home/</directory>
       <port></port>
@@ -1688,13 +1688,13 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       </type>
       <type>
          <name>Default association</name>
-         <assocsi>http://wandora.org/si/core/default-association</assocsi>
-         <subsi>http://wandora.org/si/core/default-role-2</subsi>
+         <assocsi>https://wandora.org/si/core/default-association</assocsi>
+         <subsi>https://wandora.org/si/core/default-role-2</subsi>
          <icon>gui/icons/topictree/box.png</icon>
-         <supersi>http://wandora.org/si/core/default-role-1</supersi>
+         <supersi>https://wandora.org/si/core/default-role-1</supersi>
       </type>
       <tree>
-         <root>http://wandora.org/si/core/wandora-class</root>
+         <root>https://wandora.org/si/core/wandora-class</root>
          <name>Topics</name>
          <relation>Instances</relation>
          <relation>Subclasses</relation>
@@ -1934,8 +1934,8 @@ new BaseName().from(
       <query>
          <name>Insert test</name>
          <query>INSERT '''
-%prefix core http://wandora.org/si/core/
-%prefix test http://wandora.org/si/test/
+%prefix core https://wandora.org/si/core/
+%prefix test https://wandora.org/si/test/
 
 testctype - "Test content type" ;
   test:testctype ;
@@ -1960,12 +1960,12 @@ core:role( core:association-type : test:testatype , core:role : test:testrole2 )
       </query>
       <query>
          <name>Select test 1</name>
-         <query>%prefix core http://wandora.org/si/core/
+         <query>%prefix core https://wandora.org/si/core/
 core:content-type >> instances</query>
       </query>
       <query>
          <name>Select test 2</name>
-         <query>%prefix core http://wandora.org/si/core/
+         <query>%prefix core https://wandora.org/si/core/
 SELECT $test
 WHERE $test ISA core:content-type OR $test ISA core:association-type
 ORDER BY $test >> characteristics tm:name >> atomify [ 0 ]</query>
@@ -1973,15 +1973,15 @@ ORDER BY $test >> characteristics tm:name >> atomify [ 0 ]</query>
       <query>
          <name>Update variant test</name>
          <query># This does not work for some reason
-%prefix core http://wandora.org/si/core/
-%prefix test http://wandora.org/si/test/
+%prefix core https://wandora.org/si/core/
+%prefix test https://wandora.org/si/test/
 UPDATE variants ADD core:lang-independent "Test content type" 
 WHERE test:testctype >> characteristics tm:name</query>
       </query>
       <query>
          <name>Merge test</name>
-         <query>%prefix core http://wandora.org/si/core/
-%prefix test http://wandora.org/si/test/
+         <query>%prefix core https://wandora.org/si/core/
+%prefix test https://wandora.org/si/test/
 MERGE test:testctype, test:testatype</query>
       </query>
    </tmqlQueries>

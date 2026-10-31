@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,6 @@ import java.util.Map;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -80,7 +79,7 @@ import org.wandora.utils.IObox;
  */
 
 
-public class GraphMLExport extends AbstractExportTool implements WandoraTool {
+public class GraphMLExport extends AbstractExportTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -137,7 +136,7 @@ public class GraphMLExport extends AbstractExportTool implements WandoraTool {
     
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
        String topicMapName = null;
        String exportInfo = null;
 
@@ -240,7 +239,7 @@ public class GraphMLExport extends AbstractExportTool implements WandoraTool {
                 Iterator<Topic> typeTopicIter=types.iterator();
                 while(typeTopicIter.hasNext()){
                     Topic type=(Topic)typeTopicIter.next();
-                    Hashtable<Topic,String> ht=(Hashtable)t.getData(type);
+                    Hashtable<Topic,String> ht=t.getData(type);
                     Iterator<Map.Entry<Topic,String>> iter3=ht.entrySet().iterator();
                     while(iter3.hasNext()){
                         Map.Entry<Topic,String> e=iter3.next();

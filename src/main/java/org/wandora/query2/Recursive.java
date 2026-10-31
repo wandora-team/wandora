@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -138,7 +138,7 @@ public class Recursive extends Directive implements DirectiveUIHints.Provider {
                     iter.dispose();
                     if(queue.isEmpty()){
                         queue=nextQueue;
-                        nextQueue=new LinkedList<ResultIterator>();
+                        nextQueue=new LinkedList<>();
                         depth++;
                         if(maxDepth!=-1 && depth>maxDepth) return false;
                         if(queue.isEmpty()) return false;
@@ -172,9 +172,9 @@ public class Recursive extends Directive implements DirectiveUIHints.Provider {
         @Override
         public void reset() throws QueryException {
             dispose();
-            processed=new HashSet<Object>();
-            queue=new LinkedList<ResultIterator>();
-            nextQueue=new LinkedList<ResultIterator>();
+            processed=new HashSet<>();
+            queue=new LinkedList<>();
+            nextQueue=new LinkedList<>();
             iter=recursion.queryIterator(context, input);
             nextRow=null;
             depth=0;

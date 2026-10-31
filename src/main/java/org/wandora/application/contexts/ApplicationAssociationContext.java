@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,33 +36,36 @@ import org.wandora.application.Wandora;
 import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author akivela
  */
-public class ApplicationAssociationContext implements Context {
-    
+public class ApplicationAssociationContext implements Context<Association> {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(ApplicationAssociationContext.class);
+
     private Object contextSource;
     protected WandoraTool contextOwner = null;
     protected ActionEvent actionEvent = null;
-    protected Wandora wandora = null;  
-    
-    
-    
+    protected Wandora wandora = null;
+
+
+
     /** Creates a new instance of ApplicationAssociationContext */
     public ApplicationAssociationContext() {
     }
 
-    
+
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<Association> getContextObjects() {
         List<Association> contextAssociations = new ArrayList<>();
         try {
             Wandora w = (Wandora) contextSource;
             Topic currentTopic = w.getOpenTopic();
-            if(currentTopic != null) {
+            if (currentTopic != null) {
                 return currentTopic.getAssociations().iterator();
             }
         }
@@ -71,45 +74,48 @@ public class ApplicationAssociationContext implements Context {
         }
         return contextAssociations.iterator();
     }
-    
-    
-    
+
+
+
     @Override
     public ActionEvent getContextEvent() {
         return actionEvent;
     }
-    
-    
-    
+
+
+
     @Override
     public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
         this.wandora = wandora;
         this.actionEvent = actionEvent;
         this.contextOwner = contextOwner;
-        
-        setContextSource( wandora );
+
+        setContextSource(wandora);
     }
-    
-    
+
+
     @Override
     public void setContextSource(Object proposedContextSource) {
         contextSource = proposedContextSource;
     }
-    
+
+
     @Override
     public Object getContextSource() {
         return contextSource;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     public void log(Exception e) {
-        if(contextOwner != null) contextOwner.log(e);
-        else e.printStackTrace();
+        if (contextOwner != null)
+            contextOwner.log(e);
+        else
+            logger.error(e);
     }
 
 

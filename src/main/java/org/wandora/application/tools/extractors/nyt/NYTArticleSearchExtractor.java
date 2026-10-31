@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 package org.wandora.application.tools.extractors.nyt;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 
 import org.json.JSONArray;
@@ -36,6 +37,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.HTMLEntitiesCoder;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -44,8 +46,8 @@ import org.wandora.utils.IObox;
  * @author Eero Lehtonen
  */
 public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(NYTArticleSearchExtractor.class);
 	
 	private static String defaultLang = "en";
     private static String currentURL = null;
@@ -79,9 +81,10 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
 
         String in = IObox.doUrl(u);
 
-        System.out.println("New York Times API returned-------------------------\n" + in
-                + "\n----------------------------------------------------");
-
+        logger.info("New York Times API returned-------------------------");
+        logger.info(in);
+        logger.info("----------------------------------------------------");
+        
         JSONObject json = new JSONObject(in);
         parse(json, tm);
         return true;
@@ -107,7 +110,7 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
                         try {
                             parseResult(result, tm);
                         } catch (JSONException | TopicMapException e) {
-                            e.printStackTrace();
+                            logger.error(e);
                             log(e);
                         }
                     }
@@ -165,16 +168,16 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
             String originalURL = currentURL;
             
             if (pagingOptions[1].equals(a)) {
-                System.out.println("Selected to extract only next page");
+                logger.info("Selected to extract only next page");
                 String newURL = originalURL.replace("page=" + page, "page=" + (page + 1));
                 shouldHandlePagination = false;
-                _extractTopicsFrom(new URL(newURL), tm);
+                _extractTopicsFrom(new URI(newURL).toURL(), tm);
             } else if (pagingOptions[2].equals(a)) {
-                System.out.println("Selected to extract next page");
+                logger.info("Selected to extract next page");
                 String newURL = originalURL.replace("page=" + page, "page=" + (page + 1));
-                _extractTopicsFrom(new URL(newURL), tm);
+                _extractTopicsFrom(new URI(newURL).toURL(), tm);
             } else if (pagingOptions[3].equals(a)) {
-                System.out.println("Selected to extract 10 next pages");
+                logger.info("Selected to extract 10 next pages");
                 shouldHandlePagination = false;
                 setProgress(1);
                 setProgressMax(10);
@@ -184,19 +187,19 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
                     if (p == page + 10) {
                         shouldHandlePagination = true;
                     }
-                    _extractTopicsFrom(new URL(newURL), tm);
+                    _extractTopicsFrom(new URI(newURL).toURL(), tm);
                     setProgress(progress++);
                     nap();
                 }
             } else if (pagingOptions[4].equals(a)) {
-                System.out.println("Selected to extract all pages");
+                logger.info("Selected to extract all pages");
                 shouldHandlePagination = false;
                 setProgress(1);
                 setProgressMax((int) (total - page));
                 int progress = 1;
                 for (int p = page + 1; p <= totalPages && !forceStop(); p++) {
                     String newURL = originalURL.replace("page=" + page, "page=" + p);
-                    _extractTopicsFrom(new URL(newURL), tm);
+                    _extractTopicsFrom(new URI(newURL).toURL(), tm);
                     setProgress(progress++);
                     nap();
                 }
@@ -347,9 +350,10 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
 
         }
     }
+    
+    
 
     private void parseKeyword(String name, String value, Topic articleTopic, TopicMap tm) throws TopicMapException {
-        
         Topic keywordTypeTopic = getKeywordNameTopic(name, tm);
         Topic keywordTopic = getKeywordTopic(value, tm);
         Topic articleTypeTopic = getArticleTypeTopic(tm);
@@ -357,6 +361,5 @@ public class NYTArticleSearchExtractor extends AbstractNYTExtractor {
         Association a = tm.createAssociation(keywordTypeTopic);
         a.addPlayer(keywordTopic, keywordTypeTopic);
         a.addPlayer(articleTopic, articleTypeTopic);
-        
     }
 }

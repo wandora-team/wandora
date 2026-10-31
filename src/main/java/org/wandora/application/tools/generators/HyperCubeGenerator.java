@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -44,6 +43,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 
@@ -52,13 +52,13 @@ import org.wandora.utils.swing.GuiTools;
  *
  * @author akivela
  */
-public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool {
-
+public class HyperCubeGenerator extends AbstractGenerator {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(HyperCubeGenerator.class);
 
-	public static String HYPERCUBE_GRAPH_SI = "http://wandora.org/si/hypercube/";
+	public static String HYPERCUBE_GRAPH_SI = "https://wandora.org/si/hypercube/";
     
-    public static String siPattern = "http://wandora.org/si/hypercube/vertex/__n__";
+    public static String siPattern = "https://wandora.org/si/hypercube/vertex/__n__";
     public static String basenamePattern = "Hypercube vertex __n__";
     public static boolean connectWithWandoraClass = true;
     public static int n = 4;
@@ -80,7 +80,7 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(wandora, context);
         
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,
@@ -214,7 +214,7 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
                 t.addType(graphInstanceTopic);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         return t;
@@ -268,7 +268,6 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
                             edges.add( new T2<String,String>(vertex+"-"+this.dimension, vertex) );
                         }
                     }
-                    //System.out.println("edges: dim="+this.dimension+", edges="+edges.size());
                 }
             }
             return edges;
@@ -287,7 +286,6 @@ public class HyperCubeGenerator extends AbstractGenerator implements WandoraTool
                     for(String vertex : parentVertices) {
                         vertices.add(vertex+"-"+this.dimension);
                     }
-                    //System.out.println("dim="+this.dimension+", vertices="+vertices.size());
                 }
             }
             return vertices;

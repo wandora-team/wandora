@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -91,6 +92,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -98,17 +100,17 @@ import org.wandora.utils.Tuples.T2;
  */
 
 public class SparqlExtractor extends AbstractExtractor {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SparqlExtractor.class);
 
 	public static String DEFAULT_SI_ENCODING = "UTF-8";
 
     public static String DEFAULT_RESULTSET_FORMAT = "JSON";
     public static String DEFAULT_HANDLE_METHOD = "RESULTSET-TOPICMAP";
 
-    public static String RESULTSET_SI = "http://wandora.org/si/sparql/resultset";
-    public static String COLUMN_SI = "http://wandora.org/si/sparql/resultset/column";
-    public static String LITERAL_SI = "http://wandora.org/si/sparql/resultset/literal";
+    public static String RESULTSET_SI = "https://wandora.org/si/sparql/resultset";
+    public static String COLUMN_SI = "https://wandora.org/si/sparql/resultset/column";
+    public static String LITERAL_SI = "https://wandora.org/si/sparql/resultset/literal";
 
     private SparqlExtractorUI ui = null;
     public static final String defaultOccurrenceScopeSI = TMBox.LANGINDEPENDENT_SI;
@@ -145,7 +147,7 @@ public class SparqlExtractor extends AbstractExtractor {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             if(ui == null) {
                 ui = new SparqlExtractorUI(wandora);
@@ -164,7 +166,7 @@ public class SparqlExtractor extends AbstractExtractor {
                 if(urls != null && urls.length > 0) {
                     for(int i=0; i<urls.length; i++) {
                         try {
-                            URL u = new URL(urls[i]);
+                            URL u = new URI(urls[i]).toURL();
                             log("Extracting result set from '"+u.toExternalForm()+"'");
                             URLConnection uc = u.openConnection();
                             uc.setUseCaches(false);
@@ -237,15 +239,15 @@ public class SparqlExtractor extends AbstractExtractor {
         ResultSet results = null;
         if(in != null) {
             if("JSON".equalsIgnoreCase(format)) {
-                System.out.println("Processing SPARQL results set as JSON");
+                logger.info("Processing SPARQL results set as JSON");
                 results = ResultSetFactory.fromJSON(in);
             }
             else if("XML".equalsIgnoreCase(format)) {
-                System.out.println("Processing SPARQL results set as XML");
+                logger.info("Processing SPARQL results set as XML");
                 results = ResultSetFactory.fromXML(in);
             }
             else if("RDF/XML".equalsIgnoreCase(format)) {
-                System.out.println("Processing SPARQL results set as RDF/XML");
+                logger.info("Processing SPARQL results set as RDF/XML");
                 // results = ResultSetFactory.load(in, com.hp.hpl.jena.sparql.resultset.ResultsFormat.FMT_RDF_XML);
             }
         }
@@ -392,7 +394,6 @@ public class SparqlExtractor extends AbstractExtractor {
         Property predicate = stmt.getPredicate();   // get the predicate
         RDFNode object     = stmt.getObject();      // get the object
 
-        //System.out.println("statement:\n  "+subject+"\n   "+predicate+"\n    "+object);
 
         Topic subjectTopic = getOrCreateTopic(map, subject.toString());
 
@@ -486,7 +487,6 @@ public class SparqlExtractor extends AbstractExtractor {
         if(baseUrl != null) {
             int lindex = baseUrl.lastIndexOf("/");
             int findex = baseUrl.indexOf("/");
-            //System.out.println("solving base url: "+lindex+", "+findex+", "+baseUrl);
             if(1+findex < lindex) {
                 baseUrl = baseUrl.substring(0, lindex);
             }
@@ -524,7 +524,7 @@ public class SparqlExtractor extends AbstractExtractor {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return topic;
     }

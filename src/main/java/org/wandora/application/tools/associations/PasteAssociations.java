@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -80,7 +79,7 @@ import org.wandora.utils.Textbox;
  * @author  akivela
  */
 
-public class PasteAssociations extends AbstractWandoraTool implements WandoraTool {
+public class PasteAssociations extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -94,7 +93,7 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
     
     public PasteAssociations(){
     }
-    public PasteAssociations(Context preferredContext){
+    public PasteAssociations(Context<?> preferredContext){
         setContext(preferredContext);        
     }
 
@@ -119,11 +118,11 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         requiresRefresh = false;
         TopicMap topicMap = wandora.getTopicMap();
         
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
 
         Topic topicOpen = null;
         
@@ -286,10 +285,10 @@ public class PasteAssociations extends AbstractWandoraTool implements WandoraToo
                     }
                     else {
                         t.setBaseName(topicName);
-                        String si = "http://wandora.org/si/" + System.currentTimeMillis();
+                        String si = "https://wandora.org/si/" + System.currentTimeMillis();
                         int counter = 1000;
                         while(topicMap.getTopic(si) != null && --counter > 0) {
-                            si = "http://wandora.org/si/" + System.currentTimeMillis() + counter;
+                            si = "https://wandora.org/si/" + System.currentTimeMillis() + counter;
                         }
                         t.addSubjectIdentifier(new Locator(si));
                     }

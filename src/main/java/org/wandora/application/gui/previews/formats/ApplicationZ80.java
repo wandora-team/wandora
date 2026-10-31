@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.net.MalformedURLException;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -52,63 +53,64 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.Base64;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class ApplicationZ80 implements ActionListener, PreviewPanel, ComponentListener {
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(ApplicationZ80.class);
 
     private String locator = null;
     private Qaop qaop = null;
     private JPanel qaopWrapper = null;
     private JPanel ui = null;
-    
-    
+
+
     private boolean isPaused = false;
     private boolean isMuted = false;
     private int sizeScaler = 1;
-    
-    
+
+
 
     public ApplicationZ80(String locator) {
         this.locator = locator;
     }
-    
-    
-    
+
+
 
     @Override
     public void stop() {
-        if(qaop != null) {
+        if (qaop != null) {
             qaop.destroy();
             qaop = null;
         }
     }
-    
+
 
     @Override
     public void finish() {
-        if(qaop != null) {
+        if (qaop != null) {
             qaop.destroy();
             qaop = null;
         }
     }
 
-    
-    
+
+
     @Override
     public Component getGui() {
-        if(ui == null) {
+        if (ui == null) {
             ui = new JPanel();
-            ui.setLayout(new BorderLayout(8,8));
+            ui.setLayout(new BorderLayout(8, 8));
             ui.addComponentListener(this);
 
             try {
                 qaopWrapper = new JPanel();
-                if(qaop == null) {
-                    HashMap params = new HashMap();
-                    if(DataURL.isDataURL(locator)) {
+                if (qaop == null) {
+                    Map<String, String> params = new HashMap<>();
+                    if (DataURL.isDataURL(locator)) {
                         params.put("load", new DataURL(locator).toExternalForm(Base64.DONT_BREAK_LINES));
                     }
                     else {
@@ -126,25 +128,23 @@ public class ApplicationZ80 implements ActionListener, PreviewPanel, ComponentLi
                 ui.add(qaopWrapper, BorderLayout.CENTER);
                 ui.add(toolbarWrapper, BorderLayout.SOUTH);
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 PreviewUtils.previewError(ui, "Can't initialize text viewer. Exception occurred.", e);
             }
         }
         return ui;
     }
 
-    
 
 
     protected JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            getMenuButton(),
+                getMenuButton(),
         }, this);
     }
-    
-    
-    
-    
+
+
+
     public JButton getMenuButton() {
         final JButton button = UIBox.makeDefaultButton();
         button.setIcon(UIBox.getIcon(0xf0c9));
@@ -159,171 +159,172 @@ public class ApplicationZ80 implements ActionListener, PreviewPanel, ComponentLi
         });
         return button;
     }
-    
-    
-    
-    
+
+
+
     private static final Icon selectedIcon = UIBox.getIcon("gui/icons/checked2.png");
     private static final Icon unselectedIcon = UIBox.getIcon("gui/icons/empty.png");
-    
+
     public JPopupMenu getOptionsMenu() {
         Object[] menuStruct = new Object[] {
-            "Open subject locator in ext", PreviewUtils.ICON_OPEN_EXT,
-            "Copy subject locator", PreviewUtils.ICON_COPY_LOCATION,
-            "Save subject locator resource...", PreviewUtils.ICON_SAVE,
-            "---",
-            "Reify snapshot",
-            "Reify screen capture",
-            "---",
-            "Display size", new Object[] {
-                "1x", sizeScaler == 1 ? selectedIcon : unselectedIcon,
-                "2x", sizeScaler == 2 ? selectedIcon : unselectedIcon,
-            },
-            "Mute", isMuted ? selectedIcon : unselectedIcon,
-            "---",
-            "Pause", isPaused ? selectedIcon : unselectedIcon,
-            "Reset",
-            "---",
-            "About"
+                "Open subject locator in ext", PreviewUtils.ICON_OPEN_EXT,
+                "Copy subject locator", PreviewUtils.ICON_COPY_LOCATION,
+                "Save subject locator resource...", PreviewUtils.ICON_SAVE,
+                "---",
+                "Reify snapshot",
+                "Reify screen capture",
+                "---",
+                "Display size", new Object[] {
+                        "1x", sizeScaler == 1 ? selectedIcon : unselectedIcon,
+                        "2x", sizeScaler == 2 ? selectedIcon : unselectedIcon,
+                },
+                "Mute", isMuted ? selectedIcon : unselectedIcon,
+                "---",
+                "Pause", isPaused ? selectedIcon : unselectedIcon,
+                "Reset",
+                "---",
+                "About"
         };
         JPopupMenu optionsPopup = UIBox.makePopupMenu(menuStruct, this);
         return optionsPopup;
     }
 
-    
-    
-    
+
+
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
-        if(c == null) return;
-        
-        if("Open subject locator in ext".equalsIgnoreCase(c)) {
+        if (c == null)
+            return;
+
+        if ("Open subject locator in ext".equalsIgnoreCase(c)) {
             PreviewUtils.forkExternalPlayer(locator);
         }
-        else if("Copy subject locator".equalsIgnoreCase(c)) {
-            if(locator != null) {
+        else if ("Copy subject locator".equalsIgnoreCase(c)) {
+            if (locator != null) {
                 ClipboardBox.setClipboard(locator);
             }
         }
-        else if("Save subject locator resource...".equalsIgnoreCase(c)) {
+        else if ("Save subject locator resource...".equalsIgnoreCase(c)) {
             PreviewUtils.saveToFile(locator);
         }
-        
-        
-        
-        else if("Reify snapshot".equalsIgnoreCase(c)) {
+
+
+
+        else if ("Reify snapshot".equalsIgnoreCase(c)) {
             DataURL snapshot = makeSnapshot();
-            if(snapshot != null) {
+            if (snapshot != null) {
                 saveToTopic(snapshot);
             }
         }
-        else if("Reify screen capture".equalsIgnoreCase(c)) {
+        else if ("Reify screen capture".equalsIgnoreCase(c)) {
             DataURL screenCapture = makeScreenCapture();
-            if(screenCapture != null) {
+            if (screenCapture != null) {
                 saveToTopic(screenCapture);
             }
-        }     
+        }
 
-        else if("Type text...".equalsIgnoreCase(c)) {
-
-        }    
-
-        
-        else if("Enter a special key...".equalsIgnoreCase(c)) {
+        else if ("Type text...".equalsIgnoreCase(c)) {
 
         }
-        
-        
-        
-        else if("1x".equalsIgnoreCase(c)) {
+
+
+        else if ("Enter a special key...".equalsIgnoreCase(c)) {
+
+        }
+
+
+
+        else if ("1x".equalsIgnoreCase(c)) {
             setScaling(1);
         }
-        else if("2x".equalsIgnoreCase(c)) {
+        else if ("2x".equalsIgnoreCase(c)) {
             setScaling(2);
         }
-        else if("Display size".equalsIgnoreCase(c)) {
+        else if ("Display size".equalsIgnoreCase(c)) {
             sizeScaler += 1;
-            if(sizeScaler > 2) sizeScaler = 1;
+            if (sizeScaler > 2)
+                sizeScaler = 1;
             setScaling(sizeScaler);
         }
-        
-        
-        else if("Mute".equalsIgnoreCase(c)) {
+
+
+        else if ("Mute".equalsIgnoreCase(c)) {
             isMuted = !isMuted;
             qaop.mute(isMuted);
         }
 
-        
-        else if("Reset".equalsIgnoreCase(c)) {
+
+        else if ("Reset".equalsIgnoreCase(c)) {
             qaop.reset();
         }
-        
-        else if("Pause".equalsIgnoreCase(c)) {
+
+        else if ("Pause".equalsIgnoreCase(c)) {
             isPaused = !isPaused;
             qaop.pause(isPaused);
         }
-        else if("Resume".equalsIgnoreCase(c)) {
+        else if ("Resume".equalsIgnoreCase(c)) {
             isPaused = false;
             qaop.pause(isPaused);
         }
-        
-        else if("About".equalsIgnoreCase(c)) {
+
+        else if ("About".equalsIgnoreCase(c)) {
             StringBuilder aboutBuilder = new StringBuilder("");
-            aboutBuilder.append("Wandora's Sinclair ZX emulation support is based on Qaop - ZX Spectrum emulator by Jan Bobrowski ");
+            aboutBuilder.append(
+                    "Wandora's Sinclair ZX emulation support is based on Qaop - ZX Spectrum emulator by Jan Bobrowski ");
             aboutBuilder.append("distributed under the license of GNU GPL.");
 
             qaop.pause(true);
-            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), aboutBuilder.toString(), "About Sinclair ZX emulation");
+            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), aboutBuilder.toString(),
+                    "About Sinclair ZX emulation");
             qaop.pause(false);
         }
     }
-    
-    
-    
-    
-    
+
+
+
     private void setScaling(int scale) {
         sizeScaler = scale;
         qaop.setScreenSize(scale);
         qaop.validate();
         qaop.repaint();
     }
-    
-    
+
+
 
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     private DataURL makeSnapshot() {
         try {
             return new DataURL(qaop.save());
-        } 
+        }
         catch (MalformedURLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
         }
         return null;
     }
-    
-    
+
+
     private DataURL makeScreenCapture() {
         try {
-            BufferedImage screenCaptureImage = new BufferedImage(qaop.getPreferredSize().width, qaop.getPreferredSize().height, BufferedImage.TYPE_INT_RGB); 
+            BufferedImage screenCaptureImage = new BufferedImage(qaop.getPreferredSize().width,
+                    qaop.getPreferredSize().height, BufferedImage.TYPE_INT_RGB);
             Graphics screenCaptureGraphics = screenCaptureImage.createGraphics();
             qaop.paintAll(screenCaptureGraphics);
             DataURL screenCaptureDataUrl = null;
             screenCaptureDataUrl = new DataURL(screenCaptureImage);
             return screenCaptureDataUrl;
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error(e);
         }
         return null;
     }
-    
-    
-    
+
+
+
     private void saveToTopic(DataURL dataUrl) {
         Wandora wandora = Wandora.getWandora();
         try {
@@ -334,77 +335,80 @@ public class ApplicationZ80 implements ActionListener, PreviewPanel, ComponentLi
 
             wandora.doRefresh();
         }
-        catch(Exception e) {
+        catch (Exception e) {
             wandora.handleError(e);
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     @Override
     public boolean isHeavy() {
         return false;
     }
-    
-    
-    
+
+
+
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { 
-                    "application/x.zx.",
-                    "application/x-spectrum-",
-                    "application/x.spectrum."
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "application/x.zx.",
+                        "application/x-spectrum-",
+                        "application/x.spectrum."
                 },
-                new String[] { 
-                    "z80",
-                    "slt",
-                    "tap",
-                    "sna",
-                    "rom",
-                    
-                    "z80.gz",
-                    "slt.gz",
-                    "tap.gz",
-                    "sna.gz",
-                    "rom.gz"
-                }
-        );
+                new String[] {
+                        "z80",
+                        "slt",
+                        "tap",
+                        "sna",
+                        "rom",
+
+                        "z80.gz",
+                        "slt.gz",
+                        "tap.gz",
+                        "sna.gz",
+                        "rom.gz"
+                });
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
+
+
     private void refreshSize() {
-        if(qaopWrapper != null) {
+        if (qaopWrapper != null) {
             qaopWrapper.setPreferredSize(qaop.getPreferredSize());
             qaopWrapper.setSize(qaop.getPreferredSize());
             qaopWrapper.revalidate();
             ui.validate();
         }
     }
-    
-    
+
+
     @Override
     public void componentResized(ComponentEvent e) {
         refreshSize();
     }
+
 
     @Override
     public void componentMoved(ComponentEvent e) {
         refreshSize();
     }
 
+
     @Override
     public void componentShown(ComponentEvent e) {
         refreshSize();
     }
 
+
     @Override
     public void componentHidden(ComponentEvent e) {
-        
+
     }
-    
+
 }

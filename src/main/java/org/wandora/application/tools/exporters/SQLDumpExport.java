@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapLogger;
 import org.wandora.topicmap.parser.XTMParser2;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -56,8 +57,8 @@ import org.xml.sax.XMLReader;
  * @author olli
  */
 public class SQLDumpExport extends AbstractExportTool {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SQLDumpExport.class);
 
 	
 	public static final int I_TOPIC=0;
@@ -94,7 +95,7 @@ public class SQLDumpExport extends AbstractExportTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setDialogTitle("Topic map SQL dump export");
         if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
@@ -179,7 +180,7 @@ public class SQLDumpExport extends AbstractExportTool {
                 setState(SQLDumpExport.WAIT);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
                 log(e);
             }
         }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -58,7 +57,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class DuplicateAssociations extends AbstractWandoraTool implements WandoraTool {
+public class DuplicateAssociations extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -82,7 +81,7 @@ public class DuplicateAssociations extends AbstractWandoraTool implements Wandor
     
     
     public void makeRoleMap(Wandora wandora)  throws TopicMapException {
-        Iterator contextAssociations = getContext().getContextObjects();
+        Iterator<?> contextAssociations = getContext().getContextObjects();
         if(contextAssociations == null || !contextAssociations.hasNext()) return;
         if(roleMap == null) roleMap = new LinkedHashMap<>();
 
@@ -133,7 +132,7 @@ public class DuplicateAssociations extends AbstractWandoraTool implements Wandor
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         wasCancelled = false;
 /*        BaseNamePrompt prompt=new BaseNamePrompt(wandora.getManager(), wandora, true);
         prompt.setTitle("Select new association type...");

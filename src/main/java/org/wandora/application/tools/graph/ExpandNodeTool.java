@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,10 +56,10 @@ public class ExpandNodeTool extends AbstractGraphTool {
         return "Open graph node";
     }
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         VModel model = null;
         VNode node = null;
-        for(Iterator iter = context.getContextObjects(); iter.hasNext(); ) {
+        for(Iterator<?> iter = context.getContextObjects(); iter.hasNext(); ) {
             try {
                 node = (VNode) iter.next();
                 if(node != null) {

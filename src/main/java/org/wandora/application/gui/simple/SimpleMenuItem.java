@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,56 +43,55 @@ import org.wandora.application.gui.UIConstants;
 public class SimpleMenuItem extends JMenuItem {
     private static final long serialVersionUID = 1L;
 
-    
+
     public SimpleMenuItem() {
     }
-    
-    
+
+
     public SimpleMenuItem(String menuName) {
         this(menuName, null);
     }
-    
-    
+
+
     public SimpleMenuItem(String menuName, ActionListener defaultListener) {
         boolean enabled = true;
         String iconResource = "gui/icons/empty.png";
-        
-        if(menuName.startsWith("[") && menuName.endsWith("]")) {
+
+        if (menuName.startsWith("[") && menuName.endsWith("]")) {
             enabled = false;
-            menuName = menuName.substring(1, menuName.length()-1);
+            menuName = menuName.substring(1, menuName.length() - 1);
         }
-        if(menuName.startsWith("X ") || menuName.startsWith("O ")) {
+        if (menuName.startsWith("X ") || menuName.startsWith("O ")) {
             String name = menuName.substring(2);
-            if(menuName.startsWith("X ")) {
-               //menuItem=new javax.swing.JCheckBoxMenuItem(name, true);
+            if (menuName.startsWith("X ")) {
                 iconResource = "gui/icons/checked.png";
             }
             else {
-                //menuItem=new javax.swing.JCheckBoxMenuItem(name, false);
                 iconResource = "gui/icons/unchecked.png";
             }
             menuName = name;
         }
 
-        if(iconResource != null) setIcon(UIBox.getIcon(iconResource));
+        if (iconResource != null)
+            setIcon(UIBox.getIcon(iconResource));
         setFont(UIConstants.menuFont);
         UIConstants.setFancyFont(this);
         setForeground(UIConstants.menuColor);
         setText(menuName);
         setName(menuName);
         setActionCommand(menuName);
-        if(defaultListener != null) addActionListener(defaultListener);
+        if (defaultListener != null)
+            addActionListener(defaultListener);
         setEnabled(enabled);
     }
-    
-    
-    
-    
+
+
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);
         super.paint(g);
     }
-    
-    
+
+
 }

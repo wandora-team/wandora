@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ public class ClearNodeFilters extends AbstractGraphTool {
         this.filter = filter;
     }
 
-    public void executeSynchronized(Wandora admin, Context context) {
+    public void executeSynchronized(Wandora admin, Context<?> context) {
         try {
             filter.clearNodeFilters();
             filter.clearNodeTypeFilters();

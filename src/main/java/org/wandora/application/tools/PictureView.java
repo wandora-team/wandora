@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,9 @@ import java.awt.image.BufferedImage;
  * @author  olli
  */
 public class PictureView extends javax.swing.JDialog {
-    private BufferedImage image;
+    private static final long serialVersionUID = 1L;
+    
+	private BufferedImage image;
     /** Creates new form PictureView */
     public PictureView(java.awt.Dialog parent, boolean modal,BufferedImage image) {
         super(parent, modal);

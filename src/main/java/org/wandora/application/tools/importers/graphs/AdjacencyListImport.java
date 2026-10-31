@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -44,6 +43,7 @@ import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -51,12 +51,13 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class AdjacencyListImport extends AbstractWandoraTool implements WandoraTool {
+public class AdjacencyListImport extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AdjacencyListImport.class);
 
-	public final static String SI_PREFIX = "http://wandora.org/si/topic/";
+	public final static String SI_PREFIX = "https://wandora.org/si/topic/";
     
     public static String nodeDelimiter = ",";
     public static String edgeDelimiter = "";
@@ -82,7 +83,7 @@ public class AdjacencyListImport extends AbstractWandoraTool implements WandoraT
     }
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(admin, context);
         
         AdjacencyListImportDialog edgeSourceDialog = new AdjacencyListImportDialog(admin, this, true);
@@ -149,7 +150,7 @@ public class AdjacencyListImport extends AbstractWandoraTool implements WandoraT
         }
         catch(Exception e) {
             log(e);
-            e.printStackTrace();
+            logger.error(e);
         }
         return topic;
     }

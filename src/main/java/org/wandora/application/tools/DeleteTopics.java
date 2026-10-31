@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,12 +30,12 @@ package org.wandora.application.tools;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.ConfirmResult;
 import org.wandora.application.gui.UIBox;
@@ -53,7 +53,7 @@ import org.wandora.topicmap.layered.LayeredTopic;
  *
  * @author  akivela
  */
-public class DeleteTopics extends AbstractWandoraTool implements WandoraTool {
+public class DeleteTopics extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -69,7 +69,7 @@ public class DeleteTopics extends AbstractWandoraTool implements WandoraTool {
     public DeleteTopics() {
         //setContext(new TopicContext());
     }
-    public DeleteTopics(Context preferredContext) {
+    public DeleteTopics(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -89,10 +89,10 @@ public class DeleteTopics extends AbstractWandoraTool implements WandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         this.wandora = wandora;
-        ArrayList<Topic> topicsToDelete = new ArrayList<Topic>();
-        Iterator topics = context.getContextObjects();
+        List<Topic> topicsToDelete = new ArrayList<>();
+        Iterator<?> topics = context.getContextObjects();
         Topic topic = null;
         Topic ltopic = null;
         int count = 0;
@@ -105,8 +105,8 @@ public class DeleteTopics extends AbstractWandoraTool implements WandoraTool {
             while(topics.hasNext() && shouldContinue && !forceStop()) {
                 topic = (Topic) topics.next();
                 if(topic != null && !topic.isRemoved()) {
-                    if(topic instanceof LayeredTopic) {
-                        ltopic = ((LayeredTopic) topic).getTopicForSelectedLayer();
+                    if(topic instanceof LayeredTopic layeredTopic) {
+                        ltopic = layeredTopic.getTopicForSelectedLayer();
                         if(ltopic == null || ltopic.isRemoved()) {
                             int answer = WandoraOptionPane.showConfirmDialog(wandora, 
                                     "Topic '"+getTopicName(topic)+"' doesn't exist in selected layer. "+

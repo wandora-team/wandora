@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -45,6 +46,8 @@ import org.xml.sax.XMLReader;
  * @author akivela
  */
 public class GeoNamesCities extends AbstractGeoNamesExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(GeoNamesCities.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -174,7 +177,7 @@ public class GeoNamesCities extends AbstractGeoNamesExtractor {
                             parent.log("GeoNames web service says: "+msg+" ("+val+")");
                         }
                         else {
-                            System.out.println("GeoNames web service says: "+msg+" ("+val+")");
+                            logger.info("GeoNames web service says: "+msg+" ("+val+")");
                         }
                     }
                     else if(qName.equals(TAG_GEONAME)) {

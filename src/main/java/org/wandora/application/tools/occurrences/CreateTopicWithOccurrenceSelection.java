@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@ package org.wandora.application.tools.occurrences;
 
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.texteditor.OccurrenceTextEditor;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -43,7 +42,7 @@ import org.wandora.topicmap.TopicTools;
  *
  * @author akivela
  */
-public class CreateTopicWithOccurrenceSelection extends AbstractWandoraTool implements WandoraTool {
+public class CreateTopicWithOccurrenceSelection extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -58,10 +57,10 @@ public class CreateTopicWithOccurrenceSelection extends AbstractWandoraTool impl
     public CreateTopicWithOccurrenceSelection(boolean associate) {
         ASSOCIATE_TO_OCCURRENCE_CARRIER = associate;
     }
-    public CreateTopicWithOccurrenceSelection(Context proposedContext) {
+    public CreateTopicWithOccurrenceSelection(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
-    public CreateTopicWithOccurrenceSelection(boolean associate, Context proposedContext) {
+    public CreateTopicWithOccurrenceSelection(boolean associate, Context<?> proposedContext) {
         ASSOCIATE_TO_OCCURRENCE_CARRIER = associate;
         this.setContext(proposedContext);
     }
@@ -78,7 +77,7 @@ public class CreateTopicWithOccurrenceSelection extends AbstractWandoraTool impl
 
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         Object source = getContext().getContextSource();
         requiresRefresh = false;
         if(source instanceof OccurrenceTextEditor) {
@@ -105,10 +104,10 @@ public class CreateTopicWithOccurrenceSelection extends AbstractWandoraTool impl
                             if(ASSOCIATE_TO_OCCURRENCE_CARRIER) {
                                 Topic ocarrier = (Topic) context.getContextObjects().next();
                                 if(ocarrier != null) {
-                                    Topic atype = getOrCreateTopic(tm, "http://wandora.org/si/occurrence-distilled-association", "Occurrence distilled association");
+                                    Topic atype = getOrCreateTopic(tm, "https://wandora.org/si/occurrence-distilled-association", "Occurrence distilled association");
                                     Association a = tm.createAssociation(atype);
-                                    a.addPlayer(ocarrier, getOrCreateTopic(tm, "http://wandora.org/si/occurrence-carrier", "Occurrence carrier"));
-                                    a.addPlayer(topic, getOrCreateTopic(tm, "http://wandora.org/si/occurrence-distilled-topic", "Occurrence distilled topic"));
+                                    a.addPlayer(ocarrier, getOrCreateTopic(tm, "https://wandora.org/si/occurrence-carrier", "Occurrence carrier"));
+                                    a.addPlayer(topic, getOrCreateTopic(tm, "https://wandora.org/si/occurrence-distilled-topic", "Occurrence distilled topic"));
                                     requiresRefresh = true;
                                 }
                             }
@@ -149,8 +148,7 @@ public class CreateTopicWithOccurrenceSelection extends AbstractWandoraTool impl
             if(t==null){
                 t=tm.createTopic();
                 if(bn!=null) t.setBaseName(bn);
-                if(si!=null) t.addSubjectIdentifier(tm.createLocator(si));
-                else t.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
+                t.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
             }
             return t;
         }

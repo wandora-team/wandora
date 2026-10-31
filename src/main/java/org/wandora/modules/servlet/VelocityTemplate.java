@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,9 +135,9 @@ public class VelocityTemplate extends AbstractTemplate {
             this.vTemplate=vTemplate;
         }
         VelocityContext context=new VelocityContext();
-        Iterator iter=params.entrySet().iterator();
+        Iterator<Map.Entry<String,Object>> iter=params.entrySet().iterator();
         while(iter.hasNext()){
-            Map.Entry e=(Map.Entry)iter.next();
+            Map.Entry<String,Object> e=iter.next();
             context.put(e.getKey().toString(),e.getValue());
         }
 

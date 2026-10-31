@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,16 +27,20 @@
  */
 
 package org.wandora.utils;
+
 import java.util.Vector;
+
 /**
  *
  * @author  olli
  */
-public class EasyVector extends Vector {
+public class EasyVector<K> extends Vector<K> {
+
+    private static final long serialVersionUID = 1L;
 
     /** Creates new EasyVector */
-    public EasyVector(Object[] o) {
-        for(int i=0;i<o.length;i++){
+    public EasyVector(K[] o) {
+        for (int i = 0; i < o.length; i++) {
             this.add(o[i]);
         }
     }

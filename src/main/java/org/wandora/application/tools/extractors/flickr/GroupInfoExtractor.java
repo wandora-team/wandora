@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ public class GroupInfoExtractor extends FlickrExtractor {
     
     
     @Override
-    protected boolean extract(Wandora wandora, Context context) throws ExtractionFailure {
+    protected boolean extract(Wandora wandora, Context<?> context) throws ExtractionFailure {
         Collection<Topic> groupTopics = null;
         Topic groupT = null;
         
@@ -124,7 +124,7 @@ public class GroupInfoExtractor extends FlickrExtractor {
         int totalPhotos = 0;
         int photosReceived = 0;
   
-        TreeMap<String, String> args = new TreeMap();
+        TreeMap<String, String> args = new TreeMap<>();
         args.put("group_id", curGroup.ID);
         args.put("extras", "date_taken,date_upload,o_dims,geo,last_update,license,media,owner_name,tags,views");
         args.put("per_page", "" + photosPerPage);

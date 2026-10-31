@@ -2,9 +2,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 
 package org.wandora.application.tools.extractors;
 
+import java.net.URI;
 import java.net.URL;
 
 import org.wandora.application.Wandora;
@@ -43,15 +44,18 @@ import org.wandora.utils.MSOfficeBox;
 import org.wandora.utils.PDFbox;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class ExtractHelper {
-    public static final String TOPIC_SI = "http://wandora.org/si/topic";
-    public static final String SOURCE_SI = "http://wandora.org/si/source";
-    public static final String DOCUMENT_SI = "http://wandora.org/si/document";
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ExtractHelper.class);
+	
+    public static final String TOPIC_SI = "https://wandora.org/si/topic";
+    public static final String SOURCE_SI = "https://wandora.org/si/source";
+    public static final String DOCUMENT_SI = "https://wandora.org/si/document";
 
 
 
@@ -219,20 +223,20 @@ public class ExtractHelper {
         String content = null;
         try {
             if(url.endsWith(".pdf") || url.endsWith(".PDF")) {
-                System.out.println("Found no content. Reading the url content as a PDF.");
+                logger.info("Found no content. Reading the url content as a PDF.");
                 content = PDFbox.extractTextOutOfPDF(url);
             }
             else if(url.endsWith(".doc") || url.endsWith(".DOC") || url.endsWith(".ppt") || url.endsWith(".PPT")) {
-                System.out.println("Found no content. Reading the url content as a MS Office file.");
-                content = MSOfficeBox.getText(new URL(url));
+                logger.info("Found no content. Reading the url content as a MS Office file.");
+                content = MSOfficeBox.getText(new URI(url).toURL());
             }
             else {
-                System.out.println("Found no content. Reading the url content.");
-                content = IObox.doUrl(new URL(url));
+                logger.info("Found no content. Reading the url content.");
+                content = IObox.doUrl(new URI(url).toURL());
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return content;
     }
@@ -250,24 +254,24 @@ public class ExtractHelper {
                 // to Wandora.
                 String lurl = url.toLowerCase();
                 if(lurl.endsWith(".pdf")) {
-                    System.out.println("Found no content. Reading the url content as a PDF.");
+                    logger.info("Found no content. Reading the url content as a PDF.");
                     content = PDFbox.extractTextOutOfPDF(url);
                 }
                 else if(lurl.endsWith(".doc") || lurl.endsWith(".ppt") || lurl.endsWith(".xsl")) {
-                    System.out.println("Found no content. Reading the url content as a MS Office file.");
-                    content = MSOfficeBox.getText(new URL(url));
+                    logger.info("Found no content. Reading the url content as a MS Office file.");
+                    content = MSOfficeBox.getText(new URI(url).toURL());
                 }
                 else if(lurl.endsWith(".xml")) {
-                    System.out.println("Found no content. Reading the url content as an XML file.");
+                    logger.info("Found no content. Reading the url content as an XML file.");
                     content = getContent(url);
                 }
                 else if(lurl.endsWith(".rdf") || lurl.endsWith(".owl")) {
-                    System.out.println("Found no content. Reading the url content as an RDF file.");
+                    logger.info("Found no content. Reading the url content as an RDF file.");
                     content = getContent(url);
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         if(content == null) {
@@ -275,11 +279,11 @@ public class ExtractHelper {
         }
         if(content == null && url != null) {
             try {
-                System.out.println("Found no content. Reading the url content.");
+                logger.info("Found no content. Reading the url content.");
                 content = getContent(url);
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return content;
@@ -302,7 +306,7 @@ public class ExtractHelper {
 
             // SOURCE IS A FRACTION OF URL
             if(content!=null) {
-                System.out.println("Found selection.");
+                logger.info("Found selection.");
                 String tidyContent = XMLbox.cleanUp( content );
                 if(tidyContent != null && tidyContent.length() > 0) {
                     content = XMLbox.getAsText(tidyContent, defaultEncoding);
@@ -350,7 +354,7 @@ public class ExtractHelper {
         }
         catch(Exception e) {
             callback.clearMasterSubject();
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
     }
@@ -436,12 +440,11 @@ public class ExtractHelper {
             else {
                 // Ok, Tidy fixed the html/xml document
                 tdata = XMLbox.getAsText(tdata, "UTF-8");
-                //System.out.println("content after getAsText: "+content);
                 //contentType = "text/txt";
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             tdata = data;
             //contentType = "text/raw";
         }

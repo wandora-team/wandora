@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.URL;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
 import org.wandora.topicmap.Association;
@@ -45,14 +44,14 @@ import org.wandora.utils.Textbox;
  *
  * @author akivela
  */
-public class ApuRahatCSVExtract extends AbstractExtractor implements WandoraTool {
+public class ApuRahatCSVExtract extends AbstractExtractor {
 
 	private static final long serialVersionUID = 1L;
 	
 	protected String defaultEncoding = "UTF-8";
     public static String LANG = "fi";
 
-    public static final String APURAHAT_SI = "http://wandora.org/si/hsopen/apurahat";
+    public static final String APURAHAT_SI = "https://wandora.org/si/hsopen/apurahat";
 
     public static final String KOONTI_SI = APURAHAT_SI+"/koonti";
     public static final String HENKILO_SI = APURAHAT_SI+"/henkilo";
@@ -181,9 +180,7 @@ public class ApuRahatCSVExtract extends AbstractExtractor implements WandoraTool
                 tokens = line.split("\t");
                 for(int i=0; i<tokens.length; i++) { // Trim results!
                     if(tokens[i] != null && tokens[i].length() > 0) {
-                        //System.out.print("trimming " + tokens[i]);
                         tokens[i] = Textbox.trimExtraSpaces(tokens[i]);
-                        //System.out.print(" --> " + tokens[i]);
                     }
                 }
                 Topic koontiT = null;

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,27 +32,26 @@ import org.wandora.application.gui.previews.PreviewUtils;
  * @author akivela
  */
 public class AudioOgg extends AudioAbstract {
-    
-    
+
+
     public AudioOgg(String locator) {
         super(locator);
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
+
 
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { 
-                    "audio/ogg",
-                    "application/ogg",
-                }, 
-                new String[] { 
-                    "ogg",
-                    "ogx"
-                }
-        );
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "audio/ogg",
+                        "application/ogg",
+                },
+                new String[] {
+                        "ogg",
+                        "ogx"
+                });
     }
 }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import javax.swing.JTree;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultTreeCellEditor;
-import javax.swing.tree.TreeCellEditor;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.TopicGuiWrapper;
@@ -49,7 +48,7 @@ import org.wandora.topicmap.Topic;
  */
 
 
-public class TopicTreeTopicEditor extends DefaultTreeCellEditor implements TreeCellEditor, CellEditorListener {
+public class TopicTreeTopicEditor extends DefaultTreeCellEditor implements CellEditorListener {
     private TopicTree topicTree;
     private Component editor;
     private SimpleField field = null;

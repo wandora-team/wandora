@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ import org.wandora.topicmap.Topic;
 
 
 
-
 /**
  *
  * @author akivela
@@ -43,7 +42,7 @@ import org.wandora.topicmap.Topic;
 public class TopicTableModel extends DefaultTableModel {
 
     private static final long serialVersionUID = 1L;
-    
+
     private Topic[][] data = null;
     private Object[] cols = null;
 
@@ -53,15 +52,17 @@ public class TopicTableModel extends DefaultTableModel {
         cols = columnObjects;
     }
 
+
     @Override
-    public Class getColumnClass(int c) {
+    public Class<?> getColumnClass(int c) {
         return Topic.class;
     }
 
 
     @Override
     public int getColumnCount() {
-        if(cols != null) return cols.length;
+        if (cols != null)
+            return cols.length;
         return 0;
     }
 
@@ -69,15 +70,16 @@ public class TopicTableModel extends DefaultTableModel {
 
     @Override
     public int getRowCount() {
-        if(data != null) return data.length;
+        if (data != null)
+            return data.length;
         return 0;
     }
 
-    
-    
+
+
     public Topic getTopicAt(int rowIndex, int columnIndex) {
         try {
-            if(data != null && rowIndex >= 0 && columnIndex >= 0) {
+            if (data != null && rowIndex >= 0 && columnIndex >= 0) {
                 return data[rowIndex][columnIndex];
             }
         }
@@ -86,13 +88,13 @@ public class TopicTableModel extends DefaultTableModel {
         }
         return null;
     }
-    
+
 
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
-            if(data != null && rowIndex >= 0 && columnIndex >= 0) {
+            if (data != null && rowIndex >= 0 && columnIndex >= 0) {
                 return data[rowIndex][columnIndex];
             }
         }
@@ -104,7 +106,7 @@ public class TopicTableModel extends DefaultTableModel {
 
 
     public Object getColumnObjectAt(int columnIndex) {
-        if(cols != null && columnIndex >= 0 && cols.length > columnIndex) {
+        if (cols != null && columnIndex >= 0 && cols.length > columnIndex) {
             return cols[columnIndex];
         }
         return null;
@@ -112,11 +114,13 @@ public class TopicTableModel extends DefaultTableModel {
 
 
     @Override
-    public String getColumnName(int columnIndex){
+    public String getColumnName(int columnIndex) {
         try {
-            if(cols != null && columnIndex >= 0 && cols.length > columnIndex && cols[columnIndex] != null) {
-                if(cols[columnIndex] instanceof Topic) return TopicToString.toString((Topic)cols[columnIndex]);
-                else return cols[columnIndex].toString();
+            if (cols != null && columnIndex >= 0 && cols.length > columnIndex && cols[columnIndex] != null) {
+                if (cols[columnIndex] instanceof Topic)
+                    return TopicToString.toString((Topic) cols[columnIndex]);
+                else
+                    return cols[columnIndex].toString();
             }
             return "";
         }
@@ -129,7 +133,7 @@ public class TopicTableModel extends DefaultTableModel {
 
 
     @Override
-    public boolean isCellEditable(int row,int col){
+    public boolean isCellEditable(int row, int col) {
         return false;
     }
 

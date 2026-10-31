@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@ public class NYTExtractor extends AbstractExtractor {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             if(ui == null) {
                 ui = new NYTExtractorUI();
@@ -101,14 +101,12 @@ public class NYTExtractor extends AbstractExtractor {
                 }
                 if(extrs != null && extrs.length > 0) {
                     setDefaultLogger();
-                    int c = 0;
                     log("Performing New York Times API query...");
                     for(int i=0; i<extrs.length && !forceStop(); i++) {
                         try {
                             WandoraTool e = extrs[i];
                             e.setToolLogger(getDefaultLogger());
                             e.execute(wandora);
-                            c++;
                         }
                         catch(Exception e) {
                             log(e);

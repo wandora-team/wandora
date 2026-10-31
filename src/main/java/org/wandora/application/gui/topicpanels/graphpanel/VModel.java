@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -280,7 +280,7 @@ public class VModel {
             VNode other=null;
             if(ns.e1.equals(vn)) other=ns.e2;
             else if(ns.e2.equals(vn)) other=ns.e1;
-            if(other.edgeCount<=1) remove.add(other);
+            if(other != null && other.edgeCount<=1) remove.add(other);
         }        
         for(VNode n : remove) removeNode(n);
     }

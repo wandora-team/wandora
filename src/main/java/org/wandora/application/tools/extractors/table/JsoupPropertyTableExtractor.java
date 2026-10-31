@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@ import java.util.List;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.application.tools.extractors.AbstractJsoupExtractor;
 import org.wandora.topicmap.Association;
@@ -41,8 +40,7 @@ import org.wandora.topicmap.TopicMap;
  */
 
 
-public class JsoupPropertyTableExtractor extends AbstractJsoupExtractor 
-implements WandoraTool, BrowserPluginExtractor {
+public class JsoupPropertyTableExtractor extends AbstractJsoupExtractor implements BrowserPluginExtractor {
 
 	private static final long serialVersionUID = 1L;
 
@@ -93,7 +91,11 @@ implements WandoraTool, BrowserPluginExtractor {
     private void handleAssoc(Association assoc, Element playerRow) throws Exception {
         
         Elements playerCells = playerRow.select("td");
-        if(playerCells.size() != 2) throw new Exception("Invalid player row");
+        if(playerCells.size() != 2
+        		|| playerCells.first() == null
+        		|| playerCells.last() == null) {
+        	throw new Exception("Invalid player row");
+        }
         
         String roleValue = playerCells.first().text();
         String playerValue = playerCells.last().text();

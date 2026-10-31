@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ public class StoredQueryPanel extends javax.swing.JPanel {
 
         scrollPane = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
-        queryComboBox = new javax.swing.JComboBox();
+        queryComboBox = new javax.swing.JComboBox<>();
         parameterLabelsPanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -250,7 +250,7 @@ public class StoredQueryPanel extends javax.swing.JPanel {
     private javax.swing.JButton newButton;
     private javax.swing.JPanel parameterFieldsPanel;
     private javax.swing.JPanel parameterLabelsPanel;
-    private javax.swing.JComboBox queryComboBox;
+    private javax.swing.JComboBox<String> queryComboBox;
     private javax.swing.JScrollPane scrollPane;
     // End of variables declaration//GEN-END:variables
     

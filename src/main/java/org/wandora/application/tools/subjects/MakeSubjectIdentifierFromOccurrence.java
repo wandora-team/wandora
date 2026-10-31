@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,9 +30,9 @@ package org.wandora.application.tools.subjects;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -48,13 +48,13 @@ import org.wandora.topicmap.TopicTools;
  * 
  * @author akivela
  */
-public class MakeSubjectIdentifierFromOccurrence extends AbstractWandoraTool implements WandoraTool {
+public class MakeSubjectIdentifierFromOccurrence extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
 	private static int MAXLEN = 256;
     private String replacement = "";
-    private String SITemplate = "http://wandora.org/si/%OCCURRENCE%";
+    private String SITemplate = "https://wandora.org/si/%OCCURRENCE%";
     
     private boolean askTemplate = true;
     
@@ -62,7 +62,7 @@ public class MakeSubjectIdentifierFromOccurrence extends AbstractWandoraTool imp
     public MakeSubjectIdentifierFromOccurrence() {
     }
     
-    public MakeSubjectIdentifierFromOccurrence(Context preferredContext) {
+    public MakeSubjectIdentifierFromOccurrence(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -80,9 +80,9 @@ public class MakeSubjectIdentifierFromOccurrence extends AbstractWandoraTool imp
 
     
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora admin, Context<?> context) {   
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic occurrenceType=admin.showTopicFinder("Select occurrence type...");                
@@ -94,7 +94,7 @@ public class MakeSubjectIdentifierFromOccurrence extends AbstractWandoraTool imp
             Locator occurrenceScopeLocator = occurrenceScope.getSubjectIdentifiers().iterator().next();
 
             if(SITemplate == null || SITemplate.length() == 0) {
-                SITemplate = "http://wandora.org/si/%OCCURRENCE%";
+                SITemplate = "https://wandora.org/si/%OCCURRENCE%";
             }
             if(askTemplate) {
                 SITemplate = WandoraOptionPane.showInputDialog(admin, "Make subject identifier using following template. String '%OCCURRENCE%' is replaced with topic's occurrence.", SITemplate);
@@ -115,7 +115,7 @@ public class MakeSubjectIdentifierFromOccurrence extends AbstractWandoraTool imp
             int progress = 0;
             int progressMax = 0;
 
-            ArrayList<Object> dt = new ArrayList<Object>();
+            List<Object> dt = new ArrayList<>();
             while(topics.hasNext() && !forceStop()) {
                 dt.add(topics.next());
                 progressMax++;

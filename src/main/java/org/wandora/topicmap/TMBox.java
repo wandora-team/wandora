@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,28 +55,30 @@ import org.wandora.topicmap.layered.LayerStack;
 import org.wandora.topicmap.layered.LayeredTopic;
 import org.wandora.utils.GripCollections;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  * TMBox contains various topic map related tools and utility methods.
  *
  * @author  olli
  */
 public class TMBox {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TMBox.class);
     
-    public static final String WANDORACLASS_SI = "http://wandora.org/si/core/wandora-class";
-    public static final String ASSOCIATIONTYPE_SI = "http://wandora.org/si/core/association-type";
-    public static final String ASSOCIATIONROLE_SI = "http://wandora.org/si/core/associationrole";
-    public static final String ROLE_SI = "http://wandora.org/si/core/role";
-    public static final String LANGINDEPENDENT_SI = "http://wandora.org/si/core/lang-independent";
-    public static final String ASSOCIATIONROLECATEGORIES_SI = "http://wandora.org/si/core/associationrolecategories";
-    public static final String OCCURRENCETYPE_SI = "http://wandora.org/si/core/occurrence-type";
-    public static final String HIDELEVEL_SI = "http://wandora.org/si/core/hidelevel";
-    public static final String CATEGORYHIERARCHY_SI = "http://wandora.org/si/common/categoryhierarchy";
-    public static final String SUPERCATEGORY_SI = "http://wandora.org/si/common/supercategory";
-    public static final String SUBCATEGORY_SI = "http://wandora.org/si/common/subcategory";
-    public static final String ENTRYTIME_SI = "http://wandora.org/si/common/entrytime";
+    public static final String WANDORACLASS_SI = "https://wandora.org/si/core/wandora-class";
+    public static final String ASSOCIATIONTYPE_SI = "https://wandora.org/si/core/association-type";
+    public static final String ASSOCIATIONROLE_SI = "https://wandora.org/si/core/associationrole";
+    public static final String ROLE_SI = "https://wandora.org/si/core/role";
+    public static final String LANGINDEPENDENT_SI = "https://wandora.org/si/core/lang-independent";
+    public static final String ASSOCIATIONROLECATEGORIES_SI = "https://wandora.org/si/core/associationrolecategories";
+    public static final String OCCURRENCETYPE_SI = "https://wandora.org/si/core/occurrence-type";
+    public static final String HIDELEVEL_SI = "https://wandora.org/si/core/hidelevel";
+    public static final String CATEGORYHIERARCHY_SI = "https://wandora.org/si/common/categoryhierarchy";
+    public static final String SUPERCATEGORY_SI = "https://wandora.org/si/common/supercategory";
+    public static final String SUBCATEGORY_SI = "https://wandora.org/si/common/subcategory";
+    public static final String ENTRYTIME_SI = "https://wandora.org/si/common/entrytime";
 
-    public static final String VARIANT_NAME_VERSION_SI = "http://wandora.org/si/core/variant-name-version";
-    public static final String LANGUAGE_SI = "http://wandora.org/si/core/language";
+    public static final String VARIANT_NAME_VERSION_SI = "https://wandora.org/si/core/variant-name-version";
+    public static final String LANGUAGE_SI = "https://wandora.org/si/core/language";
 
     // Language topics, data versions and display scope (moved from WandoraAdminManager)
     
@@ -94,7 +96,7 @@ public class TMBox {
                     languageSIs.add( languageTopic.getOneSubjectIdentifier().toExternalForm() );
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             return (String []) languageSIs.toArray(new String[] { } );
@@ -131,7 +133,7 @@ public class TMBox {
                     variantNameVersionSIs.add( variantNameVersionTopic.getOneSubjectIdentifier().toExternalForm() );
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);;
                 }
             }
             return (String []) variantNameVersionSIs.toArray(new String[] { } );
@@ -818,7 +820,7 @@ public class TMBox {
             try{
                 children=getSubCategories(t);
             }catch(TopicMapException tme){
-                tme.printStackTrace(); // TODO EXCEPTION
+                logger.error(tme);
                 children=new ArrayList<>();
             }
             children=sortTopics(children,lang);
@@ -1045,25 +1047,13 @@ public class TMBox {
      * is not found, other variants, base name or subject identifier is used.
      */
     public static Collection<Topic> sortTopics(Collection<Topic> topics,String lang) {
-/*        TopicAndName[] a=new TopicAndName[topics.size()];
-        Iterator iter=topics.iterator();
-        int counter=0;
-        while(iter.hasNext()){
-            a[counter++]=new TopicAndName((Topic)iter.next(),lang);
-        }
-        quickSortTopics(a,0,a.length-1);
-        ArrayList al=new ArrayList(a.length);
-        for(int i=0;i<a.length;i++){
-            al.add(a[i].topic);
-        }
-        return al;*/
         List<Topic> al=new ArrayList<>();
         if(topics != null) {
             try {
                 al.addAll(topics);
                 Collections.sort(al,new TopicNameComparator(lang));
             } catch(Exception e){
-                System.out.println("Exception in sort topics: "+e.toString());
+                logger.error("Exception in sort topics: "+e.toString());
             }
         }
         return al;
@@ -1258,7 +1248,9 @@ public class TMBox {
                 }
                 if(d1==null) d1=t1.getData(dataType,langIndep);
                 if(d2==null) d2=t2.getData(dataType,langIndep);
-            }catch(TopicMapException tme){tme.printStackTrace();}
+            } catch(TopicMapException tme){
+            	logger.error(tme);
+        	}
             int r;
             if(d1!=null && d2!=null) r=d1.compareTo(d2);
             else if(d1==null && d2!=null) r=1;
@@ -1308,8 +1300,8 @@ public class TMBox {
             try{
                 n1=getTopicName(t1);
                 n2=getTopicName(t2);
-            }catch(TopicMapException tme){
-                tme.printStackTrace(); // TODO EXCEPTION
+            } catch(TopicMapException tme){
+                logger.error(tme);
             }
             int c=n1.compareTo(n2);
             if(c==0) c=(t1.hashCode()<t2.hashCode()?-1:(t1.hashCode()==t2.hashCode()?0:1));
@@ -1350,7 +1342,7 @@ public class TMBox {
                 else return l1.compareTo(l2);
             }
             catch(TopicMapException tme){
-                tme.printStackTrace();
+                logger.error(tme);
                 return 0;
             }
         }
@@ -1371,7 +1363,7 @@ public class TMBox {
                 else return l1.compareTo(l2);
             }
             catch(TopicMapException tme){
-                tme.printStackTrace();
+                logger.error(tme);
                 return 0;
             }
         }
@@ -1435,7 +1427,7 @@ public class TMBox {
                     return topicComparator.compare(p1,p2);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                     return 0;
                 }
             }
@@ -1501,7 +1493,10 @@ public class TMBox {
                         else return 1;
                     }
                     else return c;
-                }catch(TopicMapException tme){tme.printStackTrace();return 0;} // TODO EXCEPTION
+                } catch(TopicMapException tme){
+                	logger.error(tme);
+                	return 0;
+            	}
             }
         }    
     }
@@ -1546,7 +1541,7 @@ public class TMBox {
                     ret=min;
                 }
                 catch(TopicMapException tme){
-                    tme.printStackTrace();
+                    logger.error(tme);
                     ret="";
                 }
                 nameMap.put(t,ret);
@@ -1591,7 +1586,7 @@ public class TMBox {
                     }
                 }
                 catch(TopicMapException tme){
-                    tme.printStackTrace();
+                    logger.error(tme);
                     ret="";
                 }
                 nameMap.put(a,ret);

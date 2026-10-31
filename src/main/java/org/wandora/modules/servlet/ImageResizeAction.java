@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -48,6 +49,7 @@ import org.wandora.modules.ModuleException;
 import org.wandora.modules.ModuleManager;
 import org.wandora.modules.servlet.ModulesServlet.HttpMethod;
 import org.wandora.modules.usercontrol.User;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -172,6 +174,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 public class ImageResizeAction extends CachedAction {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ImageResizeAction.class);
     
     protected boolean exceptionOnImageRead=false;
     
@@ -303,9 +306,10 @@ public class ImageResizeAction extends CachedAction {
      * @param url The URL pointing to the image.
      * @return The image as a BufferedImage.
      * @throws IOException 
+     * @throws URISyntaxException 
      */
-    protected BufferedImage readImage(String url) throws IOException {
-        return ImageIO.read(new URL(url));
+    protected BufferedImage readImage(String url) throws IOException, URISyntaxException {
+        return ImageIO.read(new URI(url).toURL());
     }
     
     /**
@@ -381,8 +385,8 @@ public class ImageResizeAction extends CachedAction {
                     return true;
                     
                 }
-                catch(IOException ioe){
-                    logging.debug("Couldn't read image "+s,ioe);
+                catch(Exception e){
+                    logging.debug("Couldn't read image "+s,e);
                 }
             }
         }
@@ -487,10 +491,10 @@ public class ImageResizeAction extends CachedAction {
             if(error!=null){
                 if(errorImage==null){
                     try{
-                        errorImage=ImageIO.read(new URL(error));
+                        errorImage=ImageIO.read(new URI(error).toURL());
                     }
-                    catch(IOException ioe) {
-                        ioe.printStackTrace();
+                    catch(Exception ioe) {
+                    	logger.error(ioe);
                     }
                 }
                 return errorImage;
@@ -615,10 +619,10 @@ public class ImageResizeAction extends CachedAction {
             if(watermark!=null){
                 if(watermarkImage==null){
                     try{
-                        watermarkImage=ImageIO.read(new URL(watermark));
+                        watermarkImage=ImageIO.read(new URI(watermark).toURL());
                     }
-                    catch(IOException ioe) {
-                        ioe.printStackTrace();
+                    catch(Exception e) {
+                    	logger.error(e);
                     }
                 }
                 if(watermarkMode.equals("lowerright")){
@@ -629,7 +633,7 @@ public class ImageResizeAction extends CachedAction {
                             g2.drawImage(watermarkImage,x,y,null);
                         }
                         catch(Exception e) {
-                            e.printStackTrace();
+                        	logger.error(e);
                         }
                     }
                 }

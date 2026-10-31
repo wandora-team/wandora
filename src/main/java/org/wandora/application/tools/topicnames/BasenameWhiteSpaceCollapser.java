@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,9 +27,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
@@ -40,7 +40,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool implements WandoraTool {
+public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -48,7 +48,7 @@ public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool implements 
 
 	public BasenameWhiteSpaceCollapser() {
     }
-    public BasenameWhiteSpaceCollapser(Context preferredContext) {
+    public BasenameWhiteSpaceCollapser(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -66,33 +66,28 @@ public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool implements 
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Collapsing white space characters in base names");
             log("Collapsing white space characters in base names");
             
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;
             String basename = null;
-            StringBuffer newBasename = null;
-            int c = 0;
-            int changed = 0;
-            int progress = 0;
-            HashMap<Topic,String> changeTopics = new HashMap<Topic,String>();
+            StringBuilder newBasename = null;
+            Map<Topic,String> changeTopics = new HashMap<>();
             
             while(topics.hasNext() && !forceStop()) {
                 try {
                     topic = (Topic) topics.next();
-                    c++;
                     if(topic != null) {
                         basename = topic.getBaseName();
                         if(basename != null) {
-                            progress++;
                             log("Investigating topic '" + basename + "'.");
-                            newBasename = new StringBuffer();
+                            newBasename = new StringBuilder();
                             char ch = 0;
                             boolean isFirst = true;
                             boolean hasChanged = false;
@@ -116,7 +111,6 @@ public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool implements 
                             if(hasChanged) {
                                 changeTopics.put(topic, newBasename.toString());
                                 log("Changing base name to '"+newBasename + "'.");
-                                changed++;
                             }
                         }
                     }
@@ -134,7 +128,6 @@ public class BasenameWhiteSpaceCollapser extends AbstractWandoraTool implements 
                     if(forceStop()) break;
                     basename = changeTopics.get(t);
                     t.setBaseName(basename);
-                    changed++;
                 }
                 catch(Exception e) {
                     log(e);

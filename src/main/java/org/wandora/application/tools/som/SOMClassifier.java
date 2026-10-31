@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.LayeredTopicContext;
@@ -46,6 +45,7 @@ import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -89,7 +89,9 @@ import org.wandora.topicmap.TopicMapException;
  * 
  * @author akivela
  */
-public class SOMClassifier extends AbstractWandoraTool implements WandoraTool {
+public class SOMClassifier extends AbstractWandoraTool {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SOMClassifier.class);
 
 
 	private static final long serialVersionUID = 1L;
@@ -97,7 +99,7 @@ public class SOMClassifier extends AbstractWandoraTool implements WandoraTool {
 
 
 
-	public SOMClassifier(Context preferredContext) {
+	public SOMClassifier(Context<?> preferredContext) {
         this.setContext(preferredContext);
     }
     
@@ -116,10 +118,10 @@ public class SOMClassifier extends AbstractWandoraTool implements WandoraTool {
                "Tool is able to group similar topics.";
     }
     
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(context instanceof AssociationContext) {
             try {
-                Iterator<Association> associations = context.getContextObjects();
+                Iterator<Association> associations = (Iterator<Association>) context.getContextObjects();
                 Set<Topic> roles = getRolesFrom(associations);
                 if(roles.size() > 0) { 
                     Topic groupingRole = (Topic) WandoraOptionPane.showOptionDialog(wandora, "Select grouping role topic", "Select grouping role topic", WandoraOptionPane.OK_CANCEL_OPTION, roles.toArray( new Topic[]{} ), roles.iterator().next());
@@ -128,7 +130,7 @@ public class SOMClassifier extends AbstractWandoraTool implements WandoraTool {
                     setLogTitle("SOM of associations");
                     if(groupingRole != null) {
                         log("Building input vectors");
-                        Map<Topic,Set<Topic>> inputSets = buildInputSets(wandora, groupingRole, context.getContextObjects());
+                        Map<Topic,Set<Topic>> inputSets = buildInputSets(wandora, groupingRole, (Iterator<Association>) context.getContextObjects());
                         Map<Topic,SOMVector> inputVectors = buildInputVectors(inputSets);
                         log("Training SOM");
                         SOMMap map = new SOMMap(inputVectors, this);
@@ -151,10 +153,10 @@ public class SOMClassifier extends AbstractWandoraTool implements WandoraTool {
             }
         }
         else if( context instanceof LayeredTopicContext ) {
-            System.out.println("LayeredTopicContext not processed!");
+            logger.warn("LayeredTopicContext not processed!");
         }
         else {
-            System.out.println("Unknown context not processed!");
+            logger.warn("Unknown context not processed!");
         }
         setState(WAIT);
     }

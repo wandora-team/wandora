@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,12 +37,14 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JComponent;
@@ -67,60 +69,59 @@ import org.wandora.application.tools.project.LoadWandoraProject;
 import org.wandora.application.tools.project.MergeWandoraProject;
 import org.wandora.utils.JarClassLoader;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author akivela
  */
-public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraTool {
+public class WandoraToolManager2 extends AbstractWandoraTool {
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolManager2.class);
 
 
-	private static final long serialVersionUID = 1L;
+    public static final boolean ADDITIONAL_DEBUG = false;
 
 
-	public static final boolean ADDITIONAL_DEBUG = false;
-    
-    
     private KeyStroke[] accelerators = new KeyStroke[] {
-        KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.CTRL_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_4, InputEvent.CTRL_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_5, InputEvent.CTRL_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_6, InputEvent.CTRL_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_7, InputEvent.CTRL_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_8, InputEvent.CTRL_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_9, InputEvent.CTRL_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.CTRL_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.CTRL_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_4, InputEvent.CTRL_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_5, InputEvent.CTRL_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_6, InputEvent.CTRL_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_7, InputEvent.CTRL_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_8, InputEvent.CTRL_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_9, InputEvent.CTRL_DOWN_MASK),
     };
 
 
     private KeyStroke[] buttonSetAccelerators = new KeyStroke[] {
-        KeyStroke.getKeyStroke(KeyEvent.VK_F1, InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_F2, InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_F3, InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_F5, InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_F6, InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_F7, InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_F8, InputEvent.SHIFT_DOWN_MASK),
-        KeyStroke.getKeyStroke(KeyEvent.VK_F9, InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_F1, InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_F2, InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_F3, InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_F5, InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_F6, InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_F7, InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_F8, InputEvent.SHIFT_DOWN_MASK),
+            KeyStroke.getKeyStroke(KeyEvent.VK_F9, InputEvent.SHIFT_DOWN_MASK),
     };
 
     protected Wandora wandora;
     protected Options options;
 
-    protected ArrayList<String> toolPaths;
-    
-    protected ArrayList<String> jarPaths;
-    
-    protected ArrayList<WandoraToolSet> toolSets;
+    protected List<String> toolPaths;
 
-    protected HashMap<WandoraTool, String> optionsPrefixes;
-    
-    protected ArrayList<WandoraTool> allTools;
-    protected HashMap<WandoraTool,ToolInfo> toolInfos;
-    
+    protected List<String> jarPaths;
+
+    protected List<WandoraToolSet> toolSets;
+
+    protected Map<WandoraTool, String> optionsPrefixes;
+
+    protected List<WandoraTool> allTools;
+    protected Map<WandoraTool, ToolInfo> toolInfos;
 
 
 
@@ -132,311 +133,255 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
         scanAllTools();
         readToolSets();
     }
-    
-    
-    public ArrayList<WandoraToolSet> getToolSets() {
+
+
+    public List<WandoraToolSet> getToolSets() {
         return toolSets;
     }
-    
-    
-    public void addTool(ToolInfo toolInfo){
+
+
+    public void addTool(ToolInfo toolInfo) {
         allTools.add(toolInfo.tool);
-        toolInfos.put(toolInfo.tool,toolInfo);
+        toolInfos.put(toolInfo.tool, toolInfo);
     }
-    
-    
+
+
     public void addTool(WandoraTool tool, String sourceType, String source) {
-        addTool(new ToolInfo(tool,sourceType,source));
+        addTool(new ToolInfo(tool, sourceType, source));
     }
-    
-    
-    public WandoraTool findTool(String cls){
-        for(WandoraTool tool : allTools){
-            if(tool.getClass().getName().equals(cls)) return tool;
+
+
+    public WandoraTool findTool(String cls) {
+        for (WandoraTool tool : allTools) {
+            if (tool.getClass().getName().equals(cls))
+                return tool;
         }
         return null;
     }
-    
-    public WandoraTool newToolInstance(WandoraTool tool) throws InstantiationException, IllegalAccessException {
-        if(tool==null) return null;
-        return tool.getClass().newInstance();
+
+
+    public WandoraTool newToolInstance(WandoraTool tool) throws InstantiationException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
+        if (tool == null)
+            return null;
+        return tool.getClass().getDeclaredConstructor().newInstance();
     }
-    
-    
+
+
     // ---------------------------------------------------------- TOOL PATHS ---
 
-    public ToolInfo getToolInfo(WandoraTool tool){
+
+    public ToolInfo getToolInfo(WandoraTool tool) {
         return toolInfos.get(tool);
     }
-    
-    public ArrayList<String> getToolPaths() {
+
+
+    public List<String> getToolPaths() {
         return toolPaths;
     }
-    
-    public ArrayList<String> getJarPaths(){
+
+
+    public List<String> getJarPaths() {
         return jarPaths;
     }
-    
-    public void readJarPaths(){
-        jarPaths = new ArrayList<String>();
-        if(options == null) return;
-        int pathCounter=0;
+
+
+    public void readJarPaths() {
+        jarPaths = new ArrayList<>();
+        if (options == null)
+            return;
+        int pathCounter = 0;
         boolean continueRefresh = true;
-        while(true) {
-            String jarResourcePath = options.get("tool.jarpath["+pathCounter+"]");
-            if(jarResourcePath == null || jarResourcePath.length() == 0) {
+        while (true) {
+            String jarResourcePath = options.get("tool.jarpath[" + pathCounter + "]");
+            if (jarResourcePath == null || jarResourcePath.length() == 0) {
                 break;
             }
             pathCounter++;
-            if(jarPaths.contains(jarResourcePath)) continue;
+            if (jarPaths.contains(jarResourcePath))
+                continue;
             jarPaths.add(jarResourcePath);
-        }    
+        }
     }
-    
+
+
     public void readToolPaths() {
-        toolPaths = new ArrayList<String>();
-        if(options == null) return;
-        int pathCounter=0;
+        toolPaths = new ArrayList<>();
+        if (options == null)
+            return;
+        int pathCounter = 0;
         boolean continueRefresh = true;
-        while(continueRefresh) {
-            String toolResourcePath = options.get("tool.path["+pathCounter+"]");
-            if(toolResourcePath == null || toolResourcePath.length() == 0) {
+        while (continueRefresh) {
+            String toolResourcePath = options.get("tool.path[" + pathCounter + "]");
+            if (toolResourcePath == null || toolResourcePath.length() == 0) {
                 toolResourcePath = "org/wandora/application/tools";
-                //System.out.println("Using default tool resource path: " + toolResourcePath);
                 continueRefresh = false;
             }
             pathCounter++;
-            if(toolPaths.contains(toolResourcePath)) continue;
+            if (toolPaths.contains(toolResourcePath))
+                continue;
             toolPaths.add(toolResourcePath);
         }
     }
-    
-    public void writeJarPaths(ArrayList<String> newJarPaths){
+
+
+    public void writeJarPaths(List<String> newJarPaths) {
         int c = jarPaths.size();
         int i = 0;
-        for( String path : newJarPaths ) {
-            options.put("tool.jarpath["+i+"]", path);
+        for (String path : newJarPaths) {
+            options.put("tool.jarpath[" + i + "]", path);
             i++;
         }
-        for( ; i<c; i++ ) {
-            options.put("tool.jarpath["+i+"]", null);
-        }        
+        for (; i < c; i++) {
+            options.put("tool.jarpath[" + i + "]", null);
+        }
     }
-    
-    public void writeToolPaths(ArrayList<String> newToolPaths) {
+
+
+    public void writeToolPaths(List<String> newToolPaths) {
         int c = toolPaths.size();
         int i = 0;
-        for( String path : newToolPaths ) {
-            options.put("tool.path["+i+"]", path);
+        for (String path : newToolPaths) {
+            options.put("tool.path[" + i + "]", path);
             i++;
         }
-        for( ; i<c; i++ ) {
-            options.put("tool.path["+i+"]", null);
+        for (; i < c; i++) {
+            options.put("tool.path[" + i + "]", null);
         }
     }
-    
-    
+
+
     // ----------------------------------------------------- AVAILABLE TOOLS ---
-    
-    
-    public ArrayList<WandoraTool> getAllTools() {
+
+
+    public List<WandoraTool> getAllTools() {
         return allTools;
     }
-    
-    
-    
+
+
+
     public void scanAllTools() {
         readToolPaths();
         readJarPaths();
-    
-        allTools=new ArrayList<WandoraTool>();
-        toolInfos=new HashMap<WandoraTool,ToolInfo>();
 
-        for(String path : toolPaths) {
+        allTools = new ArrayList<>();
+        toolInfos = new HashMap<>();
+
+        for (String path : toolPaths) {
             try {
                 String classPath = path.replace('/', '.');
                 Reflections reflections = new Reflections(classPath);
 
                 Set<Class<? extends WandoraTool>> toolClasses = reflections.getSubTypesOf(WandoraTool.class);
-                for(Class toolClass : toolClasses) {
+                for (Class<? extends WandoraTool> toolClass : toolClasses) {
                     try {
-                        if(isValidWandoraToolClass(toolClass)) {
-                            WandoraTool tool = (WandoraTool) toolClass.newInstance();
-                            if(tool != null) {
+                        if (isValidWandoraToolClass(toolClass)) {
+                            WandoraTool tool = (WandoraTool) toolClass.getDeclaredConstructor().newInstance();
+                            if (tool != null) {
                                 addTool(tool, "path", path);
                             }
                         }
                     }
-                    catch(Exception e) {
-                        if(ADDITIONAL_DEBUG) System.out.println("Rejecting tool. Exception '" + e.toString() + "' occurred while investigating class '" + toolClass + "'.");
-                        //e.printStackTrace();
+                    catch (Exception e) {
+                        logger.error(e);
                     }
                 }
             }
-            catch(Exception e) {
-                e.printStackTrace();
+            catch (Exception e) {
+                logger.error(e);
             }
         }
-        
-        for(String jarPath : jarPaths){
-            File f=new File(jarPath);
+
+        for (String jarPath : jarPaths) {
+            File f = new File(jarPath);
             scanJarPath(f);
         }
     }
-    
-    
-    private boolean isValidWandoraToolClass(Class c) {
+
+
+    private boolean isValidWandoraToolClass(Class<?> c) {
         try {
-            if(!c.isInterface() && !Modifier.isAbstract( c.getModifiers() )) {
+            if (!c.isInterface() && !Modifier.isAbstract(c.getModifiers())) {
                 // throws exception if class has no argumentless constructor.
-                c.getConstructors(); 
+                c.getConstructors();
                 return true;
             }
         }
-        catch(Exception e) {
-            
+        catch (Exception e) {
+
         }
         return false;
     }
-    
-    
-    
-    
-    /*
-    public void scanAllTools() {
-        readToolPaths();
-        readJarPaths();
-        
-        allTools=new ArrayList<WandoraTool>();
-        toolInfos=new HashMap<WandoraTool,ToolInfo>();
 
-        for(String path : toolPaths) {
-            try {
-                String classPath = path.replace('/', '.');
-                Enumeration toolResources = ClassLoader.getSystemResources(path);
 
-                while(toolResources.hasMoreElements()) {
-                    URL toolBaseUrl = (URL) toolResources.nextElement();
-                    if(toolBaseUrl.toExternalForm().startsWith("file:")) {
-                        String baseDir = IObox.getFileFromURL(toolBaseUrl);
-                        // String baseDir = URLDecoder.decode(toolBaseUrl.toExternalForm().substring(6), "UTF-8");
-                        if(!baseDir.startsWith("/") && !baseDir.startsWith("\\") && baseDir.charAt(1)!=':') 
-                            baseDir="/"+baseDir;
-                        //System.out.println("Basedir: " + baseDir);
-                        HashSet<String> toolFileNames = IObox.getFilesAsHash(baseDir, ".*\\.class", 1, 9000);
-                        for(String classFileName : toolFileNames) {
-                            try {
-                                File classFile = new File(classFileName);
-                                String className = classPath + "." + classFile.getName().replaceFirst("\\.class", "");
-                                if(className.indexOf("$")>-1) continue;
-                                WandoraTool tool=null;
-                                if(className.equals(this.getClass().getName())) tool=this;
-                                else {
-                                    Class cls=Class.forName(className);
-                                    if(!WandoraTool.class.isAssignableFrom(cls)) {
-                                        if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + cls.getSimpleName() + "'. Does not implement Tool interface!");
-                                        continue;
-                                    }
-                                    if(cls.isInterface()) {
-                                        if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + cls.getSimpleName() + "'. Is interface!");
-                                        continue;
-                                    }
-                                    try {
-                                        cls.getConstructor();
-                                    }
-                                    catch(NoSuchMethodException nsme){
-                                        if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + cls.getSimpleName() + "'. No constructor!");
-                                        continue;
-                                    }
-                                    tool=(WandoraTool)Class.forName(className).newInstance();
-                                }
-                                if(tool != null) {
-                                    addTool(tool, "path", path);
-                                    //allTools.add(tool);
-                                }
-                            }
-                            catch(Exception ex) {
-                                if(ADDITIONAL_DEBUG) System.out.println("Rejecting tool. Exception '" + ex.toString() + "' occurred while investigating '" + classFileName + "'.");
-                                //ex.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-        
-        for(String jarPath : jarPaths){
-            File f=new File(jarPath);
-            scanJarPath(f);
-        }
-    }
-    */
-    
-    
-    
-    
-    public void scanJarPath(File f){
-        if(!f.exists()) return;
-        if(f.isDirectory()){
-            for(File f2 : f.listFiles()){
+
+    public void scanJarPath(File f) {
+        if (!f.exists())
+            return;
+        if (f.isDirectory()) {
+            for (File f2 : f.listFiles()) {
                 scanJarPath(f2);
             }
         }
-        else {            
-            try{
-                JarClassLoader jc=new JarClassLoader(f);    
-                Collection<String> clsNames=jc.listClasses();
-                for(String clsName : clsNames){
-                    try{
-                        Class cls=jc.loadClass(clsName);
-                        if(!WandoraTool.class.isAssignableFrom(cls)){
-                            if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + cls.getSimpleName() + "'. Does not implement Tool interface!");
+        else {
+            try (JarClassLoader jc = new JarClassLoader(f)) {
+                Collection<String> clsNames = jc.listClasses();
+                for (String clsName : clsNames) {
+                    try {
+                        Class<?> cls = jc.loadClass(clsName);
+                        if (!WandoraTool.class.isAssignableFrom(cls)) {
+                            if (ADDITIONAL_DEBUG)
+                                logger.info(
+                                        "Rejecting '" + cls.getSimpleName() + "'. Does not implement Tool interface!");
                             continue;
                         }
-                        if(cls.isInterface()) {
-                            if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + cls.getSimpleName() + "'. Is interface!");
+                        if (cls.isInterface()) {
+                            if (ADDITIONAL_DEBUG)
+                                logger.info("Rejecting '" + cls.getSimpleName() + "'. Is interface!");
                             continue;
                         }
-                        try{
-                            Constructor constructor=cls.getConstructor();
-                            Object o=constructor.newInstance();
-                            WandoraTool tool=(WandoraTool)o;
-                            //allTools.add(tool);
-                            addTool(tool,"jar",f.getAbsolutePath());
+                        try {
+                            Constructor<?> constructor = cls.getConstructor();
+                            Object o = constructor.newInstance();
+                            WandoraTool tool = (WandoraTool) o;
+                            addTool(tool, "jar", f.getAbsolutePath());
                         }
-                        catch(NoSuchMethodException nsme){
-                            if(ADDITIONAL_DEBUG) System.out.println("Rejecting '" + cls.getSimpleName() + "'. No constructor!");
+                        catch (NoSuchMethodException nsme) {
+                            if (ADDITIONAL_DEBUG)
+                                logger.error("Rejecting '" + cls.getSimpleName() + "'. No constructor!");
                             continue;
                         }
                     }
-                    catch(Exception ex){
-                        if(ADDITIONAL_DEBUG) System.out.println("Rejecting tool. Exception '" + ex.toString() + "' occurred while investigating '" + clsName + "'.");
+                    catch (Exception ex) {
+                        if (ADDITIONAL_DEBUG)
+                            logger.error("Rejecting tool. Exception '" + ex.toString()
+                                    + "' occurred while investigating '" + clsName + "'.");
                     }
                 }
-            }catch(MalformedURLException mue){
-                mue.printStackTrace();
-            }catch(IOException ioe){
-                ioe.printStackTrace();
+            }
+            catch (MalformedURLException mue) {
+                logger.error(mue);
+            }
+            catch (IOException ioe) {
+                logger.error(ioe);
             }
         }
     }
 
     // ----------------------------------------------------------- TOOL SETS ---
-        
-        
+
+
     public void readToolSets() {
         optionsPrefixes = new HashMap<WandoraTool, String>();
         toolSets = new ArrayList<WandoraToolSet>();
-        if(options == null) return;
+        if (options == null)
+            return;
         int toolSetIndex = 0;
         String toolSetName;
         WandoraToolSet toolSet = null;
-        while(true) {
-            toolSetName = options.get("tool.set["+toolSetIndex+"].name");
-            if(toolSetName != null) {
+        while (true) {
+            toolSetName = options.get("tool.set[" + toolSetIndex + "].name");
+            if (toolSetName != null) {
                 toolSet = new WandoraToolSet(toolSetName, toolSetIndex, wandora);
                 readToolSet(toolSet, null);
                 toolSets.add(toolSet);
@@ -448,252 +393,174 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
         }
     }
 
-    
-    
+
+
     private WandoraToolSet readToolSet(WandoraToolSet set, String optionsPath) {
-        if(set == null) return null;
-        if(optionsPath == null) optionsPath = "tool.set["+set.getIndex()+"]";
+        if (set == null)
+            return null;
+        if (optionsPath == null)
+            optionsPath = "tool.set[" + set.getIndex() + "]";
         int counter = 0;
-        while(true) {
-            String newPath = optionsPath + ".item["+counter+"]";
+        while (true) {
+            String newPath = optionsPath + ".item[" + counter + "]";
             String name = options.get(newPath + ".name");
-            if(name==null) break;
+            if (name == null)
+                break;
             String cls = options.get(newPath + ".class");
-            
-            if(cls != null) {
+
+            if (cls != null) {
                 try {
-                    WandoraTool tool=null;
-                    if(cls.equals(this.getClass().getName())) tool=this;
-                    else tool=newToolInstance(findTool(cls));
-                    if(tool!=null){
-                        optionsPrefixes.put(tool, newPath+".options.");
-                        tool.initialize(wandora,options,newPath+".options.");
-                        set.add(name, tool);    
+                    WandoraTool tool = null;
+                    if (cls.equals(this.getClass().getName()))
+                        tool = this;
+                    else
+                        tool = newToolInstance(findTool(cls));
+                    if (tool != null) {
+                        optionsPrefixes.put(tool, newPath + ".options.");
+                        tool.initialize(wandora, options, newPath + ".options.");
+                        set.add(name, tool);
                     }
                     else {
-                        System.out.println("Options refer tool class '" + cls + "' not available! Discarding tool!");                        
+                        logger.info("Options refer tool class '" + cls + "' not available! Discarding tool!");
                     }
                 }
-                catch(NoClassDefFoundError ncdfe) {
-                    System.out.println("A tool configured in options requires a class that was not found. This is most likely caused by a missing library. Missing class was "+ncdfe.getMessage()+". Discarding tool!");
+                catch (NoClassDefFoundError ncdfe) {
+                    logger.error(
+                            "A tool configured in options requires a class that was not found. This is most likely caused by a missing library. Missing class was "
+                                    + ncdfe.getMessage() + ". Discarding tool!");
                 }
-                catch(Exception e) {
-                    System.out.println(e);
+                catch (Exception e) {
+                    logger.error(e);
                 }
             }
             else {
                 //String subtreename = options.get(newPath + ".item[0].name");
                 //if(subtreename != null) {
-                    WandoraToolSet newToolSet = new WandoraToolSet(name, wandora);
-                    set.add(readToolSet(newToolSet, newPath));
+                WandoraToolSet newToolSet = new WandoraToolSet(name, wandora);
+                set.add(readToolSet(newToolSet, newPath));
                 //}
             }
             counter++;
         }
         return set;
     }
-    
-    
-    
+
+
+
     public void writeToolSets() {
         options.removeAll("tool.set");
         int index = 0;
-        for(WandoraToolSet toolSet : toolSets) {
-            writeToolSet(toolSet, "tool.set["+index+"]");
+        for (WandoraToolSet toolSet : toolSets) {
+            writeToolSet(toolSet, "tool.set[" + index + "]");
             index++;
         }
     }
-    
-    
+
+
     private void writeToolSet(WandoraToolSet set, String optionsPath) {
         options.removeAll(optionsPath);
-        options.put(optionsPath+".name", set.getName());
-        // System.out.println("writeToolSet: " + optionsPath + " ---- "+set);
+        options.put(optionsPath + ".name", set.getName());
         Object[] array = set.asArray();
         Object o = null;
         WandoraToolSet.ToolItem toolItem = null;
         WandoraToolSet innerSet = null;
-        for( int i=0; i<array.length; i++ ) {
+        for (int i = 0; i < array.length; i++) {
             o = array[i];
-            if(o instanceof WandoraToolSet.ToolItem) {
+            if (o instanceof WandoraToolSet.ToolItem) {
                 toolItem = (WandoraToolSet.ToolItem) o;
-                // System.out.println("     "+optionsPath+".item["+i+"].name = "+toolItem.getName());
-                options.put(optionsPath+".item["+i+"].name", toolItem.getName());
-                options.put(optionsPath+".item["+i+"].class", toolItem.getTool().getClass().getName());
+                options.put(optionsPath + ".item[" + i + "].name", toolItem.getName());
+                options.put(optionsPath + ".item[" + i + "].class", toolItem.getTool().getClass().getName());
             }
-            else if(o instanceof WandoraToolSet) {
+            else if (o instanceof WandoraToolSet) {
                 innerSet = (WandoraToolSet) o;
-                writeToolSet(innerSet, optionsPath+".item["+i+"]");
+                writeToolSet(innerSet, optionsPath + ".item[" + i + "]");
             }
         }
     }
-    
-    
 
 
-    
-    
+
     public boolean deleteToolSet(WandoraToolSet set) {
-        if(!allowDelete(set)) return false;
+        if (!allowDelete(set))
+            return false;
         toolSets.remove(set);
         writeToolSets();
         return true;
     }
-    
-    
-    
-    
-    
+
+
+
     public WandoraToolSet createToolSet(String name) {
         WandoraToolSet newSet = new WandoraToolSet(name, wandora);
         toolSets.add(newSet);
         writeToolSets();
         return newSet;
     }
-    
-    
-    
-    /*
-    public void addToolToSet(WandoraToolSet set, WandoraToolSet.ToolItem toolItem) {
-        set.add(toolItem);
-        writeToolSets();
-    }
-    
-    
-    public void addToolToSet(WandoraToolSet set, WandoraTool tool, String instanceName) {
-        set.add(instanceName, tool);
-        writeToolSets();
-    }
-    
-    public void addSetToSet(WandoraToolSet set, WandoraToolSet child) {
-        set.add(child);
-        System.out.println("adding set to set: parent == "+set+", child == "+child);
-        writeToolSets();
-    }
-    
-    
-    public void removeToolOrSet(WandoraToolSet set, Object toolOrSet) {
-        set.remove(toolOrSet);
-        writeToolSets();
-    }
-    
-    public void renameToolOrSet(WandoraToolSet set, Object toolOrSet, String newName) {
-        if(toolOrSet instanceof WandoraToolSet) {
-            //System.out.println("WandoraToolSet == "+toolOrSet + " --- new name === "+newName+ "  --- currentSet = "+set);
-            ((WandoraToolSet) toolOrSet).setName(newName);
-        }
-        else if(toolOrSet instanceof WandoraToolSet.ToolItem) {
-            //System.out.println("WandoraToolSet.ToolItem == "+toolOrSet + " --- new name === "+newName+ "  --- currentSet = "+set);
-            ((WandoraToolSet.ToolItem) toolOrSet).setName(newName);
-        }
-        writeToolSets();
-    }
-    */
-    
-    
-    
-    public boolean allowDelete(WandoraToolSet set) {
-        if(WandoraToolType.IMPORT_TYPE.equals(set.getName())) return false;
-        if(WandoraToolType.IMPORT_MERGE_TYPE.equals(set.getName())) return false;
-        if(WandoraToolType.EXTRACT_TYPE.equals(set.getName())) return false;
-        if(WandoraToolType.EXPORT_TYPE.equals(set.getName())) return false;
-        if(WandoraToolType.GENERIC_TYPE.equals(set.getName())) return false;
-        if(WandoraToolType.GENERATOR_TYPE.equals(set.getName())) return false;
 
-        if(WandoraToolType.BROWSER_EXTRACTOR_TYPE.equals(set.getName())) return false;
-        if(WandoraToolType.WANDORA_BUTTON_TYPE.equals(set.getName())) return false;
-        
+
+
+    public boolean allowDelete(WandoraToolSet set) {
+        if (WandoraToolType.IMPORT_TYPE.equals(set.getName()))
+            return false;
+        if (WandoraToolType.IMPORT_MERGE_TYPE.equals(set.getName()))
+            return false;
+        if (WandoraToolType.EXTRACT_TYPE.equals(set.getName()))
+            return false;
+        if (WandoraToolType.EXPORT_TYPE.equals(set.getName()))
+            return false;
+        if (WandoraToolType.GENERIC_TYPE.equals(set.getName()))
+            return false;
+        if (WandoraToolType.GENERATOR_TYPE.equals(set.getName()))
+            return false;
+
+        if (WandoraToolType.BROWSER_EXTRACTOR_TYPE.equals(set.getName()))
+            return false;
+        if (WandoraToolType.WANDORA_BUTTON_TYPE.equals(set.getName()))
+            return false;
+
         return true;
     }
-    
 
-    
-    public WandoraToolSet getToolSet(String name){
-        for( WandoraToolSet set : toolSets ) {
-            if(set != null) {
-                if(set.getName().equals(name)) {
+
+
+    public WandoraToolSet getToolSet(String name) {
+        for (WandoraToolSet set : toolSets) {
+            if (set != null) {
+                if (set.getName().equals(name)) {
                     return set;
                 }
             }
         }
         return null;
     }
-    
-    /*
-    
-    public WandoraTool getToolForName(String name) {
-        WandoraTool t = null;
-        for( WandoraToolSet set : toolSets ) {
-            if(set != null) {
-                t = set.getToolForName(name);
-                if(t != null) {
-                    return t;
-                }
-            }
-        }
-        return null;
-    }
-    
-    public WandoraTool getToolForName(String name, WandoraToolSet set) {
-        if(set != null) {
-            WandoraTool t = set.getToolForName(name);
-            if(t != null) {
-                return t;
-            }
-        }
-        return null;
-    }
-    
-    public WandoraTool getToolForRealName(String name) {
-        WandoraTool t = null;
-        for( WandoraToolSet set : toolSets ) {
-            if(set != null) {
-                t = set.getToolForRealName(name);
-                if(t != null) {
-                    return t;
-                }
-            }
-        }
-        return null;
-    }
-    
-    public WandoraTool getToolForRealName(String name, WandoraToolSet set) {
-        if(set != null) {
-            WandoraTool t = set.getToolForRealName(name);
-            if(t != null) {
-                return t;
-            }
-        }
-        return null;
-    }
-    */
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public String getOptionsPrefix(WandoraTool tool) {
         String prefix = null;
         try {
             prefix = optionsPrefixes.get(tool);
         }
-        catch(Exception e) {}
+        catch (Exception e) {
+        }
         return prefix;
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
-    
-    public void execute(Wandora w, Context context) {
+
+
+
+    public void execute(Wandora w, Context<?> context) {
         scanAllTools();
         readToolSets();
-        
-        JDialog d=new JDialog(w,"Tool Manager",true);
-        WandoraToolManagerPanel2 panel=new WandoraToolManagerPanel2(this, d, wandora);
+
+        JDialog d = new JDialog(w, "Tool Manager", true);
+        WandoraToolManagerPanel2 panel = new WandoraToolManagerPanel2(this, d, wandora);
         d.getContentPane().add(panel);
-        d.setSize(900,400);
+        d.setSize(900, 400);
         org.wandora.utils.swing.GuiTools.centerWindow(d, w);
         d.setVisible(true);
         // ***** WAIT TILL USER CLOSES TOOL MANAGER DIALOG
@@ -702,39 +569,35 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
         readToolSets();
         toolsChanged();
     }
-    
-    
-    
+
+
+
     @Override
     public String getName() {
         return "Tool manager v2...";
     }
-    
-    
+
+
     @Override
     public String getDescription() {
         return "Manage Wandora's tools and tool sets.";
     }
-    
-    
-    
-    
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
 
 
 
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
 
 
     public Object[] getToolButtonSelectMenuStruct() {
         String[] set = getToolButtonSetNames();
-        ArrayList<Object> menuStruct = new ArrayList<Object>();
-        for(int i=0; i<set.length; i++) {
-            menuStruct.add( set[i] );
-            menuStruct.add( new ActivateButtonToolSet( set[i] ) );
-            if(i<buttonSetAccelerators.length) {
+        List<Object> menuStruct = new ArrayList<>();
+        for (int i = 0; i < set.length; i++) {
+            menuStruct.add(set[i]);
+            menuStruct.add(new ActivateButtonToolSet(set[i]));
+            if (i < buttonSetAccelerators.length) {
                 menuStruct.add(buttonSetAccelerators[i]);
             }
         }
@@ -742,7 +605,7 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
     }
 
 
-    
+
     public JMenu getToolButtonSelectMenu() {
         Object[] struct = new Object[] { "Select button tool set", getToolButtonSelectMenuStruct() };
         return UIBox.makeMenu(struct, wandora);
@@ -756,62 +619,64 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
 
 
     public String[] getToolButtonSetNames() {
-        ArrayList<String> buttonSets = new ArrayList<String>();
-        if(toolSets != null) {
+        List<String> buttonSets = new ArrayList<>();
+        if (toolSets != null) {
             String name = null;
-            for(WandoraToolSet set : toolSets) {
+            for (WandoraToolSet set : toolSets) {
                 name = set.getName();
-                if(name != null && name.indexOf("button") != -1) {
+                if (name != null && name.indexOf("button") != -1) {
                     buttonSets.add(name);
                 }
             }
         }
-        return buttonSets.toArray( new String[] {} );
+        return buttonSets.toArray(new String[] {});
     }
 
-    
-    
+
+
     public JComponent getToolButtonBar() {
         return getToolButtonBar(WandoraToolType.WANDORA_BUTTON_TYPE);
     }
-    
-    
-    
+
+
+
     public JComponent getToolButtonBar(String setName) {
         WandoraToolSet toolset = getToolSet(setName);
-        if(toolset != null && toolset.size() > 0) {
+        if (toolset != null && toolset.size() > 0) {
             Object[] struct = toolset.getAsObjectArray();
             JComponent buttonbar = UIBox.makeButtonContainer(struct, wandora);
-            if(buttonbar != null) {
+            if (buttonbar != null) {
                 return buttonbar;
             }
         }
         return null;
     }
-    
-    
-    
-    
-    // -------------------------------------------------------------------------
-    
 
-    
-    public JMenu getToolMenu(){
+
+
+    // -------------------------------------------------------------------------
+
+
+
+    public JMenu getToolMenu() {
         JMenu toolMenu = new SimpleMenu("Tools");
         toolMenu.setIcon(null);
         toolMenu = getToolMenu(toolMenu);
         return toolMenu;
     }
 
-    public JMenu getToolMenu(JMenu toolMenu){
+
+    public JMenu getToolMenu(JMenu toolMenu) {
         toolMenu = getMenu(toolMenu, getToolSet(WandoraToolType.GENERIC_TYPE), accelerators, 0);
 
         ClearToolLocks clearToolLocks = new ClearToolLocks();
-        toolMenu.insert(clearToolLocks.getToolMenuItem(wandora, clearToolLocks.getName(), KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK)), 0);
+        toolMenu.insert(clearToolLocks.getToolMenuItem(wandora, clearToolLocks.getName(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK)), 0);
 
         JMenu buttonSelectorSubmenus = this.getToolButtonSelectMenu();
         toolMenu.insert(buttonSelectorSubmenus, 1);
-        toolMenu.insert(this.getToolMenuItem(wandora, getName(), KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_MASK)), 0);
+        toolMenu.insert(this.getToolMenuItem(wandora, getName(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK)), 0);
 
         toolMenu.insertSeparator(2);
         toolMenu.insertSeparator(4);
@@ -822,32 +687,39 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
 
     public JMenu getGeneratorMenu() {
         JMenu toolMenu = new SimpleMenu("Generate");
-        toolMenu.setIcon( UIBox.getIcon("gui/icons/generate.png") );
+        toolMenu.setIcon(UIBox.getIcon("gui/icons/generate.png"));
         return getGeneratorMenu(toolMenu);
     }
-    public JMenu getGeneratorMenu(JMenu toolMenu){
+
+
+    public JMenu getGeneratorMenu(JMenu toolMenu) {
         return getMenu(toolMenu, WandoraToolType.GENERATOR_TYPE);
     }
-    
+
+
     public JMenu getExtractMenu() {
         JMenu toolMenu = new SimpleMenu("Extract");
-        toolMenu.setIcon( UIBox.getIcon("gui/icons/extract.png") );
+        toolMenu.setIcon(UIBox.getIcon("gui/icons/extract.png"));
         return getExtractMenu(toolMenu);
     }
-    public JMenu getExtractMenu(JMenu toolMenu){
+
+
+    public JMenu getExtractMenu(JMenu toolMenu) {
         return getMenu(toolMenu, WandoraToolType.EXTRACT_TYPE);
     }
-    
+
+
     public JMenu getImportMergeMenu(JMenu toolMenu) {
         toolMenu.removeAll();
         WandoraToolSet toolSet = getToolSet(WandoraToolType.IMPORT_MERGE_TYPE);
-        if(toolSet == null) return toolMenu;
-        List toolItems = toolSet.getTools();
-        for(Object toolItem : toolItems) {
-            if(toolItem != null) {
-                if(toolItem instanceof WandoraToolSet.ToolItem) {
+        if (toolSet == null)
+            return toolMenu;
+        List<Object> toolItems = toolSet.getTools();
+        for (Object toolItem : toolItems) {
+            if (toolItem != null) {
+                if (toolItem instanceof WandoraToolSet.ToolItem) {
                     WandoraTool tool = ((WandoraToolSet.ToolItem) toolItem).getTool();
-                    if(tool instanceof AbstractImportTool) {
+                    if (tool instanceof AbstractImportTool) {
                         AbstractImportTool aiTool = (AbstractImportTool) tool;
                         aiTool.setOptions(AbstractImportTool.TOPICMAP_DIRECT_MERGE);
                     }
@@ -856,67 +728,79 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
         }
         return toolSet.getMenu(toolMenu, toolSet);
     }
-    
-    public JMenu getImportMenu(){
+
+
+    public JMenu getImportMenu() {
         JMenu toolMenu = new SimpleMenu("Import");
-        toolMenu.setIcon( UIBox.getIcon("gui/icons/import.png") );
+        toolMenu.setIcon(UIBox.getIcon("gui/icons/import.png"));
         return getImportMenu(toolMenu);
     }
-    public JMenu getImportMenu(JMenu toolMenu){
+
+
+    public JMenu getImportMenu(JMenu toolMenu) {
         return getMenu(toolMenu, WandoraToolType.IMPORT_TYPE);
     }
-    
-    public JMenu getExportMenu(){
+
+
+    public JMenu getExportMenu() {
         JMenu toolMenu = new SimpleMenu("Export");
-        toolMenu.setIcon( UIBox.getIcon("gui/icons/export.png") );
+        toolMenu.setIcon(UIBox.getIcon("gui/icons/export.png"));
         return getExportMenu(toolMenu);
     }
-    public JMenu getExportMenu(JMenu toolMenu){
+
+
+    public JMenu getExportMenu(JMenu toolMenu) {
         return getMenu(toolMenu, WandoraToolType.EXPORT_TYPE);
     }
-    public JMenu getMenu(JMenu toolMenu, String setName){
+
+
+    public JMenu getMenu(JMenu toolMenu, String setName) {
         return getMenu(toolMenu, getToolSet(setName), null, 0);
     }
-    
+
+
     public JMenu getMenu(JMenu toolMenu, WandoraToolSet toolSet, KeyStroke[] keyStrokes, int strokeIndex) {
         toolMenu.removeAll();
-        if(toolSet == null) return toolMenu;
+        if (toolSet == null)
+            return toolMenu;
         return toolSet.getMenu(toolMenu, toolSet);
     }
-    
-    
-    // -------------------------------------------------------------------------
-    
-    
-    
 
-    public static ArrayList<WandoraTool> getImportTools(java.util.List<File> files, int orders){
+
+    // -------------------------------------------------------------------------
+
+
+
+    public static List<WandoraTool> getImportTools(java.util.List<File> files, int orders) {
         String fileName = null;
-        ArrayList<WandoraTool> importTools = new ArrayList<WandoraTool>();
-        for( File file : files ) {
+        List<WandoraTool> importTools = new ArrayList<>();
+        for (File file : files) {
             fileName = file.getName().toLowerCase();
-            if(fileName.endsWith(".xtm20") || fileName.endsWith(".xtm2") || fileName.endsWith(".xtm10") || fileName.endsWith(".xtm1") || fileName.endsWith(".xtm") || fileName.endsWith(".ltm") || fileName.endsWith(".jtm")) {
+            if (fileName.endsWith(".xtm20") || fileName.endsWith(".xtm2") || fileName.endsWith(".xtm10")
+                    || fileName.endsWith(".xtm1") || fileName.endsWith(".xtm") || fileName.endsWith(".ltm")
+                    || fileName.endsWith(".jtm")) {
                 TopicMapImport importer = new TopicMapImport(orders);
                 importer.forceFiles = file;
                 importTools.add(importer);
             }
-            else if(fileName.endsWith(".rdf") || fileName.endsWith(".rdfs") || fileName.endsWith(".owl") || fileName.endsWith(".daml")) {
+            else if (fileName.endsWith(".rdf") || fileName.endsWith(".rdfs") || fileName.endsWith(".owl")
+                    || fileName.endsWith(".daml")) {
                 SimpleRDFImport importer = new SimpleRDFImport(orders);
                 importer.forceFiles = file;
                 importTools.add(importer);
             }
-            else if(fileName.endsWith(".n3")) {
+            else if (fileName.endsWith(".n3")) {
                 SimpleN3Import importer = new SimpleN3Import(orders);
                 importer.forceFiles = file;
                 importTools.add(importer);
             }
-            else if(fileName.endsWith(".obo")) {
+            else if (fileName.endsWith(".obo")) {
                 OBOImport importer = new OBOImport(orders);
                 importer.forceFiles = file;
                 importTools.add(importer);
             }
-            else if(fileName.endsWith(".wpr")) {
-                if(importTools.isEmpty()) {
+            else if (fileName.endsWith(".wpr")) {
+                if (importTools.isEmpty()) {
                     LoadWandoraProject loader = new LoadWandoraProject(file);
                     importTools.add(loader);
                 }
@@ -928,17 +812,18 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
             else {
                 importTools.add(null);
             }
-        }        
+        }
         return importTools;
     }
-    
-    
+
+
     public void toolsChanged() {
-        if(wandora != null) wandora.toolsChanged();
+        if (wandora != null)
+            wandora.toolsChanged();
     }
-    
+
     // -------------------------------------------------------------------------
-    
+
     public static class ToolInfo {
         public WandoraTool tool;
         public String sourceType;
@@ -947,13 +832,14 @@ public class WandoraToolManager2 extends AbstractWandoraTool implements WandoraT
         public ToolInfo() {
         }
 
+
         public ToolInfo(WandoraTool tool, String sourceType, String source) {
             this.tool = tool;
             this.sourceType = sourceType;
             this.source = source;
         }
-        
+
     }
-    
-    
+
+
 }

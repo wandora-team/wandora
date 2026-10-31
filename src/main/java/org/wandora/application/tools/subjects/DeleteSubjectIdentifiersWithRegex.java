@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.RegularExpressionEditor;
 import org.wandora.topicmap.Locator;
@@ -50,7 +49,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class DeleteSubjectIdentifiersWithRegex extends DeleteSubjectIdentifiers implements WandoraTool {
+public class DeleteSubjectIdentifiersWithRegex extends DeleteSubjectIdentifiers {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -59,7 +58,7 @@ public class DeleteSubjectIdentifiersWithRegex extends DeleteSubjectIdentifiers 
     
     public DeleteSubjectIdentifiersWithRegex() {
     }
-    public DeleteSubjectIdentifiersWithRegex(Context context) {
+    public DeleteSubjectIdentifiersWithRegex(Context<?> context) {
         setContext(context);
     }
     
@@ -76,7 +75,7 @@ public class DeleteSubjectIdentifiersWithRegex extends DeleteSubjectIdentifiers 
     }
 
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         editor = RegularExpressionEditor.getMatchExpressionEditor(wandora);
         editor.approve = false;
         editor.setVisible(true);
@@ -88,10 +87,10 @@ public class DeleteSubjectIdentifiersWithRegex extends DeleteSubjectIdentifiers 
     
     
     @Override
-    protected Collection<Locator> getSubjectIdentifiers(Iterator<Locator> subjectIdentifiers) throws TopicMapException {
-        ArrayList<Locator> subjectIdentifiersToDelete = new ArrayList<>();
+    protected Collection<Locator> getSubjectIdentifiers(Iterator<?> subjectIdentifiers) throws TopicMapException {
+        List<Locator> subjectIdentifiersToDelete = new ArrayList<>();
         while(subjectIdentifiers.hasNext()) {
-            Locator subjectIdentifier = subjectIdentifiers.next();
+            Locator subjectIdentifier = (Locator) subjectIdentifiers.next();
             if(subjectIdentifier != null) {
                 String subjectIdetifierString = subjectIdentifier.toExternalForm();
                 if(editor.matches(subjectIdetifierString)) {

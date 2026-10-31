@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ package org.wandora.application;
 
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -37,26 +38,36 @@ import org.wandora.topicmap.TopicMapException;
  * @author  olli
  */
 public class ConcurrentEditingWarning extends javax.swing.JDialog {
-	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ConcurrentEditingWarning.class);
 	
     
     /** Creates new form ConcurrentEditingWarning */
     public ConcurrentEditingWarning(java.awt.Frame parent, boolean modal,Topic[] failed,Topic[] removed) {
         super(parent, modal);
         initComponents();
-        StringBuffer buf=new StringBuffer();
-        if(failed.length>0) buf.append("Edited:\n");
-        try{
-            for(int i=0;i<failed.length;i++){
-                buf.append(failed[i].getBaseName()+" ("+failed[i].getSubjectIdentifiers().iterator().next()+")\n");
+        StringBuilder buf=new StringBuilder();
+        if (failed.length>0) {
+        	buf.append("Edited:\n");
+        }
+        try {
+            for (int i = 0; i < failed.length; i++) {
+                buf.append(failed[i].getBaseName())
+                    .append(" (")
+                    .append(failed[i].getSubjectIdentifiers().iterator().next())
+                    .append(")\n");
             }
-            if(removed.length>0) buf.append("Removed:\n");
+            if(removed.length>0) {
+            	buf.append("Removed:\n");
+            }
             for(int i=0;i<removed.length;i++){
-                buf.append(removed[i].getBaseName()+" ("+removed[i].getSubjectIdentifiers().iterator().next()+")\n");
+                buf.append(removed[i].getBaseName())
+                    .append(" (")
+                    .append(removed[i].getSubjectIdentifiers().iterator().next())
+                    .append(")\n");
             }
-        }catch(TopicMapException tme){
-            tme.printStackTrace(); // TODO EXCEPTION
+        } catch(TopicMapException tme){
+        	logger.error(tme);
         }
         failedTextArea.setText(buf.toString());
         this.setSize(300,400);
@@ -104,7 +115,7 @@ public class ConcurrentEditingWarning extends javax.swing.JDialog {
     // </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        this.hide();
+        this.setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
     
     

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -51,7 +52,8 @@ import org.wandora.utils.Options;
 public class UClassifier extends AbstractUClassifier {
     
 	private static final long serialVersionUID = 1L;
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(UClassifier.class);
+	
 	
 	protected static final String OPTIONS_KEY = "uclassify";
     
@@ -153,11 +155,11 @@ public class UClassifier extends AbstractUClassifier {
                     i++;
                 }
                 if(classifiers.isEmpty()) {
-                    System.out.print("Warning: UClassifier didn't find any classifiers in Wandora options.");
+                    logger.warn("Warning: UClassifier didn't find any classifiers in Wandora options.");
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
             defaultClassifiers = classifiers.toArray( new String[] {} );
         }
@@ -170,7 +172,7 @@ public class UClassifier extends AbstractUClassifier {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         setWandora(wandora);
         readOptions(wandora.getOptions());
         Object contextSource = context.getContextSource();

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ package org.wandora.application.tools.topicnames;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -52,14 +51,14 @@ import org.wandora.topicmap.Topic;
  */
 
 
-public class BasenameRemover extends AbstractWandoraTool implements WandoraTool {
+public class BasenameRemover extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
 
 	public BasenameRemover() {
     }
-    public BasenameRemover(Context preferredContext) {
+    public BasenameRemover(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -77,9 +76,9 @@ public class BasenameRemover extends AbstractWandoraTool implements WandoraTool 
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             
             if(WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to remove all base names of selected topics?","Confirm base name remove", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){
@@ -89,13 +88,11 @@ public class BasenameRemover extends AbstractWandoraTool implements WandoraTool 
                 log("Removing all base names");
 
                 Topic topic = null;
-                int progress = 0;
 
                 while(topics.hasNext() && !forceStop()) {
                     try {
                         topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
-                            progress++;
                             topic.setBaseName(null);
                         }
                     }

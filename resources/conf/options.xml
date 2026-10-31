@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <options>
    <window>
-      <x>104</x>
-      <y>66</y>
-      <width>1225</width>
-      <height>717</height>
+      <x>162</x>
+      <y>75</y>
+      <width>1351</width>
+      <height>835</height>
       <horizontalsplitter>250</horizontalsplitter>
-      <verticalsplitter>558</verticalsplitter>
+      <verticalsplitter>629</verticalsplitter>
    </window>
    <textEditor>
       <window>
@@ -15,6 +15,11 @@
          <x>50</x>
          <y>50</y>
       </window>
+      <font>
+         <face>Sans Serif</face>
+         <size>12</size>
+      </font>
+      <inverseColors>0</inverseColors>
    </textEditor>
    <gui>
       <customTopicPanel>
@@ -67,54 +72,9 @@ new Roles(XTMPSI.SUPERCLASS,XTMPSI.SUBCLASS).from(
          <panel>org.wandora.application.gui.topicpanels.SearchTopicPanel</panel>
          <panel>org.wandora.application.gui.topicpanels.LayerInfoPanel</panel>
          <panel>org.wandora.application.gui.topicpanels.DropExtractor</panel>
+         <panel>org.wandora.application.gui.topicpanels.OllamaPanel</panel>
          <defaultPanel>org.wandora.application.gui.topicpanels.TraditionalTopicPanel</defaultPanel>
       </topicPanels>
-      <processingTopicPanel>
-         <useOccurrenceProcessingCode>false</useOccurrenceProcessingCode>
-         <autorun>false</autorun>
-         <currentSketch>/* 
- * Welcome to Wandora's Processing topic panel!
- * 
- * Processing topic panel is used to write and run Processing scripts.
- * Processing script can access the topic map in Wandora via Wandora's Java API.
- * Topic panel suits best for topic and topic map visualizations.
- * Writing a Processing script requires programming skills.
- * 
- * You might want to begin by trying one of our demo sketches. We have
- * prepared three example scripts to inspire you. These sketces, titled as
- * AssociationArches, TopicBoxes and TopicRing can be opened by clicking
- * the Open button and selecting option Open sketch from file...
- * To run a script press Run button down under.
- * 
- * Learn Processing and Wandora API here
- *    http://processing.org/
- *    http://wandora.org/api/ 
- */
-
-package processing;
-
-import org.wandora.application.gui.topicpanels.processing.SketchTemplate;
-import org.wandora.topicmap.*;
-
-public class Sketch extends SketchTemplate {
-
-	public void setup() {
-		size(920,640);
-		frameRate(10);
-	}
-
-	public void draw() {
-		background(255);
-		Topic t = getCurrentTopic();
-		if( t != null ) {
-			try{
-				fill(0xff000000);
-				text(t.getBaseName(),100,100);
-			} catch(TopicMapException tme){tme.printStackTrace();}
-		}
-	}
-}</currentSketch>
-      </processingTopicPanel>
       <tabbedTopicPanel>
          <view>
             <dataPanelContainer>true</dataPanelContainer>
@@ -185,20 +145,14 @@ public class Sketch extends SketchTemplate {
    </httpserver>
    <dbconnections>
       <connection>
-         <name>MySQL generic</name>
          <type>Generic</type>
+         <name>MySQL generic</name>
          <user>wandora</user>
          <pass>wandora</pass>
-         <constring>jdbc:mysql://localhost:3306/wandora?useOldAliasMetadataBehavior=true</constring>
          <driver>com.mysql.jdbc.Driver</driver>
+         <constring>jdbc:mysql://localhost:3306/wandora?useOldAliasMetadataBehavior=true</constring>
       </connection>
       <connection>
-         <name>HSQL memory</name>
-         <type>Generic</type>
-         <user>sa</user>
-         <pass></pass>
-         <constring>jdbc:hsqldb:mem:wandora</constring>
-         <driver>org.hsqldb.jdbcDriver</driver>
          <script>create cached table TOPIC(
 TOPICID varchar(255) primary key,
 BASENAME longvarchar,
@@ -271,34 +225,40 @@ create index VARIANTTOPIC_INDEX on VARIANT(TOPIC);
 create index DATATOPIC_INDEX on DATA(TOPIC);
 create index DATATYPE_INDEX on DATA(TYPE);
 create index DATAVERSION_INDEX on DATA(VERSION);</script>
+         <type>Generic</type>
+         <name>HSQL memory</name>
+         <user>sa</user>
+         <pass></pass>
+         <driver>org.hsqldb.jdbcDriver</driver>
+         <constring>jdbc:hsqldb:mem:wandora</constring>
       </connection>
       <connection>
-         <name>HSQL file</name>
          <type>Generic</type>
+         <name>HSQL file</name>
          <user>sa</user>
          <pass></pass>
          <driver>org.hsqldb.jdbcDriver</driver>
          <constring>jdbc:hsqldb:file:C:\wandora\testdb</constring>
       </connection>
       <connection>
-         <name>SQLite file</name>
          <type>Generic</type>
+         <name>SQLite file</name>
          <user>sa</user>
          <pass></pass>
          <driver>org.sqlite.JDBC</driver>
          <constring>jdbc:sqlite:C:\\wandora\testdb</constring>
       </connection>
       <connection>
-         <name>Mariadb generic</name>
          <type>Generic</type>
+         <name>Mariadb generic</name>
          <user>user</user>
          <pass>password</pass>
          <driver>org.mariadb.jdbc.Driver</driver>
          <constring>jdbc:mariadb://localhost:3306/wandora</constring>
       </connection>
       <connection>
-         <name>PostgreSQL generic</name>
          <type>Generic</type>
+         <name>PostgreSQL generic</name>
          <user>postgres</user>
          <pass>password</pass>
          <driver>org.postgresql.Driver</driver>
@@ -315,11 +275,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <map>remote-wandora</map>
       </connection>
    </remoteconnections>
-   <helpviewer>http://wandora.org/wiki/__HELP__</helpviewer>
+   <helpviewer>https://wandora.org/wiki/__HELP__</helpviewer>
    <layers>
       <layer>org.wandora.topicmap.memory.MemoryTopicMapType</layer>
       <layer>org.wandora.topicmap.database2.DatabaseTopicMapType</layer>
-      <layer>org.wandora.topicmap.database.DatabaseTopicMapType</layer>
       <layer>org.wandora.topicmap.query.QueryTopicMapType</layer>
       <layer>org.wandora.topicmap.linked.LinkedTopicMapType</layer>
       <layer>org.wandora.topicmap.layered.LayeredTopicMapType</layer>
@@ -391,6 +350,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
          <item>
             <name>Add your tools here with Tool manager</name>
             <class>org.wandora.application.WandoraToolManager2</class>
+         </item>
+         <item>
+            <name>Topic base name remover</name>
+            <class>org.wandora.application.tools.topicnames.BasenameRemover</class>
          </item>
       </set>
       <set>
@@ -519,45 +482,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>DBpedia extractor...</name>
                <class>org.wandora.application.tools.extractors.dbpedia.DbpediaExtractor</class>
             </item>
-            <item>
-               <name>--- UMBEL ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>Search Umbel concepts...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelSearchConcept</class>
-            </item>
-            <item>
-               <name>Get Umbel concept...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetConcept</class>
-            </item>
-            <item>
-               <name>Get Umbel super type...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSuperType</class>
-            </item>
-            <item>
-               <name>Get broader Umbel concepts...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetBroader</class>
-            </item>
-            <item>
-               <name>Get narrower Umbel concepts...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetNarrower</class>
-            </item>
-            <item>
-               <name>Get subclass Umbel concepts...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSubclasses</class>
-            </item>
-            <item>
-               <name>Get superclass Umbel concepts...</name>
-               <class>org.wandora.application.tools.extractors.umbel.UmbelGetSuperclasses</class>
-            </item>
-         </item>
-         <item>
-            <name>Search engines</name>
-            <item>
-               <name>DuckDuckGo extractor...</name>
-               <class>org.wandora.application.tools.extractors.duckduckgo.DuckDuckGoExtractor</class>
-            </item>
          </item>
          <item>
             <name>News</name>
@@ -572,18 +496,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             <item>
                <name>Atom extractor...</name>
                <class>org.wandora.application.tools.extractors.AtomExtractor</class>
-            </item>
-            <item>
-               <name>--- NEWS ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>New York Times API extractor...</name>
-               <class>org.wandora.application.tools.extractors.nyt.NYTExtractor</class>
-            </item>
-            <item>
-               <name>The Guardian API extractor...</name>
-               <class>org.wandora.application.tools.extractors.guardian.GuardianExtractor</class>
             </item>
          </item>
          <item>
@@ -618,44 +530,6 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
             </item>
          </item>
          <item>
-            <name>Language</name>
-            <item>
-               <name>Stands4 word describer...</name>
-               <class>org.wandora.application.tools.extractors.stands4.Stands4Extractor</class>
-            </item>
-            <item>
-               <name>--- OTHER LANG ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>Sentences to associations...</name>
-               <class>org.wandora.application.tools.extractors.Sentences2Associations</class>
-            </item>
-            <item>
-               <name>VerbOcean extractor...</name>
-               <class>org.wandora.application.tools.extractors.VerbOceanExtractor</class>
-            </item>
-            <item>
-               <name>Moby thesaurus extractor...</name>
-               <class>org.wandora.application.tools.extractors.MobyThesaurusExtractor</class>
-            </item>
-         </item>
-         <item>
-            <name>Wiki</name>
-            <item>
-               <name>Wikipedia extractor...</name>
-               <class>org.wandora.application.tools.extractors.WikipediaExtractor</class>
-            </item>
-            <item>
-               <name>MediaWiki extractor...</name>
-               <class>org.wandora.application.tools.extractors.MediaWikiExtractor</class>
-            </item>
-            <item>
-               <name>MediaWiki content extractor...</name>
-               <class>org.wandora.application.tools.extractors.mediawikiapi.MediaWikiAPIExtractor</class>
-            </item>
-         </item>
-         <item>
             <name>Bibliographical</name>
             <item>
                <name>RIS extractor...</name>
@@ -677,75 +551,12 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
                <name>MARCXML batch extractor...</name>
                <class>org.wandora.application.tools.extractors.marcxml.BatchExtractMarcXML</class>
             </item>
-            <item>
-               <name>--- HELMET ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>HelMet extractor...</name>
-               <class>org.wandora.application.tools.extractors.helmet.HelmetJSONExtractor</class>
-            </item>
-            <item>
-               <name>--- BRITISH LIBRARY ---</name>
-               <class>org.wandora.application.tools.DummyTool</class>
-            </item>
-            <item>
-               <name>British Library Million First Steps Book JSON...</name>
-               <class>org.wandora.application.tools.extractors.britishlibrary.MillionFirstStepsBookMetadataJSONExtractor</class>
-            </item>
-            <item>
-               <name>British Library Million First Steps TSV...</name>
-               <class>org.wandora.application.tools.extractors.britishlibrary.MillionFirstStepsBookTSVExtractor</class>
-            </item>
-         </item>
-         <item>
-            <name>Social</name>
-            <item>
-               <name>Reddit extractor...</name>
-               <class>org.wandora.application.tools.extractors.reddit.RedditExtractor</class>
-            </item>
          </item>
          <item>
             <name>Media</name>
             <item>
-               <name>Europeana extractor...</name>
-               <class>org.wandora.application.tools.extractors.europeana.EuropeanaExtractor</class>
-            </item>
-            <item>
-               <name>--- Flickr extractors ---</name>
-               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
-               <name>Flickr profile extractor...</name>
-               <class>org.wandora.application.tools.extractors.flickr.PersonInfoExtractor</class>
-            </item>
-            <item>
-               <name>Flickr photo extractor...</name>
-               <class>org.wandora.application.tools.extractors.flickr.PhotoInfoExtractor</class>
-            </item>
-            <item>
-               <name>Flickr group extractor...</name>
-               <class>org.wandora.application.tools.extractors.flickr.GroupInfoExtractor</class>
-            </item>
-            <item>
-               <name>--- AUDIO DATA/FILES ---</name>
-               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
                <name>MP3 metadata extractor...</name>
                <class>org.wandora.application.tools.extractors.files.SimpleMP3Extractor</class>
-            </item>
-            <item>
-               <name>FreeDB extractor...</name>
-               <class>org.wandora.application.tools.extractors.FreeDBExtractor</class>
-            </item>
-            <item>
-               <name>--- OTHER MEDIA ---</name>
-               <class>org.wandora.application.tools.extractors.DummyExtractor</class>
-            </item>
-            <item>
-               <name>IMDB extractor...</name>
-               <class>org.wandora.application.tools.extractors.IMDBExtractor</class>
             </item>
             <item>
                <name>OCR extractor...</name>
@@ -1280,10 +1091,10 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
    <basemap>conf/wandora.xtm</basemap>
    <shortcuts>
       <si>http://www.topicmaps.org/xtm/1.0/language.xtm</si>
-      <si>http://wandora.org/si/core/schema-type</si>
-      <si>http://wandora.org/si/core/variant-name-version</si>
+      <si>https://wandora.org/si/core/schema-type</si>
+      <si>https://wandora.org/si/core/variant-name-version</si>
    </shortcuts>
-   <defaultSIprefix>http://wandora.org/si/</defaultSIprefix>
+   <defaultSIprefix>https://wandora.org/si/</defaultSIprefix>
    <current>
       <directory>/Users/akikivela</directory>
       <port></port>
@@ -1349,13 +1160,13 @@ create index DATAVERSION_INDEX on DATA(VERSION);</script>
       </type>
       <type>
          <name>Default association</name>
-         <assocsi>http://wandora.org/si/core/default-association</assocsi>
-         <subsi>http://wandora.org/si/core/default-role-2</subsi>
+         <assocsi>https://wandora.org/si/core/default-association</assocsi>
+         <subsi>https://wandora.org/si/core/default-role-2</subsi>
          <icon>gui/icons/topictree/box.png</icon>
-         <supersi>http://wandora.org/si/core/default-role-1</supersi>
+         <supersi>https://wandora.org/si/core/default-role-1</supersi>
       </type>
       <tree>
-         <root>http://wandora.org/si/core/wandora-class</root>
+         <root>https://wandora.org/si/core/wandora-class</root>
          <name>Topics</name>
          <relation>Instances</relation>
          <relation>Subclasses</relation>
@@ -1595,8 +1406,8 @@ new BaseName().from(
       <query>
          <name>Insert test</name>
          <query>INSERT '''
-%prefix core http://wandora.org/si/core/
-%prefix test http://wandora.org/si/test/
+%prefix core https://wandora.org/si/core/
+%prefix test https://wandora.org/si/test/
 
 testctype - "Test content type" ;
   test:testctype ;
@@ -1621,12 +1432,12 @@ core:role( core:association-type : test:testatype , core:role : test:testrole2 )
       </query>
       <query>
          <name>Select test 1</name>
-         <query>%prefix core http://wandora.org/si/core/
+         <query>%prefix core https://wandora.org/si/core/
 core:content-type >> instances</query>
       </query>
       <query>
          <name>Select test 2</name>
-         <query>%prefix core http://wandora.org/si/core/
+         <query>%prefix core https://wandora.org/si/core/
 SELECT $test
 WHERE $test ISA core:content-type OR $test ISA core:association-type
 ORDER BY $test >> characteristics tm:name >> atomify [ 0 ]</query>
@@ -1634,15 +1445,15 @@ ORDER BY $test >> characteristics tm:name >> atomify [ 0 ]</query>
       <query>
          <name>Update variant test</name>
          <query># This does not work for some reason
-%prefix core http://wandora.org/si/core/
-%prefix test http://wandora.org/si/test/
+%prefix core https://wandora.org/si/core/
+%prefix test https://wandora.org/si/test/
 UPDATE variants ADD core:lang-independent "Test content type" 
 WHERE test:testctype >> characteristics tm:name</query>
       </query>
       <query>
          <name>Merge test</name>
-         <query>%prefix core http://wandora.org/si/core/
-%prefix test http://wandora.org/si/test/
+         <query>%prefix core https://wandora.org/si/core/
+%prefix test https://wandora.org/si/test/
 MERGE test:testctype, test:testatype</query>
       </query>
    </tmqlQueries>
@@ -1659,4 +1470,19 @@ MERGE test:testctype, test:testatype</query>
          <logLevel>6</logLevel>
       </loggerRule>
    </loggerRules>
+   <rpanel>
+      <currentScript># 
+# Welcome to Wandora's R topic panel!
+# 
+# R topic panel is used to write and execute R language scripts.
+# R script can access the topic map in Wandora via Wandora's Java API.
+# 
+# Learn R language and Wandora API here
+#    http://www.r-project.org/ 
+#    https://wandora.org/api/ 
+#</currentScript>
+   </rpanel>
+   <ollamapanel>
+      <currentPrompt>What is Wandora?</currentPrompt>
+   </ollamapanel>
 </options>

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@ package org.wandora.application.tools.generators;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.GenericOptionsDialog;
 import org.wandora.topicmap.Association;
@@ -38,18 +37,19 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 /**
  *
  * @author akivela
  */
-public class PlatonicSolidGenerator extends AbstractGenerator implements WandoraTool {
-
+public class PlatonicSolidGenerator extends AbstractGenerator {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PlatonicSolidGenerator.class);
 
 	public static boolean connectWithWandoraClass = true;
-    public static String PLATONIC_SOLID_GRAPH_SI = "http://wandora.org/si/platonic-solid";
+    public static String PLATONIC_SOLID_GRAPH_SI = "https://wandora.org/si/platonic-solid";
     
     
     
@@ -67,7 +67,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(wandora, context);
         
         GenericOptionsDialog god=new GenericOptionsDialog(wandora,
@@ -132,7 +132,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
     
     
     public void generateTetrahedron(TopicMap topicmap) throws TopicMapException {
-        String TETRAHEDRON_SI = "http://wandora.org/si/platonic-solid/tetrahedron/";
+        String TETRAHEDRON_SI = "https://wandora.org/si/platonic-solid/tetrahedron/";
         
         log("Creating tetrahedron.");
         setProgressMax(4+6);
@@ -183,7 +183,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
     
     
     public void generateCube(TopicMap topicmap) throws TopicMapException {
-        String CUBE_SI = "http://wandora.org/si/platonic-solid/cube/";
+        String CUBE_SI = "https://wandora.org/si/platonic-solid/cube/";
         
         log("Creating cube.");
         setProgressMax(8+12);
@@ -243,7 +243,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
     
 
     public void generateOctahedron(TopicMap topicmap) throws TopicMapException {
-        String OCTAHEDRON_SI = "http://wandora.org/si/platonic-solid/octahedron/";
+        String OCTAHEDRON_SI = "https://wandora.org/si/platonic-solid/octahedron/";
         
         log("Creating octahedron.");
         setProgressMax(6+12);
@@ -334,7 +334,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
     
     
     public void generateDodecahedron(TopicMap topicmap) throws TopicMapException {
-        String DODECAHEDRON_SI = "http://wandora.org/si/platonic-solid/dodecahedron/";
+        String DODECAHEDRON_SI = "https://wandora.org/si/platonic-solid/dodecahedron/";
         
         log("Creating dodecahedron.");
         setProgressMax(20+30);
@@ -409,7 +409,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
     };
 
     public void generateIcosahedron(TopicMap topicmap) throws TopicMapException {
-        String ICOSAHEDRON_SI = "http://wandora.org/si/platonic-solid/icosahedron/";
+        String ICOSAHEDRON_SI = "https://wandora.org/si/platonic-solid/icosahedron/";
         
         log("Creating icosahedron.");
         setProgressMax(12+30);
@@ -462,7 +462,7 @@ public class PlatonicSolidGenerator extends AbstractGenerator implements Wandora
             vertexTopic.addType(platonicSolidInstance);
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     

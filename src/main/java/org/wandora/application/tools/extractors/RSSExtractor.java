@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.regex.Matcher;
@@ -52,6 +53,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -65,8 +67,8 @@ import org.xml.sax.XMLReader;
  */
 public class RSSExtractor extends AbstractExtractor {
     
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RSSExtractor.class);
 
 	
 	/** Creates a new instance of RSSExtractor */
@@ -106,13 +108,10 @@ public class RSSExtractor extends AbstractExtractor {
             setWandora(wandora);
             String urlstr = request.getSource();
 
-            //System.out.println("FOUND URL: "+urlstr);
 
-            URL url = new URL(urlstr);
+            URL url = new URI(urlstr).toURL();
             URLConnection uc = url.openConnection();
             String type = uc.getContentType();
-            
-            //System.out.println("FOUND TYPE: "+type);
 
             if(type != null && type.indexOf("text/html") > -1) {
                 String htmlContent = IObox.doUrl(url);
@@ -129,10 +128,10 @@ public class RSSExtractor extends AbstractExtractor {
                             if(m2.find()) {
                                 try {
                                     String rssfeed = m2.group(1);
-                                    _extractTopicsFrom(new URL(rssfeed), wandora.getTopicMap());
+                                    _extractTopicsFrom(new URI(rssfeed).toURL(), wandora.getTopicMap());
                                 }
                                 catch(Exception e) {
-                                    e.printStackTrace();
+                                    logger.error(e);
                                 }
                             }
                         }
@@ -157,7 +156,7 @@ public class RSSExtractor extends AbstractExtractor {
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
     }
@@ -218,6 +217,8 @@ public class RSSExtractor extends AbstractExtractor {
         public static boolean MAKE_LINK_SUBJECT_IDENTIFIER = true;
         public static boolean MAKE_LINK_SUBJECT_LOCATOR = false;
         public static boolean MAKE_SUBCLASS_OF_WANDORA_CLASS = true;
+        
+        public static boolean STORE_COPYRIGHT_AS_ASSOCIATION = true;
         
         public RSSParser(TopicMap tm, RSSExtractor parent){
             this.tm=tm;
@@ -294,9 +295,9 @@ public class RSSExtractor extends AbstractExtractor {
                
         private int state=STATE_START;
         
-        public static String RSS_SI = "http://wandora.org/si/rss/2.0/";
+        public static String RSS_SI = "https://wandora.org/si/rss/2.0/";
 
-        public static String SIPREFIX="http://wandora.org/si/rss/2.0/";
+        public static String SIPREFIX="https://wandora.org/si/rss/2.0/";
         public static String CHANNEL_SI=SIPREFIX+"channel";
         public static String CHANNEL_LINK_SI=CHANNEL_SI+"/link";
         public static String CHANNEL_DESCRIPTION_SI=CHANNEL_SI+"/description";
@@ -326,7 +327,7 @@ public class RSSExtractor extends AbstractExtractor {
         public static String CHANNEL_IMAGE_LINK_SI=CHANNEL_IMAGE_SI+"/link";
         public static String CHANNEL_IMAGE_DESCRIPTION_SI=CHANNEL_IMAGE_SI+"/description";
         
-        public static String DATE_SI="http://wandora.org/si/date"; 
+        public static String DATE_SI="https://wandora.org/si/date"; 
         
         private String data_channel_title;
         private String data_channel_link;
@@ -676,7 +677,7 @@ public class RSSExtractor extends AbstractExtractor {
                         state = STATE_CHANNEL;
                         if(theChannel != null && data_channel_copyright.length() > 0) {
                             try {
-                                if(true) {
+                                if(STORE_COPYRIGHT_AS_ASSOCIATION) {
                                     Topic channelType = getOrCreateTopic(CHANNEL_SI,"RSS Channel");
                                     Topic copyrightType = getOrCreateTopic(CHANNEL_COPYRIGHT_SI,"RSS Channel Copyright");
                                     Topic theCopyright = getOrCreateTopic(CHANNEL_COPYRIGHT_SI + "/" + data_channel_copyright, data_channel_copyright);

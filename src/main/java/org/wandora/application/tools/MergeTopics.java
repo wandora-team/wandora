@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.Locator;
@@ -51,7 +50,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class MergeTopics extends AbstractWandoraTool implements WandoraTool {
+public class MergeTopics extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -73,8 +72,8 @@ public class MergeTopics extends AbstractWandoraTool implements WandoraTool {
     
 
     @Override
-    public void execute(Wandora wandora, Context context) {
-        Iterator topics = context.getContextObjects();
+    public void execute(Wandora wandora, Context<?> context) {
+        Iterator<?> topics = context.getContextObjects();
         
         int progress = 0;
 

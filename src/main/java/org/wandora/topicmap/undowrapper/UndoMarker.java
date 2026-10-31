@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,47 +28,54 @@ package org.wandora.topicmap.undowrapper;
 
 
 public class UndoMarker extends UndoOperation {
-    
+
     protected String undoLabel;
     protected String redoLabel;
-    
+
     public UndoMarker(String label) {
-        this(label,label);
+        this(label, label);
     }
-    
-    public UndoMarker(String undoLabel,String redoLabel){
-        this.undoLabel=undoLabel;
-        this.redoLabel=redoLabel;
-        this.isMarker=true;
+
+
+    public UndoMarker(String undoLabel, String redoLabel) {
+        this.undoLabel = undoLabel;
+        this.redoLabel = redoLabel;
+        this.isMarker = true;
     }
+
 
     @Override
     public void undo() throws UndoException {
     }
 
+
     @Override
     public void redo() throws UndoException {
     }
+
 
     @Override
     public String getLabel() {
         return undoLabel;
     }
 
+
     @Override
     public String getRedoLabel() {
         return redoLabel;
     }
 
+
     @Override
     public String getUndoLabel() {
         return undoLabel;
     }
-    
+
+
     @Override
     public UndoOperation combineWith(UndoOperation previous) {
         return null;
     }
-    
-    
+
+
 }

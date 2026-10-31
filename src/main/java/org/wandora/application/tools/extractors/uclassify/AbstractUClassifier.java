@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -65,6 +66,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Base64;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -78,7 +80,7 @@ import org.xml.sax.XMLReader;
 public abstract class AbstractUClassifier extends AbstractExtractor {
     
 	private static final long serialVersionUID = 1L;
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractUClassifier.class);
 
 
 
@@ -99,20 +101,20 @@ public abstract class AbstractUClassifier extends AbstractExtractor {
     
     protected String defaultEncoding = "UTF-8";
     
-    public static final String SOURCE_SI = "http://wandora.org/si/source";
-    public static final String DOCUMENT_SI = "http://wandora.org/si/document";
-    public static final String TOPIC_SI = "http://wandora.org/si/topic";
+    public static final String SOURCE_SI = "https://wandora.org/si/source";
+    public static final String DOCUMENT_SI = "https://wandora.org/si/document";
+    public static final String TOPIC_SI = "https://wandora.org/si/topic";
 
     public static final String UCLASSIFY_SI = "http://www.uclassify.com";
 
-    public static final String UCLASSIFY_CLASSIFIER_SI = "http://wandora.org/si/uclassify/classifier";
-    public static final String UCLASSIFY_CLASSIFIER_TYPE_SI = "http://wandora.org/si/uclassify/classifier-type";
+    public static final String UCLASSIFY_CLASSIFIER_SI = "https://wandora.org/si/uclassify/classifier";
+    public static final String UCLASSIFY_CLASSIFIER_TYPE_SI = "https://wandora.org/si/uclassify/classifier-type";
     
-    public static final String UCLASSIFY_CLASS_SI = "http://wandora.org/si/uclassify/term";
-    public static final String UCLASSIFY_CLASS_TYPE_SI = "http://wandora.org/si/uclassify/term-type";
+    public static final String UCLASSIFY_CLASS_SI = "https://wandora.org/si/uclassify/term";
+    public static final String UCLASSIFY_CLASS_TYPE_SI = "https://wandora.org/si/uclassify/term-type";
     
-    public static final String UCLASSIFY_PROBABILITY_SI = "http://wandora.org/si/uclassify/probability";
-    public static final String UCLASSIFY_PROBABILITY_TYPE_SI = "http://wandora.org/si/uclassify/probability-type";
+    public static final String UCLASSIFY_PROBABILITY_SI = "https://wandora.org/si/uclassify/probability";
+    public static final String UCLASSIFY_PROBABILITY_TYPE_SI = "https://wandora.org/si/uclassify/probability-type";
     
     
 
@@ -346,7 +348,7 @@ public abstract class AbstractUClassifier extends AbstractExtractor {
             str = URLEncoder.encode(str, defaultEncoding);
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return str;
     }
@@ -375,7 +377,7 @@ public abstract class AbstractUClassifier extends AbstractExtractor {
         }
 
         catch(TransformerException ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
             return null;
         }
     }
@@ -417,11 +419,11 @@ public abstract class AbstractUClassifier extends AbstractExtractor {
                 requestData = requestData.replace("__PUBLISHED_USER__", classifierOwner);
                 requestData = requestData.replace("__PUBLISHED_CLASSIFIER__", classifier);
 
-                System.out.println("Sending: "+requestData);
+                logger.info("Sending: "+requestData);
 
-                String result = sendRequest(new URL(API_URL), requestData, "text/xml; charset=utf-8", "POST");
+                String result = sendRequest(new URI(API_URL).toURL(), requestData, "text/xml; charset=utf-8", "POST");
 
-                System.out.println("uClassifier returned == "+result);
+                logger.info("uClassifier returned == "+result);
 
                 javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
                 factory.setNamespaceAware(true);
@@ -463,7 +465,6 @@ public abstract class AbstractUClassifier extends AbstractExtractor {
 
             if(method != null && con instanceof HttpURLConnection) {
                 ((HttpURLConnection) con).setRequestMethod(method);
-                //System.out.println("****** Setting HTTP request method to "+method);
             }
 
             if(ctype != null) {

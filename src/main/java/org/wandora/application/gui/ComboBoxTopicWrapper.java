@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ package org.wandora.application.gui;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -37,29 +38,38 @@ import org.wandora.topicmap.TopicMapException;
  * @author  olli
  */
 public class ComboBoxTopicWrapper {
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(ComboBoxTopicWrapper.class);
+
     public Topic topic;
-    public ComboBoxTopicWrapper(Topic topic){
-        this.topic=topic;
+
+    public ComboBoxTopicWrapper(Topic topic) {
+        this.topic = topic;
     }
+
+
     @Override
-    public String toString(){
-        try{
-            String name=topic.getBaseName();
-            if(name == null) {
+    public String toString() {
+        try {
+            String name = topic.getBaseName();
+            if (name == null) {
                 Locator l = topic.getOneSubjectIdentifier();
-                if(l != null) name = l.toExternalForm();
+                if (l != null)
+                    name = l.toExternalForm();
             }
-            if(name == null) {
-                if(topic.isRemoved()) return "[removed]";
-                else return "[unnamed]";
+            if (name == null) {
+                if (topic.isRemoved())
+                    return "[removed]";
+                else
+                    return "[unnamed]";
             }
             else {
-                if(name.length()>100) name=name.subSequence(0,100)+"...";
+                if (name.length() > 100)
+                    name = name.subSequence(0, 100) + "...";
                 return name;
             }
         }
-        catch(TopicMapException tme){
-            tme.printStackTrace(); // TODO EXCEPTION;
+        catch (TopicMapException tme) {
+            logger.error(tme);
             return "[exception retrieving topic name]";
         }
     }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,58 +38,61 @@ import org.wandora.application.gui.UIConstants;
  * @author  akivela
  */
 public class SimpleLabel extends JLabel implements MouseListener {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     /** Creates a new instance of SimpleLabel */
     public SimpleLabel() {
         initialize();
     }
-    
-    public SimpleLabel(String text){
+
+
+    public SimpleLabel(String text) {
         super(text);
         initialize();
     }
-    
-    
-    
+
+
+
     public void initialize() {
         this.addMouseListener(this);
         this.setFont(UIConstants.labelFont);
         UIConstants.setFancyFont(this);
         this.setBorder(UIConstants.defaultLabelBorder);
     }
-    
-    
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
-    
-    
-    
 
-    
+
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);
         super.paint(g);
     }
-    
-    
+
+
 }

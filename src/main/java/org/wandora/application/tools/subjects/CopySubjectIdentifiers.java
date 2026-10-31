@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.SIContext;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -49,15 +48,15 @@ import org.wandora.utils.ClipboardBox;
  *
  * @author akivela
  */
-public class CopySubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
+public class CopySubjectIdentifiers extends AbstractWandoraTool {
     
 	private static final long serialVersionUID = 1L;
 
 
-	/** Creates a new instance of CopySIs */
+	/** Creates a new instance of CopySubjectIdentifiers */
     public CopySubjectIdentifiers() {
     }
-    public CopySubjectIdentifiers(Context context) {
+    public CopySubjectIdentifiers(Context<?> context) {
         setContext(context);
     }
 
@@ -73,19 +72,17 @@ public class CopySubjectIdentifiers extends AbstractWandoraTool implements Wando
     
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         StringBuilder sis = new StringBuilder("");
         Collection<Locator> topicSIs = null;
-        Iterator<Locator> SIIterator = null;
+        Iterator<?> SIIterator = null;
         Locator SI = null;
         int progress = 0;
 
         if(context instanceof SIContext) {
-            //System.out.println("CopySubjectIdentifiers & SIContext");
             SIIterator = context.getContextObjects();
             while(SIIterator.hasNext()) {
                 SI = (Locator) SIIterator.next();
-                //System.out.println("  si="+SI.toExternalForm());
                 if(SI != null) {
                     sis.append(SI.toExternalForm()).append("\n");
                 }
@@ -94,7 +91,7 @@ public class CopySubjectIdentifiers extends AbstractWandoraTool implements Wando
         
         
         else {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics != null && topics.hasNext()) {
                 Topic topic = null;
                 while(topics.hasNext()) {

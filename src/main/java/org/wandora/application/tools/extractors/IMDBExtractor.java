@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -52,46 +51,46 @@ import org.wandora.topicmap.layered.LayerStack;
  *
  * @author olli
  */
-public class IMDBExtractor extends AbstractExtractor implements WandoraTool {
+public class IMDBExtractor extends AbstractExtractor {
     
 
 	private static final long serialVersionUID = 1L;
 	
 	
-	public static final String ACTOR_SI="http://wandora.org/si/imdb/actor";
-    public static final String DIRECTOR_SI="http://wandora.org/si/imdb/director";
-    public static final String PRODUCER_SI="http://wandora.org/si/imdb/producer";
-    public static final String ROLE_SI="http://wandora.org/imdb/si/role";
-    public static final String EPISODE_SI="http://wandora.org/si/imdb/episode";
+	public static final String ACTOR_SI="https://wandora.org/si/imdb/actor";
+    public static final String DIRECTOR_SI="https://wandora.org/si/imdb/director";
+    public static final String PRODUCER_SI="https://wandora.org/si/imdb/producer";
+    public static final String ROLE_SI="https://wandora.org/imdb/si/role";
+    public static final String EPISODE_SI="https://wandora.org/si/imdb/episode";
     
-    public static final String SHOW_SI="http://wandora.org/si/imdb/show";
-    public static final String TVSHOW_SI="http://wandora.org/si/imdb/tvshow";
-    public static final String TVMINI_SI="http://wandora.org/si/imdb/tvmini";
-    public static final String MOVIE_SI="http://wandora.org/si/imdb/movie";
-    public static final String TVMOVIE_SI="http://wandora.org/si/imdb/tvmovie";
-    public static final String VIDEOMOVIE_SI="http://wandora.org/si/imdb/videomovie";
-    public static final String VIDEOGAME_SI="http://wandora.org/si/imdb/videogame";
+    public static final String SHOW_SI="https://wandora.org/si/imdb/show";
+    public static final String TVSHOW_SI="https://wandora.org/si/imdb/tvshow";
+    public static final String TVMINI_SI="https://wandora.org/si/imdb/tvmini";
+    public static final String MOVIE_SI="https://wandora.org/si/imdb/movie";
+    public static final String TVMOVIE_SI="https://wandora.org/si/imdb/tvmovie";
+    public static final String VIDEOMOVIE_SI="https://wandora.org/si/imdb/videomovie";
+    public static final String VIDEOGAME_SI="https://wandora.org/si/imdb/videogame";
     
-    public static final String KEYWORD_SI="http://wandora.org/si/imdb/keyword";
-    public static final String LANGUAGE_SI="http://wandora.org/si/imdb/language";
-    public static final String COUNTRY_SI="http://wandora.org/si/imdb/country";
-    public static final String YEAR_SI="http://wandora.org/si/imdb/year";
-    public static final String GENRE_SI="http://wandora.org/si/imdb/genre";
-    public static final String LOCATION_SI="http://wandora.org/si/imdb/location";
-    public static final String RUNTIME_SI="http://wandora.org/si/imdb/runtime";
-    public static final String RUNTIMEINFO_SI="http://wandora.org/si/imdb/runtimeinfo";
-    public static final String RELEASEDATE_SI="http://wandora.org/si/imdb/releasedate";
-    public static final String RELEASEDATEINFO_SI="http://wandora.org/si/imdb/releasedateinfo";
+    public static final String KEYWORD_SI="https://wandora.org/si/imdb/keyword";
+    public static final String LANGUAGE_SI="https://wandora.org/si/imdb/language";
+    public static final String COUNTRY_SI="https://wandora.org/si/imdb/country";
+    public static final String YEAR_SI="https://wandora.org/si/imdb/year";
+    public static final String GENRE_SI="https://wandora.org/si/imdb/genre";
+    public static final String LOCATION_SI="https://wandora.org/si/imdb/location";
+    public static final String RUNTIME_SI="https://wandora.org/si/imdb/runtime";
+    public static final String RUNTIMEINFO_SI="https://wandora.org/si/imdb/runtimeinfo";
+    public static final String RELEASEDATE_SI="https://wandora.org/si/imdb/releasedate";
+    public static final String RELEASEDATEINFO_SI="https://wandora.org/si/imdb/releasedateinfo";
 
-    public static final String PLOT_SI="http://wandora.org/si/imdb/plot";
+    public static final String PLOT_SI="https://wandora.org/si/imdb/plot";
 
-    public static final String PERSON_SI="http://wandora.org/si/imdb/person";
-    public static final String DATE_SI="http://wandora.org/si/imdb/date";
-    public static final String DATEOFBIRTH_SI="http://wandora.org/si/imdb/dateofbirth";
-    public static final String DATEOFDEATH_SI="http://wandora.org/si/imdb/dateofdeath";
-    public static final String BIOGRAPHY_SI="http://wandora.org/si/imdb/biography";
-    public static final String REALNAME_SI="http://wandora.org/si/imdb/realname";
-    public static final String PLACE_SI="http://wandora.org/si/imdb/place";
+    public static final String PERSON_SI="https://wandora.org/si/imdb/person";
+    public static final String DATE_SI="https://wandora.org/si/imdb/date";
+    public static final String DATEOFBIRTH_SI="https://wandora.org/si/imdb/dateofbirth";
+    public static final String DATEOFDEATH_SI="https://wandora.org/si/imdb/dateofdeath";
+    public static final String BIOGRAPHY_SI="https://wandora.org/si/imdb/biography";
+    public static final String REALNAME_SI="https://wandora.org/si/imdb/realname";
+    public static final String PLACE_SI="https://wandora.org/si/imdb/place";
     
     /** Creates a new instance of IMDBExtractor */
     public IMDBExtractor() {
@@ -718,7 +717,7 @@ public class IMDBExtractor extends AbstractExtractor implements WandoraTool {
         int counter=0;
         String line=null;
         String type="";
-        StringBuffer collected=new StringBuffer();
+        StringBuilder collected=new StringBuilder();
         String name=null;
         boolean bgfound=false;
         while( (line=in.readLine())!=null ){
@@ -754,7 +753,7 @@ public class IMDBExtractor extends AbstractExtractor implements WandoraTool {
                         bgfound=true;
                     }
                 }
-                collected=new StringBuffer();
+                collected=new StringBuilder();
                 type="";
             }
             else{
@@ -767,7 +766,7 @@ public class IMDBExtractor extends AbstractExtractor implements WandoraTool {
                 name=null;
                 bgfound=false;
                 type="";
-                collected=new StringBuffer();
+                collected=new StringBuilder();
             }
             
         }
@@ -779,7 +778,7 @@ public class IMDBExtractor extends AbstractExtractor implements WandoraTool {
         int counter=0;
         String line=null;
         String type="";
-        StringBuffer collected=new StringBuffer();
+        StringBuilder collected=new StringBuilder();
         String name=null;
         boolean plfound=false;
         while( (line=in.readLine())!=null ){
@@ -805,7 +804,7 @@ public class IMDBExtractor extends AbstractExtractor implements WandoraTool {
                         plfound=true;                            
                     }
                 }
-                collected=new StringBuffer();
+                collected=new StringBuilder();
                 type="";
             }
             else{
@@ -818,7 +817,7 @@ public class IMDBExtractor extends AbstractExtractor implements WandoraTool {
                 name=null;
                 plfound=false;
                 type="";
-                collected=new StringBuffer();
+                collected=new StringBuilder();
             }
             
         }

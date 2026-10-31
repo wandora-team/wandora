@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,18 +27,19 @@
 package org.wandora.application.tools.occurrences;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * Performs a test to given occurrences. Test checks if the occurrence is an URL,
@@ -46,9 +47,10 @@ import org.wandora.utils.IObox;
  *
  * @author akivela
  */
-public class URLOccurrenceChecker extends AbstractWandoraTool implements WandoraTool {
+public class URLOccurrenceChecker extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(URLOccurrenceChecker.class);
 
 	String urlExists = "EXISTS\t'<locator/>'";
     String urlDoesntExists = "MISSING\t'<locator/>'";
@@ -70,11 +72,11 @@ public class URLOccurrenceChecker extends AbstractWandoraTool implements Wandora
     String reportType = "sm";
 
     File currentDirectory = null;
-    Iterator<Topic> topicsToCheck;
+    Iterator<?> topicsToCheck;
 
 
     public URLOccurrenceChecker() {}
-    public URLOccurrenceChecker(Context context) {
+    public URLOccurrenceChecker(Context<?> context) {
         setContext(context);
     }
     public URLOccurrenceChecker(Collection<Topic> topics) {
@@ -87,7 +89,7 @@ public class URLOccurrenceChecker extends AbstractWandoraTool implements Wandora
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         setDefaultLogger();
 
         if(topicsToCheck == null) {
@@ -212,15 +214,14 @@ public class URLOccurrenceChecker extends AbstractWandoraTool implements Wandora
             urlString = urlString.trim();
             if(urlString.startsWith("http://") || urlString.startsWith("https://") || urlString.startsWith("file://") || urlString.startsWith("ftp://") || urlString.startsWith("ftps://")) {
                 try {
-                    URL url = new URL(urlString);
+                    URL url = new URI(urlString).toURL();
                     return url;
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
-        //System.out.println("NOT A URL: '"+urlString+"'");
         return null;
     }
 

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,8 @@ import java.awt.Component;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
+
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -39,9 +40,10 @@ import javax.swing.table.TableCellRenderer;
  */
 
 
-public class MergeMatrixCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer{
+public class MergeMatrixCellRenderer extends DefaultTableCellRenderer {
     
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MergeMatrixCellRenderer.class);
 
 	public MergeMatrixCellRenderer() {
         
@@ -67,8 +69,7 @@ public class MergeMatrixCellRenderer extends DefaultTableCellRenderer implements
             this.setValue(value);
         }
         catch(Exception e){
-            e.printStackTrace(); // TODO EXCEPTION;
-            // uriLabel.setText("*** Exception occurred while initializing locator table label!");
+        	logger.error(e);
         }
         
         return this;

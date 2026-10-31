@@ -1,9 +1,9 @@
 /* 
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -221,7 +221,7 @@ public class PatchDiffParser {
     protected String readQuotedString() throws IOException,ParseException {
         int r=reader.read();
         if(r!='"') throw new ParseException("Expecting \"",line);
-        StringBuffer read=new StringBuffer();
+        StringBuilder read=new StringBuilder();
         boolean escape=false;
         while(true){
             r=reader.read();

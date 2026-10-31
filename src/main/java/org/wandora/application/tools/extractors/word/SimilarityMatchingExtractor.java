@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ public class SimilarityMatchingExtractor extends AbstractWordExtractor{
 
 	private static final long serialVersionUID = 1L;
 
-	private final String SI_BASE = "http://wandora.org/si/word-similarity/";
+	private final String SI_BASE = "https://wandora.org/si/word-similarity/";
     private static final String BN_SUFFIX = "(word similarity matching extractor)";
     
     protected SimilarityWordConfiguration config;

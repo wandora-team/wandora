@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -48,9 +49,8 @@ import org.wandora.utils.IObox;
 
 
 public class MillionFirstStepsBookMetadataJSONExtractor extends AbstractMillionFirstStepsExtractor {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MillionFirstStepsBookMetadataJSONExtractor.class);
 
 
 
@@ -89,7 +89,7 @@ public class MillionFirstStepsBookMetadataJSONExtractor extends AbstractMillionF
    
         } 
         catch (Exception e){
-           e.printStackTrace();
+           logger.error(e);
         }
         return true;
     }
@@ -141,7 +141,7 @@ public class MillionFirstStepsBookMetadataJSONExtractor extends AbstractMillionF
     
     
     public void parse(JSONObject json, TopicMap tm) throws TopicMapException {
-        Iterator keys = json.keys();
+        Iterator<String> keys = json.keys();
         int i=0;
         while(keys.hasNext() && !forceStop()) {
             try {
@@ -273,7 +273,7 @@ public class MillionFirstStepsBookMetadataJSONExtractor extends AbstractMillionF
             }
             else if(data instanceof JSONObject) {
                 JSONObject dataObject = (JSONObject) data;
-                Iterator keys = dataObject.keys();
+                Iterator<String> keys = dataObject.keys();
                 
                 while( keys.hasNext() ) {
                     try {
@@ -332,7 +332,7 @@ public class MillionFirstStepsBookMetadataJSONExtractor extends AbstractMillionF
             }
             else if(data instanceof JSONObject) {
                 JSONObject dataObject = (JSONObject) data;
-                Iterator keys = dataObject.keys();
+                Iterator<String> keys = dataObject.keys();
                 
                 while( keys.hasNext() ) {
                     try {
@@ -380,11 +380,11 @@ public class MillionFirstStepsBookMetadataJSONExtractor extends AbstractMillionF
             }
             else if(data instanceof JSONObject) {
                 JSONObject dataObject = (JSONObject) data;
-                Iterator keys = dataObject.keys();
+                Iterator<String> keys = dataObject.keys();
                 
                 while( keys.hasNext() ) {
                     try {
-                        String key = (String) keys.next();
+                        String key = keys.next();
                         Object innerData = dataObject.get(key);
                         if(innerData != null) {
                             parseN(bookTopic, innerData, id, tm);

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -52,14 +51,14 @@ import org.wandora.topicmap.TopicTools;
  *
  * @author  akivela
  */
-public class FixSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
+public class FixSubjectIdentifiers extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
 
 	public FixSubjectIdentifiers() {
     }
-    public FixSubjectIdentifiers(Context context) {
+    public FixSubjectIdentifiers(Context<?> context) {
         setContext(context);
     }
     
@@ -75,8 +74,8 @@ public class FixSubjectIdentifiers extends AbstractWandoraTool implements Wandor
     }
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
-        Iterator<Topic> contextTopics = context.getContextObjects();
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
+        Iterator<?> contextTopics = context.getContextObjects();
         if(contextTopics != null && contextTopics.hasNext()) {
             if(WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to fix subject identifiers?","Fix subject identifiers?", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){
                 setDefaultLogger();
@@ -86,7 +85,7 @@ public class FixSubjectIdentifiers extends AbstractWandoraTool implements Wandor
 
                 ArrayList<Topic> topics = new ArrayList<>();
                 while(contextTopics.hasNext() && !forceStop()) {
-                    topics.add(contextTopics.next());
+                    topics.add((Topic) contextTopics.next());
                 }
   
                 for(Topic topic : topics) {

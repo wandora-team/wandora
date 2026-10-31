@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,10 +28,10 @@
 package org.wandora.application.tools.subjects;
 
 
+import java.net.URISyntaxException;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.ConfirmResult;
 import org.wandora.application.gui.topicstringify.TopicToString;
@@ -53,14 +53,14 @@ import org.wandora.utils.DataURL;
  */
 
 
-public class AddSubjectIdentifier extends AbstractWandoraTool implements WandoraTool {
+public class AddSubjectIdentifier extends AbstractWandoraTool {
     
 	private static final long serialVersionUID = 1L;
 	
 	private boolean shouldRefresh = false;
     
     public AddSubjectIdentifier() {}
-    public AddSubjectIdentifier(Context preferredContext) {
+    public AddSubjectIdentifier(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -78,9 +78,9 @@ public class AddSubjectIdentifier extends AbstractWandoraTool implements Wandora
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         shouldRefresh = false;
-        Iterator contextTopics = getContext().getContextObjects();
+        Iterator<?> contextTopics = getContext().getContextObjects();
         if(contextTopics != null && contextTopics.hasNext()) {
             Topic topic = (Topic) contextTopics.next();
             
@@ -92,14 +92,14 @@ public class AddSubjectIdentifier extends AbstractWandoraTool implements Wandora
                         newSubjectIdentifier = newSubjectIdentifier.trim();
                         try {
                             boolean isValid = DataURL.isDataURL(newSubjectIdentifier);
-                            if(!isValid) new java.net.URL(newSubjectIdentifier);
+                            if(!isValid) new java.net.URI(newSubjectIdentifier).toURL();
                             Locator l = topic.getTopicMap().createLocator(newSubjectIdentifier);
                             if(TMBox.checkSubjectIdentifierChange(wandora,topic,l,true) == ConfirmResult.yes) {
                                 shouldRefresh = true;
                                 topic.addSubjectIdentifier(l);
                             }
                         }
-                        catch(java.net.MalformedURLException mue) {
+                        catch(java.net.MalformedURLException | URISyntaxException ue) {
                             log("Malformed subject identifier given. Subject identifier should be a valid URL. Rejecting subject identifier!");
                         }
                     }

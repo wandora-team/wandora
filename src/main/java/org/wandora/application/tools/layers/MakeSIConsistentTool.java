@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,11 +28,10 @@
 package org.wandora.application.tools.layers;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.database.DatabaseTopicMap;
+import org.wandora.topicmap.database2.DatabaseTopicMap;
 import org.wandora.topicmap.layered.Layer;
 
 
@@ -40,7 +39,7 @@ import org.wandora.topicmap.layered.Layer;
 /**
  * @author akivela
  */
-public class MakeSIConsistentTool extends AbstractLayerTool implements WandoraTool {
+public class MakeSIConsistentTool extends AbstractLayerTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -70,7 +69,7 @@ public class MakeSIConsistentTool extends AbstractLayerTool implements WandoraTo
     }
    
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         requiresRefresh = false;
         Layer contextLayer =  solveContextLayer(admin, context);
         

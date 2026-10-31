@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,11 +37,11 @@ import java.io.StringReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -59,12 +59,12 @@ import org.wandora.utils.GripCollections;
  *
  * @author olli
  */
-public class BibtexExtractor extends AbstractExtractor implements WandoraTool {
+public class BibtexExtractor extends AbstractExtractor {
 
 
 	private static final long serialVersionUID = 1L;
 	
-	private String baseLocator = "http://wandora.org/si/bibtex/";
+	private String baseLocator = "https://wandora.org/si/bibtex/";
     private String defaultEncoding = "ISO-8859-1";
 
     /** Creates a new instance of BibtexExtractor */
@@ -116,20 +116,21 @@ public class BibtexExtractor extends AbstractExtractor implements WandoraTool {
         
         Topic type=getOrCreateTopic(tm,key);
         Topic citation=getOrCreateTopic(tm,"citation");
-        Topic lang=TMBox.getOrCreateTopic(tm,XTMPSI.LANG_INDEPENDENT);
-        
-        ArrayList a;
-        if(o instanceof ArrayList) a=(ArrayList)o;
+
+        List<Object> a;
+        if(o instanceof ArrayList ol) {
+        	a=ol;
+        }
         else {
-            a=new ArrayList();
+            a=new ArrayList<>();
             a.add(o);
         }
         for(Object v : a){
             Association as=tm.createAssociation(type);
             as.addPlayer(entryTopic,citation);
             Topic p;
-            if(v instanceof BibtexPerson){
-                p=createPersonTopic(tm,(BibtexPerson)v);
+            if(v instanceof BibtexPerson bibp){
+                p=createPersonTopic(tm,bibp);
             }
             else{
                 p=tm.createTopic();
@@ -151,15 +152,15 @@ public class BibtexExtractor extends AbstractExtractor implements WandoraTool {
         return t;
     }
     
-    public static final HashSet<String> associationFields=GripCollections.newHashSet("author","editor","institution","organization","booktitle","journal",
-                                                                                    "publisher","school","series","year","volume","number","month","type","chapter","edition","howpublished");
-    public static final HashSet<String> occurrenceFields=GripCollections.newHashSet("address","annote","crossref",
-                                                                                    "key","note","pages");
+    public static final Set<String> associationFields=GripCollections.newHashSet("author","editor","institution","organization","booktitle","journal",
+                                                                                 "publisher","school","series","year","volume","number","month","type","chapter","edition","howpublished");
+    public static final Set<String> occurrenceFields=GripCollections.newHashSet("address","annote","crossref",
+                                                                                "key","note","pages");
     public boolean _extractTopicsFrom(Reader reader, TopicMap tm) throws Exception {
         BibtexParser parser=new BibtexParser();
         try{
             parser.parse(reader);
-            ArrayList<BibtexEntry> entries=parser.getEntries();
+            List<BibtexEntry> entries=parser.getEntries();
                         
             for(BibtexEntry e : entries){
                 String typeS=e.getType();

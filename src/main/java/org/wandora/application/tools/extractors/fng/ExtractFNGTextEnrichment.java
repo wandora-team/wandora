@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DateFormat;
@@ -41,7 +42,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -57,7 +57,7 @@ import org.wandora.utils.Textbox;
  *
  * @author akivela
  */
-public class ExtractFNGTextEnrichment extends AbstractExtractor implements WandoraTool {
+public class ExtractFNGTextEnrichment extends AbstractExtractor {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -147,7 +147,7 @@ public class ExtractFNGTextEnrichment extends AbstractExtractor implements Wando
         try {
             Topic textType = createTopic(topicMap, "tekstidokumentti");
             Topic textTopic = createTopic(topicMap, file.getName(), " (tekstidokumentti)", file.getName(), textType);
-            textTopic.addSubjectIdentifier(new Locator(TopicTools.cleanDirtyLocator(file.toURL().toExternalForm())));
+            textTopic.addSubjectIdentifier(new Locator(TopicTools.cleanDirtyLocator(file.toURI().toURL().toExternalForm())));
             
             // --- ADD LAST MODIFICATION TIME AS OCCURRENCE ---
             try {
@@ -180,7 +180,7 @@ public class ExtractFNGTextEnrichment extends AbstractExtractor implements Wando
             // --- HANDLE PDF ENRICHMENT TEXT ---
             if(lowerCaseLocator.endsWith("pdf")) {
 
-                PDDocument doc = PDDocument.load(new URL(locator).openStream());
+                PDDocument doc = PDDocument.load(new URI(locator).toURL().openStream());
                 PDDocumentInformation info = doc.getDocumentInformation();
 
                 // --- PDF SUBJECT ---

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ public class RSSMapping extends RDF2TopicMapsMapping {
     public static final String RSS_TEXTINPUT_NS = "http://purl.org/rss/1.0/modules/textinput/";
     public static final String RSS_CONTENT_NS = "http://purl.org/rss/1.0/modules/content/";
     
-    public static final String RSS_ROLE_NS = "http://wandora.org/si/rss/role/";
+    public static final String RSS_ROLE_NS = "https://wandora.org/si/rss/role/";
     
     
     public static final String[] SI_BASENAME_MAPPING = new String[] {

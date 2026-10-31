@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +24,10 @@
  */
 package org.wandora.query2;
 
-import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  *
@@ -93,7 +94,7 @@ public class OrderBy extends Directive implements DirectiveUIHints.Provider {
 
     @Override
     public ResultIterator queryIterator(QueryContext context, ResultRow input) throws QueryException {
-        ArrayList<ResultRow> res=directive.query(context, input);
+        List<ResultRow> res=directive.query(context, input);
         Collections.sort(res, new Comparator<ResultRow>(){
             public int compare(ResultRow o1, ResultRow o2) {
                 Object v1=o1.getActiveValue();

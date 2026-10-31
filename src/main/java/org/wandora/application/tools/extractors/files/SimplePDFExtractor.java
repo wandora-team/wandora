@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ package org.wandora.application.tools.extractors.files;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DateFormat;
@@ -59,6 +60,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -67,8 +69,8 @@ import org.wandora.utils.Textbox;
  * @author akivela
  */
 public class SimplePDFExtractor extends AbstractExtractor {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimplePDFExtractor.class);
 
 	protected static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     
@@ -133,7 +135,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
             String url = request.getSource();
             TopicMap tm = wandora.getTopicMap();
             if(url != null && url.endsWith(".pdf")) {
-                _extractTopicsFrom(new URL(url), tm);
+                _extractTopicsFrom(new URI(url).toURL(), tm);
                 wandora.doRefresh();
                 return null;
             }
@@ -144,17 +146,17 @@ public class SimplePDFExtractor extends AbstractExtractor {
                 }
                 if(content == null && url != null) {
                     try {
-                        System.out.println("Found no content. Reading the url content.");
-                        content = IObox.doUrl(new URL(url));
+                        logger.info("Found no content. Reading the url content.");
+                        content = IObox.doUrl(new URI(url).toURL());
                     }
                     catch(Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
 
                 if(content != null) {
-                    System.out.println("--- browser plugin processing content ---");
-                    System.out.println(content);
+                    logger.info("--- browser plugin processing content ---");
+                    logger.info(content);
 
                     Pattern p = Pattern.compile("\"[^\"]+?\\.pdf\"");
                     Matcher m = p.matcher(content);
@@ -169,8 +171,8 @@ public class SimplePDFExtractor extends AbstractExtractor {
                     }
 
                     for( String u : pdfUrls ) {
-                        System.out.println("Extracting pdf url: " + u);
-                        _extractTopicsFrom(new URL(u), tm);
+                        logger.info("Extracting pdf url: " + u);
+                        _extractTopicsFrom(new URI(u).toURL(), tm);
                     }
                     wandora.doRefresh();
                     return null;
@@ -181,7 +183,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
 
@@ -304,7 +306,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
         PDDocument doc = null;
         try {
             if(locator.startsWith("http://")) {
-                doc = PDDocument.load(new URL(locator).openStream());
+                doc = PDDocument.load(new URI(locator).toURL().openStream());
             }
             else {
                 doc = PDDocument.load(new File(locator));
@@ -418,12 +420,12 @@ public class SimplePDFExtractor extends AbstractExtractor {
             doc.close();
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             try {
                 if(doc != null) doc.close();
             }
             catch(Exception ix) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -449,7 +451,7 @@ public class SimplePDFExtractor extends AbstractExtractor {
         if(siend.startsWith("http://")) return new Locator(siend);
         if(siend.startsWith("file:/")) return new Locator(siend);
         if(siend.startsWith("/")) siend = siend.substring(1);
-        return new Locator("http://wandora.org/si/pdf/" + urlEncode(siend));
+        return new Locator("https://wandora.org/si/pdf/" + urlEncode(siend));
     }
 
 

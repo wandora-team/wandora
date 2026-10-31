@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicNode;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.graph.AbstractGraphTool;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -48,8 +49,8 @@ import org.wandora.topicmap.Topic;
  */
 public class ReleaseNodesOfType extends AbstractGraphTool {
     
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ReleaseNodesOfType.class);
 
 	private Topic type;
     private GraphFilter filter;
@@ -80,7 +81,7 @@ public class ReleaseNodesOfType extends AbstractGraphTool {
     
 
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         if(type != null && filter != null) {
             filter.releaseNodesOfType(type);
         }
@@ -104,7 +105,7 @@ public class ReleaseNodesOfType extends AbstractGraphTool {
                     }
                 }
                 catch(Exception tme){
-                    tme.printStackTrace();
+                	logger.error(tme);
                 }
             }
         }

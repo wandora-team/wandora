@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@ package org.wandora.utils;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -43,19 +45,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class JsonMapper extends ObjectMapper {
     private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(JsonMapper.class);
 
-    public JsonMapper(){
+
+    public JsonMapper() {
         super();
     }
 
-    public String writeValue(Object value){
-        try{
-            StringWriter sw=new StringWriter();
-            writeValue(sw,value);
+
+    public String writeValue(Object value) {
+        try {
+            StringWriter sw = new StringWriter();
+            writeValue(sw, value);
             return sw.toString();
-        }catch(IOException ioe){ioe.printStackTrace();}
+        }
+        catch (IOException ioe) {
+            logger.error(ioe);
+        }
         return null;
     }
-    
-    
+
+
 }

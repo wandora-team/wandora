@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,19 +29,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * Extractor takes text as input and transforms sentences to associations where
@@ -49,23 +50,22 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class Sentences2Associations  extends AbstractExtractor implements WandoraTool {
-
+public class Sentences2Associations  extends AbstractExtractor {
 
 	private static final long serialVersionUID = 1L;
-
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Sentences2Associations.class);
 
 
 	public static boolean ADD_SOURCE_AS_PLAYER = true;
     
     
 
-    public static String SOURCE_SI = "http://wandora.org/si/sentence-source";
-    public static String WORD_SI_BASE = "http://wandora.org/si/word/";
-    public static String ROLE_SI_BASE = "http://wandora.org/si/word-slot/";
-    public static String SENTENCE_SI_BASE = "http://wandora.org/si/sentence";
-    public static String ORDER_SI_BASE = "http://wandora.org/si/sentence/";
-    public static String SENTENCES_TO_ASSOCIATIONS = "http://wandora.org/si/sentences2associations";
+    public static String SOURCE_SI = "https://wandora.org/si/sentence-source";
+    public static String WORD_SI_BASE = "https://wandora.org/si/word/";
+    public static String ROLE_SI_BASE = "https://wandora.org/si/word-slot/";
+    public static String SENTENCE_SI_BASE = "https://wandora.org/si/sentence";
+    public static String ORDER_SI_BASE = "https://wandora.org/si/sentence/";
+    public static String SENTENCES_TO_ASSOCIATIONS = "https://wandora.org/si/sentences2associations";
 
 
     private URL basePath = null;
@@ -121,9 +121,9 @@ public class Sentences2Associations  extends AbstractExtractor implements Wandor
     @Override
     public String doBrowserExtract(BrowserExtractRequest request, Wandora wandora) throws TopicMapException {
         try {
-            basePath = new URL(request.getSource());
+            basePath = new URI(request.getSource()).toURL();
         }
-        catch(Exception e) { e.printStackTrace(); }
+        catch(Exception e) { logger.error(e); }
         String s = super.doBrowserExtract(request, wandora);
         basePath = null;
         return s;
@@ -185,7 +185,7 @@ public class Sentences2Associations  extends AbstractExtractor implements Wandor
 
     @Override
     public boolean _extractTopicsFrom(String str, TopicMap tm) throws Exception {
-        String stringLocator = "http://wandora.org/si/sentences2associations/";
+        String stringLocator = "https://wandora.org/si/sentences2associations/";
         try {
             _extractTopicsFromStream(stringLocator, new ByteArrayInputStream(str.getBytes()), tm);
             return true;
@@ -201,7 +201,7 @@ public class Sentences2Associations  extends AbstractExtractor implements Wandor
     public void _extractTopicsFromStream(String locator, InputStream inputStream, TopicMap tm) {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuffer word = null;
+            StringBuilder word = null;
             Topic wordTopic = null;
             Topic orderTopic = null;
             Topic roleTopic = null;
@@ -211,8 +211,8 @@ public class Sentences2Associations  extends AbstractExtractor implements Wandor
 
             log("Prosessing word stream!");
             int c = reader.read();
-            word = new StringBuffer("");
-            ArrayList<String> words = new ArrayList();
+            word = new StringBuilder("");
+            ArrayList<String> words = new ArrayList<>();
 
 
             while(c != -1) {
@@ -230,7 +230,7 @@ public class Sentences2Associations  extends AbstractExtractor implements Wandor
                             log("Found word '"+wordStr+"'.");
                             words.add(wordStr);
                         }
-                        word = new StringBuffer("");
+                        word = new StringBuilder("");
                     }
                 }
                 if(isSentenceDelimiter(c)) {
@@ -270,7 +270,7 @@ public class Sentences2Associations  extends AbstractExtractor implements Wandor
                                 }
                             }
                         }
-                        words = new ArrayList();
+                        words = new ArrayList<>();
                     }
                 }
                 while((isWordDelimiter(c) || isSentenceDelimiter(c)) && c != -1) {

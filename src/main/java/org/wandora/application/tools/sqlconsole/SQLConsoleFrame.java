@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 package org.wandora.application.tools.sqlconsole;
 
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -35,13 +36,12 @@ import org.wandora.utils.Options;
 public class SQLConsoleFrame extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SQLConsoleFrame.class);
 
-	//private Kirjava kirjava;
     public Options options = null;
     
     /** Creates new form SQLConsole */
     public SQLConsoleFrame(String[] args) {
-        //this.kirjava=kirjava;
         String optionsFileName = "conf/sqlconsole_options.xml";
         options = new Options(optionsFileName);
         initComponents();
@@ -51,12 +51,12 @@ public class SQLConsoleFrame extends javax.swing.JFrame {
                     (String)options.get("options.sqlconsole.user"),
                     (String)options.get("options.sqlconsole.password"));
         } catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         try {
             ((SQLConsolePanel)consolePanel).loadStoredQueries();
         } catch(Exception e){
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
     
@@ -85,7 +85,7 @@ public class SQLConsoleFrame extends javax.swing.JFrame {
         try{
             ((SQLConsolePanel)consolePanel).saveStoredQueries();
         }catch(java.io.IOException ioe){
-            ioe.printStackTrace();
+        	logger.error(ioe);
         }
     }//GEN-LAST:event_exitForm
     
@@ -96,7 +96,7 @@ public class SQLConsoleFrame extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        new SQLConsoleFrame(args).show();
+        new SQLConsoleFrame(args).setVisible(true);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

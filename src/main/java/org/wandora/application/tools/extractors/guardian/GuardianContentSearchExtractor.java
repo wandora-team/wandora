@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 package org.wandora.application.tools.extractors.guardian;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -47,8 +49,8 @@ import org.wandora.utils.IObox;
  */
 
 public class GuardianContentSearchExtractor extends AbstractGuardianExtractor {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GuardianContentSearchExtractor.class);
 	
 	private static String defaultLang = "en";
 	private static String currentURL = null;
@@ -87,9 +89,9 @@ public class GuardianContentSearchExtractor extends AbstractGuardianExtractor {
 
 		String in = IObox.doUrl(u);
 
-		System.out.println(
-				    "The Guardian API returned-------------------------\n" + in
-				+ "\n----------------------------------------------------");
+		logger.info("The Guardian API returned-------------------------");
+		logger.info(in);
+	    logger.info("--------------------------------------------------");
 
 		JSONObject json = new JSONObject(in);
 
@@ -106,8 +108,8 @@ public class GuardianContentSearchExtractor extends AbstractGuardianExtractor {
 							WandoraOptionPane.YES_NO_OPTION);
 					
 					if (didMean == WandoraOptionPane.YES_OPTION) {
-						URL newUrl = new URL(currentURL.replaceAll("&q=[^&]*", "&q=" + dym));
-						System.out.println(newUrl.toString());
+						URL newUrl = new URI(currentURL.replaceAll("&q=[^&]*", "&q=" + dym)).toURL();
+						logger.info(newUrl.toString());
 						this._extractTopicsFrom(newUrl, tm);
 					} 
 					else {
@@ -119,7 +121,7 @@ public class GuardianContentSearchExtractor extends AbstractGuardianExtractor {
 				}
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 
 		}
@@ -152,7 +154,7 @@ public class GuardianContentSearchExtractor extends AbstractGuardianExtractor {
 					parseResult(result, tm);
 				}
 			} catch (JSONException ex) {
-				System.out.println(ex);
+				logger.error(ex);
 				log(ex);
 			}
 		}
@@ -187,20 +189,20 @@ public class GuardianContentSearchExtractor extends AbstractGuardianExtractor {
 							String originalURL = currentURL;
 							try {
 								if (pagingOptions[1].equals(a)) {
-									System.out.println("Selected to extract only next page");
+									logger.info("Selected to extract only next page");
 									String newURL = originalURL.replace("page=" + page, "page=" + (page + 1));
 									shouldHandlePagination = false;
-									_extractTopicsFrom(new URL(newURL), tm);
+									_extractTopicsFrom(new URI(newURL).toURL(), tm);
 								}
 
 								else if (pagingOptions[2].equals(a)) {
-									System.out.println("Selected to extract next page");
+									logger.info("Selected to extract next page");
 									String newURL = originalURL.replace("page=" + page, "page=" + (page + 1));
-									_extractTopicsFrom(new URL(newURL), tm);
+									_extractTopicsFrom(new URI(newURL).toURL(), tm);
 								}
 
 								else if (pagingOptions[3].equals(a)) {
-									System.out.println("Selected to extract 10 next pages");
+									logger.info("Selected to extract 10 next pages");
 									shouldHandlePagination = false;
 									setProgress(1);
 									setProgressMax(10);
@@ -209,21 +211,21 @@ public class GuardianContentSearchExtractor extends AbstractGuardianExtractor {
 										String newURL = originalURL.replace("page=" + page, "page=" + p);
 										if (p == page + 10)
 											shouldHandlePagination = true;
-										_extractTopicsFrom(new URL(newURL), tm);
+										_extractTopicsFrom(new URI(newURL).toURL(), tm);
 										setProgress(progress++);
 										nap();
 									}
 								}
 
 								else if (pagingOptions[4].equals(a)) {
-									System.out.println("Selected to extract all pages");
+									logger.info("Selected to extract all pages");
 									shouldHandlePagination = false;
 									setProgress(1);
 									setProgressMax((int) (total));
 									int progress = 1;
 									for (int p = page + 1; p <= total && !forceStop(); p++) {
 										String newURL = originalURL.replace("page=" + page, "page=" + p);
-										_extractTopicsFrom(new URL(newURL), tm);
+										_extractTopicsFrom(new URI(newURL).toURL(), tm);
 										setProgress(progress++);
 										nap();
 									}
@@ -297,9 +299,9 @@ public class GuardianContentSearchExtractor extends AbstractGuardianExtractor {
 
 			if (result.has("fields")) {
 				JSONObject fields = result.getJSONObject("fields");
-				Iterator keys = fields.keys();
+				Iterator<String> keys = fields.keys();
 				while (keys.hasNext()) {
-					String key = keys.next().toString();
+					String key = keys.next();
 					Topic type = getFieldType(tm, key);
 					if (toAsso.contains(key)) {
 						parseFieldAssociation(fields, key, tm, contentTopic, type);

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ import org.wandora.modules.servlet.ActionException;
 import org.wandora.modules.servlet.ModulesServlet;
 import org.wandora.modules.usercontrol.User;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,6 +52,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 public class BrowserPluginService extends AbstractAction {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(BrowserPluginService.class);
 
     private BrowserExtractorManager extractorManager;
 
@@ -118,7 +120,7 @@ public class BrowserPluginService extends AbstractAction {
             if(selectionStart!=null && selectionStart.length()>0) sStart=Integer.parseInt(selectionStart);
             if(selectionEnd!=null && selectionEnd.length()>0) sEnd=Integer.parseInt(selectionEnd);
         }
-        catch(NumberFormatException nfe){nfe.printStackTrace();}
+        catch(NumberFormatException nfe){ logger.error(nfe); }
         String action=request.getParameter("action");
         String app=request.getParameter("application");
         if(action==null || action.length()==0) action="doextract";

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -71,14 +70,14 @@ import org.wandora.topicmap.TopicTools;
 
 
 
-public class MakeAssociationWithOccurrence extends AbstractWandoraTool implements WandoraTool {
+public class MakeAssociationWithOccurrence extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
 	
 	public static int MAXLEN = 256;
     public String replacement = "";
-    public String SITemplate = "http://wandora.org/si/occurrence/%OCCURRENCE%";
+    public String SITemplate = "https://wandora.org/si/occurrence/%OCCURRENCE%";
     
     
     private boolean deleteOccurrence = false;
@@ -89,7 +88,7 @@ public class MakeAssociationWithOccurrence extends AbstractWandoraTool implement
     public MakeAssociationWithOccurrence() {
     }
     
-    public MakeAssociationWithOccurrence(Context preferredContext) {
+    public MakeAssociationWithOccurrence(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -110,10 +109,10 @@ public class MakeAssociationWithOccurrence extends AbstractWandoraTool implement
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {   
+    public void execute(Wandora wandora, Context<?> context) {   
         try {
-            SITemplate = "http://wandora.org/si/occurrence/%OCCURRENCE%";
-            Iterator topics = context.getContextObjects();
+            SITemplate = "https://wandora.org/si/occurrence/%OCCURRENCE%";
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
                         
             Topic occurrenceType=wandora.showTopicFinder("Select occurrence type...");                
@@ -143,7 +142,6 @@ public class MakeAssociationWithOccurrence extends AbstractWandoraTool implement
             String topicName = null;
             Topic newTopic = null;
             String SIString = null;
-            int progress = 0;
             TopicMap map = wandora.getTopicMap();
             Association a = null;
             String occurrence = null;
@@ -160,7 +158,6 @@ public class MakeAssociationWithOccurrence extends AbstractWandoraTool implement
                 try {
                     topic = (Topic) topics.next();
                     if(topic != null && !topic.isRemoved()) {
-                        progress++;
                         hlog("Inspecting topic '"+getTopicName(topic)+"'");
                         
                         occurrenceType = topic.getTopicMap().getTopic(occurrenceTypeLocator);

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,6 @@ import java.util.List;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -58,7 +57,7 @@ import org.wandora.topicmap.TopicMapException;
 
 
 
-public class DuplicateTopics extends AbstractWandoraTool implements WandoraTool {
+public class DuplicateTopics extends AbstractWandoraTool {
     
 	private static final long serialVersionUID = 1L;
 	
@@ -70,7 +69,7 @@ public class DuplicateTopics extends AbstractWandoraTool implements WandoraTool 
 
     public DuplicateTopics() {
     }
-    public DuplicateTopics(Context preferredContext) {
+    public DuplicateTopics(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -96,8 +95,8 @@ public class DuplicateTopics extends AbstractWandoraTool implements WandoraTool 
     
     
     @Override
-    public void execute(Wandora w, Context context) {
-        Iterator topics = getContext().getContextObjects();
+    public void execute(Wandora w, Context<?> context) {
+        Iterator<?> topics = getContext().getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         TopicMap tm = w.getTopicMap();
         

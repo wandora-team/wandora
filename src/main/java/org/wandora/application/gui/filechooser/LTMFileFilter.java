@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,32 +35,32 @@ import java.io.File;
 
 
 public class LTMFileFilter extends javax.swing.filechooser.FileFilter {
-    
+
     /** Creates a new instance of LTMFileFilter */
     public LTMFileFilter() {
     }
-    
+
 
 
     @Override
     public boolean accept(File f) {
-        if(f != null) {
+        if (f != null) {
             if (f.isDirectory()) {
                 return true;
             }
             String uppercaseName = f.getName().toUpperCase();
-            if(uppercaseName.endsWith(".LTM")) {
+            if (uppercaseName.endsWith(".LTM")) {
                 return true;
             }
         }
         return false;
     }
-    
+
 
     //The description of this filter
     @Override
     public String getDescription() {
         return "LTM topic map";
     }
-    
+
 }

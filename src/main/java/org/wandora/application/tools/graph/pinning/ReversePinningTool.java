@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ public class ReversePinningTool extends AbstractGraphPinningTool {
         super(gp);
         this.setContext(new GraphNodeContext());
     }
-    public ReversePinningTool(TopicMapGraphPanel gp, Context proposedContext) {
+    public ReversePinningTool(TopicMapGraphPanel gp, Context<?> proposedContext) {
         super(gp);
         this.setContext(proposedContext);
     }
@@ -65,7 +65,7 @@ public class ReversePinningTool extends AbstractGraphPinningTool {
     
     
 
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         if(context != null) {
             setPinning(context.getContextObjects(), REVERSE_PINNING);
         }

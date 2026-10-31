@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,9 +41,9 @@ import org.wandora.application.gui.UIConstants;
  * @author akivela
  */
 public class SimpleTree extends JTree implements SimpleComponent {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     /** Creates a new instance of SimpleTree */
     public SimpleTree() {
         this.putClientProperty("JTree.lineStyle", "None");
@@ -51,25 +51,24 @@ public class SimpleTree extends JTree implements SimpleComponent {
         this.addFocusListener(this);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
-    
-    
-    
-    
+
+
+
     @Override
     public void focusGained(java.awt.event.FocusEvent focusEvent) {
         Wandora w = Wandora.getWandora(this);
-        if(w != null) {
+        if (w != null) {
             w.gainFocus(this);
         }
     }
-    
+
+
     @Override
     public void focusLost(java.awt.event.FocusEvent focusEvent) {
     }
-    
-    
-    
-    
+
+
+
     @Override
     public void paint(Graphics g) {
         UIConstants.preparePaint(g);

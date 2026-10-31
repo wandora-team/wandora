@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,44 +37,43 @@ import org.wandora.topicmap.undowrapper.UndoOperation;
 
 
 public class OperationTableModel extends DefaultTableModel {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private UndoOperation[] ops = null;
-    
-    
+
+
     public OperationTableModel(UndoOperation[] operations) {
         this.ops = operations;
     }
-    
+
 
     @Override
     public int getColumnCount() {
         return 6;
     }
 
-    
 
 
     @Override
     public int getRowCount() {
-        if(ops != null) return ops.length;
+        if (ops != null)
+            return ops.length;
         return 0;
     }
 
-    
-   
-    
 
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
-            if(ops != null && rowIndex >= 0 && rowIndex < getRowCount()) {
-                switch(columnIndex) {
+            if (ops != null && rowIndex >= 0 && rowIndex < getRowCount()) {
+                switch (columnIndex) {
                     case 0: {
-                        String i = ""+ops[rowIndex].getOperationNumber();
-                        while(i.length()<5) i="0"+i;
+                        String i = "" + ops[rowIndex].getOperationNumber();
+                        while (i.length() < 5) {
+                            i = "0" + i;
+                        }
                         return i;
                     }
                     case 1: {
@@ -87,25 +86,25 @@ public class OperationTableModel extends DefaultTableModel {
                         return ops[rowIndex].getDescription();
                     }
                     case 4: {
-                        return ""+ops[rowIndex].getClass().toString();
+                        return "" + ops[rowIndex].getClass().toString();
                     }
                     case 5: {
-                        return ""+ops[rowIndex].isMarker();
+                        return "" + ops[rowIndex].isMarker();
                     }
                 }
             }
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+        }
         return "[ERROR]";
     }
 
 
-    
-    
+
     @Override
-    public String getColumnName(int columnIndex){
+    public String getColumnName(int columnIndex) {
         try {
-            switch(columnIndex) {
+            switch (columnIndex) {
                 case 0: {
                     return "index";
                 }
@@ -127,24 +126,25 @@ public class OperationTableModel extends DefaultTableModel {
             }
             return "";
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+        }
         return "[ERROR]";
     }
 
 
 
     @Override
-    public boolean isCellEditable(int row, int col){
+    public boolean isCellEditable(int row, int col) {
         return false;
     }
 
-    
+
     public boolean isMarker(int row) {
-        if(ops != null && row >= 0 && row < getRowCount()) {
+        if (ops != null && row >= 0 && row < getRowCount()) {
             return ops[row].isMarker();
         }
         return false;
     }
 
-    
+
 }

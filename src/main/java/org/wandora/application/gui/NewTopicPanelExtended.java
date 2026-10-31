@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ package org.wandora.application.gui;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.net.URL;
+import java.net.URI;
 import java.util.Iterator;
 
 import javax.swing.JDialog;
@@ -46,81 +46,79 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  * @author  akivela
  */
 public class NewTopicPanelExtended extends javax.swing.JPanel {
-	
-	
-	private static final long serialVersionUID = 1L;
-	
-    
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(NewTopicPanelExtended.class);
+
+
     private boolean accepted = false;
     private JDialog newTopicDialog = null;
-    private Context currentContext = null;
+    private Context<?> currentContext = null;
     private Wandora wandora = null;
     private TopicMap topicmap = null;
-    
-    
-    
+
+
+
     /** Creates new form NewTopicPanelExtended */
-    public NewTopicPanelExtended(Context context) {
+    public NewTopicPanelExtended(Context<?> context) {
         this.wandora = Wandora.getWandora();
         this.topicmap = wandora.getTopicMap();
         this.currentContext = context;
         initComponents();
         selectCurrentTopicAsTypeActionPerformed(null);
-        
+
         newTopicDialog = new JDialog(wandora, "Create new topic", true);
         newTopicDialog.add(this);
         newTopicDialog.pack();
         newTopicDialog.setSize(600, 250);
         wandora.centerWindow(newTopicDialog);
-        
+
         basenameTextField.requestFocusInWindow();
         newTopicDialog.setVisible(true);
     }
-    
-    
+
+
     public boolean getAccepted() {
         return accepted;
     }
-    
-    
-    
-    
-    
+
+
+
     public Topic createTopic() throws TopicMapException {
         Topic newTopic = null;
-        
-        String basename = getBasename();
-        
-        
-        if(basename != null && basename.length() > 0) {
-            newTopic=topicmap.createTopic();
 
-            if(TMBox.checkBaseNameChange(wandora,newTopic,basename) != ConfirmResult.yes){
+        String basename = getBasename();
+
+
+        if (basename != null && basename.length() > 0) {
+            newTopic = topicmap.createTopic();
+
+            if (TMBox.checkBaseNameChange(wandora, newTopic, basename) != ConfirmResult.yes) {
                 newTopic.remove();
                 return null;
             }
-            
+
             newTopic.setBaseName(basename);
         }
         else {
             WandoraOptionPane.showMessageDialog(
-                    wandora, 
-                    "Basename is missing. No topic created.", 
-                    "No topic created", 
+                    wandora,
+                    "Basename is missing. No topic created.",
+                    "No topic created",
                     WandoraOptionPane.WARNING_MESSAGE);
-            if(newTopic != null) newTopic.remove();
             return null;
         }
-        
+
         String si = getSI();
-        if(si != null && si.length() > 0) {
-            if(TMBox.checkSubjectIdentifierChange(wandora, newTopic, topicmap.createLocator(si),true) != ConfirmResult.yes){
+        if (si != null && si.length() > 0) {
+            if (TMBox.checkSubjectIdentifierChange(wandora, newTopic, topicmap.createLocator(si),
+                    true) != ConfirmResult.yes) {
                 newTopic.remove();
                 return null;
             }
@@ -128,17 +126,17 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
         }
         else {
             WandoraOptionPane.showMessageDialog(
-                    wandora, 
-                    "Subject identifier is missing. No topic created.", 
-                    "No topic created", 
+                    wandora,
+                    "Subject identifier is missing. No topic created.",
+                    "No topic created",
                     WandoraOptionPane.WARNING_MESSAGE);
             newTopic.remove();
             return null;
         }
-        
+
         String sl = getSL();
-        if(sl != null && sl.length() > 0) {
-            if(TMBox.checkSubjectLocatorChange(wandora,newTopic,sl,true)!=ConfirmResult.yes){
+        if (sl != null && sl.length() > 0) {
+            if (TMBox.checkSubjectLocatorChange(wandora, newTopic, sl, true) != ConfirmResult.yes) {
                 newTopic.remove();
                 return null;
             }
@@ -148,96 +146,93 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
         // --- Types ---
         try {
             Topic typeTopic = ((GetTopicButton) typeTopicButton).getTopic();
-            if(typeTopic != null) {
+            if (typeTopic != null) {
                 newTopic.addType(typeTopic);
             }
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error(e);
         }
-        
+
         try {
             Topic superclassTopic = ((GetTopicButton) superclassButton).getTopic();
-            if(superclassTopic != null) {
+            if (superclassTopic != null) {
                 SchemaBox.setSuperClass(newTopic, superclassTopic);
             }
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error(e);
         }
-        
-        
+
+
         return newTopic;
     }
-    
-    
-    
-    
+
+
+
     private String getBasename() {
         return basenameTextField.getText().trim();
     }
-    
-    
-    
-    
-    
+
+
+
     private String getSI() {
         String si = SITextField.getText().trim();
-        if(si.length() == 0) {
+        if (si.isEmpty()) {
             si = topicmap.makeSubjectIndicator();
             WandoraOptionPane.showMessageDialog(
-                    wandora, 
-                    "Subject identifier is missing. Creating subject identifier '"+si+"' for the topic.", 
-                    "Created subject identifier for the topic", 
-                    WandoraOptionPane.INFORMATION_MESSAGE
-            );
+                    wandora,
+                    "Subject identifier is missing. Creating subject identifier '" + si + "' for the topic.",
+                    "Created subject identifier for the topic",
+                    WandoraOptionPane.INFORMATION_MESSAGE);
         }
         try {
-            URL siUrl = new URL(si);
+            new URI(si).toURL();
         }
-        catch(Exception e) {
+        catch (Exception e) {
             si = topicmap.makeSubjectIndicator();
             WandoraOptionPane.showMessageDialog(
-                    wandora, 
-                    "Subject identifier is not valid. Creating subject identifier '"+si+"' for the topic.", 
-                    "Created subject identifier for the topic", 
-                    WandoraOptionPane.INFORMATION_MESSAGE
-            );
+                    wandora,
+                    "Subject identifier is not valid. Creating subject identifier '" + si + "' for the topic.",
+                    "Created subject identifier for the topic",
+                    WandoraOptionPane.INFORMATION_MESSAGE);
         }
         return si;
     }
-    
+
 
     private String getSL() {
         String sl = SLTextField.getText().trim();
-        if(sl.length() == 0) return null;
-        try {
-            URL slUrl = new URL(sl);
+        if (sl.isEmpty()) {
+            return null;
         }
-        catch(Exception e) {
+        try {
+            new URI(sl).toURL();
+        }
+        catch (Exception e) {
             WandoraOptionPane.showMessageDialog(
-                    wandora, 
-                    "Subject locator is invalid. Rejecting subject locator.", 
-                    "Rejecting subject locator", 
+                    wandora,
+                    "Subject locator is invalid. Rejecting subject locator.",
+                    "Rejecting subject locator",
                     WandoraOptionPane.INFORMATION_MESSAGE);
             return null;
         }
         return sl;
     }
-    
-    
-    
+
+
+
     private GetTopicButton getTopicButton() {
         try {
             return new GetTopicButton();
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error(e);
         }
         return null;
     }
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -279,7 +274,8 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
 
         identityPanel.setLayout(new java.awt.GridBagLayout());
 
-        identityInfoLabel.setText("<html>To create a topic you need to enter topic's base name at least. If valid subject identifier is not available, a default subject identifier will be added to the topic.</html>");
+        identityInfoLabel.setText(
+                "<html>To create a topic you need to enter topic's base name at least. If valid subject identifier is not available, a default subject identifier will be added to the topic.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 2;
@@ -371,7 +367,8 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
 
         classPanel.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("<html>By default topic's class is derived from action's context. To remove default class topic click clear button. By default topic has no superclass. Pick context button chooses a topic in context.</html>");
+        jLabel1.setText(
+                "<html>By default topic's class is derived from action's context. To remove default class topic click clear button. By default topic has no superclass. Pick context button chooses a topic in context.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 2;
@@ -516,91 +513,101 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
         add(buttonPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
     private void accepted(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accepted
         accepted = true;
-        if(newTopicDialog != null) newTopicDialog.setVisible(false);
+        if (newTopicDialog != null)
+            newTopicDialog.setVisible(false);
     }//GEN-LAST:event_accepted
+
 
     private void cancelled(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelled
         accepted = false;
-        if(newTopicDialog != null) newTopicDialog.setVisible(false);
+        if (newTopicDialog != null)
+            newTopicDialog.setVisible(false);
     }//GEN-LAST:event_cancelled
 
+
     private void basenameTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_basenameTextFieldKeyReleased
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             accepted(null);
         }
     }//GEN-LAST:event_basenameTextFieldKeyReleased
 
+
     private void SITextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SITextFieldKeyReleased
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             accepted(null);
         }
     }//GEN-LAST:event_SITextFieldKeyReleased
 
+
     private void okButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_okButtonKeyReleased
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             accepted(null);
         }
     }//GEN-LAST:event_okButtonKeyReleased
 
+
     private void selectCurrentTopicAsTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectCurrentTopicAsTypeActionPerformed
-        if(currentContext != null) {
-            Iterator i = currentContext.getContextObjects();
-            if(i.hasNext()) {
+        if (currentContext != null) {
+            Iterator<?> i = currentContext.getContextObjects();
+            if (i.hasNext()) {
                 Object o = i.next();
-                if(o instanceof Topic) {
-                    Topic t = (Topic) o;
+                if (o instanceof Topic t) {
                     try {
                         ((GetTopicButton) typeTopicButton).setTopic(t.getOneSubjectIdentifier().toExternalForm());
                     }
-                    catch(Exception e) {
+                    catch (Exception e) {
                     }
                 }
             }
         }
     }//GEN-LAST:event_selectCurrentTopicAsTypeActionPerformed
 
+
     private void clearSuperclassButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearSuperclassButtonActionPerformed
         try {
             ((GetTopicButton) superclassButton).setTopic((Topic) null);
         }
-            catch(Exception e) {
+        catch (Exception e) {
         }
     }//GEN-LAST:event_clearSuperclassButtonActionPerformed
+
 
     private void clearTypeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearTypeButtonActionPerformed
         try {
             ((GetTopicButton) typeTopicButton).setTopic((Topic) null);
         }
-            catch(Exception e) {
+        catch (Exception e) {
         }
     }//GEN-LAST:event_clearTypeButtonActionPerformed
 
+
     private void selectCurrentTopicAsSuperclasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectCurrentTopicAsSuperclasActionPerformed
-        if(currentContext != null) {
-            Iterator i = currentContext.getContextObjects();
-            if(i.hasNext()) {
+        if (currentContext != null) {
+            Iterator<?> i = currentContext.getContextObjects();
+            if (i.hasNext()) {
                 Object o = i.next();
-                if(o instanceof Topic) {
+                if (o instanceof Topic) {
                     Topic t = (Topic) o;
                     try {
                         ((GetTopicButton) superclassButton).setTopic(t.getOneSubjectIdentifier().toExternalForm());
                     }
-                    catch(Exception e) {
+                    catch (Exception e) {
                     }
                 }
             }
         }
     }//GEN-LAST:event_selectCurrentTopicAsSuperclasActionPerformed
 
+
     private void pickSLFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pickSLFileActionPerformed
         SimpleFileChooser chooser = UIConstants.getFileChooser();
-        if(chooser != null) {
-            if(chooser.open(wandora, "Select")==SimpleFileChooser.APPROVE_OPTION) {
+        if (chooser != null) {
+            if (chooser.open(wandora, "Select") == SimpleFileChooser.APPROVE_OPTION) {
                 File f = chooser.getSelectedFile();
-                if(f != null) {
+                if (f != null) {
                     String subject = f.toURI().toString();
                     SLTextField.setText(subject);
                 }
@@ -608,20 +615,21 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_pickSLFileActionPerformed
 
+
     private void pickSIFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pickSIFileActionPerformed
         SimpleFileChooser chooser = UIConstants.getFileChooser();
-        if(chooser != null) {
-            if(chooser.open(wandora, "Select")==SimpleFileChooser.APPROVE_OPTION) {
+        if (chooser != null) {
+            if (chooser.open(wandora, "Select") == SimpleFileChooser.APPROVE_OPTION) {
                 File f = chooser.getSelectedFile();
-                if(f != null) {
+                if (f != null) {
                     String subject = f.toURI().toString();
                     SITextField.setText(subject);
                 }
             }
         }
     }//GEN-LAST:event_pickSIFileActionPerformed
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel SILabel;
     private javax.swing.JTextField SITextField;
@@ -651,5 +659,5 @@ public class NewTopicPanelExtended extends javax.swing.JPanel {
     private javax.swing.JPanel typePanel;
     private javax.swing.JButton typeTopicButton;
     // End of variables declaration//GEN-END:variables
-    
+
 }

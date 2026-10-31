@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ public class EuropeanaExtractor extends AbstractEuropeanaExtractor {
 
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             if(ui == null) {
                 ui = new EuropeanaExtractorUI();
@@ -59,7 +59,6 @@ public class EuropeanaExtractor extends AbstractEuropeanaExtractor {
                 }
                 if(extrs != null && extrs.length > 0) {
                     setDefaultLogger();
-                    int c = 0;
                     log("Performing Europeana API query...");
                     for(int i=0; i<extrs.length && !forceStop(); i++) {
                         try {
@@ -67,7 +66,6 @@ public class EuropeanaExtractor extends AbstractEuropeanaExtractor {
                             e.setToolLogger(getDefaultLogger());
                             e.execute(wandora);
                             setState(EXECUTE);
-                            c++;
                         }
                         catch(Exception e) {
                             log(e);

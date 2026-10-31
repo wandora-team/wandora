@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,8 +30,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-class StreamGobbler extends Thread {
+import org.wandora.utils.logger.Log4j2Logger;
 
+class StreamGobbler extends Thread {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(StreamGobbler.class);
+	
+	
     InputStream is;
     StringBuilder outputMessage = new StringBuilder();
 
@@ -53,7 +57,7 @@ class StreamGobbler extends Thread {
                 outputMessage.append(line).append("\n");
             }
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+        	logger.error(ioe);
         }
     }
 }

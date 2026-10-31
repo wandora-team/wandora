@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,22 +31,22 @@ package org.wandora.application.tools.importers;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.Connection;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.LayerTree;
 import org.wandora.topicmap.TopicMap;
-import org.wandora.topicmap.database.DatabaseTopicMap;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
 /**
  * @author akivela
  */
-public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool {
+public class SQLTopicMapImport extends AbstractImportTool {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SQLTopicMapImport.class);
     
 
 	private static final long serialVersionUID = 1L;
@@ -74,17 +74,14 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
     
     
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         TopicMap topicMap = solveContextTopicMap(admin, context);
-        if(topicMap instanceof DatabaseTopicMap) {
-            super.execute(admin, context);
-        }
-        else if(topicMap instanceof org.wandora.topicmap.database2.DatabaseTopicMap) {
+        if(topicMap instanceof org.wandora.topicmap.database2.DatabaseTopicMap) {
             super.execute(admin, context);
         }
         else {
             log("Selected topic map is not a database topic map! Unable to import SQL file.");
-            System.out.println("topicMap:"+topicMap);
+            logger.info("topicMap:"+topicMap);
         }
     }
     
@@ -96,36 +93,7 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
         BufferedReader reader = new BufferedReader( new InputStreamReader(inputStream) );
         
         TopicMap topicMap = solveContextTopicMap(wandora, getContext());
-        if(topicMap instanceof DatabaseTopicMap) {
-            setDefaultLogger();
-            int count = 0;
-            int errorCount = 0;
-            DatabaseTopicMap dbTopicMap = (DatabaseTopicMap) topicMap;
-            try {
-                Connection connection = dbTopicMap.getConnection();
-                String query = reader.readLine();
-                while(query != null && query.length() > 0 && !forceStop()) {
-                    try {
-                        dbTopicMap.executeUpdate(query, connection);
-                        query = reader.readLine();
-                        count++;
-                    }
-                    catch(Exception e) {
-                        log(e);
-                        errorCount++;
-                    }
-                }
-            }
-            catch(Exception e) {
-                log(e);
-            }
-            dbTopicMap.clearTopicMapIndexes();
-            wandora.getTopicMap().clearTopicIndex();
-            log("Injected " + count + " SQL lines into the database topic map.");
-            if(errorCount > 0) log("Encountered " + errorCount + " errors during inject.");
-            setState(WAIT);
-        }
-        else if(topicMap instanceof org.wandora.topicmap.database2.DatabaseTopicMap) {
+        if(topicMap instanceof org.wandora.topicmap.database2.DatabaseTopicMap) {
             setDefaultLogger();
             int count = 0;
             int errorCount = 0;
@@ -177,7 +145,7 @@ public class SQLTopicMapImport extends AbstractImportTool implements WandoraTool
     
     
     @Override
-    public TopicMap solveContextTopicMap(Wandora wandora, Context context) {
+    public TopicMap solveContextTopicMap(Wandora wandora, Context<?> context) {
         LayerTree layerTree = wandora.layerTree;
         TopicMap topicMap = layerTree.getSelectedLayer().getTopicMap();
         if(topicMap instanceof UndoTopicMap) {

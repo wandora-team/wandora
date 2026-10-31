@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,9 +64,9 @@ public class SQLExtractor extends AbstractExtractor {
 	public static String DEFAULT_SI_ENCODING = "UTF-8";
     public static String DEFAULT_LANG = "en";
 
-    public static String RESULTSET_SI = "http://wandora.org/si/sql/resultset";
-    public static String COLUMN_SI = "http://wandora.org/si/sql/resultset/column";
-    public static String VALUE_SI = "http://wandora.org/si/sql/resultset/value";
+    public static String RESULTSET_SI = "https://wandora.org/si/sql/resultset";
+    public static String COLUMN_SI = "https://wandora.org/si/sql/resultset/column";
+    public static String VALUE_SI = "https://wandora.org/si/sql/resultset/value";
 
     private SQLExtractorUI ui = null;
     public static final String defaultOccurrenceScopeSI = TMBox.LANGINDEPENDENT_SI;
@@ -91,7 +91,7 @@ public class SQLExtractor extends AbstractExtractor {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             if(ui == null) {
                 ui = new SQLExtractorUI(wandora);
@@ -193,7 +193,6 @@ public class SQLExtractor extends AbstractExtractor {
                     String name = x;
                     String lang = DEFAULT_LANG;
                     player = createTopic(tm, uri, name);
-                    //System.out.println("lang=="+lang+" name=="+name);
                     player.setDisplayName(lang, name);
 
                     if(role != null && player != null) {

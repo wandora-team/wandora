@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -42,30 +43,31 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class AssociationTypeIterator extends TopicIterator {
 
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AssociationTypeIterator.class);
 
 
 
     @Override
-    public Iterator solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator oldIterator) {
+    public Iterator<Topic> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<Topic> oldIterator) {
         Collection<Topic> associationTypeTopics = new ArrayList<>();
         Collection<Association> associations = null;
         Association association = null;
         Iterator<Association> associationIterator = null;
-        
-        if(topic != null) {
-            try{
+
+        if (topic != null) {
+            try {
                 associations = topic.getAssociations();
-                if(associations != null) {
+                if (associations != null) {
                     associationIterator = associations.iterator();
-                    while(associationIterator.hasNext()) {
+                    while (associationIterator.hasNext()) {
                         association = associationIterator.next();
-                        if(association == null) continue;
+                        if (association == null)
+                            continue;
                         associationTypeTopics.add(association.getType());
                     }
                 }
-            }
-            catch(TopicMapException tme){
-                tme.printStackTrace(); // TODO EXCEPTION
+            } catch (TopicMapException tme) {
+                logger.error(tme);
             }
         }
         return associationTypeTopics.iterator();

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,18 +40,20 @@ import org.wandora.utils.swing.TableSorter;
 public class LocatorTableSorter extends TableSorter {
 
     private static final long serialVersionUID = 1L;
-    
-    
+
+
     public LocatorTableSorter() {
         super();
     }
-    
+
+
     public LocatorTableSorter(TableModel tableModel) {
         super(tableModel);
     }
 
+
     public LocatorTableSorter(TableModel tableModel, JTableHeader tableHeader) {
         super(tableModel, tableHeader);
     }
-    
+
 }

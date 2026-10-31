@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@ package org.wandora.application.gui;
 
 
 
-
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,60 +47,72 @@ import org.wandora.utils.swing.GuiTools;
  * @author  olli
  */
 public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSelector {
-    
 
-	private static final long serialVersionUID = 1L;
 
-	private List<TopicSelector> selectors;
-    private boolean wasCancelled=true;
-    private boolean cleared=false;
-    
-    
+    private static final long serialVersionUID = 1L;
+
+    private List<TopicSelector> selectors;
+    private boolean wasCancelled = true;
+    private boolean cleared = false;
+
+
     /** Creates new form TabbedTopicSelector */
     public TabbedTopicSelector() {
-        selectors=new ArrayList<>();
+        selectors = new ArrayList<>();
         initComponents();
         clearButton.setVisible(false);
     }
-    
-    public void insertTab(TopicSelector selector, int index){
+
+
+    public void insertTab(TopicSelector selector, int index) {
         selectors.add(index, selector);
-        tabbedPane.insertTab(selector.getSelectorName(),null,selector.getPanel(),null,index);
+        tabbedPane.insertTab(selector.getSelectorName(), null, selector.getPanel(), null, index);
     }
-    
-    public void addTab(TopicSelector selector){
+
+
+    public void addTab(TopicSelector selector) {
         selectors.add(selector);
-        tabbedPane.addTab(selector.getSelectorName(),selector.getPanel());
+        tabbedPane.addTab(selector.getSelectorName(), selector.getPanel());
     }
+
 
     @Override
     public Topic[] getSelectedTopics() {
-        if(cleared) return new Topic[0];
-        TopicSelector selector=selectors.get(tabbedPane.getSelectedIndex());
+        if (cleared) {
+            return new Topic[0];
+        }
+        TopicSelector selector = selectors.get(tabbedPane.getSelectedIndex());
         return selector.getSelectedTopics();
     }
 
+
     @Override
     public Topic getSelectedTopic() {
-        if(cleared) return null;
-        TopicSelector selector=selectors.get(tabbedPane.getSelectedIndex());
+        if (cleared) {
+            return null;
+        }
+        TopicSelector selector = selectors.get(tabbedPane.getSelectedIndex());
         return selector.getSelectedTopic();
     }
+
 
     @Override
     public Component getPanel() {
         return this;
     }
-    
+
+
     @Override
-    public String getSelectorName(){
+    public String getSelectorName() {
         return "Tabbed selector";
     }
-    
-    public void setClearVisible(boolean b){
+
+
+    public void setClearVisible(boolean b) {
         clearButton.setVisible(b);
     }
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -141,7 +152,7 @@ public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSele
         gridBagConstraints.weightx = 1.0;
         buttonPanel.add(jPanel1, gridBagConstraints);
 
-        clearButton.setLabel("Select none");
+        clearButton.setText("Select none");
         clearButton.setMargin(new java.awt.Insets(2, 1, 2, 1));
         clearButton.setMaximumSize(new java.awt.Dimension(80, 23));
         clearButton.setMinimumSize(new java.awt.Dimension(80, 23));
@@ -190,71 +201,91 @@ public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSele
         add(buttonPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
-        wasCancelled=false;
-        cleared=true;
-        java.awt.Window w=GuiTools.getWindow(this);
-        if(w!=null) w.setVisible(false);
+        wasCancelled = false;
+        cleared = true;
+        java.awt.Window w = GuiTools.getWindow(this);
+        if (w != null) {
+            w.setVisible(false);
+        }
     }//GEN-LAST:event_clearButtonActionPerformed
 
+
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        wasCancelled=true;
-        cleared=false;
-        java.awt.Window w=GuiTools.getWindow(this);
-        if(w!=null) w.setVisible(false);
+        wasCancelled = true;
+        cleared = false;
+        java.awt.Window w = GuiTools.getWindow(this);
+        if (w != null) {
+            w.setVisible(false);
+        }
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+
     private void selectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectButtonActionPerformed
-        wasCancelled=false;
-        java.awt.Window w=GuiTools.getWindow(this);
-        if(w!=null) w.setVisible(false);        
+        wasCancelled = false;
+        java.awt.Window w = GuiTools.getWindow(this);
+        if (w != null) {
+            w.setVisible(false);
+        }
     }//GEN-LAST:event_selectButtonActionPerformed
+
 
     private void tabbedPaneMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabbedPaneMouseReleased
         Component currentTab = tabbedPane.getSelectedComponent();
-        if(currentTab != null) {
-            if(currentTab instanceof SearchPanel) {
+        if (currentTab != null) {
+            if (currentTab instanceof SearchPanel) {
                 ((SearchPanel) currentTab).requestSearchFieldFocus();
             }
-            else if(currentTab instanceof SelectTopicPanel) {
+            else if (currentTab instanceof SelectTopicPanel) {
                 ((SelectTopicPanel) currentTab).requestSearchFieldFocus();
             }
         }
     }//GEN-LAST:event_tabbedPaneMouseReleased
-    
-    public boolean wasCancelled(){
+
+
+    public boolean wasCancelled() {
         return wasCancelled;
     }
-    
+
+
     @Override
-    public void init(){
+    public void init() {
         // tabbedPane.setSelectedIndex(0);
-        for(TopicSelector s : selectors) s.init();
+        for (TopicSelector s : selectors) {
+            s.init();
+        }
     }
-    
+
+
     @Override
-    public void cleanup(){
-        for(TopicSelector s : selectors) s.cleanup();        
+    public void cleanup() {
+        for (TopicSelector s : selectors) {
+            s.cleanup();
+        }
     }
-    
-    
+
+
     public boolean remember() {
         return rememberCheckBox.isSelected();
     }
-    
+
+
     public void setRemember(boolean remember) {
         rememberCheckBox.setSelected(remember);
     }
-    
+
+
     public Component getSelectedSelector() {
         return tabbedPane.getSelectedComponent();
     }
-    
+
+
     public void setSelectedSelector(Component s) {
         tabbedPane.setSelectedComponent(s);
     }
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
@@ -264,5 +295,5 @@ public class TabbedTopicSelector extends javax.swing.JPanel implements TopicSele
     private javax.swing.JButton selectButton;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
-    
+
 }

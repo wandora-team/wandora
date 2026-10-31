@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
@@ -49,7 +49,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class BasenameNewlineRemover extends AbstractWandoraTool implements WandoraTool {
+public class BasenameNewlineRemover extends AbstractWandoraTool {
 
 
 
@@ -58,7 +58,7 @@ public class BasenameNewlineRemover extends AbstractWandoraTool implements Wando
 
 	public BasenameNewlineRemover() {
     }
-    public BasenameNewlineRemover(Context preferredContext) {
+    public BasenameNewlineRemover(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -75,31 +75,26 @@ public class BasenameNewlineRemover extends AbstractWandoraTool implements Wando
     }
     
   
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Removing newline characters in base names");
             log("Removing newline characters in base names");
             
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;
             String basename = null;
             String newBasename = null;
-            int c = 0;
-            int changed = 0;
-            int progress = 0;
-            HashMap<Topic,String> changeTopics = new HashMap<Topic,String>();
+            Map<Topic,String> changeTopics = new HashMap<>();
             
             while(topics.hasNext() && !forceStop()) {
                 try {
                     topic = (Topic) topics.next();
-                    c++;
                     if(topic != null) {
                         basename = topic.getBaseName();
                         if(basename != null) {
-                            progress++;
                             hlog("Investigating topic '" + basename + "'.");
                             if(basename.indexOf("\n") != -1 || basename.indexOf("\r") != -1) {
                                 newBasename = basename.replaceAll("\r", "");
@@ -123,7 +118,6 @@ public class BasenameNewlineRemover extends AbstractWandoraTool implements Wando
                     newBasename = changeTopics.get(t);
                     t.setBaseName(newBasename);
                     log("Changed base name to '"+newBasename + "'.");
-                    changed++;
                 }
                 catch(Exception e) {
                     log(e);

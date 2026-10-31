@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -128,7 +128,7 @@ public class HistogramPanel extends javax.swing.JPanel {
         jd.getContentPane().setLayout(new GridBagLayout());
         HistogramPanel p=new HistogramPanel(data,jd,infoPattern,mousePattern);
         GridBagConstraints gbc=new GridBagConstraints();
-        gbc.fill=gbc.BOTH;
+        gbc.fill=GridBagConstraints.BOTH;
         gbc.gridx=0;
         gbc.gridy=0;
         gbc.weightx=1.0;
@@ -296,7 +296,7 @@ public class HistogramPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void copyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyButtonActionPerformed
-        StringBuffer sb=new StringBuffer();
+        StringBuilder sb=new StringBuilder();
         for(int i=0;i<dataSize;i++){
             sb.append(i+"\t"+data[i]+"\n");
         }

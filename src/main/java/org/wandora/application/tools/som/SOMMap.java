@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ import java.util.Set;
 import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Topic;
 import org.wandora.utils.Tuples.T3;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -42,6 +43,8 @@ import org.wandora.utils.Tuples.T3;
  * @author akivela
  */
 public class SOMMap {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SOMMap.class);
+	
     public static boolean RANDOM_TRAINING_VECTOR_SELECTION = false;
     
     private Map<Topic,SOMVector> samples = null;
@@ -219,7 +222,7 @@ public class SOMMap {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }

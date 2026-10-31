@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
 
 
 public class WPRFileChooser extends SimpleFileChooser {
-    
+
     private static final long serialVersionUID = 1L;
 
 
@@ -43,13 +43,15 @@ public class WPRFileChooser extends SimpleFileChooser {
     public WPRFileChooser() {
         initialize();
     }
+
+
     public WPRFileChooser(String currentPath) {
         super(currentPath);
-        initialize();       
+        initialize();
     }
 
-    
-    
+
+
     private void initialize() {
         setFileFilter(new WPRFileFilter());
         setFileView(new WPRFileView());

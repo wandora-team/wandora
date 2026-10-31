@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.Association;
@@ -58,7 +57,7 @@ import org.wandora.utils.Textbox;
  *
  * @author akivela
  */
-public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
+public class PasteTopics extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -85,7 +84,7 @@ public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
     public boolean ACCEPT_UNKNOWN_TOPICS = false;
     public boolean USER_HAS_BEEN_ASKED = false;
     
-    public Iterator contextTopics = null;
+    public Iterator<?> contextTopics = null;
     public Topic currentTopic = null;
     public TopicMap topicMap = null;
     
@@ -101,15 +100,15 @@ public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
         this.pasteOrders = pasteOrders;
         this.includeOrders = includeOrders;
     }
-    public PasteTopics(Context context) {
+    public PasteTopics(Context<?> context) {
         this(INCLUDE_NOTHING);
         setContext(context);
     }
-    public PasteTopics(Context context, int includeOrders) {
+    public PasteTopics(Context<?> context, int includeOrders) {
         this(includeOrders);
         setContext(context);
     }
-    public PasteTopics(Context context, int includeOrders, int pasteOrders) {
+    public PasteTopics(Context<?> context, int includeOrders, int pasteOrders) {
         this(includeOrders, pasteOrders);
         setContext(context);
     }
@@ -128,7 +127,7 @@ public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
   
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         initialize(wandora);
 
         try {
@@ -225,7 +224,6 @@ public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
                                                             String si = nt.nextToken();
                                                             if(si != null && si.length() > 0) {
                                                                 try {
-                                                                    //System.out.println("Adding SI '" +si+ "' to " + topic.getBaseName());
                                                                     topic.addSubjectIdentifier(new Locator(si));
                                                                 }
                                                                 catch (Exception e) {
@@ -367,10 +365,10 @@ public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
                             if(isBasename) {
                                 t = topicMap.createTopic();
                                 t.setBaseName(identifier);
-                                String si = "http://wandora.org/si/" + System.currentTimeMillis();
+                                String si = "https://wandora.org/si/" + System.currentTimeMillis();
                                 int counter = 1000;
                                 while(topicMap.getTopic(si) != null && --counter > 0) {
-                                    si = "http://wandora.org/si/" + System.currentTimeMillis() + Math.floor(Math.random() * 10000);
+                                    si = "https://wandora.org/si/" + System.currentTimeMillis() + Math.floor(Math.random() * 10000);
                                 }
                                 t.addSubjectIdentifier(new Locator(si));
                             }
@@ -395,9 +393,9 @@ public class PasteTopics extends AbstractWandoraTool implements WandoraTool {
     
     
     
-    public boolean isKnownTopic(Topic topic, Context context)  throws TopicMapException {
+    public boolean isKnownTopic(Topic topic, Context<?> context)  throws TopicMapException {
         if(topic == null || context == null) return false;
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         while(topics.hasNext()) {
             if(topic.mergesWithTopic((Topic) topics.next())) return true;
         }

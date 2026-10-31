@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,15 +38,15 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.HTMLEntitiesCoder;
 import org.wandora.utils.IObox;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author Eero
  */
 public class NYTEventSearchExtractor extends AbstractNYTExtractor {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(NYTEventSearchExtractor.class);
 
 	private static String defaultLang = "en";
     private static String currentURL = null;
@@ -81,8 +81,9 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
 
             String in = IObox.doUrl(u);
 
-            System.out.println("New York Times API returned-------------------------\n" + in
-                    + "\n----------------------------------------------------");
+            logger.info("New York Times API returned-------------------------");
+            logger.info(in);
+            logger.info("----------------------------------------------------");
             
             JSONObject json = new JSONObject(in);
             if (json.get("num_results").toString().equals("0")){
@@ -92,7 +93,7 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return true;
     }
@@ -115,7 +116,7 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
                 }
             } catch (JSONException ex) {
                 log(ex);
-                System.out.println(ex);
+                logger.error(ex);
             }
         }
     }
@@ -202,7 +203,7 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
             if (result.has("event_date_list")){
               String dates = "";
               JSONArray resultJSONArray = result.getJSONArray("event_date_list");
-              Locale locale = new Locale("ENGLISH");
+              Locale locale = Locale.of("en");
               SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd",locale);
               SimpleDateFormat output = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss '-0500'",locale);
               for( int i = 0; i < resultJSONArray.length(); i++ ){
@@ -224,7 +225,7 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
                 eventTopic.setData(dateTypeTopic, langTopic, dates);
               }
             } else if (result.has("recurring_start_date")) {
-              Locale locale = new Locale("ENGLISH");
+              Locale locale = Locale.of("en");
               SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",locale);
               SimpleDateFormat output = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss '-0500'",locale);
               String startDateString = result.getString("recurring_start_date");
@@ -232,7 +233,7 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
                 Date startDate = input.parse(startDateString);
                 startDateString = output.format(startDate);
               } catch (Exception e){
-                System.out.println("dateparseerror");
+                logger.error("dateparseerror");
               }
               
               if(startDateString != null && startDateString.length() > 0) {
@@ -265,7 +266,7 @@ public class NYTEventSearchExtractor extends AbstractNYTExtractor {
                    Date endDate = input.parse(endDateString);
                    endDateString = output.format(endDate);
                 } catch (Exception e){
-                  System.out.println("dateparseerror");
+                  logger.error("dateparseerror");
                 }
                 if(endDateString != null && endDateString.length() > 0) {
                   Topic dateEndTypeTopic = getEndDateTypeTopic(tm);

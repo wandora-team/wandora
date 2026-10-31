@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,6 +54,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -63,9 +64,8 @@ import org.wandora.utils.XMLbox;
  * @author olli
  */
 public class RDFExport extends AbstractExportTool {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RDFExport.class);
 	
 	
 	public boolean EXPORT_SELECTION_INSTEAD_TOPIC_MAP = false;
@@ -100,7 +100,7 @@ public class RDFExport extends AbstractExportTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setDialogTitle("RDF N3 Export");
         if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){
@@ -127,7 +127,7 @@ public class RDFExport extends AbstractExportTool {
                 setState(WAIT);
             }
             catch(Exception e){
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }
@@ -271,7 +271,7 @@ public class RDFExport extends AbstractExportTool {
                             getTopicLocator(object).toExternalForm()+"> .");
         }
         else{
-            String about="http://wandora.org/si/rdfexport/association/"+(associationCounter++);
+            String about="https://wandora.org/si/rdfexport/association/"+(associationCounter++);
             for(Topic t : a.getRoles()){
 /*                out.println("  <rdf:Statement> ");
                 out.println("      <rdf:subject rdf:resource=\""+attribute(about)+"\"/>");

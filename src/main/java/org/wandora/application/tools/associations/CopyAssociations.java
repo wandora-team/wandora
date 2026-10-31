@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.topicstringify.TopicToString;
@@ -61,7 +60,7 @@ import org.wandora.utils.ClipboardBox;
  * 
  * @author  akivela
  */
-public class CopyAssociations extends AbstractWandoraTool implements WandoraTool {
+public class CopyAssociations extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -77,16 +76,16 @@ public class CopyAssociations extends AbstractWandoraTool implements WandoraTool
     private int layout = WANDORA_LAYOUT;
 
     
-    public CopyAssociations(Wandora wandora, Context context)  throws TopicMapException {
+    public CopyAssociations(Wandora wandora, Context<?> context)  throws TopicMapException {
         this(wandora, context, TABTEXT_OUTPUT);
     }
     
-    public CopyAssociations(Wandora wandora, Context context, int outputFormat)  throws TopicMapException {
+    public CopyAssociations(Wandora wandora, Context<?> context, int outputFormat)  throws TopicMapException {
         this.outputFormat = outputFormat;
         setContext(context);
     }
     
-    public CopyAssociations(Wandora wandora, Context context, int outputFormat, int outputLayout)  throws TopicMapException {
+    public CopyAssociations(Wandora wandora, Context<?> context, int outputFormat, int outputLayout)  throws TopicMapException {
         this.outputFormat = outputFormat;
         this.layout = outputLayout;
         setContext(context);
@@ -94,18 +93,18 @@ public class CopyAssociations extends AbstractWandoraTool implements WandoraTool
     
     
     
-    public CopyAssociations(Context context) {
+    public CopyAssociations(Context<?> context) {
         this(context, TABTEXT_OUTPUT);
     }
     
     
-    public CopyAssociations(Context context, int outputFormat) {
+    public CopyAssociations(Context<?> context, int outputFormat) {
         setContext(context);
         this.outputFormat = outputFormat;
     }
     
     
-    public CopyAssociations(Context context, int outputFormat, int outputLayout) {
+    public CopyAssociations(Context<?> context, int outputFormat, int outputLayout) {
         setContext(context);
         this.outputFormat = outputFormat;
         this.layout = outputLayout;
@@ -140,7 +139,7 @@ public class CopyAssociations extends AbstractWandoraTool implements WandoraTool
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         String associationText = makeString(wandora);
         if(associationText != null && associationText.length() > 0) {
             ClipboardBox.setClipboard(associationText);
@@ -157,7 +156,7 @@ public class CopyAssociations extends AbstractWandoraTool implements WandoraTool
         Map<Topic,Set<Topic>> rolesByType = new LinkedHashMap<>();
 
         Iterator<Association> associations = null;
-        Iterator context = getContext().getContextObjects();
+        Iterator<?> context = getContext().getContextObjects();
         Association a = null;
         Topic t = null;
         Object aort = null;

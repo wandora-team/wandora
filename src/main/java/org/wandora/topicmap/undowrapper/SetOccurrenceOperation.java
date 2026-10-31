@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,52 +41,73 @@ public class SetOccurrenceOperation extends UndoOperation {
     protected String oldValue;
     protected String newValue;
 
-    public SetOccurrenceOperation(Topic t,Topic type,Topic version,String value) throws TopicMapException, UndoException {
-        this.tm=t.getTopicMap();
-        si=t.getOneSubjectIdentifier();
-        if(si==null) throw new UndoException("Topic has no subject identifier");
-        typeSi=type.getOneSubjectIdentifier();
-        if(typeSi==null) throw new UndoException("Type topic has no subject identifier");
-        versionSi=version.getOneSubjectIdentifier();
-        if(versionSi==null) throw new UndoException("Version topic has no subject identifier");
-        oldValue=t.getData(type, version);
-        newValue=value;
+    public SetOccurrenceOperation(Topic t, Topic type, Topic version, String value)
+            throws TopicMapException, UndoException {
+        
+        this.tm = t.getTopicMap();
+        si = t.getOneSubjectIdentifier();
+        if (si == null)
+            throw new UndoException("Topic has no subject identifier");
+        typeSi = type.getOneSubjectIdentifier();
+        if (typeSi == null)
+            throw new UndoException("Type topic has no subject identifier");
+        versionSi = version.getOneSubjectIdentifier();
+        if (versionSi == null)
+            throw new UndoException("Version topic has no subject identifier");
+        oldValue = t.getData(type, version);
+        newValue = value;
     }
+
 
     @Override
     public String getLabel() {
         return "occurrence";
     }
 
+
     @Override
     public void undo() throws UndoException {
-        try{
-            Topic t=tm.getTopic(si);
-            if(t==null) throw new UndoException();
-            Topic type=tm.getTopic(typeSi);
-            if(type==null) throw new UndoException();
-            Topic version=tm.getTopic(versionSi);
-            if(version==null) throw new UndoException();
+        try {
+            Topic t = tm.getTopic(si);
+            if (t == null)
+                throw new UndoException();
+            Topic type = tm.getTopic(typeSi);
+            if (type == null)
+                throw new UndoException();
+            Topic version = tm.getTopic(versionSi);
+            if (version == null)
+                throw new UndoException();
 
-            if(oldValue==null) t.removeData(type,version);
-            else t.setData(type, version,oldValue);
-        }catch(TopicMapException tme){throw new UndoException(tme);}
+            if (oldValue == null)
+                t.removeData(type, version);
+            else
+                t.setData(type, version, oldValue);
+        }
+        catch (TopicMapException tme) {
+            throw new UndoException(tme);
+        }
     }
+
 
     @Override
     public void redo() throws UndoException {
-        try{
-            Topic t=tm.getTopic(si);
-            if(t==null) throw new UndoException();
-            Topic type=tm.getTopic(typeSi);
-            if(type==null) throw new UndoException();
-            Topic version=tm.getTopic(versionSi);
-            if(version==null) throw new UndoException();
+        try {
+            Topic t = tm.getTopic(si);
+            if (t == null)
+                throw new UndoException();
+            Topic type = tm.getTopic(typeSi);
+            if (type == null)
+                throw new UndoException();
+            Topic version = tm.getTopic(versionSi);
+            if (version == null)
+                throw new UndoException();
 
-            if(newValue==null) t.removeData(type, version);
-            else t.setData(type, version,newValue);
+            if (newValue == null)
+                t.removeData(type, version);
+            else
+                t.setData(type, version, newValue);
         }
-        catch(TopicMapException tme){
+        catch (TopicMapException tme) {
             throw new UndoException(tme);
         }
     }

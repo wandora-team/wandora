@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ package org.wandora.application.tools;
 
 
 
+import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -37,7 +38,6 @@ import javax.swing.Icon;
 import javax.swing.JDialog;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.ConfirmResult;
 import org.wandora.application.gui.NewTopicPanel;
@@ -61,7 +61,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class NewTopic extends AbstractWandoraTool implements WandoraTool {
+public class NewTopic extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -88,7 +88,7 @@ public class NewTopic extends AbstractWandoraTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         Topic newTopic = null;
         String confirmMessage = null;
         String basename = null;
@@ -102,7 +102,7 @@ public class NewTopic extends AbstractWandoraTool implements WandoraTool {
         // --- Now we are going to post process the created topic.
         switch(orders) {
             case MAKE_INSTANCE_OF_CONTEXT: {
-                Iterator contextTopics = getContext().getContextObjects();
+                Iterator<?> contextTopics = getContext().getContextObjects();
                 if(contextTopics != null && contextTopics.hasNext()) {
                     while(contextTopics.hasNext()) {
                         contextTopic = (Topic) contextTopics.next();
@@ -132,7 +132,7 @@ public class NewTopic extends AbstractWandoraTool implements WandoraTool {
                 break;
             }
             case MAKE_SUBCLASS_OF_CONTEXT: {
-                Iterator contextTopics = getContext().getContextObjects();
+                Iterator<?> contextTopics = getContext().getContextObjects();
                 if(contextTopics != null && contextTopics.hasNext()) {
                     while(contextTopics.hasNext()) {
                         contextTopic = (Topic) contextTopics.next();
@@ -192,7 +192,7 @@ public class NewTopic extends AbstractWandoraTool implements WandoraTool {
     
     
     
-    public Topic createNewTopic(Wandora wandora, String windowTitle, Context context)  throws TopicMapException {
+    public Topic createNewTopic(Wandora wandora, String windowTitle, Context<?> context)  throws TopicMapException {
         Topic newTopic = null;
         TopicMap topicMap = wandora.getTopicMap();
 
@@ -228,7 +228,7 @@ public class NewTopic extends AbstractWandoraTool implements WandoraTool {
                 }
                 if(si != null && si.length() > 0) {
                     try {
-                        URL siUrl = new URL(si);
+                        URL siUrl = new URI(si).toURL();
                         newTopic.addSubjectIdentifier(topicMap.createLocator(siUrl.toExternalForm()));
                     }
                     catch(Exception e) {

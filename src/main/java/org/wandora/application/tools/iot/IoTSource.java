@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 package org.wandora.application.tools.iot;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 
 /**
  * An IoTSource represents a simple virtual source of data for the IoT tool. It
@@ -43,6 +44,6 @@ public interface IoTSource {
      */
     String getData(String url);
     
-    boolean matches(String url) throws MalformedURLException;
+    boolean matches(String url) throws MalformedURLException, URISyntaxException;
     
 }

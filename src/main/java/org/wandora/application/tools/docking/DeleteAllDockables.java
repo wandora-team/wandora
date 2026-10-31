@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ package org.wandora.application.tools.docking;
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -34,9 +35,8 @@ import org.wandora.application.gui.topicpanels.DockingFramePanel;
 
 
 public class DeleteAllDockables extends AbstractDockingTool {
-	
-	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DeleteAllDockables.class);
 
 
     /** Creates a new instance of DeleteAllDockables */
@@ -51,14 +51,14 @@ public class DeleteAllDockables extends AbstractDockingTool {
     
     
     @Override
-    public void execute(Wandora w, Context context) {
+    public void execute(Wandora w, Context<?> context) {
         DockingFramePanel dockingPanel = this.solveDockingFramePanel(w, context);
         if(dockingPanel != null) {
             try {
                 dockingPanel.deleteAllDockables();
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }    

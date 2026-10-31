@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,12 +30,13 @@ package org.wandora.application.tools.extractors.foaf;
 
 
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.StringBufferInputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.Icon;
 
@@ -58,6 +59,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -66,11 +68,9 @@ import org.wandora.topicmap.XTMPSI;
  * @author akivela
  */
 public class FoafRDFExtractor extends AbstractExtractor {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(FoafRDFExtractor.class);
 	
-	
-	private String defaultEncoding = "UTF-8";
     public static String defaultLanguage = "en";
     
     
@@ -111,7 +111,7 @@ public class FoafRDFExtractor extends AbstractExtractor {
     }
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         super.execute(wandora, context);
     }
     
@@ -144,7 +144,7 @@ public class FoafRDFExtractor extends AbstractExtractor {
     
     public boolean _extractTopicsFrom(String in, TopicMap tm) throws Exception {        
         try {           
-            importFoafRDF(new StringBufferInputStream(in), tm);
+            importFoafRDF(new ByteArrayInputStream(in.getBytes(StandardCharsets.UTF_8)), tm);
         }
         catch(Exception e){
             log("Exception when handling request",e);
@@ -204,7 +204,7 @@ public class FoafRDFExtractor extends AbstractExtractor {
         Property predicate = stmt.getPredicate();   // get the predicate
         RDFNode object     = stmt.getObject();      // get the object
 
-        System.out.println("statement:\n  "+subject+"\n   "+predicate+"\n    "+object);
+        logger.info("statement:\n  {}\n   {}\n    {}", subject, predicate, object);
         
         Topic subjectTopic = getOrCreateTopic(map, subject.toString());
         Topic predicateTopic = getOrCreateTopic(map, predicate.toString());
@@ -243,31 +243,31 @@ public class FoafRDFExtractor extends AbstractExtractor {
     
     String[] roles = new String[] {
         "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-                "http://wandora.org/si/core/rdf-type-carrier", "rdf-type-carrier",
-                "http://wandora.org/si/core/rdf-type", "rdf-type",
+                "https://wandora.org/si/core/rdf-type-carrier", "rdf-type-carrier",
+                "https://wandora.org/si/core/rdf-type", "rdf-type",
                 
         "http://www.w3.org/2000/01/rdf-schema#seeAlso",
-                "http://wandora.org/si/core/subject", "subject",
-                "http://wandora.org/si/core/rdf-schema/see-also", "rdf-see-also",
+                "https://wandora.org/si/core/subject", "subject",
+                "https://wandora.org/si/core/rdf-schema/see-also", "rdf-see-also",
                 
         "http://xmlns.com/foaf/0.1/nick",
-                "http://wandora.org/si/foaf/person", "person",
-                "http://wandora.org/si/foaf/nick", "nick",
+                "https://wandora.org/si/foaf/person", "person",
+                "https://wandora.org/si/foaf/nick", "nick",
                 
         "http://xmlns.com/foaf/0.1/weblog",
-                "http://wandora.org/si/foaf/person", "person",
-                "http://wandora.org/si/foaf/weblog", "weblog",
+                "https://wandora.org/si/foaf/person", "person",
+                "https://wandora.org/si/foaf/weblog", "weblog",
                 
         "http://xmlns.com/foaf/0.1/homepage",
-                "http://wandora.org/si/foaf/person", "person",
-                "http://wandora.org/si/foaf/homepage", "homepage",
+                "https://wandora.org/si/foaf/person", "person",
+                "https://wandora.org/si/foaf/homepage", "homepage",
 
         "http://xmlns.com/foaf/0.1/member",
-                "http://wandora.org/si/foaf/person", "person",
-                "http://wandora.org/si/foaf/group", "group",
+                "https://wandora.org/si/foaf/person", "person",
+                "https://wandora.org/si/foaf/group", "group",
         "http://xmlns.com/foaf/0.1/knows",
-                "http://wandora.org/si/foaf/person", "person",
-                "http://wandora.org/si/foaf/known-person", "known-person",
+                "https://wandora.org/si/foaf/person", "person",
+                "https://wandora.org/si/foaf/known-person", "known-person",
     };
     
     
@@ -276,7 +276,7 @@ public class FoafRDFExtractor extends AbstractExtractor {
     public Topic solveSubjectRoleFor(Property predicate, Resource subject, TopicMap map) {
         if(map == null) return null;
         String predicateString = predicate.toString();
-        String si = "http://wandora.org/si/core/rdf-subject";
+        String si = "https://wandora.org/si/core/rdf-subject";
         String bn = "subject-role";
         for(int i=0; i<roles.length; i=i+5) {
             if(predicateString.equals(roles[i])) {
@@ -291,7 +291,7 @@ public class FoafRDFExtractor extends AbstractExtractor {
     public Topic solveObjectRoleFor(Property predicate, RDFNode object, TopicMap map) {
         if(map == null) return null;
         String predicateString = predicate.toString();
-        String si = "http://wandora.org/si/core/rdf-object";
+        String si = "https://wandora.org/si/core/rdf-object";
         String bn = "object-role";
         for(int i=0; i<roles.length; i=i+5) {
             if(predicateString.equals(roles[i])) {
@@ -460,7 +460,7 @@ public class FoafRDFExtractor extends AbstractExtractor {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return topic;
     }

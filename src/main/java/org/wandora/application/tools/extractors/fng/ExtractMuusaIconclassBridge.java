@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,6 @@ import java.io.StringReader;
 import java.net.URL;
 import java.util.Hashtable;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -73,7 +72,7 @@ import org.wandora.utils.Textbox;
  *
  * @author akivela
  */
-public class ExtractMuusaIconclassBridge extends AbstractExtractor implements WandoraTool {
+public class ExtractMuusaIconclassBridge extends AbstractExtractor {
     
 
 	private static final long serialVersionUID = 1L;
@@ -172,10 +171,10 @@ public class ExtractMuusaIconclassBridge extends AbstractExtractor implements Wa
                 iconclassType.addSubjectIdentifier(new Locator("http://www.iconclass.nl/"));
                 iconclassType.setBaseName("Keyword (iconclass)");
             }
-            Topic muusaIconclassBridgeType=topicMap.getTopic("http://wandora.org/si/muusa_iconclass_bridge");
+            Topic muusaIconclassBridgeType=topicMap.getTopic("https://wandora.org/si/muusa_iconclass_bridge");
             if(muusaIconclassBridgeType == null) {
                 muusaIconclassBridgeType = topicMap.createTopic();
-                muusaIconclassBridgeType.addSubjectIdentifier(new Locator("http://wandora.org/si/muusa_iconclass_bridge"));
+                muusaIconclassBridgeType.addSubjectIdentifier(new Locator("https://wandora.org/si/muusa_iconclass_bridge"));
                 muusaIconclassBridgeType.setBaseName("Keyword bridge (muusa - iconclass)");
             }
 
@@ -200,9 +199,7 @@ public class ExtractMuusaIconclassBridge extends AbstractExtractor implements Wa
                 tokens = line.split("\t");
                 for(int i=0; i<tokens.length; i++) { // Trim results!
                     if(tokens[i] != null && tokens[i].length() > 0) {
-                        //System.out.print("trimming " + tokens[i]);
                         tokens[i] = Textbox.trimExtraSpaces(tokens[i]);
-                        //System.out.print(" --> " + tokens[i]);
                     }
                 }
                 if(tokens.length > 1) {
@@ -219,7 +216,6 @@ public class ExtractMuusaIconclassBridge extends AbstractExtractor implements Wa
                         }
                     }
                     if(muusaKeyword != null) {
-                        //System.out.println("tokens length:" + tokens.length);
                         if(tokens.length > 3 && isValidIconclass(tokens[3])) { // Iconclass code exists!
                             iconclassCode = tokens[3];
                             log("Found iconclass keyword '" + iconclassCode + "'.");
@@ -342,7 +338,7 @@ public class ExtractMuusaIconclassBridge extends AbstractExtractor implements Wa
     
     public Locator getLocatorForIconclass(String iconclassCode) {
         try {
-            return new Locator( TopicTools.cleanDirtyLocator("http://wandora.org/si/iconclass/" + iconclassCode) );
+            return new Locator( TopicTools.cleanDirtyLocator("https://wandora.org/si/iconclass/" + iconclassCode) );
         }
         catch(Exception e) {
             log(e);

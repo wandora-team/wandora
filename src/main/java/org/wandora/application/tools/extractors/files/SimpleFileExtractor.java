@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@ import java.util.Date;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
@@ -55,20 +54,21 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.Textbox;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author akivela
  */
-public class SimpleFileExtractor extends AbstractExtractor implements WandoraTool, BrowserPluginExtractor {
-
+public class SimpleFileExtractor extends AbstractExtractor implements BrowserPluginExtractor {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleFileExtractor.class);
 	
 	
-	protected static String TOPIC_SI = "http://wandora.org/si/topic";
-    protected static String SOURCE_SI = "http://wandora.org/si/source";
-    protected static String DOCUMENT_SI = "http://wandora.org/si/document";
+	protected static String TOPIC_SI = "https://wandora.org/si/topic";
+    protected static String SOURCE_SI = "https://wandora.org/si/source";
+    protected static String DOCUMENT_SI = "https://wandora.org/si/document";
 
     protected static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     
@@ -186,7 +186,7 @@ public class SimpleFileExtractor extends AbstractExtractor implements WandoraToo
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
         wandora.doRefresh();
@@ -208,7 +208,7 @@ public class SimpleFileExtractor extends AbstractExtractor implements WandoraToo
 
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         visitedDirectories = new ArrayList<String>();
         super.execute(wandora, context);
     }
@@ -222,7 +222,7 @@ public class SimpleFileExtractor extends AbstractExtractor implements WandoraToo
         try {
             int hash = str.hashCode();
             Topic documentType = this.getDocumentType(topicMap);
-            String locator = "http://wandora.org/si/simple-file-extractor/"+hash;
+            String locator = "https://wandora.org/si/simple-file-extractor/"+hash;
 
             String name = null;
             if(str.length() > 80) {

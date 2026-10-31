@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,6 @@ import java.util.Stack;
 import javax.swing.Icon;
 
 import org.w3c.tidy.Tidy;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Association;
@@ -56,13 +55,16 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author akivela
  */
-public class HCardExtractor extends AbstractExtractor implements WandoraTool {
+public class HCardExtractor extends AbstractExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(HCardExtractor.class);
     
 
 	private static final long serialVersionUID = 1L;
@@ -158,9 +160,9 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
         //tidyXML = HTMLEntitiesCoder.decode(tidyXML);
         //tidyXML = tidyXML.replace("&amp;deg;", "&#0176;");
         
-        System.out.println("------");
-        System.out.println(tidyXML);
-        System.out.println("------");
+        logger.info("------");
+        logger.info(tidyXML);
+        logger.info("------");
         
         javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -192,7 +194,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
         private TopicMap tm = null;
         private HCardExtractor parent = null;
 
-        public static final String SI_PREFIX = "http://wandora.org/si/hcard/";
+        public static final String SI_PREFIX = "https://wandora.org/si/hcard/";
 
         public static final String ABBR = "abbr";
         
@@ -352,12 +354,12 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
             String clas = atts.getValue("class");
             String abbrTitle = atts.getValue("title");
             
-            if(debug) System.out.print("qname=="+ qName);
-            if(debug) System.out.print(", class=="+ clas);
-            if(debug) System.out.print(", sstate="+state);
+            if(debug) logger.info("qname=="+ qName);
+            if(debug) logger.info(", class=="+ clas);
+            if(debug) logger.info(", sstate="+state);
             
             if(clas == null) {
-                if(debug) System.out.println(", no class here - rejecting");
+                if(debug) logger.info(", no class here - rejecting");
                 return;
             }
 
@@ -875,7 +877,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                 }
             }
             
-            if(debug) System.out.println(", nstate="+state);
+            if(debug) logger.info(", nstate="+state);
         }
 
         
@@ -914,7 +916,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
             // **** POP STATE ****
             if(!stateStack.empty()) {
                 state = (ArrayList<Integer>) stateStack.pop();
-                if(debug) System.out.println("  popping state:"+state);
+                if(debug) logger.info("  popping state:"+state);
             }
             else {
                 state = new ArrayList<Integer>();
@@ -1141,7 +1143,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
         private String catenate(String base, char[] data, int start, int length) {
             if(base == null) base = "";
             base = base + new String(data,start,length);
-            if(debug) System.out.println("  string=="+base);
+            if(debug) logger.info("  string=="+base);
             return base;
         }
 
@@ -1269,10 +1271,10 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                         }
                         if(cardName.length() == 0) {
                             if(n.fn != null) {
-                                System.out.print("n.fn == " + n.fn);
+                                logger.info("n.fn == " + n.fn);
                                 n.fn = n.fn.trim();
                                 cardName = n.fn;
-                                System.out.print("cardName == " + cardName);
+                                logger.info("cardName == " + cardName);
 
                                 if(n.fn.indexOf(", ") != -1) {
                                     String[] ns = n.fn.split(", ");
@@ -1622,7 +1624,7 @@ public class HCardExtractor extends AbstractExtractor implements WandoraTool {
                 }
             }
             if(t == null) {
-                System.out.println("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
+                logger.info("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
             }
             return t;
         }

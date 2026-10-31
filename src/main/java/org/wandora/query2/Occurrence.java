@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 package org.wandora.query2;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import org.wandora.topicmap.Topic;
@@ -107,7 +108,7 @@ public class Occurrence extends Directive implements DirectiveUIHints.Provider {
                 Topic typeT=type.getOperandTopic(context,input);
                 if(typeT==null) return new ResultIterator.EmptyIterator();
                 Hashtable<Topic,String> data=((Topic)o).getData(typeT);
-                ArrayList<ResultRow> ret=new ArrayList<ResultRow>();
+                List<ResultRow> ret=new ArrayList<>();
                 if(data!=null){
                     for(Map.Entry<Topic,String> e : data.entrySet()){
                         ret.add(input.addValues(new String[]{DEFAULT_NS+"occurrence_version",DEFAULT_COL}, new Object[]{e.getKey(),e.getValue()}));
@@ -116,7 +117,7 @@ public class Occurrence extends Directive implements DirectiveUIHints.Provider {
                 return new ResultIterator.ListIterator(ret);
             }
             else {
-                ArrayList<ResultRow> ret=new ArrayList<ResultRow>();
+                List<ResultRow> ret=new ArrayList<>();
                 for(Topic typeT : ((Topic)o).getDataTypes()){
                     Hashtable<Topic,String> data=((Topic)o).getData(typeT);
                     if(data!=null){

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,11 +29,15 @@
 
 package org.wandora.application.tools.som;
 
+import org.wandora.utils.logger.Log4j2Logger;
+
 /**
  *
  * @author akivela
  */
 public class SOMNeuron {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SOMNeuron.class);
     private SOMVector vector = null;
         
     public SOMNeuron(int dim) {
@@ -61,7 +65,7 @@ public class SOMNeuron {
     }
         
     public void print() {
-        if(vector == null) System.out.println("-null-");
+        if(vector == null) logger.info("-null-");
         else vector.print();
     }
     @Override

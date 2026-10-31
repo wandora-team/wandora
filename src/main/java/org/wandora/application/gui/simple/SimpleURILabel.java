@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ import java.net.URI;
 
 import org.wandora.application.gui.UIBox;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -39,19 +40,21 @@ import org.wandora.utils.DataURL;
 public class SimpleURILabel extends SimpleLabel {
 
     private static final long serialVersionUID = 1L;
-    
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleURILabel.class);
+
     private static BufferedImage invalidURIImage = UIBox.getImage("gui/icons/invalid_uri.png");
-    
+
     private String completeLabelString = null;
 
 
-    
+
     @Override
     public void setText(String str) {
-        if(DataURL.isDataURL(str)) {
+        if (DataURL.isDataURL(str)) {
             completeLabelString = str;
-            String strFragment = str.substring(0, Math.min(str.length(), 64)) + "... ("+str.length()+")";
-            System.out.println("strFragment=="+strFragment);
+            String strFragment = str.substring(0, Math.min(str.length(), 64)) + "... (" + str.length() + ")";
+            logger.debug("strFragment==" + strFragment);
             super.setText(strFragment);
         }
         else {
@@ -59,51 +62,51 @@ public class SimpleURILabel extends SimpleLabel {
             super.setText(str);
         }
     }
-    
-    
+
+
     @Override
     public String getText() {
         try {
-            if(completeLabelString != null) {
+            if (completeLabelString != null) {
                 return completeLabelString;
             }
             else {
                 return super.getText();
             }
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error(e);
         }
         return "";
     }
-    
-    
+
+
     public boolean isValidURI() {
         String u = getText();
-        if(u != null && u.length() > 0) {
+        if (u != null && u.length() > 0) {
             try {
-                if(DataURL.isDataURL(u)) {
+                if (DataURL.isDataURL(u)) {
                     return true;
                 }
                 new URI(u);
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 return false;
             }
         }
         return true;
     }
 
-    
-    
+
+
     @Override
     public void paint(Graphics gfx) {
         super.paint(gfx);
-        if(!isValidURI()) {
-            gfx.drawImage(invalidURIImage, this.getWidth()-18, 0, this);
+        if (!isValidURI()) {
+            gfx.drawImage(invalidURIImage, this.getWidth() - 18, 0, this);
         }
     }
-    
-    
-    
+
+
+
 }

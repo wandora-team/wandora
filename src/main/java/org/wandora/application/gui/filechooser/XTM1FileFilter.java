@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,33 +36,33 @@ import java.io.File;
 
 
 public class XTM1FileFilter extends javax.swing.filechooser.FileFilter {
-    
+
     /** Creates a new instance of XTM1FileFilter */
     public XTM1FileFilter() {
     }
-    
+
 
 
     @Override
     public boolean accept(File f) {
-        if( f != null) {
+        if (f != null) {
             if (f.isDirectory()) {
                 return true;
             }
             String uppercaseName = f.getName().toUpperCase();
-            if(uppercaseName.endsWith(".XTM10") ||
-               uppercaseName.endsWith(".XTM1")) {
-                    return true;
+            if (uppercaseName.endsWith(".XTM10") ||
+                    uppercaseName.endsWith(".XTM1")) {
+                return true;
             }
         }
         return false;
     }
-    
+
 
     //The description of this filter
     @Override
     public String getDescription() {
         return "XTM 1.0 topic map";
     }
-    
+
 }

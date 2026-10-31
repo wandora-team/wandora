@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,12 +38,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicTools;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * <p>
@@ -73,12 +73,12 @@ import org.wandora.topicmap.TopicTools;
  * 
  * @author akivela
  */
-public class MobyThesaurusExtractor extends AbstractExtractor implements WandoraTool {
+public class MobyThesaurusExtractor extends AbstractExtractor {
     
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MobyThesaurusExtractor.class);
 	
-	public String locatorPrefix = "http://wandora.org/si/moby/";
+	public String locatorPrefix = "https://wandora.org/si/moby/";
     public boolean ANTISYMMETRIC_ASSOCIATIONS = true;
     public boolean REMOVE_RARE_WORDS = false;
     
@@ -275,7 +275,7 @@ public class MobyThesaurusExtractor extends AbstractExtractor implements Wandora
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return false;
     }

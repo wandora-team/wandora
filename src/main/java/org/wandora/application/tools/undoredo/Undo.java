@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,13 +26,13 @@ package org.wandora.application.tools.undoredo;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.undowrapper.UndoException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -42,9 +42,10 @@ import org.wandora.topicmap.undowrapper.UndoException;
  */
 
 
-public class Undo extends AbstractWandoraTool implements WandoraTool{
+public class Undo extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Undo.class);
 
 	@Override
     public Icon getIcon() {
@@ -62,7 +63,7 @@ public class Undo extends AbstractWandoraTool implements WandoraTool{
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         if(wandora != null) {
             try {
                 wandora.undo();
@@ -74,7 +75,7 @@ public class Undo extends AbstractWandoraTool implements WandoraTool{
                         ue.getMessage());
                 }
                 else {
-                    ue.printStackTrace();
+                	logger.error(ue);
                     WandoraOptionPane.showMessageDialog(wandora, 
                         "Undo exception occurred. In order to undo you need to change topic maps, topics or associations.", 
                         "Undo exception occurred");
@@ -104,7 +105,6 @@ public class Undo extends AbstractWandoraTool implements WandoraTool{
     
     @Override
     public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        //System.out.println(prefix);
         UndoRedoOptions dialog=new UndoRedoOptions();
         dialog.open(wandora);
     }

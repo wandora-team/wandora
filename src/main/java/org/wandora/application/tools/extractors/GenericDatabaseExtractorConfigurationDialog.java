@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ public class GenericDatabaseExtractorConfigurationDialog extends javax.swing.JDi
         GridBagConstraints gbc=new GridBagConstraints();
         gbc.gridx=0;
         gbc.gridy=0;
-        gbc.fill=gbc.BOTH;
+        gbc.fill=GridBagConstraints.BOTH;
         gbc.weightx=1.0;
         gbc.weighty=0.0;
         for(String table : schema.tables){

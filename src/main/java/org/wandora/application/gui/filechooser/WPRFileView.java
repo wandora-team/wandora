@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,35 +41,41 @@ import org.wandora.application.gui.UIBox;
  * @author akivela
  */
 public class WPRFileView extends FileView {
-    
+
     Icon wprFileIcon = null;
 
-    
-    
+
+
     /** Creates a new instance of WPRFileView */
     public WPRFileView() {
-        try { wprFileIcon = UIBox.getIcon("gui/icons/wpr_file.png"); } catch(Exception e) {}
+        try {
+            wprFileIcon = UIBox.getIcon("gui/icons/wpr_file.png");
+        }
+        catch (Exception e) {
+        }
     }
-    
-    
+
+
     @Override
     public String getTypeDescription(File f) {
-        if(f != null) {
+        if (f != null) {
             String uppercaseName = f.getName().toUpperCase();
-            if(uppercaseName.endsWith(".WPR")) return "Wandora project file";
+            if (uppercaseName.endsWith(".WPR"))
+                return "Wandora project file";
         }
         return null;
     }
-    
-    
-    
+
+
+
     @Override
     public Icon getIcon(File f) {
-        if(f != null) {
+        if (f != null) {
             String uppercaseName = f.getName().toUpperCase();
-            if(uppercaseName.endsWith(".WPR")) return wprFileIcon;
+            if (uppercaseName.endsWith(".WPR"))
+                return wprFileIcon;
         }
         return null;
     }
-    
+
 }

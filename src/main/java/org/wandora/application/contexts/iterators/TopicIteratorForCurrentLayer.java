@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,40 +29,42 @@ package org.wandora.application.contexts.iterators;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.layered.LayeredTopic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class TopicIteratorForCurrentLayer extends TopicIterator {
-    
 
-    
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicIteratorForCurrentLayer.class);
+
 
     @Override
-    public Iterator solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator oldIterator) {
-        Iterator it = oldIterator;
-        if(topic != null && topicmap != null) {
+    public Iterator<Topic> solveIteratorForTopic(Topic topic, TopicMap topicmap, Iterator<Topic> oldIterator) {
+        Iterator<Topic> it = oldIterator;
+        if (topic != null && topicmap != null) {
             try {
-                if(topic instanceof LayeredTopic) {
-                    collection = ((LayeredTopic) topic).getTopicsForSelectedLayer();
+                if (topic instanceof LayeredTopic layeredTopic) {
+                    collection = layeredTopic.getTopicsForSelectedLayer();
                 }
                 else {
-                    ArrayList list = new ArrayList();
+                    List<Topic> list = new ArrayList<>();
                     list.add(topic);
                     collection = list;
-                    //collection = null;
                 }
             }
-            catch(Exception e) {
-                e.printStackTrace();
-                collection=null;
+            catch (Exception e) {
+                logger.error(e);
+                collection = null;
             }
-            if(collection != null) {
+            if (collection != null) {
                 it = collection.iterator();
             }
         }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,41 +30,41 @@ package org.wandora.utils.sessions;
 
 /**
  *
- * @author  marko
+ * @author marko
  */
 public class SessionObject {
 
     private HistoryList history = null;
-    
+
     private String name = null;
-    
+
     private String id = null;
-    
-    
-    
+
+
+
     /** Creates new SessionObject */
     public SessionObject(HistoryList sessionHistory, String topicName, String sessionID) {
         history = sessionHistory;
         name = topicName;
         id = sessionID;
     }
-    
-    
+
+
 
     public HistoryList getHistory() {
         return history;
     }
-    
-    
-    
+
+
+
     public String getID() {
         return id;
     }
 
-    
-    
+
+
     public String getName() {
         return name;
     }
-    
+
 }

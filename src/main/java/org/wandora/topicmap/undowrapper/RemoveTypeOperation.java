@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 
 
@@ -40,53 +39,65 @@ public class RemoveTypeOperation extends UndoOperation {
     protected TopicMap tm;
     protected Locator si;
     protected Locator typeSi;
-    protected boolean dummy=false;
+    protected boolean dummy = false;
 
-    public RemoveTypeOperation(Topic t,Topic type) throws TopicMapException, UndoException {
-        if(!t.isOfType(type)){
-            dummy=true;
+    public RemoveTypeOperation(Topic t, Topic type) throws TopicMapException, UndoException {
+        if (!t.isOfType(type)) {
+            dummy = true;
             return;
         }
 
-        tm=t.getTopicMap();
-        si=t.getOneSubjectIdentifier();
-        if(si==null) throw new UndoException("Topic doesn't have a subject identifier");
-        typeSi=type.getOneSubjectIdentifier();
-        if(typeSi==null) throw new UndoException("Type topic doesn't have a subject identifier");
+        tm = t.getTopicMap();
+        si = t.getOneSubjectIdentifier();
+        if (si == null)
+            throw new UndoException("Topic doesn't have a subject identifier");
+        typeSi = type.getOneSubjectIdentifier();
+        if (typeSi == null)
+            throw new UndoException("Type topic doesn't have a subject identifier");
     }
+
 
     @Override
     public String getLabel() {
         return "remove type";
     }
 
+
     @Override
     public void undo() throws UndoException {
-        if(dummy) return;
-        try{
-            Topic t=tm.getTopic(si);
-            if(t==null) throw new UndoException();
-            Topic type=tm.getTopic(typeSi);
-            if(type==null) throw new UndoException();
+        if (dummy)
+            return;
+        try {
+            Topic t = tm.getTopic(si);
+            if (t == null)
+                throw new UndoException();
+            Topic type = tm.getTopic(typeSi);
+            if (type == null)
+                throw new UndoException();
             t.addType(type);
-        }catch(TopicMapException tme){
+        }
+        catch (TopicMapException tme) {
             throw new UndoException(tme);
         }
     }
 
+
     @Override
     public void redo() throws UndoException {
-        if(dummy) return;
+        if (dummy)
+            return;
         try {
-            Topic t=tm.getTopic(si);
-            if(t==null) throw new UndoException();
-            Topic type=tm.getTopic(typeSi);
-            if(type==null) throw new UndoException();
+            Topic t = tm.getTopic(si);
+            if (t == null)
+                throw new UndoException();
+            Topic type = tm.getTopic(typeSi);
+            if (type == null)
+                throw new UndoException();
             t.removeType(type);
-        } 
-        catch(TopicMapException tme) {
+        }
+        catch (TopicMapException tme) {
             throw new UndoException(tme);
         }
     }
-    
+
 }

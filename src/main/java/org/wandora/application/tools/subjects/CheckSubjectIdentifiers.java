@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Locator;
@@ -40,7 +39,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author  akivela
  */
-public class CheckSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
+public class CheckSubjectIdentifiers extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -48,7 +47,7 @@ public class CheckSubjectIdentifiers extends AbstractWandoraTool implements Wand
 	public CheckSubjectIdentifiers() {
         super();
     }
-    public CheckSubjectIdentifiers(Context context) {
+    public CheckSubjectIdentifiers(Context<?> context) {
         setContext(context);
     }
 
@@ -64,8 +63,8 @@ public class CheckSubjectIdentifiers extends AbstractWandoraTool implements Wand
     }
 
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException {
-        Iterator contextTopics = context.getContextObjects();
+    public void execute(Wandora admin, Context<?> context) throws TopicMapException {
+        Iterator<?> contextTopics = context.getContextObjects();
         if(contextTopics != null && contextTopics.hasNext()) {
             setDefaultLogger();
             setLogTitle("Checking subject identifiers");

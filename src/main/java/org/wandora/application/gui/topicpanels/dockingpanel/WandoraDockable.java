@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,6 @@ public class WandoraDockable extends DefaultDockable {
         for(int i=0; i<dtitles.length; i++) {
             DockTitle dtitle = dtitles[i];
             Component comp = dtitle.getComponent();
-            //System.out.println("COMP="+comp);
             //comp.add(tp.getViewPopupMenu());
         }
         this.addMouseInputListener(new WandoraDockableMouseListener());

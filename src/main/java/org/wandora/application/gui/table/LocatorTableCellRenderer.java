@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,19 +29,17 @@ package org.wandora.application.gui.table;
 
 
 
-
 import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 
 import org.wandora.application.gui.UIConstants;
 import org.wandora.topicmap.Locator;
 import org.wandora.utils.DataURL;
-
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -49,42 +47,46 @@ import org.wandora.utils.DataURL;
  *
  * @author akivela
  */
-public class LocatorTableCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
-    
+public class LocatorTableCellRenderer extends DefaultTableCellRenderer {
+
     private static final long serialVersionUID = 1L;
-    
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(LocatorTableCellRenderer.class);
+
     private LocatorTable locatorTable;
 
-    
-    
+
+
     public LocatorTableCellRenderer(LocatorTable table) {
         this.locatorTable = table;
     }
 
-    
+
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+            int row, int column) {
         Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-        try {          
+        try {
             Color foregroundColor = locatorTable.getColorFor(row, column);
-            if(foregroundColor != null) {
+            if (foregroundColor != null) {
                 c.setForeground(foregroundColor);
             }
-            
-            if(c instanceof JLabel) {
+
+            if (c instanceof JLabel) {
                 JLabel label = (JLabel) c;
                 label.setBorder(UIConstants.defaultTableCellLabelBorder);
                 Locator l = (Locator) value;
                 String locatorString = l.toExternalForm();
-                if(DataURL.isDataURL(locatorString)) {
-                    String locatorFragment = locatorString.substring(0, Math.min(locatorString.length(), 64)) + "... ("+locatorString.length()+")";
+                if (DataURL.isDataURL(locatorString)) {
+                    String locatorFragment = locatorString.substring(0, Math.min(locatorString.length(), 64)) + "... ("
+                            + locatorString.length() + ")";
                     label.setText(locatorFragment);
                 }
             }
         }
-        catch(Exception e){
-            e.printStackTrace(); // TODO EXCEPTION
+        catch (Exception e) {
+            logger.error(e);
         }
         return c;
     }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,10 +44,10 @@ public class SelectionInstancesIIIFBuilder extends SimpleSelectionIIIFBuilder {
     
  
     @Override
-    protected void processTopics(Wandora wandora,Context context, Sequence sequence,IIIFExport tool) throws TopicMapException {
+    protected void processTopics(Wandora wandora,Context<?> context, Sequence sequence,IIIFExport tool) throws TopicMapException {
         TopicHashSet processed=new TopicHashSet();
         
-        Iterator iter=context.getContextObjects();
+        Iterator<?> iter=context.getContextObjects();
         while(iter.hasNext()){
             Object o=iter.next();
             if(!(o instanceof Topic)) continue;

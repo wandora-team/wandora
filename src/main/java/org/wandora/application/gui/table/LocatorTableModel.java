@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,88 +40,92 @@ import org.wandora.topicmap.Locator;
 
 
 public class LocatorTableModel extends DefaultTableModel {
-        
+
     private static final long serialVersionUID = 1L;
-    
+
     private String[] cols;
     private Locator[][] data;
     private Color[][] colors;
 
-    
-    
+
+
     public LocatorTableModel(Locator[][] tableData, String[] columnData, Color[][] colorData) {
         data = tableData;
         cols = columnData;
         colors = colorData;
     }
-    
-    
-    
+
+
+
     @Override
     public int getColumnCount() {
-        if(cols != null) return cols.length;
+        if (cols != null)
+            return cols.length;
         return 0;
     }
 
-    
+
     @Override
-    public Class getColumnClass(int col) {
+    public Class<?> getColumnClass(int col) {
         return Locator.class;
     }
-    
+
 
 
     @Override
     public int getRowCount() {
-        if(data != null) return data.length;
+        if (data != null)
+            return data.length;
         return 0;
     }
 
-    
-    
+
+
     public Color getColorAt(int rowIndex, int columnIndex) {
         try {
-            if(data != null && rowIndex >= 0 && columnIndex >= 0) {
+            if (data != null && rowIndex >= 0 && columnIndex >= 0) {
                 return colors[rowIndex][columnIndex];
             }
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+        }
         return null;
     }
-    
-    
+
 
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
-            if(data != null && rowIndex >= 0 && columnIndex >= 0 && columnIndex < getColumnCount() && rowIndex < getRowCount()) {
+            if (data != null && rowIndex >= 0 && columnIndex >= 0 && columnIndex < getColumnCount()
+                    && rowIndex < getRowCount()) {
                 return data[rowIndex][columnIndex];
             }
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+        }
         return "[ERROR]";
     }
 
 
-    
-    
+
     @Override
-    public String getColumnName(int columnIndex){
+    public String getColumnName(int columnIndex) {
         try {
-            if(cols != null && columnIndex >= 0 && cols.length > columnIndex && cols[columnIndex] != null) {
+            if (cols != null && columnIndex >= 0 && cols.length > columnIndex && cols[columnIndex] != null) {
                 return cols[columnIndex];
             }
             return "";
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+        }
         return "[ERROR]";
     }
 
 
 
     @Override
-    public boolean isCellEditable(int row,int col){
+    public boolean isCellEditable(int row, int col) {
         return false;
     }
 

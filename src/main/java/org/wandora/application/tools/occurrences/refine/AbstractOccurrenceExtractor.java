@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,10 +32,10 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -46,18 +46,18 @@ import org.wandora.topicmap.TopicMap;
  *
  * @author akivela
  */
-public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool implements  WandoraTool {
+public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
-	private Context preferredContext = null;
+	private Context<?> preferredContext = null;
 
 
 
     public AbstractOccurrenceExtractor() {
         
     }
-    public AbstractOccurrenceExtractor(Context context) {
+    public AbstractOccurrenceExtractor(Context<?> context) {
         this.preferredContext = context;
     }
 
@@ -71,8 +71,8 @@ public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool im
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
-        Iterator topics = null;
+    public void execute(Wandora wandora, Context<?> context) {
+        Iterator<?> topics = null;
         if(preferredContext != null) topics = preferredContext.getContextObjects();
         else topics = context.getContextObjects();
 
@@ -103,7 +103,7 @@ public abstract class AbstractOccurrenceExtractor extends AbstractWandoraTool im
                 setDefaultLogger();
                 setLogTitle("Extracting from occurrences...");
 
-                ArrayList<Topic> dtopics = new ArrayList<Topic>();
+                List<Topic> dtopics = new ArrayList<>();
                 while(topics.hasNext() && !forceStop()) {
                     dtopics.add((Topic) topics.next());
                 }

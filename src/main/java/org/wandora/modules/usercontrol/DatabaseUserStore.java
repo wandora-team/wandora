@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -168,9 +168,9 @@ public class DatabaseUserStore extends AbstractModule implements ModifyableUserS
     }
 
     protected void fetchUsers() throws UserStoreException {
-        Map<String,DBUser> newUsers=new LinkedHashMap<String,DBUser>();
+        Map<String,DBUser> newUsers=new LinkedHashMap<>();
         try{
-            List<User> ret=new ArrayList<User>();
+            List<User> ret=new ArrayList<>();
             Rows userRows=database.query("select * from "+tablePrefix+"USERS order by ID");
             Rows roleRows=database.query("select * from "+tablePrefix+"USER_ROLES order by USERID");
             Rows propRows=database.query("select * from "+tablePrefix+"USER_PROPS order by USERID");

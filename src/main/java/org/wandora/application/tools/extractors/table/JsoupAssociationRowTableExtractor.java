@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ import java.util.List;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.application.tools.extractors.AbstractJsoupExtractor;
 import org.wandora.topicmap.Association;
@@ -43,8 +42,7 @@ import org.wandora.topicmap.TopicMap;
  */
 
 
-public class JsoupAssociationRowTableExtractor extends AbstractJsoupExtractor 
-implements WandoraTool, BrowserPluginExtractor {
+public class JsoupAssociationRowTableExtractor extends AbstractJsoupExtractor implements BrowserPluginExtractor {
 
 	
 	private static final long serialVersionUID = 1L;

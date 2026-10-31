@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,7 +98,7 @@ public class ModelTools {
             out.write("[");
             out.write(""+classIndex.get(topic.getCls()));
             for(ModelField field : topic.getCls().getFields()){
-                out.write(","); // the class index is always first, no need for the flag varliable
+                out.write(","); // the class index is always first, no need for the flag variable
                 Type type=field.getType();
                 Object o=topic.getField(field);
                 if(o==null){

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -41,6 +40,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -50,14 +50,15 @@ import org.wandora.utils.Tuples.T2;
  */
 
 
-public class VariantsToTopicsAndAssociations extends AbstractWandoraTool implements WandoraTool {
+public class VariantsToTopicsAndAssociations extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(VariantsToTopicsAndAssociations.class);
 
 
 	public VariantsToTopicsAndAssociations() {
     }
-    public VariantsToTopicsAndAssociations(Context preferredContext) {
+    public VariantsToTopicsAndAssociations(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -74,7 +75,7 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool impleme
     }
 
 
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
 
             GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Transform variants to topics and associations","Transform variants to topics and associations",true,new String[][]{
@@ -93,7 +94,7 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool impleme
             setLogTitle("Transform variants to topcs and associations");
             log("Transforming variants to topcs and associations");
 
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             TopicMap tm = wandora.getTopicMap();
@@ -109,16 +110,12 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool impleme
             if(originalRole == null) log("Original role topic has not been specified. Aborting.");
 
             if(associationType != null && variantRole != null && scopeRole != null && originalRole != null) {
-
-                int progress = 0;
                 int associationCount = 0;
-
                 List<T2<Topic,Set<Topic>>> deleteScopes = new ArrayList<>();
                 while(topics.hasNext() && !forceStop()) {
                     try {
                         Topic topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
-                            progress++;
                             Collection<Set<Topic>> scopes = topic.getVariantScopes();
                             if(scopes != null) {
                                 Iterator<Set<Topic>> scopeIterator = scopes.iterator();
@@ -143,7 +140,6 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool impleme
                                                     associationCount++;
                                                 }
                                                 catch(Exception e) {
-                                                    e.printStackTrace();
                                                     log(e);
                                                 }
                                             }
@@ -153,7 +149,6 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool impleme
                                         }
                                     }
                                     catch(Exception e) {
-                                        e.printStackTrace();
                                         log(e);
                                     }
                                 }
@@ -171,7 +166,7 @@ public class VariantsToTopicsAndAssociations extends AbstractWandoraTool impleme
                             deleteScope.e1.removeVariant(deleteScope.e2);
                         }
                         catch(Exception e) {
-                            e.printStackTrace();
+                            logger.error(e);
                         }
                     }
                     log("Ready.");

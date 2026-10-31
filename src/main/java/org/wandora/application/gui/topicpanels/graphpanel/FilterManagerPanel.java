@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleButton;
 import org.wandora.application.gui.simple.SimpleMenu;
 import org.wandora.application.gui.simple.SimpleMenuItem;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -49,12 +50,9 @@ import org.wandora.application.gui.simple.SimpleMenuItem;
  * @author  olli
  */
 public class FilterManagerPanel extends javax.swing.JPanel implements ActionListener {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(FilterManagerPanel.class);
 	
-	
-	private Wandora wandora = null;
     private DefaultListModel<TopicNode> filteredTopicsModel;
     private DefaultListModel<TopicNode> filteredTopicTypesModel;
     private DefaultListModel<Object> filteredAssociationTypesModel; // NEAR <TopicNode>
@@ -154,17 +152,17 @@ public class FilterManagerPanel extends javax.swing.JPanel implements ActionList
         okButton = new org.wandora.application.gui.simple.SimpleButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        jComboBox1 = new org.wandora.application.gui.simple.SimpleComboBox();
+        jComboBox1 = new org.wandora.application.gui.simple.SimpleComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new org.wandora.application.gui.simple.SimpleLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        filteredTopicList = new javax.swing.JList();
+        filteredTopicList = new javax.swing.JList<>();
         removeFilteredTopicButton = new SimpleButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new org.wandora.application.gui.simple.SimpleLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        filteredAssociationTypesList = new javax.swing.JList();
+        filteredAssociationTypesList = new javax.swing.JList<>();
         removeFilteredAssociationTypeButton = new SimpleButton();
 
         footerPanel.setLayout(new java.awt.GridBagLayout());
@@ -196,7 +194,7 @@ public class FilterManagerPanel extends javax.swing.JPanel implements ActionList
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -344,10 +342,10 @@ public class FilterManagerPanel extends javax.swing.JPanel implements ActionList
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList filteredAssociationTypesList;
-    private javax.swing.JList filteredTopicList;
+    private javax.swing.JList<Object> filteredAssociationTypesList;
+    private javax.swing.JList<TopicNode> filteredTopicList;
     private javax.swing.JPanel footerPanel;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox<Object> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
@@ -370,7 +368,7 @@ public class FilterManagerPanel extends javax.swing.JPanel implements ActionList
     
     
     public void actionPerformed(ActionEvent actionEvent) {
-        System.out.println("Action preformed in FilterManagerPanel: "+actionEvent.getActionCommand());
+        logger.debug("Action preformed in FilterManagerPanel: "+actionEvent.getActionCommand());
         String ac = actionEvent.getActionCommand();
         if("Exit".equalsIgnoreCase(ac)) {
             if(filterDialog != null) {

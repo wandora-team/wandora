@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
  */
 
 package org.wandora.utils;
+
 import java.util.Map;
 
 /**
@@ -35,37 +36,48 @@ import java.util.Map;
  * 
  * @author olli
  */
-public class MapEntry<K,V> implements Map.Entry<K,V> {
-    
+public class MapEntry<K, V> implements Map.Entry<K, V> {
+
     private K key;
     private V value;
-    
+
     /** Creates a new instance of MapEntry */
-    public MapEntry(K key,V value) {
-        this.key=key;
-        this.value=value;
+    public MapEntry(K key, V value) {
+        this.key = key;
+        this.value = value;
     }
-    
-    public K getKey(){return key;}
-    public V getValue(){return value;}
-    public int hashCode(){
-        return (key==null   ? 0 : key.hashCode()) ^
-               (value==null ? 0 : value.hashCode()) ; // by api definition
+
+
+    public K getKey() {
+        return key;
     }
-    public boolean equals(Object o){
-        if(o instanceof Map.Entry){
-            Map.Entry e=(Map.Entry)o;
-            return (getKey()==null ?
-                    e.getKey()==null : getKey().equals(e.getKey()))  &&
-                   (getValue()==null ?
-                    e.getValue()==null : getValue().equals(e.getValue()));
+
+
+    public V getValue() {
+        return value;
+    }
+
+
+    public int hashCode() {
+        return (key == null ? 0 : key.hashCode()) ^
+                (value == null ? 0 : value.hashCode()); // by api definition
+    }
+
+
+    public boolean equals(Object o) {
+        if (o instanceof Map.Entry e) {
+            return (getKey() == null ? e.getKey() == null : getKey().equals(e.getKey())) &&
+                    (getValue() == null ? e.getValue() == null : getValue().equals(e.getValue()));
         }
-        else return false;
+        else
+            return false;
     }
-    public V setValue(V value){
-        V old=this.value;
-        this.value=value;
+
+
+    public V setValue(V value) {
+        V old = this.value;
+        this.value = value;
         return old;
     }
-    
+
 }

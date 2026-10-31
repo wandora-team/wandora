@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,130 +41,127 @@ import org.wandora.application.gui.topicpanels.GraphTopicPanel;
 import org.wandora.application.gui.topicpanels.TopicPanel;
 import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 import org.wandora.application.gui.topicpanels.graphpanel.VEdge;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author akivela
  */
-public class GraphEdgeContext implements Context {
-    
+public class GraphEdgeContext implements Context<VEdge> {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(GraphEdgeContext.class);
+
     private Object contextSource;
     protected WandoraTool contextOwner = null;
     protected ActionEvent actionEvent = null;
     protected Wandora wandora = null;
-    
-    
+
+
     /** Creates a new instance of GraphEdgeContext */
     public GraphEdgeContext() {
     }
-    
-    
+
+
     @Override
     public void initialize(Wandora wandora, ActionEvent actionEvent, WandoraTool contextOwner) {
         this.wandora = wandora;
         this.actionEvent = actionEvent;
         this.contextOwner = contextOwner;
-        
+
         Object proposedContextSource = UIBox.getActionsRealSource(actionEvent);
-        if( !isContextSource(proposedContextSource) ) {
+        if (!isContextSource(proposedContextSource)) {
             proposedContextSource = wandora.getFocusOwner();
-            if( !isContextSource(proposedContextSource) ) {
+            if (!isContextSource(proposedContextSource)) {
                 proposedContextSource = wandora;
             }
         }
-        setContextSource( proposedContextSource );
+        setContextSource(proposedContextSource);
     }
-    
-    
-    
+
+
+
     @Override
     public ActionEvent getContextEvent() {
         return actionEvent;
     }
-    
-    
-    
+
+
+
     @Override
-    public Iterator getContextObjects() {
-        return getContextObjects( getContextSource() );
+    public Iterator<VEdge> getContextObjects() {
+        return getContextObjects(getContextSource());
     }
-    
-    
-    
-    public Iterator getContextObjects(Object contextSource) {
-        if(contextSource == null) return null;
-        
+
+
+
+    public Iterator<VEdge> getContextObjects(Object contextSource) {
+        if (contextSource == null)
+            return null;
+
         List<VEdge> contextEdges = new ArrayList<>();
-        if(contextSource instanceof Wandora) {
+        if (contextSource instanceof Wandora w) {
             try {
-                Wandora w = (Wandora) contextSource;
                 TopicPanel currentTopicPanel = w.getTopicPanel();
-                if(currentTopicPanel != null && currentTopicPanel instanceof DockingFramePanel) {
-                    currentTopicPanel = ((DockingFramePanel) currentTopicPanel).getCurrentTopicPanel();
+                if (currentTopicPanel != null && currentTopicPanel instanceof DockingFramePanel dfp) {
+                    currentTopicPanel = dfp.getCurrentTopicPanel();
                 }
-                if(currentTopicPanel != null && currentTopicPanel instanceof GraphTopicPanel) {
-                    contextEdges.addAll( ((GraphTopicPanel) currentTopicPanel).getGraphPanel().getSelectedEdges() );
-                    if(contextEdges.isEmpty()) {
-                        //contextEdges.add( ((GraphTopicPanel) currentTopicPanel).getGraphPanel().getMouseOverEdge() );
-                    }
+                if (currentTopicPanel != null && currentTopicPanel instanceof GraphTopicPanel gtp) {
+                    contextEdges.addAll(gtp.getGraphPanel().getSelectedEdges());
                 }
-                if(currentTopicPanel != null && currentTopicPanel instanceof TopicMapGraphPanel) {
-                    contextEdges.addAll( ((TopicMapGraphPanel) currentTopicPanel).getSelectedEdges() );
-                    if(contextEdges.isEmpty()) {
-                        //contextEdges.add( ((TopicMapGraphPanel) currentTopicPanel).getMouseOverEdge() );
-                    }
+                if (currentTopicPanel != null && currentTopicPanel instanceof TopicMapGraphPanel tmgp) {
+                    contextEdges.addAll(tmgp.getSelectedEdges());
                 }
             }
             catch (Exception e) {
                 log(e);
             }
         }
-        else if(contextSource instanceof GraphTopicPanel) {
-            contextEdges.addAll( ((GraphTopicPanel) contextSource).getGraphPanel().getSelectedEdges() );
+        else if (contextSource instanceof GraphTopicPanel gtp) {
+            contextEdges.addAll(gtp.getGraphPanel().getSelectedEdges());
         }
-        else if(contextSource instanceof TopicMapGraphPanel) {
-            contextEdges.addAll( ((TopicMapGraphPanel) contextSource).getSelectedEdges() );
+        else if (contextSource instanceof TopicMapGraphPanel tmgp) {
+            contextEdges.addAll(tmgp.getSelectedEdges());
         }
         return contextEdges.iterator();
     }
-    
-    
+
+
 
     @Override
     public void setContextSource(Object proposedContextSource) {
-        if(isContextSource(proposedContextSource)) {
+        if (isContextSource(proposedContextSource)) {
             contextSource = proposedContextSource;
         }
         else {
             contextSource = null;
         }
     }
-    
-    
+
+
     public boolean isContextSource(Object contextSource) {
-        if(contextSource != null && (
-                contextSource instanceof Wandora ||
-                contextSource instanceof GraphTopicPanel) ) {
-                    return true;
+        if (contextSource != null && (contextSource instanceof Wandora || contextSource instanceof GraphTopicPanel)) {
+            return true;
         }
         return false;
     }
-    
-    
-    
+
+
+
     @Override
     public Object getContextSource() {
         return contextSource;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public void log(Exception e) {
-        if(contextOwner != null) contextOwner.log(e);
-        else e.printStackTrace();
+        if (contextOwner != null)
+            contextOwner.log(e);
+        else
+            logger.error(e);
     }
 }

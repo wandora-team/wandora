@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@ package org.wandora.application.tools.generators;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -39,6 +38,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 /**
@@ -47,13 +47,13 @@ import org.wandora.utils.swing.GuiTools;
  */
 
 
-public class LatticeGenerator extends AbstractGenerator implements WandoraTool {
-
+public class LatticeGenerator extends AbstractGenerator {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LatticeGenerator.class);
 
-	public static String LATTICE_GRAPH_SI = "http://wandora.org/si/lattice/";
+	public static String LATTICE_GRAPH_SI = "https://wandora.org/si/lattice/";
     
-    public static String siPattern = "http://wandora.org/si/lattice/vertex/__n__";
+    public static String siPattern = "https://wandora.org/si/lattice/vertex/__n__";
     public static String basenamePattern = "Lattice vertex __n__";
     public static boolean connectWithWandoraClass = true;
     
@@ -72,7 +72,7 @@ public class LatticeGenerator extends AbstractGenerator implements WandoraTool {
     }
     
     @Override
-    public void execute (Wandora wandora, Context context) throws TopicMapException {
+    public void execute (Wandora wandora, Context<?> context) throws TopicMapException {
         TopicMap topicmap = solveContextTopicMap(wandora, context);
         
         GenericOptionsDialog god = new GenericOptionsDialog(
@@ -273,7 +273,7 @@ public class LatticeGenerator extends AbstractGenerator implements WandoraTool {
                 t.addType(treeGraphInstanceTopic);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
     }

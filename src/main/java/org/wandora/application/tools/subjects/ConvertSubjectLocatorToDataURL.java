@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,13 +20,12 @@
  */
 package org.wandora.application.tools.subjects;
 
-import java.io.File;
-import java.net.URL;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Locator;
@@ -37,15 +36,15 @@ import org.wandora.utils.DataURL;
  *
  * @author akivela
  */
-public class ConvertSubjectLocatorToDataURL extends AbstractWandoraTool implements WandoraTool {
+public class ConvertSubjectLocatorToDataURL extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
-	private Iterator<Topic> topicsToProcess;
+	private Iterator<?> topicsToProcess;
     
     
     public ConvertSubjectLocatorToDataURL() {}
-    public ConvertSubjectLocatorToDataURL(Context context) {
+    public ConvertSubjectLocatorToDataURL(Context<?> context) {
         setContext(context);
     }
     public ConvertSubjectLocatorToDataURL(Collection<Topic> topics) {
@@ -58,7 +57,7 @@ public class ConvertSubjectLocatorToDataURL extends AbstractWandoraTool implemen
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         setDefaultLogger();
         
         if(topicsToProcess == null) {
@@ -78,12 +77,12 @@ public class ConvertSubjectLocatorToDataURL extends AbstractWandoraTool implemen
                             if(subjectLocator != null) {
                                 String subjectLocatorString = subjectLocator.toExternalForm();
                                 if(subjectLocatorString.startsWith("file")) {
-                                    DataURL dataUrl = new DataURL(new File(new URL(subjectLocatorString).toURI()));
+                                    DataURL dataUrl = new DataURL(Path.of(new URI(subjectLocatorString)).toFile());
                                     topic.setSubjectLocator(new Locator(dataUrl.toExternalForm()));
                                     convertCount++;
                                 }
                                 else if(subjectLocatorString.startsWith("http")) {
-                                    DataURL dataUrl = new DataURL(new URL(subjectLocatorString));
+                                    DataURL dataUrl = new DataURL(new URI(subjectLocatorString).toURL());
                                     topic.setSubjectLocator(new Locator(dataUrl.toExternalForm()));
                                     convertCount++;
                                 }

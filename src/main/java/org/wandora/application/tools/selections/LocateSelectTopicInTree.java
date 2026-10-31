@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@ import java.util.Iterator;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -35,6 +34,7 @@ import org.wandora.application.gui.tree.TopicTree;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -42,22 +42,23 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class LocateSelectTopicInTree extends AbstractWandoraTool implements WandoraTool {
+public class LocateSelectTopicInTree extends AbstractWandoraTool {
 
 	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LocateSelectTopicInTree.class);
 
 	/** Creates a new instance of LocateSelectTopicInTree */
     public LocateSelectTopicInTree() {
     }
-    public LocateSelectTopicInTree(Context preferredContext) {
+    public LocateSelectTopicInTree(Context<?> preferredContext) {
         setContext(preferredContext);
     }
  
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
-        Iterator contextTopics = context.getContextObjects();
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
+        Iterator<?> contextTopics = context.getContextObjects();
         TopicTree tree = wandora.getCurrentTopicTree();
         if(tree != null && contextTopics != null && contextTopics.hasNext()) {
             try {
@@ -67,7 +68,7 @@ public class LocateSelectTopicInTree extends AbstractWandoraTool implements Wand
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }

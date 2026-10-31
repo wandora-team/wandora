@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ public class TopicMapDiameter extends AbstractWandoraTool {
         return "Calculates diameter of a topic map, that is maximum shortest path between two topics. Also calculates average shortest path between all topic pairs. Not usable for topic maps of approximately more than 10000 topics.";
     }
 
-    public void execute(Wandora admin, Context context)  throws TopicMapException {
+    public void execute(Wandora admin, Context<?> context)  throws TopicMapException {
         TopicMap tm = solveContextTopicMap(admin, context);
         String tmTitle = solveNameForTopicMap(admin, tm);
         boolean useHash = false;

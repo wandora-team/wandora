@@ -3,7 +3,7 @@
     <!--
         This file is meant to be imported by the Wandora Modules Servlet. In general
         this file is like all other configuration files of the Wandora modules 
-        framework, described at http://wandora.org/wiki/Wandora_modules_framework .
+        framework, described at https://wandora.org/wiki/Wandora_modules_framework .
         There are a few additions however. Wandora automatically adds some modules
         and variables when it loads bundle configurations like this.
     -->
@@ -17,7 +17,7 @@
     <!-- ServletModule is added automatically by Wandora, we don't need to import that -->
 
     <!-- The server automatically sets variables, home, relativeHome, urlbase and port-->
-    <variable key="defaultSI">http://wandora.org/si/core/schema-type</variable>
+    <variable key="defaultSI">https://wandora.org/si/core/schema-type</variable>
 
     <module class="org.wandora.modules.servlet.TemplateManager">
         <param key="templatePath">${home}</param> <!-- note that velocity has its own template path which ignores this one, so this is largely useless at the moment -->

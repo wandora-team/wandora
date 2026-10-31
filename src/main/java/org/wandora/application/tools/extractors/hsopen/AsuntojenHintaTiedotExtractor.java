@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 package org.wandora.application.tools.extractors.hsopen;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -40,7 +42,7 @@ import org.wandora.utils.IObox;
 
 
 public class AsuntojenHintaTiedotExtractor {
-    
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AsuntojenHintaTiedotExtractor.class);
     
     public AsuntojenHintaTiedotExtractor() {
         
@@ -58,12 +60,12 @@ public class AsuntojenHintaTiedotExtractor {
             int z = 1;
             boolean nextPage = false;
             do {
-                System.out.println("Scraping "+i+" and page "+z+".");
+                logger.info("Scraping "+i+" and page "+z+".");
                 String u = ubody.replace("__p__", ""+i);
                 u = u.replace("__z__", ""+z);
 
                 try {
-                    URL url = new URL(u);
+                    URL url = new URI(u).toURL();
                     String c = IObox.doUrl(url);
                     IObox.saveFile(saveFolder+"/"+i+"_"+z+".html", c);
                     
@@ -76,7 +78,7 @@ public class AsuntojenHintaTiedotExtractor {
                     z++;
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
 
                 try {
@@ -96,7 +98,7 @@ public class AsuntojenHintaTiedotExtractor {
         String saveFile = "G:/asuntojen_hintatiedot_111011.txt";
         StringBuilder sb = new StringBuilder("");
         File[] files = IObox.getFiles(loadFolder);
-        System.out.println("Found total "+files.length+" files.");
+        logger.info("Found total "+files.length+" files.");
         for(int i=0; i<files.length; i++) {
             try {
                 String c = IObox.loadFile(files[i]);
@@ -113,9 +115,6 @@ public class AsuntojenHintaTiedotExtractor {
                 int pni = pn.indexOf("_");
                 pn = pn.substring(0,pni);
                 
-                //System.out.println("-----------------------------");
-                //System.out.println(c);
-                //System.out.println("-----------------------------");
                 
                 Pattern p = Pattern.compile(
                         "<tr(?:\\sclass\\=\\\"last\\\")?>\\s*?"+
@@ -164,15 +163,15 @@ public class AsuntojenHintaTiedotExtractor {
                     String hissi = m.group(8);
                     String kunto = m.group(9);
 
-                    System.out.print( kpginOsa + " - " );
-                    System.out.print( huoneet + " - " );
-                    System.out.print( neliot + " - " );
-                    System.out.print( hinta + " - " );
-                    System.out.print( nelioHinta + " - " );
-                    System.out.print( rakVuosi + " - " );
-                    System.out.print( kerros + " - " );
-                    System.out.print( hissi + " - " );
-                    System.out.println( kunto + " - " );
+                    logger.info( kpginOsa + " - " );
+                    logger.info( huoneet + " - " );
+                    logger.info( neliot + " - " );
+                    logger.info( hinta + " - " );
+                    logger.info( nelioHinta + " - " );
+                    logger.info( rakVuosi + " - " );
+                    logger.info( kerros + " - " );
+                    logger.info( hissi + " - " );
+                    logger.info(kunto + " - ");
                     
                     sb.append(files[i].getName()).append( "\t");
                     sb.append(pn).append( "\t");
@@ -190,7 +189,7 @@ public class AsuntojenHintaTiedotExtractor {
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         
@@ -198,7 +197,7 @@ public class AsuntojenHintaTiedotExtractor {
             IObox.saveFile(saveFile, sb.toString());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         
     }
@@ -219,8 +218,8 @@ public class AsuntojenHintaTiedotExtractor {
             String[] ilmoituksetArray = ilmoituksetRaw.split("\n");
             String[] myydytArray = myydytRaw.split("\n");
             
-            System.out.println(ilmoituksetArray.length + " ilmoitusta.");
-            System.out.println(myydytArray.length + " myyntia.");
+            logger.info(ilmoituksetArray.length + " ilmoitusta.");
+            logger.info(myydytArray.length + " myyntia.");
             
             HashMap<String,ArrayList<String[]>> ilmoituksetHash = new HashMap<>();
             HashMap<String,ArrayList<String[]>> myydytHash = new HashMap<>();
@@ -250,7 +249,7 @@ public class AsuntojenHintaTiedotExtractor {
             // **** calculate ****
             for(String pno : ilmoituksetHash.keySet()) {
                 if(!"100".equals(pno)) continue;
-                System.out.println("--------------------");
+                logger.info("--------------------");
                 
                 
                 ArrayList<String[]> iArray = ilmoituksetHash.get(pno);
@@ -270,11 +269,11 @@ public class AsuntojenHintaTiedotExtractor {
                         countI++;
                     }
                 }
-                System.out.println(pno+" kohteitaI="+countI);
+                logger.info(pno+" kohteitaI="+countI);
                 double keskiarvoHintaI = countI != 0 ? hintaTotalI / countI : 0;
                 double keskiarvoNelioHintaI = countI != 0 ? nelioHintaTotalI / countI : 0;
-                System.out.println(pno+" keskiarvoHintaI="+keskiarvoHintaI);
-                System.out.println(pno+" keskiarvoNelioHintaI="+keskiarvoNelioHintaI);
+                logger.info(pno+" keskiarvoHintaI="+keskiarvoHintaI);
+                logger.info(pno+" keskiarvoNelioHintaI="+keskiarvoNelioHintaI);
                 
                 int countM = 0;
                 double hintaTotalM = 0;
@@ -290,17 +289,17 @@ public class AsuntojenHintaTiedotExtractor {
                         countM++;
                     }
                 }
-                System.out.println(pno+" kohteitaM="+countM);
+                logger.info(pno+" kohteitaM="+countM);
                 double keskiarvoHintaM = countM != 0 ? hintaTotalM / countM : 0;
                 double keskiarvoNelioHintaM = countM != 0 ? nelioHintaTotalM / countM : 0;
-                System.out.println(pno+" keskiarvoHintaM="+keskiarvoHintaM);
-                System.out.println(pno+" keskiarvoNelioHintaM="+keskiarvoNelioHintaM);
+                logger.info(pno+" keskiarvoHintaM="+keskiarvoHintaM);
+                logger.info(pno+" keskiarvoNelioHintaM="+keskiarvoNelioHintaM);
                 
                 double hintaJousto = keskiarvoHintaI - keskiarvoHintaM;
                 double nelioHintaJousto = keskiarvoNelioHintaI - keskiarvoNelioHintaM;
                 
-                System.out.println(pno+" hintaJousto="+hintaJousto);
-                System.out.println(pno+" nelioHintaJousto="+nelioHintaJousto);
+                logger.info(pno+" hintaJousto="+hintaJousto);
+                logger.info(pno+" nelioHintaJousto="+nelioHintaJousto);
                 
                 sb.append(pno).append("\t");
                 sb.append(countI).append("\t");
@@ -316,7 +315,7 @@ public class AsuntojenHintaTiedotExtractor {
             IObox.saveFile(outputFile, sb.toString());
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
 
     }

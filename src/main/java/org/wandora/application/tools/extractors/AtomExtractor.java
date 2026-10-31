@@ -1,8 +1,8 @@
 /*
  * WANDORA - Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.regex.Matcher;
@@ -53,6 +54,7 @@ import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.HTMLEntitiesCoder;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -70,9 +72,9 @@ import org.xml.sax.XMLReader;
 
 
 public class AtomExtractor extends AbstractExtractor {
-    
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AtomExtractor.class);
 	
 	
 	public static final String DEFAULT_LANG = "en";
@@ -175,12 +177,9 @@ public class AtomExtractor extends AbstractExtractor {
             setWandora(wandora);
             String urlstr = request.getSource();
 
-            // System.out.println("FOUND URL: "+urlstr);
-
-            URL url = new URL(urlstr);
+            URL url = new URI(urlstr).toURL();
             URLConnection uc = url.openConnection();
             String type = uc.getContentType();
-            // System.out.println("FOUND TYPE: "+type);
 
             if(type != null && type.indexOf("text/html") > -1) {
                 String htmlContent = IObox.doUrl(url);
@@ -197,10 +196,10 @@ public class AtomExtractor extends AbstractExtractor {
                             if(m2.find()) {
                                 try {
                                     String atomfeed = m2.group(1);
-                                    _extractTopicsFrom(new URL(atomfeed), wandora.getTopicMap());
+                                    _extractTopicsFrom(new URI(atomfeed).toURL(), wandora.getTopicMap());
                                 }
                                 catch(Exception e) {
-                                    e.printStackTrace();
+                                    logger.error(e);
                                 }
                             }
                         }
@@ -220,7 +219,7 @@ public class AtomExtractor extends AbstractExtractor {
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
     }
@@ -386,9 +385,9 @@ public class AtomExtractor extends AbstractExtractor {
         public String LINK_TYPE_SI=SIPREFIX+"link/type";
         public String LINK_HREF_LANG_SI=SIPREFIX+"link/href-lang"; 
         
-        public String DATE_SI="http://wandora.org/si/date"; 
-        public String RIGHTS_SI="http://wandora.org/si/rights"; 
-        public String LINK_SI="http://wandora.org/si/link";
+        public String DATE_SI="https://wandora.org/si/date"; 
+        public String RIGHTS_SI="https://wandora.org/si/rights"; 
+        public String LINK_SI="https://wandora.org/si/link";
         
         
         
@@ -482,8 +481,7 @@ public class AtomExtractor extends AbstractExtractor {
                 if(t==null){
                     t=tm.createTopic();
                     t.setBaseName(bn);
-                    if(si!=null) t.addSubjectIdentifier(tm.createLocator(si));
-                    else t.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
+                    t.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
                 }
                 return t;
             }
@@ -1487,7 +1485,7 @@ public class AtomExtractor extends AbstractExtractor {
                         if(theEntry != null && (isValid(data_entry_content) || isValid(data_entry_content_src ))) {
                             try {
                                 if(!isValid(data_entry_content)) {
-                                    data_entry_content = IObox.doUrl(new URL(data_entry_content_src));
+                                    data_entry_content = IObox.doUrl(new URI(data_entry_content_src).toURL());
                                 }
                                 data_entry_content = this.postProcessFeedText(data_entry_content, data_entry_content_type);
                                 Topic contentType = getOrCreateTopic(FEED_ENTRY_CONTENT_SI,"Atom Entry Content");
@@ -1520,7 +1518,7 @@ public class AtomExtractor extends AbstractExtractor {
                         if(theEntry != null && (isValid(data_entry_summary) || isValid(data_entry_summary_src))) {
                             try {
                                 if(!isValid(data_entry_summary)) {
-                                    data_entry_summary = IObox.doUrl(new URL(data_entry_summary_src));
+                                    data_entry_summary = IObox.doUrl(new URI(data_entry_summary_src).toURL());
                                 }
                                 data_entry_summary = this.postProcessFeedText(data_entry_summary, data_entry_summary_type);
                                 Topic summaryType = getOrCreateTopic(FEED_ENTRY_SUMMARY_SI,"Atom Entry Summary");

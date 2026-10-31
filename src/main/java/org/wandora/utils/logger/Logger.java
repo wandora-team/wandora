@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,51 +30,72 @@ package org.wandora.utils.logger;
 
 /**
  *
- * @author  olli, akivela
+ * @author olli, akivela
  */
 public abstract class Logger {
 
-    private static Logger defaultLogger = new SystemOutLogger();
-    
+    private Logger defaultLogger;
+
+
+
     public abstract void writelog(String level, String s);
-    
-    public void writelog(String s){
+
+
+    public void writelog(String s) {
         writelog("INF", s);
     }
-    
-    public void writelog(String level, String s, Throwable e){
-        writelog(level,s+"\n"+getStackTrace(e, true));
-    }
-    public void writelog(String level, Throwable e){
-        writelog(level, getStackTrace(e, true));
-    }
-    
-    
-    
-    
-    public static void log(String msg) {
-        defaultLogger.writelog(msg);
+
+
+    public void writelog(Throwable e) {
+        writelog("ERR", e);
     }
 
-    public static void setLogger(Logger logger){
-        defaultLogger=logger;
+
+    public void writelog(String level, String s, Throwable e) {
+        writelog(level, s + "\n" + getStackTrace(e, true));
     }
-    
-    public static Logger getLogger() {
+
+
+    public void writelog(String level, Throwable e) {
+        writelog(level, getStackTrace(e, true));
+    }
+
+
+
+    public void log(String msg) {
+        getLogger().writelog(msg);
+    }
+
+
+    public void log(Throwable e) {
+        getLogger().writelog(e);
+    }
+
+
+
+    public void setLogger(Logger logger) {
+        defaultLogger = logger;
+    }
+
+
+    public Logger getLogger() {
+        if (defaultLogger == null) {
+            defaultLogger = Log4j2Logger.getLogger(getClass());
+        }
         return defaultLogger;
     }
-    
-    
+
+
     // ---------------------------------------------
-    
-    
-    public String getStackTrace(Throwable e, boolean cause){
-        java.io.StringWriter writer=new java.io.StringWriter();
+
+
+    public String getStackTrace(Throwable e, boolean cause) {
+        java.io.StringWriter writer = new java.io.StringWriter();
         e.printStackTrace(new java.io.PrintWriter(writer));
-        if(cause && e.getCause()!=null){
+        if (cause && e.getCause() != null) {
             writer.write("\n");
             writer.write("Cause:\n");
-            writer.write(getStackTrace(e.getCause(),true));
+            writer.write(getStackTrace(e.getCause(), true));
         }
         return writer.toString();
     }

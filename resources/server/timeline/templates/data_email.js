@@ -4,19 +4,19 @@
 ##
 #set( $count = 0 )##
 ##
-#set( $emailTypeSI = "http://wandora.org/si/email/email" )##
+#set( $emailTypeSI = "https://wandora.org/si/email/email" )##
 #set( $emailType = $topicmap.getTopic( $emailTypeSI ) )##
 ##
-#set( $emailDateTypeSI = "http://wandora.org/si/email/sent-date" )##
+#set( $emailDateTypeSI = "https://wandora.org/si/email/sent-date" )##
 #set( $emailDateType = $topicmap.getTopic( $emailDateTypeSI ) )##
 ##
-#set( $emailTextContentTypeSI = "http://wandora.org/si/email/text-content" )##
-#set( $emailHTMLContentTypeSI = "http://wandora.org/si/email/html-text-content" )##
-#set( $emailXMLContentTypeSI = "http://wandora.org/si/email/xml-content" )##
-#set( $emailWordContentTypeSI = "http://wandora.org/si/email/ms-word-text-content" )##
-#set( $emailExcelContentTypeSI = "http://wandora.org/si/email/ms-excel-text-content" )##
-#set( $emailPPContentTypeSI = "http://wandora.org/si/email/ms-powerpoint-text-content" )##
-#set( $emailPDFContentTypeSI = "http://wandora.org/si/email/pdf-text-content" )##
+#set( $emailTextContentTypeSI = "https://wandora.org/si/email/text-content" )##
+#set( $emailHTMLContentTypeSI = "https://wandora.org/si/email/html-text-content" )##
+#set( $emailXMLContentTypeSI = "https://wandora.org/si/email/xml-content" )##
+#set( $emailWordContentTypeSI = "https://wandora.org/si/email/ms-word-text-content" )##
+#set( $emailExcelContentTypeSI = "https://wandora.org/si/email/ms-excel-text-content" )##
+#set( $emailPPContentTypeSI = "https://wandora.org/si/email/ms-powerpoint-text-content" )##
+#set( $emailPDFContentTypeSI = "https://wandora.org/si/email/pdf-text-content" )##
 ##
 #if($topicmap.getTopic( $emailTextContentTypeSI ))
 #set( $emailContentType = $topicmap.getTopic( $emailTextContentTypeSI ) )##

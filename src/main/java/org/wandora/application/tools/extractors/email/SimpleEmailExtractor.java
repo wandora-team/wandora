@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,6 +77,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.MSOfficeBox;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import net.fortuna.mstor.model.MStorStore;
 
@@ -87,9 +88,8 @@ import net.fortuna.mstor.model.MStorStore;
  * @author akivela
  */
 public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPluginExtractor {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimpleEmailExtractor.class);
 	
 	
 	private List<String> visitedEmailFolders = null;
@@ -112,14 +112,13 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
 
     @Override
     public String doBrowserExtract(BrowserExtractRequest request, Wandora wandora) throws TopicMapException {
-        String url=request.getSource();
         try {
             ByteArrayInputStream in=new ByteArrayInputStream(request.getContent().getBytes("ISO-8859-1"));
             TopicMap tm=wandora.getTopicMap();
             _extractTopicsFromStream(request.getSource(), in, tm);
         }
         catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
         wandora.doRefresh();
@@ -164,7 +163,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         TopicMap tm = wandora.getTopicMap();
         visitedDirectories = new ArrayList<>();
         visitedEmailFolders = new ArrayList<>();
@@ -226,14 +225,14 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
 
     @Override
     public boolean _extractTopicsFrom(String str, TopicMap topicMap) throws Exception {
-        _extractTopicsFromStream("http://wandora.org/si/simple-email-extractor/"+System.currentTimeMillis(), new ByteArrayInputStream(str.getBytes()), topicMap);
+        _extractTopicsFromStream("https://wandora.org/si/simple-email-extractor/"+System.currentTimeMillis(), new ByteArrayInputStream(str.getBytes()), topicMap);
         return true;
     }
 
     
     @Override
     public boolean _extractTopicsFrom(File file, TopicMap topicMap) throws Exception {
-        System.out.println("@ _extractTopicsFrom: "+file.getAbsolutePath());
+        logger.info("@ _extractTopicsFrom: "+file.getAbsolutePath());
         return _extractTopicsFrom(file, topicMap, SimpleEmailExtractorPanel.EMAIL_RESOURCE);
     }
     
@@ -302,6 +301,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     
     public boolean extractTopicsFromMBOX(File file, TopicMap topicMap) throws Exception {
         extractedEmails = 0;
+        MStorStore store = null;
         try {
             visitedEmailFolders = new ArrayList<>();
             Properties properties = new Properties();
@@ -311,7 +311,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
             javax.mail.Session session = javax.mail.Session.getDefaultInstance(properties);
             //Provider mstorProvider = new Provider(Provider.Type.STORE, "mstor", "net.fortuna.mstor.MStorStore", null, null);
             //session.setProvider(mstorProvider);
-            MStorStore store = new MStorStore(session, new javax.mail.URLName("mstor:"+file.getAbsolutePath()));
+            store = new MStorStore(session, new javax.mail.URLName("mstor:"+file.getAbsolutePath()));
             store.connect();
             javax.mail.Folder folder = store.getDefaultFolder();
             extractTopicsFromFolder(topicMap, folder);
@@ -330,6 +330,11 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
             log("Unable to read MBOX mail store! No suitable library available!");
             log("In order to read the MBOX store please download mstor's jars (http://mstor.sourceforge.net/)\ninto Wandora's lib directory and add jars to bin/Wandora.bat!");
             return false;
+        }
+        finally {
+        	if(store != null) {
+        		store.close();
+        	}
         }
         log("Total "+extractedEmails+" emails extracted.");
         return true;
@@ -641,7 +646,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
             }
             catch(Exception e) {
                 log("Warning: Exception occurred while processing 'received-date' field of an email.");
-                e.printStackTrace();
+                logger.error(e);
             }
             
             try {
@@ -657,7 +662,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
             }
             catch(Exception e) {
                 log("Warning: Exception occurred while processing 'sent-date' field of an email.");
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         catch(Exception e) {
@@ -725,7 +730,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
                     doc.close();
                 }
                 catch(Exception e) {
-                    System.out.println("No PDF support!");
+                    logger.error("No PDF support!");
                 }
                 setData(emailTopic, contentTypeTopic, defaultLang, stringContent.trim());
             }
@@ -764,7 +769,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     
     public void extractHeaders(TopicMap map, Topic emailTopic, Part part) {
         try {
-            Enumeration e = part.getAllHeaders();
+            Enumeration<Header> e = part.getAllHeaders();
             Header header = null;
             String name = null;
             String value = null;
@@ -775,7 +780,7 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
             Topic headerName = null;
             Topic headerValue = null;
             while(e.hasMoreElements()) {
-                header = (Header) e.nextElement();
+                header = e.nextElement();
                 if(header != null) {
                     name = header.getName();
                     value = header.getValue();
@@ -867,17 +872,14 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
         if(nameMatcher.matches()) {
             emailName = nameMatcher.group(1);
             emailAddress = nameMatcher.group(2);
-            //System.out.println("found name '"+emailName+"' and address '"+emailAddress+"' in '"+originalAddress+"'");
         }
 
         Matcher addressMatcher = emailPattern.matcher(emailAddress);
         if(addressMatcher.matches()) {
-            //System.out.println("good! email address '"+emailAddress+"' matches the email pattern!");
         }
         else {
             if(addressMatcher.find()) {
                 emailAddress = addressMatcher.group(1);
-                //System.out.println("found email address '"+emailAddress+"'!");
             }
         }
 
@@ -904,10 +906,10 @@ public class SimpleEmailExtractor extends AbstractExtractor implements BrowserPl
     @Override
     public Locator buildSI(String siend) {
         try {
-            return new Locator("http://wandora.org/si/email/" + URLEncoder.encode(siend, "utf-8"));
+            return new Locator("https://wandora.org/si/email/" + URLEncoder.encode(siend, "utf-8"));
         }
         catch(Exception e) {
-            return new Locator("http://wandora.org/si/email/" + siend);
+            return new Locator("https://wandora.org/si/email/" + siend);
         }
     }
     

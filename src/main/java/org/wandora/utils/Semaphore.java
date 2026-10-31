@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,22 +33,25 @@ package org.wandora.utils;
  * @author  olli
  */
 public class Semaphore {
-    
+
     private int counter;
-    
+
     /** Creates a new instance of Semaphore */
     public Semaphore(int counter) {
-        this.counter=counter;
+        this.counter = counter;
     }
-    
-    public synchronized void acquire() throws InterruptedException{
-        while(counter==0) this.wait();
+
+
+    public synchronized void acquire() throws InterruptedException {
+        while (counter == 0)
+            this.wait();
         counter--;
     }
-    
-    public synchronized void release(){
+
+
+    public synchronized void release() {
         counter++;
         this.notify();
     }
-    
+
 }

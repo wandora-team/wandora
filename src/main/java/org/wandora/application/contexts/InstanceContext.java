@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,19 +31,20 @@ package org.wandora.application.contexts;
 import java.util.Iterator;
 
 import org.wandora.application.contexts.iterators.InstanceIterator;
+import org.wandora.topicmap.Topic;
 
 
 
 /**
  * @author akivela
  */
-public class InstanceContext extends LayeredTopicContext implements Context {
+public class InstanceContext extends LayeredTopicContext {
 
-    
+
     @Override
-    public Iterator getContextObjects() {
+    public Iterator<Topic> getContextObjects() {
         InstanceIterator instanceIterator = new InstanceIterator();
-        instanceIterator.initialize(super.getContextObjects(), wandora);
+        instanceIterator.initialize(super.getContextObjects(), getWandora());
         return instanceIterator;
     }
 

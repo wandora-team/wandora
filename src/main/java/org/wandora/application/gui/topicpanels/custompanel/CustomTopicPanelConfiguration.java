@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -224,7 +224,7 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         nameLabel = new org.wandora.application.gui.simple.SimpleLabel();
         nameField = new org.wandora.application.gui.simple.SimpleField();
         engineLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        engineComboBox = new org.wandora.application.gui.simple.SimpleComboBox();
+        engineComboBox = new org.wandora.application.gui.simple.SimpleComboBox<>();
         engineComboBox.setEditable(false);
         addGroupButton = new org.wandora.application.gui.simple.SimpleButton();
         removeGroupButton = new org.wandora.application.gui.simple.SimpleButton();
@@ -275,7 +275,7 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
         editorToolPanel.add(engineLabel, gridBagConstraints);
 
-        engineComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        engineComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -445,7 +445,7 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
     private javax.swing.JButton duplicateQueryButton;
     private javax.swing.JButton editButton;
     private javax.swing.JPanel editorToolPanel;
-    private javax.swing.JComboBox engineComboBox;
+    private javax.swing.JComboBox<String> engineComboBox;
     private javax.swing.JLabel engineLabel;
     private javax.swing.JPanel groupsPanel;
     private javax.swing.JTree groupsTree;
@@ -560,7 +560,10 @@ public class CustomTopicPanelConfiguration extends javax.swing.JPanel {
     
     public class DraggableTree extends DragJTree {
         
-        @Override
+        private static final long serialVersionUID = 1L;
+
+
+		@Override
         public int allowDrop(TreePath destinationParent, TreePath destinationPosition, TreePath source) {
             Object[] s=source.getPath();
             if(destinationParent==null) return DnDConstants.ACTION_NONE;

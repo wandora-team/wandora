@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -48,23 +47,23 @@ import org.wandora.topicmap.TopicTools;
  * 
  * @author akivela
  */
-public class MakeSubjectLocatorFromBasename extends AbstractWandoraTool implements WandoraTool {
+public class MakeSubjectLocatorFromBasename extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	
 	private static int MAXLEN = 256;
     private String replacement = "";
-    private String SLTemplate = "http://wandora.org/si/%BASENAME%";
+    private String SLTemplate = "https://wandora.org/si/%BASENAME%";
     
     private boolean askTemplate = true;
     private boolean overWrite = true;
     
     
-    /** Creates a new instance of CopyTextdataToSL */
+    /** Creates a new instance of MakeSubjectLocatorFromBasename */
     public MakeSubjectLocatorFromBasename() {
     }
     
-    public MakeSubjectLocatorFromBasename(Context preferredContext) {
+    public MakeSubjectLocatorFromBasename(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -82,13 +81,13 @@ public class MakeSubjectLocatorFromBasename extends AbstractWandoraTool implemen
 
     
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora admin, Context<?> context) {   
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             if(SLTemplate == null || SLTemplate.length() == 0) {
-                SLTemplate = "http://wandora.org/si/%BASENAME%";
+                SLTemplate = "https://wandora.org/si/%BASENAME%";
             }
             if(askTemplate) {
                 SLTemplate = WandoraOptionPane.showInputDialog(admin, "Make subject identifier using following template. String '%BASENAME%' is replaced with topic's base name.", SLTemplate);

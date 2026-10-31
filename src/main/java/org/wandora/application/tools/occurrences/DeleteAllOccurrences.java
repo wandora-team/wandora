@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
@@ -41,13 +40,13 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class DeleteAllOccurrences extends AbstractWandoraTool implements WandoraTool {
+public class DeleteAllOccurrences extends AbstractWandoraTool {
     
 	
 	private static final long serialVersionUID = 1L;
 	
     
-    public DeleteAllOccurrences(Context proposedContext) {
+    public DeleteAllOccurrences(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
     
@@ -68,14 +67,9 @@ public class DeleteAllOccurrences extends AbstractWandoraTool implements Wandora
     
 
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
-        Object contextSource = context.getContextSource();
-
-        Iterator topics = getContext().getContextObjects();
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
+        Iterator<?> topics = getContext().getContextObjects();
         Topic topic = null;
-        int count = 0;
-
-        ArrayList<Topic> allOccurrenceTypes = new ArrayList<Topic>();
 
         if(topics!= null && topics.hasNext()) {
             while(topics.hasNext() && !forceStop()) {
@@ -88,9 +82,7 @@ public class DeleteAllOccurrences extends AbstractWandoraTool implements Wandora
                             Collection<Topic> scopes = new ArrayList<>(topic.getData(type).keySet());
                             for(Topic scope : scopes) {
                                 topic.removeData(type, scope);
-                                count++;
                             }
-                            count++;
                         }
                         catch(Exception e) {
                             log(e);

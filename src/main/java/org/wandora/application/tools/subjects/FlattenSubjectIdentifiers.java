@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.TopicContext;
 import org.wandora.application.gui.ConfirmResult;
@@ -59,7 +58,7 @@ import org.wandora.topicmap.TopicMapException;
  * 
  * @author akivela
  */
-public class FlattenSubjectIdentifiers extends AbstractWandoraTool implements WandoraTool {
+public class FlattenSubjectIdentifiers extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -67,7 +66,7 @@ public class FlattenSubjectIdentifiers extends AbstractWandoraTool implements Wa
 	public FlattenSubjectIdentifiers() {
         setContext(new TopicContext());
     }
-    public FlattenSubjectIdentifiers(Context context) {
+    public FlattenSubjectIdentifiers(Context<?> context) {
         setContext(context);
     }
     
@@ -84,8 +83,8 @@ public class FlattenSubjectIdentifiers extends AbstractWandoraTool implements Wa
 
 
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
-        Iterator contextTopics = getContext().getContextObjects();
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
+        Iterator<?> contextTopics = getContext().getContextObjects();
         if(contextTopics == null || !contextTopics.hasNext()) return;
         
         if(WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to delete all but one subject identifiers of context topics?","Delete subject identifiers", WandoraOptionPane.YES_NO_OPTION)== WandoraOptionPane.YES_OPTION){

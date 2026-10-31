@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,24 +30,27 @@ package org.wandora.utils.logger;
 
 
 import java.io.PrintStream;
+
 /**
  *
- * @author  olli
+ * @author olli
  */
 public class SystemOutLogger extends Logger {
     protected PrintStream stream;
-    
+
     /** Creates a new instance of SimpleLogger */
     public SystemOutLogger() {
         this(System.out);
     }
-    
+
+
     public SystemOutLogger(PrintStream stream) {
-        this.stream=stream;
+        this.stream = stream;
     }
-    
+
+
     public void writelog(String level, String s) {
-        stream.println(level+" "+s);
+        stream.println(level + " " + s);
     }
-    
+
 }

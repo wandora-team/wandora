@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -43,7 +44,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.OccurrenceTable;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -61,7 +61,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class PasteBinOccurrenceUploader extends AbstractWandoraTool implements WandoraTool {
+public class PasteBinOccurrenceUploader extends AbstractWandoraTool {
     
 	private static final long serialVersionUID = 1L;
 	
@@ -83,7 +83,7 @@ public class PasteBinOccurrenceUploader extends AbstractWandoraTool implements W
         this.uploadAll = upAll;
     }
     
-    public PasteBinOccurrenceUploader(Context proposedContext) {
+    public PasteBinOccurrenceUploader(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
 
@@ -101,7 +101,7 @@ public class PasteBinOccurrenceUploader extends AbstractWandoraTool implements W
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         requiresRefresh = false;
         isConfigured = false;
         cancelled = false;
@@ -124,7 +124,7 @@ public class PasteBinOccurrenceUploader extends AbstractWandoraTool implements W
                 }
             }
             else {
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 if(!contextObjects.hasNext()) return;
                 
                 boolean wasUploaded = false;
@@ -253,7 +253,7 @@ public class PasteBinOccurrenceUploader extends AbstractWandoraTool implements W
         
         String reply = null;
         try {
-            reply = sendRequest(new URL(apibase), data.toString(), "application/x-www-form-urlencoded", "POST");
+            reply = sendRequest(new URI(apibase).toURL(), data.toString(), "application/x-www-form-urlencoded", "POST");
         }
         catch(Exception e) {
             reply = e.getMessage();
@@ -289,7 +289,6 @@ public class PasteBinOccurrenceUploader extends AbstractWandoraTool implements W
 
             if(method != null && con instanceof HttpURLConnection) {
                 ((HttpURLConnection) con).setRequestMethod(method);
-                //System.out.println("****** Setting HTTP request method to "+method);
             }
 
             if(ctype != null) {

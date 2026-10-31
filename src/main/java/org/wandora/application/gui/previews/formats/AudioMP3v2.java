@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,28 +30,27 @@ import org.wandora.application.gui.previews.PreviewUtils;
  * @author akivela
  */
 public class AudioMP3v2 extends AudioAbstract {
-    
-    
+
+
     public AudioMP3v2(String locator) {
         super(locator);
     }
-    
-    
-    
-    // -------------------------------------------------------------------------
-    
 
-    
+
+
+    // -------------------------------------------------------------------------
+
+
+
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { 
-                    "audio/mpeg",
-                    "audio/x-mpeg-3",
-                    "audio/mpeg3"
-                }, 
-                new String[] { 
-                    "mp3"
-                }
-        );
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "audio/mpeg",
+                        "audio/x-mpeg-3",
+                        "audio/mpeg3"
+                },
+                new String[] {
+                        "mp3"
+                });
     }
 }

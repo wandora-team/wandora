@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,11 +23,15 @@
 package org.wandora.application.tools.iot;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author Eero Lehtonen
@@ -35,6 +39,7 @@ import java.util.Map;
 
 
 class TimeSource extends AbstractIoTSource implements IoTSource {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TimeSource.class);
 
     private static final String HOST = "wandora.org";
     private static final String PATH = "/si/iot/source/time";
@@ -45,7 +50,7 @@ class TimeSource extends AbstractIoTSource implements IoTSource {
         Map<String,String> params;
         
         try {
-            URL u = new URL(url);
+            URL u = new URI(url).toURL();
             params = parseParams(u);
             if(params != null && params.containsKey("format")) {
                 String formatString = params.get("format");
@@ -57,15 +62,15 @@ class TimeSource extends AbstractIoTSource implements IoTSource {
             }
         } 
         catch (Exception ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
         }
         return Long.toString(System.currentTimeMillis()); // Default
     }
 
     
     @Override
-    public boolean matches(String url) throws MalformedURLException{
-        URL u = new URL(url);
+    public boolean matches(String url) throws MalformedURLException, URISyntaxException{
+        URL u = new URI(url).toURL();
         return u.getHost().equals(HOST) && u.getPath().equals(PATH);
     }
     

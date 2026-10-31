@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +27,8 @@
  */
 
 package org.wandora.topicmap;
-import org.wandora.topicmap.database.DatabaseTopicMap;
-import org.wandora.topicmap.database.DatabaseTopicMapType;
+import org.wandora.topicmap.database2.DatabaseTopicMap;
+import org.wandora.topicmap.database2.DatabaseTopicMapType;
 import org.wandora.topicmap.layered.LayerStack;
 import org.wandora.topicmap.layered.LayeredTopicMapType;
 import org.wandora.topicmap.linked.LinkedTopicMap;
@@ -74,10 +74,9 @@ public class TopicMapTypeManager {
     /**
      * Get the TopicMapType from a topic map implementing class.
      */
-    public static TopicMapType getType(Class<? extends TopicMap> c){
+    public static TopicMapType getType(Class<?> c){
         if(c==LayerStack.class) return new LayeredTopicMapType();
         else if(c==DatabaseTopicMap.class) return new DatabaseTopicMapType();
-        else if(c==org.wandora.topicmap.database2.DatabaseTopicMap.class) return new org.wandora.topicmap.database2.DatabaseTopicMapType();
         else if(c==TopicMapImpl.class) return new MemoryTopicMapType();
         else if(c==QueryTopicMap.class) return new QueryTopicMapType();
         else if(c==LinkedTopicMap.class) return new LinkedTopicMapType();

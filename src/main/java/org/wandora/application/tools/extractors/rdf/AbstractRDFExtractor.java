@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,10 +30,10 @@ package org.wandora.application.tools.extractors.rdf;
 
 
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.StringBufferInputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
@@ -64,6 +64,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -72,8 +73,8 @@ import org.wandora.utils.Tuples.T2;
  * @author akivela
  */
 public abstract class AbstractRDFExtractor extends AbstractExtractor {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractRDFExtractor.class);
 
 	private String defaultEncoding = "UTF-8";
     public static String defaultLanguage = "en";
@@ -115,7 +116,7 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
     }
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         baseUrl = null;
         super.execute(wandora, context);
     }
@@ -131,7 +132,6 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
         if(baseUrl != null) {
             int lindex = baseUrl.lastIndexOf("/");
             int findex = baseUrl.indexOf("/");
-            //System.out.println("solving base url: "+lindex+", "+findex+", "+baseUrl);
             if(1+findex < lindex) {
                 baseUrl = baseUrl.substring(0, lindex);
             }
@@ -142,6 +142,7 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
     public boolean _extractTopicsFrom(URL url, TopicMap topicMap) throws Exception {
         setBaseUrl(url.toExternalForm());
         URLConnection uc = url.openConnection();
+        uc.setRequestProperty("Accept", "application/rdf+xml");
         uc.setUseCaches(false);
         boolean r = _extractTopicsFrom(uc.getInputStream(), topicMap);
         return r;
@@ -168,7 +169,7 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
     
     public boolean _extractTopicsFrom(String in, TopicMap tm) throws Exception {        
         try {           
-            importRDF(new StringBufferInputStream(in), tm);
+            importRDF(new ByteArrayInputStream(in.getBytes(defaultEncoding)), tm);
         }
         catch(Exception e){
             log("Exception when handling request",e);
@@ -224,7 +225,7 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
     }
 
     
-    public static final String RDF_LIST_ORDER="http://wandora.org/si/rdf/list_order";
+    public static final String RDF_LIST_ORDER="https://wandora.org/si/rdf/list_order";
 
     public void handleStatement(Statement stmt, TopicMap map) throws TopicMapException {
         Resource subject   = stmt.getSubject();     // get the subject
@@ -240,9 +241,6 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
             // of some other statement
             return;
         }
-            
-        
-        //System.out.println("statement:\n  "+subject+"\n   "+predicate+"\n    "+object);
         
         Topic subjectTopic = getOrCreateTopic(map, subject.toString());
                 
@@ -388,7 +386,7 @@ public abstract class AbstractRDFExtractor extends AbstractExtractor {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return topic;
     }

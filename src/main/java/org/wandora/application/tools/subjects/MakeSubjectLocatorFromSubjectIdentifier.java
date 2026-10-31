@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,8 +34,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
-import org.wandora.application.contexts.ApplicationContext;
+import org.wandora.application.contexts.ApplicationTopicContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.LayeredTopicContext;
 import org.wandora.application.contexts.SIContext;
@@ -52,14 +51,14 @@ import org.wandora.topicmap.TopicMap;
  *
  * @author akivela
  */
-public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool implements WandoraTool {
+public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
 
 	public MakeSubjectLocatorFromSubjectIdentifier() {
     }
-    public MakeSubjectLocatorFromSubjectIdentifier(Context preferredContext) {
+    public MakeSubjectLocatorFromSubjectIdentifier(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -76,11 +75,11 @@ public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         
         
         if(context instanceof SIContext) {
-            Iterator sis = context.getContextObjects();
+            Iterator<?> sis = context.getContextObjects();
             if(sis.hasNext()) {
                 try {
                     Locator si = (Locator) sis.next();
@@ -101,13 +100,13 @@ public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool
             }
         }
         
-        else if(context instanceof ApplicationContext) {
-            Iterator<Topic> topics = context.getContextObjects();
+        else if(context instanceof ApplicationTopicContext) {
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             
             try {
                 while(topics.hasNext()) {
-                    Topic topic = topics.next();
+                    Topic topic = (Topic) topics.next();
                     Locator subjectIdentifier = topic.getFirstSubjectIdentifier();
                     topic.setSubjectLocator(subjectIdentifier);
                 }
@@ -119,7 +118,7 @@ public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool
         }
         
         else if(context instanceof LayeredTopicContext) {
-            Iterator<Topic> topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             setDefaultLogger();
             try {
@@ -135,7 +134,7 @@ public class MakeSubjectLocatorFromSubjectIdentifier extends AbstractWandoraTool
 
                 while(topics.hasNext() && !forceStop(result)) {
                     try {
-                        topic = topics.next();
+                        topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
                             setProgress(progress++);
 

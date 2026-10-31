@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -47,7 +46,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class MakeOccurrenceFromSubjectIdentifier extends AbstractWandoraTool implements WandoraTool {
+public class MakeOccurrenceFromSubjectIdentifier extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -65,7 +64,7 @@ public class MakeOccurrenceFromSubjectIdentifier extends AbstractWandoraTool imp
      */
     public MakeOccurrenceFromSubjectIdentifier() {
     }
-    public MakeOccurrenceFromSubjectIdentifier(Context preferredContext) {
+    public MakeOccurrenceFromSubjectIdentifier(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -83,13 +82,13 @@ public class MakeOccurrenceFromSubjectIdentifier extends AbstractWandoraTool imp
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Copying subject identifier to topic occurrence");
             log("Copying subject identifier to topic occurrence");
 
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;
@@ -105,7 +104,6 @@ public class MakeOccurrenceFromSubjectIdentifier extends AbstractWandoraTool imp
             if(language == null) return;
 
             int progress = 0;
-            int count = 0;
             Pattern siPattern = null;
 
             while(topics.hasNext() && !forceStop()) {
@@ -150,7 +148,6 @@ public class MakeOccurrenceFromSubjectIdentifier extends AbstractWandoraTool imp
                             occurrence = topic.getData(type, language);
                             if(occurrence == null || overWrite) {
                                 topic.setData(type, language, sistr);
-                                count++;
                             }
                         }
                     }

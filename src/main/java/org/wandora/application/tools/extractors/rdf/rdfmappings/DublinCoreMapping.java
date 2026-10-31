@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class DublinCoreMapping extends RDF2TopicMapsMapping {
     public final static String DC_TERMS_NS = "http://purl.org/dc/terms/";
     public final static String DC_TYPES_NS = "http://purl.org/dc/dcmitype/";
     
-    public static final String DC_ROLE_NS = "http://wandora.org/si/dc/role/";
+    public static final String DC_ROLE_NS = "https://wandora.org/si/dc/role/";
     
     public static final String[] SI_BASENAME_MAPPING = new String[] {
         DC_ELEMENTS_NS+"title",

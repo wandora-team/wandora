@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ import javax.swing.Icon;
 import javax.swing.JDialog;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.texteditor.TextEditor;
@@ -61,7 +60,7 @@ import org.wandora.utils.swing.GuiTools;
  *
  * @author olli
  */
-public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
+public class DiffTool extends AbstractWandoraTool  {
 
 
 
@@ -126,7 +125,7 @@ public class DiffTool extends AbstractWandoraTool implements WandoraTool  {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         
         JDialog dialog=new JDialog(wandora,"Compare topic maps",true);
         DiffToolConfigPanel configPanel=new DiffToolConfigPanel(wandora,dialog);

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@ import javax.swing.JOptionPane;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.tools.sqlconsole.data.utils.SQLPattern;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -59,6 +60,7 @@ import org.wandora.application.tools.sqlconsole.data.utils.SQLPattern;
 public class PatternEditor extends javax.swing.JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PatternEditor.class);
 
 	public static final String DEFAULT_PATTERN_NAME = "käyttäjän lauseke";
     
@@ -133,7 +135,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
         andCheckBox = new javax.swing.JCheckBox();
         jPanel4 = new javax.swing.JPanel();
         nameLabel = new javax.swing.JLabel();
-        nameComboBox = new javax.swing.JComboBox();
+        nameComboBox = new javax.swing.JComboBox<>();
         patternLabel = new javax.swing.JLabel();
         patternScrollPane = new javax.swing.JScrollPane();
         patternPane = new javax.swing.JTextPane();
@@ -436,14 +438,16 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
     public SQLPattern getCurrentPattern() {
         if(approve == true) {
             try { 
-                Pattern p = Pattern.compile(patternPane.getText()); // TRYING
+                Pattern.compile(patternPane.getText()); // TRYING
                 String name = (String) nameComboBox.getSelectedItem();
                 if(name == null) name = DEFAULT_PATTERN_NAME;
-                return new SQLPattern((String) nameComboBox.getSelectedItem(), patternPane.getText(), !matchCheckBox.isSelected(), !caseSensitivityCheckBox.isSelected()); }
+                return new SQLPattern((String) nameComboBox.getSelectedItem(), patternPane.getText(), !matchCheckBox.isSelected(), !caseSensitivityCheckBox.isSelected()); 
+            }
             catch (Exception e) { 
                 testResultPane.setBackground(TEST_ERROR);
-                testResultPane.setText("Virhe s��nn�llisess� lausekkeessa!\n\n" + e.toString());
-                return null; }
+                testResultPane.setText("Error in regular expression:\n\n" + e.toString());
+                return null; 
+            }
         }
         else {
             return originalPattern;
@@ -464,28 +468,27 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
     
     
     
     public void savePattern() {
-        String patternNameString=JOptionPane.showInputDialog(this, "Anna säännöllisen lausekkeen nimi", nameComboBox.getSelectedItem());
+        String patternNameString=JOptionPane.showInputDialog(this, "Name of the regular expression", nameComboBox.getSelectedItem());
 
         String patternString = patternPane.getText();
         if(patternNameString != null && patternNameString.length() > 0) {
             if(patternString != null && patternString.length() > 0) {
                 try {
-                    Pattern p = Pattern.compile(patternPane.getText()); // TESTING!
+                    Pattern.compile(patternPane.getText()); // TESTING!
                     SQLPattern kp = new SQLPattern(patternNameString, patternPane.getText(), !matchCheckBox.isSelected(), !caseSensitivityCheckBox.isSelected());
                     patterns.put(patternNameString, kp);
-                    //((KirjavaComboBox) nameComboBox).setOptions(patterns.keys());
                     nameComboBox.setSelectedItem(patternNameString);
                 }
                 catch (Exception e) {
                     testResultPane.setBackground(TEST_ERROR);
-                    testResultPane.setText("Säilytys epäonnistui! Virhe säännöllisessä lausekkeessa!\n\n" + e.toString());
+                    testResultPane.setText("Failed to save regular expressions! Error in regular expression:\n\n" + e.toString());
                 }
             }
             else {
@@ -584,7 +587,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
                 parsePatterns(s);
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -603,7 +606,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
                 parsePatterns(s);
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -631,7 +634,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }
@@ -670,7 +673,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
     
     
     public String patterns2String() {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         String key;
         for(Enumeration<String> keys=patterns.keys(); keys.hasMoreElements();) {
             try {
@@ -708,7 +711,7 @@ public class PatternEditor extends javax.swing.JDialog implements ActionListener
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JMenuItem loadMenuItem;
     private javax.swing.JCheckBox matchCheckBox;
-    private javax.swing.JComboBox nameComboBox;
+    private javax.swing.JComboBox<String> nameComboBox;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JLabel patternLabel;
     private javax.swing.JTextPane patternPane;

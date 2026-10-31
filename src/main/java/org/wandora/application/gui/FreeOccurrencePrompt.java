@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,9 +30,10 @@ package org.wandora.application.gui;
 
 import static org.wandora.utils.Tuples.t2;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.Vector;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.topicstringify.TopicToString;
@@ -40,17 +41,17 @@ import org.wandora.topicmap.SchemaBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author  olli
  */
 public class FreeOccurrencePrompt extends javax.swing.JDialog {
-    
-	
-	private static final long serialVersionUID = 1L;
-	
-	
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(FreeOccurrencePrompt.class);
+
+
     private Topic topic;
     private Wandora wandora;
     private boolean cancelled;
@@ -59,30 +60,35 @@ public class FreeOccurrencePrompt extends javax.swing.JDialog {
 
     private static Topic lastOccurrenceType = null;
     private Topic originalType = null;
-    
-    
+
+
     /** Creates new form FreeOccurrencePrompt */
     public FreeOccurrencePrompt(final Wandora wandora, final Topic topic, Topic occurrenceType) throws TopicMapException {
         super(wandora, true);
         this.wandora = wandora;
         this.topic = topic;
         this.originalType = occurrenceType;
-        
-        typeButton=new GetTopicButton(null,wandora,this,false,new GetTopicButton.ButtonHandler(){
-            private Vector<Topic> players=null;
-            private Vector<Topic> suggested=null;
+
+        typeButton = new GetTopicButton(null, wandora, this, false, new GetTopicButton.ButtonHandler() {
+            private List<Topic> players = null;
+            private List<Topic> suggested = null;
+
             @Override
-            public T2<Topic,Boolean> pressed(GetTopicButton button) throws TopicMapException {
-                suggested=suggestOccurrenceType(topic);
-                if(suggested==null || suggested.isEmpty()) {
+            public T2<Topic, Boolean> pressed(GetTopicButton button) throws TopicMapException {
+                suggested = suggestOccurrenceType(topic);
+                if (suggested == null || suggested.isEmpty()) {
                     return button.defaultPressHandler();
                 }
                 else {
-                    TabbedTopicSelector finder=wandora.getTopicFinder();
-                    finder.insertTab(new TopicListSelector(suggested),0);
-                    Topic s=wandora.showTopicFinder(wandora,finder);
-                    if(s==null) return t2(null,true);
-                    else return t2(s,false);                    
+                    TabbedTopicSelector finder = wandora.getTopicFinder();
+                    finder.insertTab(new TopicListSelector(suggested), 0);
+                    Topic s = wandora.showTopicFinder(wandora, finder);
+                    if (s == null) {
+                        return t2(null, true);
+                    }
+                    else {
+                        return t2(s, false);
+                    }
                 }
             }
         });
@@ -93,49 +99,48 @@ public class FreeOccurrencePrompt extends javax.swing.JDialog {
             }
         });
         initComponents();
-        this.cancelled=true;
+        this.cancelled = true;
 
-        if(lastOccurrenceType == null) {
+        if (lastOccurrenceType == null) {
             useLastButton.setEnabled(false);
         }
-        
-        if(occurrenceType != null) {
+
+        if (occurrenceType != null) {
             typeButton.setTopic(originalType);
         }
-        
+
         makeDataPanel();
         this.setSize(1200, 400);
         wandora.centerWindow(this);
     }
-    
-    
-    
+
+
+
     /** Creates new form FreeOccurrencePrompt */
     public FreeOccurrencePrompt(final Wandora wandora, final Topic topic) throws TopicMapException {
         this(wandora, topic, null);
     }
-    
-    
-    
 
-    
-    
-    public Vector<Topic> suggestOccurrenceType(Topic topic){
-        Vector<Topic> ret=new Vector<Topic>();
+
+
+    public List<Topic> suggestOccurrenceType(Topic topic) {
+        List<Topic> ret = new ArrayList<>();
         try {
-            Collection<Topic> types=SchemaBox.getOccurrenceTypesFor(topic);
-            for(Topic t : types) {
-                Hashtable<Topic,String> data=topic.getData(t);
-                if(data==null || data.isEmpty()) ret.add(t);
+            Collection<Topic> types = SchemaBox.getOccurrenceTypesFor(topic);
+            for (Topic t : types) {
+                Hashtable<Topic, String> data = topic.getData(t);
+                if (data == null || data.isEmpty()) {
+                    ret.add(t);
+                }
             }
         }
-        catch(TopicMapException tme) {
+        catch (TopicMapException tme) {
             wandora.handleError(tme);
         }
         return ret;
     }
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -257,90 +262,94 @@ public class FreeOccurrencePrompt extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        cancelled=true;
+        cancelled = true;
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        cancelled=false;
-        boolean close=true;
+        cancelled = false;
+        boolean close = true;
         try {
             close = makeOccurrence();
         }
-        catch(TopicMapException tme){
+        catch (TopicMapException tme) {
             wandora.handleError(tme);
         }
-        if(close) {
+        if (close) {
             lastOccurrenceType = typeButton.getTopic();
             this.setVisible(false);
         }
     }//GEN-LAST:event_okButtonActionPerformed
 
+
     private void useDefaultButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_useDefaultButtonMouseReleased
         try {
             typeButton.setTopic(SchemaBox.DEFAULT_OCCURRENCE_SI);
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error(e);
         }
     }//GEN-LAST:event_useDefaultButtonMouseReleased
 
+
     private void useLastButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_useLastButtonMouseReleased
         try {
-            if(lastOccurrenceType != null && !lastOccurrenceType.isRemoved()) {
+            if (lastOccurrenceType != null && !lastOccurrenceType.isRemoved()) {
                 typeButton.setTopic(lastOccurrenceType);
             }
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error(e);
         }
     }//GEN-LAST:event_useLastButtonMouseReleased
-    
-    
-    
+
+
+
     private boolean makeOccurrence() throws TopicMapException {
-        Topic type=typeButton.getTopic();
-        if(type == null) {
+        Topic type = typeButton.getTopic();
+        if (type == null) {
             return false;
         }
-        if(editor != null) {
-            if(!type.equals(originalType)) {
-                Hashtable<Topic,String> oldData = topic.getData(type);
-                if(oldData != null && oldData.size() > 0) {
+        if (editor != null) {
+            if (!type.equals(originalType)) {
+                Hashtable<Topic, String> oldData = topic.getData(type);
+                if (oldData != null && oldData.size() > 0) {
                     int c = WandoraOptionPane.showConfirmDialog(wandora,
-                            "Topic already contains occurrences with type "+TopicToString.toString(type)+".<br>"+
-                            "Do you want to overwrite old occurrences?");
-                    if(c != WandoraOptionPane.YES_OPTION) {
+                            "Topic already contains occurrences with type " + TopicToString.toString(type) + ".<br>" +
+                                    "Do you want to overwrite old occurrences?");
+                    if (c != WandoraOptionPane.YES_OPTION) {
                         return false;
                     }
                 }
-                if(originalType != null) {
+                if (originalType != null) {
                     topic.removeData(originalType);
                 }
             }
-            ((OccurrencePanel)editor).setOccurrenceType(type);
-            editor.applyChanges(topic, wandora); 
+            ((OccurrencePanel) editor).setOccurrenceType(type);
+            editor.applyChanges(topic, wandora);
             return true;
         }
         return false;
     }
-    
-    
-    public boolean wasCancelled(){
+
+
+    public boolean wasCancelled() {
         return cancelled;
     }
 
-    
+
     private void makeDataPanel() throws TopicMapException {
-        editor=new OccurrencePanel();
-        editor.initializeOccurrence(topic,originalType,wandora);
+        editor = new OccurrencePanel();
+        editor.initializeOccurrence(topic, originalType, wandora);
         dataPanel.removeAll();
-        dataPanel.add(editor,java.awt.BorderLayout.CENTER);
+        dataPanel.add(editor, java.awt.BorderLayout.CENTER);
         dataPanel.validate();
         this.repaint();
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton _typeButton;
@@ -353,5 +362,5 @@ public class FreeOccurrencePrompt extends javax.swing.JDialog {
     private javax.swing.JButton useDefaultButton;
     private javax.swing.JButton useLastButton;
     // End of variables declaration//GEN-END:variables
-    
+
 }

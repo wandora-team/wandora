@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ import org.wandora.query2.DirectiveUIHints.Parameter;
  */
 public abstract class Directive {
 
-    public static final String DEFAULT_NS="http://wandora.org/si/query/";
+    public static final String DEFAULT_NS="https://wandora.org/si/query/";
     public static final String DEFAULT_COL="#DEFAULT";
 
     public static Addon[] getStandardAddonHints(){
@@ -100,9 +100,9 @@ public abstract class Directive {
      * the query is done. If this is the top level directive you may have to do
      * it manually. These call should propaget automaticall to all inner queries.
      */
-    public ArrayList<ResultRow> query(QueryContext context,ResultRow input) throws QueryException {
+    public List<ResultRow> query(QueryContext context,ResultRow input) throws QueryException {
         ResultIterator iter=queryIterator(context,input);
-        ArrayList<ResultRow> res=new ArrayList<ResultRow>();
+        ArrayList<ResultRow> res=new ArrayList<>();
         while(iter.hasNext()) {
             if(context.checkInterrupt()) throw new QueryException("Execution interrupted");
             res.add(iter.next());
@@ -117,9 +117,9 @@ public abstract class Directive {
      * to execute a query. You can interrupt the query through the context
      * object by calling interrupt in it.
      */
-    public ArrayList<ResultRow> doQuery(QueryContext context,ResultRow input) throws QueryException {
-        if(!startQuery(context)) return new ArrayList<ResultRow>();
-        ArrayList<ResultRow> ret=query(context,input);
+    public List<ResultRow> doQuery(QueryContext context,ResultRow input) throws QueryException {
+        if(!startQuery(context)) return new ArrayList<>();
+        List<ResultRow> ret=query(context,input);
         endQuery(context);
         return ret;
     }
@@ -243,61 +243,5 @@ public abstract class Directive {
     public String debugString(String indent){
         return this.getClass().getSimpleName()+"("+debugStringParams(indent)+")";
     }
-/*
-    public static String getOperandString(Object o,QueryContext context,ResultRow input) throws QueryException {
-        Object ob=getOperand(o,context,input);
-        if(ob==null) return null;
-        else return ob.toString();
-    }
-    public static Object getOperand(Object o,QueryContext context,ResultRow input) throws QueryException {
-        if(o==null) return null;
-        else if(o instanceof Directive) {
-            ResultIterator iter=((Directive)o).queryIterator(context, input);
-            if(iter.hasNext()){
-                Object ret=iter.next().getActiveValue();
-                iter.dispose();
-                return ret;
-            }
-            else {
-                return null;
-            }
-        }
-        else return o;
-    }
-*/
-    public static void main(String[] args) throws Exception {
-/*        String debug=
-            new BaseName().of("#in").as("#bn").from(
-              new Instances().from("http://wandora.org/si/core/schema-type").as("#in"),
-              new Literals("Content type").as("#literals")
-            ).where("#bn","=","#literals").debugString();*/
-/*        String debug=
-            new Players("http://www.wandora.net/freedb/track",
-                    "http://www.wandora.net/freedb/artist"
-            ).as("#artist").of("#track").from(
-                new Regex("^([^\\(]*).*$","$1",0).from(
-                    new BaseName().from(
-                        new Instances().from("http://www.wandora.net/freedb/track")
-                            .as("#track")
-                    )
-                ).as("#trackname"),
-                new Regex("^([^\\(]*).*$","$1",0).from(
-                    new BaseName().from(
-                        new Players(
-                            "http://www.wandora.net/freedb/track",
-                            "http://www.wandora.net/freedb/track"
-                        ).as("#queentrack").from(
-                            new Literals("http://www.wandora.net/freedb/artist/QUEEN").as("#queen")
-                        )
-                    )
-                ).as("#queenname")
-            ).where("#trackname","=","#queenname")
-            .where("#artist","t!=","#queen").debugString();*/
-        String debug=new Identity().as("#b").of("#c").from(new BaseName()).debugString();
-        System.out.println(debug);
-        debug=new Identity().of("#c").as("#b").from(new BaseName()).debugString();
-        System.out.println(debug);
-        debug=new Identity().of("#c").from(new BaseName()).as("#b").debugString();
-        System.out.println(debug);
-    }
+
 }

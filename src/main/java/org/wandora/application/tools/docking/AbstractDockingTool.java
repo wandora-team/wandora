@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,12 +25,12 @@
 package org.wandora.application.tools.docking;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
 import org.wandora.application.gui.topicpanels.TopicPanel;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -38,21 +38,21 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class AbstractDockingTool extends AbstractWandoraTool implements WandoraTool {
-
+public class AbstractDockingTool extends AbstractWandoraTool {
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractDockingTool.class);
 
 	private static final long serialVersionUID = 1L;
 
 
 
 	@Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
-        System.out.println("Warning: Docking tool is not overriding execute method.");
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
+        logger.warn("Warning: Docking tool is not overriding execute method.");
     }
     
     
 
-    public DockingFramePanel solveDockingFramePanel(Wandora wandora, Context context) {
+    public DockingFramePanel solveDockingFramePanel(Wandora wandora, Context<?> context) {
         if(context != null) {
             Object contextSource = context.getContextSource();
             if(contextSource != null && contextSource instanceof DockingFramePanel) {

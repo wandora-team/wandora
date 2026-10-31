@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -55,7 +54,7 @@ import org.wandora.topicmap.TopicTools;
  *
  * @author akivela
  */
-public class FindAssociationsInOccurrence extends AbstractWandoraTool implements WandoraTool {
+public class FindAssociationsInOccurrence extends AbstractWandoraTool {
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -63,7 +62,7 @@ public class FindAssociationsInOccurrence extends AbstractWandoraTool implements
 	
 	public static int MAXLEN = 256;
     public String replacement = "";
-    public String SITemplate = "http://wandora.org/si/occurrence/%OCCURRENCE%";
+    public String SITemplate = "https://wandora.org/si/occurrence/%OCCURRENCE%";
     
     
     private boolean createNewTopics = false;
@@ -74,7 +73,7 @@ public class FindAssociationsInOccurrence extends AbstractWandoraTool implements
     public FindAssociationsInOccurrence() {
     }
     
-    public FindAssociationsInOccurrence(Context preferredContext) {
+    public FindAssociationsInOccurrence(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -95,7 +94,7 @@ public class FindAssociationsInOccurrence extends AbstractWandoraTool implements
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {   
+    public void execute(Wandora wandora, Context<?> context) {   
         try {
             requiresRefresh = false;
             GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Find associations options","Find associations options",true,new String[][]{
@@ -103,7 +102,7 @@ public class FindAssociationsInOccurrence extends AbstractWandoraTool implements
                 new String[]{"Occurrence scope","topic"},
                 new String[]{"Topic role","topic"},
                 new String[]{"Link pattern","string","\\[\\[(.+?)\\]\\]","The regular expression pattern for base names? First capture group in the pattern marks the base name."},
-                new String[]{"SI template","string","http://wandora.org/si/occurrence/%OCCURRENCE%"},
+                new String[]{"SI template","string","https://wandora.org/si/occurrence/%OCCURRENCE%"},
                 new String[]{"Create topics","boolean","true","Should new topics be created for non existing base names"},
             },wandora);
             god.setVisible(true);
@@ -120,7 +119,7 @@ public class FindAssociationsInOccurrence extends AbstractWandoraTool implements
             String recognizePatternString=values.get("Link pattern");
             createNewTopics=Boolean.parseBoolean(values.get("Create topics"));
             
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Locator occurrenceTypeLocator = occurrenceType.getSubjectIdentifiers().iterator().next();

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -63,9 +64,8 @@ import org.wandora.utils.Textbox;
  * @author akivela
  */
 public abstract class AbstractTagtheExtractor extends AbstractExtractor {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractTagtheExtractor.class);
 
 	protected String defaultEncoding = "UTF-8";
 
@@ -75,9 +75,9 @@ public abstract class AbstractTagtheExtractor extends AbstractExtractor {
     public static final String WEB_SERVICE_URL = "http://tagthe.net/api/";
 
 
-    public static final String SOURCE_SI = "http://wandora.org/si/source";
-    public static final String DOCUMENT_SI = "http://wandora.org/si/document";
-    public static final String TOPIC_SI = "http://wandora.org/si/topic";
+    public static final String SOURCE_SI = "https://wandora.org/si/source";
+    public static final String DOCUMENT_SI = "https://wandora.org/si/document";
+    public static final String TOPIC_SI = "https://wandora.org/si/topic";
 
     public static final String TAGTHE_SI = "http://tagthe.net";
     public static final String TAGTHE_TERM_SI = "http://tagthe.net/term";
@@ -289,7 +289,7 @@ public abstract class AbstractTagtheExtractor extends AbstractExtractor {
         }
 
         catch(TransformerException ex) {
-            ex.printStackTrace();
+        	logger.error(ex);
             return null;
         }
     }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,6 @@ import java.util.Map;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -75,7 +74,7 @@ import org.wandora.utils.IObox;
  */
 
 
-public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
+public class GraphXMLExport extends AbstractExportTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -141,7 +140,7 @@ public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
     
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
        String topicMapName = null;
        String exportInfo = null;
 
@@ -241,7 +240,7 @@ public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
 
         // First round... topic nodes
         int count = 0;
-        Iterator iter=topicMap.getTopics();
+        Iterator<Topic> iter=topicMap.getTopics();
         while(iter.hasNext() && !logger.forceStop()) {
             Topic t=(Topic)iter.next();
             if(t.isRemoved()) continue;
@@ -258,7 +257,7 @@ public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
 
             // Topic types....
             if(EXPORT_CLASSES && t.getTypes().size()>0) {
-                Iterator iter2=t.getTypes().iterator();
+                Iterator<Topic> iter2=t.getTypes().iterator();
                 while(iter2.hasNext()){
                     Topic t2=(Topic)iter2.next();
                     if(t2.isRemoved()) continue;
@@ -267,15 +266,15 @@ public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
             }
             // Topic occurrences....
             if(EXPORT_OCCURRENCES && t.getDataTypes().size()>0) {
-                Collection types=t.getDataTypes();
-                Iterator iter2=types.iterator();
+                Collection<Topic> types=t.getDataTypes();
+                Iterator<Topic> iter2=types.iterator();
                 while(iter2.hasNext()){
                     Topic type=(Topic)iter2.next();
-                    Hashtable ht=(Hashtable)t.getData(type);
-                    Iterator iter3=ht.entrySet().iterator();
+                    Hashtable<Topic,String> ht=t.getData(type);
+                    Iterator<Map.Entry<Topic,String>> iter3=ht.entrySet().iterator();
                     while(iter3.hasNext()){
-                        Map.Entry e=(Map.Entry)iter3.next();
-                        String data=(String)e.getValue();
+                        Map.Entry<Topic,String> e=iter3.next();
+                        String data=e.getValue();
                         echoNode(data, writer);
                         echoEdge(t, data, type, writer);
                     }
@@ -285,15 +284,15 @@ public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
 
         // Third round and association edges....
         if(!logger.forceStop()) {
-            iter=topicMap.getAssociations();
+            Iterator<Association> aiter=topicMap.getAssociations();
             int icount=0;
-            while(iter.hasNext() && !logger.forceStop()) {
+            while(aiter.hasNext() && !logger.forceStop()) {
                 logger.setProgress(count++);
-                Association a=(Association)iter.next();
-                Collection roles = a.getRoles();
+                Association a=aiter.next();
+                Collection<Topic> roles = a.getRoles();
                 if(roles.size() < 2) continue;
                 else if(roles.size() == 2) {
-                    Topic[] roleArray = (Topic[]) roles.toArray(new Topic[2]);
+                    Topic[] roleArray = roles.toArray(new Topic[2]);
                     echoEdge(a.getPlayer(roleArray[0]), a.getPlayer(roleArray[1]), a.getType(), writer);
                 }
                 else {
@@ -301,9 +300,9 @@ public class GraphXMLExport extends AbstractExportTool implements WandoraTool {
                         icount++;
                         String target="nameless-intermediator-node-"+icount;
                         echoNode(target, writer);
-                        Iterator iter2 = roles.iterator();
+                        Iterator<Topic> iter2 = roles.iterator();
                         while(iter2.hasNext()) {
-                            Topic role=(Topic)iter2.next();
+                            Topic role=iter2.next();
                             echoEdge(a.getPlayer(role), target, a.getType(), writer);
                         }
                     }

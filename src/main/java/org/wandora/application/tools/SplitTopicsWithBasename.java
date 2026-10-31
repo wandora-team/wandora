@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,12 +36,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -52,6 +52,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapReadOnlyException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -63,10 +64,9 @@ import org.wandora.topicmap.TopicMapReadOnlyException;
  *
  * @author akivela
  */
-public class SplitTopicsWithBasename extends AbstractWandoraTool implements WandoraTool {
-
-	
+public class SplitTopicsWithBasename extends AbstractWandoraTool {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SplitTopicsWithBasename.class);
 
 
 	public static boolean SKIP_WHITE_SPACE_SPLIT_PARTS = true;
@@ -85,7 +85,7 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
     
     public SplitTopicsWithBasename() {
     }
-    public SplitTopicsWithBasename(Context preferredContext) {
+    public SplitTopicsWithBasename(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -110,8 +110,8 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
     
     
     @Override
-    public void execute(Wandora w, Context context) {       
-        Iterator topics = getContext().getContextObjects();
+    public void execute(Wandora w, Context<?> context) {       
+        Iterator<?> topics = getContext().getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         TopicMap tm = w.getTopicMap();
         
@@ -236,7 +236,7 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
            
             // --- resolve new subject identifiers ---
             Collection<Locator> sis = split.getSubjectIdentifiers();
-            ArrayList<Locator> siv = new ArrayList();
+            List<Locator> siv = new ArrayList<>();
             siv.addAll(sis);
 
             Locator l = null;
@@ -301,18 +301,17 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
                     String value = keyValue[0];
                     if(!originals.containsKey(key)) {
                         originals.put(key, value);
-                        // System.out.println("Adding key: "+key);
                     }
                     else {
-                        System.out.println("Originals already contains key: "+key);
+                        logger.warn("Originals already contains key: "+key);
                         originals.put(key, originals.get(key) + " ; " + value);
                     }
                 }
                 else {
-                    System.out.println("Illegal number of elements in original line: "+str);
+                    logger.warn("Illegal number of elements in original line: "+str);
                 }
             }
-            System.out.println("Originals has "+originals.size()+" values.");
+            logger.info("Originals has "+originals.size()+" values.");
             
             br.close();
             
@@ -330,21 +329,21 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool implements Wand
                             // OK!
                         }
                         else {
-                            System.out.println("Original key "+keyValue[1]+ " contains no '"+keyValue[0]+"'");
+                            logger.info("Original key "+keyValue[1]+ " contains no '"+keyValue[0]+"'");
                         }
                     }
                     else {
-                        System.out.println("Originals has no key: "+keyValue[1]);
+                        logger.info("Originals has no key: "+keyValue[1]);
                     }
                 }
                 else {
-                    System.out.println("Illegal number of elements in original line: "+str);
+                    logger.info("Illegal number of elements in original line: "+str);
                 }
             }
 
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         finally {
         	if(br != null) {

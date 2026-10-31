@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ public interface TopicStringifier {
      * Initialization method is called before a TopicStringifier is actually used.
      * If initialization returns false, the TopicStringifier should not be used.
      */
-    public boolean initialize(Wandora wandora, Context context);
+    public boolean initialize(Wandora wandora, Context<?> context);
     
     /**
      * toString method is the actual endpoint used to create a string out of a

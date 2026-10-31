@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@ import java.io.StringReader;
 import java.net.URL;
 import java.util.Hashtable;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -74,7 +73,7 @@ import org.wandora.utils.Textbox;
  *
  * @author akivela
  */
-public class ExtractKiasmaKeywords extends AbstractExtractor implements WandoraTool {
+public class ExtractKiasmaKeywords extends AbstractExtractor {
     
 
 	private static final long serialVersionUID = 1L;
@@ -191,9 +190,7 @@ public class ExtractKiasmaKeywords extends AbstractExtractor implements WandoraT
                 tokens = line.split("\t");
                 for(int i=0; i<tokens.length; i++) { // Trim results!
                     if(tokens[i] != null && tokens[i].length() > 0) {
-                        //System.out.print("trimming " + tokens[i]);
                         tokens[i] = Textbox.trimExtraSpaces(tokens[i]);
-                        //System.out.print(" --> " + tokens[i]);
                     }
                 }
                 if(tokens.length > 1) {
@@ -213,7 +210,6 @@ public class ExtractKiasmaKeywords extends AbstractExtractor implements WandoraT
                         }
                     }
                     if(currentWork != null) {
-                        //System.out.println("tokens length:" + tokens.length);
                         if(tokens.length > 3 && tokens[3].length() > 0) { // Iconclass code exists!
                             iconclassCode = tokens[3];
                             log("Found iconclass keyword '" + iconclassCode + "'.");
@@ -348,7 +344,7 @@ public class ExtractKiasmaKeywords extends AbstractExtractor implements WandoraT
     
     public Locator getLocatorForIconclass(String iconclassCode) {
         try {
-            return new Locator( TopicTools.cleanDirtyLocator("http://wandora.org/si/iconclass/" + iconclassCode) );
+            return new Locator( TopicTools.cleanDirtyLocator("https://wandora.org/si/iconclass/" + iconclassCode) );
         }
         catch(Exception e) {
             log(e);

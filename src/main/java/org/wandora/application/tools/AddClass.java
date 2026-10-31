@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ package org.wandora.application.tools;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
@@ -40,7 +39,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class AddClass extends AbstractWandoraTool implements WandoraTool {
+public class AddClass extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -51,7 +50,7 @@ public class AddClass extends AbstractWandoraTool implements WandoraTool {
     /** Creates a new instance of AddClass */
     public AddClass() {
     }
-    public AddClass(Context preferredContext) {
+    public AddClass(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -66,9 +65,9 @@ public class AddClass extends AbstractWandoraTool implements WandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         shouldRefresh = false;
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         if(topics != null && topics.hasNext()) {
             Topic classTopic=wandora.showTopicFinder();
             

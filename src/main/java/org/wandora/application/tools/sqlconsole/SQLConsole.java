@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ import javax.swing.JFileChooser;
 import org.wandora.application.gui.UIBox;
 import org.wandora.utils.Options;
 import org.wandora.utils.RegexFileChooser;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author  olli
@@ -42,6 +43,7 @@ import org.wandora.utils.RegexFileChooser;
 public class SQLConsole extends javax.swing.JDialog {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SQLConsole.class);
 
 	private Options options;
         
@@ -168,8 +170,7 @@ public class SQLConsole extends javax.swing.JDialog {
     }
     
     public static void reportException(Exception e){
-        e.printStackTrace();
-        //new KirjavaExceptionDialog(parent,true,e).setVisible(true);
+    	logger.error(e);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

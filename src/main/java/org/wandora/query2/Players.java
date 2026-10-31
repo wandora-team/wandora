@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 package org.wandora.query2;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.wandora.query2.DirectiveUIHints.Addon;
 import org.wandora.query2.DirectiveUIHints.Constructor;
@@ -138,7 +139,7 @@ public class Players extends Directive implements DirectiveUIHints.Provider {
             }
             Topic t=(Topic)o;
 
-            ArrayList<ResultRow> ret=new ArrayList<ResultRow>();
+            List<ResultRow> ret=new ArrayList<>();
 
             Topic atype=null;
             if(associationType!=null) atype=associationType.getOperandTopic(context, input);

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,31 +32,35 @@ package org.wandora.topicmap.layered.ambiguity;
 
 import org.wandora.topicmap.layered.AmbiguityResolution;
 import org.wandora.topicmap.layered.AmbiguityResolver;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class AmbiguityDebugger implements AmbiguityResolver {
-       
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AmbiguityDebugger.class);
+
     /** Creates a new instance of AmbiguityDebugger */
     public AmbiguityDebugger() {
     }
-    
-    
+
+
     @Override
     public void ambiguity(String s) {
-        System.out.println(s);
+        logger.info(s);
     }
-    
+
+
     @Override
     public AmbiguityResolution resolveAmbiguity(String event) {
-        return resolveAmbiguity(event,null);
+        return resolveAmbiguity(event, null);
     }
-    
+
+
     @Override
-    public AmbiguityResolution resolveAmbiguity(String event,String msg) {
-        ambiguity(event+(msg==null?"":(" "+msg)));
+    public AmbiguityResolution resolveAmbiguity(String event, String msg) {
+        ambiguity(event + (msg == null ? "" : (" " + msg)));
         return AmbiguityResolution.addToSelected;
     }
 }

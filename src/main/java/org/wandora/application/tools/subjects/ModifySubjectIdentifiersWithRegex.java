@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.TopicContext;
 import org.wandora.application.gui.RegularExpressionEditor;
@@ -47,7 +46,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class ModifySubjectIdentifiersWithRegex extends AbstractWandoraTool implements WandoraTool {
+public class ModifySubjectIdentifiersWithRegex extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -58,7 +57,7 @@ public class ModifySubjectIdentifiersWithRegex extends AbstractWandoraTool imple
     public ModifySubjectIdentifiersWithRegex() {
         setContext(new TopicContext());
     }
-    public ModifySubjectIdentifiersWithRegex(Context preferredContext) {
+    public ModifySubjectIdentifiersWithRegex(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -74,8 +73,8 @@ public class ModifySubjectIdentifiersWithRegex extends AbstractWandoraTool imple
     }
     
   
-    public void execute(Wandora admin, Context context) {   
-        Iterator topics = context.getContextObjects();
+    public void execute(Wandora admin, Context<?> context) {   
+        Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         try {
             editor = RegularExpressionEditor.getReplaceExpressionEditor(admin);
@@ -90,7 +89,6 @@ public class ModifySubjectIdentifiersWithRegex extends AbstractWandoraTool imple
                 Topic topic = null;
                 String newSIString = null;
                 String SIString = null;
-                int progress = 0;
                 int changed = 0;
                 Collection<Locator> sis = null;
                 Locator l = null;
@@ -106,7 +104,6 @@ public class ModifySubjectIdentifiersWithRegex extends AbstractWandoraTool imple
                 
                 while(topics.hasNext() && !forceStop()) {
                     try {
-                        progress++;
                         topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
                             sis = topic.getSubjectIdentifiers();

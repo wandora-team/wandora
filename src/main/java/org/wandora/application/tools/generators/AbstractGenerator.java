@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@ package org.wandora.application.tools.generators;
 
 import javax.swing.Icon;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -39,15 +38,16 @@ import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author akivela
  */
-public abstract class AbstractGenerator extends AbstractWandoraTool implements WandoraTool {
-    
+public abstract class AbstractGenerator extends AbstractWandoraTool {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractGenerator.class);
 	
 	/** Creates a new instance of AbstractGenerator */
     public AbstractGenerator() {
@@ -72,7 +72,7 @@ public abstract class AbstractGenerator extends AbstractWandoraTool implements W
         }
         catch(Exception e) {
             log(e);
-            e.printStackTrace();
+            logger.error(e);
         }
         return topic;
     }
@@ -91,7 +91,7 @@ public abstract class AbstractGenerator extends AbstractWandoraTool implements W
         }
         catch(Exception e) {
             log(e);
-            e.printStackTrace();
+            logger.error(e);
         }
         return topic;
     }
@@ -111,7 +111,7 @@ public abstract class AbstractGenerator extends AbstractWandoraTool implements W
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
     }
 

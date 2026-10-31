@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,13 +26,13 @@ package org.wandora.application.tools.undoredo;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.undowrapper.UndoException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -41,10 +41,11 @@ import org.wandora.topicmap.undowrapper.UndoException;
  */
 
 
-public class Redo extends AbstractWandoraTool implements WandoraTool {
+public class Redo extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Redo.class);
 
 	@Override
     public Icon getIcon() {
@@ -62,7 +63,7 @@ public class Redo extends AbstractWandoraTool implements WandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         if(wandora != null) {
             try {
                 wandora.redo();
@@ -74,7 +75,7 @@ public class Redo extends AbstractWandoraTool implements WandoraTool {
                         ue.getMessage());
                 }
                 else {
-                    ue.printStackTrace();
+                	logger.error(ue);
                     WandoraOptionPane.showMessageDialog(wandora, 
                         "Redo exception occurred. In order to redo you need to undo something first.", 
                         "Redo exception occurred");
@@ -104,7 +105,6 @@ public class Redo extends AbstractWandoraTool implements WandoraTool {
     
     @Override
     public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        //System.out.println(prefix);
         UndoRedoOptions dialog=new UndoRedoOptions();
         dialog.open(wandora);
     }

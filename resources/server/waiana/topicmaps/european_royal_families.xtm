@@ -11,7 +11,7 @@
 	</topic>
 	<topic id="ID2063089-topic86543">
 		<subjectIdentifier href="http://www.wandora.org/core/default-association"/>
-		<subjectIdentifier href="http://wandora.org/si/core/default-association"/>
+		<subjectIdentifier href="https://wandora.org/si/core/default-association"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86356"/>
 		</instanceOf>
@@ -20,7 +20,7 @@
 		</name>
 	</topic>
 	<topic id="ID2063089-topic86252">
-		<subjectIdentifier href="http://wandora.org/si/core/lang-independent"/>
+		<subjectIdentifier href="https://wandora.org/si/core/lang-independent"/>
 		<subjectIdentifier href="http://www.wandora.org/core/langindependent"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86213"/>
@@ -44,7 +44,7 @@
 		</name>
 	</topic>
 	<topic id="ID2063089-topic86235">
-		<subjectIdentifier href="http://wandora.org/si/core/role"/>
+		<subjectIdentifier href="https://wandora.org/si/core/role"/>
 		<subjectIdentifier href="http://www.wandora.org/core/role"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86258"/>
@@ -91,7 +91,7 @@
 		</occurrence>
 	</topic>
 	<topic id="ID2063089-topic86354">
-		<subjectIdentifier href="http://wandora.org/si/core/role-class"/>
+		<subjectIdentifier href="https://wandora.org/si/core/role-class"/>
 		<subjectIdentifier href="http://www.wandora.org/core/roleclass"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86258"/>
@@ -119,7 +119,7 @@
 		</occurrence>
 	</topic>
 	<topic id="ID2063089-topic86356">
-		<subjectIdentifier href="http://wandora.org/si/core/association-type"/>
+		<subjectIdentifier href="https://wandora.org/si/core/association-type"/>
 		<subjectIdentifier href="http://www.wandora.org/core/associationtype"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86258"/>
@@ -172,7 +172,7 @@
 	</topic>
 	<topic id="ID2063089-topic86258">
 		<subjectIdentifier href="http://www.wandora.org/core/schema-type"/>
-		<subjectIdentifier href="http://wandora.org/si/core/schema-type"/>
+		<subjectIdentifier href="https://wandora.org/si/core/schema-type"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86258"/>
 			<topicRef href="#ID2063089-topic86354"/>
@@ -199,7 +199,7 @@
 		</occurrence>
 	</topic>
 	<topic id="ID2063089-topic86525">
-		<subjectIdentifier href="http://wandora.org/si/core/edittime"/>
+		<subjectIdentifier href="https://wandora.org/si/core/edittime"/>
 		<subjectIdentifier href="http://www.wandora.org/core/edittime"/>
 		<name>
 			<value>Topic edit time</value>
@@ -215,7 +215,7 @@
 		</occurrence>
 	</topic>
 	<topic id="ID2063089-topic86256">
-		<subjectIdentifier href="http://wandora.org/si/core/variant-name-version"/>
+		<subjectIdentifier href="https://wandora.org/si/core/variant-name-version"/>
 		<subjectIdentifier href="http://www.wandora.org/core/variant-name-version"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86258"/>
@@ -255,7 +255,7 @@
 		</name>
 	</topic>
 	<topic id="ID2063089-topic86328">
-		<subjectIdentifier href="http://wandora.org/si/core/default-role-1"/>
+		<subjectIdentifier href="https://wandora.org/si/core/default-role-1"/>
 		<subjectIdentifier href="http://www.wandora.org/core/default-role-1"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86235"/>
@@ -265,7 +265,7 @@
 		</name>
 	</topic>
 	<topic id="ID2063089-topic86330">
-		<subjectIdentifier href="http://wandora.org/si/core/wandora-class"/>
+		<subjectIdentifier href="https://wandora.org/si/core/wandora-class"/>
 		<subjectIdentifier href="http://www.wandora.org/core/wandoraclass"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86258"/>
@@ -330,7 +330,7 @@
 		</name>
 	</topic>
 	<topic id="ID2063089-topic86207">
-		<subjectIdentifier href="http://wandora.org/si/core/default-occurrence"/>
+		<subjectIdentifier href="https://wandora.org/si/core/default-occurrence"/>
 		<subjectIdentifier href="http://www.wandora.org/core/default-occurrence"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86209"/>
@@ -399,8 +399,8 @@
 		</name>
 	</topic>
 	<topic id="ID2063089-topic86254">
-		<subjectIdentifier href="http://wandora.org/si/core/hidelevel"/>
-		<subjectIdentifier href="http://wandora.org/si/core/hide-level"/>
+		<subjectIdentifier href="https://wandora.org/si/core/hidelevel"/>
+		<subjectIdentifier href="https://wandora.org/si/core/hide-level"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86209"/>
 		</instanceOf>
@@ -434,7 +434,7 @@
 		</name>
 	</topic>
 	<topic id="ID2063089-topic86209">
-		<subjectIdentifier href="http://wandora.org/si/core/occurrence-type"/>
+		<subjectIdentifier href="https://wandora.org/si/core/occurrence-type"/>
 		<subjectIdentifier href="http://www.wandora.org/core/occurrencetype"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86258"/>
@@ -463,7 +463,7 @@
 		</occurrence>
 	</topic>
 	<topic id="ID2063089-topic86306">
-		<subjectIdentifier href="http://wandora.org/si/core/default-role-2"/>
+		<subjectIdentifier href="https://wandora.org/si/core/default-role-2"/>
 		<subjectIdentifier href="http://www.wandora.org/core/default-role-2"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86235"/>
@@ -474,7 +474,7 @@
 	</topic>
 	<topic id="ID2063089-topic86213">
 		<subjectIdentifier href="http://www.topicmaps.org/xtm/1.0/language.xtm"/>
-		<subjectIdentifier href="http://wandora.org/si/core/language"/>
+		<subjectIdentifier href="https://wandora.org/si/core/language"/>
 		<subjectIdentifier href="http://www.wandora.org/core/language"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86258"/>
@@ -491,7 +491,7 @@
 		</name>
 	</topic>
 	<topic id="ID2063089-topic86404">
-		<subjectIdentifier href="http://wandora.org/si/core/content-type"/>
+		<subjectIdentifier href="https://wandora.org/si/core/content-type"/>
 		<subjectIdentifier href="http://www.wandora.org/core/contenttype"/>
 		<instanceOf>
 			<topicRef href="#ID2063089-topic86258"/>

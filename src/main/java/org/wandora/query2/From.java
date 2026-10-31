@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,6 +96,8 @@ public class From extends Directive implements DirectiveUIHints.Provider  {
         return debugStringInner(new Directive[]{to,from},indent);
     }
 
+    
+    
     private class FromIterator extends ResultIterator {
         public ResultIterator fromIter;
         public ResultIterator toIter;

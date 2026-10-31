@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,6 @@ import java.util.Set;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
@@ -60,7 +59,7 @@ import org.wandora.utils.IObox;
  *
  * @author  olli
  */
-public class ExportSchemaMap extends AbstractExportTool implements WandoraTool {
+public class ExportSchemaMap extends AbstractExportTool {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -113,7 +112,7 @@ public class ExportSchemaMap extends AbstractExportTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         SimpleFileChooser chooser = UIConstants.getFileChooser();
         chooser.setDialogTitle("Export Wandora schema...");
         

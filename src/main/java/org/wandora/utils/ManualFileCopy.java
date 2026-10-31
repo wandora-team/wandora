@@ -20,9 +20,11 @@ public class ManualFileCopy implements Abortable.Impl {
         this.parent = parent;
     }
 
+
     public void forceAbort() {
         abortRequested = true;
     }
+
 
     public static Abortable.ImplFactory factory(final String outPath, final String inPath) {
         return new Abortable.ImplFactory() {
@@ -32,8 +34,9 @@ public class ManualFileCopy implements Abortable.Impl {
         };
     }
 
+
     public void run() {
-        final boolean overWrite = false;
+        boolean overWrite = false;
         try {
             File source = new File(new URI(inPath));
             File target = new File(new URI(outPath));
@@ -74,11 +77,14 @@ public class ManualFileCopy implements Abortable.Impl {
 
             parent.progress(1.0, Abortable.Status.Success, "File copy operation succeeded.");
 
-        } catch (FileNotFoundException ex) {
+        }
+        catch (FileNotFoundException ex) {
             parent.progress(0.0, Abortable.Status.Failure, "File not found: " + ex.getMessage());
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             parent.progress(0.0, Abortable.Status.Failure, "IO exception: " + ex.getMessage());
-        } catch (URISyntaxException e) {
+        }
+        catch (URISyntaxException e) {
             parent.progress(0.0, Abortable.Status.Failure, "Syntax error in SL URI: " + e.getMessage());
         }
     }

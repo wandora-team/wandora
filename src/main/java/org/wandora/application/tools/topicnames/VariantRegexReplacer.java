@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.TopicContext;
 import org.wandora.application.gui.RegularExpressionEditor;
@@ -51,7 +50,7 @@ import org.wandora.topicmap.Topic;
  */
 
 
-public class VariantRegexReplacer extends AbstractWandoraTool implements WandoraTool {
+public class VariantRegexReplacer extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -62,7 +61,7 @@ public class VariantRegexReplacer extends AbstractWandoraTool implements Wandora
     public VariantRegexReplacer() {
         setContext(new TopicContext());
     }
-    public VariantRegexReplacer(Context preferredContext) {
+    public VariantRegexReplacer(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -78,8 +77,8 @@ public class VariantRegexReplacer extends AbstractWandoraTool implements Wandora
     }
     
   
-    public void execute(Wandora wandora, Context context) {
-        Iterator topics = context.getContextObjects();
+    public void execute(Wandora wandora, Context<?> context) {
+        Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         try {
             editor = RegularExpressionEditor.getReplaceExpressionEditor(wandora);
@@ -97,14 +96,12 @@ public class VariantRegexReplacer extends AbstractWandoraTool implements Wandora
                 Collection<Set<Topic>> scopes = null;
                 Iterator<Set<Topic>> scopeIterator = null;
                 Set<Topic> scope = null;
-                int progress = 0;
                 int count = 0;
                 
                 while(topics.hasNext() && !forceStop()) {
                     try {
                         topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
-                            progress++;
                             scopes = topic.getVariantScopes();
                             if(scopes != null) {
                                 scopeIterator = scopes.iterator();

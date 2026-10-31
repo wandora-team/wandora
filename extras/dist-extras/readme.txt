@@ -38,25 +38,25 @@ More information
 ================
 
 Wandora's home page
-http://wandora.org
+https://wandora.org
 
 Download Wandora
-http://wandora.org/www/download
+https://wandora.org/www/download
  
 Install Wandora
-http://wandora.org/wiki/How_to_install_Wandora
+https://wandora.org/wiki/How_to_install_Wandora
 
 Run Wandora
-http://wandora.org/wiki/Running_Wandora
+https://wandora.org/wiki/Running_Wandora
 
 Start using Wandora
-http://wandora.org/wiki/Quickstart
+https://wandora.org/wiki/Quickstart
  
 Wandora's documentation
-http://wandora.org/wiki/Main_Page
+https://wandora.org/wiki/Main_Page
 
 Wandora forum
-http://wandora.org/forum
+https://wandora.org/forum
 
 
 Thank you for using Wandora.

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ import java.io.FileInputStream;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -38,16 +37,16 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author akivela
  */
-public class XTMRoundTrip extends AbstractWandoraTool implements WandoraTool {
-
-
+public class XTMRoundTrip extends AbstractWandoraTool {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(XTMRoundTrip.class);
 
 
 	@Override
@@ -74,7 +73,7 @@ public class XTMRoundTrip extends AbstractWandoraTool implements WandoraTool {
 
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             SimpleFileChooser chooser=UIConstants.getFileChooser();
             chooser.setMultiSelectionEnabled(true);
@@ -113,7 +112,7 @@ public class XTMRoundTrip extends AbstractWandoraTool implements WandoraTool {
                     map.exportXTM(exportFileName, this);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
             long endtime = System.currentTimeMillis();

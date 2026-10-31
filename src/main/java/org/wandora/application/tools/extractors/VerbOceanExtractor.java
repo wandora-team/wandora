@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -71,7 +70,7 @@ import org.wandora.topicmap.TopicMapException;
  * 
  * @author akivela
  */
-public class VerbOceanExtractor extends AbstractExtractor implements WandoraTool {
+public class VerbOceanExtractor extends AbstractExtractor {
 
 
 	private static final long serialVersionUID = 1L;
@@ -173,7 +172,7 @@ public class VerbOceanExtractor extends AbstractExtractor implements WandoraTool
 
 
     public boolean _extractTopicsFrom(String str, TopicMap tm) throws Exception {
-        String stringLocator = "http://wandora.org/si/verb-ocean-extractor/";
+        String stringLocator = "https://wandora.org/si/verb-ocean-extractor/";
         try {
             _extractTopicsFromStream(stringLocator, new ByteArrayInputStream(str.getBytes()), tm);
             return true;
@@ -242,7 +241,7 @@ public class VerbOceanExtractor extends AbstractExtractor implements WandoraTool
     
     
     
-    String SI_BASE = "http://wandora.org/si/verbocean/";
+    String SI_BASE = "https://wandora.org/si/verbocean/";
     public Topic getOrCreateTopic(String name, String path, TopicMap topicMap) {
         try {
             if(topicMap != null) {

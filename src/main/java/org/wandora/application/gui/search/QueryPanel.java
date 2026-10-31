@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 
 
 
-
 package org.wandora.application.gui.search;
 
 
@@ -37,9 +36,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelListener;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -70,6 +69,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
 import org.wandora.utils.Tuples;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -80,15 +80,17 @@ import org.wandora.utils.Tuples;
 public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
     private static final long serialVersionUID = 1L;
-    
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(QueryPanel.class);
+
     private Wandora wandora = null;
     private String SCRIPT_QUERY_OPTION_KEY = "scriptQueries";
-    private List<Tuples.T3<String,String,String>> storedQueryScripts = new ArrayList<Tuples.T3<String,String,String>>();
+    private List<Tuples.T3<String, String, String>> storedQueryScripts = new ArrayList<>();
     private MixedTopicTable resultsTable = null;
     private SimpleLabel message = null;
-    
-    
-    
+
+
+
     /**
      * Creates new form QueryPanel
      */
@@ -100,10 +102,10 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         message.setIcon(UIBox.getIcon("gui/icons/warn.png"));
         scriptTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         engineComboBox.setEditable(false);
-        List<String> engines=WandoraScriptManager.getAvailableEngines();
+        List<String> engines = WandoraScriptManager.getAvailableEngines();
         engineComboBox.removeAllItems();
-        for(String e : engines) {
-            if(e != null && e.length() > 0) {
+        for (String e : engines) {
+            if (e != null && e.length() > 0) {
                 engineComboBox.addItem(e);
             }
         }
@@ -112,32 +114,32 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         readStoredScriptQueries();
     }
 
-    
-    
+
+
     public void removeResultScrollPanesMouseListeners() {
         MouseWheelListener[] mouseWheelListeners = resultScrollPane.getMouseWheelListeners();
-        for(MouseWheelListener listener : mouseWheelListeners) {
+        for (MouseWheelListener listener : mouseWheelListeners) {
             resultScrollPane.removeMouseWheelListener(listener);
         }
     }
-    
-    
-    
+
+
+
     private void readStoredScriptQueries() {
-        storedQueryScripts = new ArrayList<Tuples.T3<String,String,String>>();
-        if(wandora != null) {
+        storedQueryScripts = new ArrayList<Tuples.T3<String, String, String>>();
+        if (wandora != null) {
             Options options = wandora.getOptions();
-            if(options != null) {
+            if (options != null) {
                 int queryCount = 0;
                 String queryScript = null;
                 String queryEngine = null;
-                String queryName = options.get(SCRIPT_QUERY_OPTION_KEY+".query["+queryCount+"].name");
-                while(queryName != null && queryName.length() > 0) {
-                    queryScript = options.get(SCRIPT_QUERY_OPTION_KEY+".query["+queryCount+"].script");
-                    queryEngine = options.get(SCRIPT_QUERY_OPTION_KEY+".query["+queryCount+"].engine");
-                    storedQueryScripts.add( new Tuples.T3(queryName, queryEngine, queryScript) );
+                String queryName = options.get(SCRIPT_QUERY_OPTION_KEY + ".query[" + queryCount + "].name");
+                while (queryName != null && queryName.length() > 0) {
+                    queryScript = options.get(SCRIPT_QUERY_OPTION_KEY + ".query[" + queryCount + "].script");
+                    queryEngine = options.get(SCRIPT_QUERY_OPTION_KEY + ".query[" + queryCount + "].engine");
+                    storedQueryScripts.add(new Tuples.T3<>(queryName, queryEngine, queryScript));
                     queryCount++;
-                    queryName = options.get(SCRIPT_QUERY_OPTION_KEY+".query["+queryCount+"].name");
+                    queryName = options.get(SCRIPT_QUERY_OPTION_KEY + ".query[" + queryCount + "].name");
                 }
                 updateQueryComboBox();
             }
@@ -146,16 +148,16 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
 
     private void writeScriptQueries() {
-        if(wandora != null) {
+        if (wandora != null) {
             Options options = wandora.getOptions();
-            if(options != null) {
+            if (options != null) {
                 options.removeAll(SCRIPT_QUERY_OPTION_KEY);
                 int queryCount = 0;
-                for( Tuples.T3<String,String,String> storedQuery : storedQueryScripts ) {
-                    if(storedQuery != null) {
-                        options.put(SCRIPT_QUERY_OPTION_KEY+".query["+queryCount+"].name", storedQuery.e1);
-                        options.put(SCRIPT_QUERY_OPTION_KEY+".query["+queryCount+"].engine", storedQuery.e2);
-                        options.put(SCRIPT_QUERY_OPTION_KEY+".query["+queryCount+"].script", storedQuery.e3);
+                for (Tuples.T3<String, String, String> storedQuery : storedQueryScripts) {
+                    if (storedQuery != null) {
+                        options.put(SCRIPT_QUERY_OPTION_KEY + ".query[" + queryCount + "].name", storedQuery.e1);
+                        options.put(SCRIPT_QUERY_OPTION_KEY + ".query[" + queryCount + "].engine", storedQuery.e2);
+                        options.put(SCRIPT_QUERY_OPTION_KEY + ".query[" + queryCount + "].script", storedQuery.e3);
                         queryCount++;
                     }
                 }
@@ -169,8 +171,8 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         String name = "";
         String script = "";
         String engine = "";
-        for( Tuples.T3<String,String,String> storedQuery : storedQueryScripts ) {
-            if(storedQuery != null) {
+        for (Tuples.T3<String, String, String> storedQuery : storedQueryScripts) {
+            if (storedQuery != null) {
                 name = storedQuery.e1;
                 engine = storedQuery.e2;
                 script = storedQuery.e3;
@@ -184,11 +186,14 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
 
     public void addScriptQuery() {
-        String queryName = WandoraOptionPane.showInputDialog(wandora, "Give name for the query script?", "", "Name of the query script");
-        if(queryName != null && queryName.length() > 0) {
+        String queryName = WandoraOptionPane.showInputDialog(
+                wandora, 
+                "Give name for the query script?", "",
+                "Name of the query script");
+        if (queryName != null && queryName.length() > 0) {
             String queryEngine = engineComboBox.getSelectedItem().toString();
             String queryScript = scriptTextPane.getText();
-            storedQueryScripts.add( new Tuples.T3(queryName, queryEngine, queryScript) );
+            storedQueryScripts.add(new Tuples.T3<>(queryName, queryEngine, queryScript));
             writeScriptQueries();
             updateQueryComboBox();
         }
@@ -198,10 +203,11 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
     public void deleteScriptQuery() {
         int index = queryComboBox.getSelectedIndex();
-        if(index < storedQueryScripts.size() && index >= 0) {
+        if (index < storedQueryScripts.size() && index >= 0) {
             String name = storedQueryScripts.get(index).e1;
-            int a = WandoraOptionPane.showConfirmDialog(wandora, "Would you like to remove query script '"+name+"'?", "Delete query script?");
-            if(a == WandoraOptionPane.YES_OPTION) {
+            int a = WandoraOptionPane.showConfirmDialog(wandora,
+                    "Would you like to remove query script '" + name + "'?", "Delete query script?");
+            if (a == WandoraOptionPane.YES_OPTION) {
                 storedQueryScripts.remove(index);
                 writeScriptQueries();
                 updateQueryComboBox();
@@ -212,124 +218,144 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
     public void selectScriptQuery() {
         int index = queryComboBox.getSelectedIndex();
-        if(index < storedQueryScripts.size() && index >= 0) {
-            Tuples.T3<String,String,String> query = storedQueryScripts.get(index);
+        if (index < storedQueryScripts.size() && index >= 0) {
+            Tuples.T3<String, String, String> query = storedQueryScripts.get(index);
             // queryComboBox.setSelectedIndex(index);
             engineComboBox.setSelectedItem(query.e2);
             scriptTextPane.setText(query.e3);
         }
     }
-    
-    public MixedTopicTable getTopicsByQuery(Iterator<Topic> contextTopics) throws ScriptException, TopicMapException, Exception {
+
+
+    public MixedTopicTable getTopicsByQuery(
+            Iterator<?> contextTopics)
+            throws ScriptException, TopicMapException, Exception {
         String engineName = engineComboBox.getSelectedItem().toString();
-        String scriptStr =  scriptTextPane.getText();
-        return getTopicsByQuery(wandora,engineName,scriptStr,contextTopics);
+        String scriptStr = scriptTextPane.getText();
+        return getTopicsByQuery(wandora, engineName, scriptStr, contextTopics);
     }
+
+
+    public static MixedTopicTable getTopicsByQuery(
+            Wandora wandora, 
+            TopicMap tm, 
+            Directive query,
+            Iterator<?> contextTopics) throws QueryException, TopicMapException {
         
-    public static MixedTopicTable getTopicsByQuery(Wandora wandora,TopicMap tm,Directive query,Iterator<Topic> contextTopics) throws QueryException, TopicMapException {
-        ArrayList<ResultRow> res = new ArrayList<>();
-        if(contextTopics!=null){
-            while(contextTopics.hasNext()){
-                Topic t=contextTopics.next();
-                if(t!=null && !t.isRemoved()) res.add( new ResultRow(t));
+        List<ResultRow> res = new ArrayList<>();
+        if (contextTopics != null) {
+            while (contextTopics.hasNext()) {
+                Topic t = (Topic) contextTopics.next();
+                if (t != null && !t.isRemoved())
+                    res.add(new ResultRow(t));
             }
         }
 
-        QueryContext context=new QueryContext(tm, "en");
+        QueryContext context = new QueryContext(tm, "en");
 
-        // System.out.println("Query: "+query.debugString());
-
-        if(res.isEmpty()){}
-        else if(res.size()==1){
-            res=query.doQuery(context, res.get(0));
+        if (res.isEmpty()) {
         }
-        else{
-            res=query.from(new Static(res)).doQuery(context, res.get(0));
+        else if (res.size() == 1) {
+            res = query.doQuery(context, res.get(0));
+        }
+        else {
+            res = query.from(new Static(res)).doQuery(context, res.get(0));
         }
 
-        ArrayList<String> columns=new ArrayList<>();
-        for(ResultRow row : res){
-            for(int i=0;i<row.getNumValues();i++){
-                String l=row.getRole(i);
-                if(!columns.contains(l)) columns.add(l);
+        List<String> columns = new ArrayList<>();
+        for (ResultRow row : res) {
+            for (int i = 0; i < row.getNumValues(); i++) {
+                String l = row.getRole(i);
+                if (!columns.contains(l))
+                    columns.add(l);
             }
         }
-        ArrayList<Object> columnTopicsA=new ArrayList<>();
-        for(int i=0;i<columns.size();i++){
-            String l=columns.get(i);
-            if(l.startsWith("~")){
+        List<Object> columnTopicsA = new ArrayList<>();
+        for (int i = 0; i < columns.size(); i++) {
+            String l = columns.get(i);
+            if (l.startsWith("~")) {
                 columns.remove(i);
                 i--;
             }
-            else{
-                Topic t=tm.getTopic(l);
-                if(t!=null) columnTopicsA.add(t);
-                else columnTopicsA.add(l);
+            else {
+                Topic t = tm.getTopic(l);
+                if (t != null)
+                    columnTopicsA.add(t);
+                else
+                    columnTopicsA.add(l);
             }
         }
-        Object[] columnTopics=columnTopicsA.toArray(new Object[columnTopicsA.size()]);
-        if(res.size() > 0) {
-            Object[][] data=new Object[res.size()][columns.size()];
-            for(int i=0;i<res.size();i++){
-                ResultRow row=res.get(i);
-                ArrayList<String> roles=row.getRoles();
-                for(int j=0;j<columns.size();j++){
-                    String r=columns.get(j);
-                    int ind=roles.indexOf(r);
-                    if(ind!=-1) data[i][j]=row.getValue(ind);
-                    else data[i][j]=null;
+        Object[] columnTopics = columnTopicsA.toArray(new Object[columnTopicsA.size()]);
+        if (res.size() > 0) {
+            Object[][] data = new Object[res.size()][columns.size()];
+            for (int i = 0; i < res.size(); i++) {
+                ResultRow row = res.get(i);
+                List<String> roles = row.getRoles();
+                for (int j = 0; j < columns.size(); j++) {
+                    String r = columns.get(j);
+                    int ind = roles.indexOf(r);
+                    if (ind != -1)
+                        data[i][j] = row.getValue(ind);
+                    else
+                        data[i][j] = null;
                 }
             }
 
-            MixedTopicTable table=new MixedTopicTable(wandora);
-            table.initialize(data,columnTopics);
+            MixedTopicTable table = new MixedTopicTable(wandora);
+            table.initialize(data, columnTopics);
             return table;
         }
-        return null;        
+        return null;
     }
-    
-    public static MixedTopicTable getTopicsByQuery(Wandora wandora,String engineName,String scriptStr,Iterator<Topic> contextTopics) throws ScriptException, TopicMapException, Exception {
+
+
+    public static MixedTopicTable getTopicsByQuery(
+            Wandora wandora, 
+            String engineName, 
+            String scriptStr,
+            Iterator<?> contextTopics) throws ScriptException, TopicMapException, Exception {
+        
         TopicMap tm = wandora.getTopicMap();
         WandoraScriptManager sm = new WandoraScriptManager();
         ScriptEngine engine = sm.getScriptEngine(engineName);
         Directive query = null;
-        Object o=engine.eval(scriptStr);
-        if(o==null) o=engine.get("query");
-        if(o!=null && o instanceof Directive) {
-            query = (Directive)o;
+        Object o = engine.eval(scriptStr);
+        if (o == null)
+            o = engine.get("query");
+        if (o != null && o instanceof Directive) {
+            query = (Directive) o;
         }
-        
-        if(contextTopics==null || !contextTopics.hasNext()){
+
+        if (contextTopics == null || !contextTopics.hasNext()) {
             // if context is empty just add some (root of a tree chooser) topic
-            HashMap<String,TopicTreePanel> trees=wandora.getTopicTreeManager().getTrees();
-            TopicTreePanel tree=trees.values().iterator().next();
-            Topic t=tm.getTopic(tree.getRootSI());
-            ArrayList<Topic> al=new ArrayList<>();
+            Map<String, TopicTreePanel> trees = wandora.getTopicTreeManager().getTrees();
+            TopicTreePanel tree = trees.values().iterator().next();
+            Topic t = tm.getTopic(tree.getRootSI());
+            ArrayList<Topic> al = new ArrayList<>();
             al.add(t);
-            contextTopics=al.iterator();
+            contextTopics = al.iterator();
         }
 
         return getTopicsByQuery(wandora, wandora.getTopicMap(), query, contextTopics);
     }
-    
-    
-    
+
+
+
     public void refresh() {
-        if(resultsTable != null) {
+        if (resultsTable != null) {
             ((DefaultTableModel) resultsTable.getModel()).fireTableDataChanged();
         }
         resultPanel.revalidate();
         revalidate();
     }
-    
-    
-    
+
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
@@ -337,12 +363,12 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         queryPanel = new javax.swing.JPanel();
         queryPanelInner = new javax.swing.JPanel();
         selectQueryPanel = new javax.swing.JPanel();
-        queryComboBox = new SimpleComboBox();
+        queryComboBox = new SimpleComboBox<>();
         addQueryButton = new SimpleButton();
         delQueryButton = new SimpleButton();
         scriptQueryPanel = new javax.swing.JPanel();
         engineLabel = new SimpleLabel();
-        engineComboBox = new SimpleComboBox();
+        engineComboBox = new SimpleComboBox<>();
         scriptLabel = new SimpleLabel();
         scriptScrollPane = new javax.swing.JScrollPane();
         scriptTextPane = new QueryTextPane();
@@ -361,7 +387,8 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
         selectQueryPanel.setLayout(new java.awt.GridBagLayout());
 
-        queryComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        queryComboBox.setModel(
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         queryComboBox.setPreferredSize(new java.awt.Dimension(56, 25));
         queryComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -418,7 +445,8 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         gridBagConstraints.insets = new java.awt.Insets(2, 0, 0, 4);
         scriptQueryPanel.add(engineLabel, gridBagConstraints);
 
-        engineComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        engineComboBox.setModel(
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -524,54 +552,58 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         add(queryPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void queryComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_queryComboBoxActionPerformed
-        if((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
+        if ((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
             selectScriptQuery();
         }
     }//GEN-LAST:event_queryComboBoxActionPerformed
 
+
     private void addQueryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addQueryButtonActionPerformed
-        if((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
+        if ((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
             addScriptQuery();
         }
     }//GEN-LAST:event_addQueryButtonActionPerformed
 
+
     private void delQueryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delQueryButtonActionPerformed
-        if((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
+        if ((evt.getModifiers() | ActionEvent.MOUSE_EVENT_MASK) != 0) {
             deleteScriptQuery();
         }
     }//GEN-LAST:event_delQueryButtonActionPerformed
 
+
     private void scriptLabelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scriptLabelMouseReleased
         try {
             Desktop desktop = Desktop.getDesktop();
-            desktop.browse(new URI("http://wandora.org/wiki/Query_language"));
+            desktop.browse(new URI("https://wandora.org/wiki/Query_language"));
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error(e);
         }
     }//GEN-LAST:event_scriptLabelMouseReleased
 
-    
-    
+
+
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
-//        Iterator contextObjects = (new ArrayList()).iterator();
-        
+        //        Iterator contextObjects = (new ArrayList()).iterator();
+
         // TODO: Get global context objects and pass them into the getTopicsByQuery.
         // if(context != null) contextObjects = context.getContextObjects();
-        
-        Context context = new LayeredTopicContext();
+
+        Context<Topic> context = new LayeredTopicContext();
         context.initialize(wandora, null, null);
-        Iterator contextObjects = context.getContextObjects();
-        
+        Iterator<Topic> contextObjects = context.getContextObjects();
+
         try {
             resultPanel.removeAll();
             resultScrollPane.setColumnHeaderView(null);
             clearResultsButton.setEnabled(false);
             resultsTable = getTopicsByQuery(contextObjects);
-            if(resultsTable != null) {
+            if (resultsTable != null) {
                 resultScrollPane.setColumnHeaderView(resultsTable.getTableHeader());
-//                resultPanel.add(resultsTable.getTableHeader(), BorderLayout.NORTH);
+                //                resultPanel.add(resultsTable.getTableHeader(), BorderLayout.NORTH);
                 resultPanel.add(resultsTable, BorderLayout.CENTER);
                 clearResultsButton.setEnabled(true);
             }
@@ -580,20 +612,19 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
                 resultPanel.add(message, BorderLayout.CENTER);
             }
         }
-        catch(ScriptException se) {
+        catch (ScriptException se) {
             message.setText("Script error!");
             resultPanel.add(message, BorderLayout.CENTER);
             revalidate();
             repaint();
             wandora.handleError(se);
         }
-        catch(TopicMapException tme) {
+        catch (TopicMapException tme) {
             message.setText("Topic map exception!");
             resultPanel.add(message, BorderLayout.CENTER);
-            tme.printStackTrace();
-            //wandora.handleError(tme);
+            logger.error(tme);
         }
-        catch(Exception e) {
+        catch (Exception e) {
             message.setText("Error!");
             resultPanel.add(message, BorderLayout.CENTER);
             wandora.handleError(e);
@@ -601,6 +632,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
         revalidate();
         repaint();
     }//GEN-LAST:event_runButtonActionPerformed
+
 
     private void clearResultsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearResultsButtonActionPerformed
         resultPanel.removeAll();
@@ -615,9 +647,9 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
     private javax.swing.JButton addQueryButton;
     private javax.swing.JButton clearResultsButton;
     private javax.swing.JButton delQueryButton;
-    private javax.swing.JComboBox engineComboBox;
+    private javax.swing.JComboBox<String> engineComboBox;
     private javax.swing.JLabel engineLabel;
-    private javax.swing.JComboBox queryComboBox;
+    private javax.swing.JComboBox<String> queryComboBox;
     private javax.swing.JPanel queryPanel;
     private javax.swing.JPanel queryPanelInner;
     private javax.swing.JPanel resultContainerPanel;
@@ -634,16 +666,17 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
 
 
-    
     // ------------------------------------------------------- QueryTextPane ---
-    
-    
+
+
     private class QueryTextPane extends SimpleTextPaneResizeable {
-    
+
+        private static final long serialVersionUID = 1L;
+
         private int scriptQueryPanelWidth = 100;
         private int scriptQueryPanelHeight = scriptQueryPanel.getHeight();
-        
-        
+
+
         public QueryTextPane() {
             super();
             try {
@@ -652,23 +685,23 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
                 //DefaultSyntaxKit.initKit();
                 //setContentType("text/javascript");
             }
-            catch(Exception e) {
-                e.printStackTrace();
+            catch (Exception e) {
+                logger.error(e);
             }
         }
-        
-        
+
+
         @Override
         public void mouseDragged(MouseEvent e) {
             Point p = e.getPoint();
-            if(mousePressedInTriangle) {
+            if (mousePressedInTriangle) {
                 inTheTriangleZone = true;
                 int yDiff = (mousePressedPoint.y - p.y);
                 newSize = new Dimension(100, sizeAtPress.height - yDiff);
 
                 JScrollPane sp = getScrollPane();
 
-                if(scrollPane != null) {
+                if (scrollPane != null) {
                     sp.getViewport().setSize(newSize);
                     sp.getViewport().setPreferredSize(newSize);
                     sp.getViewport().setMinimumSize(newSize);
@@ -683,29 +716,27 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
                 scriptQueryPanel.repaint();
             }
         }
-        
-        
+
+
         @Override
         public void mousePressed(MouseEvent e) {
             super.mousePressed(e);
-            if(mousePressedInTriangle) {
+            if (mousePressedInTriangle) {
                 scriptQueryPanelHeight = scriptQueryPanel.getHeight();
             }
         }
-        
+
     }
 
 
 
-    
-    
     // ------------------------------------------------------- TopicSelector ---
-    
+
     @Override
     public Topic getSelectedTopic() {
-        if(resultsTable != null) {
+        if (resultsTable != null) {
             Topic[] topics = resultsTable.getSelectedTopics();
-            if(topics != null && topics.length > 0) {
+            if (topics != null && topics.length > 0) {
                 return topics[0];
             }
         }
@@ -715,34 +746,36 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
     @Override
     public Topic[] getSelectedTopics() {
-        if(resultsTable != null) {
+        if (resultsTable != null) {
             resultsTable.getSelectedTopics();
         }
         return null;
     }
-    
+
 
     @Override
     public java.awt.Component getPanel() {
         return this;
     }
-    
-    
+
+
     @Override
     public String getSelectorName() {
         return "Query";
     }
-    
+
+
     @Override
     public void init() {
-        
+
     }
-    
+
+
     @Override
     public void cleanup() {
-        
+
     }
-    
-    
-    
+
+
+
 }

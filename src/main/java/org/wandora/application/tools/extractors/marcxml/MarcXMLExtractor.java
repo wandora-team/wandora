@@ -3,7 +3,7 @@
  * Knowledge Extraction, Management, and Publishing Application
  * http://www.wandora.org/
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,6 +54,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -67,8 +68,8 @@ import org.xml.sax.XMLReader;
  */
 
 public class MarcXMLExtractor extends AbstractExtractor {
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MarcXMLExtractor.class);
 
 	public static boolean TRIM_DATAS = false;
 
@@ -286,7 +287,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                         if(code.length() == 1) code = "00"+code;
                         else if(code.length() == 2) code = "0"+code;
                         codes.put(code, code);
-                        System.out.println("field code: "+code);
+                        logger.info("field code: "+code);
                     }
                 }
                 else {
@@ -610,7 +611,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                                                 si = si.replaceAll("___"+subfieldCode+"@"+fieldCode+"___", URLEncoder.encode(data_subfield, defaultEncoding));
                                             }
                                             catch(Exception e) {
-                                                e.printStackTrace();
+                                                logger.error(e);
                                             }
                                         }
                                         updatedSubjectIdentifiers.add(si);
@@ -619,7 +620,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                                 subjectIdentifiers = updatedSubjectIdentifiers;
                             }
                             catch(Exception e) {
-                                e.printStackTrace();
+                                logger.error(e);
                             }
                         }
 
@@ -634,7 +635,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                                                 n = n.replaceAll("___"+subfieldCode+"@"+fieldCode+"___", data_subfield);
                                             }
                                             catch(Exception e) {
-                                                e.printStackTrace();
+                                                logger.error(e);
                                             }
                                         }
                                         updatedBasenames.add(n);
@@ -643,7 +644,7 @@ public class MarcXMLExtractor extends AbstractExtractor {
                                 basenames = updatedBasenames;
                             }
                             catch(Exception e) {
-                                e.printStackTrace();
+                                logger.error(e);
                             }
                         }
 
@@ -656,11 +657,9 @@ public class MarcXMLExtractor extends AbstractExtractor {
                         String fieldCode = data_datafield_tag.trim();
                         if(!excludeFields.containsKey(fieldCode)) {
                             if(!includeFields.isEmpty() && includeFields.containsKey(fieldCode)) {
-                                //System.out.println("Adding a field: "+fieldCode);
                                 data_datafields.add(datafield);
                             }
                             else if(includeFields.isEmpty()) {
-                                //System.out.println("Adding a field: "+fieldCode);
                                 data_datafields.add(datafield);
                             }
                         }
@@ -673,11 +672,9 @@ public class MarcXMLExtractor extends AbstractExtractor {
                         String fieldCode = data_controlfield_tag.trim();
                         if(!excludeFields.containsKey(fieldCode)) {
                             if(!includeFields.isEmpty() && includeFields.containsKey(fieldCode)) {
-                                //System.out.println("Adding a control field: "+fieldCode);
                                 data_controlfields.put(fieldCode, data_controlfield);
                             }
                             else if(includeFields.isEmpty()) {
-                                //System.out.println("Adding a control field: "+fieldCode);
                                 data_controlfields.put(fieldCode, data_controlfield);
                             }
                         }

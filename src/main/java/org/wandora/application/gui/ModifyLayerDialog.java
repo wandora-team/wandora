@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ package org.wandora.application.gui;
 
 
 
-
 import org.wandora.application.Wandora;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapConfigurationPanel;
@@ -39,6 +38,7 @@ import org.wandora.topicmap.TopicMapTypeManager;
 import org.wandora.topicmap.layered.ContainerTopicMap;
 import org.wandora.topicmap.layered.Layer;
 import org.wandora.topicmap.undowrapper.UndoTopicMap;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.wandora.utils.swing.GuiTools;
 
 /**
@@ -46,47 +46,51 @@ import org.wandora.utils.swing.GuiTools;
  * @author  olli
  */
 public class ModifyLayerDialog extends javax.swing.JDialog {
-	
-	private static final long serialVersionUID = 1L;
-	
-    
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(ModifyLayerDialog.class);
+
     private TopicMapConfigurationPanel modifyPanel;
     private TopicMapType modifyType;
     private Layer modifyLayer;
     private Wandora wandora;
-    
+
+
+
     /** Creates new form ModifyLayerDialog */
-    public ModifyLayerDialog(Wandora wandora,Layer modifyLayer) {
+    public ModifyLayerDialog(Wandora wandora, Layer modifyLayer) {
         super(wandora, true);
         this.wandora = wandora;
         this.modifyLayer = modifyLayer;
         TopicMap tm = getWrappedTopicMap(modifyLayer.getTopicMap());
         modifyType = TopicMapTypeManager.getType(tm);
-        modifyPanel = modifyType.getModifyConfigurationPanel(wandora,wandora.getOptions(),tm);
+        modifyPanel = modifyType.getModifyConfigurationPanel(wandora, wandora.getOptions(), tm);
         initComponents();
-        if(modifyPanel!=null) modifyContainerPanel.add(modifyPanel);
+        if (modifyPanel != null) {
+            modifyContainerPanel.add(modifyPanel);
+        }
         modifyNameTextField.setText(modifyLayer.getName());
-        if(modifyPanel==null) {
-            emptyPanel.setSize(10,20);
+        if (modifyPanel == null) {
+            emptyPanel.setSize(10, 20);
             this.setSize(400, 150);
         }
-        else this.setSize(400, 350);
+        else {
+            this.setSize(400, 350);
+        }
         GuiTools.centerWindow(this, wandora);
     }
-    
-    
-    
-    
+
+
+
     private TopicMap getWrappedTopicMap(TopicMap tm) {
-        if(tm != null) {
-            if(tm.getClass().equals(UndoTopicMap.class)) {
+        if (tm != null) {
+            if (tm.getClass().equals(UndoTopicMap.class)) {
                 tm = ((UndoTopicMap) tm).getWrappedTopicMap();
             }
         }
         return tm;
     }
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -178,49 +182,53 @@ public class ModifyLayerDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void modifyOKButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyOKButtonActionPerformed
-        Object params=null;
-        if(modifyPanel!=null) params=modifyPanel.getParameters();
-        ContainerTopicMap layerStack=modifyLayer.getContainer();
-        try{
-            TopicMap tm=modifyType.modifyTopicMap(getWrappedTopicMap(modifyLayer.getTopicMap()),params);
-            
-            String name=modifyNameTextField.getText().trim();
-            if(name.length()==0) {
+        Object params = null;
+        if (modifyPanel != null)
+            params = modifyPanel.getParameters();
+        ContainerTopicMap layerStack = modifyLayer.getContainer();
+        try {
+            TopicMap tm = modifyType.modifyTopicMap(getWrappedTopicMap(modifyLayer.getTopicMap()), params);
+
+            String name = modifyNameTextField.getText().trim();
+            if (name.length() == 0) {
                 WandoraOptionPane.showMessageDialog(wandora, "Enter name for the layer!");
                 return;
             }
-            for(Layer l : layerStack.getLayers()){
-                if(l.getName().equals(name) && l!=modifyLayer) {
-                    WandoraOptionPane.showMessageDialog(wandora, "Layer name is already in use!", null, WandoraOptionPane.WARNING_MESSAGE);
+            for (Layer l : layerStack.getLayers()) {
+                if (l.getName().equals(name) && l != modifyLayer) {
+                    WandoraOptionPane.showMessageDialog(wandora, "Layer name is already in use!", null,
+                            WandoraOptionPane.WARNING_MESSAGE);
                     return;
                 }
             }
-            
+
             this.setVisible(false);
-            
-            if(tm==modifyLayer.getTopicMap()){
+
+            if (tm == modifyLayer.getTopicMap()) {
                 modifyLayer.setName(name);
             }
-            else{
-                Layer l=new Layer(tm,name,layerStack);
+            else {
+                Layer l = new Layer(tm, name, layerStack);
                 l.setVisible(modifyLayer.isVisible());
                 l.setReadOnly(modifyLayer.isReadOnly());
-                layerStack.setLayer(l,modifyLayer.getZPos());
+                layerStack.setLayer(l, modifyLayer.getZPos());
             }
         }
-        catch(TopicMapException tme){
-            tme.printStackTrace(); // TODO EXCEPTION
+        catch (TopicMapException tme) {
+            logger.error(tme);
         }
-        
+
     }//GEN-LAST:event_modifyOKButtonActionPerformed
+
 
     private void modifyCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyCancelButtonActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_modifyCancelButtonActionPerformed
-    
 
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JPanel emptyPanel;
@@ -230,5 +238,5 @@ public class ModifyLayerDialog extends javax.swing.JDialog {
     private javax.swing.JButton modifyOKButton;
     private javax.swing.JLabel nameLabel;
     // End of variables declaration//GEN-END:variables
-    
+
 }

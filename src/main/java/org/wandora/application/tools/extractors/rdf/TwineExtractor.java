@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 package org.wandora.application.tools.extractors.rdf;
 
 
+import java.net.URI;
 import java.net.URL;
 
 import javax.swing.Icon;
@@ -108,7 +109,7 @@ public class TwineExtractor extends AbstractRDFExtractor {
                     try {
                         String fixedUrlStr = twineUrlBody+twineId+"?rdf";
                         log("Fixed Twine url: "+fixedUrlStr);
-                        url = new URL(fixedUrlStr);
+                        url = new URI(fixedUrlStr).toURL();
                     }
                     catch(Exception e) {
                         log(e);

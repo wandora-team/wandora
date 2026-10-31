@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 
@@ -36,6 +37,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.utils.IObox;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -47,9 +49,8 @@ import org.xml.sax.XMLReader;
  * @author akivela
  */
 public class TagtheExtractor extends AbstractTagtheExtractor {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TagtheExtractor.class);
 
 
 
@@ -95,20 +96,17 @@ public class TagtheExtractor extends AbstractTagtheExtractor {
                 else {
                     // Ok, Tidy fixed the html/xml document
                     content = XMLbox.getAsText(content, defaultEncoding);
-                    //System.out.println("content after getAsText: "+content);
                     //contentType = "text/txt";
                 }
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
                 content = data;
                 //contentType = "text/raw";
             }
 
             String extractURL = WEB_SERVICE_URL+"?text="+URLEncoder.encode(content, "utf-8");
-            String result = IObox.doUrl(new URL(extractURL));
-
-            //System.out.println("Tagthe returned == "+result);
+            String result = IObox.doUrl(new URI(extractURL).toURL());
 
             javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -246,7 +244,6 @@ public class TagtheExtractor extends AbstractTagtheExtractor {
 
 
         public void endElement(String uri, String localName, String qName) throws SAXException {
-            // System.out.println("   "+state);
             switch(state) {
                 case STATE_MEMES_MEME_DIM_ITEM:
                     if(qName.equals(TAG_ITEM)) {

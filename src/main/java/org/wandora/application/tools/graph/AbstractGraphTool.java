@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@
 package org.wandora.application.tools.graph;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
 import org.wandora.application.gui.topicpanels.GraphTopicPanel;
@@ -37,6 +36,7 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 import org.wandora.application.gui.topicpanels.graphpanel.VModel;
 import org.wandora.application.gui.topicpanels.graphpanel.VNode;
 import org.wandora.application.tools.AbstractWandoraTool;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -46,7 +46,9 @@ import org.wandora.application.tools.AbstractWandoraTool;
  *
  * @author akivela
  */
-public abstract class AbstractGraphTool extends AbstractWandoraTool implements WandoraTool {
+public abstract class AbstractGraphTool extends AbstractWandoraTool {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractGraphTool.class);
 
 	private static final long serialVersionUID = 1L;
 	
@@ -65,21 +67,21 @@ public abstract class AbstractGraphTool extends AbstractWandoraTool implements W
     
     
     @Override
-    public void execute(Wandora wandora, Context context){
+    public void execute(Wandora wandora, Context<?> context){
         try {
             synchronized(solveGraphPanel(wandora,context)){
                 executeSynchronized(wandora,context);
             }
         }
         catch(Exception e) {
-            System.out.println("Exception '"+e.toString()+"' captured in abstract graph tool.");
+            logger.error("Exception '"+e.toString()+"' captured in abstract graph tool.");
             singleLog(e);
         }
     }
     
-    public abstract void executeSynchronized(Wandora wandora, Context context);
+    public abstract void executeSynchronized(Wandora wandora, Context<?> context);
     
-    public TopicMapGraphPanel solveGraphPanel(Wandora wandora, Context context) {
+    public TopicMapGraphPanel solveGraphPanel(Wandora wandora, Context<?> context) {
         if(graphPanel != null) {
             return graphPanel;
         }
@@ -101,7 +103,7 @@ public abstract class AbstractGraphTool extends AbstractWandoraTool implements W
         return null;
     }
     
-    public VModel solveModel(Wandora wandora, Context context){
+    public VModel solveModel(Wandora wandora, Context<?> context){
         TopicMapGraphPanel panel=solveGraphPanel(wandora,context);
         if(panel==null) return null;
         else return panel.getModel();

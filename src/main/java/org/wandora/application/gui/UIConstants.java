@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ import javax.swing.text.DefaultEditorKit;
 
 import org.wandora.application.gui.filechooser.WPRFileChooser;
 import org.wandora.application.gui.simple.SimpleFileChooser;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -55,13 +56,15 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
  * @author akivela
  */
 public class UIConstants {
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(UIConstants.class);
+
     public static boolean ANTIALIASING = true;
-    
-    
+
+
     public static Border defaultTableCellLabelBorder = BorderFactory.createEmptyBorder(3, 3, 3, 3);
     public static Border defaultLabelBorder = BorderFactory.createEmptyBorder(2, 2, 2, 2);
-    
-    
+
+
     public static Font smallButtonLabelFont = new Font("SansSerif", Font.PLAIN, 10);
     public static Font buttonLabelFont = new Font("SansSerif", Font.PLAIN, 12);
     public static Font comboBoxFont = new Font("SansSerif", Font.PLAIN, 12);
@@ -74,7 +77,8 @@ public class UIConstants {
     public static Font menuFont = new Font("SansSerif", Font.PLAIN, 12);
     public static Font tabFont = new Font("SansSerif", Font.PLAIN, 12);
     public static Font miniButtonLabel = new Font("SansSerif", Font.BOLD, 7);
-    
+    public static Font wandoraVersionInfoFont = new Font("SansSerif", Font.BOLD, 8);
+
     public static Font h3Font = new Font("SansSerif", Font.PLAIN, 14);
     public static Font h2Font = new Font("SansSerif", Font.PLAIN, 16);
     public static Font h1Font = new Font("SansSerif", Font.PLAIN, 20);
@@ -84,74 +88,77 @@ public class UIConstants {
     private static SimpleFileChooser fileChooser = null;
     private static WPRFileChooser wandoraProjectFileChooser = null;
 
-    public static Color menuColor = new Color(60,60,60);
-    public static Color buttonBarLabelColor = new Color(90,90,90);
-    public static Color buttonBarBackgroundColor = new Color(238,238,238);
-    public static Color buttonBarMouseOverBackgroundColor = new Color(220,231,242);
+    public static Color menuColor = new Color(60, 60, 60);
+    public static Color buttonBarLabelColor = new Color(90, 90, 90);
+    public static Color buttonBarBackgroundColor = new Color(238, 238, 238);
+    public static Color buttonBarMouseOverBackgroundColor = new Color(220, 231, 242);
 
-    public static Color buttonBackgroundColor = new Color(200,221,242);
-    public static Color buttonMouseOverBackgroundColor = new Color(220,231,242);
-    
-    public static Color checkBoxBackgroundColor = new Color(255,255,255);
-    
-    
-    public static final Color defaultTextColor = new Color(60,60,60);
+    public static Color buttonBackgroundColor = new Color(200, 221, 242);
+    public static Color buttonMouseOverBackgroundColor = new Color(220, 231, 242);
+
+    public static Color checkBoxBackgroundColor = new Color(255, 255, 255);
+
+
+    public static final Color defaultTextColor = new Color(60, 60, 60);
     public static final Color defaultInactiveBackground = new Color(229, 229, 229);
-    public static final Color defaultActiveBackground = new Color(200,221,242);
-    
-    public static final Color editableBackgroundColor = new Color(255,255,255);
-    public static final Color noContentBackgroundColor = new Color(245,245,245);
-    
-    public static final Color defaultBorderHighlight = new Color(255,255,255);
-    public static final Color defaultBorderShadow = new Color(200,221,242);
-    
-    
-    public static final Color wandoraBlueColor = new Color(53,56,87);
-    
-    
-    
+    public static final Color defaultActiveBackground = new Color(200, 221, 242);
+
+    public static final Color editableBackgroundColor = new Color(255, 255, 255);
+    public static final Color noContentBackgroundColor = new Color(245, 245, 245);
+
+    public static final Color defaultBorderHighlight = new Color(255, 255, 255);
+    public static final Color defaultBorderShadow = new Color(200, 221, 242);
+
+
+    public static final Color wandoraBlueColor = new Color(53, 56, 87);
+    public static final Color wandoraBlueColorAlt = new Color(54, 75, 106);
+
+
+
     public static WPRFileChooser getWandoraProjectFileChooser() {
-        if(wandoraProjectFileChooser == null) wandoraProjectFileChooser = new WPRFileChooser();
+        if (wandoraProjectFileChooser == null)
+            wandoraProjectFileChooser = new WPRFileChooser();
         return wandoraProjectFileChooser;
     }
-    
-    
+
+
     public static SimpleFileChooser getFileChooser() {
-        if(fileChooser == null) fileChooser = new SimpleFileChooser();
+        if (fileChooser == null)
+            fileChooser = new SimpleFileChooser();
         fileChooser.setFileSelectionMode(SimpleFileChooser.FILES_AND_DIRECTORIES);
         return fileChooser;
     }
 
 
     private static final String[] COPY_PASTE_COMPONENTS = {
-        "TextField.focusInputMap",
-        "PasswordField.focusInputMap",
-        "TextArea.focusInputMap",
-        "TextPane.focusInputMap",
-        "EditorPane.focusInputMap",
-        "FormattedTextField.focusInputMap",
-        "List.focusInputMap",
-        "Table.ancestorInputMap",
-        "Tree.focusInputMap"
+            "TextField.focusInputMap",
+            "PasswordField.focusInputMap",
+            "TextArea.focusInputMap",
+            "TextPane.focusInputMap",
+            "EditorPane.focusInputMap",
+            "FormattedTextField.focusInputMap",
+            "List.focusInputMap",
+            "Table.ancestorInputMap",
+            "Tree.focusInputMap"
     };
-    
+
     // http://deeploveprogram.pbworks.com/w/page/17134461/UIManager,%20set%20default%20look%20and%20feel
-    
+
     public static void initializeGUI() {
         try {
             javax.swing.plaf.metal.MetalLookAndFeel.setCurrentTheme(new javax.swing.plaf.metal.OceanTheme());
             UIManager.put("swing.boldMetal", Boolean.FALSE);
-            
+
             UIManager.put("ToolTip.background", defaultActiveBackground);
-            
+
             UIManager.put("TabbedPane.selectHighlight", new Color(229, 229, 229));
             UIManager.put("TabbedPane.foreground", defaultTextColor);
             UIManager.put("TabbedPane.background", defaultInactiveBackground);
             //UIManager.put("TabbedPane.darkShadow", Color.WHITE);
-            
+
             UIManager.put("ToggleButton.disabledBackground", defaultActiveBackground);
             UIManager.put("ToggleButton.background", defaultActiveBackground);
-            
+
             UIManager.put("ComboBox.disabledBackground", defaultInactiveBackground);
             UIManager.put("ComboBox.background", Color.WHITE);
             UIManager.put("ComboBox.selectionBackground", defaultActiveBackground);
@@ -162,49 +169,49 @@ public class UIConstants {
 
             UIManager.put("Table.focusCellBackground", defaultActiveBackground);
             UIManager.put("Table.selectionBackground", defaultActiveBackground);
-            
+
             UIManager.put("TextField.selectionBackground", defaultActiveBackground);
             UIManager.put("TextField.background", editableBackgroundColor);
             UIManager.put("TextArea.background", editableBackgroundColor);
-            
+
             UIManager.put("MenuItem.selectionBackground", defaultActiveBackground);
             UIManager.put("Menu.selectionBackground", defaultActiveBackground);
             UIManager.put("Menu.background", defaultInactiveBackground);
-            
+
             UIManager.put("Button.background", defaultActiveBackground);
             UIManager.put("Button.foreground", defaultTextColor);
-            
+
             UIManager.put("Tree.selectionBackground", defaultActiveBackground);
             UIManager.put("Tree.line", "None");
             UIManager.put("Tree.collapsedIcon", UIBox.getIcon("gui/icons/tree_branch.png"));
             UIManager.put("Tree.expandedIcon", UIBox.getIcon("gui/icons/tree_branch_open.png"));
-            
+
             UIManager.put("Slider.foreground", defaultActiveBackground);
             UIManager.put("Slider.highlight", defaultActiveBackground);
             UIManager.put("Slider.horizontalThumbIcon", UIBox.getIcon("gui/icons/slider_thumb_horizontal.png"));
             UIManager.put("Slider.VerticalThumbIcon", UIBox.getIcon("gui/icons/slider_thumb_vertical.png"));
-            
+
             UIManager.setLookAndFeel(new javax.swing.plaf.metal.MetalLookAndFeel());
-            
+
             for (String component : COPY_PASTE_COMPONENTS) {
                 InputMap im = (InputMap) UIManager.get(component);
-                int shortcutMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+                int shortcutMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
                 im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, shortcutMask), DefaultEditorKit.copyAction);
                 im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, shortcutMask), DefaultEditorKit.pasteAction);
                 im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, shortcutMask), DefaultEditorKit.cutAction);
             }
-            
-        } 
+
+        }
         catch (UnsupportedLookAndFeelException e) {
-           e.printStackTrace();
+            logger.error(e);
         }
         catch (Exception e) {
-           e.printStackTrace();
+            logger.error(e);
         }
     }
-    
-    
-    
+
+
+
     /**
      * Used to set rendering hints for given graphics before actual
      * painting is done. At the moment this method doesn't do anything at all!
@@ -223,19 +230,19 @@ public class UIConstants {
             RenderingHints metricsHints = new RenderingHints(
                 RenderingHints.KEY_FRACTIONALMETRICS,
                 RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-
+        
             ((Graphics2D) g).addRenderingHints(qualityHints);
             ((Graphics2D) g).addRenderingHints(antialiasHints);
             //((Graphics2D) g).addRenderingHints(metricsHints);
         }
         */
     }
-    
-    
-    
-    
+
+
+
     //private static Font fancyBaseFont = null;
-    
+
+
     /**
      * Used to set a font of a component. Doesn't do anything at all at the moment. 
      * 
@@ -254,10 +261,10 @@ public class UIConstants {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         */
     }
-    
-    
+
+
 }

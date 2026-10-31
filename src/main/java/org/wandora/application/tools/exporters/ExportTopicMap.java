@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@ import java.io.OutputStream;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.filechooser.JTMFileFilter;
@@ -53,7 +52,7 @@ import org.wandora.utils.IObox;
  *
  * @author akivela
  */
-public class ExportTopicMap extends AbstractExportTool implements WandoraTool {
+public class ExportTopicMap extends AbstractExportTool {
 	
 
 	private static final long serialVersionUID = 1L;
@@ -77,7 +76,7 @@ public class ExportTopicMap extends AbstractExportTool implements WandoraTool {
     
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         TopicMap tm = null;
         String topicMapName = null;
         String exportInfo = "";
@@ -138,7 +137,6 @@ public class ExportTopicMap extends AbstractExportTool implements WandoraTool {
                     fileName = file.getName(); // Updating filename if file has changed!
                     out=new FileOutputStream(file);
                     log(exportInfo+" in XTM 2.0 format to '"+fileName+"'.");
-                    //System.out.println("tm == "+ tm);
                     tm.exportXTM20(out, getCurrentLogger());
                 }
                 if(out != null) out.close();

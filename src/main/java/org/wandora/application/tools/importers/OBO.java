@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -52,6 +53,8 @@ import org.wandora.utils.IObox;
  * @author akivela
  */
 public class OBO {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(OBO.class);
+	
     public static final String optionPrefix = "obo.";
     
     public static boolean COLLATE_SIMILAR_SYNONYMS = true;
@@ -65,7 +68,7 @@ public class OBO {
     
     public static String LANG = "en";
     
-    public static final String SI = "http://wandora.org/si/obo/";
+    public static final String SI = "https://wandora.org/si/obo/";
     public static final String SCHEMA_SI = SI + "schema/";
     public static final String HEADER_SI = SI + "header/";
     public static final String DBXREF_SI = SI + "dbxref/";
@@ -882,7 +885,7 @@ public class OBO {
     
     
     private static void setData(Topic t, Topic type, String lang, String text) throws TopicMapException {
-        if(t != null & type != null && lang != null && text != null) {
+        if(t != null && type != null && lang != null && text != null) {
             String langsi=XTMPSI.getLang(LANG);
             Topic langT=t.getTopicMap().getTopic(langsi);
             if(langT == null) {
@@ -1352,12 +1355,12 @@ public class OBO {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
         else {
-            System.out.println("No OBO files to import!");
+            logger.warn("No OBO files to import!");
         }
     }
     

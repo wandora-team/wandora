@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 package org.wandora.application.tools.mediawiki;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -37,7 +38,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.OccurrenceTable;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -50,7 +50,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class MediawikiOccurrenceUploader extends MediawikiHandler implements WandoraTool {
+public class MediawikiOccurrenceUploader extends MediawikiHandler {
     
 	private static final long serialVersionUID = 1L;
 	
@@ -69,7 +69,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler implements Wan
         this.uploadAll = upAll;
     }
     
-    public MediawikiOccurrenceUploader(Context proposedContext) {
+    public MediawikiOccurrenceUploader(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
     
@@ -84,7 +84,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler implements Wan
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         requiresRefresh = false;
         isConfigured = false;
         cancelled = false;
@@ -130,7 +130,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler implements Wan
             }
             else {
                 
-                Iterator contextObjects = context.getContextObjects();
+                Iterator<?> contextObjects = context.getContextObjects();
                 if(!contextObjects.hasNext()) return;
                 
                 int uploadCounter = 0;
@@ -154,7 +154,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler implements Wan
                 if(uploadLang == null) return;
                 setDefaultLogger();
                 
-                Iterator objects = context.getContextObjects();
+                Iterator<?> objects = context.getContextObjects();
                 Object cx = null;
                 Topic topic = null;
                 Collection<Topic> occurranceTypes = null;
@@ -338,7 +338,7 @@ public class MediawikiOccurrenceUploader extends MediawikiHandler implements Wan
                 url = file.toURI().toURL();
             } else {
                 try {
-                    url = new URL(fileString);
+                    url = new URI(fileString).toURL();
                 } catch (Exception e) {
                     log(e.getMessage());                
                 }

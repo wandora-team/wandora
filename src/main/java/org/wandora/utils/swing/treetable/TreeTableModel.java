@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,9 @@
  */
 
 package org.wandora.utils.swing.treetable;
+
 import javax.swing.tree.TreeModel;
+
 /**
  *
  * @author olli
@@ -30,7 +32,7 @@ import javax.swing.tree.TreeModel;
 public interface TreeTableModel extends TreeModel {
     public int getColumnCount();
     public String getColumnName(int column);
-    public Class getColumnClass(int cloumn);
+    public Class<?> getColumnClass(int cloumn);
     public Object getValueAt(Object node,int column);
     public boolean isCellEditable(Object node,int column);
     public void setValueAt(Object aValue,Object node,int column);

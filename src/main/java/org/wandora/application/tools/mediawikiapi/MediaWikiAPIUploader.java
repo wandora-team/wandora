@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,25 +29,26 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.GenericOptionsDialog;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author Eero
  */
 
 
-public class MediaWikiAPIUploader extends MediaWikiAPIHandler implements WandoraTool{
+public class MediaWikiAPIUploader extends MediaWikiAPIHandler {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MediaWikiAPIUploader.class);
 
 	private static final String DEFAULT_TYPE_SI  
-            = "http://wandora.org/si/mediawiki/api/content/";
+            = "https://wandora.org/si/mediawiki/api/content/";
     private static final String DEFAULT_SCOPE_SI  
             = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
     
@@ -80,9 +81,9 @@ public class MediaWikiAPIUploader extends MediaWikiAPIHandler implements Wandora
     };
     
     private Wandora wandora;
-    private Context context;
+    private Context<?> context;
     
-    private WandoraToolLogger logger;
+    private WandoraToolLogger toolLogger;
     
     private MediaWikiAPIConfig conf;
     
@@ -93,7 +94,7 @@ public class MediaWikiAPIUploader extends MediaWikiAPIHandler implements Wandora
         this.conf = null;
     }
     
-    public MediaWikiAPIUploader(Context c){
+    public MediaWikiAPIUploader(Context<?> c){
         super();
         this.setContext(c);
         this.conf = null;
@@ -224,7 +225,7 @@ public class MediaWikiAPIUploader extends MediaWikiAPIHandler implements Wandora
                         log("Processing " + ct.getBaseName()); 
                     } catch (Exception e) {
                         log(e.getMessage());
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                     
                     content = occurrence.get(ctScope);
@@ -265,18 +266,18 @@ public class MediaWikiAPIUploader extends MediaWikiAPIHandler implements Wandora
      */
     
     @Override
-    public void execute(Wandora w, Context c) throws TopicMapException {
+    public void execute(Wandora w, Context<?> c) throws TopicMapException {
         
         this.wandora = w;
         this.context = c;
         
         setDefaultLogger();
-        logger = getDefaultLogger();
+        toolLogger = getDefaultLogger();
         Topic contentType;
         Topic contentScope;
         
         //Get the context Objects (Topics)
-        Iterator contextObjects = context.getContextObjects();
+        Iterator<?> contextObjects = context.getContextObjects();
         
         //Log and early return on context selection failure
         if(!contextObjects.hasNext()){

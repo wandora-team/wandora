@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,12 +77,12 @@ public class AnnieExtractor extends AbstractGate {
 
 	private static final long serialVersionUID = 1L;
 	
-	public static final String SOURCE_SI = "http://wandora.org/si/source";
-    public static final String DOCUMENT_SI = "http://wandora.org/si/document";
-    public static final String TOPIC_SI = "http://wandora.org/si/topic";
+	public static final String SOURCE_SI = "https://wandora.org/si/source";
+    public static final String DOCUMENT_SI = "https://wandora.org/si/document";
+    public static final String TOPIC_SI = "https://wandora.org/si/topic";
 
-    public static final String ENTITY_SI = "http://wandora.org/si/gate/entity";
-    public static final String ENTITY_TYPE_SI = "http://wandora.org/si/gate/entity-type";
+    public static final String ENTITY_SI = "https://wandora.org/si/gate/entity";
+    public static final String ENTITY_TYPE_SI = "https://wandora.org/si/gate/entity-type";
     public static final String GATE_ANNIE_SI = "http://gate.ac.uk";
 
 
@@ -145,7 +145,7 @@ public class AnnieExtractor extends AbstractGate {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(configuration == null && wandora != null) {
             configuration = new AnnieConfiguration(wandora, this);
         }
@@ -272,7 +272,6 @@ public class AnnieExtractor extends AbstractGate {
         // -------------------------------------------------
         // for each document, get the annotations
         Iterator<Document> iter = corpus.iterator();
-        int count = 0;
 
         while(iter.hasNext() && !forceStop()) {
             Document docu = (Document) iter.next();
@@ -282,8 +281,7 @@ public class AnnieExtractor extends AbstractGate {
             for(String annotType : annotTypes) {
                 if(forceStop()) break;
                 if(acceptAnnotationType(annotType)) {
-                    Set<Annotation> annotations = new HashSet<Annotation>(defaultAnnotSet.get(annotType));
-                    ++count;
+                    Set<Annotation> annotations = new HashSet<>(defaultAnnotSet.get(annotType));
 
                     setProgressMax(annotations.size());
                     int c = 0;

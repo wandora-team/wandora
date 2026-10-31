@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -48,13 +47,13 @@ import org.wandora.topicmap.TopicTools;
  *
  * @author akivela
  */
-public class MakeSubjectIdentifierFromBasename extends AbstractWandoraTool implements WandoraTool {
+public class MakeSubjectIdentifierFromBasename extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
 	private static int MAXLEN = 256;
     private String replacement = "";
-    private String SITemplate = "http://wandora.org/si/%BASENAME%";
+    private String SITemplate = "https://wandora.org/si/%BASENAME%";
     
     private boolean askTemplate = true;
     
@@ -63,7 +62,7 @@ public class MakeSubjectIdentifierFromBasename extends AbstractWandoraTool imple
     public MakeSubjectIdentifierFromBasename() {
     }
     
-    public MakeSubjectIdentifierFromBasename(Context preferredContext) {
+    public MakeSubjectIdentifierFromBasename(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -81,13 +80,13 @@ public class MakeSubjectIdentifierFromBasename extends AbstractWandoraTool imple
 
     
     @Override
-    public void execute(Wandora admin, Context context) {   
+    public void execute(Wandora admin, Context<?> context) {   
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             if(SITemplate == null || SITemplate.length() == 0) {
-                SITemplate = "http://wandora.org/si/%BASENAME%";
+                SITemplate = "https://wandora.org/si/%BASENAME%";
             }
             if(askTemplate) {
                 SITemplate = WandoraOptionPane.showInputDialog(admin, "Make subject identifier using following template. String '%BASENAME%' is replaced with topic's base name.", SITemplate);

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,10 +25,12 @@ package org.wandora.modules.velocityhelpers;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 
 import org.json.JSONObject;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -37,6 +39,7 @@ import org.json.JSONObject;
 
 
 public class JSONBox {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(JSONBox.class);
     
     
     public JSONBox() {
@@ -47,7 +50,7 @@ public class JSONBox {
         JSONObject json = null;
         try {
             if(urlStr != null) {
-                URL url = new URL(urlStr);
+                URL url = new URI(urlStr).toURL();
                 URLConnection urlConnection = url.openConnection();
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -62,7 +65,7 @@ public class JSONBox {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return json;
     }

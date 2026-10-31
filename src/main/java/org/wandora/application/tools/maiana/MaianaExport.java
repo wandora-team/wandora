@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,14 +26,13 @@
 package org.wandora.application.tools.maiana;
 
 import java.io.ByteArrayOutputStream;
-import java.net.URL;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 
 import javax.swing.Icon;
 
 import org.json.JSONObject;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.exporters.AbstractExportTool;
@@ -49,7 +48,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class MaianaExport extends AbstractExportTool implements WandoraTool {
+public class MaianaExport extends AbstractExportTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -101,7 +100,7 @@ public class MaianaExport extends AbstractExportTool implements WandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
        String topicMapName = null;
        String shortName = null;
        String exportInfo = null;
@@ -156,9 +155,7 @@ public class MaianaExport extends AbstractExportTool implements WandoraTool {
                 String apiEndPoint = maianaPanel.getApiEndPoint();
                 MaianaUtils.checkForLocalService(apiEndPoint);
 
-                String reply = MaianaUtils.doUrl(new URL(apiEndPoint), json, "application/json");
-
-                //System.out.println("reply:\n"+reply);
+                String reply = MaianaUtils.doUrl(new URI(apiEndPoint).toURL(), json, "application/json");
 
                 JSONObject replyObject = new JSONObject(reply);
                 if(replyObject.has("msg")) {

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,6 @@ import java.util.List;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -62,7 +61,7 @@ import org.wandora.topicmap.XTMPSI;
  */
 
 
-public class SplitToSuperclassesWithBasename extends AbstractWandoraTool implements WandoraTool {
+public class SplitToSuperclassesWithBasename extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -85,11 +84,11 @@ public class SplitToSuperclassesWithBasename extends AbstractWandoraTool impleme
     }
     public SplitToSuperclassesWithBasename() {
     }
-    public SplitToSuperclassesWithBasename(Context preferredContext, boolean desc) {
+    public SplitToSuperclassesWithBasename(Context<?> preferredContext, boolean desc) {
         this.descending = desc;
         setContext(preferredContext);
     }
-    public SplitToSuperclassesWithBasename(Context preferredContext) {
+    public SplitToSuperclassesWithBasename(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -112,8 +111,8 @@ public class SplitToSuperclassesWithBasename extends AbstractWandoraTool impleme
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
-        Iterator topics = getContext().getContextObjects();
+    public void execute(Wandora wandora, Context<?> context) {
+        Iterator<?> topics = getContext().getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         
         splitString = WandoraOptionPane.showInputDialog(

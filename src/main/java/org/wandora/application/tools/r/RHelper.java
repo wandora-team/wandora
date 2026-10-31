@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.AssociationContext;
@@ -38,6 +40,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -48,10 +51,10 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class RHelper {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RHelper.class);
     
     
-    
-    private static final String IGRAPH_SI = "http://wandora.org/si/R/igraph";
+    private static final String IGRAPH_SI = "https://wandora.org/si/R/igraph";
     private static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
     
     public static class Graph {
@@ -124,7 +127,7 @@ public class RHelper {
             return new Graph(labels.size(),labels.toArray(new String[labels.size()]),colors.toArray(new String[colors.size()]),iedges);
         }
         catch(TopicMapException tme){
-            tme.printStackTrace();
+        	logger.error(tme);
             return null;
         }
     }
@@ -134,8 +137,8 @@ public class RHelper {
     public static Association[] getContextAssociations(){
         AssociationContext context=new AssociationContext();
         context.initialize(Wandora.getWandora(), null, null);
-        ArrayList<Association> ret=new ArrayList<Association>();
-        Iterator iter=context.getContextObjects();
+        List<Association> ret=new ArrayList<>();
+        Iterator<?> iter=context.getContextObjects();
         if(iter!=null){
             while(iter.hasNext()){
                 Object o=iter.next();
@@ -147,8 +150,8 @@ public class RHelper {
 
     public static Topic[] getContextTopics(){
         LayeredTopicContext context=new LayeredTopicContext(Wandora.getWandora(),null,null);
-        ArrayList<Topic> ret=new ArrayList<Topic>();
-        Iterator iter=context.getContextObjects();
+        List<Topic> ret=new ArrayList<>();
+        Iterator<?> iter=context.getContextObjects();
         if(iter!=null){
             while(iter.hasNext()){
                 Object o=iter.next();
@@ -160,8 +163,8 @@ public class RHelper {
     }
 
     // "next" is a reserved word in R which makes this tricky
-    public static Object[] unwrapIterator(Iterator iter){
-        ArrayList<Object> ret=new ArrayList<Object>();
+    public static Object[] unwrapIterator(Iterator<Object> iter){
+        List<Object> ret=new ArrayList<>();
         while(iter.hasNext()){
             ret.add(iter.next());
         }
@@ -189,8 +192,8 @@ public class RHelper {
         Topic role2           = getRole2Topic(tm);
         
         
-        HashMap<Integer,Topic> edgeMap = new HashMap<Integer, Topic>();
-        HashMap<String,Topic> occTypeMap = new HashMap<String,Topic>();
+        Map<Integer,Topic> edgeMap = new HashMap<Integer, Topic>();
+        Map<String,Topic> occTypeMap = new HashMap<String,Topic>();
         Topic[][] toAssoc = new Topic[edges.length][edges[0].length];
         
         /*
@@ -202,7 +205,7 @@ public class RHelper {
         
         if(occ != null){
             for(String key : occ.keySet()){
-                System.out.println("adding occurrence type " + key);
+                logger.info("adding occurrence type " + key);
                 occTypeMap.put(key, getOccTypeTopic(tm,key));
             }
         }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ import org.wandora.application.gui.topicpanels.DockingFramePanel;
 import org.wandora.application.gui.topicpanels.TopicPanel;
 import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -51,18 +52,16 @@ import org.wandora.topicmap.Topic;
 
 
 public class AddDockable extends AbstractDockingTool {
-
-	
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AddDockable.class);
 
-
-    private Class dockableClass = null;
+    private Class<?> dockableClass = null;
     private Icon dockableIcon = null;
     
     
     
     /** Creates a new instance of AddDockable */
-    public AddDockable(Class dc) {
+    public AddDockable(Class<?> dc) {
         dockableClass = dc;
     }
     
@@ -74,11 +73,11 @@ public class AddDockable extends AbstractDockingTool {
                 dockableClass = Class.forName(className);
             }
             else {
-                System.out.println("AddDockable can't use given class name 'null'.");
+                logger.warn("AddDockable can't use given class name 'null'.");
             }
         }
         catch(Exception e) {
-            System.out.println("AddDockable can't use given class name '"+className+"'.");
+            logger.error("AddDockable can't use given class name '"+className+"'.");
         }
     }
     
@@ -110,7 +109,7 @@ public class AddDockable extends AbstractDockingTool {
                     }
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             if(dockableIcon == null) {
@@ -124,12 +123,12 @@ public class AddDockable extends AbstractDockingTool {
     
     
     @Override
-    public void execute(Wandora w, Context context) {
+    public void execute(Wandora w, Context<?> context) {
         DockingFramePanel dockingPanel = this.solveDockingFramePanel(w, context);
         if(dockableClass != null && dockingPanel != null) {
             try {
                 Topic t = null;
-                Iterator i = context.getContextObjects();
+                Iterator<?> i = context.getContextObjects();
                 if(i.hasNext()) {
                     try {
                         t = (Topic) i.next();
@@ -145,11 +144,11 @@ public class AddDockable extends AbstractDockingTool {
                 dockingPanel.addDockable(dockableClass.getDeclaredConstructor().newInstance(), t);
             }
             catch(Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         else {
-            System.out.println("No valid dockable class registered in AddDockable. Can't create new dockable.");
+            logger.warn("No valid dockable class registered in AddDockable. Can't create new dockable.");
         }
     }    
     

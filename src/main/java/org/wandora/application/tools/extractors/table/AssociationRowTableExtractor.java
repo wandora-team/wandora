@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -44,7 +45,6 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
 import org.wandora.application.tools.extractors.AbstractExtractor;
@@ -55,6 +55,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -64,12 +65,13 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class AssociationRowTableExtractor extends AbstractExtractor implements WandoraTool {
-   
-
+public class AssociationRowTableExtractor extends AbstractExtractor {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AssociationRowTableExtractor.class);
+	
+	
 	private URL basePath = null;
-    public static String SI_PREFIX = "http://wandora.org/si/table";
+    public static String SI_PREFIX = "https://wandora.org/si/table";
     
     
     /** Creates a new instance of AssociationRowTableExtractor */
@@ -117,9 +119,9 @@ public class AssociationRowTableExtractor extends AbstractExtractor implements W
     @Override
     public String doBrowserExtract(BrowserExtractRequest request, Wandora wandora) throws TopicMapException {
         try {
-            basePath = new URL(request.getSource());
+            basePath = new URI(request.getSource()).toURL();
         }
-        catch(Exception e) { e.printStackTrace(); }
+        catch(Exception e) { logger.error(e); }
         String s = super.doBrowserExtract(request, wandora);
         basePath = null;
         return s;
@@ -450,7 +452,7 @@ public class AssociationRowTableExtractor extends AbstractExtractor implements W
 
         @Override
         public void handleError(String errorMsg,int pos) {
-            System.out.println("TableExtractor: " + errorMsg);
+            logger.error("TableExtractor: " + errorMsg);
         }
         
 

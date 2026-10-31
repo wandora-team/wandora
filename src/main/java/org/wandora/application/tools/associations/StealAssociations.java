@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -71,7 +70,7 @@ import org.wandora.topicmap.Topic;
  */
 
 
-public class StealAssociations extends AbstractWandoraTool implements WandoraTool {
+public class StealAssociations extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -88,7 +87,7 @@ public class StealAssociations extends AbstractWandoraTool implements WandoraToo
     
     
     
-    public StealAssociations(Context preferredContext) {
+    public StealAssociations(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -111,10 +110,10 @@ public class StealAssociations extends AbstractWandoraTool implements WandoraToo
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             requiresRefresh = false;
-            Iterator associations = null;
+            Iterator<?> associations = null;
             Topic thief = null;
             Topic victim = null;
             Association a = null;
@@ -160,7 +159,7 @@ public class StealAssociations extends AbstractWandoraTool implements WandoraToo
                 else thief = wandora.getOpenTopic();
                 if(thief == null) return;
                 
-                Iterator victims = context.getContextObjects();
+                Iterator<?> victims = context.getContextObjects();
                 long startTime = System.currentTimeMillis();
                 while(victims.hasNext() && !forceStop()) {
                     victim = (Topic) victims.next();

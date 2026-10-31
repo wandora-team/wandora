@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -57,7 +56,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class DuplicateAssociationsOfType extends AbstractWandoraTool implements WandoraTool {
+public class DuplicateAssociationsOfType extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -93,7 +92,6 @@ public class DuplicateAssociationsOfType extends AbstractWandoraTool implements 
     public void makeRoleMap(Wandora wandora)  throws TopicMapException {
 //        BaseNamePrompt prompt=new BaseNamePrompt(wandora.getManager(), wandora, true);
         roleMap = new LinkedHashMap<>();
-        //System.out.println("Type: " + oldAssociationType.getBaseName());
         Collection<Association> associations = theTopic.getAssociations(oldAssociationType);
         Iterator<Association> associationIterator = associations.iterator(); 
         Association association = null;
@@ -105,9 +103,6 @@ public class DuplicateAssociationsOfType extends AbstractWandoraTool implements 
                 role = (Topic) i2.next();
                 if(!roleMap.containsKey(role)) {
                     if(changeRoles) {
-/*                        prompt.setTitle("Map role '" + getTopicName(role) + "' to...");
-                        prompt.setVisible(true);
-                        Topic newRole=prompt.getTopic();*/
                         Topic newRole=wandora.showTopicFinder("Map role '"+getTopicName(role)+"' to...");                
                         if(newRole != null) {
                             roleMap.put(role, newRole);
@@ -140,20 +135,14 @@ public class DuplicateAssociationsOfType extends AbstractWandoraTool implements 
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         theTopic = wandora.getOpenTopic();
         oldAssociationType = (Topic) context.getContextObjects().next();
         wasCancelled = false;
-/*      
-        BaseNamePrompt prompt=new BaseNamePrompt(wandora.getManager(), wandora, true);
-        prompt.setTitle("Select new association type...");
-        prompt.setVisible(true);
-        Topic newAssociationType=prompt.getTopic();
-*/
+
         Topic newAssociationType=wandora.showTopicFinder("Select new association type...");                
         if (newAssociationType != null) {
             makeRoleMap(wandora);        
-            //System.out.println("new type: " + newAssociationType.getBaseName());
             if(theTopic != null) {
                 if(oldAssociationType != null) {
                     Collection<Association> ass = theTopic.getAssociations();
@@ -167,7 +156,6 @@ public class DuplicateAssociationsOfType extends AbstractWandoraTool implements 
                         if(a.getType().equals(oldAssociationType)) {
                             topicMap = a.getTopicMap();
                             Association ca = topicMap.createAssociation(newAssociationType);
-                            //System.out.println("new type: " + newAssociationType.getBaseName());
                             Collection<Topic> aRoles = a.getRoles();
                             for(Iterator<Topic> aRoleIter = aRoles.iterator(); aRoleIter.hasNext(); ) {
                                 Topic role = (Topic) aRoleIter.next();

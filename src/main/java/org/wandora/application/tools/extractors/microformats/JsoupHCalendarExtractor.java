@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ public class JsoupHCalendarExtractor
         return "Converts HCalendar Microformat HTML snippets to Topic Maps.";
     }
 
-    private static final String SI_PREFIX = "http://wandora.org/si/hcalendar/";
+    private static final String SI_PREFIX = "https://wandora.org/si/hcalendar/";
     
     private static final String[] EVENT_PROPS = {
         "dstart",

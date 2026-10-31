@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,6 @@ import java.util.Stack;
 import javax.swing.Icon;
 
 import org.w3c.tidy.Tidy;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Association;
@@ -56,13 +55,16 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author akivela
  */
-public class AdrExtractor extends AbstractExtractor implements WandoraTool {
+public class AdrExtractor extends AbstractExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AdrExtractor.class);
     
 
 	private static final long serialVersionUID = 1L;
@@ -158,12 +160,6 @@ public class AdrExtractor extends AbstractExtractor implements WandoraTool {
         //tidyXML = tidyXML.replace("&", "&amp;");
         tidyXML = tidyXML.replace("&amp;deg;", "&#0176;");
         //tidyXML = HTMLEntitiesCoder.decode(tidyXML);
-        
-        /*
-        System.out.println("------");
-        System.out.println(tidyXML);
-        System.out.println("------");
-        */
 
         javax.xml.parsers.SAXParserFactory factory=javax.xml.parsers.SAXParserFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -195,7 +191,7 @@ public class AdrExtractor extends AbstractExtractor implements WandoraTool {
         private TopicMap tm = null;
         private AdrExtractor parent = null;
 
-        public static final String SI_PREFIX = "http://wandora.org/si/adr/";
+        public static final String SI_PREFIX = "https://wandora.org/si/adr/";
 
         public int progress = 0;
         public int adrcount = 0;
@@ -262,9 +258,9 @@ public class AdrExtractor extends AbstractExtractor implements WandoraTool {
             stateStack.push(Integer.valueOf(state));
             String clas = atts.getValue("class");
             
-            if(debug) System.out.print("qname=="+ qName);
-            if(debug) System.out.print(", class=="+ clas);
-            if(debug) System.out.print(", sstate="+state);
+            if(debug) logger.info("qname=="+ qName);
+            if(debug) logger.info(", class=="+ clas);
+            if(debug) logger.info(", sstate="+state);
             
             if(parent.forceStop()){
                 throw new SAXException("User interrupt");
@@ -344,7 +340,7 @@ public class AdrExtractor extends AbstractExtractor implements WandoraTool {
                     break;
                 }
             }
-            if(debug) System.out.println(", nstate="+state);
+            if(debug) logger.info(", nstate="+state);
         }
 
 
@@ -546,7 +542,7 @@ public class AdrExtractor extends AbstractExtractor implements WandoraTool {
                 }
             }
             if(t == null) {
-                System.out.println("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
+                logger.warn("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
             }
             return t;
         }

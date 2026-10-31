@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -61,35 +62,37 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
 
     private static final long serialVersionUID = 1L;
 
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SearchTopicPanel.class);
+
     private Options options = null;
-    
+
     private SearchPanel searchPanel = null;
     private SimilarityPanel similarityPanel = null;
     private QueryPanel queryPanel = null;
 
     private Component currentContainerPanel = null;
     private Topic openedTopic = null;
-    
+
     private boolean useResultScrollPanes = false;
-    
-    
+
+
     /**
      * Creates new form SearchTopicPanel
      */
     public SearchTopicPanel() {
     }
-    
-    
+
+
     @Override
     public void init() {
         searchPanel = new SearchPanel();
         similarityPanel = new SimilarityPanel();
         queryPanel = new QueryPanel();
 
-        if(!useResultScrollPanes) {
+        if (!useResultScrollPanes) {
             removeResultScrollPanes();
         }
-        
+
         Wandora wandora = Wandora.getWandora();
         this.options = new Options(wandora.getOptions());
         initComponents();
@@ -97,24 +100,23 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
             tabbedPane.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
-                    // System.out.println("Tab: " + tabbedPane.getSelectedIndex());
                     setCurrentPanel(tabbedPane.getSelectedComponent());
                 }
             });
             setCurrentPanel(searchContainerPanel);
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
-    
-    
+
+
+
     public void setUseResultScrollPanes(boolean use) {
         useResultScrollPanes = use;
     }
 
-    
+
     /*
      * By default SearchTopicPanel removes MouseListeners in all result tables of
      * sub panels. This enables mouse wheel events of SearchTopicPanel to work
@@ -131,13 +133,13 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
         similarityPanel.removeResultScrollPanesMouseListeners();
         queryPanel.removeResultScrollPanesMouseListeners();
     }
-    
-    
-    
+
+
+
     private void setCurrentPanel(Component p) {
-        if(p != null) {
-            if(!p.equals(currentContainerPanel)) {
-                
+        if (p != null) {
+            if (!p.equals(currentContainerPanel)) {
+
                 /*
                     Why remove content from other container panels?
                     Tabbed pane's height is inherited from the heighest
@@ -145,20 +147,20 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
                     panels ensures the tabbed pane inherits it's height from
                     the active tab.
                 */
-                
-                if(p.equals(searchContainerPanel)) {
+
+                if (p.equals(searchContainerPanel)) {
                     searchContainerPanel.add(searchPanel, BorderLayout.CENTER);
                     similarityContainerPanel.removeAll();
                     queryContainerPanel.removeAll();
                     tmqlContainerPanel.removeAll();
                 }
-                else if(p.equals(similarityContainerPanel)) {
+                else if (p.equals(similarityContainerPanel)) {
                     similarityContainerPanel.add(similarityPanel, BorderLayout.CENTER);
                     searchContainerPanel.removeAll();
                     queryContainerPanel.removeAll();
                     tmqlContainerPanel.removeAll();
                 }
-                else if(p.equals(queryContainerPanel)) {
+                else if (p.equals(queryContainerPanel)) {
                     queryContainerPanel.add(queryPanel, BorderLayout.CENTER);
                     searchContainerPanel.removeAll();
                     similarityContainerPanel.removeAll();
@@ -170,15 +172,14 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
             }
         }
     }
-    
-    
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
@@ -210,8 +211,7 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
         add(tabbedPane, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel queryContainerPanel;
@@ -221,32 +221,33 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
     private javax.swing.JPanel tmqlContainerPanel;
     // End of variables declaration//GEN-END:variables
 
-    
-    
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+
     }
 
-    
+
     @Override
     public boolean supportsOpenTopic() {
         return false;
     }
-    
-    
+
+
     @Override
     public void open(Topic topic) throws TopicMapException, OpenTopicNotSupportedException {
         // Notice, this TopicPanel doesn't support open topic.
         openedTopic = topic;
     }
 
-    
-    
+
+
     @Override
     public void stop() {
         openedTopic = null;
     }
+
 
     @Override
     public void refresh() throws TopicMapException {
@@ -257,139 +258,164 @@ public class SearchTopicPanel extends javax.swing.JPanel implements ActionListen
         revalidate();
     }
 
+
     @Override
     public boolean applyChanges() throws CancelledException, TopicMapException {
         return true;
     }
+
 
     @Override
     public JPanel getGui() {
         return this;
     }
 
+
     @Override
     public Topic getTopic() throws TopicMapException {
         Component selectedTab = tabbedPane.getSelectedComponent();
-        if(selectedTab != null) {
-            if(selectedTab.equals(searchContainerPanel)) {
+        if (selectedTab != null) {
+            if (selectedTab.equals(searchContainerPanel)) {
                 return searchPanel.getSelectedTopic();
             }
-            else if(selectedTab.equals(similarityContainerPanel)) {
+            else if (selectedTab.equals(similarityContainerPanel)) {
                 return similarityPanel.getSelectedTopic();
             }
-            else if(selectedTab.equals(queryContainerPanel)) {
+            else if (selectedTab.equals(queryContainerPanel)) {
                 return queryPanel.getSelectedTopic();
             }
         }
         return openedTopic;
     }
-    
+
+
     @Override
-    public String getName(){
+    public String getName() {
         return "Search";
     }
-    
+
+
     @Override
     public String getTitle() {
         return "Search and query";
     }
 
+
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/topic_panel_search.png");
     }
-   
+
+
     @Override
     public int getOrder() {
         return 9995;
     }
-    
+
+
     @Override
     public Object[] getViewMenuStruct() {
         return new Object[] {
         };
     }
 
+
     @Override
     public JMenu getViewMenu() {
         return UIBox.makeMenu(getViewMenuStruct(), this);
     }
+
 
     @Override
     public JPopupMenu getViewPopupMenu() {
         return UIBox.makePopupMenu(getViewMenuStruct(), this);
     }
 
+
     @Override
     public LocatorHistory getTopicHistory() {
         return null;
     }
 
+
     @Override
-    public boolean noScroll(){
+    public boolean noScroll() {
         return false;
     }
-    
-    
-    // -------------------------------------------------------------------------
-    
-    
 
-    
+
+    // -------------------------------------------------------------------------
+
+
+
     @Override
     public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
         refresh();
     }
+
 
     @Override
     public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
         refresh();
     }
 
+
     @Override
     public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
         refresh();
     }
 
+
     @Override
-    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName) throws TopicMapException {
+    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName)
+            throws TopicMapException {
         refresh();
     }
 
+
     @Override
-    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue) throws TopicMapException {
+    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue)
+            throws TopicMapException {
         refresh();
     }
+
 
     @Override
     public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
         refresh();
     }
 
+
     @Override
     public void topicRemoved(Topic t) throws TopicMapException {
         refresh();
     }
+
 
     @Override
     public void topicChanged(Topic t) throws TopicMapException {
         refresh();
     }
 
+
     @Override
     public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
         refresh();
     }
 
+
     @Override
-    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer) throws TopicMapException {
+    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer)
+            throws TopicMapException {
         refresh();
     }
+
 
     @Override
     public void associationRemoved(Association a) throws TopicMapException {
         refresh();
     }
+
 
     @Override
     public void associationChanged(Association a) throws TopicMapException {

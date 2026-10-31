@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ package org.wandora.application.tools.occurrences;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
@@ -42,7 +41,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class MakeOccurrenceFromBasename extends AbstractWandoraTool implements WandoraTool {
+public class MakeOccurrenceFromBasename extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -54,7 +53,7 @@ public class MakeOccurrenceFromBasename extends AbstractWandoraTool implements W
      */
     public MakeOccurrenceFromBasename() {
     }
-    public MakeOccurrenceFromBasename(Context preferredContext) {
+    public MakeOccurrenceFromBasename(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -72,13 +71,13 @@ public class MakeOccurrenceFromBasename extends AbstractWandoraTool implements W
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Copying base name to topic occurrence");
             log("Copying base name to topic occurrence");
 
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;

@@ -1,9 +1,9 @@
  /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.Icon;
@@ -45,6 +46,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -57,9 +59,8 @@ import com.mashape.unirest.request.body.MultipartBody;
  * @author akivela
  */
 public abstract class AbstractRedditExtractor extends AbstractExtractor {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractRedditExtractor.class);
 
 	private static final String ERROR_MSG = "Reddit API error occurred:";
     private static final String ERROR_RESPONSE_MSG = "API response follows:";
@@ -74,7 +75,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     private static final String THING_TYPE_PROMO = "t8";
     private static final String THING_TYPE_MORE = "more";
     private static final String LANG_SI = "http://www.topicmaps.org/xtm/1.0/language.xtm#en";
-    private static final String SI_ROOT = "http://wandora.org/si/reddit/";
+    private static final String SI_ROOT = "https://wandora.org/si/reddit/";
     private static final String COMMENT_SI = SI_ROOT + "comment";
     private static final String LINK_SI = SI_ROOT + "link";
     private static final String ACCOUNT_SI = SI_ROOT + "account";
@@ -106,10 +107,10 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     private static final String TITLE_SI = SI_ROOT + "title";
     
     
-    private static HashMap<String, Boolean> CRAWL_SETTINGS = null;
+    private static Map<String, Boolean> CRAWL_SETTINGS = null;
     private static DateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 
-    private static ArrayList<String> extracted;
+    private static List<String> extracted;
     
     private static int progress = 0;
     
@@ -212,8 +213,8 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     // ------------------------------------------------------------------
     
     
-    protected static HashMap<String, Topic> getThingTypes(TopicMap tm) throws TopicMapException {
-        HashMap<String, Topic> types = new HashMap<>();
+    protected static Map<String, Topic> getThingTypes(TopicMap tm) throws TopicMapException {
+        Map<String, Topic> types = new HashMap<>();
 
         types.put(THING_TYPE_COMMENT, getOrCreateTopic(tm, COMMENT_SI, "Comment"));
         types.put(THING_TYPE_LINK, getOrCreateTopic(tm, LINK_SI, "Link"));
@@ -232,9 +233,9 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     }
 
     
-    protected static HashMap<String, Topic> getAssociationTypes(TopicMap tm) throws TopicMapException {
+    protected static Map<String, Topic> getAssociationTypes(TopicMap tm) throws TopicMapException {
 
-        HashMap<String, Topic> types = new HashMap<>();
+        Map<String, Topic> types = new HashMap<>();
 
         types.put("Parent", getOrCreateTopic(tm, PARENT_SI, "Parent"));
         types.put("Child", getOrCreateTopic(tm, CHILD_SI, "Child"));
@@ -272,7 +273,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
     
     private void associateParent(TopicMap tm, Topic commentTopic, Topic parentTopic) throws TopicMapException {
-        HashMap<String, Topic> types = getAssociationTypes(tm);
+        Map<String, Topic> types = getAssociationTypes(tm);
 
         Association a = tm.createAssociation(types.get("Parent-Child"));
         a.addPlayer(parentTopic, types.get("Parent"));
@@ -280,7 +281,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     }
 
     
-    private void associateAccount(TopicMap tm, JSONObject thing, Topic account, HashMap<String, Topic> types) throws TopicMapException, JSONException {
+    private void associateAccount(TopicMap tm, JSONObject thing, Topic account, Map<String, Topic> types) throws TopicMapException, JSONException {
         if(account == null) return;
 
         JSONObject thingData = thing.getJSONObject("data");
@@ -295,7 +296,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     }
     
 
-    private void associateSubreddit(TopicMap tm, JSONObject thing, Topic subreddit, HashMap<String, Topic> types) throws TopicMapException, JSONException {
+    private void associateSubreddit(TopicMap tm, JSONObject thing, Topic subreddit, Map<String, Topic> types) throws TopicMapException, JSONException {
         JSONObject thingData = thing.getJSONObject("data");
         String thingKind = thing.getString("kind");
         String thingId = thingData.getString("name");
@@ -309,7 +310,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
     
     private void addLinkOccurenceData(TopicMap tm, JSONObject linkData, Topic linkTopic) throws TopicMapException, JSONException {
-        HashMap<String, Topic> types = getAssociationTypes(tm);
+        Map<String, Topic> types = getAssociationTypes(tm);
         Topic lang = types.get("Lang");
 
         Long created = linkData.getLong("created");
@@ -327,7 +328,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
     
     private void addCommentOccurenceData(TopicMap tm, JSONObject commentData, Topic commentTopic) throws TopicMapException, JSONException {
-        HashMap<String, Topic> types = getAssociationTypes(tm);
+        Map<String, Topic> types = getAssociationTypes(tm);
         Topic lang = types.get("Lang");
 
         String body = commentData.getString("body");
@@ -357,7 +358,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
     
     private void addAccountOccurenceData(TopicMap tm, JSONObject accountData, Topic accountTopic) throws TopicMapException, JSONException {
-        HashMap<String, Topic> types = getAssociationTypes(tm);
+        Map<String, Topic> types = getAssociationTypes(tm);
         Topic lang = types.get("Lang");
 
         Long created = accountData.getLong("created");
@@ -385,7 +386,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
 
     
     private void addSubredditOccurrenceData(TopicMap tm, JSONObject subredditData, Topic subredditTopic) throws TopicMapException, JSONException {
-        HashMap<String, Topic> types = getAssociationTypes(tm);
+        Map<String, Topic> types = getAssociationTypes(tm);
         Topic lang = types.get("Lang");
 
         Long created = subredditData.getLong("created");
@@ -454,13 +455,13 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     // ---------------------------------------------------------------------- //
     
     
-    protected void parseThing(JSONObject thing, TopicMap tm, HashMap<String, Topic> thingTypes, HashMap<String, Boolean> crawlSettings) {
+    protected void parseThing(JSONObject thing, TopicMap tm, Map<String, Topic> thingTypes, Map<String, Boolean> crawlSettings) {
         CRAWL_SETTINGS = crawlSettings;
         parseThing(thing, tm, thingTypes);
     }
 
     
-    protected void parseThing(JSONObject thing, TopicMap tm, HashMap<String, Topic> thingTypes) {
+    protected void parseThing(JSONObject thing, TopicMap tm, Map<String, Topic> thingTypes) {
         progress = (progress+1)%100;
         getDefaultLogger().setProgress(progress);
         
@@ -499,7 +500,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
                         child = children.getJSONObject(i);
                     } 
                     catch(JSONException jse) {
-                        jse.printStackTrace();
+                    	logger.error(jse);
                         continue;
                     }
                     parseThing(child, tm, thingTypes);
@@ -515,7 +516,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             catch(JSONException jsee) {
                 log("The message JSON was invalid.");
             }
-            jse.printStackTrace();
+            logger.error(jse);
         } 
         catch (TopicMapException tme){
             log(tme.getMessage());
@@ -523,7 +524,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     }
 
     
-    private void parseMore(JSONObject commentData, JSONObject child, TopicMap tm, HashMap<String, Topic> thingTypes) throws JSONException, TopicMapException {
+    private void parseMore(JSONObject commentData, JSONObject child, TopicMap tm, Map<String, Topic> thingTypes) throws JSONException, TopicMapException {
         if(forceStop()) {
             return;
         }
@@ -577,7 +578,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     }
 
     
-    private Topic parseLink(JSONObject l, HashMap<String, Topic> thingTypes, TopicMap tm) throws JSONException, TopicMapException {
+    private Topic parseLink(JSONObject l, Map<String, Topic> thingTypes, TopicMap tm) throws JSONException, TopicMapException {
         if(forceStop()) {
             return null;
         }
@@ -599,7 +600,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             String linkUrl = linkData.getString("url");
             Topic destinationTopic = getOrCreateTopic(tm, linkUrl);
             destinationTopic.setSubjectLocator(new Locator(linkUrl));
-            HashMap<String,Topic> assTypes = getAssociationTypes(tm);
+            Map<String,Topic> assTypes = getAssociationTypes(tm);
             Association a = tm.createAssociation(assTypes.get("Destination"));
             a.addPlayer(linkTopic, thingTypes.get(THING_TYPE_LINK));
             a.addPlayer(destinationTopic, assTypes.get("Destination"));
@@ -684,7 +685,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
             }
         }
         catch (Exception e) {
-          e.printStackTrace();
+        	logger.error(e);
         }
         
         if(CRAWL_SETTINGS.get("linkComment")) {
@@ -709,13 +710,13 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
                 }
             };
             
-            System.out.println("Requesting " + commentUrl);
+            logger.info("Requesting " + commentUrl);
             requester.addRequest(Unirest.get(commentUrl), callback);
         }
         return linkTopic;
     }
 
-    private Topic parseComment(JSONObject c, HashMap<String, Topic> thingTypes, TopicMap tm) throws JSONException, TopicMapException {
+    private Topic parseComment(JSONObject c, Map<String, Topic> thingTypes, TopicMap tm) throws JSONException, TopicMapException {
         if(forceStop()) {
             return null;
         }
@@ -832,7 +833,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     }
 
     
-    private Topic parseAccount(JSONObject account, HashMap<String, Topic> thingTypes, TopicMap tm) throws JSONException, TopicMapException {
+    private Topic parseAccount(JSONObject account, Map<String, Topic> thingTypes, TopicMap tm) throws JSONException, TopicMapException {
         if (forceStop()) {
             return null;
         }
@@ -894,7 +895,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
         return accountTopic;
     }
 
-    private Topic parseSubreddit(JSONObject subreddit, HashMap<String, Topic> thingTypes, TopicMap tm) throws JSONException, TopicMapException {
+    private Topic parseSubreddit(JSONObject subreddit, Map<String, Topic> thingTypes, TopicMap tm) throws JSONException, TopicMapException {
         if(forceStop()) {
             return null;
         }
@@ -953,7 +954,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     */
     protected void logParseCallbackError(Exception e, String body) {
         if(e != null) {
-            e.printStackTrace();
+            logger.error(e);
             log(ERROR_MSG);
             log(e.getMessage());
             if(body != null) {
@@ -968,7 +969,7 @@ public abstract class AbstractRedditExtractor extends AbstractExtractor {
     */
     protected void logParseCallbackRunError(Exception e) {
         if(e != null) {
-            e.printStackTrace();
+            logger.error(e);
             if(e instanceof JSONException) {
                 log("Exception occurred while processing JSON data in Reddit extractor. Details follow.");
                 log(e.getMessage());

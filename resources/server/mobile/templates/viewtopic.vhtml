@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $wandoraClass = $topic.getTopicMap().getTopic("https://wandora.org/si/core/wandora-class") )##
 #set( $ctopic = $topic )##
 ##set( $lang = "en" )##
 ##
@@ -44,8 +44,8 @@ ${urlbase}?lang=$lang&action=mobile&topic=$urlencoder.encode($t.getOneSubjectIde
     <h1>$topic.getDisplayName($lang)</h1>
 #*
     <div data-role="navbar"><ul>
-       #set( $wc = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
-       #set( $wcs = $helper.getPlayers($wc,"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass", "http://www.topicmaps.org/xtm/1.0/core.xtm#subclass", "http://www.topicmaps.org/xtm/1.0/core.xtm#superclass", "http://wandora.org/si/core/wandora-class") )##
+       #set( $wc = $topic.getTopicMap().getTopic("https://wandora.org/si/core/wandora-class") )##
+       #set( $wcs = $helper.getPlayers($wc,"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass", "http://www.topicmaps.org/xtm/1.0/core.xtm#subclass", "http://www.topicmaps.org/xtm/1.0/core.xtm#superclass", "https://wandora.org/si/core/wandora-class") )##
        #if( $wcs && $wcs.size() > 0)##
         #set( $dummy = $wcs.addAll( $topic.getTopicMap().getTopicsOfType($wc) ) )##
        #else##
@@ -200,7 +200,7 @@ ${urlbase}?lang=$lang&action=mobile&topic=$urlencoder.encode($t.getOneSubjectIde
 #end
 </div> ## page
 <div data-role="footer" data-theme="c">
-   <a class="wandoraButton" data-theme="c" data-role="button" href="http://wandora.org" target="_blank">
+   <a class="wandoraButton" data-theme="c" data-role="button" href="https://wandora.org" target="_blank">
     <img src="${staticbase}wandora_logo.png" border="0" alt="wandora.org">
    </a>
 </div>

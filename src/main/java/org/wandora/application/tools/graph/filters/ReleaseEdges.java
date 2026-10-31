@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@ import org.wandora.application.gui.topicpanels.graphpanel.VModel;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.application.tools.graph.AbstractGraphTool;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -53,6 +54,7 @@ import org.wandora.topicmap.Topic;
 public class ReleaseEdges extends AbstractGraphTool  {
     
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ReleaseEdges.class);
 	
 	public static final int FILTER_EDGES_WITH_TYPE = 1;
     public static final int FILTER_INSTANCE_EDGES = 2;
@@ -94,7 +96,7 @@ public class ReleaseEdges extends AbstractGraphTool  {
             }
         }
         catch(Exception tme){
-            tme.printStackTrace(); 
+        	logger.error(tme);
         }
         return "";
     }
@@ -102,7 +104,7 @@ public class ReleaseEdges extends AbstractGraphTool  {
 
     
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         VModel model = solveModel(wandora,context);
         switch(filterType) {
             case FILTER_OCCURRENCE_EDGES: { filter.setFilterOccurrences(false); break; }
@@ -122,9 +124,9 @@ public class ReleaseEdges extends AbstractGraphTool  {
     
     
     
-    public static List<AbstractGraphTool> makeTools(Collection c, GraphFilter graphFilter, List<AbstractGraphTool> tools){
-        if(tools==null) tools=new ArrayList<AbstractGraphTool>();
-        ArrayList<Topic> types = new ArrayList<Topic>();
+    public static List<AbstractGraphTool> makeTools(Collection<?> c, GraphFilter graphFilter, List<AbstractGraphTool> tools){
+        if(tools==null) tools=new ArrayList<>();
+        List<Topic> types = new ArrayList<>();
 
         for(Object o : graphFilter.getFilteredEdgeTypes()) {
             if(o != null) {
@@ -137,7 +139,9 @@ public class ReleaseEdges extends AbstractGraphTool  {
                             tools.add(new ReleaseEdges(FILTER_EDGES_WITH_TYPE, t, graphFilter));
                         }
                     }
-                    catch(Exception tme){tme.printStackTrace();}
+                    catch(Exception tme){
+                    	logger.error(tme);
+                    }
                 }
             }
         }
@@ -148,11 +152,9 @@ public class ReleaseEdges extends AbstractGraphTool  {
         if(graphFilter.getFilterOccurrences()) {
             tools.add(new ReleaseEdges(FILTER_OCCURRENCE_EDGES, null, graphFilter));
         }
-        
         if(tools.isEmpty()) {
             tools.add(new ReleaseEdges(FILTER_EDGES_WITH_TYPE, null, graphFilter));
         }
-        
         
         return tools;
     }

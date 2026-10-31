@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,23 +61,26 @@ class SimpleCheckBoxUI extends BasicCheckBoxUI implements java.io.Serializable {
         super.uninstallUI(c);
     }
 
+
     @Override
     public void paint(Graphics g, JComponent c) {
-        super.paint(g, c);       
+        super.paint(g, c);
     }
-    
+
 
     @Override
     protected void paintIcon(Graphics g, JComponent c, Rectangle iconRect) {
-        
+
     }
 
-    
+
     @Override
-    protected void paintFocus(Graphics g, AbstractButton b, Rectangle viewRect, Rectangle textRect, Rectangle iconRect) {
-        
+    protected void paintFocus(Graphics g, AbstractButton b, Rectangle viewRect, Rectangle textRect,
+            Rectangle iconRect) {
+
     }
-    
+
+
     protected Color getSelectColor() {
         return Color.BLACK;
     }

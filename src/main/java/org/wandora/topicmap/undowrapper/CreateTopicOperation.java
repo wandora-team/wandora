@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,39 +43,45 @@ public class CreateTopicOperation extends UndoOperation {
     protected Topic copyt;
 
     public CreateTopicOperation(Topic t) throws TopicMapException, UndoException {
-        tm=t.getTopicMap();
-        copytm=new TopicMapImpl();
-        copyt=copytm.copyTopicIn(t, true);
-        si=copyt.getOneSubjectIdentifier();
-        if(si==null) throw new UndoException("Topic doesn't have a subject identifier");
+        tm = t.getTopicMap();
+        copytm = new TopicMapImpl();
+        copyt = copytm.copyTopicIn(t, true);
+        si = copyt.getOneSubjectIdentifier();
+        if (si == null)
+            throw new UndoException("Topic doesn't have a subject identifier");
     }
+
 
     @Override
     public String getLabel() {
         return "create topic";
     }
 
+
     @Override
     public void redo() throws UndoException {
         try {
-            Collection<Topic> merging=tm.getMergingTopics(copyt);
-            if(!merging.isEmpty()) throw new UndoException();
+            Collection<Topic> merging = tm.getMergingTopics(copyt);
+            if (!merging.isEmpty())
+                throw new UndoException();
             tm.copyTopicIn(copyt, true);
         }
-        catch(TopicMapException tme) { 
-            throw new UndoException(tme); 
+        catch (TopicMapException tme) {
+            throw new UndoException(tme);
         }
     }
+
 
     @Override
     public void undo() throws UndoException {
         try {
-            Topic t=tm.getTopic(si);
-            if(t==null) throw new UndoException();
+            Topic t = tm.getTopic(si);
+            if (t == null)
+                throw new UndoException();
             t.remove();
-        } 
-        catch(TopicMapException tme) { 
-            throw new UndoException(tme); 
+        }
+        catch (TopicMapException tme) {
+            throw new UndoException(tme);
         }
     }
 }

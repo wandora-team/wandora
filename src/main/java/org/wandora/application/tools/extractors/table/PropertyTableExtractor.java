@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -44,7 +45,6 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
 import org.wandora.application.tools.extractors.AbstractExtractor;
@@ -55,6 +55,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -67,12 +68,12 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class PropertyTableExtractor extends AbstractExtractor implements WandoraTool {
-   
+public class PropertyTableExtractor extends AbstractExtractor {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PropertyTableExtractor.class);
 	
 	private URL basePath = null;
-    public static String SI_PREFIX = "http://wandora.org/si/table";
+    public static String SI_PREFIX = "https://wandora.org/si/table";
     
     
     
@@ -121,9 +122,9 @@ public class PropertyTableExtractor extends AbstractExtractor implements Wandora
     @Override
     public String doBrowserExtract(BrowserExtractRequest request, Wandora wandora) throws TopicMapException {
         try {
-            basePath = new URL(request.getSource());
+            basePath = new URI(request.getSource()).toURL();
         }
-        catch(Exception e) { e.printStackTrace(); }
+        catch(Exception e) { logger.error(e); }
         String s = super.doBrowserExtract(request, wandora);
         basePath = null;
         return s;
@@ -214,7 +215,9 @@ public class PropertyTableExtractor extends AbstractExtractor implements Wandora
     
 
     private static class HTMLParse extends HTMLEditorKit {
-        /**
+        private static final long serialVersionUID = 1L;
+
+		/**
         * Call to obtain a HTMLEditorKit.Parser object.
         * @return A new HTMLEditorKit.Parser object.
         */
@@ -260,7 +263,7 @@ public class PropertyTableExtractor extends AbstractExtractor implements Wandora
             this.tm = tm;
             this.parent = parent;
             this.state = null;
-            this.stateStack = new ArrayList();
+            this.stateStack = new ArrayList<>();
         }
         
 
@@ -323,8 +326,8 @@ public class PropertyTableExtractor extends AbstractExtractor implements Wandora
                             state.association.addPlayer(propertyValueTopic, propertyNameTopic);
                             playerCount++;
                             
-                            state.cells = new ArrayList();
-                            state.links = new ArrayList();
+                            state.cells = new ArrayList<>();
+                            state.links = new ArrayList<>();
                         }
                         catch(Exception e) {
                             parent.log(e);
@@ -333,8 +336,8 @@ public class PropertyTableExtractor extends AbstractExtractor implements Wandora
                     else if(state.cells.size() == 1) {
                         state.associationType = state.cells.get(0);
                         state.associationTypeLink = state.links.get(0);
-                        state.cells = new ArrayList();
-                        state.links = new ArrayList();
+                        state.cells = new ArrayList<>();
+                        state.links = new ArrayList<>();
                     }
                     state.state = STATE_TABLE;
                 }
@@ -351,8 +354,8 @@ public class PropertyTableExtractor extends AbstractExtractor implements Wandora
             else if(t == HTML.Tag.TABLE) {
                 if(state != null) {
                     state.association = null;
-                    state.cells = new ArrayList();
-                    state.links = new ArrayList();
+                    state.cells = new ArrayList<>();
+                    state.links = new ArrayList<>();
                     state.state = STATE_OTHER;
                     if(!stateStack.isEmpty()) {
                         state = stateStack.remove(stateStack.size()-1);
@@ -388,7 +391,7 @@ public class PropertyTableExtractor extends AbstractExtractor implements Wandora
 
         @Override
         public void handleError(String errorMsg,int pos) {
-            // System.out.println("PropertyTableExtractor: " + errorMsg);
+            logger.error(errorMsg);
         }
         
         
@@ -398,8 +401,8 @@ public class PropertyTableExtractor extends AbstractExtractor implements Wandora
         
         
         private class TableState {  
-            public ArrayList<String> cells = new ArrayList();
-            public ArrayList<String> links = new ArrayList();
+            public ArrayList<String> cells = new ArrayList<>();
+            public ArrayList<String> links = new ArrayList<>();
             
             private String associationTypeSeed = System.currentTimeMillis() + "-" + Math.round(Math.random()*9999);
             public String associationType = "Table-"+associationTypeSeed;

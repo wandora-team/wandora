@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.OccurrenceTable;
 import org.wandora.application.gui.table.MixedTopicTable;
@@ -37,6 +36,7 @@ import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.query2.QueryRunner;
 import org.wandora.topicmap.Topic;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -44,13 +44,14 @@ import org.wandora.utils.DataURL;
  */
 
 
-public class RunOccurrenceAsQuery extends AbstractWandoraTool implements WandoraTool {
+public class RunOccurrenceAsQuery extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(RunOccurrenceAsQuery.class);
 
 	public RunOccurrenceAsQuery() {}
-    public RunOccurrenceAsQuery(Context preferredContext) {
+    public RunOccurrenceAsQuery(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -66,7 +67,7 @@ public class RunOccurrenceAsQuery extends AbstractWandoraTool implements Wandora
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         Object contextSource = context.getContextSource();
         
         // ***** OCCURRENCE TABLE ***** 
@@ -85,7 +86,7 @@ public class RunOccurrenceAsQuery extends AbstractWandoraTool implements Wandora
                     occurrence = new String(dataURL.getData());
                 }
             }
-            System.out.println("Running Wandora Query script:\n"+occurrence);
+            logger.info("Running Wandora Query script:\n"+occurrence);
             try {
                 QueryRunner queryRunner = new QueryRunner();
                 Collection<Topic> contextTopics = new ArrayList<>();
@@ -105,7 +106,7 @@ public class RunOccurrenceAsQuery extends AbstractWandoraTool implements Wandora
             }
             catch(Exception e) {
                 wandora.handleError(e);
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }

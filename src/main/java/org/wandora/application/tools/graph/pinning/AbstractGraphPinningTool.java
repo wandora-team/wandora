@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ public abstract class AbstractGraphPinningTool extends AbstractGraphTool {
         super(gp);
     }
  
-    public void setPinning(Iterator nodes, int mode) {
+    public void setPinning(Iterator<?> nodes, int mode) {
         if(nodes == null) return;
         VNode vn = null;
         while(nodes.hasNext()) {

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ abstract class AbstractWordExtractor extends AbstractExtractor{
 
     @Override
     public boolean _extractTopicsFrom(URL u, TopicMap t) throws Exception {
-        String str = IOUtils.toString(u.openStream());
+        String str = IOUtils.toString(u.openStream(), Charset.forName("UTF-8"));
         return _extractTopicsFrom(str, t);
     }
 
@@ -151,8 +151,8 @@ abstract class AbstractWordExtractor extends AbstractExtractor{
      */
     private HashMap<Topic, Float> solveTopics(String word, TopicMap tm) {
 
-        Context c = getContext();
-        Iterator contextIterator = c.getContextObjects();
+        Context<?> c = getContext();
+        Iterator<?> contextIterator = c.getContextObjects();
 
         HashMap<Topic, Float> scores = new HashMap<>();
         
@@ -225,9 +225,6 @@ abstract class AbstractWordExtractor extends AbstractExtractor{
             } catch (TopicMapException tme) {
                 log(tme.getMessage());
             }
-
-
-
         }
 
         return scores;

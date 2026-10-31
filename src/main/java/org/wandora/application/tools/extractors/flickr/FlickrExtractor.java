@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,8 @@ package org.wandora.application.tools.extractors.flickr;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
@@ -36,6 +37,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -55,12 +57,15 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
         
 /**
  *
  * @author anttirt
  */
 public abstract class FlickrExtractor extends AbstractWandoraTool {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(FlickrExtractor.class);
     
 
 	private static final long serialVersionUID = 1L;
@@ -104,7 +109,7 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(staticState == null)
             staticState = new FlickrState();
         
@@ -158,7 +163,7 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
             String baz = FlickrUtils.searchString(obj, "foo.baz");
         }
         catch(Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
    
@@ -209,7 +214,7 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
         args.put("api_sig", createSignature(args));
 
         try {
-            JSONObject obj = new JSONObject(IObox.doUrl(new URL(FlickrState.makeRESTURL(args))));
+            JSONObject obj = new JSONObject(IObox.doUrl(new URI(FlickrState.makeRESTURL(args)).toURL()));
 
             if(!obj.getString("stat").equals("ok"))
                 throw new RequestFailure(String.valueOf(obj.getInt("code")) + ": " + obj.getString("message"));
@@ -219,7 +224,7 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
         catch(JSONException e) {
             throw new RequestFailure("Invalid json in frob response", e);
         }
-        catch(MalformedURLException e) {
+        catch(MalformedURLException | URISyntaxException e) {
             throw new RequestFailure("Attempted to construct malformed URL", e);
         }
         catch(IOException e) {
@@ -387,12 +392,12 @@ public abstract class FlickrExtractor extends AbstractWandoraTool {
     }
 
     
-    protected abstract boolean extract(Wandora admin, Context context) throws ExtractionFailure;
+    protected abstract boolean extract(Wandora admin, Context<?> context) throws ExtractionFailure;
     
     
-    public final Collection<Topic> getWithType( Context context, Topic type) {
-        Iterator objs = context.getContextObjects();
-        ArrayList<Topic> topicList = new ArrayList<>();
+    public final Collection<Topic> getWithType( Context<?> context, Topic type) {
+        Iterator<?> objs = context.getContextObjects();
+        List<Topic> topicList = new ArrayList<>();
         if(type == null) return topicList;
             
         try {

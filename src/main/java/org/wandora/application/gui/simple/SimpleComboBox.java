@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import java.util.Enumeration;
 import java.util.Set;
 import java.util.Vector;
 
-import javax.swing.ComboBoxEditor;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -50,143 +49,142 @@ import org.wandora.application.gui.UIConstants;
  *
  * @author  akivela
  */
-public class SimpleComboBox extends JComboBox implements MouseListener, SimpleComponent {
-    
+public class SimpleComboBox<T> extends JComboBox<T> implements MouseListener, SimpleComponent {
+
     private static final long serialVersionUID = 1L;
-   
-    
+
+
     /** Creates a new instance of SimpleComboBox */
     public SimpleComboBox() {
         initialize();
     }
-    
-    
-    public SimpleComboBox(Vector v) {
+
+
+    public SimpleComboBox(Vector<T> v) {
         super(v);
         initialize();
     }
-    
-    
-    public SimpleComboBox(String[] content) {
+
+
+    public SimpleComboBox(T[] content) {
         super();
         initialize();
         setOptions(content);
     }
-    
-    
-    public SimpleComboBox(Set content) {
+
+
+    public SimpleComboBox(Set<T> content) {
         super();
         initialize();
         setOptions(content);
     }
-    
-    
-    public SimpleComboBox(Collection content) {
+
+
+    public SimpleComboBox(Collection<T> content) {
         super();
         initialize();
         setOptions(content);
     }
-    
-    
+
+
     private void initialize() {
         this.addMouseListener(this);
         this.setFont(UIConstants.comboBoxFont);
         UIConstants.setFancyFont(this);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        ComboBoxEditor e = this.getEditor();
-        Component ec = e.getEditorComponent();
-        this.setRenderer(new BorderListCellRenderer());
+        this.setRenderer(new BorderListCellRenderer<T>());
         this.setEditable(true);
     }
-    
-    
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
     }
-    
-    
-    
-    public void setOptions(String[] content) {
+
+
+
+    public void setOptions(T[] content) {
         removeAllItems();
-        for (String item : content) {
+        for (T item : content) {
             addItem(item);
         }
     }
-    
-        
-    public void setOptions(Enumeration content) {
+
+
+    public void setOptions(Enumeration<T> content) {
         removeAllItems();
-        while(content.hasMoreElements()) {
+        while (content.hasMoreElements()) {
             try {
                 addItem(content.nextElement());
             }
-            catch (Exception e) {}
-        }
-    }
-    
-    public void setOptions(Set content) {
-        removeAllItems();
-        for(Object o : content) {
-            try {
-                addItem(o);
+            catch (Exception e) {
             }
-            catch (Exception e) {}
-        }
-    }
-    
-    public void setOptions(Collection content) {
-        removeAllItems();
-        for(Object o : content) {
-            try {
-                addItem(o);
-            }
-            catch (Exception e) {}
         }
     }
 
-    
+
+    public void setOptions(Set<T> content) {
+        removeAllItems();
+        for (T o : content) {
+            try {
+                addItem(o);
+            }
+            catch (Exception e) {
+            }
+        }
+    }
+
+
+    public void setOptions(Collection<T> content) {
+        removeAllItems();
+        for (T o : content) {
+            try {
+                addItem(o);
+            }
+            catch (Exception e) {
+            }
+        }
+    }
+
+
     @Override
     public void focusGained(java.awt.event.FocusEvent focusEvent) {
         // DO NOTHING...
     }
-    
+
+
     @Override
     public void focusLost(java.awt.event.FocusEvent focusEvent) {
         // DO NOTHING...
     }
-   
-    
-    
-    /*
-    @Override
-    public void paint(Graphics g) {
-        UIConstants.preparePaint(g);
-        super.paint(g);
-    }
-    */
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
-    public class BorderListCellRenderer implements ListCellRenderer {
+
+
+
+    public class BorderListCellRenderer<E> implements ListCellRenderer<E> {
 
         private Border insetBorder;
         private DefaultListCellRenderer defaultRenderer;
@@ -196,15 +194,16 @@ public class SimpleComboBox extends JComboBox implements MouseListener, SimpleCo
             this.defaultRenderer = new DefaultListCellRenderer();
         }
 
+
         @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+        public Component getListCellRendererComponent(JList<? extends E> list, E value, int index, boolean isSelected,
+                boolean cellHasFocus) {
             JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(
-                    list, 
-                    value, 
-                    index, 
-                    isSelected, 
-                    cellHasFocus
-            );
+                    list,
+                    value,
+                    index,
+                    isSelected,
+                    cellHasFocus);
             renderer.setBorder(insetBorder);
             return renderer;
         }

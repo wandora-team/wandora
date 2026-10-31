@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,11 +29,11 @@ package org.wandora.application.tools.subjects;
 
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIConstants;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -44,6 +44,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.utils.DataURL;
 import org.wandora.utils.IObox;
 import org.wandora.utils.MimeTypes;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -53,9 +54,10 @@ import org.wandora.utils.MimeTypes;
  *
  * @author  akivela
  */
-public class DownloadSubjectLocators extends AbstractWandoraTool implements  WandoraTool {
+public class DownloadSubjectLocators extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DownloadSubjectLocators.class);
 
 	private boolean changeSubjectLocator = false;
     private boolean overWriteAll = false;
@@ -65,14 +67,14 @@ public class DownloadSubjectLocators extends AbstractWandoraTool implements  Wan
     
     public DownloadSubjectLocators() {
     }
-    public DownloadSubjectLocators(Context preferredContext) {
+    public DownloadSubjectLocators(Context<?> preferredContext) {
         this(preferredContext, false);
     }
 
     public DownloadSubjectLocators(boolean changeSubjectLocator) {
         this.changeSubjectLocator = changeSubjectLocator;
     }
-    public DownloadSubjectLocators(Context preferredContext, boolean changeSubjectLocator) {
+    public DownloadSubjectLocators(Context<?> preferredContext, boolean changeSubjectLocator) {
         setContext(preferredContext);
         this.changeSubjectLocator = changeSubjectLocator;
     }
@@ -82,9 +84,9 @@ public class DownloadSubjectLocators extends AbstractWandoraTool implements  Wan
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         this.wandora = wandora;
-        Iterator<Topic> topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
         File targetPath = null;
         
         if(topics != null && topics.hasNext()) {
@@ -107,7 +109,7 @@ public class DownloadSubjectLocators extends AbstractWandoraTool implements  Wan
                 while(topics.hasNext() && !isCancelled && !forceStop()) {
                     try {
                         total++;
-                        topic = topics.next();
+                        topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
                             Locator l = topic.getSubjectLocator();
                             if(l != null) {
@@ -159,7 +161,7 @@ public class DownloadSubjectLocators extends AbstractWandoraTool implements  Wan
                 }
             }
             else {
-                URL subjectUrl = new URL(locatorString);
+                URL subjectUrl = new URI(locatorString).toURL();
                 String filename = subjectUrl.getPath();
                 if(filename.indexOf('/') > -1) {
                     filename = filename.substring(filename.lastIndexOf('/'));
@@ -228,7 +230,7 @@ public class DownloadSubjectLocators extends AbstractWandoraTool implements  Wan
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return currentDirectory;
     }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Vector;
@@ -57,7 +58,7 @@ import org.xml.sax.XMLReader;
  * Extracts text and metadata from exported MediaWiki pages. Exported MediaWiki
  * pages are XML dumps. Example of exported MediaWiki page can be found at
  *
- * http://wandora.orgwiki/Special:Export/Wandora
+ * https://wandora.orgwiki/Special:Export/Wandora
  *
  * @author olli
  */
@@ -113,7 +114,7 @@ public class MediaWikiExtractor extends AbstractExtractor {
     }
 
     public boolean _extractTopicsFrom(String str, TopicMap topicMap) throws Exception {
-        boolean answer = _extractTopicsFrom(new ByteArrayInputStream(str.getBytes()), "http://wandora.org/si/mediawiki-extractor/"+System.currentTimeMillis(), topicMap);
+        boolean answer = _extractTopicsFrom(new ByteArrayInputStream(str.getBytes()), "https://wandora.org/si/mediawiki-extractor/"+System.currentTimeMillis(), topicMap);
         return answer;
     }
 
@@ -140,7 +141,7 @@ public class MediaWikiExtractor extends AbstractExtractor {
     public String extractTopicsFromWiki(String page, TopicMap topicMap) throws Exception {
         if(wikiBaseURL!=null){
             String url=wikiBaseURL.replace("__1__", page.replace(" ", "_"));
-            if(_extractTopicsFrom(new URL(url),topicMap)) return url;
+            if(_extractTopicsFrom(new URI(url).toURL(),topicMap)) return url;
             else return null;
         }
         else return null;
@@ -203,7 +204,7 @@ public class MediaWikiExtractor extends AbstractExtractor {
         
         private int state=STATE_START;
         
-        public static String SIPREFIX="http://wandora.org/si/mediawiki/";
+        public static String SIPREFIX="https://wandora.org/si/mediawiki/";
         public static String CONTRIBUTOR_SI=SIPREFIX+"contributor";
         public static String PAGE_SI=SIPREFIX+"page";
         public static String TIMESTAMP_SI=SIPREFIX+"timestamp";
@@ -380,7 +381,7 @@ public class MediaWikiExtractor extends AbstractExtractor {
                             try{
                                 Topic wikiTopic=tm.createTopic();
                                 try {
-                                    URL si = new URL(url);
+                                    URL si = new URI(url).toURL();
                                     String protocol = si.getProtocol();
                                     String host = si.getHost();
                                     wikiTopic.addSubjectIdentifier(new org.wandora.topicmap.Locator(protocol+"://"+host));

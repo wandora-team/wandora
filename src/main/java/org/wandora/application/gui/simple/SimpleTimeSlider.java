@@ -37,119 +37,123 @@ import javax.swing.JProgressBar;
  * @author akivela
  */
 public class SimpleTimeSlider extends JProgressBar {
-    
+
     private static final long serialVersionUID = 1L;
-    
-    private final static int MULTIPLIER = 100; 
-    
-    
+
+    private final static int MULTIPLIER = 100;
+
+
     public SimpleTimeSlider() {
         super();
         setStringPainted(true);
         setBorderPainted(false);
     }
-    
+
 
     @Override
     public void setString(String txt) {
-        if(txt == null) txt = "";
-        if(txt.length() > 100) txt = txt.substring(0, 100) + "...";
+        if (txt == null)
+            txt = "";
+        if (txt.length() > 100)
+            txt = txt.substring(0, 100) + "...";
         super.setString(txt);
     }
 
-    
+
     public void setMaximum(double value) {
-        super.setMaximum((int) floor(value*MULTIPLIER));
+        super.setMaximum((int) floor(value * MULTIPLIER));
     }
-    
-    
+
+
     public void setMinimum(double value) {
-        super.setMinimum((int) floor(value*MULTIPLIER));
+        super.setMinimum((int) floor(value * MULTIPLIER));
     }
-    
-    
+
+
     @Override
     public void setMaximum(int value) {
-        super.setMaximum(value*MULTIPLIER);
+        super.setMaximum(value * MULTIPLIER);
     }
-    
-    
+
+
     @Override
     public void setMinimum(int value) {
-        super.setMinimum(value*MULTIPLIER);
+        super.setMinimum(value * MULTIPLIER);
     }
-    
-    
+
+
     public void setValue(double value) {
-        super.setValue((int) floor(value*MULTIPLIER));
-        setString(getFormatTime((int) floor(value*MULTIPLIER), this.getMaximum()));
-        setToolTipText(getString());
-    }
-    
-    
-    @Override
-    public void setValue(int value) {
-        super.setValue(value*MULTIPLIER);
-        setString(getFormatTime(value*MULTIPLIER, this.getMaximum()));
+        super.setValue((int) floor(value * MULTIPLIER));
+        setString(getFormatTime((int) floor(value * MULTIPLIER), this.getMaximum()));
         setToolTipText(getString());
     }
 
-    
+
+    @Override
+    public void setValue(int value) {
+        super.setValue(value * MULTIPLIER);
+        setString(getFormatTime(value * MULTIPLIER, this.getMaximum()));
+        setToolTipText(getString());
+    }
+
+
     @Override
     public int getValue() {
         int v = super.getValue();
-        return v/MULTIPLIER;
+        return v / MULTIPLIER;
     }
-    
-    
-    
+
+
+
     public int getValueFor(MouseEvent mouseEvent) {
-        if(mouseEvent == null) return getValue();
+        if (mouseEvent == null)
+            return getValue();
         else {
-            int newValue = (( (MULTIPLIER*(mouseEvent.getX()-getX())) / getWidth()) * getMaximum()) / (MULTIPLIER*MULTIPLIER);
+            int newValue = (((MULTIPLIER * (mouseEvent.getX() - getX())) / getWidth()) * getMaximum())
+                    / (MULTIPLIER * MULTIPLIER);
             newValue = Math.max(0, newValue);
             newValue = Math.min(super.getMaximum(), newValue);
             return newValue;
         }
     }
-    
-    
+
+
     public void setProgress(String text, int minValue, int value, int maxValue) {
-        super.setMinimum(minValue*MULTIPLIER);
-        super.setMaximum(maxValue*MULTIPLIER);
-        super.setValue(value*MULTIPLIER);
+        super.setMinimum(minValue * MULTIPLIER);
+        super.setMaximum(maxValue * MULTIPLIER);
+        super.setValue(value * MULTIPLIER);
         this.setString(text);
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     @Override
     public void addMouseMotionListener(MouseMotionListener listener) {
         setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
         super.addMouseMotionListener(listener);
     }
-    
-    
+
+
     @Override
     public void addMouseListener(MouseListener listener) {
-        if(getCursor().getType() != Cursor.W_RESIZE_CURSOR) {
+        if (getCursor().getType() != Cursor.W_RESIZE_CURSOR) {
             setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
         super.addMouseListener(listener);
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     private String getFormatTime(int elapsed, int duration) {
-        elapsed = elapsed/MULTIPLIER;
-        duration = duration/MULTIPLIER;
-        
+        elapsed = elapsed / MULTIPLIER;
+        duration = duration / MULTIPLIER;
+
         int elapsedHours = elapsed / (60 * 60);
         if (elapsedHours > 0) {
             elapsed -= elapsedHours * 60 * 60;
@@ -168,24 +172,25 @@ public class SimpleTimeSlider extends JProgressBar {
                 return format("%d:%02d:%02d/%d:%02d:%02d",
                         elapsedHours, elapsedMinutes, elapsedSeconds,
                         durationHours, durationMinutes, durationSeconds);
-            } 
+            }
             else {
                 return format("%02d:%02d/%02d:%02d",
                         elapsedMinutes, elapsedSeconds, durationMinutes,
                         durationSeconds);
             }
-        } 
+        }
         else {
             if (elapsedHours > 0) {
                 return format("%d:%02d:%02d", elapsedHours,
                         elapsedMinutes, elapsedSeconds);
-            } else {
+            }
+            else {
                 return format("%02d:%02d", elapsedMinutes,
                         elapsedSeconds);
             }
         }
     }
 
-    
-    
+
+
 }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.RegularExpressionEditor;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -48,7 +47,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class ModifySubjectLocatorWithRegex extends AbstractWandoraTool implements WandoraTool {
+public class ModifySubjectLocatorWithRegex extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -58,7 +57,7 @@ public class ModifySubjectLocatorWithRegex extends AbstractWandoraTool implement
     /** Creates a new instance of SubjectLocatorRegexReplacer */
     public ModifySubjectLocatorWithRegex() {
     }
-    public ModifySubjectLocatorWithRegex(Context preferredContext) {
+    public ModifySubjectLocatorWithRegex(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -76,8 +75,8 @@ public class ModifySubjectLocatorWithRegex extends AbstractWandoraTool implement
     
   
     @Override
-    public void execute(Wandora admin, Context context) {   
-        Iterator topics = context.getContextObjects();
+    public void execute(Wandora admin, Context<?> context) {   
+        Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         try {
             editor = RegularExpressionEditor.getReplaceExpressionEditor(admin);
@@ -93,7 +92,6 @@ public class ModifySubjectLocatorWithRegex extends AbstractWandoraTool implement
                 Locator subjectLocator = null;
                 String newSubjectLocatorString = null;
                 String subjectLocatorString = null;
-                int progress = 0;
                 int changed = 0;
 
                 ArrayList<Object> dt = new ArrayList<Object>();
@@ -105,7 +103,6 @@ public class ModifySubjectLocatorWithRegex extends AbstractWandoraTool implement
                 while(topics.hasNext() && !forceStop()) {
                     try {
                         topic = (Topic) topics.next();
-                        progress++;
                         if(topic != null && !topic.isRemoved()) {
                             subjectLocator = topic.getSubjectLocator();
                             if(subjectLocator != null) {

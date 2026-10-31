@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,9 +30,9 @@ package org.wandora.application.tools.subjects;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
@@ -44,7 +44,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class ExtractWithSubjectLocator extends AbstractWandoraTool implements WandoraTool, Runnable {
+public class ExtractWithSubjectLocator extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -55,28 +55,24 @@ public class ExtractWithSubjectLocator extends AbstractWandoraTool implements Wa
     public ExtractWithSubjectLocator(AbstractExtractor extractor) {
         enclosedExtractor = extractor;
     }
-    public ExtractWithSubjectLocator(AbstractExtractor extractor, Context proposedContext) {
+    public ExtractWithSubjectLocator(AbstractExtractor extractor, Context<?> proposedContext) {
         enclosedExtractor = extractor;
         setContext(proposedContext);
     }
     
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             log("Extracting with subject locator urls!");
             if(wandora != null) {
-                Iterator contextTopics = getContext().getContextObjects();
-                int openCount = 0;
-                boolean openAll = false;
-                boolean openNext = true;
-                boolean forceStop = false;
-                ArrayList<String> sls = new ArrayList<String>(); 
+                Iterator<?> contextTopics = getContext().getContextObjects();
+                List<String> sls = new ArrayList<>(); 
                 
                 // ***** Collection urls in context topics *****
                 if(contextTopics == null) return;
-                while(contextTopics.hasNext() && !forceStop) {
+                while(contextTopics.hasNext() && !forceStop()) {
                     Topic t = (Topic) (contextTopics.next());
                     Locator sl = t.getSubjectLocator();
                     if(sl != null) {

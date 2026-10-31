@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,22 +29,22 @@
 package org.wandora.utils.velocity;
 
 /**
- * Use this class in velocity when you need to make new instances of some class in
- * the template.
+ * Use this class in velocity when you need to make new instances of some class
+ * in the template.
  *
- * @author  olli
+ * @author olli
  */
 public class InstanceMaker {
-    
-    private Class c;
-    
+
+    private Class<?> c;
+
     /** Creates a new instance of InstanceMaker */
     public InstanceMaker(String cls) throws Exception {
-        c=Class.forName(cls);
+        c = Class.forName(cls);
     }
-    
-    
+
+
     public Object make() throws Exception {
-        return c.newInstance();
+        return c.getDeclaredConstructor().newInstance();
     }
 }

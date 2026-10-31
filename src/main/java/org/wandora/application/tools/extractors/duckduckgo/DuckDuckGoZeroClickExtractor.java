@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,8 @@ package org.wandora.application.tools.extractors.duckduckgo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
-import java.util.HashMap;
+import java.nio.charset.Charset;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -53,7 +54,7 @@ public class DuckDuckGoZeroClickExtractor  extends AbstractDuckDuckGoExtractor {
         = "http://api.duckduckgo.com";
     
     private static final String API_NAME = "DuckDuckGo API";    
-    private static final String SI_ROOT  = "http://wandora.org/si/duckduckgo";
+    private static final String SI_ROOT  = "https://wandora.org/si/duckduckgo";
     
     private static final String DUCK_T_SI       = SI_ROOT + "/topic";
     private static final String DEFINITON_SI    = SI_ROOT + "/defintion";
@@ -100,7 +101,7 @@ public class DuckDuckGoZeroClickExtractor  extends AbstractDuckDuckGoExtractor {
     @Override
     public boolean _extractTopicsFrom(File f, TopicMap tm) throws Exception {
         FileInputStream is = new FileInputStream(f);
-        String query = IOUtils.toString(is);
+        String query = IOUtils.toString(is, Charset.forName("UTF-8"));
         _extractTopicsFrom(query, tm);
         return true;
         
@@ -139,7 +140,7 @@ public class DuckDuckGoZeroClickExtractor  extends AbstractDuckDuckGoExtractor {
                         
             Topic lang = getLangTopic(tm);
             Topic api = getAPIClass(tm, API_SI, API_NAME);
-            HashMap<String, Topic> types = getTypes(tm,typeStrings, api);
+            Map<String, Topic> types = getTypes(tm,typeStrings, api);
             
             String bn = body.getString("Heading");
             

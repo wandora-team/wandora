@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,8 +53,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -65,44 +65,45 @@ import org.wandora.application.WandoraToolSet;
 import org.wandora.application.gui.simple.SimpleTree;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.utils.Textbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author akivela
  */
-public class WandoraToolTree extends SimpleTree implements MouseListener, TreeModelListener, TreeSelectionListener, ActionListener /*, DragSourceListener, DragGestureListener*/ {
-    
+public class WandoraToolTree extends SimpleTree implements MouseListener, TreeModelListener, TreeSelectionListener,
+        ActionListener /*, DragSourceListener, DragGestureListener*/ {
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraToolTree.class);
 
-	private static final long serialVersionUID = 1L;
-
-	
-	private Wandora wandora;
+    private Wandora wandora;
     private MouseEvent mouseEvent;
     private WandoraToolSet toolSet = null;
     protected TreeModel toolTreeModel = null;
-    
+
     private Object[] toolTreeMenuStruct = new Object[] {
-        "Add tool...",
-        "Add group...",
-        "---",
-        "Rename...",
-        "Delete...",
-        "---",
-        "Execute...",
-        "Configure...",
-        "Release tool locks...",
-        "Kill threads...",
-        "---",
-        "Info...",
+            "Add tool...",
+            "Add group...",
+            "---",
+            "Rename...",
+            "Delete...",
+            "---",
+            "Execute...",
+            "Configure...",
+            "Release tool locks...",
+            "Kill threads...",
+            "---",
+            "Info...",
     };
     private JPopupMenu toolTreeMenu = null;
-    
-    
+
+
     public WandoraToolTree(Wandora parent) {
         this.wandora = parent;
     }
-    
+
+
     public void initialize(WandoraToolSet toolSet) {
         this.toolSet = toolSet;
         this.setRootVisible(false);
@@ -118,36 +119,34 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
         this.addMouseListener(this);
         this.toolTreeMenu = UIBox.makePopupMenu(toolTreeMenuStruct, this);
         this.setComponentPopupMenu(toolTreeMenu);
-        
+
         ToolTreeNode top = new ToolTreeNode(toolSet);
         createNodes(top, toolSet);
         toolTreeModel = new DefaultTreeModel(top);
         toolTreeModel.addTreeModelListener(this);
         this.setModel(toolTreeModel);
     }
-    
-    
-    
+
+
+
     public void createNodes(ToolTreeNode node, WandoraToolSet toolSet) {
         Object[] ts = toolSet.asArray();
         Object to = null;
         ToolTreeNode subnode = null;
         WandoraToolSet subset = null;
         WandoraToolSet.ToolItem toolWrapper = null;
-        for(int i=0; i<ts.length; i++) {
+        for (int i = 0; i < ts.length; i++) {
             to = ts[i];
-            if(to != null) {
-                if(to instanceof WandoraToolSet) {
+            if (to != null) {
+                if (to instanceof WandoraToolSet) {
                     subset = (WandoraToolSet) to;
-                    //System.out.println("adding subtree "+subset+" to tool tree");
                     subnode = new ToolTreeNode(subset);
                     createNodes(subnode, subset);
                     subnode.setParentNode(node);
                     node.add(subnode);
                 }
-                else if(to instanceof WandoraToolSet.ToolItem) {
+                else if (to instanceof WandoraToolSet.ToolItem) {
                     toolWrapper = (WandoraToolSet.ToolItem) to;
-                    //System.out.println("adding tool "+toolWrapper+" to tool tree");
                     subnode = new ToolTreeNode(toolWrapper);
                     subnode.setParentNode(node);
                     node.add(subnode);
@@ -156,80 +155,81 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
         }
     }
 
-    
-    
+
+
     public Object addNode(WandoraToolSet set) {
         return addNode((Object) set);
     }
-    
+
+
     public Object addNode(WandoraToolSet.ToolItem tool) {
         return addNode((Object) tool);
     }
-    
+
+
     private Object addNode(Object n) {
         TreePath parentPath = this.getSelectionPath();
         ToolTreeNode parentNode = null;
-        if(parentPath == null) {
+        if (parentPath == null) {
             //There is no selection. Default to the root node.
             parentNode = (ToolTreeNode) this.getModel().getRoot();
         }
         else {
             parentNode = (ToolTreeNode) (parentPath.getLastPathComponent());
-            while(!parentNode.isSet()) {
+            while (!parentNode.isSet()) {
                 parentNode = parentNode.getParentNode();
             }
         }
-        
+
         ToolTreeNode childNode = null;
-        if(n instanceof WandoraToolSet.ToolItem) {
+        if (n instanceof WandoraToolSet.ToolItem) {
             childNode = new ToolTreeNode((WandoraToolSet.ToolItem) n);
         }
-        if(n instanceof WandoraToolSet) {
+        if (n instanceof WandoraToolSet) {
             childNode = new ToolTreeNode((WandoraToolSet) n);
         }
-        if(childNode != null) {
+        if (childNode != null) {
             childNode.setParentNode(parentNode);
             ((DefaultTreeModel) toolTreeModel).insertNodeInto(
                     childNode,
                     parentNode,
-                    parentNode.getChildCount()
-            );
+                    parentNode.getChildCount());
             scrollPathToVisible(new TreePath(childNode.getPath()));
-            
+
             WandoraToolSet set = (WandoraToolSet) parentNode.getUserObject();
             set.add(n);
-            
+
             return parentNode.getUserObject();
         }
         return null;
     }
 
-    
-    
+
+
     public Object renameCurrentNode(String newName) {
         TreePath parentPath = this.getSelectionPath();
-        if(parentPath != null) {
+        if (parentPath != null) {
             ToolTreeNode node = (ToolTreeNode) (parentPath.getLastPathComponent());
             Object o = node.getUserObject();
-            if(o instanceof WandoraToolSet) {
-                ((WandoraToolSet) o).setName(newName);
+            if (o instanceof WandoraToolSet toolset) {
+                toolset.setName(newName);
             }
-            else if(o instanceof WandoraToolSet.ToolItem) {
-                ((WandoraToolSet.ToolItem) o).setName(newName);
+            else if (o instanceof WandoraToolSet.ToolItem toolitem) {
+                toolitem.setName(newName);
             }
-            return o; 
+            return o;
         }
         return null;
     }
-    
-    
+
+
     public Object removeCurrentNode() {
         TreePath selectionPath = this.getSelectionPath();
-        if(selectionPath != null) {
+        if (selectionPath != null) {
             ToolTreeNode currentNode = (ToolTreeNode) (selectionPath.getLastPathComponent());
-            if(currentNode != null) {
+            if (currentNode != null) {
                 ((DefaultTreeModel) toolTreeModel).removeNodeFromParent(currentNode);
-                
+
                 ToolTreeNode parentNode = currentNode.getParentNode();
                 WandoraToolSet set = (WandoraToolSet) parentNode.getUserObject();
                 set.remove(currentNode.getUserObject());
@@ -239,90 +239,94 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
         return null;
     }
 
-    
-    
-    
+
+
     public ToolTreeNode solveNode(int nodeHash) {
         ToolTreeNode root = (ToolTreeNode) this.getModel().getRoot();
         return solveNode(nodeHash, root);
     }
+
+
     public ToolTreeNode solveNode(int hash, ToolTreeNode node) {
-        if(hash == node.hashCode()) return node;
+        if (hash == node.hashCode()) {
+            return node;
+        }
         else {
             ToolTreeNode child = null;
-            for(Enumeration children = node.children() ; children.hasMoreElements(); ) {
+            for (Enumeration<TreeNode> children = node.children(); children.hasMoreElements();) {
                 child = (ToolTreeNode) children.nextElement();
                 ToolTreeNode childnode = solveNode(hash, child);
-                if(childnode != null) return childnode;
+                if (childnode != null) {
+                    return childnode;
+                }
             }
         }
         return null;
     }
-    
-            
-    
+
+
+
     public void refresh() {
         this.setModel(toolTreeModel);
         this.validate();
         this.repaint();
-        // System.out.println("refresh acquired");
     }
-    
+
+
     public WandoraToolSet getToolSet() {
         return toolSet;
     }
-    
-    
-    
-    
+
+
+
     public WandoraToolSet.ToolItem getSelectedTool() {
         TreePath parentPath = this.getSelectionPath();
-        if(parentPath != null) {
+        if (parentPath != null) {
             ToolTreeNode node = (ToolTreeNode) (parentPath.getLastPathComponent());
             Object o = node.getUserObject();
-            if(o instanceof WandoraToolSet.ToolItem) {
-                return (WandoraToolSet.ToolItem) o;
+            if (o instanceof WandoraToolSet.ToolItem toolitem) {
+                return toolitem;
             }
         }
         return null;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String c = e.getActionCommand();
-        if(c == null) return;
+        if (c == null)
+            return;
         c = c.toLowerCase();
-        // System.out.println("actionPerformed @ ToolTree "+e);
-        
+
         // ***** EXECUTE *****
-        if(c.startsWith("execute")) {
+        if (c.startsWith("execute")) {
             try {
                 WandoraToolSet.ToolItem toolItem = getSelectedTool();
-                if(toolItem != null) {
+                if (toolItem != null) {
                     WandoraTool t = toolItem.getTool();
                     t.execute(wandora);
                 }
             }
-            catch(Exception ex) {
-                ex.printStackTrace();
+            catch (Exception ex) {
+                logger.error(ex);
             }
-            catch(Error er) {
-                er.printStackTrace();
+            catch (Error er) {
+                logger.error(er);
             }
         }
-        
+
         // ***** CONFIGURE *****
-        else if(c.startsWith("configure")) {
+        else if (c.startsWith("configure")) {
             try {
                 WandoraToolSet.ToolItem toolItem = getSelectedTool();
-                if(toolItem != null) {
+                if (toolItem != null) {
                     WandoraTool t = toolItem.getTool();
-                    if(t.isConfigurable()) {
+                    if (t.isConfigurable()) {
                         t.configure(wandora, wandora.getOptions(), wandora.getToolManager().getOptionsPrefix(t));
                     }
                     else {
@@ -330,41 +334,42 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                     }
                 }
             }
-            catch(Exception ex) {
-                ex.printStackTrace();
+            catch (Exception ex) {
+                logger.error(ex);
             }
-            catch(Error er) {
-                er.printStackTrace();
+            catch (Error er) {
+                logger.error(er);
             }
         }
-        
+
         // ***** RENAME *****
-        else if(c.startsWith("rename")) {
-            if(getSelectionPath() != null) {
-                String newName = WandoraOptionPane.showInputDialog(wandora, "Give new name for selected node?", "", "Rename node");
-                if(newName != null) {
+        else if (c.startsWith("rename")) {
+            if (getSelectionPath() != null) {
+                String newName = WandoraOptionPane.showInputDialog(wandora, "Give new name for selected node?", "",
+                        "Rename node");
+                if (newName != null) {
                     renameCurrentNode(newName);
                 }
             }
         }
-        
+
         // ***** DELETE *****
-        else if(c.startsWith("delete")) {
-            if(getSelectionPath() != null) {
-                int a = WandoraOptionPane.showConfirmDialog(wandora, "Remove selected tool or folder?", "Confirm remove");
-                if(a == WandoraOptionPane.YES_OPTION) {
+        else if (c.startsWith("delete")) {
+            if (getSelectionPath() != null) {
+                int a = WandoraOptionPane.showConfirmDialog(wandora, "Remove selected tool or folder?",
+                        "Confirm remove");
+                if (a == WandoraOptionPane.YES_OPTION) {
                     removeCurrentNode();
                 }
             }
         }
-        
+
         // ***** ADD TOOL *****
-        else if(c.startsWith("add tool")) {
+        else if (c.startsWith("add tool")) {
             WandoraToolSelector toolSelector = new WandoraToolSelector(wandora);
-            if(toolSelector.selectToolAccepted()) {              
+            if (toolSelector.selectToolAccepted()) {
                 WandoraTool addedTool = toolSelector.getSelectedTool();
-                if(addedTool != null) {
-                    // toolSet.new ToolWrapper(toolName, (WandoraTool) n)
+                if (addedTool != null) {
                     String toolName = addedTool.getName();
                     WandoraToolSet rootSet = getRootSet();
                     WandoraToolSet.ToolItem toolWrapper = rootSet.new ToolItem(toolName, addedTool);
@@ -372,121 +377,130 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
                 }
             }
         }
-        
+
         // ***** ADD GROUP *****
-        else if(c.startsWith("add group")) {
+        else if (c.startsWith("add group")) {
             String name = WandoraOptionPane.showInputDialog(wandora, "Give name for new group?", "", "Group name");
-            if(name != null) {
-                if(name.length() > 0) {
+            if (name != null) {
+                if (name.length() > 0) {
                     WandoraToolSet group = new WandoraToolSet(name, wandora);
                     addNode(group);
                 }
                 else {
-                    WandoraOptionPane.showMessageDialog(wandora, "Given name is zero length. Cancelling folder creation.", "Too short folder name");
+                    WandoraOptionPane.showMessageDialog(wandora,
+                            "Given name is zero length. Cancelling folder creation.", "Too short folder name");
                 }
             }
         }
-        
+
         // ***** RELEASE TOOL LOCKS *****
-        else if(c.startsWith("release tool locks")) {
+        else if (c.startsWith("release tool locks")) {
             try {
                 WandoraToolSet.ToolItem toolItem = getSelectedTool();
-                if(toolItem != null) {
+                if (toolItem != null) {
                     WandoraTool t = toolItem.getTool();
                     String className = t.getClass().getSimpleName();
-                    if(t instanceof AbstractWandoraTool && !((AbstractWandoraTool) t).allowMultipleInvocations()) {
-                        int a = WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to release tool lock for class '"+className+"'", "Release tool lock");
-                        if(a == WandoraOptionPane.YES_OPTION) {
+                    if (t instanceof AbstractWandoraTool && !((AbstractWandoraTool) t).allowMultipleInvocations()) {
+                        int a = WandoraOptionPane.showConfirmDialog(wandora,
+                                "Are you sure you want to release tool lock for class '" + className + "'",
+                                "Release tool lock");
+                        if (a == WandoraOptionPane.YES_OPTION) {
                             boolean released = ((AbstractWandoraTool) t).clearToolLock();
-                            if(!released) WandoraOptionPane.showMessageDialog(wandora, "Tool class '"+className+"' was not locked. Couldn't release tool locks.");
+                            if (!released)
+                                WandoraOptionPane.showMessageDialog(wandora,
+                                        "Tool class '" + className + "' was not locked. Couldn't release tool locks.");
                         }
                     }
                     else {
-                        WandoraOptionPane.showMessageDialog(wandora, "Tool class '"+className+"' doesn't support tool locks. Can't release tool locks.");
+                        WandoraOptionPane.showMessageDialog(wandora,
+                                "Tool class '" + className + "' doesn't support tool locks. Can't release tool locks.");
                     }
                 }
             }
-            catch(Exception ex) {
-                ex.printStackTrace();
+            catch (Exception ex) {
+                logger.error(ex);
             }
-            catch(Error er) {
-                er.printStackTrace();
+            catch (Error er) {
+                logger.error(er);
             }
         }
-        
+
         // ***** KILL TOOL THREADS *****
-        else if(c.startsWith("kill threads")) {
+        else if (c.startsWith("kill threads")) {
             try {
                 WandoraToolSet.ToolItem toolItem = getSelectedTool();
-                if(toolItem != null) {
+                if (toolItem != null) {
                     WandoraTool t = toolItem.getTool();
                     String className = t.getClass().getSimpleName();
-                    if(t instanceof AbstractWandoraTool && ((AbstractWandoraTool) t).runInOwnThread()) {
-                        int a = WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to interrupt tool threads for class '"+className+"'", "Interrupt tool threads");
-                        if(a == WandoraOptionPane.YES_OPTION) {
+                    if (t instanceof AbstractWandoraTool && ((AbstractWandoraTool) t).runInOwnThread()) {
+                        int a = WandoraOptionPane.showConfirmDialog(wandora,
+                                "Are you sure you want to interrupt tool threads for class '" + className + "'",
+                                "Interrupt tool threads");
+                        if (a == WandoraOptionPane.YES_OPTION) {
                             ((AbstractWandoraTool) t).interruptThreads();
                         }
                     }
                     else {
-                        WandoraOptionPane.showMessageDialog(wandora, "Tool class '"+className+"' doesn't support interrups. Can't kill tool threads.");
+                        WandoraOptionPane.showMessageDialog(wandora,
+                                "Tool class '" + className + "' doesn't support interrups. Can't kill tool threads.");
                     }
                 }
             }
-            catch(Exception ex) {
-                ex.printStackTrace();
+            catch (Exception ex) {
+                logger.error(ex);
             }
-            catch(Error er) {
-                er.printStackTrace();
+            catch (Error er) {
+                logger.error(er);
             }
         }
-        
+
         // ***** TOOL INFO *****
-        else if(c.startsWith("info")) {
+        else if (c.startsWith("info")) {
             try {
                 WandoraToolSet.ToolItem wrappedTool = getSelectedTool();
-                if(wrappedTool != null) {
-                    WandoraToolManager2 toolManager=wandora.getToolManager();
-                    WandoraToolManager2.ToolInfo info=null;
-                    WandoraTool tool=getSelectedTool().getTool();
-                    if(toolManager!=null) info=toolManager.getToolInfo(tool);
-                    new WandoraToolInfoDialog(wandora, tool,info);
+                if (wrappedTool != null) {
+                    WandoraToolManager2 toolManager = wandora.getToolManager();
+                    WandoraToolManager2.ToolInfo info = null;
+                    WandoraTool tool = getSelectedTool().getTool();
+                    if (toolManager != null)
+                        info = toolManager.getToolInfo(tool);
+                    new WandoraToolInfoDialog(wandora, tool, info);
                 }
             }
-            catch(Exception ex) {
-                ex.printStackTrace();
+            catch (Exception ex) {
+                logger.error(ex);
             }
         }
-        
+
         // ****** FINALLY REFRESH TOOL TREE
         this.refresh();
     }
-    
-    
-    
+
+
+
     public WandoraToolSet getRootSet() {
         ToolTreeNode rootNode = (ToolTreeNode) this.getModel().getRoot();
         return (WandoraToolSet) rootNode.getUserObject();
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     @Override
     public void valueChanged(TreeSelectionEvent e) {
-        //System.out.println("valueChanged @ tooltree");
+        //logger.info("valueChanged @ tooltree");
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     @Override
     public void treeNodesChanged(TreeModelEvent e) {
         DefaultMutableTreeNode node;
-        node = (DefaultMutableTreeNode)
-                 (e.getTreePath().getLastPathComponent());
+        node = (DefaultMutableTreeNode) (e.getTreePath().getLastPathComponent());
 
         /*
          * If the event lists children, then the changed
@@ -496,280 +510,310 @@ public class WandoraToolTree extends SimpleTree implements MouseListener, TreeMo
          */
         try {
             int index = e.getChildIndices()[0];
-            node = (DefaultMutableTreeNode)
-                   (node.getChildAt(index));
-        } catch (NullPointerException exc) {}
+            node = (DefaultMutableTreeNode) (node.getChildAt(index));
+        }
+        catch (NullPointerException exc) {
+        }
 
-        System.out.println("The user has finished editing the node.");
-        System.out.println("New value: " + node.getUserObject());
+        logger.info("The user has finished editing the node.");
+        logger.info("New value: " + node.getUserObject());
     }
+
+
     @Override
     public void treeNodesInserted(TreeModelEvent e) {
     }
+
+
     @Override
     public void treeNodesRemoved(TreeModelEvent e) {
     }
+
+
     @Override
     public void treeStructureChanged(TreeModelEvent e) {
     }
 
-    
+
     // -------------------------------------------------------------------------
-    
-      
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
-        if(mouseEvent.getClickCount()>=2) {
+        if (mouseEvent.getClickCount() >= 2) {
             try {
                 WandoraToolSet.ToolItem wrappedTool = getSelectedTool();
-                if(wrappedTool != null) {
-                    WandoraToolManager2 toolManager=wandora.getToolManager();
-                    WandoraToolManager2.ToolInfo info=null;
-                    WandoraTool tool=getSelectedTool().getTool();
-                    if(toolManager!=null) info=toolManager.getToolInfo(tool);
-                    new WandoraToolInfoDialog(wandora, tool,info);
+                if (wrappedTool != null) {
+                    WandoraToolManager2 toolManager = wandora.getToolManager();
+                    WandoraToolManager2.ToolInfo info = null;
+                    WandoraTool tool = getSelectedTool().getTool();
+                    if (toolManager != null)
+                        info = toolManager.getToolInfo(tool);
+                    new WandoraToolInfoDialog(wandora, tool, info);
                 }
             }
-            catch(Exception e) {
-                e.printStackTrace();
+            catch (Exception e) {
+                logger.error(e);
             }
         }
     }
-    
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
     }
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
     }
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
-    
+
+
+
     public class ToolTreeNode extends DefaultMutableTreeNode {
+        private static final long serialVersionUID = 1L;
+
         private WandoraToolSet toolSet = null;
         private WandoraToolSet.ToolItem toolItem = null;
         private ToolTreeNode parentNode = null;
-        
+
         public ToolTreeNode(WandoraToolSet set) {
             super();
             this.toolSet = set;
         }
-        
+
+
         public ToolTreeNode(WandoraToolSet.ToolItem wrapper) {
             super();
             this.toolItem = wrapper;
         }
-        
-        
+
+
         @Override
         public Object getUserObject() {
             return (toolSet != null ? toolSet : toolItem);
         }
-        
+
+
         public void setParentNode(ToolTreeNode node) {
             this.parentNode = node;
         }
-        
+
+
         public ToolTreeNode getParentNode() {
             return parentNode;
         }
-        
+
+
         public boolean isSet() {
             return (toolSet != null);
         }
-        
+
+
         @Override
         public String toString() {
             Object o = getUserObject();
             return (o != null ? o.toString() : "null");
         }
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-    public class ToolTreeRenderer extends DefaultTreeCellRenderer implements TreeCellRenderer {
-        
+
+
+    public class ToolTreeRenderer extends DefaultTreeCellRenderer {
+
+        private static final long serialVersionUID = 1L;
+
         private Icon toolSetIcon = null;
-        
-        
+
+
         public ToolTreeRenderer() {
             toolSetIcon = UIBox.getIcon("gui/icons/tool_set.png");
         }
-        
-        
+
+
         @Override
         public Component getTreeCellRendererComponent(JTree tree,
-                                       Object value,
-                                       boolean selected,
-                                       boolean expanded,
-                                       boolean leaf,
-                                       int row,
-                                       boolean hasFocus) {
-            
+                Object value,
+                boolean selected,
+                boolean expanded,
+                boolean leaf,
+                int row,
+                boolean hasFocus) {
+
             Component c = super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
-            
+
             try {
-                if(c instanceof JLabel) {
-                    JLabel l = (JLabel) c;
-                    
+                if (c instanceof JLabel l) {
                     Object userValueContent = ((DefaultMutableTreeNode) value).getUserObject();
-                    //System.out.println("userValue == " +userValueContent+" --- " +userValueContent.getClass());
-                    
-                    if(userValueContent instanceof WandoraToolSet.ToolItem) {
+                    if (userValueContent instanceof WandoraToolSet.ToolItem) {
                         WandoraToolSet.ToolItem tool = (WandoraToolSet.ToolItem) userValueContent;
                         l.setText(tool.getName());
                         l.setIcon(tool.getTool().getIcon());
                         setToolTipText(Textbox.makeHTMLParagraph(tool.getTool().getDescription(), 40));
                     }
-                    else if(userValueContent instanceof WandoraToolSet) {
-                        if(toolSetIcon != null) {
+                    else if (userValueContent instanceof WandoraToolSet) {
+                        if (toolSetIcon != null) {
                             l.setIcon(toolSetIcon);
                         }
                     }
                 }
             }
-            catch(Exception e) {
-                e.printStackTrace();
+            catch (Exception e) {
+                logger.error(e);
             }
-            
+
             return c;
         }
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public static class ToolTreeTransferable extends DnDHelper.WandoraTransferable {
-        public static final DataFlavor toolTreeNodeFlavor = new DataFlavor(ToolTreeNode.class,"ToolTreeNode");
-        
+        public static final DataFlavor toolTreeNodeFlavor = new DataFlavor(ToolTreeNode.class, "ToolTreeNode");
+
         protected Object transferable;
-        
+
         public ToolTreeTransferable(ToolTreeNode node) {
-            this.transferable=node.hashCode();
+            this.transferable = node.hashCode();
         }
-        
+
+
         @Override
         public void updateFlavors() {
             super.updateFlavors();
-            if(this.transferable==null) return;
-            DataFlavor[] old=supportedFlavors;
-            supportedFlavors=new DataFlavor[old.length+1];
-            supportedFlavors[0]=toolTreeNodeFlavor;
+            if (this.transferable == null) {
+                return;
+            }
+            DataFlavor[] old = supportedFlavors;
+            supportedFlavors = new DataFlavor[old.length + 1];
+            supportedFlavors[0] = toolTreeNodeFlavor;
             System.arraycopy(old, 0, supportedFlavors, 1, old.length);
         }
-        
+
+
         @Override
         public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-            if(transferable!=null && (flavor.equals(toolTreeNodeFlavor))) return transferable;
-            else return super.getTransferData(flavor);
+            if (transferable != null && (flavor.equals(toolTreeNodeFlavor)))
+                return transferable;
+            else
+                return super.getTransferData(flavor);
         }
     }
-    
-    
-    
-    
+
+
+
     public class ToolTreeTransferHandler extends TransferHandler {
+
+        private static final long serialVersionUID = 1L;
 
         @Override
         public boolean canImport(TransferSupport support) {
-            if(!support.isDrop()) return false;
+            if (!support.isDrop())
+                return false;
             return support.isDataFlavorSupported(ToolTreeTransferable.toolTreeNodeFlavor);
         }
 
+
         @Override
         protected Transferable createTransferable(JComponent c) {
-            TreePath path=getSelectionPath();
-            if(path==null) return new ToolTreeTransferable(null);
+            TreePath path = getSelectionPath();
+            if (path == null)
+                return new ToolTreeTransferable(null);
             else {
                 ToolTreeNode toolNode = (ToolTreeNode) path.getLastPathComponent();
                 return new ToolTreeTransferable(toolNode);
             }
         }
 
+
         @Override
         public int getSourceActions(JComponent c) {
             return TransferHandler.COPY_OR_MOVE;
         }
 
+
         @Override
         public boolean importData(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            try{
-                if(support.isDataFlavorSupported(ToolTreeTransferable.toolTreeNodeFlavor)) {
-                    Object movedNodeHash = (Object)support.getTransferable().getTransferData(ToolTreeTransferable.toolTreeNodeFlavor);                  
-                    ToolTreeNode movedNode = solveNode(((Integer)movedNodeHash).intValue());
+            if (!support.isDrop())
+                return false;
+            try {
+                if (support.isDataFlavorSupported(ToolTreeTransferable.toolTreeNodeFlavor)) {
+                    Object movedNodeHash = (Object) support.getTransferable()
+                            .getTransferData(ToolTreeTransferable.toolTreeNodeFlavor);
+                    ToolTreeNode movedNode = solveNode(((Integer) movedNodeHash).intValue());
 
-                    int action=support.getDropAction();
-                    
-                    JTree.DropLocation location=(JTree.DropLocation)support.getDropLocation();
-                    TreePath dropPath=location.getPath();
-                    if(dropPath==null){
-                        //WandoraOptionPane.showMessageDialog(TopicTree.this.parent,"Invalid drop location, drop cancelled.");
+                    int action = support.getDropAction();
+
+                    JTree.DropLocation location = (JTree.DropLocation) support.getDropLocation();
+                    TreePath dropPath = location.getPath();
+                    if (dropPath == null) {
                         return false;
                     }
 
-                    ToolTreeNode targetNode = (ToolTreeNode)dropPath.getLastPathComponent();
+                    ToolTreeNode targetNode = (ToolTreeNode) dropPath.getLastPathComponent();
                     ToolTreeNode targetSetNode = targetNode;
-                    while(!targetSetNode.isSet()) {
+                    while (!targetSetNode.isSet()) {
                         targetSetNode = targetSetNode.getParentNode();
                     }
                     int index = targetSetNode.getIndex(targetNode);
-                    index = Math.max(0, Math.min(index, targetSetNode.getChildCount()-1));
-                    
-                    if(targetSetNode.isNodeAncestor(movedNode)) {
-                        WandoraOptionPane.showMessageDialog(wandora, "Can't move the item in itself.", "Illegal drop path");
+                    index = Math.max(0, Math.min(index, targetSetNode.getChildCount() - 1));
+
+                    if (targetSetNode.isNodeAncestor(movedNode)) {
+                        WandoraOptionPane.showMessageDialog(wandora, "Can't move the item in itself.",
+                                "Illegal drop path");
                         return false;
                     }
-                    
+
                     try {
                         ((DefaultTreeModel) toolTreeModel).removeNodeFromParent(movedNode);
                         WandoraToolSet sourceSet = (WandoraToolSet) movedNode.getParentNode().getUserObject();
                         sourceSet.remove(movedNode.getUserObject());
-                        
+
                         ((DefaultTreeModel) toolTreeModel).insertNodeInto(movedNode, targetSetNode, index);
                         WandoraToolSet targetSet = (WandoraToolSet) targetSetNode.getUserObject();
                         Object o = movedNode.getUserObject();
                         targetSet.add(o, index);
                         scrollPathToVisible(new TreePath(movedNode.getPath()));
                     }
-                    catch(Exception e){
-                        e.printStackTrace();
+                    catch (Exception e) {
+                        logger.error(e);
                         return false;
                     }
-                    
+
                     doRefresh();
                     return true;
                 }
             }
-            //catch(UnsupportedFlavorException ufe){ufe.printStackTrace();}
-            catch(Exception e) {
-                e.printStackTrace();
+            catch (Exception e) {
+                logger.error(e);
             }
             return false;
         }
 
-        public void doRefresh(){
+
+        public void doRefresh() {
             WandoraToolTree.this.refresh();
         }
     }

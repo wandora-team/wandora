@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,19 +28,20 @@
 package org.wandora.query2;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 /**
  *
  * @author olli
  */
 public class Static extends Directive implements DirectiveUIHints.Provider {
 
-    private ArrayList<ResultRow> result;
+    private List<ResultRow> result;
 
     public Static(){
         this.result=new ArrayList<ResultRow>();
     }
     
-    public Static(ArrayList<ResultRow> result){
+    public Static(List<ResultRow> result){
         this.result=result;
     }
     public Static(ResultRow result){
@@ -68,7 +69,7 @@ public class Static extends Directive implements DirectiveUIHints.Provider {
     }
 
     @Override
-    public ArrayList<ResultRow> query(QueryContext context, ResultRow input) throws QueryException {
+    public List<ResultRow> query(QueryContext context, ResultRow input) throws QueryException {
         return result;
     }
 

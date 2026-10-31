@@ -1,7 +1,7 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
  * Copyright (C) 2013 Wandora Team
  *
@@ -41,7 +41,7 @@ public class DiscogsExtractor extends AbstractDiscogsExtractor {
 
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             if(ui == null) {
                 ui = new DiscogsExtractorUI();
@@ -59,7 +59,6 @@ public class DiscogsExtractor extends AbstractDiscogsExtractor {
                 }
                 if(extrs != null && extrs.length > 0) {
                     setDefaultLogger();
-                    int c = 0;
                     log("Performing Discogs API query...");
                     for(int i=0; i<extrs.length && !forceStop(); i++) {
                         try {
@@ -67,7 +66,6 @@ public class DiscogsExtractor extends AbstractDiscogsExtractor {
                             e.setToolLogger(getDefaultLogger());
                             e.execute(wandora);
                             setState(EXECUTE);
-                            c++;
                         }
                         catch(Exception e) {
                             log(e);

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,8 @@ import org.wandora.topicmap.TopicMapException;
  */
 public abstract class ResourceEditor extends javax.swing.JPanel {   
 
+	private static final long serialVersionUID = 1L;
+	
 	public abstract void initializeAssociation(Topic t,Association a,Wandora parent) throws TopicMapException ;
     public abstract void initializeOccurrence(Topic t,Topic otype,Wandora parent) throws TopicMapException ;
     public abstract boolean applyChanges(Topic t,Wandora parent) throws TopicMapException ;

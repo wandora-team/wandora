@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@ import org.wandora.utils.ListenerList;
 import org.wandora.utils.ScriptManager;
 import org.wandora.utils.Tuples;
 import org.wandora.utils.Tuples.T3;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * <p>
@@ -88,12 +89,14 @@ import org.wandora.utils.Tuples.T3;
  * dependencies haven't been started yet whereas the other method simply starts
  * them too.
  * </p>
- * http://wandora.orgwiki/Wandora_modules_framework for additional
+ * https://wandora.orgwiki/Wandora_modules_framework for additional
  * documentation about the modules framework.</p>
  *
  * @author olli
  */
 public class ModuleManager {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ModuleManager.class);
+	
     /**
      * A list containing all the modules this manager takes care of.
      */
@@ -553,7 +556,7 @@ public class ModuleManager {
             try{
                 module.init(this, params);
             }catch(ModuleException me){
-                me.printStackTrace();
+                logger.error(me);
             }
             log=((LoggingModule)module).getLog("ModuleManager");
         }
@@ -839,14 +842,14 @@ public class ModuleManager {
     public Object parseXMLParamElement(Element e) throws ReflectiveOperationException, IllegalArgumentException, ScriptException {
         String instance=e.getAttribute("instance");
         if(instance!=null && instance.length()>0){
-            Class cls=Class.forName(instance);
+            Class<?> cls=Class.forName(instance);
             Map<String,Object> params=parseXMLOptionsElement(e);
             if(!params.isEmpty()){
                 Collection<Object> constructorParams=params.values();
-                Constructor[] cs=cls.getConstructors();
+                Constructor<?>[] cs=cls.getConstructors();
                 ConstructorLoop: for(int i=0;i<cs.length;i++){
-                    Constructor c=cs[i];
-                    Class[] paramTypes=c.getParameterTypes();
+                    Constructor<?> c=cs[i];
+                    Class<?>[] paramTypes=c.getParameterTypes();
                     if(paramTypes.length!=constructorParams.size()) continue;
                     
                     int j=-1;
@@ -879,7 +882,7 @@ public class ModuleManager {
         
         String clas=e.getAttribute("class");
         if(clas!=null && clas.length()>0){
-            Class cls=Class.forName(clas);
+            Class<?> cls=Class.forName(clas);
             return cls;
         }
         
@@ -977,7 +980,7 @@ public class ModuleManager {
                 String service=e2.getAttribute("service");
                 String value=e2.getAttribute("value");
                 
-                Class serviceClass=Class.forName(service);
+                Class<?> serviceClass=Class.forName(service);
                 if(!Module.class.isAssignableFrom(serviceClass)){
                     throw new ClassCastException("The specified service is not a module");
                 }

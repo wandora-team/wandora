@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 package org.wandora.application.tools.subjects.expand;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Collection;
@@ -34,7 +35,6 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.ConfirmResult;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -53,7 +53,7 @@ import org.wandora.utils.IObox;
  */
 
 
-public class SameAsSubjectExpander extends AbstractWandoraTool implements WandoraTool {
+public class SameAsSubjectExpander extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -63,7 +63,7 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
     private boolean shouldRefresh = false;
     
     public SameAsSubjectExpander() {}
-    public SameAsSubjectExpander(Context preferredContext) {
+    public SameAsSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -80,9 +80,9 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
     
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         shouldRefresh = false;
-        Iterator contextObjects = getContext().getContextObjects();
+        Iterator<?> contextObjects = getContext().getContextObjects();
         TopicMap tm = wandora.getTopicMap();
         
         if(contextObjects != null && contextObjects.hasNext()) {
@@ -146,8 +146,8 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
                             }
                             if(subjectTopic != null && !subjectTopic.mergesWithTopic(topic)) {
                                 Topic sameAsType = getOrCreateTopic("http://sameas.org/", "sameas.org", tm);
-                                Topic sourceRole = getOrCreateTopic("http://wandora.org/si/core/rdf-source", "rdf-source", tm);
-                                Topic targetRole = getOrCreateTopic("http://wandora.org/si/core/rdf-target", "rdf-target", tm);
+                                Topic sourceRole = getOrCreateTopic("https://wandora.org/si/core/rdf-source", "rdf-source", tm);
+                                Topic targetRole = getOrCreateTopic("https://wandora.org/si/core/rdf-target", "rdf-target", tm);
                                 if(sameAsType != null && sourceRole != null && targetRole != null) {
                                     Association sameAsAssociation = topic.getTopicMap().createAssociation(sameAsType);
                                     sameAsAssociation.addPlayer(topic, sourceRole);
@@ -207,7 +207,7 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
             catch(Exception e) {}
             
             try {
-                url = new URL(expanderRequestString);
+                url = new URI(expanderRequestString).toURL();
             }
             catch(Exception e) {
                 log("Exception '"+e.getMessage()+"' occurred while building sameas request URL with base '"+base+"'.");
@@ -232,7 +232,7 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
                     if(json.has("uri")) {
                         String uri = json.getString("uri");
                         if(!subject.equals(uri)) {
-                            additionalSubjects.add(new URL(uri));
+                            additionalSubjects.add(new URI(uri).toURL());
                         }
                     }
                     if(json.has("duplicates")) {
@@ -240,7 +240,7 @@ public class SameAsSubjectExpander extends AbstractWandoraTool implements Wandor
                         for(int j=0; j<duplicates.length(); j++) {
                             String duplicate = duplicates.getString(j);
                             if(duplicate != null) {
-                                additionalSubjects.add(new URL(duplicate));
+                                additionalSubjects.add(new URI(duplicate).toURL());
                             }
                         }
                     }

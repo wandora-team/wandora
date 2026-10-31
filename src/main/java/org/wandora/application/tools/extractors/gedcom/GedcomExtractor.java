@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,6 @@ import java.util.Iterator;
 
 import javax.swing.Icon;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
@@ -49,6 +48,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -61,9 +61,9 @@ import org.wandora.topicmap.XTMPSI;
  * @author akivela
  */
 
-public class GedcomExtractor extends AbstractExtractor implements WandoraTool {
-
+public class GedcomExtractor extends AbstractExtractor {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(GedcomExtractor.class);
 
 	public static final boolean DEBUG = true;
 
@@ -71,7 +71,7 @@ public class GedcomExtractor extends AbstractExtractor implements WandoraTool {
 
 	public static final String DEFAULT_LANG = "en";
 
-	public String SI_PREFIX = "http://wandora.org/si/gedcom/";
+	public String SI_PREFIX = "https://wandora.org/si/gedcom/";
 	public String SCHEMA_PREFIX = "schema/";
 
 	/** Creates a new instance of GedcomExtractor */
@@ -577,7 +577,7 @@ public class GedcomExtractor extends AbstractExtractor implements WandoraTool {
 	
 	
 	private String getText(Gedcom.Node node) {
-		StringBuffer note = new StringBuffer(node.value == null ? "" : node.value);
+	    StringBuilder note = new StringBuilder(node.value == null ? "" : node.value);
 		Iterator<Gedcom.Node> childIterator = node.children.iterator();
 		while (childIterator.hasNext()) {
 			Gedcom.Node child = (Gedcom.Node) childIterator.next();
@@ -597,7 +597,6 @@ public class GedcomExtractor extends AbstractExtractor implements WandoraTool {
 				}
 			}
 		}
-		// System.out.println("---note:"+note.toString());
 		return note.toString();
 	}
 	
@@ -838,7 +837,7 @@ public class GedcomExtractor extends AbstractExtractor implements WandoraTool {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return false;
 	}

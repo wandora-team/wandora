@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,9 +31,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.RegularExpressionEditor;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -49,7 +49,7 @@ import org.wandora.topicmap.Topic;
  * 
  * @author akivela
  */
-public class BasenameRegexReplacer extends AbstractWandoraTool implements WandoraTool {
+public class BasenameRegexReplacer extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -59,7 +59,7 @@ public class BasenameRegexReplacer extends AbstractWandoraTool implements Wandor
 
     public BasenameRegexReplacer() {
     }
-    public BasenameRegexReplacer(Context preferredContext) {
+    public BasenameRegexReplacer(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -75,8 +75,8 @@ public class BasenameRegexReplacer extends AbstractWandoraTool implements Wandor
     }
     
   
-    public void execute(Wandora wandora, Context context) {
-        Iterator topics = context.getContextObjects();
+    public void execute(Wandora wandora, Context<?> context) {
+        Iterator<?> topics = context.getContextObjects();
         if(topics == null || !topics.hasNext()) return;
         try {
             editor = RegularExpressionEditor.getReplaceExpressionEditor(wandora);
@@ -91,10 +91,9 @@ public class BasenameRegexReplacer extends AbstractWandoraTool implements Wandor
                 Topic topic = null;
                 String basename = null;
                 String newBasename = null;
-                int progress = 0;
                 int count = 0;
 
-                HashMap<Topic,String> changeTopics = new HashMap<Topic,String>();
+                Map<Topic,String> changeTopics = new HashMap<>();
 
                 while(topics.hasNext() && !forceStop()) {
                     try {
@@ -102,7 +101,6 @@ public class BasenameRegexReplacer extends AbstractWandoraTool implements Wandor
                         if(topic != null && !topic.isRemoved()) {
                             basename = topic.getBaseName();
                             if(basename != null) {
-                                progress++;
                                 hlog("Investigating base name '" + basename + "'.");
                                 newBasename = editor.replace(basename);
                                 if(newBasename != null && !basename.equalsIgnoreCase(newBasename)) {

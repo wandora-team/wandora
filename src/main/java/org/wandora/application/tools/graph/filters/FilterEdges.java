@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,6 +51,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -61,6 +62,7 @@ import org.wandora.utils.Tuples.T2;
 public class FilterEdges extends AbstractGraphTool  {
     
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(FilterEdges.class);
 	
 	public static final int FILTER_EDGES_WITH_TYPE = 1;
     public static final int FILTER_INSTANCE_EDGES = 2;
@@ -99,7 +101,7 @@ public class FilterEdges extends AbstractGraphTool  {
             }
         }
         catch(Exception tme){
-            tme.printStackTrace(); 
+        	logger.error(tme);
         }
         return "";
     }
@@ -133,7 +135,7 @@ public class FilterEdges extends AbstractGraphTool  {
             }
         }
         catch(TopicMapException tme) {
-            tme.printStackTrace();
+        	logger.error(tme);
         }
         for(VEdge vedge : remove){
             model.removeEdge(vedge);
@@ -144,7 +146,7 @@ public class FilterEdges extends AbstractGraphTool  {
     }
     
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         VModel model = solveModel(wandora,context);
         hideNodesOfType(filterType, edgeType, model);
         switch(filterType) {
@@ -173,7 +175,7 @@ public class FilterEdges extends AbstractGraphTool  {
                     tools.add(new FilterEdges(FILTER_EDGES_WITH_TYPE, a.getType(), graphFilter));
                 }
                 catch(TopicMapException tme) {
-                    tme.printStackTrace();
+                	logger.error(tme);
                 }
             }
             else if(e instanceof InstanceEdge){
@@ -188,9 +190,9 @@ public class FilterEdges extends AbstractGraphTool  {
     
     
     
-    public static List<AbstractGraphTool> makeTools(Collection c,GraphFilter graphFilter,List<AbstractGraphTool> tools){
-        if(tools==null) tools=new ArrayList<AbstractGraphTool>();
-        ArrayList<Topic> types = new ArrayList<Topic>();
+    public static List<AbstractGraphTool> makeTools(Collection<?> c,GraphFilter graphFilter,List<AbstractGraphTool> tools){
+        if(tools==null) tools=new ArrayList<>();
+        List<Topic> types = new ArrayList<>();
         boolean instanceAdded = false;
         boolean occurrenceAdded = false;
         for(Object o : c) {
@@ -209,7 +211,9 @@ public class FilterEdges extends AbstractGraphTool  {
                             tools.add(new FilterEdges(FILTER_EDGES_WITH_TYPE, type, graphFilter));
                         }
                     }
-                    catch(TopicMapException tme){tme.printStackTrace();}
+                    catch(TopicMapException tme){
+                    	logger.error(tme);
+                	}
                 }
                 else if(o instanceof InstanceEdge) {
                     if(!instanceAdded) {

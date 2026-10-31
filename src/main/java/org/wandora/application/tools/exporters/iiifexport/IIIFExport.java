@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,9 @@ import org.wandora.utils.Options;
 
 public class IIIFExport extends AbstractExportTool {
     
-    protected HashMap<String,String> options;
+    private static final long serialVersionUID = 1L;
+    
+	protected HashMap<String,String> options;
     protected IIIFBuilder selectedBuilder;
     protected boolean prettyPrint=true;
 
@@ -135,11 +137,11 @@ public class IIIFExport extends AbstractExportTool {
         
         god.setVisible(true);
         if(!god.wasCancelled()){
-            Map values=god.getValues();
-            String builderStr=values.get("IIIF Builder").toString();
+            Map<String,String> values=god.getValues();
+            String builderStr=values.get("IIIF Builder");
             selectedBuilder=resolveBuilder(builderStr);
             options.put(prefix+"builder", builderStr);
-            prettyPrint=Boolean.parseBoolean(values.get("Pretty print").toString());
+            prettyPrint=Boolean.parseBoolean(values.get("Pretty print"));
             options.put(prefix+"prettyprint", ""+prettyPrint);
         }
     }
@@ -165,7 +167,7 @@ public class IIIFExport extends AbstractExportTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         SimpleFileChooser chooser=UIConstants.getFileChooser();
         chooser.setDialogTitle("IIIF Export");
         if(chooser.open(wandora, "Export")==SimpleFileChooser.APPROVE_OPTION){

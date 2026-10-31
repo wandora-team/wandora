@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -162,7 +162,7 @@ public class DnDTools {
         public Class<K> getDataClass(){return cls;}
     }
     
-    public static <K> WrapperDataFlavor makeDataFlavor(Class<K> cls){
+    public static <K> WrapperDataFlavor<K> makeDataFlavor(Class<K> cls){
         try{
             return new WrapperDataFlavor<>(DataFlavor.javaJVMLocalObjectMimeType+";class="+cls.getName(),cls);
         }catch(ClassNotFoundException cnfe){

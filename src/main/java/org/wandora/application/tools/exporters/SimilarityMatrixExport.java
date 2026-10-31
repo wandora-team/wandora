@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,11 +36,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -57,7 +57,7 @@ import org.wandora.utils.IObox;
  *
  * @author akivela
  */
-public class SimilarityMatrixExport extends AbstractExportTool implements WandoraTool {
+public class SimilarityMatrixExport extends AbstractExportTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -104,9 +104,9 @@ public class SimilarityMatrixExport extends AbstractExportTool implements Wandor
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
 
-        Iterator<Topic> topics = null;
+        Iterator<?> topics = null;
         String exportInfo = "";
         try {
             if(exportSelectionInsteadOfTopicMap) {
@@ -191,7 +191,7 @@ public class SimilarityMatrixExport extends AbstractExportTool implements Wandor
 
 
 
-    public void exportMatrix(OutputStream out, Iterator<Topic> topicIterator, WandoraToolLogger logger) throws TopicMapException {
+    public void exportMatrix(OutputStream out, Iterator<?> topicIterator, WandoraToolLogger logger) throws TopicMapException {
         if(logger == null) logger = this;
         PrintWriter writer = null;
         try {
@@ -203,12 +203,12 @@ public class SimilarityMatrixExport extends AbstractExportTool implements Wandor
         }
 
         int totalCount = 0;
-        ArrayList<Topic> topics = new ArrayList<Topic>();
+        List<Topic> topics = new ArrayList<>();
         Topic t = null;
 
         log("Collecting topics...");
         while(topicIterator.hasNext() && !logger.forceStop()) {
-            t = topicIterator.next();
+            t = (Topic) topicIterator.next();
             if(t != null && !t.isRemoved()) {
                 topics.add(t);
                 totalCount++;
@@ -238,7 +238,7 @@ public class SimilarityMatrixExport extends AbstractExportTool implements Wandor
 
 
 
-    public void exportMatrixAsTabText(PrintWriter writer, ArrayList<Topic> topics, WandoraToolLogger logger) throws TopicMapException {
+    public void exportMatrixAsTabText(PrintWriter writer, List<Topic> topics, WandoraToolLogger logger) throws TopicMapException {
         int progress = 0;
         Topic t1 = null;
         Topic t2 = null;
@@ -270,7 +270,7 @@ public class SimilarityMatrixExport extends AbstractExportTool implements Wandor
 
 
 
-    public void exportMatrixAsHTMLTable(PrintWriter writer, ArrayList<Topic> topics, WandoraToolLogger logger) throws TopicMapException {
+    public void exportMatrixAsHTMLTable(PrintWriter writer, List<Topic> topics, WandoraToolLogger logger) throws TopicMapException {
         int progress = 0;
         Topic t1 = null;
         Topic t2 = null;

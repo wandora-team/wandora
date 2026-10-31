@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@
 
 package org.wandora.topicmap.memory;
 
+import java.io.InputStream;
+
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
@@ -40,92 +42,101 @@ import org.wandora.topicmap.TopicMapType;
 import org.wandora.topicmap.packageio.PackageInput;
 import org.wandora.topicmap.packageio.PackageOutput;
 import org.wandora.utils.Options;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author olli
  */
 public class MemoryTopicMapType implements TopicMapType {
-    
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(MemoryTopicMapType.class);
+
+
     /** Creates a new instance of MemoryTopicMapType */
     public MemoryTopicMapType() {
     }
-    
-    
-    
+
+
+
     @Override
-    public String getTypeName(){
+    public String getTypeName() {
         return "Memory";
     }
-    
-    
-    
+
+
+
     @Override
     public TopicMap createTopicMap(Object params) throws TopicMapException {
-        TopicMapImpl tm=new TopicMapImpl();
-        if(params instanceof String && params != null) {
+        TopicMapImpl tm = new TopicMapImpl();
+        if (params instanceof String && params != null) {
             String load = (String) params;
-            if(MemoryConfiguration.LOAD_MINI_SCHEMA_PARAM.equals(params)) {
-                load="conf/wandora_mini.xtm";
+            if (MemoryConfiguration.LOAD_MINI_SCHEMA_PARAM.equals(params)) {
+                try (InputStream minimapStream = this.getClass().getResourceAsStream("/conf/wandora_mini.xtm")) {
+                    tm.importXTM(minimapStream);
+                }
+                catch (Exception e) {
+                    logger.error(e);
+                }
             }
-            if(load!=null && load.length()>0) {
+            else if (load != null && load.length() > 0) {
                 try {
                     tm.importXTM(load);
                 }
-                catch(java.io.IOException ioe){
-                    ioe.printStackTrace(); // TODO
+                catch (Exception ioe) {
+                    logger.error(ioe);
                 }
             }
         }
         return tm;
     }
-    
-    
-    
+
+
+
     @Override
     public TopicMap modifyTopicMap(TopicMap tm, Object params) throws TopicMapException {
         return tm;
     }
-    
-    
-    
+
+
+
     @Override
-    public TopicMapConfigurationPanel getConfigurationPanel(Wandora wandora, Options options){
-        MemoryConfiguration mc=new MemoryConfiguration(wandora);
+    public TopicMapConfigurationPanel getConfigurationPanel(Wandora wandora, Options options) {
+        MemoryConfiguration mc = new MemoryConfiguration(wandora);
         return mc;
     }
-    
-    
-    
+
+
+
     @Override
     public TopicMapConfigurationPanel getModifyConfigurationPanel(Wandora wandora, Options options, TopicMap tm) {
         return null;
-    }   
-    
-    
-    
+    }
+
+
+
     @Override
     public String toString() {
         return getTypeName();
     }
 
-    
-    
+
+
     @Override
-    public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger) throws java.io.IOException,TopicMapException {
+    public void packageTopicMap(TopicMap tm, PackageOutput out, String path, TopicMapLogger logger)
+            throws java.io.IOException, TopicMapException {
         out.nextEntry(path, "topicmap.xtm");
         tm.exportXTM(out.getOutputStream(), logger);
     }
 
-    
-    
+
+
     @Override
-    public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger,Wandora wandora) throws java.io.IOException,TopicMapException {
+    public TopicMap unpackageTopicMap(PackageInput in, String path, TopicMapLogger logger, Wandora wandora)
+            throws java.io.IOException, TopicMapException {
         TopicMapImpl tm = new TopicMapImpl();
         boolean found = in.gotoEntry(path, "topicmap.xtm");
-        if(!found) {
-            logger.log("Couldn't find topicmap file '"+in.joinPath(path,"topicmap.xtm")+"'.");
+        if (!found) {
+            logger.log("Couldn't find topicmap file '" + in.joinPath(path, "topicmap.xtm") + "'.");
             return null;
         }
         else {
@@ -133,17 +144,23 @@ public class MemoryTopicMapType implements TopicMapType {
         }
         return tm;
     }
-    
-    
-    
+
+
+
     @Override
-    public TopicMap unpackageTopicMap(TopicMap topicmap, PackageInput in, String path, TopicMapLogger logger,Wandora wandora) throws java.io.IOException,TopicMapException {
-        if(topicmap == null) {
+    public TopicMap unpackageTopicMap(
+            TopicMap topicmap, 
+            PackageInput in, 
+            String path, 
+            TopicMapLogger logger,
+            Wandora wandora) throws java.io.IOException, TopicMapException {
+        
+        if (topicmap == null) {
             topicmap = new TopicMapImpl();
-        } 
+        }
         boolean found = in.gotoEntry(path, "topicmap.xtm");
-        if(!found) {
-            logger.log("Couldn't find topicmap file '"+in.joinPath(path, "topicmap.xtm")+"'.");
+        if (!found) {
+            logger.log("Couldn't find topicmap file '" + in.joinPath(path, "topicmap.xtm") + "'.");
             return null;
         }
         else {
@@ -151,20 +168,20 @@ public class MemoryTopicMapType implements TopicMapType {
         }
         return topicmap;
     }
-    
-   
-    
+
+
+
     @Override
-    public javax.swing.JMenuItem[] getTopicMapMenu(TopicMap tm,Wandora admin){
+    public javax.swing.JMenuItem[] getTopicMapMenu(TopicMap tm, Wandora admin) {
         return null;
     }
-    
-    
-    
+
+
+
     @Override
-    public Icon getTypeIcon(){
+    public Icon getTypeIcon() {
         // return UIBox.getIcon("gui/icons/layerinfo/layer_type_memory.png");
         return UIBox.getIcon(0xf1b2);
     }
-    
+
 }

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -50,9 +51,8 @@ import org.wandora.utils.IObox;
  */
 
 public class EuropeanaSearchExtractor extends AbstractEuropeanaExtractor {
-    
-    
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(EuropeanaSearchExtractor.class);
 	
 	
 	private static String defaultEncoding = "UTF-8";
@@ -68,7 +68,7 @@ public class EuropeanaSearchExtractor extends AbstractEuropeanaExtractor {
     
     @Override
     public String getDescription(){
-        return "Extracts data from The Europeana data API at http://pro.europeana.eu";
+        return "Extracts data from The Europeana data API at https://pro.europeana.eu";
     }
 
     @Override
@@ -99,14 +99,15 @@ public class EuropeanaSearchExtractor extends AbstractEuropeanaExtractor {
 
             String in = doUrl(u);
 
-            System.out.println("---------------Europeana API returned------------\n"+in+
-                               "\n-----------------------------------------------");
+            logger.info("---------------Europeana API returned----------");
+            logger.info(in);
+            logger.info("-----------------------------------------------");
 
             JSONObject json = new JSONObject(in);
             parse(json, tm);
    
         } catch (Exception e){
-           e.printStackTrace();
+           logger.error(e);
         }
         return true;
     }

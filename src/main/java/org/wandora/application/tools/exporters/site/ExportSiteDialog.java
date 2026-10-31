@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ import org.wandora.application.gui.simple.SimpleField;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.gui.simple.SimpleLabel;
 import org.wandora.application.gui.simple.SimpleTabbedPane;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -59,9 +60,8 @@ import org.wandora.application.gui.simple.SimpleTabbedPane;
 
 
 public class ExportSiteDialog extends javax.swing.JDialog {
-    
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(ExportSiteDialog.class);
 
 	private Wandora wandora;
     public boolean accept = false;
@@ -130,7 +130,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         browseIndexTemplateButton = new SimpleButton();
         templateEncodingPanel = new javax.swing.JPanel();
         templateEncodingLabel = new SimpleLabel();
-        templateEncodingComboBox = new SimpleComboBox();
+        templateEncodingComboBox = new SimpleComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         imagePanel = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
@@ -215,7 +215,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
         pageTemplatePanel.add(pageTemplateField, gridBagConstraints);
 
-        browsePageTemplateButton.setLabel("Browse");
+        browsePageTemplateButton.setText("Browse");
         browsePageTemplateButton.setMargin(new java.awt.Insets(2, 8, 2, 8));
         browsePageTemplateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -245,7 +245,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 3);
         indexTemplatePanel.add(indexTemplateField, gridBagConstraints);
 
-        browseIndexTemplateButton.setLabel("Browse");
+        browseIndexTemplateButton.setText("Browse");
         browseIndexTemplateButton.setMargin(new java.awt.Insets(2, 8, 2, 8));
         browseIndexTemplateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -417,7 +417,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
 
@@ -450,7 +450,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+            	logger.error(e);
             }
         }
         chooser.setDialogTitle(title);
@@ -465,8 +465,8 @@ public class ExportSiteDialog extends javax.swing.JDialog {
     
     
     
-    public ComboBoxModel getEncodings() {
-        return new DefaultComboBoxModel(
+    public ComboBoxModel<String> getEncodings() {
+        return new DefaultComboBoxModel<>(
             new String[] {
                 "UTF-8",
                 "ISO-8859-1",
@@ -568,7 +568,7 @@ public class ExportSiteDialog extends javax.swing.JDialog {
     private javax.swing.JPanel pageTemplatePanel;
     private javax.swing.JCheckBox resizeImagesCheckBox;
     private javax.swing.JPanel subjectLocatorPanel;
-    private javax.swing.JComboBox templateEncodingComboBox;
+    private javax.swing.JComboBox<String> templateEncodingComboBox;
     private javax.swing.JLabel templateEncodingLabel;
     private javax.swing.JPanel templateEncodingPanel;
     private javax.swing.JPanel templatePanel;

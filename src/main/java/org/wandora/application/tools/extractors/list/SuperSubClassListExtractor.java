@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Properties;
@@ -43,7 +44,6 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import org.w3c.tidy.Tidy;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.browserextractors.BrowserExtractRequest;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
@@ -58,6 +58,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -85,10 +86,9 @@ import org.wandora.utils.IObox;
  * 
  * @author akivela
  */
-public class SuperSubClassListExtractor extends AbstractExtractor implements WandoraTool, BrowserPluginExtractor {
-
-
+public class SuperSubClassListExtractor extends AbstractExtractor implements BrowserPluginExtractor {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SuperSubClassListExtractor.class);
 	
 	private URL basePath = null;
     private static int listCounter = 0;
@@ -133,9 +133,9 @@ public class SuperSubClassListExtractor extends AbstractExtractor implements Wan
     @Override
     public String doBrowserExtract(BrowserExtractRequest request, Wandora wandora) throws TopicMapException {
         try {
-            basePath = new URL(request.getSource());
+            basePath = new URI(request.getSource()).toURL();
         }
-        catch(Exception e) { e.printStackTrace(); }
+        catch(Exception e) { logger.error(e); }
         String s = super.doBrowserExtract(request, wandora);
         basePath = null;
         return s;
@@ -244,7 +244,7 @@ public class SuperSubClassListExtractor extends AbstractExtractor implements Wan
     private class ListParseListener extends HTMLEditorKit.ParserCallback {
         public int progress = 0;
         
-        public static final String SI_PREFIX = "http://wandora.org/si/list/";
+        public static final String SI_PREFIX = "https://wandora.org/si/list/";
         
         private TopicMap tm;
         private SuperSubClassListExtractor parent;
@@ -292,7 +292,7 @@ public class SuperSubClassListExtractor extends AbstractExtractor implements Wan
                 ExtractHelper.makeSubclassOf(listRoot, wandoraClass, tm);
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         
@@ -401,7 +401,7 @@ public class SuperSubClassListExtractor extends AbstractExtractor implements Wan
         
         @Override
         public void handleError(String errorMsg,int pos) {
-            // System.out.println("InstanceListExtractor: " + errorMsg);
+            logger.error(errorMsg);
         }
         
         
@@ -419,7 +419,7 @@ public class SuperSubClassListExtractor extends AbstractExtractor implements Wan
                 t.addType(listRoot);
             }
             catch(Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
             return t;
         }

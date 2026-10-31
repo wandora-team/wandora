@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,6 @@ import java.util.Map;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -60,7 +59,7 @@ import org.wandora.utils.IObox;
  *
  * @author akivela
  */
-public class AdjacencyMatrixExport extends AbstractExportTool implements WandoraTool {
+public class AdjacencyMatrixExport extends AbstractExportTool {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -128,9 +127,9 @@ public class AdjacencyMatrixExport extends AbstractExportTool implements Wandora
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
 
-        Iterator<Topic> topics = null;
+        Iterator<?> topics = null;
         String exportInfo = "";
         try {
             if(EXPORT_SELECTION_INSTEAD_TOPIC_MAP) {
@@ -198,7 +197,7 @@ public class AdjacencyMatrixExport extends AbstractExportTool implements Wandora
 
 
 
-    public void exportMatrix(OutputStream out, Iterator<Topic> topicIterator, WandoraToolLogger logger) throws TopicMapException {
+    public void exportMatrix(OutputStream out, Iterator<?> topicIterator, WandoraToolLogger logger) throws TopicMapException {
         if(logger == null) logger = this;
         PrintWriter writer = null;
         try {
@@ -215,7 +214,7 @@ public class AdjacencyMatrixExport extends AbstractExportTool implements Wandora
 
         log("Collecting topics...");
         while(topicIterator.hasNext() && !logger.forceStop()) {
-            t = topicIterator.next();
+            t = (Topic) topicIterator.next();
             if(t != null && !t.isRemoved()) {
                 topics.add(t);
                 totalCount++;

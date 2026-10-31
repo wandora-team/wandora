@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,6 +53,7 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.language.LanguageBox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -62,16 +65,16 @@ import org.wandora.utils.language.LanguageBox;
 
 
 public class OCRExtractor extends AbstractExtractor {
-    
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(OCRExtractor.class);
 	
-	protected String SOURCE_SI         = "http://wandora.org/si/source";
-    protected String DOCUMENT_SI       = "http://wandora.org/si/document";
+	protected String SOURCE_SI         = "https://wandora.org/si/source";
+    protected String DOCUMENT_SI       = "https://wandora.org/si/document";
     
-    protected String TEXT_CONTENT_SI   = "http://wandora.org/si/text_content";
-    protected String DATE_EXTRACTED_SI = "http://wandora.org/si/time_extracted";
-    protected String DATE_MODIFIED_SI  = "http://wandora.org/si/date_modified";
-    protected String FILE_SIZE_SI      = "http://wandora.org/si/file_size";
+    protected String TEXT_CONTENT_SI   = "https://wandora.org/si/text_content";
+    protected String DATE_EXTRACTED_SI = "https://wandora.org/si/time_extracted";
+    protected String DATE_MODIFIED_SI  = "https://wandora.org/si/date_modified";
+    protected String FILE_SIZE_SI      = "https://wandora.org/si/file_size";
 
 
 
@@ -128,7 +131,7 @@ public class OCRExtractor extends AbstractExtractor {
             setWandora(wandora);
             String urlStr = request.getSource();
             
-            URL u = new URL(urlStr);
+            URL u = new URI(urlStr).toURL();
             String mime = u.openConnection().getContentType();
             
             if(mime != null && mime.indexOf("image") > -1){
@@ -138,7 +141,7 @@ public class OCRExtractor extends AbstractExtractor {
             }
             
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
         
@@ -205,7 +208,7 @@ public class OCRExtractor extends AbstractExtractor {
                 fos.close();
             }
         } catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
         } finally {
             is.close();
         }
@@ -227,7 +230,7 @@ public class OCRExtractor extends AbstractExtractor {
             documentTopic.addSubjectIdentifier(new Locator(si));
             success = processFile(f,t, documentTopic);
         } catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }  finally {
             f.delete();
         }
@@ -277,7 +280,7 @@ public class OCRExtractor extends AbstractExtractor {
             if(w == 0 && p.exitValue() == 0){ // Exited alright
                 FileInputStream is = new FileInputStream(TEMP_PATH + ".txt");
                 try{
-                    text = IOUtils.toString(is);
+                    text = IOUtils.toString(is, Charset.forName("UTF-8"));
                 } finally {
                     is.close();
                 }
@@ -286,7 +289,7 @@ public class OCRExtractor extends AbstractExtractor {
                 if(error.length() == 0){
                     error = gobbler.getMessage();
                 }
-                System.out.println(error);
+                logger.info(error);
                 throw new RuntimeException(error);
             }
             

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,7 +51,6 @@ import javax.imageio.stream.ImageInputStream;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.UIConstants;
@@ -78,6 +78,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
 import org.wandora.utils.Tuples;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -85,9 +86,9 @@ import org.wandora.utils.Tuples.T2;
  */
 
 
-public class SimbergExport extends AbstractExportTool implements WandoraTool {
-
+public class SimbergExport extends AbstractExportTool {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SimbergExport.class);
 
 	
 	@Override
@@ -107,13 +108,13 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
     
     
     public static Topic getAssociatedTopic(Topic t,Topic atype,Topic role,HashMap<Topic,Topic> constraints,Topic orderT) throws TopicMapException {
-        ArrayList<Topic> ret=getAssociatedTopics(t, atype, role, constraints, orderT);
+        List<Topic> ret=getAssociatedTopics(t, atype, role, constraints, orderT);
         if(ret.isEmpty()) return null;
         else return ret.get(0);
     }
     
-    public static ArrayList<Association> getAssociations(Topic t,Topic atype,HashMap<Topic,Topic> constraints,Topic orderT) throws TopicMapException {
-        ArrayList<Tuples.T2<Association,Topic>> ret=new ArrayList<Tuples.T2<Association,Topic>>();
+    public static List<Association> getAssociations(Topic t,Topic atype,HashMap<Topic,Topic> constraints,Topic orderT) throws TopicMapException {
+        List<Tuples.T2<Association,Topic>> ret=new ArrayList<>();
         AS: for(Association a : t.getAssociations(atype)){
             if(constraints!=null){
                 for(Map.Entry<Topic,Topic> e : constraints.entrySet()){
@@ -149,15 +150,15 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
             }
         });
         
-        ArrayList<Association> ret2=new ArrayList<Association>();
+        List<Association> ret2=new ArrayList<>();
         for(Tuples.T2<Association,Topic> tu : ret) ret2.add(tu.e1);
         
         return ret2;        
     }
 
-    public static ArrayList<Topic> getAssociatedTopics(Topic t,Topic atype,Topic role,HashMap<Topic,Topic> constraints,Topic orderT) throws TopicMapException {
-        ArrayList<Association> as=getAssociations(t, atype, constraints, orderT);
-        ArrayList<Topic> ret=new ArrayList<Topic>();
+    public static List<Topic> getAssociatedTopics(Topic t,Topic atype,Topic role,HashMap<Topic,Topic> constraints,Topic orderT) throws TopicMapException {
+        List<Association> as=getAssociations(t, atype, constraints, orderT);
+        List<Topic> ret=new ArrayList<>();
         for(Association a : as){
             Topic player=a.getPlayer(role);
             if(player!=null) ret.add(player);
@@ -165,12 +166,12 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
         return ret;
     }
     
-    public static ArrayList<ModelTopic> getOrMakeTopics(Collection ts,ModelClass cls,String nameField,HashMap<T2<ModelClass,Object>,ModelTopic> modelTopics) throws TopicMapException {
+    public static List<ModelTopic> getOrMakeTopics(Collection<? extends Object> ts,ModelClass cls,String nameField,HashMap<T2<ModelClass,Object>,ModelTopic> modelTopics) throws TopicMapException {
         return getOrMakeTopics(ts, cls, nameField, modelTopics, null);
     }
     
-    public static ArrayList<ModelTopic> getOrMakeTopics(Collection ts,ModelClass cls,String nameField,HashMap<T2<ModelClass,Object>,ModelTopic> modelTopics, String lang) throws TopicMapException {
-        ArrayList<ModelTopic> ret=new ArrayList<ModelTopic>();
+    public static List<ModelTopic> getOrMakeTopics(Collection<? extends Object> ts,ModelClass cls,String nameField,HashMap<T2<ModelClass,Object>,ModelTopic> modelTopics, String lang) throws TopicMapException {
+        List<ModelTopic> ret=new ArrayList<>();
         for(Object t : ts){
             ModelTopic mt=getOrMakeTopic(t, cls, nameField, modelTopics,lang);
             ret.add(mt);
@@ -204,11 +205,11 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
         return digikuva.getBaseName().replaceAll("[^a-zA-Z0-9,_-]", "_");
     }
     
-    public static ArrayList<ResultRow> doQuery(Directive d,Topic context,TopicMap tm,String lang){
+    public static List<ResultRow> doQuery(Directive d,Topic context,TopicMap tm,String lang){
         try{
             return d.doQuery(new QueryContext(tm, lang), context!=null?new ResultRow(context):new ResultRow());
         }catch(QueryException qe){
-            qe.printStackTrace();
+        	logger.error(qe);
             return null;
         }
     }
@@ -244,18 +245,18 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
         }
     }
     
-    public static Object getResult(ArrayList<ResultRow> res,String role){
+    public static Object getResult(List<ResultRow> res,String role){
         if(res.isEmpty()) return null;
         return res.get(0).get(role);
     }
-    public static Topic getTopicResult(ArrayList<ResultRow> rows,String role) {
+    public static Topic getTopicResult(List<ResultRow> rows,String role) {
         if(rows.isEmpty()) return null;
         try{
             return (Topic)rows.get(0).getValue(role);
-        }catch(QueryException qe){ qe.printStackTrace(); return null;}
+        }catch(QueryException qe){ logger.error(qe); return null;}
     }
-    public static ArrayList<Topic> getTopicResults(ArrayList<ResultRow> rows,String role) {
-        ArrayList<Topic> ret=new ArrayList<Topic>();
+    public static List<Topic> getTopicResults(List<ResultRow> rows,String role) {
+        List<Topic> ret=new ArrayList<>();
         for(ResultRow row : rows){
             Object o;
             try{
@@ -263,7 +264,7 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
                 else o=row.getActiveValue();
                 if(o==null || !(o instanceof Topic)) continue;
                 else ret.add((Topic)o);
-            }catch(QueryException qe){ qe.printStackTrace(); }
+            }catch(QueryException qe){ logger.error(qe); }
         }
         return ret;
     }
@@ -320,19 +321,20 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
     }
 
     
-    public static ArrayList<String> readKeywords(File f) throws IOException {
-        ArrayList<String> ret=new ArrayList<String>();
-        BufferedReader reader=new BufferedReader(new InputStreamReader(new FileInputStream(f),"UTF-8"));
-        String line=null;
-        while((line=reader.readLine())!=null){
-            line=line.trim();
-            if(line.isEmpty()) continue;
-            ret.add(line);
+    public static List<String> readKeywords(File f) throws IOException {
+        List<String> ret=new ArrayList<>();
+        try(BufferedReader reader=new BufferedReader(new InputStreamReader(new FileInputStream(f),"UTF-8"))) {
+	        String line=null;
+	        while((line=reader.readLine())!=null){
+	            line=line.trim();
+	            if(line.isEmpty()) continue;
+	            ret.add(line);
+	        }
         }
         return ret;
     }
     
-    public static T2<ArrayList<String>,String> matchKeywords(String keywordString,ArrayList<String> keywordList){
+    public static T2<List<String>,String> matchKeywords(String keywordString,List<String> keywordList){
         String stopChars=" ,;.()[]";
         
         Collections.sort(keywordList,new Comparator<String>(){
@@ -348,7 +350,7 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
             }
         });
         
-        ArrayList<String> matched=new ArrayList<String>();
+        List<String> matched=new ArrayList<>();
         String keywordLinks=keywordString;
         
         keywordString=keywordString.toLowerCase();
@@ -387,38 +389,8 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
                 
                 // add the matched keyword in the array
                 matched.add(keyword);
-/*
-                if(start>end){
-                    System.out.println("Matched "+keyword+" to "+
-                        keywordString.substring(Math.max(0,start-10),m[1])+"|^|"+
-                        keywordString.substring(end,Math.min(keywordString.length(),m[1]+10))
-                        );                    
-                }
-                else{
-                    System.out.println("Matched "+keyword+" to "+
-                        keywordString.substring(Math.max(0,start-10),start)+"|"+
-                        keywordString.substring(start,m[1])+"^"+
-                        keywordString.substring(m[1],end)+"|"+
-                        keywordString.substring(end,Math.min(keywordString.length(),end+10))
-                        );
-                }*/
             }
         }
-/*        
-        Collections.sort(keywordsAndPos,new Comparator<T2<String,Integer>>(){
-            @Override
-            public int compare(T2<String, Integer> o1, T2<String, Integer> o2) {
-                if(o1.e2==o2.e2) return o1.e1.compareTo(o2.e1); // shouldn't really happen
-                else return o1.e2-o2.e2;
-            }
-        });
-        
-        ArrayList<String> ret=new ArrayList<String>();
-        for(T2<String,Integer> e : keywordsAndPos){
-            ret.add(e.e1);
-        }
-        
-        return ret;*/
         
         return Tuples.t2(matched, keywordLinks);
     }
@@ -428,9 +400,9 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
     public static int[] getImageDimensions(File f) throws IOException {
         ImageInputStream in = ImageIO.createImageInputStream(f);
         try{
-            final Iterator readers = ImageIO.getImageReaders(in);
+            final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
             if(readers.hasNext()){
-                    ImageReader reader=(ImageReader)readers.next();
+                    ImageReader reader=readers.next();
                     try{
                             reader.setInput(in);
                             return new int[]{reader.getWidth(0), reader.getHeight(0)};
@@ -444,7 +416,7 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
         return null;
     }
     
-    public static Collection<ModelTopic> buildModel(TopicMap tm,String imagesDir,ArrayList<String> keywordList) throws TopicMapException {
+    public static Collection<ModelTopic> buildModel(TopicMap tm,String imagesDir,List<String> keywordList) throws TopicMapException {
         String lang="fi";
         
         ModelClass photoCls=new ModelClass("photograph");
@@ -521,7 +493,7 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
 //                .where(new Of("#nega"),"!=",null)
                 ;
         
-        ArrayList<ResultRow> res=doQuery(query, null, tm, lang);
+        List<ResultRow> res=doQuery(query, null, tm, lang);
         
         Pattern datePattern=Pattern.compile("\\d\\d\\d\\d");
         
@@ -579,7 +551,7 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
                             new Null().as("#material")
                         )
                     }).from(new Identity().as("#photograph"));
-                ArrayList<ResultRow> res2=doQuery(query,photograph,tm,lang);
+                List<ResultRow> res2=doQuery(query,photograph,tm,lang);
                 
                 photoM.setField("identifier", photograph.getBaseName());
                 
@@ -615,19 +587,19 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
                 if(keywordList!=null){
                     Topic keywordStringTopic=getTopicResult(res2,"#keyword");
                     String keywordString=null;
-                    T2<ArrayList<String>,String> keywords=null;
+                    T2<List<String>,String> keywords=null;
                     if(keywordStringTopic!=null) keywordString=keywordStringTopic.getBaseName();
                     if(keywordString==null || keywordString.trim().length()==0) keywordString="valokuvat";
                     else keywordString="valokuvat, "+keywordString;
                     keywords=matchKeywords(keywordString, keywordList);
                     if(keywords!=null){
-                        ArrayList<ModelTopic> keywordsM=getOrMakeTopics(keywords.e1, keywordCls, "name", modelTopics,lang);
+                        List<ModelTopic> keywordsM=getOrMakeTopics(keywords.e1, keywordCls, "name", modelTopics,lang);
                         photoM.setField("keywords",keywordsM);
                         photoM.setField("keywordText",keywords.e2);
                     }
-                    else photoM.setField("keywords",new ArrayList<ModelTopic>());
+                    else photoM.setField("keywords",new ArrayList<>());
                 }
-                else photoM.setField("keywords",new ArrayList<ModelTopic>());
+                else photoM.setField("keywords",new ArrayList<>());
                 
                 /*
                 {
@@ -661,8 +633,8 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
                             "http://www.muusa.net/P32.used_general_technique","http://www.muusa.net/Order")
                             .usingColumns("#technique","#order").to(new Of("#order"))
                     ), photograph, tm, lang);
-                ArrayList<Topic> techniques=getTopicResults(res2, "#technique");
-                ArrayList<ModelTopic> techniquesM=getOrMakeTopics(techniques, techniqueCls, "name", modelTopics, lang);
+                List<Topic> techniques=getTopicResults(res2, "#technique");
+                List<ModelTopic> techniquesM=getOrMakeTopics(techniques, techniqueCls, "name", modelTopics, lang);
                 photoM.setField("technique",techniquesM);
                 
                 
@@ -675,8 +647,8 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
                             .usingColumns("#keyword","#keywordtype")
                             .where(new Of("#keywordtype"), "t=", "http://www.muusa.net/P71_lists_asiasanat")
                     ), photograph, tm, lang);
-                ArrayList<Topic> keywords=getTopicResults(res2, "#keyword");
-                ArrayList<ModelTopic> keywordsM=getOrMakeTopics(keywords, keywordCls, "name", modelTopics,lang);
+                List<Topic> keywords=getTopicResults(res2, "#keyword");
+                List<ModelTopic> keywordsM=getOrMakeTopics(keywords, keywordCls, "name", modelTopics,lang);
                 photoM.setField("keywords",keywordsM);*/
                                 
                 modelTopics.put(Tuples.t2(photoCls,(Object)photograph), photoM);
@@ -726,7 +698,7 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         TopicMap tm=Wandora.getWandora().getTopicMap();
         
         SimpleFileChooser chooser=UIConstants.getFileChooser();
@@ -744,7 +716,7 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
                 String parentDir=file.getParent();
                 if(!(parentDir.endsWith("/") || parentDir.endsWith("\\"))) parentDir+="/";
                 
-                ArrayList<String> keywords=null;
+                List<String> keywords=null;
                 File keywordFile=new File(parentDir+"keywords.txt");
                 if(keywordFile.exists()) {
                     keywords=readKeywords(keywordFile);
@@ -765,17 +737,6 @@ public class SimbergExport extends AbstractExportTool implements WandoraTool {
         }
         setState(WAIT);
     }
-    /*
-    public static void main(String[] args){
-        String test="taiteilija, Simberg-suku, kesäpaikka Niemenlautta, Säkkijärvi, ".toLowerCase();
-        int[] ret=levenshtein(test,"niemenlautta");
-        System.out.println(ret[0]+" "+ret[1]+" "+ret[2]);
-        System.out.println(test);
-        for(int i=0;i<test.length();i++){
-            if(i==ret[1] || i==ret[2]) System.out.print("^");
-            else System.out.print(" ");
-        }
-        System.out.println();
-    }*/
+
     
 }

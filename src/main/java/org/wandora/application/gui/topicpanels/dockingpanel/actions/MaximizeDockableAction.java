@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ package org.wandora.application.gui.topicpanels.dockingpanel.actions;
 
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.topicpanels.DockingFramePanel;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import bibliothek.gui.Dockable;
 import bibliothek.gui.dock.action.actions.SimpleButtonAction;
@@ -35,6 +36,8 @@ import bibliothek.gui.dock.action.actions.SimpleButtonAction;
 
 
 public class MaximizeDockableAction extends SimpleButtonAction {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MaximizeDockableAction.class);
+	
     private DockingFramePanel dockingFramePanel = null;
     
     
@@ -59,12 +62,12 @@ public class MaximizeDockableAction extends SimpleButtonAction {
 
     @Override
     public void action(Dockable dockable) {
-        System.out.println("ACTION MaximizeDockableAction TRIGGERED");
+        logger.debug("ACTION MaximizeDockableAction TRIGGERED");
         try {
             dockingFramePanel.maximizeDockable(dockable);
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
         }
     }
 }

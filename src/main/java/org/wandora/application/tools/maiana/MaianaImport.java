@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,13 +27,12 @@ package org.wandora.application.tools.maiana;
 
 
 import java.io.ByteArrayInputStream;
-import java.net.URL;
+import java.net.URI;
 
 import javax.swing.Icon;
 
 import org.json.JSONObject;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.AbstractWandoraTool;
@@ -47,7 +46,7 @@ import org.wandora.topicmap.layered.LayerStack;
  *
  * @author akivela
  */
-public class MaianaImport extends AbstractWandoraTool implements WandoraTool {
+public class MaianaImport extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -95,7 +94,7 @@ public class MaianaImport extends AbstractWandoraTool implements WandoraTool {
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         String topicMapName = "";
         String topicMapOwner = "";
         
@@ -142,9 +141,7 @@ public class MaianaImport extends AbstractWandoraTool implements WandoraTool {
                     String apiEndPoint = maianaPanel.getApiEndPoint();
                     MaianaUtils.checkForLocalService(apiEndPoint);
                         
-                    String reply = MaianaUtils.doUrl(new URL(apiEndPoint), request, "application/json");
-
-                    //System.out.println("reply:\n"+reply);
+                    String reply = MaianaUtils.doUrl(new URI(apiEndPoint).toURL(), request, "application/json");
 
                     JSONObject replyObject = new JSONObject(reply);
 

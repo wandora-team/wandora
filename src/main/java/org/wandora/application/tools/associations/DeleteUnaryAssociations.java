@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,13 +31,13 @@ package org.wandora.application.tools.associations;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -47,9 +47,9 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class DeleteUnaryAssociations extends DeleteAssociationsInTopic implements WandoraTool {
-    
+public class DeleteUnaryAssociations extends DeleteAssociationsInTopic {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DeleteUnaryAssociations.class);
 	
 	
     public static final boolean LOOK_AT_ASSOCIATION_TYPES_TOO = true;
@@ -57,7 +57,7 @@ public class DeleteUnaryAssociations extends DeleteAssociationsInTopic implement
 
     public DeleteUnaryAssociations() {
     }
-    public DeleteUnaryAssociations(Context preferredContext) {
+    public DeleteUnaryAssociations(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -76,7 +76,7 @@ public class DeleteUnaryAssociations extends DeleteAssociationsInTopic implement
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return false;
     }

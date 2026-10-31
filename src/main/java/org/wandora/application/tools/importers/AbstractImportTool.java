@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,13 +32,13 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -48,13 +48,16 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.layered.Layer;
 import org.wandora.topicmap.layered.LayerStack;
 import org.wandora.utils.HttpAuthorizer;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author akivela
  */
-public abstract class AbstractImportTool extends AbstractWandoraTool implements WandoraTool {
+public abstract class AbstractImportTool extends AbstractWandoraTool {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractImportTool.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -158,7 +161,7 @@ public abstract class AbstractImportTool extends AbstractWandoraTool implements 
     
         
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(forceFiles != null && forceFiles instanceof File) {
             importFile(wandora, (File) forceFiles);
         }
@@ -203,7 +206,7 @@ public abstract class AbstractImportTool extends AbstractWandoraTool implements 
                     urlSource = urlSources[i];
                     if(urlSource != null && urlSource.length() > 0) {
                         try {
-                            importUrl(wandora, new URL(urlSource));
+                            importUrl(wandora, new URI(urlSource).toURL());
                         }
                         catch(Exception e) {
                             log(e);
@@ -233,7 +236,7 @@ public abstract class AbstractImportTool extends AbstractWandoraTool implements 
             }
         }
         else {
-            System.out.println("Illegal import source: "+selectedImportSource);
+            logger.info("Illegal import source: "+selectedImportSource);
         }
     }
     

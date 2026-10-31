@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import java.util.Date;
 
 import javax.swing.Icon;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.application.tools.extractors.ExtractHelper;
@@ -44,6 +43,7 @@ import org.wandora.topicmap.TMBox;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
         
 
@@ -51,15 +51,14 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class DirectoryStructureExtractor2 extends AbstractExtractor implements WandoraTool {
-
-
+public class DirectoryStructureExtractor2 extends AbstractExtractor {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DirectoryStructureExtractor2.class);
 
 	private String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
     
     private String defaultLang = "en";
-    private String baseLocator = "http://wandora.org/si/file/";
+    private String baseLocator = "https://wandora.org/si/file/";
     private int progress = 0;
 
 
@@ -278,7 +277,7 @@ public class DirectoryStructureExtractor2 extends AbstractExtractor implements W
             }
             catch (Exception e) {
                 log(e);
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         return null;

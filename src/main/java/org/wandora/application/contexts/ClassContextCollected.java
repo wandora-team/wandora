@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,55 +41,57 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class ClassContextCollected extends LayeredTopicContext implements Context {
-    
-    public boolean removeDuplicates = true;  
-    
-    
+public class ClassContextCollected extends LayeredTopicContext {
+
+    public boolean removeDuplicates = true;
+
+
     /**
      * Creates a new instance of ClassContextCollected
      */
     public ClassContextCollected() {
     }
-    
-    
-    
+
+
+
     @Override
-    public Iterator getContextObjects() {
-        return getClassesOf( super.getContextObjects() );
+    public Iterator<Topic> getContextObjects() {
+        return getClassesOf(super.getContextObjects());
     }
-    
-    
-    
-    public Iterator getClassesOf(Iterator topics) {
-        if(topics == null) return null;
+
+
+
+    public Iterator<Topic> getClassesOf(Iterator<Topic> topics) {
+        if (topics == null)
+            return null;
         List<Topic> contextTopics = new ArrayList<>();
         Collection<Topic> classTopics = null;
         Topic topic = null;
         Topic classTopic = null;
 
-        while(topics.hasNext()) {
+        while (topics.hasNext()) {
             try {
-                topic = (Topic) topics.next();
-                if(topic == null) continue;
-                if(removeDuplicates) {
+                topic = topics.next();
+                if (topic == null)
+                    continue;
+                if (removeDuplicates) {
                     classTopics = topic.getTypes();
-                    for(Iterator<Topic> classIterator = classTopics.iterator(); classIterator.hasNext(); ) {
+                    for (Iterator<Topic> classIterator = classTopics.iterator(); classIterator.hasNext();) {
                         classTopic = classIterator.next();
-                        if(classTopic != null && !contextTopics.contains(classTopic)) {
+                        if (classTopic != null && !contextTopics.contains(classTopic)) {
                             contextTopics.add(classTopic);
                         }
                     }
                 }
                 else {
-                    contextTopics.addAll( topic.getTypes() );
+                    contextTopics.addAll(topic.getTypes());
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 log(e);
             }
         }
         return contextTopics.iterator();
     }
-    
+
 }

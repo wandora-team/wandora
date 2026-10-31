@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,12 +61,12 @@ public class StanfordNERClassifier extends AbstractExtractor {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String SOURCE_SI = "http://wandora.org/si/source";
-    public static final String DOCUMENT_SI = "http://wandora.org/si/document";
-    public static final String TOPIC_SI = "http://wandora.org/si/topic";
+	public static final String SOURCE_SI = "https://wandora.org/si/source";
+    public static final String DOCUMENT_SI = "https://wandora.org/si/document";
+    public static final String TOPIC_SI = "https://wandora.org/si/topic";
 
-    public static final String ENTITY_SI = "http://wandora.org/si/stanford-ner/entity";
-    public static final String ENTITY_TYPE_SI = "http://wandora.org/si/stanford-ner/type";
+    public static final String ENTITY_SI = "https://wandora.org/si/stanford-ner/entity";
+    public static final String ENTITY_TYPE_SI = "https://wandora.org/si/stanford-ner/type";
     public static final String STANFORD_NER_SI = "http://nlp.stanford.edu/software/CRF-NER.shtml";
 
     public static final String classifierPath = "lib/stanford-ner/classifiers/";
@@ -222,18 +222,6 @@ public class StanfordNERClassifier extends AbstractExtractor {
                         }
                     }
                 }
-                /*
-                out = classifier.classifyFile(args[1]);
-                for (List<CoreLabel> sentence : out) {
-                    for (CoreLabel word : sentence) {
-                        System.out.print(word.word() + '/' + word.get(AnswerAnnotation.class) + ' ');
-                    }
-                    System.out.println();
-                }
-                System.out.println(classifier.classifyToString(s1));
-                System.out.println(classifier.classifyWithInlineXML(s2));
-                System.out.println(classifier.classifyToString(s2, "xml", true));
-                */
                 log("Total " + entityCounter + " entities found by Stanford Named Entity Recognizer.");
             }
             else {

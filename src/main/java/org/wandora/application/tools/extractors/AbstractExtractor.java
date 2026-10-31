@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ package org.wandora.application.tools.extractors;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -42,7 +43,6 @@ import java.util.regex.Pattern;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -59,16 +59,17 @@ import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
 /**
  * @author  akivela
  */
-public abstract class AbstractExtractor extends AbstractWandoraTool implements WandoraTool, Runnable, DropExtractor, BrowserPluginExtractor {
-    
-
+public abstract class AbstractExtractor extends AbstractWandoraTool implements DropExtractor, BrowserPluginExtractor {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractExtractor.class);
+	
 
 	public final static String STRING_EXTRACTOR_NOT_SUPPORTED_MESSAGE = "String extractor not supported";
 
@@ -228,7 +229,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
             
             case LOG_TITLE: return "Extraction Log";
         }
-        System.out.println("Requesting Illegal extraction GUI text: " + textType);
+        logger.info("Requesting Illegal extraction GUI text: " + textType);
         return "";
     }
     
@@ -276,7 +277,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         setWandora(wandora);
         if(wandora != null) topicMap = wandora.getTopicMap();
         Object contextSource = context.getContextSource();
@@ -431,7 +432,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
         int counter = 0;
         for(int i=0; i<urls.length && !forceStop(); i++) {
             try {
-                extractTopicsFrom(new URL(urls[i]), tm);
+                extractTopicsFrom(new URI(urls[i]).toURL(), tm);
                 counter++;
             }
             catch(FileNotFoundException fmfe) {
@@ -525,7 +526,6 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
     public int extractTopicsFrom(String fileName, Collection<String> visited, Pattern fileMask, int depth, int space) {
         browseCounter++;
         if(!forceStop()) {
-            //System.out.println("depth: "+depth);
             if(depth >= 0) {
                 if(space >= 0) {
                     if(!visited.contains(fileName)) {
@@ -558,7 +558,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
                                     }
                                 }
                                 catch (Exception e) {
-                                    e.printStackTrace();
+                                    logger.error(e);
                                 }
                             }
                         }
@@ -712,7 +712,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
         if(siend.startsWith("ftps:")) return new Locator(siend);
         if(siend.startsWith("mailto:")) return new Locator(siend);
         if(siend.startsWith("/")) siend = siend.substring(1);
-        return new Locator("http://wandora.org/si/default/" + urlEncode(siend));
+        return new Locator("https://wandora.org/si/default/" + urlEncode(siend));
     }
 
     public Topic createTopic(TopicMap topicMap, String baseString) throws TopicMapException {
@@ -766,7 +766,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
             }
             return t;
         }
-        System.out.println("Failed to create topic!");
+        logger.info("Failed to create topic!");
         return null;
     }
 
@@ -812,7 +812,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
     
     
     public void setDisplayName(Topic t, String lang, String name)  throws TopicMapException {
-        if(t != null & lang != null && name != null) {
+        if(t != null && lang != null && name != null) {
             String langsi=XTMPSI.getLang(lang);
             Topic langT=t.getTopicMap().getTopic(langsi);
             if(langT == null) {
@@ -943,8 +943,8 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
                     }
                 }
                 
-                System.out.println("--- browser plugin processing content ---");
-                System.out.println(content);
+                logger.info("--- browser plugin processing content ---");
+                logger.info(content);
                 _extractTopicsFrom(content, wandora.getTopicMap());
                 wandora.doRefresh();
                 return null;
@@ -954,7 +954,7 @@ public abstract class AbstractExtractor extends AbstractWandoraTool implements W
             }
         }
         catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
             return BrowserPluginExtractor.RETURN_ERROR+e.getMessage();
         }
     }

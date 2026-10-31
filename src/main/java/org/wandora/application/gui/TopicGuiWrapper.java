@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,70 +31,62 @@ import javax.swing.tree.TreePath;
 
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.topicmap.Topic;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author olli, akivela
  */
 public class TopicGuiWrapper {
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicGuiWrapper.class);
 
     public static final String PROCESSING_TYPE = "PROCESSING_TYPE";
-    
+
     public Topic topic;
     public String icon;
     public String associationType;
     public TreePath path;
-    
-    
-    
-    
+
+
+
     public TopicGuiWrapper(Topic t, String icon, String associationType, TreePath parent) {
-        this.topic=t;
-        this.icon=icon;
-        this.associationType=associationType;
-        if(parent==null) path=new TreePath(this);
-        else path=parent.pathByAddingChild(this);
+        this.topic = t;
+        this.icon = icon;
+        this.associationType = associationType;
+        if (parent == null) {
+            path = new TreePath(this);
+        }
+        else {
+            path = parent.pathByAddingChild(this);
+        }
     }
+
+
     public TopicGuiWrapper(Topic t, String icon) {
-        this(t,icon,"",null);
+        this(t, icon, "", null);
     }
+
+
     public TopicGuiWrapper(Topic t) {
-        this(t,null,"",null);
+        this(t, null, "", null);
     }
-    
-    
+
+
     @Override
     public String toString() {
         try {
-            if(PROCESSING_TYPE.equals(associationType)) {
+            if (PROCESSING_TYPE.equals(associationType)) {
                 return "Processing...";
             }
             else {
                 return TopicToString.toString(topic);
             }
         }
-        catch(Exception e){
-            e.printStackTrace(); // TODO EXCEPTION
+        catch (Exception e) {
+            logger.error(e);
             return "[Exception retrieving name]";
         }
     }
-    
-    /*
-    public String toString(int stringType) throws TopicMapException {
-        try {
-            if(PROCESSING_TYPE.equals(associationType)) {
-                return "Processing...";
-            }
-            else {
-                return TopicToString.toString(topic, stringType);
-            }
-        }
-        catch(Exception e){
-            e.printStackTrace(); // TODO EXCEPTION
-            return "[Exception retrieving name]";
-        }
-    }
-     * 
-     */
-   
+
+
 }

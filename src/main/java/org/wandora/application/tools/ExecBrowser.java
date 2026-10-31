@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import java.net.URI;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 
@@ -48,7 +47,7 @@ import org.wandora.application.gui.UIBox;
 
 
 
-public class ExecBrowser extends AbstractWandoraTool implements WandoraTool, Runnable {
+public class ExecBrowser extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -65,7 +64,7 @@ public class ExecBrowser extends AbstractWandoraTool implements WandoraTool, Run
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         if(uri != null) {
             try {
                 Desktop desktop = Desktop.getDesktop();

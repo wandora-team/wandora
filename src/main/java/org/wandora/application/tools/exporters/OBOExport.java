@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.Icon;
 
@@ -110,7 +111,6 @@ public class OBOExport extends AbstractExportTool {
     
     @Override
     public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        //System.out.println(prefix);
         OBOConfiguration dialog=new OBOConfiguration(wandora,true);
         dialog.setOptions(OBO.getOptions());
         dialog.setVisible(true);
@@ -131,7 +131,7 @@ public class OBOExport extends AbstractExportTool {
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         String namespace = WandoraOptionPane.showInputDialog(wandora, "Give OBO namespace to export", "", "OBO namespace");
         if(namespace == null || namespace.trim().length() == 0) return;
         
@@ -882,7 +882,7 @@ public class OBOExport extends AbstractExportTool {
                         }
 
                         for(Iterator<String> groupKeys = groupedSynonyms.keySet().iterator(); groupKeys.hasNext(); ) {
-                            HashSet usedOrigins = new HashSet();
+                            Set<String> usedOrigins = new HashSet<>();
                             String groupKey = groupKeys.next();
                             ArrayList<Association> synonymGroup = groupedSynonyms.get(groupKey);
                             boolean isFirst = true;
@@ -893,7 +893,7 @@ public class OBOExport extends AbstractExportTool {
                                 Topic synonymType = (synonymTypeRole != null ? synonymAssociation.getPlayer(synonymTypeRole) : null);
                                 Topic synonymScope = (synonymScopeRole != null ? synonymAssociation.getPlayer(synonymScopeRole) : null);
                                 Topic synonymOrigin = (synonymOriginRole != null ? synonymAssociation.getPlayer(synonymOriginRole) : null);
-                                if(isFirst) {
+                                if(isFirst && synonymText != null) {
                                     out.print("synonym: \""+OBO.Java2OBO(synonymText.getDisplayName(OBO.LANG))+"\"");
                                     isFirst = false;
                                 }

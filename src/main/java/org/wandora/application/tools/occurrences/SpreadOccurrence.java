@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,15 +33,16 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.OccurrenceTable;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.Tuples.T4;
 
 
 
@@ -49,7 +50,7 @@ import org.wandora.topicmap.XTMPSI;
  *
  * @author akivela
  */
-public class SpreadOccurrence extends AbstractWandoraTool implements WandoraTool {
+public class SpreadOccurrence extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
@@ -57,7 +58,7 @@ public class SpreadOccurrence extends AbstractWandoraTool implements WandoraTool
 
 	public SpreadOccurrence() {
     }
-    public SpreadOccurrence(Context proposedContext) {
+    public SpreadOccurrence(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
 
@@ -74,7 +75,7 @@ public class SpreadOccurrence extends AbstractWandoraTool implements WandoraTool
 
     
     @Override
-    public void execute(Wandora wandora, Context context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
         Object source = getContext().getContextSource();
 
         // This tool is used mainly in context of occurrence table
@@ -85,7 +86,7 @@ public class SpreadOccurrence extends AbstractWandoraTool implements WandoraTool
 
         // But general branch allows also any occurrence spread...
         else {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(!topics.hasNext()) return;
 
             Topic otype = wandora.showTopicFinder("Select source occurrence type...");
@@ -106,12 +107,11 @@ public class SpreadOccurrence extends AbstractWandoraTool implements WandoraTool
             Iterator<Topic> typeIterator = null;
             Collection<Topic> types = null;
             Hashtable<Topic, String> occurrences = null;
-            //Iterator occurrenceIterator = null;
             Topic type = null;
             Topic scope = null;
             int progress = 0;
             int count = 0;
-            ArrayList updatedOccurrences = new ArrayList();
+            List<T4<Topic,Topic,Topic,String>> updatedOccurrences = new ArrayList<>();
 
             while(topics.hasNext() && !forceStop()) {
                 try {
@@ -131,21 +131,18 @@ public class SpreadOccurrence extends AbstractWandoraTool implements WandoraTool
                                         occurrences = topic.getData(type);
                                         if(occurrences != null) {
                                             // First, look for the occurrence text that will be spread!
-                                            for(Enumeration occurrenceScopes = occurrences.keys(); occurrenceScopes.hasMoreElements();) {
-                                                scope = (Topic) occurrenceScopes.nextElement();
+                                            for(Enumeration<Topic> occurrenceScopes = occurrences.keys(); occurrenceScopes.hasMoreElements();) {
+                                                scope = occurrenceScopes.nextElement();
                                                 if(scope != null && scope.mergesWithTopic(oscope)) {
                                                     spreadOccurrence = occurrences.get(scope);
                                                 }
                                             }
                                             if(spreadOccurrence != null) {
                                                 // Then, iterate through available languages and spread the text
-                                                for(Iterator occurrenceScopes = langs.iterator(); occurrenceScopes.hasNext();) {
-                                                    scope = (Topic) occurrenceScopes.next();
+                                                for(Iterator<Topic> occurrenceScopes = langs.iterator(); occurrenceScopes.hasNext();) {
+                                                    scope = occurrenceScopes.next();
                                                     if(scope != null && !scope.mergesWithTopic(oscope)) {
-                                                        updatedOccurrences.add(topic);
-                                                        updatedOccurrences.add(type);
-                                                        updatedOccurrences.add(scope);
-                                                        updatedOccurrences.add(spreadOccurrence);
+                                                    	updatedOccurrences.add(new T4<>(topic, type, scope, spreadOccurrence));
                                                     }
                                                 }
                                             }
@@ -169,13 +166,14 @@ public class SpreadOccurrence extends AbstractWandoraTool implements WandoraTool
             setProgressMax(updatedOccurrences.size());
             progress = 0;
             String so = null;
-            for(Iterator i = updatedOccurrences.iterator(); i.hasNext() && !forceStop();) {
+            for(Iterator<T4<Topic,Topic,Topic,String>> i = updatedOccurrences.iterator(); i.hasNext() && !forceStop();) {
                 try {
                     setProgress(++progress);
-                    topic = (Topic) i.next();
-                    type = (Topic) i.next();
-                    scope = (Topic) i.next();
-                    so = (String) i.next();
+                    T4<Topic,Topic,Topic,String> o = i.next();
+                    topic = o.e1;
+                    type = o.e2;
+                    scope = o.e3;
+                    so = o.e4;
                     if(topic != null && type != null && scope != null && so != null) {
                         topic.setData(type, scope, so);
                         count++;

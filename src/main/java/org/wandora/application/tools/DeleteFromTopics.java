@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.topicmap.Association;
@@ -47,7 +46,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author  akivela
  */
-public class DeleteFromTopics extends AbstractWandoraTool implements WandoraTool, Runnable {
+public class DeleteFromTopics extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -88,7 +87,7 @@ public class DeleteFromTopics extends AbstractWandoraTool implements WandoraTool
     public DeleteFromTopics(int orders) {
         whatToDelete = orders;
     }
-    public DeleteFromTopics(Context preferredContext, int orders) {
+    public DeleteFromTopics(Context<?> preferredContext, int orders) {
         setContext(preferredContext);
         whatToDelete = orders;
     }
@@ -111,77 +110,14 @@ public class DeleteFromTopics extends AbstractWandoraTool implements WandoraTool
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         Topic topic = null;
-        Iterator topics = context.getContextObjects();
+        Iterator<?> topics = context.getContextObjects();
 
         // Delete from topics.
         switch(whatToDelete) {
-            
-            
-            // REFACTORED TO DeleteSIsWithRegex
-            /*
-            case DELETE_SIS_WITH_REGEX: {
-                try {
-                    RegularExpressionEditor editor;
-                    editor = RegularExpressionEditor.getMatchExpressionEditor(admin);
-                    editor.approve = false;
-                    editor.setVisible(true);
-                    if(editor.approve == true) {
-                        setDefaultLogger();
-                        Topic t = null;
-                        int c = 0;
-                        int tc = 0;
-                        while(topics.hasNext() && !forceStop()) {
-                            t = (Topic) topics.next();
-                            if(t != null && !t.isRemoved()) {
-                                try {
-                                    tc++;
-                                    hlog("Inspecting topic '" + getTopicName(t) + "'.");
-                                    Collection sis = t.getSubjectIdentifiers();
-                                    int s = sis.size();
-                                    if(s > 1) {
-                                        ArrayList sisToDelete = new ArrayList();
-                                        Iterator sii = sis.iterator();
-                                        Locator l = null;
-                                        while(sii.hasNext() && s > 1) {
-                                            l = (Locator) sii.next();
-                                            String ls = l.toExternalForm();
-                                            if(editor.matches(ls)) {
-                                                sisToDelete.add(l);
-                                                s--;
-                                                c++;
-                                                hlog("Removing SI '"+ l.toExternalForm() +"'.");
-                                            }
-                                        }
-                                        sii = sisToDelete.iterator();
-                                        while(sii.hasNext()) {
-                                            t.removeSubjectIdentifier((Locator) sii.next());
-                                        }
-                                    }
-                                }
-                                catch(Exception e) {
-                                    log(e);
-                                }
-                            }
-                        }
-                        log("Inspected total "+tc+" topics.");
-                        log("Deleted total "+c+" subject identifiers.");
-                        setState(WAIT);
-                    }
-                }
-                catch(Exception e) {
-                    log(e);
-                }
-                break;
-            }
-            */
-            
-            // 
             case LOOSE_INSTANCES: {
-                int c = 0;
                 try {
-                    c++;
                     topic = (Topic) topics.next();
                     if(WandoraOptionPane.showConfirmDialog(wandora,"Are you sure you want to delete all instances of '" + getTopicName(topic) + "'?","Confirm instance delete", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION) {
                         Collection<Topic> instances = topic.getTopicMap().getTopicsOfType(topic);
@@ -212,12 +148,10 @@ public class DeleteFromTopics extends AbstractWandoraTool implements WandoraTool
                 Topic openTopic = wandora.getOpenTopic();
                 if(openTopic != null) {
                     if(WandoraOptionPane.showConfirmDialog(wandora,"Are you sure you want to delete selected instances of '" + getTopicName(openTopic) + "'?","Confirm instance delete", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){
-                        int c = 0;
                         setDefaultLogger();
                         Topic instance = null;
                         while(topics.hasNext() && !forceStop()) {
                             try {
-                                c++;
                                 instance = (Topic) topics.next();
                                 if( !instance.isRemoved() ) {
                                     log("Deleting instance '"+ getTopicName(instance) +"' from topic '" + getTopicName(openTopic) + "'");
@@ -238,20 +172,17 @@ public class DeleteFromTopics extends AbstractWandoraTool implements WandoraTool
             
             case DELETE_INSTANCE_TOPICS: {
                 if(WandoraOptionPane.showConfirmDialog(wandora,"Are you sure you want to delete all instance topics?","Confirm delete", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){
-                    int c = 0;
-                    int d = 0;
                     TopicMap tm = wandora.getTopicMap();
                     setDefaultLogger();
                     while(topics.hasNext() && !forceStop()) {
                         Topic typeTopic = (Topic) topics.next();
-                        Iterator<Topic> iter=new ArrayList(tm.getTopicsOfType(typeTopic)).iterator();
+                        Iterator<Topic> iter=new ArrayList<>(tm.getTopicsOfType(typeTopic)).iterator();
                         Topic t = null;
                         List<Topic> deleteThese = new ArrayList<>();
                         while(iter.hasNext() && !forceStop()) {
                             t=(Topic)iter.next();
                             if(!t.isRemoved() && t.isOfType(typeTopic)) {
                                 deleteThese.add(t);
-                                c++;
                                 hlog("Preparing instance topic " + getTopicName(t) + "");
                             }
                         }
@@ -260,7 +191,6 @@ public class DeleteFromTopics extends AbstractWandoraTool implements WandoraTool
                             try {
                                 topic = (Topic) deleteThese.get(i);
                                 if(!topic.isRemoved() && topic.isDeleteAllowed()) {
-                                    d++;
                                     log("Deleting instance topic '" + getTopicName(topic) + "'");
                                     topic.remove();
                                     requiresRefresh = true;
@@ -284,11 +214,9 @@ public class DeleteFromTopics extends AbstractWandoraTool implements WandoraTool
                     String message = "Delete selected classes from topic "+getTopicName(currentTopic)+"?";
                     int r = WandoraOptionPane.showConfirmDialog(wandora, message, "Confirm delete", WandoraOptionPane.YES_NO_OPTION);
                     if(r == WandoraOptionPane.YES_OPTION) {
-                        int c = 0;
                         setDefaultLogger();
                         while(topics.hasNext() && !forceStop()) {
                             try {
-                                c++;
                                 typeTopic = (Topic) topics.next();
                                 if(typeTopic != null && !typeTopic.isRemoved()) {
                                     currentTopic.removeType(typeTopic);
@@ -315,11 +243,9 @@ public class DeleteFromTopics extends AbstractWandoraTool implements WandoraTool
                 Topic t=wandora.showTopicFinder("Select class to be removed from topics...");                
                 if (t == null) return;
 
-                int c = 0;
                 setDefaultLogger();
                 while(topics.hasNext() && !forceStop()) {
                     try {
-                        c++;
                         topic = (Topic) topics.next();
                         if(!topic.isRemoved()) {
                             log("Deleting class '" + getTopicName(t) + "' from topic '" + getTopicName(topic) + "'");
@@ -340,11 +266,9 @@ public class DeleteFromTopics extends AbstractWandoraTool implements WandoraTool
 
             case LOOSE_CLASSES: {
                 Topic classTopic = null;
-                int c = 0;
                 setDefaultLogger();
                 while(topics.hasNext() && !forceStop()) {
                     try {
-                        c++;
                         topic = (Topic) topics.next();
                         Collection<Topic> classTopics = topic.getTypes();
                         if(classTopics != null) {
@@ -370,17 +294,11 @@ public class DeleteFromTopics extends AbstractWandoraTool implements WandoraTool
             }
             
             case DELETE_TYPED_TEXTDATA: {
-/*                BaseNamePrompt prompt=new BaseNamePrompt(admin.getManager(), admin, true);
-                prompt.setTitle("Select occurrence type to be removed from topics...");
-                prompt.setVisible(true);
-                Topic occurrenceType=prompt.getTopic();*/
                 Topic occurrenceType=wandora.showTopicFinder("Select occurrence type to be removed from topics...");                
                 if(occurrenceType == null) return;
-                int c = 0;
                 setDefaultLogger();
                 while(topics.hasNext() && !forceStop()) {
                     try {
-                        c++;
                         topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
                             log("Deleting occurrence of type '" + getTopicName(occurrenceType) + "' from topic '" + getTopicName(topic) + "'");
@@ -402,10 +320,8 @@ public class DeleteFromTopics extends AbstractWandoraTool implements WandoraTool
             case DELETE_TEXTDATAS: {
                 if(WandoraOptionPane.showConfirmDialog(wandora,"Are you sure you want to delete all occurrences?","Confirm delete", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){
                     setDefaultLogger();
-                    int c = 0;
                     while(topics.hasNext() && !forceStop()) {
                         try {
-                            c++;
                             topic = (Topic) topics.next();
                             hlog("Inspecting topic '"+getTopicName(topic)+"'.");
                             Collection<Topic> types = topic.getDataTypes();
@@ -428,80 +344,6 @@ public class DeleteFromTopics extends AbstractWandoraTool implements WandoraTool
                 }
                 break;
             }
-            
-            /* REFACTORED TO tools.associations.DeleteAssociationsInTopic
-             *
-            case DELETE_ASSOCIATIONS: {
-                if(WandoraOptionPane.showConfirmDialog(wandora,"Are you sure you want to delete all associations?","Confirm delete", WandoraOptionPane.YES_NO_OPTION)==WandoraOptionPane.YES_OPTION){
-                    setDefaultLogger();
-                    int c = 0;
-                    while(topics.hasNext() && !forceStop()) {
-                        try {
-                            c++;
-                            topic = (Topic) topics.next();
-                            hlog("Deleting associations from topic\n" + getTopicName(topic) + "\n" + c + " done...");
-                            Collection associations = topic.getAssociations();
-                            for(Iterator i2 = associations.iterator(); i2.hasNext(); ) {
-                                Association association = (Association) i2.next();
-                                if(association != null) {
-                                    association.remove();
-                                    requiresRefresh = true;
-                                }
-                            }
-                        }
-                        catch (Exception e) {
-                            log("Exception occurred while deleting associations", e);
-                            try { Thread.currentThread().sleep(1000); }
-                            catch (Exception timeout) {}
-                        }
-                    }
-                    setState(WAIT);
-                }
-                break;
-            }
-            */
-            
-            
-            
-            // REFACTORED TO tools.associations.DeleteAssociationsInTopicWithType
-            /*
-            case DELETE_TYPED_ASSOCIATIONS: {
-/*                BaseNamePrompt prompt=new BaseNamePrompt(admin.getManager(), admin, true);
-                prompt.setTitle("Select type of association be removed from topics...");
-                prompt.setVisible(true);
-                Topic associationType=prompt.getTopic();*/
-            /*
-                Topic associationType=admin.showTopicFinder("Select type of association to be removed from topics...");                
-                if(associationType == null) return;
-                String tname = associationType.getBaseName();
-                setDefaultLogger();
-
-                int c = 0;
-                while(topics.hasNext() && !forceStop()) {
-                    try {
-                        c++;
-                        topic = (Topic) topics.next();
-                        hlog("Deleting associations of type '" + tname + "' from topic\n" + getTopicName(topic) + "\n" + c + " done...");
-                        Collection associations = topic.getAssociations(associationType);
-                        for(Iterator i2 = associations.iterator(); i2.hasNext(); ) {
-                            Association association = (Association) i2.next();
-                            if(association != null) {
-                                association.remove();
-                                requiresRefresh = true;
-                            }
-                        }
-                    }
-                    catch (Exception e) {
-                        log("Exception occurred while deleting associations", e);
-                        try { Thread.currentThread().sleep(1000); }
-                        catch (Exception timeout) {}
-                    }
-                }
-                setState(WAIT);
-                break;
-            }
-        */
-            
 
             case DELETE_TYPED_ASSOCIATIONS_OF_CURRENT: {
                 setDefaultLogger();

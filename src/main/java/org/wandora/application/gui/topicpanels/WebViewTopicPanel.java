@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,66 +57,74 @@ public class WebViewTopicPanel implements TopicPanel {
 
     private Topic currentTopic = null;
     private WebViewPanel webPanel = null;
-    
-    
+
+
     public WebViewTopicPanel() {
-        
+
     }
-    
-    
+
+
     @Override
     public void init() {
     }
-    
-    
-    
+
+
+
     @Override
     public boolean supportsOpenTopic() {
         return true;
     }
-    
-    
+
+
     @Override
     public void open(Topic topic) throws TopicMapException {
         currentTopic = topic;
-        if(webPanel != null) webPanel.open(topic);
+        if (webPanel != null)
+            webPanel.open(topic);
     }
+
 
     @Override
     public void stop() {
-        if(webPanel != null) webPanel.stop();
+        if (webPanel != null)
+            webPanel.stop();
     }
+
 
     @Override
     public void refresh() throws TopicMapException {
-        if(webPanel != null) webPanel.refresh();
+        if (webPanel != null)
+            webPanel.refresh();
     }
 
     // -------------------------------------------------------------------------
-    
-    
+
+
     @Override
     public boolean applyChanges() throws CancelledException, TopicMapException {
-        if(webPanel != null) return webPanel.applyChanges();
+        if (webPanel != null)
+            return webPanel.applyChanges();
         return false;
     }
 
+
     @Override
     public JPanel getGui() {
-        if(webPanel == null) {
+        if (webPanel == null) {
             try {
                 Class.forName("javafx.embed.swing.JFXPanel");
                 webPanel = new WebViewPanel();
-                if(currentTopic != null) {
+                if (currentTopic != null) {
                     try {
                         webPanel.open(currentTopic);
                     }
-                    catch(Exception e) {}
+                    catch (Exception e) {
+                    }
                 }
             }
-            catch(NoClassDefFoundError e) {
+            catch (NoClassDefFoundError e) {
                 return getErrorPanel();
-            } 
+            }
             catch (ClassNotFoundException ex) {
                 return getErrorPanel();
             }
@@ -124,8 +132,8 @@ public class WebViewTopicPanel implements TopicPanel {
         return webPanel;
     }
 
-    
-    
+
+
     private JPanel getErrorPanel() {
         JPanel p = new JPanel();
         p.setLayout(new BorderLayout());
@@ -137,24 +145,30 @@ public class WebViewTopicPanel implements TopicPanel {
         p.setBackground(Color.WHITE);
         return p;
     }
-    
-    
+
+
     @Override
     public Topic getTopic() throws TopicMapException {
-        if(webPanel != null) return webPanel.getTopic();
+        if (webPanel != null)
+            return webPanel.getTopic();
         return currentTopic;
     }
+
 
     @Override
     public String getName() {
         return "Webview";
     }
 
+
     @Override
     public String getTitle() {
-        if(webPanel != null) return webPanel.getTitle();
-        else if(currentTopic == null) return getName();
-        else return TopicToString.toString(currentTopic);
+        if (webPanel != null)
+            return webPanel.getTitle();
+        else if (currentTopic == null)
+            return getName();
+        else
+            return TopicToString.toString(currentTopic);
     }
 
 
@@ -163,133 +177,175 @@ public class WebViewTopicPanel implements TopicPanel {
         return UIBox.getIcon("gui/icons/topic_panel_webview.png");
     }
 
+
     @Override
     public int getOrder() {
         return 2000;
     }
+
 
     @Override
     public Object[] getViewMenuStruct() {
         return null;
     }
 
+
     @Override
     public JMenu getViewMenu() {
         return null;
     }
+
 
     @Override
     public JPopupMenu getViewPopupMenu() {
         return null;
     }
 
+
     @Override
     public LocatorHistory getTopicHistory() {
         return null;
     }
-    
+
+
     @Override
-    public boolean noScroll(){
+    public boolean noScroll() {
         return false;
     }
-    
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public WebEngine getWebEngine() {
-        if(webPanel != null) return webPanel.getWebEngine();
+        if (webPanel != null)
+            return webPanel.getWebEngine();
         return null;
     }
-    
+
+
     public String getWebLocation() {
-        if(webPanel != null) return webPanel.getWebLocation();
+        if (webPanel != null)
+            return webPanel.getWebLocation();
         return null;
     }
-    
+
+
     public String getSource() {
-        if(webPanel != null) return webPanel.getSource();
+        if (webPanel != null)
+            return webPanel.getSource();
         return null;
     }
-    
+
+
     public String getSelectedText() {
-        if(webPanel != null) return webPanel.getSelectedText();
+        if (webPanel != null)
+            return webPanel.getSelectedText();
         return null;
     }
-    
+
+
     public String getWebTitle() {
-        if(webPanel != null) return webPanel.getWebTitle();
+        if (webPanel != null)
+            return webPanel.getWebTitle();
         return null;
     }
-    
+
+
     public Object executeJavascript(String script) {
-        if(webPanel != null) return webPanel.executeSynchronizedScript(script);
+        if (webPanel != null)
+            return webPanel.executeSynchronizedScript(script);
         return null;
     }
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
+
 
     @Override
     public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
-        if(webPanel != null) webPanel.topicSubjectIdentifierChanged(t, added, removed);
+        if (webPanel != null)
+            webPanel.topicSubjectIdentifierChanged(t, added, removed);
     }
+
 
     @Override
     public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
-        if(webPanel != null) webPanel.topicBaseNameChanged(t, newName, oldName);
+        if (webPanel != null)
+            webPanel.topicBaseNameChanged(t, newName, oldName);
     }
+
 
     @Override
     public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
-        if(webPanel != null) webPanel.topicTypeChanged(t, added, removed);
+        if (webPanel != null)
+            webPanel.topicTypeChanged(t, added, removed);
     }
 
-    @Override
-    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName) throws TopicMapException {
-        if(webPanel != null) webPanel.topicVariantChanged(t, scope, newName, oldName);
-    }
 
     @Override
-    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue) throws TopicMapException {
-        if(webPanel != null) webPanel.topicDataChanged(t, type, version, newValue, oldValue);
+    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName)
+            throws TopicMapException {
+        if (webPanel != null)
+            webPanel.topicVariantChanged(t, scope, newName, oldName);
     }
+
+
+    @Override
+    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue)
+            throws TopicMapException {
+        if (webPanel != null)
+            webPanel.topicDataChanged(t, type, version, newValue, oldValue);
+    }
+
 
     @Override
     public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
-        if(webPanel != null) webPanel.topicSubjectLocatorChanged(t, newLocator, oldLocator);
+        if (webPanel != null)
+            webPanel.topicSubjectLocatorChanged(t, newLocator, oldLocator);
     }
+
 
     @Override
     public void topicRemoved(Topic t) throws TopicMapException {
-        if(webPanel != null) webPanel.topicRemoved(t);
+        if (webPanel != null)
+            webPanel.topicRemoved(t);
     }
+
 
     @Override
     public void topicChanged(Topic t) throws TopicMapException {
-        if(webPanel != null) webPanel.topicChanged(t);
+        if (webPanel != null)
+            webPanel.topicChanged(t);
     }
+
 
     @Override
     public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
-        if(webPanel != null) webPanel.associationTypeChanged(a, newType, oldType);
+        if (webPanel != null)
+            webPanel.associationTypeChanged(a, newType, oldType);
     }
 
+
     @Override
-    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer) throws TopicMapException {
-        if(webPanel != null) webPanel.associationPlayerChanged(a, role, newPlayer, oldPlayer);
+    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer)
+            throws TopicMapException {
+        if (webPanel != null)
+            webPanel.associationPlayerChanged(a, role, newPlayer, oldPlayer);
     }
+
 
     @Override
     public void associationRemoved(Association a) throws TopicMapException {
-        if(webPanel != null) webPanel.associationRemoved(a);
+        if (webPanel != null)
+            webPanel.associationRemoved(a);
     }
+
 
     @Override
     public void associationChanged(Association a) throws TopicMapException {
-        if(webPanel != null) webPanel.associationChanged(a);
+        if (webPanel != null)
+            webPanel.associationChanged(a);
     }
-    
+
 }

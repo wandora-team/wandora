@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@ import java.io.StringReader;
 import java.net.URL;
 import java.util.Hashtable;
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.extractors.AbstractExtractor;
 import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Locator;
@@ -91,7 +90,7 @@ import org.wandora.utils.Textbox;
  *
  * @author akivela
  */
-public class ExtractSIFFKeywords extends AbstractExtractor implements WandoraTool {
+public class ExtractSIFFKeywords extends AbstractExtractor {
     
 	private static final long serialVersionUID = 1L;
 	

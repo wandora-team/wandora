@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,6 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 import org.w3c.tidy.Tidy;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.application.tools.extractors.AbstractExtractor;
@@ -61,6 +60,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicTools;
 import org.wandora.topicmap.XTMPSI;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  * <p>
@@ -80,7 +80,9 @@ import org.wandora.utils.IObox;
 
  * @author akivela
  */
-public class DefinitionListExtractor extends AbstractExtractor implements WandoraTool, BrowserPluginExtractor {
+public class DefinitionListExtractor extends AbstractExtractor implements BrowserPluginExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(DefinitionListExtractor.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -215,7 +217,7 @@ public class DefinitionListExtractor extends AbstractExtractor implements Wandor
     private class DefinitionListParseListener extends HTMLEditorKit.ParserCallback {
         public int progress = 0;
         
-        public static final String SI_PREFIX = "http://wandora.org/si/list/";
+        public static final String SI_PREFIX = "https://wandora.org/si/list/";
         
         private TopicMap tm;
         private DefinitionListExtractor parent;
@@ -373,7 +375,7 @@ public class DefinitionListExtractor extends AbstractExtractor implements Wandor
         
         @Override
         public void handleError(String errorMsg,int pos) {
-            System.out.println("DefinitionListExtractor: " + errorMsg);
+            logger.info("DefinitionListExtractor: " + errorMsg);
         }
         
         
@@ -517,7 +519,7 @@ public class DefinitionListExtractor extends AbstractExtractor implements Wandor
                 }
             }
             if(t == null) {
-                System.out.println("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
+                logger.info("Failed to create topic for basename '"+baseName+"' and si '"+si+"'.");
             }
             return t;
         }

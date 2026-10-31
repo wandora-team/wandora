@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1152,8 +1152,7 @@ public class MadsExtractor extends AbstractExtractor {
             if(t==null){
                 t=tm.createTopic();
                 if(bn!=null) t.setBaseName(bn);
-                if(si!=null) t.addSubjectIdentifier(tm.createLocator(si));
-                else t.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
+                t.addSubjectIdentifier(tm.makeSubjectIndicatorAsLocator());
                 if(type != null) t.addType(type);
             }
             return t;

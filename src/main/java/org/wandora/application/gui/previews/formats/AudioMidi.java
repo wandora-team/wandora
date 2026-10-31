@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ package org.wandora.application.gui.previews.formats;
 
 
 
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
@@ -37,6 +36,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
@@ -59,6 +60,7 @@ import org.wandora.application.gui.previews.PreviewPanel;
 import org.wandora.application.gui.previews.PreviewUtils;
 import org.wandora.utils.ClipboardBox;
 import org.wandora.utils.DataURL;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -67,9 +69,10 @@ import org.wandora.utils.DataURL;
  * @author akivela
  */
 public class AudioMidi implements ActionListener, MetaEventListener, PreviewPanel {
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AudioMidi.class);
+
     private static final String OPTIONS_PREFIX = "gui.audioMidiPreviewPanel.";
-    
-    //Wandora admin;
+
     private Map<String, String> options;
     private String audioLocator;
     private Dimension panelDimensions;
@@ -77,122 +80,123 @@ public class AudioMidi implements ActionListener, MetaEventListener, PreviewPane
     private boolean isPlaying = false;
     private Sequencer sequencer = null;
     private int volume = 100;
-    
+
     private JPanel ui = null;
-    
-    
+
+
     public AudioMidi(String audioLocator) {
         this.audioLocator = audioLocator;
         initialize();
     }
-    
+
+
     @Override
     public boolean isHeavy() {
         return false;
     }
-    
+
+
     public void initialize() {
         this.options = Wandora.getWandora().getOptions().asMap();
     }
 
-    
-    
-    
+
+
     @Override
     public void finish() {
         isPlaying = false;
-        if(sequencer != null) sequencer.stop();
+        if (sequencer != null)
+            sequencer.stop();
     }
-    
-    
+
+
     @Override
     public JPanel getGui() {
-        if(ui == null) {
+        if (ui == null) {
             ui = makeUI();
         }
         return ui;
     }
-    
+
 
     @Override
     public void stop() {
         isPlaying = false;
-        if(sequencer != null) sequencer.stop();
+        if (sequencer != null)
+            sequencer.stop();
     }
 
-    
+
     protected JPanel makeUI() {
-        if(ui == null) {
+        if (ui == null) {
             ui = new JPanel();
 
             JPanel controllerPanel = new JPanel();
             controllerPanel.add(getJToolBar(), BorderLayout.CENTER);
 
-            ui.setLayout(new BorderLayout(8,8));
+            ui.setLayout(new BorderLayout(8, 8));
             ui.add(controllerPanel, BorderLayout.SOUTH);
 
             updateAudioMenu();
         }
         return ui;
     }
-    
-    
+
+
     protected JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Play", PreviewUtils.ICON_PLAY, this,
-            "Stop", PreviewUtils.ICON_STOP, this,
-            "---",
-            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
-            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
-            "Save as", PreviewUtils.ICON_SAVE, this,
+                "Play", PreviewUtils.ICON_PLAY, this,
+                "Stop", PreviewUtils.ICON_STOP, this,
+                "---",
+                "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+                "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+                "Save as", PreviewUtils.ICON_SAVE, this,
         }, this);
     }
-    
 
-    
-    
-    
+
+
     public void play() {
-        if(!isPlaying) {
-            if(audioLocator != null && audioLocator.length() > 0) {
+        if (!isPlaying) {
+            if (audioLocator != null && audioLocator.length() > 0) {
                 try {
                     sequencer = MidiSystem.getSequencer();
                     sequencer.open();
                     Sequence sequence = null;
-                    
-                    if(DataURL.isDataURL(audioLocator)) {
+
+                    if (DataURL.isDataURL(audioLocator)) {
                         DataURL dataURL = new DataURL(audioLocator);
                         sequence = MidiSystem.getSequence(new ByteArrayInputStream(dataURL.getData()));
                     }
                     else {
-                        URL audioURL = new URL(audioLocator);
+                        URL audioURL = new URI(audioLocator).toURL();
                         sequence = MidiSystem.getSequence(audioURL);
                     }
-                    if(sequence != null) {
+                    if (sequence != null) {
                         sequencer.setSequence(sequence);
                         sequencer.addMetaEventListener(this);
                         // Start playing.
                         sequencer.start();
                     }
                 }
-                catch (MidiUnavailableException e) { 
+                catch (MidiUnavailableException e) {
                     PreviewUtils.previewError(ui, "Midi is unavailable.", e);
                 }
-                catch (MalformedURLException e) {
+                catch (MalformedURLException | URISyntaxException e) {
                     PreviewUtils.previewError(ui, "Midi locator is malformed.", e);
-                } 
-                catch (IOException e) {  
+                }
+                catch (IOException e) {
                     PreviewUtils.previewError(ui, "Unable to read locator resource.", e);
-                } 
+                }
                 catch (InvalidMidiDataException e) {
                     PreviewUtils.previewError(ui, "Midi resource contains bad data.", e);
                 }
             }
         }
     }
-    
 
-    
+
+
     @Override
     public void meta(MetaMessage event) {
         if (event.getType() == 47) {
@@ -200,38 +204,38 @@ public class AudioMidi implements ActionListener, MetaEventListener, PreviewPane
         }
     }
 
-    
+
     public void setVolume(int gain) {
         try {
-            if(sequencer != null) {
+            if (sequencer != null) {
                 Synthesizer synthesizer = null;
-                if(sequencer instanceof Synthesizer) {
+                if (sequencer instanceof Synthesizer) {
                     synthesizer = (Synthesizer) sequencer;
                 }
                 else {
                     synthesizer = MidiSystem.getSynthesizer();
                 }
-                if(synthesizer != null) {
+                if (synthesizer != null) {
                     MidiChannel[] channels = synthesizer.getChannels();
-                    for (int i=0; i<channels.length; i++) {                
-                        channels[i].controlChange(7, (int)(gain * 1.27)); // gain == 0..100
+                    for (int i = 0; i < channels.length; i++) {
+                        channels[i].controlChange(7, (int) (gain * 1.27)); // gain == 0..100
                     }
                     volume = gain;
                 }
             }
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
- 
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public void updateAudioMenu() {
-        if(ui != null) {
-            if(audioLocator != null && audioLocator.length() > 0) {
+        if (ui != null) {
+            if (audioLocator != null && audioLocator.length() > 0) {
                 ui.setComponentPopupMenu(getImageMenu());
             }
             else {
@@ -239,87 +243,87 @@ public class AudioMidi implements ActionListener, MetaEventListener, PreviewPane
             }
         }
     }
-    
-    
+
+
     public JPopupMenu getImageMenu() {
         Object[] menuStructure = new Object[] {
-            "Play",
-            "Stop",
-            /*
-            "Set volume", new Object[] {
+                "Play",
+                "Stop",
+                /*
+                "Set volume", new Object[] {
                 (volume == 100 ? "X" : "O") + " Volume 100%",
                 (volume == 75 ? "X" : "O") + " Volume 75%",
                 (volume == 50 ? "X" : "O") + " Volume 50%",
                 (volume == 25 ? "X" : "O") + " Volume 25%",
-            },
-             */
-            "---",
-            "Copy locator",
-            "---",
-            "Open in external player...",
-            "---",
-            "Save to file...",
-           
+                },
+                 */
+                "---",
+                "Copy locator",
+                "---",
+                "Open in external player...",
+                "---",
+                "Save to file...",
+
         };
         return UIBox.makePopupMenu(menuStructure, this);
     }
-    
-    
-    
-    
+
+
+
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
-        if(c == null) return;
-        
-        if(PreviewUtils.startsWithAny(c, "Play")) {
+        if (c == null)
+            return;
+
+        if (PreviewUtils.startsWithAny(c, "Play")) {
             play();
         }
-        else if(PreviewUtils.startsWithAny(c, "Stop")) {
+        else if (PreviewUtils.startsWithAny(c, "Stop")) {
             isPlaying = false;
-            if(sequencer != null) sequencer.stop();
+            if (sequencer != null)
+                sequencer.stop();
         }
-        else if(PreviewUtils.startsWithAny(c, "Open in external", "Open ext")) {
+        else if (PreviewUtils.startsWithAny(c, "Open in external", "Open ext")) {
             PreviewUtils.forkExternalPlayer(audioLocator);
         }
-        
-        else if(PreviewUtils.startsWithAny(c, "Copy locator")) {
-            if(audioLocator != null) {
+
+        else if (PreviewUtils.startsWithAny(c, "Copy locator")) {
+            if (audioLocator != null) {
                 ClipboardBox.setClipboard(audioLocator);
             }
         }
-        else if(PreviewUtils.startsWithAny(c, "Save to file", "Save as")) {
+        else if (PreviewUtils.startsWithAny(c, "Save to file", "Save as")) {
             PreviewUtils.saveToFile(audioLocator);
         }
-        else if(PreviewUtils.startsWithAny(c, "Volume 100%")) {
+        else if (PreviewUtils.startsWithAny(c, "Volume 100%")) {
             setVolume(100);
         }
-        else if(PreviewUtils.startsWithAny(c, "Volume 75%")) {
+        else if (PreviewUtils.startsWithAny(c, "Volume 75%")) {
             setVolume(75);
         }
-        else if(PreviewUtils.startsWithAny(c, "Volume 50%")) {
+        else if (PreviewUtils.startsWithAny(c, "Volume 50%")) {
             setVolume(50);
         }
-        else if(PreviewUtils.startsWithAny(c, "Volume 25%")) {
+        else if (PreviewUtils.startsWithAny(c, "Volume 25%")) {
             setVolume(25);
         }
     }
 
-    
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { 
-                    "audio/midi",
-                    "application/x-midi",
-                }, 
-                new String[] { 
-                    ".mid", 
-                    ".midi", 
-                    ".rmf"
-                }
-        );
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "audio/midi",
+                        "application/x-midi",
+                },
+                new String[] {
+                        ".mid",
+                        ".midi",
+                        ".rmf"
+                });
     }
 }

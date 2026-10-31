@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Locator;
@@ -42,7 +41,7 @@ import org.wandora.topicmap.TopicMap;
  *
  * @author akivela
  */
-public class TopicTest extends AbstractWandoraTool implements WandoraTool {
+public class TopicTest extends AbstractWandoraTool {
     
     
     
@@ -64,13 +63,13 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Various topic tests");
             
             TopicMap tm = wandora.getTopicMap();
-            ArrayList<String> sis = new ArrayList();
+            List<String> sis = new ArrayList<>();
             int numberOfTestTopics = 200;
             int numberOfFails = 0;
             int numberOfRepeats = 1;
@@ -86,7 +85,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 setProgress(0);
                 setProgressMax(numberOfTestTopics);
                 for(int i=0; i<numberOfTestTopics; i++) {
-                    String si = "http://wandora.org/si/test-topic/"+System.currentTimeMillis()+"/"+i;
+                    String si = "https://wandora.org/si/test-topic/"+System.currentTimeMillis()+"/"+i;
                     Topic t = tm.createTopic();
                     t.addSubjectIdentifier(new Locator(si));
                     sis.add(si);
@@ -159,7 +158,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 String si = sis.get(0);
                 Topic t = tm.getTopic(si);
                 
-                Locator testsi = new Locator("http://wandora.org/si/test-subject-identifiers/"+System.currentTimeMillis());
+                Locator testsi = new Locator("https://wandora.org/si/test-subject-identifiers/"+System.currentTimeMillis());
                 t.addSubjectIdentifier(testsi);
                 
                 Collection<Locator> tsis = t.getSubjectIdentifiers();
@@ -631,7 +630,7 @@ public class TopicTest extends AbstractWandoraTool implements WandoraTool {
                 t1.setBaseName(bn1);
                 t0.setBaseName(bn0);
                 
-                Locator sl = new Locator("http://wandora.org/si/test-subject-locator-merging/"+System.currentTimeMillis());
+                Locator sl = new Locator("https://wandora.org/si/test-subject-locator-merging/"+System.currentTimeMillis());
                 
                 t1.setSubjectLocator(sl);
                 t0.setSubjectLocator(sl); // Merges t1 into t0.

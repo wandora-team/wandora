@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@ package org.wandora.application.tools;
 
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
@@ -42,7 +41,7 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class PasteClasses extends PasteTopics implements WandoraTool {
+public class PasteClasses extends PasteTopics {
     
     
 	private static final long serialVersionUID = 1L;
@@ -58,14 +57,14 @@ public class PasteClasses extends PasteTopics implements WandoraTool {
     public PasteClasses(int includeOrders, int pasteOrders) {
         super(includeOrders, pasteOrders);
     }
-    public PasteClasses(Context preferredContext) {
+    public PasteClasses(Context<?> preferredContext) {
         setContext(preferredContext);        
     }
-    public PasteClasses(Context preferredContext, int includeOrders) {
+    public PasteClasses(Context<?> preferredContext, int includeOrders) {
         super(includeOrders);
         setContext(preferredContext);        
     }
-    public PasteClasses(Context preferredContext, int includeOrders, int pasteOrders) {
+    public PasteClasses(Context<?> preferredContext, int includeOrders, int pasteOrders) {
         super(includeOrders, pasteOrders);
         setContext(preferredContext);        
     }

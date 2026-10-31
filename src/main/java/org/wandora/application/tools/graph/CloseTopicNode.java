@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@ package org.wandora.application.tools.graph;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -71,11 +73,11 @@ public class CloseTopicNode extends AbstractGraphTool {
     
     
     @Override
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         VModel model = null;
         VNode node = null;
         if(!allButCurrent){
-            for(Iterator iter = context.getContextObjects(); iter.hasNext(); ) {
+            for(Iterator<?> iter = context.getContextObjects(); iter.hasNext(); ) {
                 try {
                     node = (VNode) iter.next();
                     if(node != null) {
@@ -91,8 +93,8 @@ public class CloseTopicNode extends AbstractGraphTool {
             }
         }
         else{
-            HashSet<VNode> selected=new HashSet<VNode>();
-            for(Iterator iter = context.getContextObjects(); iter.hasNext(); ) {
+            Set<VNode> selected=new HashSet<>();
+            for(Iterator<?> iter = context.getContextObjects(); iter.hasNext(); ) {
                 try {
                     node = (VNode) iter.next();
                     if(node != null) selected.add(node);
@@ -102,7 +104,7 @@ public class CloseTopicNode extends AbstractGraphTool {
                 }
             }
             model=solveModel(wandora, context);
-            ArrayList<VNode> all=new ArrayList<VNode>(model.getNodes());
+            List<VNode> all=new ArrayList<>(model.getNodes());
             for(VNode vn : all){
                 if(!selected.contains(vn)) model.removeNode(vn);
             }

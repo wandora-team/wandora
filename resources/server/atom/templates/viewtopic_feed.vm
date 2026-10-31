@@ -1,4 +1,4 @@
-#set( $wandoraClass = $topic.getTopicMap().getTopic("http://wandora.org/si/core/wandora-class") )##
+#set( $wandoraClass = $topic.getTopicMap().getTopic("https://wandora.org/si/core/wandora-class") )##
 #set( $ctopic = $topic )##
 #set( $lang = "en" )##
 ##
@@ -28,7 +28,7 @@ $t.getOneSubjectIdentifier().toExternalForm().replaceAll( "&", "&amp;" )##
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"
   xmlns:xml="http://www.w3.org/XML/1998/namespace"
-  xmlns:wandora="http://wandora.org">
+  xmlns:wandora="https://wandora.org">
 #set( $br = "&lt;br&gt;")
 ##
 ##

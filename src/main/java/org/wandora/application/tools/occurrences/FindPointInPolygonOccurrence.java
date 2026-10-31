@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -51,16 +50,16 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class FindPointInPolygonOccurrence extends AbstractWandoraTool implements  WandoraTool {
+public class FindPointInPolygonOccurrence extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
 	private boolean requiresRefresh = false;
-    private Context preferredContext = null;
+    private Context<?> preferredContext = null;
 
-    public static final String INCLUSION_TYPE = "http://wandora.org/si/find-point-in-polygon/inclusion";
-    public static final String POINT_TYPE = "http://wandora.org/si/find-point-in-polygon/point";
-    public static final String POLYGON_TYPE = "http://wandora.org/si/find-point-in-polygon/polygon";
+    public static final String INCLUSION_TYPE = "https://wandora.org/si/find-point-in-polygon/inclusion";
+    public static final String POINT_TYPE = "https://wandora.org/si/find-point-in-polygon/point";
+    public static final String POLYGON_TYPE = "https://wandora.org/si/find-point-in-polygon/polygon";
     
     private boolean reversePointCoordinates = false;
     
@@ -68,7 +67,7 @@ public class FindPointInPolygonOccurrence extends AbstractWandoraTool implements
     public FindPointInPolygonOccurrence() {
         
     }
-    public FindPointInPolygonOccurrence(Context context) {
+    public FindPointInPolygonOccurrence(Context<?> context) {
         this.preferredContext = context;
     }
 
@@ -91,9 +90,9 @@ public class FindPointInPolygonOccurrence extends AbstractWandoraTool implements
     
 
 
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         requiresRefresh = false;
-        Iterator topics = null;
+        Iterator<?> topics = null;
         if(preferredContext != null) topics = preferredContext.getContextObjects();
         else topics = context.getContextObjects();
 

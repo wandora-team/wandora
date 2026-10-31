@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -41,6 +40,7 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -48,21 +48,23 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class AssociateNearByOccurrenceCarriers extends AbstractWandoraTool implements  WandoraTool {
+public class AssociateNearByOccurrenceCarriers extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AssociateNearByOccurrenceCarriers.class);
+	
 	private boolean requiresRefresh = false;
-    private Context preferredContext = null;
+    private Context<?> preferredContext = null;
 
-    public static final String NEARBY_TYPE = "http://wandora.org/si/nearby-points/";
-    public static final String POINT_A_TYPE = "http://wandora.org/si/nearby-points/point-1";
-    public static final String POINT_B_TYPE = "http://wandora.org/si/nearby-points/point-2";
+    public static final String NEARBY_TYPE = "https://wandora.org/si/nearby-points/";
+    public static final String POINT_A_TYPE = "https://wandora.org/si/nearby-points/point-1";
+    public static final String POINT_B_TYPE = "https://wandora.org/si/nearby-points/point-2";
     
 
     public AssociateNearByOccurrenceCarriers() {
         
     }
-    public AssociateNearByOccurrenceCarriers(Context context) {
+    public AssociateNearByOccurrenceCarriers(Context<?> context) {
         this.preferredContext = context;
     }
 
@@ -83,7 +85,7 @@ public class AssociateNearByOccurrenceCarriers extends AbstractWandoraTool imple
 
 
     @Override
-    public void execute(Wandora admin, Context context) {
+    public void execute(Wandora admin, Context<?> context) {
         requiresRefresh = false;
 
         // This tool doesn't use context!
@@ -121,7 +123,7 @@ public class AssociateNearByOccurrenceCarriers extends AbstractWandoraTool imple
             }
             catch(Exception e) {
                 log("Invalid maximum distance. Using default maximum distance "+maxDistance);
-                e.printStackTrace();
+                logger.error(e);
             }
             boolean reversePointCoordinates = "true".equalsIgnoreCase(values.get("Reverse point (B) coordinates"));
 

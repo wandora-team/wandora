@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import java.io.File;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -52,7 +51,7 @@ import org.wandora.topicmap.packageio.ZipPackageInput;
  *
  * @author akivela
  */
-public class RevertWandoraProject extends AbstractWandoraTool implements WandoraTool {
+public class RevertWandoraProject extends AbstractWandoraTool {
    
 
 	private static final long serialVersionUID = 1L;
@@ -66,7 +65,7 @@ public class RevertWandoraProject extends AbstractWandoraTool implements Wandora
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         String recentProject = wandora.getCurrentProjectFileName();
         if(recentProject != null && recentProject.length() > 0) {
             File recentProjectFile = new File(recentProject);

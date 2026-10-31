@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
  */
 
 package org.wandora.topicmap.packageio;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.zip.ZipEntry;
@@ -45,17 +46,18 @@ import java.util.zip.ZipOutputStream;
  * @author olli
  */
 public class ZipPackageOutput implements PackageOutput {
-    
+
     private OutputStream out;
     private ZipOutputStream zos;
-    
-    
-    
+
+
+
     /** Creates a new instance of ZipPackageOutput */
     public ZipPackageOutput(OutputStream out) {
-        this.out=out;
-        zos=new ZipOutputStream(out);        
+        this.out = out;
+        zos = new ZipOutputStream(out);
     }
+
 
     /**
      * Starts next entry with the specified name.
@@ -65,64 +67,69 @@ public class ZipPackageOutput implements PackageOutput {
         zos.putNextEntry(new ZipEntry(name));
     }
 
-    
+
     @Override
     public void nextEntry(String path, String name) throws IOException {
         nextEntry(joinPath(path, name));
     }
-    
-    
+
+
     @Override
     public void removeEntry(String name) throws IOException {
     }
-    
-    
+
+
     @Override
     public void removeEntry(String path, String name) throws IOException {
     }
-    
-    
+
+
     /**
      * Gets the output stream for current entry.
      */
     @Override
     public OutputStream getOutputStream() throws IOException {
-        return new OutputStream(){
+        return new OutputStream() {
             public void write(int b) throws IOException {
                 zos.write(b);
             }
+
+
             @Override
-            public void write(byte[] b,int off,int len) throws IOException {
-                zos.write(b,off,len);
+            public void write(byte[] b, int off, int len) throws IOException {
+                zos.write(b, off, len);
             }
+
+
             @Override
             public void write(byte[] b) throws IOException {
                 zos.write(b);
             }
         };
     }
-    
+
+
     /**
      * Closes the file.
      */
     @Override
-    public void close() throws IOException{
+    public void close() throws IOException {
         zos.finish();
         out.close();
     }
-    
-    
-    
+
+
+
     @Override
     public String getSeparator() {
         return "/";
     }
-    
-    
-    
+
+
+
     @Override
     public String joinPath(String path, String name) {
-        if(path != null && path.length()>0) {
+        if (path != null && path.length() > 0) {
             return path + getSeparator() + name;
         }
         else {

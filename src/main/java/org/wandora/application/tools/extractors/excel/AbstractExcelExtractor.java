@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,6 @@ import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.tools.extractors.AbstractExtractor;
@@ -56,6 +55,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.XTMPSI;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -63,9 +63,9 @@ import org.wandora.topicmap.XTMPSI;
  */
 
 
-public abstract class AbstractExcelExtractor extends AbstractExtractor implements WandoraTool {
-
+public abstract class AbstractExcelExtractor extends AbstractExtractor {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractExcelExtractor.class);
 	
 	public static String DEFAULT_LANG = "en";
     
@@ -231,6 +231,8 @@ public abstract class AbstractExcelExtractor extends AbstractExtractor implement
                 case STRING: {
                     return cell.getRichStringCellValue().getString();
                 }
+                default:
+                	break;
             }
         }
         return null;
@@ -358,7 +360,7 @@ public abstract class AbstractExcelExtractor extends AbstractExtractor implement
     public static int CELL_TOPIC_IS_BASED_ON = CELL_VALUE;
     
 
-    public static String EXCEL_SI_PREFIX = "http://wandora.org/si/excel";
+    public static String EXCEL_SI_PREFIX = "https://wandora.org/si/excel";
     public static String EXCEL_COLUMN_SI_PREFIX = EXCEL_SI_PREFIX + "/column";
     public static String EXCEL_ROW_SI_PREFIX = EXCEL_SI_PREFIX + "/row";
     public static String EXCEL_SHEET_SI_PREFIX = EXCEL_SI_PREFIX + "/sheet";
@@ -477,7 +479,9 @@ public abstract class AbstractExcelExtractor extends AbstractExtractor implement
             case STRING: {
                 typeStr = "string";
                 break;
-            }   
+            }
+            default:
+            	break;
         }
         Topic t = getOrCreateTopic(tm, EXCEL_CELL_TYPE_SI_PREFIX+"/"+typeStr, "Excel cell type "+typeStr);
         t.addType(getCellTypeTypeTopic(tm));
@@ -681,7 +685,7 @@ public abstract class AbstractExcelExtractor extends AbstractExtractor implement
         }
         catch(Exception e) {
             log(e);
-            e.printStackTrace();
+            logger.error(e);
         }
         return topic;
     }

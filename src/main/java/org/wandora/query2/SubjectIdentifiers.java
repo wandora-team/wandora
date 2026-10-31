@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 package org.wandora.query2;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.wandora.topicmap.Locator;
 import org.wandora.topicmap.Topic;
@@ -40,7 +41,7 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class SubjectIdentifiers extends Directive implements DirectiveUIHints.Provider {
 
-    public void SubjectIdentifiers(){
+    public SubjectIdentifiers(){
 
     }
 
@@ -66,7 +67,7 @@ public class SubjectIdentifiers extends Directive implements DirectiveUIHints.Pr
                 if(o==null) return new ResultIterator.EmptyIterator();
             }
             Collection<Locator> sis=((Topic)o).getSubjectIdentifiers();
-            ArrayList<ResultRow> ret=new ArrayList<ResultRow>();
+            List<ResultRow> ret=new ArrayList<>();
             for(Locator si : sis){
                 ret.add(input.addValue(Directive.DEFAULT_COL,si.toString()));
             }

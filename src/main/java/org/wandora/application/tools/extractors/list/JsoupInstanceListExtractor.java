@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,12 +26,12 @@ package org.wandora.application.tools.extractors.list;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.application.tools.extractors.AbstractJsoupExtractor;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -39,7 +39,9 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class JsoupInstanceListExtractor extends AbstractJsoupExtractor implements WandoraTool, BrowserPluginExtractor {
+public class JsoupInstanceListExtractor extends AbstractJsoupExtractor implements BrowserPluginExtractor {
+
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(JsoupInstanceListExtractor.class);
 
 	
 	private static final long serialVersionUID = 1L;
@@ -57,7 +59,7 @@ public class JsoupInstanceListExtractor extends AbstractJsoupExtractor implement
         Elements children = d.body().children();
         
         for(Element listCandidate : children){
-            System.out.println(listCandidate.outerHtml());
+            logger.info(listCandidate.outerHtml());
             if(listCandidate.tagName().equals("ul"))
                 parseList(listCandidate, null);
         }
@@ -81,7 +83,7 @@ public class JsoupInstanceListExtractor extends AbstractJsoupExtractor implement
     
 
     private void parseTopic(Element classElement, Topic typeTopic) throws TopicMapException {
-        System.out.println(classElement.text());
+        logger.info(classElement.text());
         
         Topic t = getOrCreateTopic(tm, null, classElement.text());
         

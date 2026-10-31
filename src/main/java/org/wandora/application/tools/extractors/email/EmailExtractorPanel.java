@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -56,6 +55,7 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.application.tools.PictureView;
 import org.wandora.utils.Delegate;
 import org.wandora.utils.XMLbox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 import jakarta.mail.Address;
 import jakarta.mail.BodyPart;
@@ -74,9 +74,8 @@ import jakarta.mail.internet.MimeMultipart;
  * @author  olli
  */
 public class EmailExtractorPanel extends javax.swing.JPanel {
-
-
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(EmailExtractorPanel.class);
 	
 	private DefaultTableModel tableModel;
     private List<BufferedImage> fullImages;
@@ -93,7 +92,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
     private String port="110";
     
     private String[] columnNames;
-    private Class[] columnClasses;
+    private Class<?>[] columnClasses;
     private boolean[] columnEditable;
     private String[] columnXMLKeys;    
     
@@ -138,7 +137,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
         
         for(int i=0;i+3<additionalColumns.length;i+=4){
             this.columnNames[4+i/4]=(String)additionalColumns[i];
-            this.columnClasses[4+i/4]=(Class)additionalColumns[i+1];
+            this.columnClasses[4+i/4]=(Class<?>)additionalColumns[i+1];
             this.columnEditable[4+i/4]=((Boolean)additionalColumns[i+2]).booleanValue();
             this.columnXMLKeys[4+i/4]=(String)additionalColumns[i+3];
             if(columnXMLKeys[4+i/4]!=null) tryXMLExtract=true;
@@ -148,7 +147,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
         
         this.tableModel=new DefaultTableModel( 
                 /*new Object[]{"Import","Delete","Sent","Image","Message"}*/objectNames,0){
-            public Class getColumnClass(int columnIndex){
+            public Class<?> getColumnClass(int columnIndex){
 /*                switch(columnIndex){
                     case 0: return Boolean.class;
                     case 1: return Boolean.class;
@@ -259,7 +258,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
     }
     
     public EmailSession openEmailSession() throws MessagingException {
-        System.out.println("Connecting to mail server");
+        logger.info("Connecting to mail server");
         Properties mailSessionProps=new Properties();
         mailSessionProps.setProperty("mail.store.protocol",protocol);
         mailSessionProps.setProperty("mail."+protocol+".host",host);
@@ -300,7 +299,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                 messageLabel.setText("Fetching "+numMessages+" messages");
             }
         });
-        System.out.println("Fetching "+numMessages+" messages");
+        logger.info("Fetching "+numMessages+" messages");
         Message[] msgs=session.getMessages();
         FetchProfile prof=new FetchProfile();
         prof.add(FetchProfile.Item.ENVELOPE);
@@ -329,7 +328,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                         BodyPart bp=mm.getBodyPart(j);
                         String contentType=bp.getContentType();
                         if(contentType.startsWith("image/")){
-                            System.out.println("found image");
+                            logger.info("found image");
                             img=ImageIO.read(bp.getInputStream());
                             int height=50;
                             int width=(int)(img.getWidth()*(double)height/(double)img.getHeight());
@@ -344,11 +343,11 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                         }
                     }
                     if(row[3]!=null){
-                        Map table=null;
+                        Map<String,String> table=null;
                         if(tryXMLExtract){
                             try{
                                 org.w3c.dom.Document doc=XMLbox.getDocument(message);
-                                table=XMLbox.xml2Hash(doc);
+                                table=XMLbox.xml2MapTree(doc);
                             }catch(Exception e){}
                         }
                         for(int j=4;j<columnNames.length;j++){
@@ -367,11 +366,11 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                             from+=a.toString();
                         }
                         senders.add(from);
-                        System.out.println("UID: "+uid);
+                        logger.info("UID: "+uid);
                     }
                     else msgs[i].setFlag(Flags.Flag.DELETED,true);
                 }catch(Exception e){
-                    e.printStackTrace();
+                    logger.error(e);
                     msgs[i].setFlag(Flags.Flag.DELETED,true);
                 }
             }
@@ -410,7 +409,6 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
         session.folder.fetch(msgs,prof);
         int count=0;
         for(int i=0;i<msgs.length;i++){
-            Object c=msgs[i].getContent();
             String uid=msgs[i].getHeader("message-ID")[0];            
             Integer index=uidMap.get(uid);
             if(index==null) continue;
@@ -419,7 +417,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                 count++;
             }
         }
-        System.out.println("Deleting "+count+" messages");
+        logger.info("Deleting "+count+" messages");
         session.close(true);
     }
     
@@ -711,7 +709,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                     });
                     
                 }catch(Exception e){
-                    e.printStackTrace();
+                    logger.error(e);
                     messageLabel.setText("Error: "+e.getMessage());
                 }
             }
@@ -724,7 +722,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
         /*        try{
             deleteSelected();
         }catch(Exception e){
-            e.printStackTrace();
+            logger.error(e);
         }*/
     }//GEN-LAST:event_okButtonActionPerformed
 
@@ -755,7 +753,7 @@ public class EmailExtractorPanel extends javax.swing.JPanel {
                     return;
                 }
             }catch(IOException ioe){
-                ioe.printStackTrace();
+            	logger.error(ioe);
                 WandoraOptionPane.showMessageDialog(this,"Error saving image: "+ioe.getMessage(), WandoraOptionPane.ERROR_MESSAGE);
             }
         }

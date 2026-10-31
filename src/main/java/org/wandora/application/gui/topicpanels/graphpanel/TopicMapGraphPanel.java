@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -120,6 +120,7 @@ import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.TopicMapListener;
 import org.wandora.utils.Options;
 import org.wandora.utils.Tuples.T2;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 
@@ -131,6 +132,8 @@ import org.wandora.utils.Tuples.T2;
 public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, MouseListener, MouseMotionListener, ComponentListener, MouseWheelListener, TopicMapListener, RefreshListener, KeyListener  {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicMapGraphPanel.class);
 	
 	
 	private String OPTIONS_PREFIX = "gui.graphTopicPanel.";
@@ -175,7 +178,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     
     private double minX=-1.0,maxX=1.0,minY=-1.0,maxY=1.0;
 
-    private Map renderingHints;
+    private Map<Object,Object> renderingHints;
     
     private Topic rootTopic;
     
@@ -474,7 +477,6 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     }
     
     public void clearModel(){
-        // System.out.println("Clear model");
         model=null;
         tmModel=null;
         stopThread();
@@ -482,7 +484,6 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     }
     
     public void remakeModels(TopicMap tm){
-        // System.out.println("Remake model");
         needsRefresh=false;
         model=new VModel(this);
         tmModel=new TopicMapModel(model,tm);
@@ -504,9 +505,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         synchronized(this) {
             rootTopic=t;
             if(model==null){
-                // System.out.println("setRootTopic, remake");
                 remakeModels(t.getTopicMap());
-
                 TopicNode n=tmModel.getNodeFor(t);
                 model.addNode(n);
                 model.openNode(n);
@@ -514,7 +513,6 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
                 if(!running) startThread();
             }
             else {
-                // System.out.println("setRootTopic, reuse");
                 Node n=tmModel.getNodeFor(t);
                 boolean exists=(model.getNode(n)!=null);
                 VNode vn=null;
@@ -796,11 +794,8 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     
     private void updateClusters(Cluster c1,Cluster c2){
         VNode vin,vjn;
-        VEdge ve;
-        T2<VNode,VNode> vns;
-        Edge e;
         Node in,jn;
-        double m,dx,dy,d2,d,f,dd,f2;
+        double m,dx,dy,d2,d,f,f2;
 
         dx=c2.x-c1.x;
         dy=c2.y-c1.y;
@@ -869,8 +864,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         VEdge ve;
         T2<VNode,VNode> vns;
         Edge e;
-        Node in,jn;
-        double m,dx,dy,d2,d,f,dd;
+        double dx,dy,d2,d,f,dd;
         
 //        t1=System.currentTimeMillis();
         ArrayList<Cluster> clusters=doClustering();
@@ -1019,7 +1013,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
         paint(g);
     }
     
-    public Map getRenderingHints(){
+    public Map<Object,Object> getRenderingHints(){
         return renderingHints;
     }
     
@@ -1461,7 +1455,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
             popup.addPopupMenuListener(new PopupListener());
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         return popup;
     }
@@ -1582,7 +1576,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
             };
         }
         catch(Exception e) {
-            e.printStackTrace();
+        	logger.error(e);
         }
         JPopupMenu popup=UIBox.makePopupMenu(menuStructure, Wandora.getWandora(this));
         popup.addPopupMenuListener(new PopupListener());
@@ -1592,7 +1586,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     
     
     public Object[] getOptionsMenuStruct() {
-        Map hints=this.getRenderingHints();
+        Map<Object,Object> hints=this.getRenderingHints();
         Object antialized=hints.get(RenderingHints.KEY_ANTIALIASING);
         return new Object[] {
             "Antialised", (antialized==null || antialized==RenderingHints.VALUE_ANTIALIAS_OFF ? UIBox.getIcon("gui/icons/checkbox.png") : UIBox.getIcon("gui/icons/checkbox_selected.png")), new ToggleAntialiasTool(this),
@@ -1689,7 +1683,6 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
             projection.set(Projection.VIEW_HEIGHT, this.getHeight());
         }
 
-        // System.out.println("Refreshing graph");
         synchronized(this){
             needsRefresh=false;
             TopicMap tm=tmModel.getTopicMap();
@@ -1805,7 +1798,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
                 followNode=null;
             }
             catch(TopicMapException tme) {
-                tme.printStackTrace();
+            	logger.error(tme);
             }
         }
     }
@@ -1943,8 +1936,9 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
     
 
     private class TopicPanelTransferHandler extends TransferHandler {
+        private static final long serialVersionUID = 1L;
 
-        @Override
+		@Override
         public boolean canImport(TransferSupport support) {
             if(!support.isDrop()) return false;
             return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
@@ -1977,7 +1971,7 @@ public class TopicMapGraphPanel extends javax.swing.JPanel implements Runnable, 
                 }
                 wandora.doRefresh();
             }
-            catch(TopicMapException tme){tme.printStackTrace();}
+            catch(TopicMapException tme){logger.error(tme);}
             catch(Exception ce){}
             return false;
         }

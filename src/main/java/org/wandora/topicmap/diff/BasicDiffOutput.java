@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,13 +28,18 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.topicmap.diff.TopicMapDiff.DiffEntry;
+import org.wandora.utils.logger.Log4j2Logger;
 /**
  *
  * @author olli
  */
 public class BasicDiffOutput implements DiffOutput {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(BasicDiffOutput.class);
+	
     protected DiffEntryFormatter formatter;
     protected Writer writer;
+    
+    
     public BasicDiffOutput(DiffEntryFormatter formatter,Writer writer){
         this.formatter=formatter;
         this.writer=writer;
@@ -49,43 +54,48 @@ public class BasicDiffOutput implements DiffOutput {
             this.formatter.header(writer);
         }
         catch(IOException ioe){
-            ioe.printStackTrace();
+        	logger.error(ioe);
         }
         catch(TopicMapException tme){
-            tme.printStackTrace();
+        	logger.error(tme);
         }
     }
+    
     public void endCompare(){
         try{
             this.formatter.footer(writer);
         }
         catch(IOException ioe){
-            ioe.printStackTrace();
+        	logger.error(ioe);
         }
         catch(TopicMapException tme){
-            tme.printStackTrace();
+        	logger.error(tme);
         }
     }
+    
     public boolean outputDiffEntry(DiffEntry d) {
         try{
             doOutput(d);
         }
         catch(IOException ioe){
-            ioe.printStackTrace();
+        	logger.error(ioe);
             return false;
         }
         catch(TopicMapException tme){
-            tme.printStackTrace();
+        	logger.error(tme);
             return false;
         }
         return true;
     }
+    
     public boolean noDifferences(Topic t){
         return true;
     }
+    
     public boolean noDifferences(Association a){
         return true;
     }
+    
     public void outputDiff(ArrayList<DiffEntry> diff) {
         for(DiffEntry d : diff){
             outputDiffEntry(d);

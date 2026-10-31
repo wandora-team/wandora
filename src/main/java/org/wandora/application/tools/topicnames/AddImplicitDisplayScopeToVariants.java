@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
@@ -44,7 +43,7 @@ import org.wandora.topicmap.XTMPSI;
  *
  * @author akivela
  */
-public class AddImplicitDisplayScopeToVariants extends AbstractWandoraTool implements WandoraTool {
+public class AddImplicitDisplayScopeToVariants extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -55,7 +54,7 @@ public class AddImplicitDisplayScopeToVariants extends AbstractWandoraTool imple
      */
     public AddImplicitDisplayScopeToVariants() {
     }
-    public AddImplicitDisplayScopeToVariants(Context preferredContext) {
+    public AddImplicitDisplayScopeToVariants(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -72,14 +71,14 @@ public class AddImplicitDisplayScopeToVariants extends AbstractWandoraTool imple
 
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             setDefaultLogger();
             setLogTitle("Add implicit display scope to variants");
             log("Iterates through selected topics and adds display scope to variants that have neither display nor sort scope.");
             TopicMap tm = wandora.getTopicMap();
 
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
 
             Topic topic = null;
@@ -94,14 +93,12 @@ public class AddImplicitDisplayScopeToVariants extends AbstractWandoraTool imple
             Iterator<Set<Topic>> scopeIterator = null;
             Set<Topic> scope = null;
             Topic scopeTopic = null;
-            int progress = 0;
             int count = 0;
 
             while(topics.hasNext() && !forceStop()) {
                 try {
                     topic = (Topic) topics.next();
                     if(topic != null && !topic.isRemoved()) {
-                        progress++;
                         topic = tm.getTopic(topic.getOneSubjectIdentifier()); // Change topic to layer stack topic instead of layer topic!
                         scopes = topic.getVariantScopes();
                         if(scopes != null) {

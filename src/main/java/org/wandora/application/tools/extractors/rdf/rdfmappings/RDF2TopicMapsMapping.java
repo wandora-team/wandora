@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,9 +45,9 @@ public abstract class RDF2TopicMapsMapping {
     
     
     
-    public static final String DEFAULT_SUBJECT_ROLE_SI = "http://wandora.org/si/core/rdf-subject";
+    public static final String DEFAULT_SUBJECT_ROLE_SI = "https://wandora.org/si/core/rdf-subject";
     public static final String DEFAULT_SUBJECT_ROLE_BASENAME = "subject-role";
-    public static final String DEFAULT_OBJECT_ROLE_SI = "http://wandora.org/si/core/rdf-object";
+    public static final String DEFAULT_OBJECT_ROLE_SI = "https://wandora.org/si/core/rdf-object";
     public static final String DEFAULT_OBJECT_ROLE_BASENAME = "object-role";
     
     
@@ -66,7 +66,7 @@ public abstract class RDF2TopicMapsMapping {
                 }
             }
         }
-        return new T2(si, bn);
+        return new T2<>(si, bn);
     }
     
     
@@ -83,7 +83,7 @@ public abstract class RDF2TopicMapsMapping {
                 }
             }
         }
-        return new T2(si, bn);
+        return new T2<>(si, bn);
     }
     
     

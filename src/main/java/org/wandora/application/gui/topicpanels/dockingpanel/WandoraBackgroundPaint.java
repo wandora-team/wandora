@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,10 +31,13 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
+
+import org.wandora.utils.logger.Log4j2Logger;
 
 import bibliothek.gui.dock.util.BackgroundComponent;
 import bibliothek.gui.dock.util.BackgroundPaint;
@@ -48,6 +51,8 @@ import bibliothek.gui.dock.util.Transparency;
 
 
 public class WandoraBackgroundPaint implements BackgroundPaint {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(WandoraBackgroundPaint.class);
+	
     /* the entire image as it was read from the disk */
     private BufferedImage baseImage;
     /* an image with the same size as the frame */
@@ -77,7 +82,7 @@ public class WandoraBackgroundPaint implements BackgroundPaint {
         if(imageLocator != null) {
             baseImage = null;
             try {
-                URL url = new URL(imageLocator);
+                URL url = new URI(imageLocator).toURL();
                 this.baseImage = ImageIO.read(url);
             }
             catch (Exception e) {
@@ -91,7 +96,7 @@ public class WandoraBackgroundPaint implements BackgroundPaint {
                         this.baseImage = ImageIO.read(url);
                     }
                     catch (Exception e3) {
-                        e2.printStackTrace();
+                    	logger.error(e2);
                     }
                 }
             }

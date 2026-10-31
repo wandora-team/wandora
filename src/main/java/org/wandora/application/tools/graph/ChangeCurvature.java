@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 package org.wandora.application.tools.graph;
 
 
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.GraphNodeContext;
 import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 import org.wandora.application.gui.topicpanels.graphpanel.projections.HyperbolicProjection;
@@ -37,7 +36,7 @@ import org.wandora.application.gui.topicpanels.graphpanel.projections.Projection
  */
 
 
-public class ChangeCurvature extends AbstractSliderTool implements WandoraTool {
+public class ChangeCurvature extends AbstractSliderTool {
 
 
 	private static final long serialVersionUID = 1L;

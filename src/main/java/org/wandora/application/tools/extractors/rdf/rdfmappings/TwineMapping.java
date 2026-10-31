@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ public class TwineMapping extends RDF2TopicMapsMapping {
     public static final String TWINE_DI_NS = "http://www.radarnetworks.com/data-intelligence#";
     public static final String TWINE_ENRICHMENT_NS = "http://www.radarnetworks.com/enrichment#";
     
-    public static final String TWINE_ROLE_NS = "http://wandora.org/si/twine/role/";
+    public static final String TWINE_ROLE_NS = "https://wandora.org/si/twine/role/";
     
     
     public static final String[] SI_BASENAME_MAPPING = new String[] {

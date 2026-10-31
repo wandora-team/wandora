@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,40 +28,44 @@ package org.wandora.application.gui;
 
 
 import java.awt.Component;
-import java.util.Vector;
+import java.util.Collection;
 
 import javax.swing.DefaultListModel;
 
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author  olli
  */
 public class TopicListSelector extends javax.swing.JPanel implements TopicSelector {
-
-
 	private static final long serialVersionUID = 1L;
-	
-	
-	private DefaultListModel listModel;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicListSelector.class);
+		
+	private DefaultListModel<TopicListWrapper> listModel;
     private String name;
     
+    
     /** Creates new form TopicListSelector */
-    public TopicListSelector(Vector<Topic> topics) {
+    public TopicListSelector(Collection<Topic> topics) {
         this(topics,"Suggested topics");
     }
-    public TopicListSelector(Vector<Topic> topics,String name) {
+    
+    public TopicListSelector(Collection<Topic> topics,String name) {
         this.name=name;
-        listModel=new DefaultListModel();
+        listModel=new DefaultListModel<>();
         for(Topic t : topics){
-            listModel.addElement(new ListWrapper(t));
+            listModel.addElement(new TopicListWrapper(t));
         }
         initComponents();
         if(listModel.size()>0) list.setSelectedIndex(0);
     }
 
+    
+    
+    
     @Override
     public void init() {
     }
@@ -80,7 +84,7 @@ public class TopicListSelector extends javax.swing.JPanel implements TopicSelect
 
     @Override
     public Topic getSelectedTopic() {
-        return ((ListWrapper)list.getSelectedValue()).t;
+        return ((TopicListWrapper)list.getSelectedValue()).t;
     }
 
     @Override
@@ -102,7 +106,7 @@ public class TopicListSelector extends javax.swing.JPanel implements TopicSelect
         java.awt.GridBagConstraints gridBagConstraints;
 
         scrollPane = new javax.swing.JScrollPane();
-        list = new javax.swing.JList();
+        list = new javax.swing.JList<TopicListWrapper>();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -121,20 +125,27 @@ public class TopicListSelector extends javax.swing.JPanel implements TopicSelect
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList list;
+    private javax.swing.JList<TopicListWrapper> list;
     private javax.swing.JScrollPane scrollPane;
     // End of variables declaration//GEN-END:variables
 
-    private static class ListWrapper{
+    private static class TopicListWrapper{
         public Topic t;
-        public ListWrapper(Topic t){this.t=t;};
+        
+        public TopicListWrapper(Topic t) {
+        	this.t=t;
+    	}
+        
         @Override
-        public String toString(){
-            try{
+        public String toString() {
+            try {
                 String r=t.getBaseName();
                 if(r!=null) return r;
                 else return t.getOneSubjectIdentifier().toExternalForm();
-          }catch(TopicMapException tme){tme.printStackTrace(); return "Exception";}    
+          } catch(TopicMapException tme) {
+        	  logger.error(tme); 
+        	  return "Exception";
+    	  }    
         }
     }
     

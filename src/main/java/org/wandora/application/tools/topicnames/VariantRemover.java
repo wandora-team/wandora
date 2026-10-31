@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Locator;
@@ -48,7 +47,7 @@ import org.wandora.topicmap.Topic;
  *
  * @author akivela
  */
-public class VariantRemover extends AbstractWandoraTool implements WandoraTool {
+public class VariantRemover extends AbstractWandoraTool {
     
 	private static final long serialVersionUID = 1L;
 
@@ -58,7 +57,7 @@ public class VariantRemover extends AbstractWandoraTool implements WandoraTool {
      */
     public VariantRemover() {
     }
-    public VariantRemover(Context preferredContext) {
+    public VariantRemover(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -76,9 +75,9 @@ public class VariantRemover extends AbstractWandoraTool implements WandoraTool {
     
   
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             
             Topic typeTopic = wandora.showTopicFinder("Select type of variants to be removed...");
@@ -95,8 +94,7 @@ public class VariantRemover extends AbstractWandoraTool implements WandoraTool {
                 Set<Topic> scope = null;
                 Locator typeTopicSI = typeTopic.getOneSubjectIdentifier();
                 Locator scopeTopicSI = scopeTopic.getOneSubjectIdentifier();
-                
-                int progress = 0;
+
                 int removed = 0;
                 Topic topic = null;
                 
@@ -104,8 +102,6 @@ public class VariantRemover extends AbstractWandoraTool implements WandoraTool {
                     try {
                         topic = (Topic) topics.next();
                         if(topic != null && !topic.isRemoved()) {
-                            progress++;
-                            
                             typeTopic = topic.getTopicMap().getTopic(typeTopicSI);
                             scopeTopic = topic.getTopicMap().getTopic(scopeTopicSI);
                             

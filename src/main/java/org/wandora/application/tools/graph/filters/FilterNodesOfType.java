@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ import org.wandora.application.tools.graph.AbstractGraphTool;
 import org.wandora.application.tools.graph.CloseTopicNodesOfType;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -55,6 +56,7 @@ import org.wandora.topicmap.TopicMapException;
 public class FilterNodesOfType extends AbstractGraphTool {
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(FilterNodesOfType.class);
 
 	private Topic type;
     private GraphFilter filter;
@@ -78,7 +80,7 @@ public class FilterNodesOfType extends AbstractGraphTool {
             return "Filter nodes of type "+TopicToString.toString(type);
         }
         catch(Exception tme){
-            tme.printStackTrace(); 
+        	logger.error(tme);
             return "";
         }
     }
@@ -86,7 +88,7 @@ public class FilterNodesOfType extends AbstractGraphTool {
     
 
     
-    public void executeSynchronized(Wandora wandora, Context context) {
+    public void executeSynchronized(Wandora wandora, Context<?> context) {
         VModel model=solveModel(wandora,context);
         CloseTopicNodesOfType.hideTopicsOfType(type,model);
         filter.filterNodesOfType(type);
@@ -113,7 +115,7 @@ public class FilterNodesOfType extends AbstractGraphTool {
                 }
             } 
             catch(TopicMapException tme) {
-                tme.printStackTrace();
+            	logger.error(tme);
             }
         }        
         return tools;
@@ -121,14 +123,14 @@ public class FilterNodesOfType extends AbstractGraphTool {
     
     
     
-    public static List<AbstractGraphTool> makeTools(Collection ns, NodeFilter nodeFilter, List<AbstractGraphTool> tools){
-        if(tools==null) tools=new ArrayList<AbstractGraphTool>();
-        ArrayList<Topic> oldTypes = new ArrayList<Topic>();
+    public static List<AbstractGraphTool> makeTools(Collection<?> ns, NodeFilter nodeFilter, List<AbstractGraphTool> tools){
+        if(tools==null) tools=new ArrayList<>();
+        List<Topic> oldTypes = new ArrayList<>();
         for(Object o : ns) {
-            if(o != null && o instanceof VNode) {
+            if(o instanceof VNode) {
                 o = ((VNode) o).getNode();
             }
-            if(o != null && o instanceof TopicNode) {
+            if(o instanceof TopicNode) {
                 TopicNode tn=(TopicNode)o;
                 try {
                     for(Topic type : tn.getTopic().getTypes()) {
@@ -139,7 +141,7 @@ public class FilterNodesOfType extends AbstractGraphTool {
                     }
                 }
                 catch(TopicMapException tme){
-                    tme.printStackTrace();
+                	logger.error(tme);
                 }
             }
         }

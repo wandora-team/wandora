@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ package org.wandora.application.tools.extractors.list;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.tools.browserextractors.BrowserPluginExtractor;
 import org.wandora.application.tools.extractors.AbstractJsoupExtractor;
 import org.wandora.topicmap.Association;
@@ -40,13 +39,12 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class JsoupDefinitionListExtractor extends AbstractJsoupExtractor 
-implements WandoraTool, BrowserPluginExtractor {
+public class JsoupDefinitionListExtractor extends AbstractJsoupExtractor implements BrowserPluginExtractor {
 
 	
 	private static final long serialVersionUID = 1L;
 
-	public static final String SI_PREFIX = "http://wandora.org/si/";
+	public static final String SI_PREFIX = "https://wandora.org/si/";
     
     public static final String LIST_SI = SI_PREFIX + "list/";
     public static final String DOCUMENT_SI = SI_PREFIX + "document/";

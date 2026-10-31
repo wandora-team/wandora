@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ package org.wandora.application.tools.occurrences.clipboards;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collection;
@@ -32,13 +33,13 @@ import java.util.Hashtable;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.OccurrenceTable;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
@@ -51,10 +52,11 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class PasteBinOccurrenceDownloader extends AbstractWandoraTool implements WandoraTool {
+public class PasteBinOccurrenceDownloader extends AbstractWandoraTool {
     
 
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PasteBinOccurrenceDownloader.class);
 
 	private static final String URL_PREFIX = "http://pastebin.com/";
     private static final String RAW_PREFIX = "http://pastebin.com/raw.php?i=";
@@ -66,7 +68,7 @@ public class PasteBinOccurrenceDownloader extends AbstractWandoraTool implements
     }
     
     
-    public PasteBinOccurrenceDownloader(Context proposedContext) {
+    public PasteBinOccurrenceDownloader(Context<?> proposedContext) {
         this.setContext(proposedContext);
     }
     
@@ -83,7 +85,7 @@ public class PasteBinOccurrenceDownloader extends AbstractWandoraTool implements
     }
 
     @Override
-    public void execute(Wandora w, Context context) {
+    public void execute(Wandora w, Context<?> context) {
         Object source = context.getContextSource();
         cancelled = false;
         String o = null;
@@ -106,7 +108,7 @@ public class PasteBinOccurrenceDownloader extends AbstractWandoraTool implements
             }
         }
         else {
-            Iterator contextObjects = context.getContextObjects();
+            Iterator<?> contextObjects = context.getContextObjects();
             setDefaultLogger();
             int counter = 0;
             while(contextObjects.hasNext() && !forceStop() && !cancelled) {
@@ -161,7 +163,7 @@ public class PasteBinOccurrenceDownloader extends AbstractWandoraTool implements
     
     public boolean restorePastebinData(Topic carrier, Topic type, Topic scope, String purl, Wandora w) {
         try {
-            String pastebinContent = getUrl(new URL(purl));
+            String pastebinContent = getUrl(new URI(purl).toURL());
             boolean storeToOccurrence = true;
             if(pastebinContent == null || pastebinContent.length() == 0) {
                 storeToOccurrence = false;
@@ -176,7 +178,7 @@ public class PasteBinOccurrenceDownloader extends AbstractWandoraTool implements
         }
         catch(Exception e) {
             log("Exception '"+e.getMessage()+"' occurred while downloading URL '"+purl+"'.");
-            e.printStackTrace();
+            logger.error(e);
         }
         return false;
     }

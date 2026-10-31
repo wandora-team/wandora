@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ package org.wandora.application.tools;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.RegularExpressionEditor;
 import org.wandora.topicmap.Locator;
@@ -44,20 +43,22 @@ import org.wandora.topicmap.TopicMapException;
  *
  * @author akivela
  */
-public class DeleteTopicsWithSIRegex extends DeleteTopics implements WandoraTool {
+public class DeleteTopicsWithSIRegex extends DeleteTopics {
     
-     RegularExpressionEditor editor = null;
+     private static final long serialVersionUID = 1L;
+     
+	 RegularExpressionEditor editor = null;
     
     
     /** Creates a new instance of DeleteTopicsWithSIRegex */
     public DeleteTopicsWithSIRegex() {
     }
-    public DeleteTopicsWithSIRegex(Context preferredContext) {
+    public DeleteTopicsWithSIRegex(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
     @Override
-    public void execute(Wandora admin, Context context) throws TopicMapException  {
+    public void execute(Wandora admin, Context<?> context) throws TopicMapException  {
         editor = RegularExpressionEditor.getMatchExpressionEditor(admin);
         editor.approve = false;
         editor.setVisible(true);

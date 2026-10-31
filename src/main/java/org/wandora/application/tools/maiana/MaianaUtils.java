@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -39,6 +41,7 @@ import org.json.JSONObject;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.WandoraOptionPane;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
@@ -46,6 +49,7 @@ import org.wandora.utils.IObox;
  */
 
 public class MaianaUtils {
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(MaianaUtils.class);
 
     private static String apiKey = "";
     private static String apiEndPoint = null;
@@ -147,9 +151,6 @@ public class MaianaUtils {
         json = json.replace("__SHORTNAME__", makeJSON(makeShortName(sn)));
         json = json.replace("__NAME__", makeJSON(n));
         json = json.replace("__FORMAT__", makeJSON(format));
-
-        //System.out.println("json:\n"+json);
-
         return json;
     }
 
@@ -174,14 +175,12 @@ public class MaianaUtils {
 
 
 
-    public static JSONObject listAvailableTopicMaps(String endpoint, String apikey) throws IOException, JSONException {
+    public static JSONObject listAvailableTopicMaps(String endpoint, String apikey) throws IOException, JSONException, URISyntaxException {
         String in = getListTemplate(apikey);
         checkForLocalService(endpoint);
 
-        String reply = IObox.doUrl(new URL(endpoint), in, "application/json");
-
-        //System.out.println("reply:\n"+reply);
-
+        String reply = IObox.doUrl(new URI(endpoint).toURL(), in, "application/json");
+        
         JSONObject replyObject = new JSONObject(reply);
         return replyObject;
     }
@@ -277,7 +276,7 @@ public class MaianaUtils {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
  

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
      * @param context
      * @throws TopicMapException 
      */
-    public void execute(Wandora wandora, Context context) throws TopicMapException;
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException;
     
     
     /**
@@ -116,7 +116,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
      * 
      * @param context Tool's new context.
      */
-    public void setContext(Context context);
+    public void setContext(Context<?> context);
     
     
     /**
@@ -124,7 +124,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
      * 
      * @return Context object.
      */
-    public Context getContext();
+    public Context<?> getContext();
 
     
     
@@ -195,8 +195,7 @@ public interface WandoraTool extends WandoraToolLogger, Serializable {
     
     
     public SimpleMenuItem getToolMenuItem(Wandora wandora, String instanceName);
-    //public WandoraButton getToolButton(Wandora admin);
-    //public WandoraButton getToolButton(Wandora admin, int styleHints);
+
     
     
     /**

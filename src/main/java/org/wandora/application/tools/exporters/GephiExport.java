@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,6 @@ import java.util.zip.ZipOutputStream;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolLogger;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -72,7 +71,7 @@ import org.wandora.utils.IObox;
  *
  * @author akivela
  */
-public class GephiExport extends AbstractExportTool implements WandoraTool {
+public class GephiExport extends AbstractExportTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -140,7 +139,7 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
     static final int BUFFER = 2048;
 
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
        String topicMapName = null;
        String exportInfo = null;
 
@@ -210,22 +209,23 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
             // Lets read and archive the file we just created
             try {
                 FileInputStream fi = new FileInputStream(fileXML);
-                BufferedInputStream origin = new BufferedInputStream(fi, BUFFER);
-                FileOutputStream dest = new FileOutputStream(file);
-                ZipOutputStream zout = new ZipOutputStream(new BufferedOutputStream(dest));
-
-                byte data[] = new byte[BUFFER];
-
-                zout.putNextEntry(new ZipEntry(file.getName()));
-
-                int count;
-
-                while((count = origin.read(data, 0, BUFFER)) != -1) {
-                   zout.write(data, 0, count);
+                try(BufferedInputStream origin = new BufferedInputStream(fi, BUFFER)) {
+	                FileOutputStream dest = new FileOutputStream(file);
+	                ZipOutputStream zout = new ZipOutputStream(new BufferedOutputStream(dest));
+	
+	                byte data[] = new byte[BUFFER];
+	
+	                zout.putNextEntry(new ZipEntry(file.getName()));
+	
+	                int count;
+	
+	                while((count = origin.read(data, 0, BUFFER)) != -1) {
+	                   zout.write(data, 0, count);
+	                }
+	
+	                zout.flush();
+	                zout.close();
                 }
-
-                zout.flush();
-                zout.close();
 
             } 
             catch(Exception e) {
@@ -274,7 +274,6 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
 
         //int totalCount = 2*topicMap.getNumTopics() + topicMap.getNumAssociations();
         logger.setProgressMax(100); // For now I have to "fake" the real progress count
-        int count = 0;
 
         println(writer, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         println(writer, "<gephiFile version=\"0.7\">"); // Should this be versionless?
@@ -297,8 +296,6 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
         println(writer, "<workspaces>");
 
         println(writer, "<workspace name=\"Default workspace\" status=\"open\">");
-
-
 
         collectNodesAndEdges(topicMap); // 50
         logger.setProgress(50);
@@ -333,18 +330,13 @@ public class GephiExport extends AbstractExportTool implements WandoraTool {
     
 
     private void collectNodesAndEdges(TopicMap topicMap) throws TopicMapException {
-
         Iterator<Topic> ti = topicMap.getTopics();
-
-        int assosNum = topicMap.getNumAssociations();
 
         // First nodes, then edges
         while(ti.hasNext())
         {
             Topic topic = ti.next();
             DataNode dNode = new DataNode(makeString(topic.getBaseName()), makeString(topic.getOneSubjectIdentifier().toString()));
-
-
             StringBuilder occurences = new StringBuilder("");
 
             if(EXPORT_OCCURRENCES) {

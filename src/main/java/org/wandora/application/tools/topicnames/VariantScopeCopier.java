@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.application.tools.GenericOptionsDialog;
@@ -50,7 +49,7 @@ import org.wandora.topicmap.TopicMap;
  * 
  * @author akivela
  */
-public class VariantScopeCopier extends AbstractWandoraTool implements WandoraTool {
+public class VariantScopeCopier extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -65,14 +64,14 @@ public class VariantScopeCopier extends AbstractWandoraTool implements WandoraTo
     public VariantScopeCopier() {
         REMOVE_AFTER_COPY = false;
     }
-    public VariantScopeCopier(Context preferredContext) {
+    public VariantScopeCopier(Context<?> preferredContext) {
         REMOVE_AFTER_COPY = false;
         setContext(preferredContext);
     }
     public VariantScopeCopier(boolean removeAfterCopy) {
         REMOVE_AFTER_COPY = false;
     }
-    public VariantScopeCopier(boolean removeAfterCopy, Context preferredContext) {
+    public VariantScopeCopier(boolean removeAfterCopy, Context<?> preferredContext) {
         REMOVE_AFTER_COPY = removeAfterCopy;
         setContext(preferredContext);
     }
@@ -91,9 +90,9 @@ public class VariantScopeCopier extends AbstractWandoraTool implements WandoraTo
     }
     
   
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
-            Iterator topics = context.getContextObjects();
+            Iterator<?> topics = context.getContextObjects();
             if(topics == null || !topics.hasNext()) return;
             
             GenericOptionsDialog god=new GenericOptionsDialog(wandora,
@@ -130,8 +129,7 @@ public class VariantScopeCopier extends AbstractWandoraTool implements WandoraTo
 
             if( OVERWRITE_OLDIES ) log("Overwriting existing names.");
             if( COPY_NULLS ) log("Copying also null names.");
-            
-            int progress = 0;
+
             int processed = 0;
             Topic topic = null;
             String variant = "";
@@ -164,14 +162,10 @@ public class VariantScopeCopier extends AbstractWandoraTool implements WandoraTo
                             targetScope.add(targetScopeTopic);
                             targetScope.add(targetTypeTopic);
 
-                            progress++;
                             variant = topic.getVariant(sourceScope);
                             targetVariant = topic.getVariant(targetScope);
                             Set<Set<Topic>> scopes = topic.getVariantScopes();
                             
-                            // System.out.println("scopes "+scopes);
-                            // System.out.println("scopes size "+scopes.size());
-                            // System.out.println("Processing "+getTopicName(topic)+" with variant "+variant);
                             
                             if(variant != null) {
                                 if(REMOVE_AFTER_COPY) topic.setVariant(sourceScope, null);

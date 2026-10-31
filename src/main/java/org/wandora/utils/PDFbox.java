@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  *
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,35 +25,37 @@
 package org.wandora.utils;
 
 import java.io.File;
-import java.net.URL;
+import java.net.URI;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author akivela
  */
 public class PDFbox {
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(PDFbox.class);
 
 
 
     public static String extractTextOutOfPDF(String url) {
         PDDocument doc = null;
         try {
-            if(url.startsWith("file:")) {
+            if (url.startsWith("file:")) {
                 doc = PDDocument.load(new File(url));
             }
             else {
-                doc = PDDocument.load(new URL(url).openStream());
+                doc = PDDocument.load(new URI(url).toURL().openStream());
             }
             PDFTextStripper stripper = new PDFTextStripper();
             String content = stripper.getText(doc);
             doc.close();
             return content;
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            logger.error(e);
         }
         return null;
     }

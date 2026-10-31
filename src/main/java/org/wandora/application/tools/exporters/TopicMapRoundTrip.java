@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ import java.io.IOException;
 import javax.swing.Icon;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.WandoraToolType;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
@@ -42,16 +41,16 @@ import org.wandora.application.tools.AbstractWandoraTool;
 import org.wandora.topicmap.TopicMap;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.IObox;
+import org.wandora.utils.logger.Log4j2Logger;
 
 
 /**
  *
  * @author akivela
  */
-public class TopicMapRoundTrip extends AbstractWandoraTool implements WandoraTool {
-
-
+public class TopicMapRoundTrip extends AbstractWandoraTool {
 	private static final long serialVersionUID = 1L;
+	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicMapRoundTrip.class);
 
 
 	@Override
@@ -78,7 +77,7 @@ public class TopicMapRoundTrip extends AbstractWandoraTool implements WandoraToo
 
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             SimpleFileChooser chooser=UIConstants.getFileChooser();
             chooser.setMultiSelectionEnabled(true);
@@ -114,20 +113,20 @@ public class TopicMapRoundTrip extends AbstractWandoraTool implements WandoraToo
                 catch(FileNotFoundException fnfe) {
                     log("Topic map file not found.");
                     log(fnfe);
-                    fnfe.printStackTrace();
+                    logger.error(fnfe);
                 }
                 catch(IOException ioe) {
                     log("Exception occurred while accessing file.");
                     log(ioe);
-                    ioe.printStackTrace();
+                    logger.error(ioe);
                 }
                 catch(TopicMapException tme) {
                     log("Topic map error.");
                     log(tme);
-                    tme.printStackTrace();
+                    logger.error(tme);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                	logger.error(e);
                 }
             }
             long endtime = System.currentTimeMillis();

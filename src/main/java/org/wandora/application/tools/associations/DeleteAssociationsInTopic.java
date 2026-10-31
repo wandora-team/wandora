@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,9 +31,9 @@ package org.wandora.application.tools.associations;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.ConfirmResult;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -51,7 +51,7 @@ import org.wandora.topicmap.layered.LayeredTopic;
  *
  * @author akivela
  */
-public class DeleteAssociationsInTopic extends AbstractWandoraTool implements WandoraTool {
+public class DeleteAssociationsInTopic extends AbstractWandoraTool {
     
 	private static final long serialVersionUID = 1L;
 	
@@ -68,7 +68,7 @@ public class DeleteAssociationsInTopic extends AbstractWandoraTool implements Wa
     /** Creates a new instance of DeleteAssociationsInTopic */
     public DeleteAssociationsInTopic() {
     }
-    public DeleteAssociationsInTopic(Context preferredContext) {
+    public DeleteAssociationsInTopic(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -83,10 +83,10 @@ public class DeleteAssociationsInTopic extends AbstractWandoraTool implements Wa
     
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
         this.wandora = wandora;
-        ArrayList<Association> associationsToDelete = new ArrayList<Association>();
-        Iterator topics = getContext().getContextObjects();
+        List<Association> associationsToDelete = new ArrayList<>();
+        Iterator<?> topics = getContext().getContextObjects();
         Collection<Association> associations = null;
         Iterator<Association> ai = null;
         Association association = null;
@@ -209,10 +209,10 @@ public class DeleteAssociationsInTopic extends AbstractWandoraTool implements Wa
         if(association == null) return "[null]";
         
         String typeName = getTopicName(association.getType());
-        Iterator roleIterator = association.getRoles().iterator();
+        Iterator<Topic> roleIterator = association.getRoles().iterator();
         StringBuilder playerDescription = new StringBuilder("");
         while(roleIterator.hasNext()) {
-            Topic role = (Topic) roleIterator.next();
+            Topic role = roleIterator.next();
             Topic player = association.getPlayer(role);
             playerDescription.append("'").append(getTopicName(player)).append("'");
             if(roleIterator.hasNext()) playerDescription.append(" and ");

@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class SameAsTorverDataStoreSubjectExpander extends SameAsSubjectExpander 
 
 
 	public SameAsTorverDataStoreSubjectExpander() {}
-    public SameAsTorverDataStoreSubjectExpander(Context preferredContext) {
+    public SameAsTorverDataStoreSubjectExpander(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     

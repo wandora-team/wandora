@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ import java.awt.Dimension;
 
 import javax.swing.Icon;
 
+import org.joda.time.LocalDate;
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.UIBox;
 import org.wandora.application.gui.simple.SimpleButton;
@@ -46,7 +46,7 @@ import org.wandora.utils.swing.MultiLineLabel;
  *
  * @author  akivela
  */
-public class AboutWandora extends AbstractWandoraTool implements WandoraTool {
+public class AboutWandora extends AbstractWandoraTool {
 
 	private static final long serialVersionUID = 1L;
 
@@ -69,16 +69,18 @@ public class AboutWandora extends AbstractWandoraTool implements WandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) {
+    public void execute(Wandora wandora, Context<?> context) {
         try {
             aboutDialog=new javax.swing.JDialog(wandora,"About Wandora",true);
             aboutDialog.getContentPane().setLayout(new java.awt.BorderLayout(20,0));
             ImagePanel titleLabel = new ImagePanel("gui/label_about_wandora.png");
             aboutDialog.getContentPane().add(titleLabel,java.awt.BorderLayout.NORTH);
+            int yearNow = LocalDate.now().getYear();
 
             String text =
+            		"Build "+Wandora.getVersion()+"\n"+
                     "Wandora is a general purpose knowledge editor application.\n"+
-                    "Copyright (C) 2004-2023 Wandora Team\n \n"+
+                    "Copyright (C) 2004-"+yearNow+" Wandora Team\n \n"+
 
                     "This program is free software: you can redistribute it\n" +
                     "and/or modify it under the terms of the GNU General Public\n"+
@@ -91,7 +93,7 @@ public class AboutWandora extends AbstractWandoraTool implements WandoraTool {
                     "of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"+
                     "PURPOSE. See the GNU General Public License for\n"+
                     "more details.\n \n"+
-                    "For more information see http://wandora.org\n";
+                    "For more information see https://wandora.org\n";
             
             textLabel=new MultiLineLabel(text);
             textLabel.setVisible(true);

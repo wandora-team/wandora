@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.wandora.application.Wandora;
-import org.wandora.application.WandoraTool;
 import org.wandora.application.contexts.AssociationContext;
 import org.wandora.application.contexts.Context;
 import org.wandora.application.gui.WandoraOptionPane;
@@ -79,7 +78,7 @@ import org.wandora.topicmap.TopicMap;
  */
 
 
-public class TransposeAssociations extends AbstractWandoraTool implements WandoraTool {
+public class TransposeAssociations extends AbstractWandoraTool {
 
 
 	private static final long serialVersionUID = 1L;
@@ -91,7 +90,7 @@ public class TransposeAssociations extends AbstractWandoraTool implements Wandor
     }
     
     
-    public TransposeAssociations(Context preferredContext) {
+    public TransposeAssociations(Context<?> preferredContext) {
         setContext(preferredContext);
     }
     
@@ -111,7 +110,7 @@ public class TransposeAssociations extends AbstractWandoraTool implements Wandor
     
     
     @Override
-    public void execute(Wandora wandora, Context context) {      
+    public void execute(Wandora wandora, Context<?> context) {      
         try {
             TopicMap topicmap = wandora.getTopicMap();
             
@@ -122,8 +121,8 @@ public class TransposeAssociations extends AbstractWandoraTool implements Wandor
             
             if(context instanceof AssociationContext) { // ASSOCIATION CONTEXT!!
                 AssociationTable associationTable = (AssociationTable) context.getContextSource();
-                Collection associations = associationTable.getSelectedAssociations();                
-                Topic associationType = ((Association) associations.iterator().next()).getType();
+                Collection<Association> associations = associationTable.getSelectedAssociations();                
+                Topic associationType = (associations.iterator().next()).getType();
                 Topic[][] newAssociations = new Topic[associationTable.getColumnCount()][associations.size()+1];
                 
                 int width = associationTable.getColumnCount();
@@ -172,10 +171,10 @@ public class TransposeAssociations extends AbstractWandoraTool implements Wandor
                     int removeCount = 0;
                     log("Removing old associations...");
                     Association association = null;
-                    Iterator associationIterator = associations.iterator();
+                    Iterator<Association> associationIterator = associations.iterator();
                     while(associationIterator.hasNext() && !forceStop()) {
                         try {
-                            association = (Association) associationIterator.next();
+                            association = associationIterator.next();
                             association.remove();
                             removeCount++;
                         }

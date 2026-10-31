@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ public class AddSchemalessAssociation extends AbstractWandoraTool {
         setContext(new LayeredTopicContext());
     }
 
-    public AddSchemalessAssociation(Context preferredContext) {
+    public AddSchemalessAssociation(Context<?> preferredContext) {
         setContext(preferredContext);
     }
 
@@ -66,8 +66,8 @@ public class AddSchemalessAssociation extends AbstractWandoraTool {
     }
     
     @Override
-    public void execute(Wandora wandora, Context context) throws TopicMapException  {
-        Iterator contextTopics = context.getContextObjects();
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
+        Iterator<?> contextTopics = context.getContextObjects();
         if(contextTopics == null || !contextTopics.hasNext()) return;
 
         Topic topic = (Topic) contextTopics.next();

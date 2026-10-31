@@ -1,9 +1,9 @@
 /*
  * WANDORA
  * Knowledge Extraction, Management, and Publishing Application
- * http://wandora.org
+ * https://wandora.org
  * 
- * Copyright (C) 2004-2023 Wandora Team
+ * Copyright (C) 2004-2026 Wandora Team
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
  *
  * 
  */
-
 
 
 
@@ -54,37 +53,37 @@ import org.wandora.topicmap.TopicMapException;
 public class DropExtractor extends javax.swing.JPanel implements TopicPanel, ActionListener {
 
     private static final long serialVersionUID = 1L;
-    
+
     private DropExtractPanel dropExtractPanel = null;
-    
-    
+
+
     /**
      * Creates new form DropExtractor
      */
     public DropExtractor() {
     }
 
-    
+
     @Override
     public void init() {
         initComponents();
         dropExtractPanel = new DropExtractPanel();
         dropExtractPanelContainer.add(dropExtractPanel);
     }
-    
-    
+
+
     @Override
     public boolean supportsOpenTopic() {
         return false;
     }
-    
-    
+
+
     @Override
     public void open(Topic topic) throws TopicMapException, OpenTopicNotSupportedException {
 
     }
 
-    
+
     @Override
     public void stop() {
 
@@ -93,155 +92,169 @@ public class DropExtractor extends javax.swing.JPanel implements TopicPanel, Act
 
     @Override
     public void refresh() throws TopicMapException {
-        if(dropExtractPanel != null) {
+        if (dropExtractPanel != null) {
             dropExtractPanel.updateMenu();
         }
     }
-   
-    
+
+
     @Override
     public boolean applyChanges() throws CancelledException, TopicMapException {
         return true;
     }
 
-    
+
     @Override
     public JPanel getGui() {
         return this;
     }
 
-    
+
     @Override
     public Topic getTopic() throws TopicMapException {
         return null;
     }
-    
-    
+
+
     @Override
-    public String getName(){
+    public String getName() {
         return "Drop extractor";
     }
-    
-    
+
+
     @Override
     public String getTitle() {
         return "Drop extractor";
     }
 
-    
+
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/topic_panel_drop_extractor.png");
     }
 
-    
+
     @Override
-    public boolean noScroll(){
+    public boolean noScroll() {
         return false;
     }
-    
-    
+
+
     @Override
     public int getOrder() {
         return 9997;
     }
 
-    
+
     @Override
     public Object[] getViewMenuStruct() {
         return new Object[] {
         };
     }
 
-    
+
     @Override
     public JMenu getViewMenu() {
         return UIBox.makeMenu(getViewMenuStruct(), this);
     }
 
-    
+
     @Override
     public JPopupMenu getViewPopupMenu() {
         return UIBox.makePopupMenu(getViewMenuStruct(), this);
     }
 
-    
+
     @Override
     public LocatorHistory getTopicHistory() {
         return null;
     }
 
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
-    
-    
-    
-    
+
+
+
     // ---------------------------------------------------- TopicMapListener ---
-    
+
     // Topic map changes doesn't affect DropExtractor any way.
+
 
     @Override
     public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
     }
 
+
     @Override
     public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
     }
+
 
     @Override
     public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
     }
 
-    @Override
-    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName) throws TopicMapException {
-    }
 
     @Override
-    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue) throws TopicMapException {
+    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName)
+            throws TopicMapException {
     }
+
+
+    @Override
+    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue)
+            throws TopicMapException {
+    }
+
 
     @Override
     public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
     }
 
+
     @Override
     public void topicRemoved(Topic t) throws TopicMapException {
     }
+
 
     @Override
     public void topicChanged(Topic t) throws TopicMapException {
     }
 
+
     @Override
     public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
     }
 
+
     @Override
-    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer) throws TopicMapException {
+    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer)
+            throws TopicMapException {
     }
+
 
     @Override
     public void associationRemoved(Association a) throws TopicMapException {
     }
 
+
     @Override
     public void associationChanged(Association a) throws TopicMapException {
     }
 
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
