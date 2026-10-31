@@ -67,178 +67,174 @@ import de.quippy.javamod.multimedia.mod.ModContainer;
  */
 public abstract class AudioAbstract extends JavaModMainBase implements PreviewPanel, ActionListener {
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(AudioAbstract.class);
-	
+
     private String locator = null;
-    private PlayerThread playerThread = null;
     private JPanel ui = null;
     private Mixer currentMixer;
     private SimpleTimeSlider progressBar = null;
     private File tmpFile = null;
-    
-    
-    
+
+
+
     public AudioAbstract(String locator) {
         super(false);
         this.locator = locator;
     }
-    
+
 
 
     @Override
     public void stop() {
-        if(currentMixer != null) {
+        if (currentMixer != null) {
             currentMixer.stopPlayback();
         }
     }
 
-    
+
     @Override
     public void finish() {
-        if(currentMixer != null) {
+        if (currentMixer != null) {
             currentMixer.stopPlayback();
         }
     }
 
-    
+
     @Override
     public Component getGui() {
-        if(ui == null) {
+        if (ui == null) {
             ui = makeUI();
         }
         return ui;
     }
 
-    
+
     @Override
     public boolean isHeavy() {
         return false;
     }
 
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
-        
-        if(startsWithAny(cmd, "Play")) {
-            if(currentMixer != null && currentMixer.isPaused()) {
-                currentMixer.pausePlayback();
-            }
-            else {
-                playerThread = new PlayerThread();
-            }
-        }
-        else if(startsWithAny(cmd, "Pause")) {
-            if(currentMixer != null) {
+
+        if (startsWithAny(cmd, "Play")) {
+            if (currentMixer != null && currentMixer.isPaused()) {
                 currentMixer.pausePlayback();
             }
         }
-        else if(startsWithAny(cmd, "Stop")) {
-            if(currentMixer != null) {
+        else if (startsWithAny(cmd, "Pause")) {
+            if (currentMixer != null) {
+                currentMixer.pausePlayback();
+            }
+        }
+        else if (startsWithAny(cmd, "Stop")) {
+            if (currentMixer != null) {
                 currentMixer.stopPlayback();
                 currentMixer = null;
             }
         }
-        else if(startsWithAny(cmd, "Forward")) {
-            if(currentMixer != null) {
-                if(currentMixer.isNotSeeking() && currentMixer.isNotPausingNorPaused()) {
+        else if (startsWithAny(cmd, "Forward")) {
+            if (currentMixer != null) {
+                if (currentMixer.isNotSeeking() && currentMixer.isNotPausingNorPaused()) {
                     long currentPosition = currentMixer.getMillisecondPosition();
                     long forwardPosition = currentPosition + 10000;
                     currentMixer.setMillisecondPosition(forwardPosition);
                 }
             }
         }
-        else if(startsWithAny(cmd, "Backward")) {
-            if(currentMixer != null) {
-                if(currentMixer.isNotSeeking() && currentMixer.isNotPausingNorPaused()) {
+        else if (startsWithAny(cmd, "Backward")) {
+            if (currentMixer != null) {
+                if (currentMixer.isNotSeeking() && currentMixer.isNotPausingNorPaused()) {
                     long currentPosition = currentMixer.getMillisecondPosition();
                     long backwardPosition = currentPosition - 10000;
                     currentMixer.setMillisecondPosition(Math.max(0, backwardPosition));
                 }
             }
         }
-        else if(startsWithAny(cmd, "Open ext")) {
-            if(locator != null) {
+        else if (startsWithAny(cmd, "Open ext")) {
+            if (locator != null) {
                 PreviewUtils.forkExternalPlayer(locator);
             }
         }
-        else if(startsWithAny(cmd, "Copy audio location", "Copy location")) {
-            if(locator != null) {
+        else if (startsWithAny(cmd, "Copy audio location", "Copy location")) {
+            if (locator != null) {
                 ClipboardBox.setClipboard(locator);
             }
         }
-        else if(startsWithAny(cmd, "Save")) {
-            if(locator != null) {
+        else if (startsWithAny(cmd, "Save")) {
+            if (locator != null) {
                 PreviewUtils.saveToFile(locator);
             }
         }
     }
-    
-    
+
+
     protected Mixer getMixer() {
         return currentMixer;
     }
-    
-    
+
+
     // ------------------
-    
-    
+
+
     protected JPanel makeUI() {
         JPanel ui = new JPanel();
-        
+
         progressBar = new SimpleTimeSlider();
         progressBar.setString(locator);
         JPanel progressBarContainer = new JPanel();
         progressBarContainer.setLayout(new BorderLayout());
         progressBarContainer.add(progressBar, BorderLayout.CENTER);
-        
+
         JPanel controllerPanel = new JPanel();
         controllerPanel.add(getJToolBar(), BorderLayout.CENTER);
-        
-        ui.setLayout(new BorderLayout(8,8));
+
+        ui.setLayout(new BorderLayout(8, 8));
         ui.add(progressBarContainer, BorderLayout.CENTER);
         ui.add(controllerPanel, BorderLayout.SOUTH);
 
         progressBar.addMouseListener(new MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent e) {
                 int mouseValue = progressBar.getValueFor(e);
-                if(currentMixer != null && currentMixer.isSeekSupported()) {
-                    if(currentMixer.isNotSeeking() && currentMixer.isNotPausingNorPaused()) {
-                        currentMixer.setMillisecondPosition(mouseValue*1000);
+                if (currentMixer != null && currentMixer.isSeekSupported()) {
+                    if (currentMixer.isNotSeeking() && currentMixer.isNotPausingNorPaused()) {
+                        currentMixer.setMillisecondPosition(mouseValue * 1000);
                         // logger.debug("newPosition: "+mouseValue*1000);
                         // logger.debug("newPosition2: "+currentMixer.getMillisecondPosition());
                     }
                 }
             }
         });
-        
+
         return ui;
     }
-    
-    
+
+
     protected JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Play", PreviewUtils.ICON_PLAY, this,
-            "Pause", PreviewUtils.ICON_PAUSE, this,
-            "Stop", PreviewUtils.ICON_STOP, this,
-            "---",
-            "Backward", PreviewUtils.ICON_BACKWARD, this,
-            "Forward", PreviewUtils.ICON_FORWARD, this,
-            "---",
-            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
-            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
-            "Save as", PreviewUtils.ICON_SAVE, this,
+                "Play", PreviewUtils.ICON_PLAY, this,
+                "Pause", PreviewUtils.ICON_PAUSE, this,
+                "Stop", PreviewUtils.ICON_STOP, this,
+                "---",
+                "Backward", PreviewUtils.ICON_BACKWARD, this,
+                "Forward", PreviewUtils.ICON_FORWARD, this,
+                "---",
+                "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+                "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+                "Save as", PreviewUtils.ICON_SAVE, this,
         }, this);
     }
-    
 
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     protected class PlayerThread extends Thread {
         private ProgressThread progressThread = null;
-        
+
         public PlayerThread() {
             Properties props = new Properties();
             props.setProperty(ModContainer.PROPERTY_PLAYER_ISP, "3");
@@ -247,113 +243,111 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
             props.setProperty(ModContainer.PROPERTY_PLAYER_NOISEREDUCTION, "FALSE");
             props.setProperty(ModContainer.PROPERTY_PLAYER_NOLOOPS, "1");
             props.setProperty(ModContainer.PROPERTY_PLAYER_MEGABASS, "TRUE");
-            props.setProperty(ModContainer.PROPERTY_PLAYER_BITSPERSAMPLE, "16");			
+            props.setProperty(ModContainer.PROPERTY_PLAYER_BITSPERSAMPLE, "16");
             props.setProperty(ModContainer.PROPERTY_PLAYER_FREQUENCY, "48000");
             props.setProperty(ModContainer.PROPERTY_PLAYER_MSBUFFERSIZE, "250");
             MultimediaContainerManager.configureContainer(props);
-            
+
             this.setDaemon(true);
             this.start();
         }
-        
-        
-        
+
+
+
         @Override
         public void run() {
             try {
-                if(progressThread == null) {
+                if (progressThread == null) {
                     progressThread = new ProgressThread(progressBar);
                 }
-                if(currentMixer == null) {
+                if (currentMixer == null) {
                     createMixer();
                 }
-                if(currentMixer != null) {
+                if (currentMixer != null) {
                     progressThread.setMixer(currentMixer);
                     progressThread.start();
                     currentMixer.startPlayback();
                 }
             }
-            catch(Exception ex) {
+            catch (Exception ex) {
                 logger.error(ex);
                 ui.removeAll();
                 JComponent errorPanel = PreviewUtils.previewError(ui, "Error while starting player", ex);
             }
-            if(progressThread != null) {
+            if (progressThread != null) {
                 progressThread.abort();
                 progressThread = null;
             }
             currentMixer = null;
         }
-        
-        
+
+
 
         public void createMixer() {
             try {
-                if(DataURL.isDataURL(locator)) {
+                if (DataURL.isDataURL(locator)) {
                     DataURL dataUrl = new DataURL(locator);
                     tmpFile = dataUrl.createTempFile();
-                    if(tmpFile != null) {
-                        MultimediaContainer multimediaContainer = MultimediaContainerManager.getMultimediaContainer(tmpFile);
+                    if (tmpFile != null) {
+                        MultimediaContainer multimediaContainer = MultimediaContainerManager
+                                .getMultimediaContainer(tmpFile);
                         currentMixer = multimediaContainer.createNewMixer();
                     }
                     else {
                         PreviewUtils.previewError(ui, "Unable to create temporal file for a dataurl.");
                     }
                 }
-                else if(locator.startsWith("file:")) {
-                    MultimediaContainer multimediaContainer = MultimediaContainerManager.getMultimediaContainer(new URI(locator).toURL());
+                else if (locator.startsWith("file:")) {
+                    MultimediaContainer multimediaContainer = MultimediaContainerManager
+                            .getMultimediaContainer(new URI(locator).toURL());
                     currentMixer = multimediaContainer.createNewMixer();
                 }
                 else {
                     File tempfile = createTempFile(new URI(locator).toURL());
-                    MultimediaContainer multimediaContainer = MultimediaContainerManager.getMultimediaContainer(tempfile.toURI().toURL());
+                    MultimediaContainer multimediaContainer = MultimediaContainerManager
+                            .getMultimediaContainer(tempfile.toURI().toURL());
                     currentMixer = multimediaContainer.createNewMixer();
                 }
             }
-            catch(IOException ioe) {
+            catch (IOException ioe) {
                 PreviewUtils.previewError(ui, "IOException occurred while preparing media.", ioe);
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 PreviewUtils.previewError(ui, "Unable to play audio.", e);
             }
         }
-        
-        
+
+
         private File createTempFile(URL url) throws Exception {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             Wandora.initUrlConnection(con);
             con.setRequestMethod("GET");
             con.setDoOutput(false);
-            //con.setRequestProperty("User-Agent","Mozilla/5.0 ( compatible ) ");
-            //con.setRequestProperty("Accept","*/*");
-            
+
             String prefix = "wandora" + url.hashCode();
             String mimetype = null;
             String suffix = null;
             mimetype = MimeTypes.getMimeType(url);
-            if(mimetype != null) {
+            if (mimetype != null) {
                 suffix = MimeTypes.getExtension(mimetype);
             }
-            
-            if(suffix == null) {
+
+            if (suffix == null) {
                 mimetype = con.getContentType();
                 suffix = MimeTypes.getExtension(mimetype);
             }
-            
-            //logger.debug("mimetype: "+mimetype);
-            //logger.debug("suffix: "+suffix);
-            
-            if(suffix == null) suffix = "tmp";
-            if(!suffix.startsWith(".")) suffix = "."+suffix;
+
+            if (suffix == null)
+                suffix = "tmp";
+            if (!suffix.startsWith("."))
+                suffix = "." + suffix;
             String tmpdir = System.getProperty("java.io.tmpdir");
-                    
+
             File tempFile = new File(tmpdir + File.separator + prefix + suffix);
-            
-            //logger.debug("tempFile: "+tempFile.getAbsolutePath());
-            
-            if(!tempFile.exists()) {
+
+            if (!tempFile.exists()) {
                 tempFile.deleteOnExit();
-                
+
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
                 byte[] chunk = new byte[128];
@@ -365,27 +359,27 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
                 try {
                     while ((bytesRead = stream.read(chunk)) > 0) {
                         outputStream.write(chunk, 0, bytesRead);
-                        if(progressThread != null) {
+                        if (progressThread != null) {
                             totalBytesRead = totalBytesRead + bytesRead;
                             progressThread.setProgress("Downloading...", totalBytesRead, contentLength);
                         }
                     }
                     stream.close();
                 }
-                catch(Exception e) {
+                catch (Exception e) {
                     stream.close();
                     throw e;
                 }
 
                 byte[] bytes = outputStream.toByteArray();
 
-                if(bytes != null && bytes.length > 0) {
+                if (bytes != null && bytes.length > 0) {
                     FileOutputStream fos = new FileOutputStream(tempFile);
                     try {
                         fos.write(bytes);
                         fos.close();
                     }
-                    catch(Exception e) {
+                    catch (Exception e) {
                         fos.close();
                         throw e;
                     }
@@ -394,64 +388,65 @@ public abstract class AudioAbstract extends JavaModMainBase implements PreviewPa
             return tempFile;
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     protected class ProgressThread extends Thread {
         private Mixer progressMixer = null;
         private SimpleTimeSlider progressBar = null;
         private boolean isRunning = true;
-        
-        
-        public ProgressThread(SimpleTimeSlider bar) {           
+
+
+        public ProgressThread(SimpleTimeSlider bar) {
             progressBar = bar;
-            if(progressBar != null) {
+            if (progressBar != null) {
                 progressBar.setMinimum(0.0);
                 progressBar.setValue(0.0);
             }
         }
-        
-        
+
+
         public void setMixer(Mixer mixer) {
             progressMixer = mixer;
-            if(progressBar != null) {
+            if (progressBar != null) {
                 progressBar.setValue(0.0);
-                if(progressMixer != null) {
+                if (progressMixer != null) {
                     progressBar.setMaximum(progressMixer.getLengthInMilliseconds() / 1000);
                 }
             }
         }
-        
-        
+
+
         public void setProgress(String text, int value, int maxValue) {
             progressBar.setProgress(text, 0, value, maxValue);
         }
-        
-        
-        
+
+
+
         @Override
         public void run() {
             long progress = 0;
-            while(progressMixer != null && progressBar != null && isRunning) {
+            while (progressMixer != null && progressBar != null && isRunning) {
                 try {
-                    if(progressMixer.isNotSeeking()) {
+                    if (progressMixer.isNotSeeking()) {
                         progress = progressMixer.getMillisecondPosition() / 1000;
                         progressBar.setValue((int) progress);
                     }
                     Thread.sleep(100);
                 }
-                catch(Exception e) {}
+                catch (Exception e) {
+                }
             }
             progressBar.setValue(0);
             progressBar.setString(locator);
         }
-        
-        
+
+
         public void abort() {
             isRunning = false;
         }
     }
-    
+
 }

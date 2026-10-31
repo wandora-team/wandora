@@ -32,36 +32,35 @@ import org.wandora.application.gui.previews.PreviewUtils;
  * @author akivela
  */
 public class AudioMod extends AudioAbstract {
-    
+
 
     public AudioMod(String locator) {
         super(locator);
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
+
 
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-            new String[] { 
-                "audio/mod",
-                "audio/xm",
-                "audio/wow",
-                "audio/it",
-                "audio/stm",
-                "audio/s3m",
-                "audio/xm"
-            }, 
-            new String[] { 
-                "mod", 
-                "wow", 
-                "it", 
-                "stm",
-                "s3m", 
-                "xm"
-            }
-        );
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "audio/mod",
+                        "audio/xm",
+                        "audio/wow",
+                        "audio/it",
+                        "audio/stm",
+                        "audio/s3m",
+                        "audio/xm"
+                },
+                new String[] {
+                        "mod",
+                        "wow",
+                        "it",
+                        "stm",
+                        "s3m",
+                        "xm"
+                });
     }
 }

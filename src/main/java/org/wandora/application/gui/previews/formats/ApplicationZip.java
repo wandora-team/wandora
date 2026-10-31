@@ -69,40 +69,43 @@ import org.wandora.utils.logger.Log4j2Logger;
  */
 public class ApplicationZip implements PreviewPanel, ActionListener {
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(ApplicationZip.class);
-    
+
     private final String locator;
     JPanel ui = null;
     JTable table = null;
-    
-    
-    
+
+
+
     public ApplicationZip(String zipLocator) {
         this.locator = zipLocator;
     }
+
 
     @Override
     public void stop() {
 
     }
 
+
     @Override
     public void finish() {
-        
+
     }
+
 
     @Override
     public JPanel getGui() {
-        if(ui == null) {
+        if (ui == null) {
             ui = new JPanel();
-            ui.setLayout(new BorderLayout(8,8));
-            
+            ui.setLayout(new BorderLayout(8, 8));
+
             JPanel tablePaneWrapper = new JPanel();
             tablePaneWrapper.setLayout(new BorderLayout());
-        
+
             tablePaneWrapper.setPreferredSize(new Dimension(640, 300));
             tablePaneWrapper.setMaximumSize(new Dimension(640, 300));
             tablePaneWrapper.setSize(new Dimension(640, 300));
-            
+
             try {
                 table = new ZipTable(locator);
                 JScrollPane scrollPane = new SimpleScrollPane(table);
@@ -114,7 +117,7 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                 ui.add(tablePaneWrapper, BorderLayout.CENTER);
                 ui.add(toolbarWrapper, BorderLayout.SOUTH);
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 PreviewUtils.previewError(ui, "Can't initialize zip viewer. Exception occurred.", e);
             }
 
@@ -122,92 +125,93 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
         return ui;
     }
 
-    
+
 
     @Override
     public boolean isHeavy() {
         return false;
     }
-    
-    
-    
+
+
 
     protected JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
-            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
-            "Save", PreviewUtils.ICON_SAVE, this,
-            "Unzip", PreviewUtils.ICON_SAVE, this,
+                "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+                "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+                "Save", PreviewUtils.ICON_SAVE, this,
+                "Unzip", PreviewUtils.ICON_SAVE, this,
         }, this);
     }
-    
-    
-    
+
+
+
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
-        if(c == null) return;
-        
-        
-        if(c.startsWith("Open ext")) {
+        if (c == null)
+            return;
+
+
+        if (c.startsWith("Open ext")) {
             PreviewUtils.forkExternalPlayer(locator);
         }
-        else if(c.equalsIgnoreCase("Copy location")) {
-            if(locator != null) {
+        else if (c.equalsIgnoreCase("Copy location")) {
+            if (locator != null) {
                 ClipboardBox.setClipboard(locator);
             }
         }
-        else if(c.startsWith("Save")) {
+        else if (c.startsWith("Save")) {
             PreviewUtils.saveToFile(locator);
         }
-        else if(c.startsWith("Unzip")) {
+        else if (c.startsWith("Unzip")) {
             unzip(locator);
         }
     }
-    
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     private void unzip(String locator) {
-        
+
         byte[] buffer = new byte[1024];
 
         try {
             String savePath = getSavePath();
-            if(savePath == null) return;
-            
+            if (savePath == null)
+                return;
+
             ZipInputStream zipInputStream = null;
-            if(DataURL.isDataURL(locator)) {
+            if (DataURL.isDataURL(locator)) {
                 DataURL dataUrl = new DataURL(locator);
                 zipInputStream = new ZipInputStream(dataUrl.getDataStream());
             }
             else {
                 zipInputStream = new ZipInputStream(new URI(locator).toURL().openStream());
             }
-            
+
             //create output directory is not exists
             File folder = new File(savePath);
-            if(!folder.exists()){
+            if (!folder.exists()) {
                 folder.mkdir();
             }
 
             //get the zipped file list entry
             ZipEntry zipEntry = zipInputStream.getNextEntry();
-            while(zipEntry != null) {
+            while (zipEntry != null) {
                 String fileName = zipEntry.getName();
                 File newFile = new File(savePath + File.separator + fileName);
 
-                logger.info("file unzip : "+ newFile.getAbsoluteFile());
+                logger.info("file unzip : " + newFile.getAbsoluteFile());
 
                 //create all non exists folders
                 //else you will hit FileNotFoundException for compressed folder
                 new File(newFile.getParent()).mkdirs();
-                FileOutputStream fos = new FileOutputStream(newFile);             
+                FileOutputStream fos = new FileOutputStream(newFile);
                 int len;
                 while ((len = zipInputStream.read(buffer)) > 0) {
                     fos.write(buffer, 0, len);
                 }
-                fos.close();   
+                fos.close();
                 zipEntry = zipInputStream.getNextEntry();
             }
 
@@ -216,20 +220,20 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
 
             logger.info("Done");
         }
-        catch(Exception ex) {
-        	logger.error(ex);
-        } 
+        catch (Exception ex) {
+            logger.error(ex);
+        }
     }
-    
-    
+
+
     protected String getSavePath() {
         SimpleFileChooser chooser = UIConstants.getFileChooser();
         chooser.setDialogTitle("Select folder");
         chooser.setApproveButtonText("Select");
-        if(chooser.open(Wandora.getWandora(),SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
+        if (chooser.open(Wandora.getWandora(), SimpleFileChooser.SAVE_DIALOG) == SimpleFileChooser.APPROVE_OPTION) {
             File selected = chooser.getSelectedFile();
-            if(selected != null) {
-                if(!selected.isDirectory()) {
+            if (selected != null) {
+                if (!selected.isDirectory()) {
                     selected = selected.getParentFile();
                 }
                 return selected.getAbsolutePath();
@@ -237,34 +241,34 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
         }
         return null;
     }
-    
-    
+
+
 
     // -------------------------------------------------------------------------
-    
+
+
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { 
-                    "application/zip",                   
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "application/zip",
                 },
-                new String[] { 
-                    "zip"
-                }
-        );
+                new String[] {
+                        "zip"
+                });
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
     // ------------------------------------------------------------ ZipTable ---
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     public class ZipTable extends JTable implements ActionListener {
         private static final long serialVersionUID = 1L;
-		private ZipTableModel model = null;
+        private ZipTableModel model = null;
         TableRowSorter<?> rowSorter = null;
-        
+
 
         public ZipTable(String locator) {
             super();
@@ -273,139 +277,139 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
             rowSorter = new TableRowSorter<>(model);
             this.setRowSorter(rowSorter);
             rowSorter.setSortsOnUpdates(true);
-            
+
             JPopupMenu popup = UIBox.makePopupMenu(getPopupStruct(), this);
             setComponentPopupMenu(popup);
-            
+
             this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
 
-        
+
         public Object[] getPopupStruct() {
             return new Object[] {
-                "Save to file...",
-                "Save to occurrence...",
-                "Save to topic..."
+                    "Save to file...",
+                    "Save to occurrence...",
+                    "Save to topic..."
             };
         }
-        
-        
+
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            logger.debug("actionPerformed: "+e.getActionCommand());
+            logger.debug("actionPerformed: " + e.getActionCommand());
             String command = e.getActionCommand();
-            if(command != null) {
-                if("Save to file...".equalsIgnoreCase(command)) {
+            if (command != null) {
+                if ("Save to file...".equalsIgnoreCase(command)) {
                     int[] selectedRows = this.getSelectedRows();
                     saveToFile(selectedRows);
                 }
-                else if("Save to occurrence...".equalsIgnoreCase(command)) {
+                else if ("Save to occurrence...".equalsIgnoreCase(command)) {
                     int[] selectedRows = this.getSelectedRows();
                     saveToOccurrence(selectedRows);
                 }
-                else if("Save to topic...".equalsIgnoreCase(command)) {
+                else if ("Save to topic...".equalsIgnoreCase(command)) {
                     int[] selectedRows = this.getSelectedRows();
                     saveToTopic(selectedRows);
                 }
             }
         }
-        
-        
+
+
         // ---------------------------------------------------------------------
-        
-        
+
+
         private void saveToFile(int[] rows) {
-            if(rows != null) {
+            if (rows != null) {
                 String savePath = null;
-                if(rows.length > 1) {
+                if (rows.length > 1) {
                     savePath = getSavePath();
-                    if(savePath == null) {
+                    if (savePath == null) {
                         return;
                     }
                 }
-                for(int i=0; i<rows.length; i++) {
+                for (int i = 0; i < rows.length; i++) {
                     int selectedRow = rows[i];
                     ZipTableRow zipTableRow = model.getZipTableRowAt(selectedRow);
-                    if(zipTableRow != null) {
+                    if (zipTableRow != null) {
                         byte[] zipData = model.getData(zipTableRow.filename);
-                        if(zipData != null) {
+                        if (zipData != null) {
                             saveToFile(savePath, zipTableRow.filename, zipData);
                         }
                     }
                 }
             }
         }
-        
-        
-        
+
+
+
         private void saveToFile(String savePath, String originalFilename, byte[] data) {
             Wandora wandora = Wandora.getWandora();
             try {
-                if(savePath == null) {
+                if (savePath == null) {
                     SimpleFileChooser chooser = UIConstants.getFileChooser();
                     chooser.setDialogTitle("Save file");
-                    String originalFilenamePart = originalFilename.substring(originalFilename.lastIndexOf(File.pathSeparator)+1);
+                    String originalFilenamePart = originalFilename
+                            .substring(originalFilename.lastIndexOf(File.pathSeparator) + 1);
                     chooser.setSelectedFile(new File(originalFilenamePart));
 
-                    if(chooser.open(wandora,SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
+                    if (chooser.open(wandora, SimpleFileChooser.SAVE_DIALOG) == SimpleFileChooser.APPROVE_OPTION) {
                         IObox.saveBFile(chooser.getSelectedFile().getAbsolutePath(), data);
                     }
                 }
                 else {
-                    String saveFilename = savePath+File.pathSeparator+originalFilename;
+                    String saveFilename = savePath + File.pathSeparator + originalFilename;
                     IObox.createPathFor(new File(saveFilename));
                     IObox.saveBFile(saveFilename, data);
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 wandora.handleError(e);
             }
         }
-        
-        
-        
 
-        
-        
-        
-        
+
+
         // ---------------------------------------------------------------------
-        
-        
-        
+
+
+
         private void saveToOccurrence(int[] rows) {
-            if(rows != null) {
-                for(int i=0; i<rows.length; i++) {
+            if (rows != null) {
+                for (int i = 0; i < rows.length; i++) {
                     int selectedRow = rows[i];
                     ZipTableRow zipTableRow = model.getZipTableRowAt(selectedRow);
-                    if(zipTableRow != null) {
+                    if (zipTableRow != null) {
                         byte[] zipData = model.getData(zipTableRow.filename);
-                        if(zipData != null) {
+                        if (zipData != null) {
                             saveToOccurrence(zipTableRow.filename, zipData);
                         }
                     }
                 }
             }
         }
-        
-        
-        
+
+
+
         private void saveToOccurrence(String filename, byte[] data) {
             Wandora wandora = Wandora.getWandora();
             try {
                 Topic topic = wandora.getOpenTopic();
-                if(topic != null) {
-                    Topic type = wandora.showTopicFinder(wandora, "Select occurrence type for "+filename);
-                    if(type == null) return;
-                    
-                    Topic scope = wandora.showTopicFinder(wandora, "Select occurrence scope for "+filename);
-                    if(scope == null) return;
-                    
-                    int makeDataUrl = WandoraOptionPane.showConfirmDialog(wandora, "Make data url occurrence for '"+filename+"'?", "Make data url occurrence?", WandoraOptionPane.YES_NO_OPTION);
-                    if(makeDataUrl == WandoraOptionPane.YES_OPTION) {
+                if (topic != null) {
+                    Topic type = wandora.showTopicFinder(wandora, "Select occurrence type for " + filename);
+                    if (type == null)
+                        return;
+
+                    Topic scope = wandora.showTopicFinder(wandora, "Select occurrence scope for " + filename);
+                    if (scope == null)
+                        return;
+
+                    int makeDataUrl = WandoraOptionPane.showConfirmDialog(wandora,
+                            "Make data url occurrence for '" + filename + "'?", "Make data url occurrence?",
+                            WandoraOptionPane.YES_NO_OPTION);
+                    if (makeDataUrl == WandoraOptionPane.YES_OPTION) {
                         DataURL dataUrl = new DataURL(data);
                         String mimetype = MimeTypes.getMimeType(filename);
-                        if(mimetype != null) {
+                        if (mimetype != null) {
                             dataUrl.setMimetype(mimetype);
                         }
                         topic.setData(type, scope, dataUrl.toExternalForm());
@@ -416,150 +420,179 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                     wandora.doRefresh();
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 wandora.handleError(e);
             }
         }
-        
-        
-        
+
+
+
         // ---------------------------------------------------------------------
-        
-        
+
+
         private void saveToTopic(int[] rows) {
-            if(rows != null) {
-                for(int i=0; i<rows.length; i++) {
+            if (rows != null) {
+                for (int i = 0; i < rows.length; i++) {
                     int selectedRow = rows[i];
                     ZipTableRow zipTableRow = model.getZipTableRowAt(selectedRow);
-                    if(zipTableRow != null) {
+                    if (zipTableRow != null) {
                         byte[] zipData = model.getData(zipTableRow.filename);
-                        if(zipData != null) {
+                        if (zipData != null) {
                             saveToTopic(zipTableRow.filename, zipData);
                         }
                     }
                 }
             }
         }
-        
-        
+
+
         private void saveToTopic(String filename, byte[] data) {
             Wandora wandora = Wandora.getWandora();
             try {
                 TopicMap topicMap = wandora.getTopicMap();
                 DataURL dataUrl = new DataURL(data);
                 String mimetype = MimeTypes.getMimeType(filename);
-                if(mimetype != null) {
+                if (mimetype != null) {
                     dataUrl.setMimetype(mimetype);
                 }
 
                 SimpleFileExtractor simpleFileExtractor = new SimpleFileExtractor();
                 simpleFileExtractor._extractTopicsFrom(dataUrl.toExternalForm(), topicMap);
-                
+
                 wandora.doRefresh();
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 wandora.handleError(e);
             }
         }
-        
-        
-        
+
+
+
         // ---------------------------------------------------------------------
-        
-        
-        
+
+
+
         public class ZipTableModel extends DefaultTableModel {
             private static final long serialVersionUID = 1L;
-			ArrayList<ZipTableRow> zipData;
+            ArrayList<ZipTableRow> zipData;
             int numberOfFields = 6;
             DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String locator = null;
-            
-            
+
+
             public ZipTableModel(String locator) {
                 this.locator = locator;
                 this.zipData = createModel(locator);
             }
-            
+
+
             @Override
             public int getColumnCount() {
                 return numberOfFields;
             }
 
+
             @Override
             public Class<?> getColumnClass(int col) {
-                switch(col) {
-                    case 0: return String.class;
-                    case 1: return String.class;
-                    case 2: return Long.class;
-                    case 3: return Long.class;
-                    case 4: return String.class;
-                    case 5: return String.class;
+                switch (col) {
+                    case 0:
+                        return String.class;
+                    case 1:
+                        return String.class;
+                    case 2:
+                        return Long.class;
+                    case 3:
+                        return Long.class;
+                    case 4:
+                        return String.class;
+                    case 5:
+                        return String.class;
                 }
                 return String.class;
             }
 
+
             @Override
             public int getRowCount() {
-                if(zipData != null) return zipData.size();
+                if (zipData != null)
+                    return zipData.size();
                 return 0;
             }
-            
-            
+
+
             public ZipTableRow getZipTableRowAt(int rowIndex) {
                 try {
                     return zipData.get(rowIndex);
                 }
-                catch(Exception e) {
-                	logger.error(e);
+                catch (Exception e) {
+                    logger.error(e);
                 }
                 return null;
             }
-            
+
 
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
                 try {
-                    if(zipData != null && rowIndex >= 0 && columnIndex >= 0 && columnIndex < getColumnCount() && rowIndex < getRowCount()) {
+                    if (zipData != null && rowIndex >= 0 && columnIndex >= 0 && columnIndex < getColumnCount()
+                            && rowIndex < getRowCount()) {
                         ZipTableRow zipDataRow = zipData.get(rowIndex);
-                        
-                        switch(columnIndex) {
-                            case 0: return zipDataRow.filename;
-                            case 1: return zipDataRow.isFolder ? "Folder" : "File";
-                            case 2: return zipDataRow.compressedSize;
-                            case 3: return zipDataRow.size;
-                            case 4: return zipDataRow.creationTime == 0 ? "" : dateFormatter.format(new Date(zipDataRow.creationTime));
-                            case 5: return zipDataRow.modifiedTime == 0 ? "" : dateFormatter.format(new Date(zipDataRow.modifiedTime));
+
+                        switch (columnIndex) {
+                            case 0:
+                                return zipDataRow.filename;
+                            case 1:
+                                return zipDataRow.isFolder ? "Folder" : "File";
+                            case 2:
+                                return zipDataRow.compressedSize;
+                            case 3:
+                                return zipDataRow.size;
+                            case 4:
+                                return zipDataRow.creationTime == 0 ? ""
+                                        : dateFormatter.format(new Date(zipDataRow.creationTime));
+                            case 5:
+                                return zipDataRow.modifiedTime == 0 ? ""
+                                        : dateFormatter.format(new Date(zipDataRow.modifiedTime));
                         }
                     }
                 }
-                catch (Exception e) {}
-                return "";
-            }
-
-            @Override
-            public String getColumnName(int columnIndex) {
-                switch(columnIndex) {
-                    case 0: return "Filename";
-                    case 1: return "Type";
-                    case 2: return "Compressed size";
-                    case 3: return "Size";
-                    case 4: return "Creation time";
-                    case 5: return "Modified time";
+                catch (Exception e) {
                 }
                 return "";
             }
 
+
             @Override
-            public boolean isCellEditable(int row,int col){
+            public String getColumnName(int columnIndex) {
+                switch (columnIndex) {
+                    case 0:
+                        return "Filename";
+                    case 1:
+                        return "Type";
+                    case 2:
+                        return "Compressed size";
+                    case 3:
+                        return "Size";
+                    case 4:
+                        return "Creation time";
+                    case 5:
+                        return "Modified time";
+                }
+                return "";
+            }
+
+
+            @Override
+            public boolean isCellEditable(int row, int col) {
                 return false;
             }
-            
+
+
             private ArrayList<ZipTableRow> createModel(String locator) {
                 ArrayList<ZipTableRow> zipModel = new ArrayList<ZipTableRow>();
                 ZipInputStream zipInputStream = null;
                 try {
-                    if(DataURL.isDataURL(locator)) {
+                    if (DataURL.isDataURL(locator)) {
                         DataURL dataUrl = new DataURL(locator);
                         zipInputStream = new ZipInputStream(dataUrl.getDataStream());
                     }
@@ -567,47 +600,48 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                         zipInputStream = new ZipInputStream(new URI(locator).toURL().openStream());
                     }
                     ZipEntry zipEntry = zipInputStream.getNextEntry();
-                    while(zipEntry != null) {
+                    while (zipEntry != null) {
                         ZipTableRow zipTableRow = new ZipTableRow();
                         zipTableRow.filename = zipEntry.getName();
                         zipTableRow.compressedSize = zipEntry.getCompressedSize();
                         zipTableRow.size = zipEntry.getSize();
                         zipTableRow.time = zipEntry.getTime();
-                        if(zipEntry.getCreationTime() != null) {
+                        if (zipEntry.getCreationTime() != null) {
                             zipTableRow.creationTime = zipEntry.getCreationTime().toMillis();
                         }
-                        if(zipEntry.getLastModifiedTime() != null) {
+                        if (zipEntry.getLastModifiedTime() != null) {
                             zipTableRow.modifiedTime = zipEntry.getLastModifiedTime().toMillis();
                         }
                         zipTableRow.isFolder = zipEntry.isDirectory();
                         zipModel.add(zipTableRow);
-                        
+
                         zipInputStream.closeEntry();
                         zipEntry = zipInputStream.getNextEntry();
                     }
                 }
-                catch(Exception e) {
-                	logger.error(e);
+                catch (Exception e) {
+                    logger.error(e);
                     throw new RuntimeException(e);
                 }
                 finally {
-                    if(zipInputStream != null) {
+                    if (zipInputStream != null) {
                         try {
                             zipInputStream.close();
                         }
-                        catch(Exception e) {}
+                        catch (Exception e) {
+                        }
                     }
                 }
                 return zipModel;
             }
-            
-            
-            
+
+
+
             public byte[] getData(String entryName) {
                 ZipInputStream zipInputStream = null;
                 byte[] entryData = null;
                 try {
-                    if(DataURL.isDataURL(locator)) {
+                    if (DataURL.isDataURL(locator)) {
                         DataURL dataUrl = new DataURL(locator);
                         zipInputStream = new ZipInputStream(dataUrl.getDataStream());
                     }
@@ -615,9 +649,9 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                         zipInputStream = new ZipInputStream(new URI(locator).toURL().openStream());
                     }
                     ZipEntry zipEntry = zipInputStream.getNextEntry();
-                    while(zipEntry != null && entryData == null) {
+                    while (zipEntry != null && entryData == null) {
                         String zipEntryName = zipEntry.getName();
-                        if(zipEntryName.equals(entryName)) {
+                        if (zipEntryName.equals(entryName)) {
                             int n = 0;
                             byte[] buf = new byte[1024];
                             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -631,23 +665,24 @@ public class ApplicationZip implements PreviewPanel, ActionListener {
                         zipEntry = zipInputStream.getNextEntry();
                     }
                 }
-                catch(Exception e) {
-                	logger.error(e);
+                catch (Exception e) {
+                    logger.error(e);
                 }
                 try {
-                	if(zipInputStream != null) {
-                		zipInputStream.close();
-                	}
+                    if (zipInputStream != null) {
+                        zipInputStream.close();
+                    }
                 }
-                catch(Exception e) {}
+                catch (Exception e) {
+                }
                 return entryData;
             }
         }
-        
-        
-        
+
+
+
         public class ZipTableRow {
-            public String filename = null; 
+            public String filename = null;
             public long compressedSize = 0;
             public long size = 0;
             public long time = 0;

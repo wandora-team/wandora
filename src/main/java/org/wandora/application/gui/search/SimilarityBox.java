@@ -50,9 +50,15 @@ public class SimilarityBox {
 
 
 
-    public static Collection<Topic> getSimilarTopics(String query, TopicMapSearchOptions options,
-            Iterator<Topic> topicIterator, InterfaceStringMetric stringMetric, float threshold,
-            boolean differenceInsteadOfSimilarity, boolean useNGrams) {
+    public static Collection<Topic> getSimilarTopics(
+            String query, 
+            TopicMapSearchOptions options,
+            Iterator<Topic> topicIterator, 
+            InterfaceStringMetric stringMetric, 
+            float threshold,
+            boolean differenceInsteadOfSimilarity, 
+            boolean useNGrams) {
+        
         List<Topic> selection = new ArrayList<>();
         Topic t = null;
         boolean isSimilar = false;
@@ -149,7 +155,12 @@ public class SimilarityBox {
 
 
 
-    public static float getSimilarity(String s1, String s2, InterfaceStringMetric stringMetric, boolean useNGrams) {
+    public static float getSimilarity(
+            String s1, 
+            String s2, 
+            InterfaceStringMetric stringMetric, 
+            boolean useNGrams) {
+        
         float similarity = 0.0f;
         if (s1 != null && s2 != null && stringMetric != null) {
             if (useNGrams) {
@@ -176,7 +187,11 @@ public class SimilarityBox {
 
 
 
-    public static boolean isSimilar(float similarity, float threshold, boolean differenceInsteadOfSimilarity) {
+    public static boolean isSimilar(
+            float similarity, 
+            float threshold, 
+            boolean differenceInsteadOfSimilarity) {
+        
         if (differenceInsteadOfSimilarity) {
             return (similarity < threshold);
         }

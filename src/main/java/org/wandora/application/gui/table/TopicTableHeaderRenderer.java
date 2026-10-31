@@ -45,26 +45,33 @@ public class TopicTableHeaderRenderer extends DefaultTableCellRenderer {
 
     private Color[] columnColors = null;
     private TableCellRenderer oldRenderer = null;
-       
-    
-    
+
+
+
     /** Creates a new instance of TopicTableHeaderRenderer */
     public TopicTableHeaderRenderer(TableCellRenderer renderer, Color[] columnColors) {
         this.columnColors = columnColors;
         this.oldRenderer = renderer;
     }
-    
+
 
     @Override
-    public Component getTableCellRendererComponent(JTable table,Object value,boolean isSelected,boolean hasFocus, int row, int column){
-        Component c = oldRenderer.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
-        
-        column=table.convertColumnIndexToModel(column);
-        if(columnColors != null && columnColors[column]!=null) {
+    public Component getTableCellRendererComponent(
+            JTable table,
+            Object value,
+            boolean isSelected,
+            boolean hasFocus,
+            int row,
+            int column) {
+
+        Component c = oldRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+        column = table.convertColumnIndexToModel(column);
+        if (columnColors != null && columnColors[column] != null) {
             c.setForeground(columnColors[column]);
         }
         return c;
     }
 
-    
+
 }

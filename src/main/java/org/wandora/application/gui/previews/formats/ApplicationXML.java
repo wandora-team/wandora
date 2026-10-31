@@ -42,13 +42,13 @@ import org.wandora.application.gui.previews.PreviewUtils;
  */
 public class ApplicationXML extends Text {
 
-    
+
     /** Creates a new instance of ApplicationXML */
     public ApplicationXML(String locator) {
         super(locator);
     }
-    
-    
+
+
     @Override
     protected JComponent getTextComponent(String locator) throws Exception {
         JTextPane textComponent = new JTextPane();
@@ -59,21 +59,20 @@ public class ApplicationXML extends Text {
         textComponent.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
         return textComponent;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
+
 
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { 
-                    "application/xml",
-                    "text/xml" }, 
-                new String[] { 
-                    "xml"
-                }
-        );
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "application/xml",
+                        "text/xml" },
+                new String[] {
+                        "xml"
+                });
     }
-    
+
 }

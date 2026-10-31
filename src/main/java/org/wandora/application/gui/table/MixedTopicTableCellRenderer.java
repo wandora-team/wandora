@@ -28,7 +28,6 @@ package org.wandora.application.gui.table;
 
 
 
-
 import java.awt.Color;
 import java.awt.Component;
 
@@ -46,18 +45,16 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 
-
-
 /**
  *
  * @author akivela
  */
 public class MixedTopicTableCellRenderer extends DefaultTableCellRenderer {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(MixedTopicTableCellRenderer.class);
-    
+
     public Object content;
     private Topic topic;
     private MixedTopicTable topicTable;
@@ -73,74 +70,83 @@ public class MixedTopicTableCellRenderer extends DefaultTableCellRenderer {
 
 
     public Object getTableCellRendererValue() {
-        if(content == null) return "--";
-        else if(topic!=null){
+        if (content == null)
+            return "--";
+        else if (topic != null) {
             try {
                 return topic.getBaseName();
             }
-            catch(TopicMapException tme){
-            	logger.error(tme);
+            catch (TopicMapException tme) {
+                logger.error(tme);
                 return "Exception retrieving name";
             }
         }
-        else return content.toString();
+        else
+            return content.toString();
     }
 
-    
-    
-    
+
 
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+    public Component getTableCellRendererComponent(
+            JTable table, 
+            Object value, 
+            boolean isSelected, 
+            boolean hasFocus,
+            int row, int column) {
+        
         Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
         try {
             MixedTopicGuiWrapper wrapper = null;
-            if(value != null && value instanceof MixedTopicGuiWrapper) {
+            if (value != null && value instanceof MixedTopicGuiWrapper) {
                 wrapper = (MixedTopicGuiWrapper) value;
             }
             else {
                 defaultWrapper.content = value;
                 wrapper = defaultWrapper;
             }
-            
+
             content = wrapper.getContent();
             topic = null;
-            if(content instanceof Topic) {
+            if (content instanceof Topic) {
                 topic = (Topic) content;
             }
 
-            if(!isSelected && !hasFocus) {
-                Color hilight=null;
-                Color bg=null;
-                if(content==null){
+            if (!isSelected && !hasFocus) {
+                Color hilight = null;
+                Color bg = null;
+                if (content == null) {
                     bg = new Color(0xffcece);
                 }
-                else if(topic==null){
+                else if (topic == null) {
                     bg = new Color(0xfff1ce);
                 }
-                else{
+                else {
                     hilight = Wandora.getWandora().topicHilights.get(topic);
                 }
-                if(hilight != null) c.setForeground(hilight);
+                if (hilight != null)
+                    c.setForeground(hilight);
                 else {
                     Color layerColor = Wandora.getWandora().topicHilights.getLayerColor(topic);
-                    if(layerColor != null) c.setForeground(layerColor);
-                    else c.setForeground(Color.BLACK);
+                    if (layerColor != null)
+                        c.setForeground(layerColor);
+                    else
+                        c.setForeground(Color.BLACK);
                 }
                 c.setBackground(bg); // note null is valid value 
             }
 
 
-            if(c instanceof JLabel) {
+            if (c instanceof JLabel) {
                 JLabel label = (JLabel) c;
                 try {
                     String topicName = wrapper.toString(topicRenders);
                     label.setText(topicName);
                     label.setBorder(UIConstants.defaultTableCellLabelBorder);
 
-                    if(MixedTopicGuiWrapper.TOPIC_RENDERS_BASENAME_WITH_SL_ICON == topicRenders) {
-                        if(topic!=null && topic.getSubjectLocator() != null) {
+                    if (MixedTopicGuiWrapper.TOPIC_RENDERS_BASENAME_WITH_SL_ICON == topicRenders) {
+                        if (topic != null && topic.getSubjectLocator() != null) {
                             String iconUrl = topic.getSubjectLocator().toExternalForm();
                             label.setIcon(UIBox.getCachedIconThumbForLocator(iconUrl, 24, 24));
                         }
@@ -149,21 +155,18 @@ public class MixedTopicTableCellRenderer extends DefaultTableCellRenderer {
                         }
                     }
                 }
-                catch(TopicMapException tme){
-                	logger.error(tme);
+                catch (TopicMapException tme) {
+                    logger.error(tme);
                     label.setText("Exception retrieving name");
                 }
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
 
         return c;
     }
-
-
-
 
 
 

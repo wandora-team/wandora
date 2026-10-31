@@ -48,31 +48,31 @@ public class MixedTopicTableRowSorter extends TableRowSorter<MixedTopicTableMode
         super(dm);
     }
 
-    
 
-    
-    
+
     @Override
     public Comparator<?> getComparator(int column) {
         return new Comparator<>() {
             public int compare(Object o1, Object o2) {
-                if(o1 == null || o2 == null) return 0;
-                if(o1 instanceof Topic && o2 instanceof Topic) {
+                if (o1 == null || o2 == null)
+                    return 0;
+                if (o1 instanceof Topic && o2 instanceof Topic) {
                     try {
                         String n1 = TopicToString.toString((Topic) o1);
                         String n2 = TopicToString.toString((Topic) o2);
                         return n1.compareTo(n2);
                     }
-                    catch(Exception e) {
+                    catch (Exception e) {
                         return 0;
                     }
                 }
-                else if(o1 instanceof String && o2 instanceof String) {
+                else if (o1 instanceof String && o2 instanceof String) {
                     try {
                         int d = ((String) o1).compareTo((String) o2);
                         return d;
                     }
-                    catch(Exception e) {}
+                    catch (Exception e) {
+                    }
                     return 0;
                 }
                 else {
@@ -81,8 +81,8 @@ public class MixedTopicTableRowSorter extends TableRowSorter<MixedTopicTableMode
             }
         };
     }
-    
-    
+
+
     @Override
     public boolean useToString(int column) {
         return false;

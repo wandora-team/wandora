@@ -61,100 +61,112 @@ import org.wandora.utils.logger.Log4j2Logger;
  */
 
 
-public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
+public class ClassTable extends TopicTable {
     private static final long serialVersionUID = 1L;
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(ClassTable.class);
 
     private Topic topic;
     private Topic[] types;
 
-    
-    private Object[] classPopupStruct = new Object[] {
-        "---",
-        "Add class...", new AddClass(new ApplicationTopicContext()),
-        "Paste classes", new Object[] {
-            "Paste classes as basenames...", new PasteClasses(new ApplicationTopicContext()),
-            "Paste classes as SIs...", new PasteClasses(new ApplicationTopicContext(), PasteClasses.INCLUDE_NOTHING, PasteClasses.PASTE_SIS),
 
+    private Object[] classPopupStruct = new Object[] {
             "---",
-            "Paste classes with names...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_NAMES),
-            "Paste classes with SLs...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_SLS),
-            "Paste classes with SIs...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_SIS),
-            "Paste classes with classes...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_CLASSES),
-            "Paste classes with instances...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_INSTANCES),
-            "Paste classes with players...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_PLAYERS),
-            "Paste classes with occurrences...", new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_TEXTDATAS),
-        },
-        "Delete classes...", new DeleteFromTopics(DeleteFromTopics.LOOSE_CLASSES_OF_CURRENT),
+            "Add class...", new AddClass(new ApplicationTopicContext()),
+            "Paste classes", new Object[] {
+                    "Paste classes as basenames...", new PasteClasses(new ApplicationTopicContext()),
+                    "Paste classes as SIs...",
+                    new PasteClasses(new ApplicationTopicContext(), PasteClasses.INCLUDE_NOTHING,
+                            PasteClasses.PASTE_SIS),
+
+                    "---",
+                    "Paste classes with names...",
+                    new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_NAMES),
+                    "Paste classes with SLs...",
+                    new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_SLS),
+                    "Paste classes with SIs...",
+                    new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_SIS),
+                    "Paste classes with classes...",
+                    new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_CLASSES),
+                    "Paste classes with instances...",
+                    new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_INSTANCES),
+                    "Paste classes with players...",
+                    new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_PLAYERS),
+                    "Paste classes with occurrences...",
+                    new PasteClasses(new ApplicationTopicContext(), PasteInstances.INCLUDE_TEXTDATAS),
+            },
+            "Delete classes...", new DeleteFromTopics(DeleteFromTopics.LOOSE_CLASSES_OF_CURRENT),
     };
-    
-    
-    
+
+
+
     /** Creates a new instance of ClassTable */
     public ClassTable(Topic topic, Wandora w) throws TopicMapException {
         super(w);
-        
+
         this.topic = topic;
         Collection<Topic> unsorted = topic.getTypes();
-        this.types = (Topic[]) TMBox.sortTopics(unsorted,null).toArray(new Topic[0]);
-        
+        this.types = (Topic[]) TMBox.sortTopics(unsorted, null).toArray(new Topic[0]);
+
         initialize(types, null);
-        
+
         this.setTransferHandler(new ClassTableTransferHandler());
         this.setDropMode(DropMode.ON);
     }
-    
-    
-    
-    
+
+
+
     @Override
     public Object[] getPopupStruct() {
         return getPopupStruct(classPopupStruct);
     }
-    
-    
-    
+
+
+
     private boolean autoCreateTopicsInPaste = false;
-    
+
     @Override
     public void paste() {
         String tabText = ClipboardBox.getClipboard();
         StringTokenizer tabLines = new StringTokenizer(tabText, "\n");
         autoCreateTopicsInPaste = false;
-        while(tabLines.hasMoreTokens()) {
+        while (tabLines.hasMoreTokens()) {
             String tabLine = tabLines.nextToken();
             StringTokenizer topicIdentifiers = new StringTokenizer(tabLine, "\t");
             try {
                 String topicIdentifier = null;
-                while(topicIdentifiers.hasMoreTokens()) {
+                while (topicIdentifiers.hasMoreTokens()) {
                     topicIdentifier = topicIdentifiers.nextToken();
-                    if(topicIdentifier != null && topicIdentifier.length() > 0) {
+                    if (topicIdentifier != null && topicIdentifier.length() > 0) {
                         Topic pastedTopic = getTopicForIdentifier(topicIdentifier);
-                        if(pastedTopic == null) {
+                        if (pastedTopic == null) {
                             boolean createTopicInPaste = false;
-                            if(!autoCreateTopicsInPaste) {
-                                int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Can't find a topic for identifier '"+topicIdentifier+"'. Would you like to create a topic for '"+topicIdentifier+"'?", "Create new topic?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
-                                if(a == WandoraOptionPane.YES_OPTION) {
+                            if (!autoCreateTopicsInPaste) {
+                                int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(),
+                                        "Can't find a topic for identifier '" + topicIdentifier
+                                                + "'. Would you like to create a topic for '" + topicIdentifier + "'?",
+                                        "Create new topic?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
+                                if (a == WandoraOptionPane.YES_OPTION) {
                                     createTopicInPaste = true;
                                 }
-                                else if(a == WandoraOptionPane.YES_TO_ALL_OPTION) {
+                                else if (a == WandoraOptionPane.YES_TO_ALL_OPTION) {
                                     autoCreateTopicsInPaste = true;
                                 }
-                                else if(a == WandoraOptionPane.CANCEL_OPTION) {
+                                else if (a == WandoraOptionPane.CANCEL_OPTION) {
                                     return;
                                 }
                             }
-                            if(autoCreateTopicsInPaste || createTopicInPaste) {
+                            if (autoCreateTopicsInPaste || createTopicInPaste) {
                                 TopicMap tm = Wandora.getWandora().getTopicMap();
-                                if(tm != null) {
+                                if (tm != null) {
                                     boolean identifierIsURL = false;
                                     try {
                                         new URI(topicIdentifier).toURL();
                                         identifierIsURL = true;
                                     }
-                                    catch(Exception e) {}
+                                    catch (Exception e) {
+                                    }
                                     pastedTopic = tm.createTopic();
-                                    if(identifierIsURL) {
+                                    if (identifierIsURL) {
                                         pastedTopic.addSubjectIdentifier(new Locator(topicIdentifier));
                                     }
                                     else {
@@ -164,41 +176,39 @@ public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
                                 }
                             }
                         }
-                        if(pastedTopic != null) {
+                        if (pastedTopic != null) {
                             topic.addType(pastedTopic);
                         }
                     }
                 }
             }
-            catch(Exception e) {
-                
+            catch (Exception e) {
+
             }
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
     // ----------------------------------------------------- actionPerformed ---
     // -------------------------------------------------------------------------
-    
-    
-        
+
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
         super.actionPerformed(e);
     }
-    
 
-    
-    
-    
+
+
     // -------------------------------------------------------------------------
     // --------------------------------------------------------- DRAG & DROP ---
     // -------------------------------------------------------------------------
-    
-    
 
-/*
+
+
+    /*
     public void dragEnter(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
         if(! parent.dragBorder.equals( this.getBorder())) {
             defaultBorder = this.getBorder();
@@ -225,13 +235,13 @@ public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
             DataFlavor fileListFlavor = DataFlavor.javaFileListFlavor;
             DataFlavor stringFlavor = DataFlavor.stringFlavor;
             Transferable tr = e.getTransferable();
-
+    
             if(e.isDataFlavorSupported(stringFlavor)) {                   
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                 String data = (String)tr.getTransferData(stringFlavor);
-
+    
                 logger.info("Trying string data flavor. Data="+data);                    
-
+    
                 String[] split=data.split("\n");
                 String identifier = null;
                 TopicMap topicmap = parent.getTopicMap();
@@ -280,48 +290,56 @@ public class ClassTable extends TopicTable /*implements DropTargetListener*/ {
     public void dropActionChanged(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
     }*/
 
-    
-    
-    
-    
+
+
     private class ClassTableTransferHandler extends TransferHandler {
 
         private static final long serialVersionUID = 1L;
 
         @Override
         public boolean canImport(TransferSupport support) {
-            if(!support.isDrop()) return false;
+            if (!support.isDrop())
+                return false;
             return support.isDataFlavorSupported(DnDHelper.topicDataFlavor) ||
-                   support.isDataFlavorSupported(DataFlavor.stringFlavor);
+                    support.isDataFlavorSupported(DataFlavor.stringFlavor);
         }
+
 
         @Override
         protected Transferable createTransferable(JComponent c) {
             return DnDHelper.makeTopicTableTransferable(ClassTable.this);
         }
 
+
         @Override
         public int getSourceActions(JComponent c) {
             return TransferHandler.COPY_OR_MOVE;
         }
 
+
         @Override
         public boolean importData(TransferSupport support) {
-            if(!support.isDrop()) return false;
-            try{
-                TopicMap tm=Wandora.getWandora().getTopicMap();
-                List<Topic> topics=DnDHelper.getTopicList(support, tm, true);
-                if(topics==null) return false;
-                Topic base=Wandora.getWandora().getOpenTopic();
-                if(base==null) return false;
+            if (!support.isDrop())
+                return false;
+            try {
+                TopicMap tm = Wandora.getWandora().getTopicMap();
+                List<Topic> topics = DnDHelper.getTopicList(support, tm, true);
+                if (topics == null)
+                    return false;
+                Topic base = Wandora.getWandora().getOpenTopic();
+                if (base == null)
+                    return false;
 
-                for(Topic t : topics){
+                for (Topic t : topics) {
                     base.addType(t);
                 }
                 Wandora.getWandora().doRefresh();
             }
-            catch(TopicMapException tme){logger.error(tme);}
-            catch(Exception ce){}
+            catch (TopicMapException tme) {
+                logger.error(tme);
+            }
+            catch (Exception ce) {
+            }
             return false;
         }
 

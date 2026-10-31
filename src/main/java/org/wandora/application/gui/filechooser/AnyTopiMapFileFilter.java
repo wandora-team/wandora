@@ -36,38 +36,38 @@ import java.io.File;
  * @author akivela
  */
 public class AnyTopiMapFileFilter extends javax.swing.filechooser.FileFilter {
-    
+
     /** Creates a new instance of AnyTopiMapFileFilter */
     public AnyTopiMapFileFilter() {
     }
-    
+
 
 
     @Override
     public boolean accept(File f) {
-        if(f != null) {
-            if(f.isDirectory()) {
+        if (f != null) {
+            if (f.isDirectory()) {
                 return true;
             }
             String uppercaseName = f.getName().toUpperCase();
-            if(uppercaseName.endsWith(".XTM10") ||
-               uppercaseName.endsWith(".XTM1") ||
-               uppercaseName.endsWith(".XTM20") ||
-               uppercaseName.endsWith(".XTM2") ||
-               uppercaseName.endsWith(".XTM") ||
-               uppercaseName.endsWith(".LTM") ||
-               uppercaseName.endsWith(".JTM")) {
-                    return true;
+            if (uppercaseName.endsWith(".XTM10") ||
+                    uppercaseName.endsWith(".XTM1") ||
+                    uppercaseName.endsWith(".XTM20") ||
+                    uppercaseName.endsWith(".XTM2") ||
+                    uppercaseName.endsWith(".XTM") ||
+                    uppercaseName.endsWith(".LTM") ||
+                    uppercaseName.endsWith(".JTM")) {
+                return true;
             }
         }
         return false;
     }
-    
+
 
     //The description of this filter
     @Override
     public String getDescription() {
         return "Any topic map";
     }
-    
+
 }

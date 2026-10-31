@@ -32,28 +32,27 @@ import org.wandora.application.gui.previews.PreviewUtils;
  * @author akivela
  */
 public class AudioMidiv2 extends AudioAbstract {
-    
+
 
     public AudioMidiv2(String locator) {
         super(locator);
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
+
 
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { 
-                    "audio/midi",
-                    "application/x-midi",
-                }, 
-                new String[] { 
-                    ".mid", 
-                    ".midi", 
-                    ".rmf"
-                }
-        );
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "audio/midi",
+                        "application/x-midi",
+                },
+                new String[] {
+                        ".mid",
+                        ".midi",
+                        ".rmf"
+                });
     }
 }

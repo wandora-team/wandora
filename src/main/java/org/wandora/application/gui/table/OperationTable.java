@@ -41,32 +41,33 @@ import org.wandora.topicmap.undowrapper.UndoOperation;
 
 
 public class OperationTable extends SimpleTable /*, DropTargetListener, DragGestureListener*/ {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private OperationTableModel opsModel = null;
-    
+
 
     public void initialize(UndoOperation[] tableOperations) {
         opsModel = new OperationTableModel(tableOperations);
         initialize();
     }
-    
+
+
     public void initialize(List<UndoOperation> tableOperations) {
         opsModel = new OperationTableModel(tableOperations.toArray(new UndoOperation[] {}));
         initialize();
     }
-    
-    
+
+
     private void initialize() {
         setDefaultRenderer(Object.class, new OperationTableRenderer(this));
-        
+
         this.setModel(opsModel);
         setRowSorter(new TableRowSorter<>(opsModel));
-        
+
         this.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         this.setRowSelectionAllowed(false);
-        
+
         TableColumnModel cm = this.getColumnModel();
         cm.getColumn(0).setPreferredWidth(40);
         cm.getColumn(1).setPreferredWidth(100);
@@ -75,10 +76,10 @@ public class OperationTable extends SimpleTable /*, DropTargetListener, DragGest
         cm.getColumn(4).setPreferredWidth(200);
         cm.getColumn(5).setPreferredWidth(40);
     }
-    
-    
+
+
     public OperationTableModel getOperationDataModel() {
         return opsModel;
     }
-    
+
 }

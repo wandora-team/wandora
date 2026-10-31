@@ -59,10 +59,11 @@ import org.wandora.topicmap.TopicMapException;
  */
 
 
-public class SketchGridPanel extends javax.swing.JPanel implements RefreshListener, TopicPanel, ActionListener, ComponentListener {
+public class SketchGridPanel extends javax.swing.JPanel
+        implements RefreshListener, TopicPanel, ActionListener, ComponentListener {
 
     private static final long serialVersionUID = 1L;
-    
+
     private int gridWidth = 10;
     private int gridHeight = 200;
     private TopicGrid topicGrid;
@@ -75,41 +76,41 @@ public class SketchGridPanel extends javax.swing.JPanel implements RefreshListen
      */
     public SketchGridPanel() {
     }
-    
-    
-    
+
+
+
     @Override
     public void init() {
         initComponents();
         this.addComponentListener(this);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        
+
         topicGrid = new TopicGrid(Wandora.getWandora());
         topicGrid.initialize(gridWidth, gridHeight);
         contentPanel.add(topicGrid, BorderLayout.CENTER);
         JTableHeader tableHeader = topicGrid.getTableHeader();
         headerPanel.add(tableHeader, BorderLayout.CENTER);
     }
-    
-    
+
+
 
     @Override
     public void doRefresh() throws TopicMapException {
-        
+
     }
 
-    
+
     @Override
     public boolean supportsOpenTopic() {
         return true;
     }
-    
-    
+
+
 
     @Override
     public void open(Topic topic) throws TopicMapException {
         List<int[]> cells = topicGrid.getSelectedCells();
-        if(cells != null && !cells.isEmpty()) {
+        if (cells != null && !cells.isEmpty()) {
             topicGrid.setCurrentTopic(topic);
         }
         else {
@@ -117,76 +118,89 @@ public class SketchGridPanel extends javax.swing.JPanel implements RefreshListen
         }
     }
 
+
     @Override
     public void stop() {
-        
+
     }
+
 
     @Override
     public void refresh() throws TopicMapException {
-        
+
     }
+
 
     @Override
     public boolean applyChanges() throws CancelledException, TopicMapException {
         return false;
     }
 
+
     @Override
     public JPanel getGui() {
         return this;
     }
 
+
     @Override
     public Topic getTopic() throws TopicMapException {
         Topic[] cts = topicGrid.getCurrentTopics();
-        if(cts != null && cts.length > 0) {
+        if (cts != null && cts.length > 0) {
             return cts[0];
         }
         return null;
     }
 
+
     @Override
     public String getName() {
         return "Sketch grid";
     }
-    
+
+
     @Override
     public String getTitle() {
         return getName();
     }
-    
-    
+
+
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/topic_panel_grid.png");
     }
+
 
     @Override
     public int getOrder() {
         return 300;
     }
 
+
     @Override
-    public boolean noScroll(){
+    public boolean noScroll() {
         return false;
     }
-    
+
+
     @Override
     public Object[] getViewMenuStruct() {
         return new Object[] {};
     }
 
+
     @Override
     public JPopupMenu getViewPopupMenu() {
         return UIBox.makePopupMenu(getViewMenuStruct(), this);
     }
+
+
     @Override
     public JMenu getViewMenu() {
         return UIBox.makeMenu(getViewMenuStruct(), this);
     }
-    
-    
+
+
 
     @Override
     public LocatorHistory getTopicHistory() {
@@ -194,109 +208,124 @@ public class SketchGridPanel extends javax.swing.JPanel implements RefreshListen
     }
 
 
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+
     }
 
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
+
+
     @Override
     public void componentResized(ComponentEvent e) {
         handleComponentEvent(e);
     }
+
 
     @Override
     public void componentMoved(ComponentEvent e) {
         handleComponentEvent(e);
     }
 
+
     @Override
     public void componentShown(ComponentEvent e) {
         handleComponentEvent(e);
     }
 
+
     @Override
     public void componentHidden(ComponentEvent e) {
         handleComponentEvent(e);
     }
-    
+
+
     private void handleComponentEvent(ComponentEvent e) {
         this.setPreferredSize(new Dimension(50, 50));
     }
-    
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
 
     @Override
     public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
-        needsRefresh=true;
+        needsRefresh = true;
     }
+
 
     @Override
     public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
-        needsRefresh=true;
+        needsRefresh = true;
     }
+
 
     @Override
     public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
-        needsRefresh=true;
+        needsRefresh = true;
     }
 
-    @Override
-    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName) throws TopicMapException {
-        needsRefresh=true;
-    }
 
     @Override
-    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue) throws TopicMapException {
-        needsRefresh=true;
+    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName)
+            throws TopicMapException {
+        needsRefresh = true;
     }
+
+
+    @Override
+    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue)
+            throws TopicMapException {
+        needsRefresh = true;
+    }
+
 
     @Override
     public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
-        needsRefresh=true;
+        needsRefresh = true;
     }
+
 
     @Override
     public void topicRemoved(Topic t) throws TopicMapException {
-        needsRefresh=true;
+        needsRefresh = true;
     }
+
 
     @Override
     public void topicChanged(Topic t) throws TopicMapException {
-        needsRefresh=true;
+        needsRefresh = true;
     }
+
 
     @Override
     public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
-        needsRefresh=true;
+        needsRefresh = true;
     }
 
+
     @Override
-    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer) throws TopicMapException {
-        needsRefresh=true;
+    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer)
+            throws TopicMapException {
+        needsRefresh = true;
     }
+
 
     @Override
     public void associationRemoved(Association a) throws TopicMapException {
-        needsRefresh=true;
+        needsRefresh = true;
     }
+
 
     @Override
     public void associationChanged(Association a) throws TopicMapException {
-        needsRefresh=true;
+        needsRefresh = true;
     }
-    
 
 
 
@@ -322,7 +351,8 @@ public class SketchGridPanel extends javax.swing.JPanel implements RefreshListen
 
         add(scrollPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+     // Variables declaration - do not modify//GEN-BEGIN:variables
+
     private javax.swing.JPanel contentPanel;
     private javax.swing.JPanel headerPanel;
     private javax.swing.JScrollPane scrollPane;

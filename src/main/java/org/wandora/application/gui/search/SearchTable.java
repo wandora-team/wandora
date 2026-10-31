@@ -126,8 +126,13 @@ public class SearchTable extends JTable {
 
 
         @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+        public Component getTableCellEditorComponent(
+                JTable table, 
+                Object value, 
+                boolean isSelected, 
+                int row,
                 int column) {
+            
             topic = sorter.modelIndex(row);
             label.setText(res[topic * 3 + 2]);
             return label;

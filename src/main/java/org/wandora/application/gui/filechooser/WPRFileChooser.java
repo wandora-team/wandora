@@ -35,7 +35,7 @@ import org.wandora.application.gui.simple.SimpleFileChooser;
 
 
 public class WPRFileChooser extends SimpleFileChooser {
-    
+
     private static final long serialVersionUID = 1L;
 
 
@@ -43,13 +43,15 @@ public class WPRFileChooser extends SimpleFileChooser {
     public WPRFileChooser() {
         initialize();
     }
+
+
     public WPRFileChooser(String currentPath) {
         super(currentPath);
-        initialize();       
+        initialize();
     }
 
-    
-    
+
+
     private void initialize() {
         setFileFilter(new WPRFileFilter());
         setFileView(new WPRFileView());

@@ -25,7 +25,6 @@
 
 
 
-
 package org.wandora.application.gui.topicpanels;
 
 
@@ -89,44 +88,42 @@ import io.github.ollama4j.models.response.OllamaAsyncResultStreamer;
 
 
 
-
-
-
 /**
  *
  * @author akivela
  */
 
 
-public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, TopicPanel, ActionListener, ComponentListener, SimpleTextConsoleListener {
+public class OllamaPanel extends javax.swing.JPanel
+        implements RefreshListener, TopicPanel, ActionListener, ComponentListener, SimpleTextConsoleListener {
     private static final long serialVersionUID = 1L;
-    
+
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(OllamaPanel.class);
-    
+
     public boolean USE_LOCAL_OPTIONS = true;
     public boolean SAVE_SKETCH_TO_GLOBAL_OPTIONS = true;
-    
+
     public static final int NO_SOURCE = 0;
     public static final int OCCURRENCE_SOURCE = 1;
     public static final int FILE_SOURCE = 2;
-    
+
     public static final int DONT_AUTORUN = 0;
     public static final int AUTORUN_OCCURRENCE = 1;
     public static final int AUTORUN_PROMPT_IN_EDITOR = 2;
     public static final int AUTORUN_FILE = 4;
-    
+
     public static final String PROMPT_OCCURRENCE_TYPE = "https://wandora.org/prompt";
-    
+
     private static int autorun = 0;
     private static String autorunPromptFile = "";
     private static boolean autoloadFromOccurrence = false;
     private static boolean shouldOutputInput = true;
     private static boolean showPromptInConsole = true;
-    
+
     private int currentPromptSource = NO_SOURCE;
     private String currentPromptFile = null;
     private String currentPrompt = null;
-    
+
     private static final String optionsPrefix = "options.ollamapanel";
     private static final String promptPath = "resources/ollama/prompts";
 
@@ -134,47 +131,44 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
     private TopicMap tm;
     private Topic rootTopic;
     private boolean isGuiInitialized = false;
-    
+
     private Ollama ollama;
     private String ollamaModel;
     private long ollamaPollIntervalMilliseconds;
     private StringBuilder capturedOutput;
-    
+
     private JDialog optionsDialog = null;
     private JFileChooser fc = null;
     private JPopupMenu menu = null;
-    
-    private static final String defaultMessage = 
-            "# \n"+
-            "# Welcome to Wandora's Ollama topic panel!\n"+
+
+    private static final String defaultMessage = "# \n" +
+            "# Welcome to Wandora's Ollama topic panel!\n" +
             "#\n";
-    
-    
-    
-    
-    
+
+
+
     private String[] openPromptMenuStruct = new String[] {
-        "Open prompt from occurrence",
-        "Open prompt from file..."
+            "Open prompt from occurrence",
+            "Open prompt from file..."
     };
     private String[] savePromptMenuStruct = new String[] {
-        "Save prompt to occurrence",
-        "Save prompt to file..."
+            "Save prompt to occurrence",
+            "Save prompt to file..."
     };
-    
-    
+
+
     /** Creates new form OllamaTopicPanel */
     public OllamaPanel() {
     }
 
-    
+
     @Override
     public void init() {
         Wandora wandora = Wandora.getWandora();
         tm = wandora.getTopicMap();
 
-        if(options == null) {
-            if(USE_LOCAL_OPTIONS) {
+        if (options == null) {
+            if (USE_LOCAL_OPTIONS) {
                 options = new Options(wandora.getOptions());
             }
             else {
@@ -184,10 +178,10 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
 
         initComponents();
         this.addComponentListener(this);
-        
+
         DefaultSyntaxKit.initKit();
         promptEditor.setContentType("text/plain");
-        
+
         KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
         promptEditor.getInputMap().put(key, "saveOperation");
         Action saveOperation = new AbstractAction() {
@@ -203,26 +197,26 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
         fc.setCurrentDirectory(new File(promptPath));
 
         readOptions();
-        if(currentPrompt != null) {
+        if (currentPrompt != null) {
             promptEditor.setText(currentPrompt);
         }
         else {
             promptEditor.setText(defaultMessage);
         }
-        
+
         try {
-        	ollama = OllamaUtilities.setUp();
-        	ollamaModel = "gemma4:12b";
+            ollama = OllamaUtilities.setUp();
+            ollamaModel = "gemma4:12b";
             ollama.pullModel(ollamaModel);
             ollamaPollIntervalMilliseconds = 500l;
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
-    
-    
+
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -464,6 +458,8 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 openBtnMousePressed(evt);
             }
+
+
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 openBtnMouseReleased(evt);
             }
@@ -481,6 +477,8 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 saveBtnMousePressed(evt);
             }
+
+
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 saveBtnMouseReleased(evt);
             }
@@ -545,62 +543,75 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
         add(tabPanel, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void executeBtnexecuteOnMouseRelease(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_executeBtnexecuteOnMouseRelease
         tabPanel.setSelectedComponent(consolePanel);
         executePromptInEditor();
-}//GEN-LAST:event_executeBtnexecuteOnMouseRelease
+    }//GEN-LAST:event_executeBtnexecuteOnMouseRelease
+
 
     private void newBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_newBtnMouseReleased
         newPrompt();
         invalidate();
-}//GEN-LAST:event_newBtnMouseReleased
+    }//GEN-LAST:event_newBtnMouseReleased
+
 
     private void saveBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseReleased
-        
-}//GEN-LAST:event_saveBtnMouseReleased
+
+    }//GEN-LAST:event_saveBtnMouseReleased
+
 
     private void optionsOkButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_optionsOkButtonMouseReleased
-        if(optionsDialog != null) {
+        if (optionsDialog != null) {
             optionsDialog.setVisible(false);
         }
-        if(noAutoRunRadioButton.isSelected()) autorun = DONT_AUTORUN;
-        else if(autoRunOccurrenceRadioButton.isSelected()) autorun = AUTORUN_OCCURRENCE;
-        else if(autoRunPromptInEditorRadioButton.isSelected()) autorun = AUTORUN_PROMPT_IN_EDITOR;
-        else if(autoRunFileRadioButton.isSelected()) autorun = AUTORUN_FILE;
+        if (noAutoRunRadioButton.isSelected())
+            autorun = DONT_AUTORUN;
+        else if (autoRunOccurrenceRadioButton.isSelected())
+            autorun = AUTORUN_OCCURRENCE;
+        else if (autoRunPromptInEditorRadioButton.isSelected())
+            autorun = AUTORUN_PROMPT_IN_EDITOR;
+        else if (autoRunFileRadioButton.isSelected())
+            autorun = AUTORUN_FILE;
         autorunPromptFile = autoRunFileTextField.getText();
-        
+
         autoloadFromOccurrence = autoloadCheckBox.isSelected();
-        
-        if(options != null) {
-            options.put(optionsPrefix+".autorun", ""+autorun);
-            options.put(optionsPrefix+".autorunPromptFile", autorunPromptFile);
-            options.put(optionsPrefix+".autoload", Boolean.toString(autoloadFromOccurrence));
+
+        if (options != null) {
+            options.put(optionsPrefix + ".autorun", "" + autorun);
+            options.put(optionsPrefix + ".autorunPromptFile", autorunPromptFile);
+            options.put(optionsPrefix + ".autoload", Boolean.toString(autoloadFromOccurrence));
         }
     }//GEN-LAST:event_optionsOkButtonMouseReleased
+
 
     private void optionsBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_optionsBtnMouseReleased
         openOptionsDialog();
     }//GEN-LAST:event_optionsBtnMouseReleased
 
+
     private void openBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_openBtnMouseReleased
 
     }//GEN-LAST:event_openBtnMouseReleased
+
 
     private void openBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_openBtnMousePressed
         showMenu(openPromptMenuStruct, evt);
     }//GEN-LAST:event_openBtnMousePressed
 
+
     private void saveBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMousePressed
         showMenu(savePromptMenuStruct, evt);
     }//GEN-LAST:event_saveBtnMousePressed
+
 
     private void autoRunFileBrowseButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_autoRunFileBrowseButtonMouseReleased
         fc.setDialogType(JFileChooser.OPEN_DIALOG);
         fc.setDialogTitle("Select Ollama Prompt");
         int answer = fc.showDialog(Wandora.getWandora(), "Select");
-        if(answer == JFileChooser.APPROVE_OPTION) {
+        if (answer == JFileChooser.APPROVE_OPTION) {
             File f = fc.getSelectedFile();
-            if(f != null) {
+            if (f != null) {
                 autoRunFileTextField.setText(f.getAbsolutePath());
                 autoRunFileRadioButton.setSelected(true);
             }
@@ -647,317 +658,332 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
     private javax.swing.JTabbedPane tabPanel;
     // End of variables declaration//GEN-END:variables
 
-    
-    
-    
-    
-    
+
+
     private void openOptionsDialog() {
         optionsDialog = new JDialog(Wandora.getWandora(), true);
-        optionsDialog.setSize(500,270);
+        optionsDialog.setSize(500, 270);
         optionsDialog.add(optionsPanel);
         optionsDialog.setTitle("Ollama topic panel options");
         Wandora.getWandora().centerWindow(optionsDialog);
         optionsDialog.setVisible(true);
     }
-    
-    
-    
-    
-    
-    
+
+
+
     public void showMenu(String[] struct, MouseEvent evt) {
         menu = UIBox.makePopupMenu(struct, this);
-        menu.setLocation(evt.getXOnScreen()-2, evt.getYOnScreen()-2);
-        menu.show(evt.getComponent(), evt.getX()-2, evt.getY()-2);
+        menu.setLocation(evt.getXOnScreen() - 2, evt.getYOnScreen() - 2);
+        menu.show(evt.getComponent(), evt.getX() - 2, evt.getY() - 2);
     }
-    
-    
+
+
 
     @Override
     public void doRefresh() throws TopicMapException {
-        
+
     }
 
-    
-    
+
+
     @Override
     public boolean supportsOpenTopic() {
         return true;
     }
-    
-    
-    
+
+
+
     @Override
     public void open(Topic topic) throws TopicMapException {
         rootTopic = topic;
-        
-        if(autoloadFromOccurrence) {
+
+        if (autoloadFromOccurrence) {
             promptEditor.setText(getPromptOccurrence());
         }
         autorun();
     }
 
-    
-    private void readOptions() {
-        autoloadFromOccurrence = options.getBoolean(optionsPrefix+".autoload", autoloadFromOccurrence);
-        autoloadCheckBox.setSelected(autoloadFromOccurrence);
-        
-        autorun = options.getInt(optionsPrefix+".autorun", 0);
-        autorunPromptFile = options.get(optionsPrefix+".autorunPromptFile");
-        autoRunFileTextField.setText(autorunPromptFile);
-        
-        currentPrompt = options.get(optionsPrefix+".currentPrompt");
 
-        switch(autorun) {
-            case DONT_AUTORUN: { noAutoRunRadioButton.setSelected(true); break; }
-            case AUTORUN_OCCURRENCE: { autoRunOccurrenceRadioButton.setSelected(true); break; }
-            case AUTORUN_PROMPT_IN_EDITOR: { autoRunPromptInEditorRadioButton.setSelected(true); break; }
-            case AUTORUN_FILE: { autoRunFileRadioButton.setSelected(true); break; }
+    private void readOptions() {
+        autoloadFromOccurrence = options.getBoolean(optionsPrefix + ".autoload", autoloadFromOccurrence);
+        autoloadCheckBox.setSelected(autoloadFromOccurrence);
+
+        autorun = options.getInt(optionsPrefix + ".autorun", 0);
+        autorunPromptFile = options.get(optionsPrefix + ".autorunPromptFile");
+        autoRunFileTextField.setText(autorunPromptFile);
+
+        currentPrompt = options.get(optionsPrefix + ".currentPrompt");
+
+        switch (autorun) {
+            case DONT_AUTORUN: {
+                noAutoRunRadioButton.setSelected(true);
+                break;
+            }
+            case AUTORUN_OCCURRENCE: {
+                autoRunOccurrenceRadioButton.setSelected(true);
+                break;
+            }
+            case AUTORUN_PROMPT_IN_EDITOR: {
+                autoRunPromptInEditorRadioButton.setSelected(true);
+                break;
+            }
+            case AUTORUN_FILE: {
+                autoRunFileRadioButton.setSelected(true);
+                break;
+            }
         }
     }
-    
-    
-    
-    
+
+
+
     private void autorun() {
         String autorunPrompt = null;
-        switch(autorun) {
+        switch (autorun) {
             case AUTORUN_OCCURRENCE: {
                 autorunPrompt = getPromptOccurrence();
-                break; 
+                break;
             }
-            case AUTORUN_PROMPT_IN_EDITOR: { 
+            case AUTORUN_PROMPT_IN_EDITOR: {
                 autorunPrompt = promptEditor.getText();
-                break; 
+                break;
             }
             case AUTORUN_FILE: {
                 try {
-                    if(autorunPromptFile != null && autorunPromptFile.length() > 0) {
-                       autorunPrompt = IObox.loadFile(autorunPromptFile);
+                    if (autorunPromptFile != null && autorunPromptFile.length() > 0) {
+                        autorunPrompt = IObox.loadFile(autorunPromptFile);
                     }
                 }
-                catch(Exception e) {
-                	logger.error(e);
+                catch (Exception e) {
+                    logger.error(e);
                 }
-                break; 
+                break;
             }
         }
-        if(autorunPrompt != null) {
+        if (autorunPrompt != null) {
             executePrompt(autorunPrompt);
         }
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     private String getPromptOccurrence() {
         return getPromptOccurrence(rootTopic);
     }
-    
-    
+
+
     private String getPromptOccurrence(Topic t) {
         String o = null;
-        if(t != null) {
+        if (t != null) {
             try {
                 Topic otype = tm.getTopic(PROMPT_OCCURRENCE_TYPE);
                 Topic olang = tm.getTopic(TMBox.LANGINDEPENDENT_SI);
-                if(otype != null && olang != null) {
+                if (otype != null && olang != null) {
                     o = t.getData(otype, olang);
                 }
             }
-            catch(Exception e) {
-            	logger.error(e);
+            catch (Exception e) {
+                logger.error(e);
             }
         }
         return o;
     }
-    
-    
-    
+
+
+
     private void setPromptOccurrence(String o) {
         setPromptOccurrence(rootTopic, o);
     }
-    
+
+
     private void setPromptOccurrence(Topic t, String o) {
-        if(t != null) {
+        if (t != null) {
             try {
                 Topic otype = tm.getTopic(PROMPT_OCCURRENCE_TYPE);
                 Topic olang = tm.getTopic(TMBox.LANGINDEPENDENT_SI);
-                if(otype != null && olang != null) {
+                if (otype != null && olang != null) {
                     t.setData(otype, olang, o);
                 }
             }
-            catch(Exception e) {
-            	logger.error(e);
+            catch (Exception e) {
+                logger.error(e);
             }
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     @Override
     public void stop() {
         saveCurrentPromptToOptions();
     }
 
+
     @Override
     public LocatorHistory getTopicHistory() {
         return null;
     }
-    
+
 
     @Override
     public void refresh() throws TopicMapException {
 
     }
 
+
     @Override
     public boolean applyChanges() throws CancelledException, TopicMapException {
         saveCurrentPromptToOptions();
         return true;
     }
-    
+
 
     @Override
     public JPanel getGui() {
         return this;
     }
 
+
     @Override
     public Topic getTopic() throws TopicMapException {
         return rootTopic;
     }
+
 
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/topic_panel_ollama.png");
     }
 
-    
-    
+
 
     @Override
     public JPopupMenu getViewPopupMenu() {
         return UIBox.makePopupMenu(getViewMenuStruct(), this);
     }
-    
+
+
     @Override
     public JMenu getViewMenu() {
         return UIBox.makeMenu(getViewMenuStruct(), this);
     }
 
+
     @Override
     public Object[] getViewMenuStruct() {
         Object[] menuStructure = new Object[] {
-            "New prompt", this,
-            "Open prompt", this,
-            new Object[] {
-                "Open prompt from occurrence", this,
-                "Open prompt from file...", this,
-            },
-            "Save prompt", this,
-            new Object[] {
-                "Save prompt to occurrence", this,
-                "Save prompt to file...", this,
-            },
-            "Run prompt", this,
-            "---",
-            "Options...", this,
+                "New prompt", this,
+                "Open prompt", this,
+                new Object[] {
+                        "Open prompt from occurrence", this,
+                        "Open prompt from file...", this,
+                },
+                "Save prompt", this,
+                new Object[] {
+                        "Save prompt to occurrence", this,
+                        "Save prompt to file...", this,
+                },
+                "Run prompt", this,
+                "---",
+                "Options...", this,
         };
         return menuStructure;
     }
-    
+
 
 
     @Override
-    public boolean noScroll(){
+    public boolean noScroll() {
         return false;
     }
-  
-    
+
+
     @Override
     public String getName() {
         return "Ollama";
     }
-    
+
+
     @Override
     public String getTitle() {
-        if(rootTopic != null) return TopicToString.toString(rootTopic);
-        else return getName();
+        if (rootTopic != null)
+            return TopicToString.toString(rootTopic);
+        else
+            return getName();
     }
-    
-    
+
+
     @Override
     public int getOrder() {
         return 2000;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String ac = e.getActionCommand();
-        if("New prompt".equalsIgnoreCase(ac)) {
+        if ("New prompt".equalsIgnoreCase(ac)) {
             newPrompt();
         }
-        else if("Open prompt from occurrence".equalsIgnoreCase(ac)) {
+        else if ("Open prompt from occurrence".equalsIgnoreCase(ac)) {
             loadPromptFromOccurrence();
         }
-        else if("Open prompt from file...".equalsIgnoreCase(ac)) {
+        else if ("Open prompt from file...".equalsIgnoreCase(ac)) {
             loadPromptFromFile();
         }
-        else if("Save prompt to occurrence".equalsIgnoreCase(ac)) {
+        else if ("Save prompt to occurrence".equalsIgnoreCase(ac)) {
             savePromptToOccurrence();
         }
-        else if("Save prompt to file...".equalsIgnoreCase(ac)) {
+        else if ("Save prompt to file...".equalsIgnoreCase(ac)) {
             savePromptToFile();
         }
-        else if("Options...".equalsIgnoreCase(ac)) {
+        else if ("Options...".equalsIgnoreCase(ac)) {
             openOptionsDialog();
         }
-        else if("Run prompt".equalsIgnoreCase(ac)) {
+        else if ("Run prompt".equalsIgnoreCase(ac)) {
             executePromptInEditor();
         }
     }
 
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     private void newPrompt() {
-        int answer = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Erase current prompt in editor?", "Erase prompt in editor?", WandoraOptionPane.YES_NO_OPTION);
-        if(answer == WandoraOptionPane.YES_OPTION) {
+        int answer = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Erase current prompt in editor?",
+                "Erase prompt in editor?", WandoraOptionPane.YES_NO_OPTION);
+        if (answer == WandoraOptionPane.YES_OPTION) {
             currentPromptSource = NO_SOURCE;
             currentPromptFile = null;
             promptEditor.setText("");
         }
     }
-    
-    
-    
-    
+
+
+
     public void executePromptInEditor() {
         String prompt = promptEditor.getText();
         executePrompt(prompt);
     }
-    
+
+
     public void executePrompt(String prompt) {
-        if(prompt != null) {
-            if(prompt.trim().length() > 0) {
+        if (prompt != null) {
+            if (prompt.trim().length() > 0) {
                 String newline = "\n";
                 //String commands[] = prompt.split(newline);
                 //prompt = prompt.replaceAll("(?m)^[ \t]*\r?\n","");
-                prompt = prompt.replace("'","\'");
+                prompt = prompt.replace("'", "\'");
                 //prompt = prompt.replaceAll("\r\n", ";");
                 prompt = prompt.replace("\n", "\\n");
                 prompt = prompt.replace("\r", "\\r");
@@ -968,302 +994,334 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
             }
         }
     }
-    
-    
-    
+
+
+
     private void loadPromptFromOccurrence() {
         try {
             Topic otype = tm.getTopic(PROMPT_OCCURRENCE_TYPE);
             Topic olang = tm.getTopic(TMBox.LANGINDEPENDENT_SI);
-            if(otype != null && olang != null) {
+            if (otype != null && olang != null) {
                 currentPromptFile = null;
                 String o = rootTopic.getData(otype, olang);
-                if(o != null) {
+                if (o != null) {
                     promptEditor.setText(o);
                 }
                 else {
-                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Can't find R occurrence in current topic. Can't restore prompt from occurrence.", "Can't restore prompt", WandoraOptionPane.INFORMATION_MESSAGE);
+                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                            "Can't find R occurrence in current topic. Can't restore prompt from occurrence.",
+                            "Can't restore prompt", WandoraOptionPane.INFORMATION_MESSAGE);
                 }
             }
             else {
-                if(otype == null) WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Can't find R occurrence type. Can't restore prompt from occurrence.", "Can't find prompt occurrence type", WandoraOptionPane.INFORMATION_MESSAGE);
-                if(olang == null) WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Can't find Language independent scope topic. Can't restore prompt from occurrence.", "Can't find Language independent scope topic", WandoraOptionPane.INFORMATION_MESSAGE);
+                if (otype == null)
+                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                            "Can't find R occurrence type. Can't restore prompt from occurrence.",
+                            "Can't find prompt occurrence type", WandoraOptionPane.INFORMATION_MESSAGE);
+                if (olang == null)
+                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                            "Can't find Language independent scope topic. Can't restore prompt from occurrence.",
+                            "Can't find Language independent scope topic", WandoraOptionPane.INFORMATION_MESSAGE);
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
     }
 
-    
+
     private void loadPromptFromFile() {
         fc.setDialogType(JFileChooser.OPEN_DIALOG);
         fc.setDialogTitle("Open Prompt");
         int answer = fc.showDialog(Wandora.getWandora(), "Open");
-        if(answer == SimpleFileChooser.APPROVE_OPTION) {
+        if (answer == SimpleFileChooser.APPROVE_OPTION) {
             File promptFile = fc.getSelectedFile();
             try {
                 String prompt = IObox.loadFile(promptFile);
                 currentPromptFile = promptFile.getAbsolutePath();
-                if(prompt != null) {
+                if (prompt != null) {
                     promptEditor.setText(prompt);
                 }
             }
-            catch(Exception e) {
-            	logger.error(e);
-                WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Exception '"+e.getMessage()+"' occurred while restoring prompt from file '"+promptFile.getName()+"'.", "Can't restore prompt", WandoraOptionPane.INFORMATION_MESSAGE);
+            catch (Exception e) {
+                logger.error(e);
+                WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                        "Exception '" + e.getMessage() + "' occurred while restoring prompt from file '"
+                                + promptFile.getName() + "'.",
+                        "Can't restore prompt", WandoraOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
-    
-    
 
-    
-    
-    
+
+
     private void savePromptToOccurrence() {
         String prompt = promptEditor.getText();
         try {
             Topic otype = tm.getTopic(PROMPT_OCCURRENCE_TYPE);
             Topic olang = tm.getTopic(TMBox.LANGINDEPENDENT_SI);
-            if(otype != null && olang != null) {
+            if (otype != null && olang != null) {
                 boolean storeToOccurrence = true;
                 currentPromptSource = OCCURRENCE_SOURCE;
                 String oldPrompt = rootTopic.getData(otype, olang);
-                if(oldPrompt != null) {
-                    int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Current topic contains prompt occurrence already. Storing current prompt erases older. Do you want to store the prompt to the occurrence?","Topic already has a prompt occurrence", WandoraOptionPane.INFORMATION_MESSAGE);
-                    if(a != WandoraOptionPane.YES_OPTION) storeToOccurrence = false;
+                if (oldPrompt != null) {
+                    int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(),
+                            "Current topic contains prompt occurrence already. Storing current prompt erases older. Do you want to store the prompt to the occurrence?",
+                            "Topic already has a prompt occurrence", WandoraOptionPane.INFORMATION_MESSAGE);
+                    if (a != WandoraOptionPane.YES_OPTION)
+                        storeToOccurrence = false;
                 }
-                if(storeToOccurrence) {
+                if (storeToOccurrence) {
                     rootTopic.setData(otype, olang, prompt);
                 }
             }
             else {
-                if(otype == null) WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Can't find prompt occurrence type. Can't save prompt to occurrence.", "Can't find R occurrence type", WandoraOptionPane.INFORMATION_MESSAGE);
-                if(olang == null) WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Can't find Language independent scope topic. Can't save prompt to occurrence.", "Can't find Language independent scope topic", WandoraOptionPane.INFORMATION_MESSAGE);
+                if (otype == null)
+                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                            "Can't find prompt occurrence type. Can't save prompt to occurrence.",
+                            "Can't find R occurrence type", WandoraOptionPane.INFORMATION_MESSAGE);
+                if (olang == null)
+                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                            "Can't find Language independent scope topic. Can't save prompt to occurrence.",
+                            "Can't find Language independent scope topic", WandoraOptionPane.INFORMATION_MESSAGE);
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
-            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Exception '"+e.getMessage()+"' occurred while storing the prompt to an occurrence to current topic.", "Can't store prompt", WandoraOptionPane.INFORMATION_MESSAGE);
+        catch (Exception e) {
+            logger.error(e);
+            WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                    "Exception '" + e.getMessage()
+                            + "' occurred while storing the prompt to an occurrence to current topic.",
+                    "Can't store prompt", WandoraOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
-    
+
+
     private void savePromptToFile() {
         File promptFile = null;
         try {
             fc.setDialogTitle("Save prompt");
             fc.setDialogType(JFileChooser.SAVE_DIALOG);
             int answer = fc.showDialog(Wandora.getWandora(), "Save");
-            if(answer == SimpleFileChooser.APPROVE_OPTION) {
+            if (answer == SimpleFileChooser.APPROVE_OPTION) {
                 promptFile = fc.getSelectedFile();
                 String promptCode = promptEditor.getText();
                 FileUtils.writeStringToFile(promptFile, promptCode, "UTF-8");
                 currentPromptSource = FILE_SOURCE;
             }
         }
-        catch(Exception e) {
-            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Exception '"+e.getMessage()+"' occurred while storing prompt to file '"+promptFile.getName()+"'.", "Can't save prompt", WandoraOptionPane.INFORMATION_MESSAGE);
+        catch (Exception e) {
+            WandoraOptionPane
+                    .showMessageDialog(Wandora.getWandora(),
+                            "Exception '" + e.getMessage() + "' occurred while storing prompt to file '"
+                                    + promptFile.getName() + "'.",
+                            "Can't save prompt", WandoraOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
-    
-    
-    
+
+
+
     private void savePrompt() {
-        if(currentPromptSource == OCCURRENCE_SOURCE) {
+        if (currentPromptSource == OCCURRENCE_SOURCE) {
             savePromptToOccurrence();
         }
-        else if(currentPromptSource == FILE_SOURCE) {
+        else if (currentPromptSource == FILE_SOURCE) {
             savePromptToFile();
         }
     }
-    
-    
+
+
     private void saveCurrentPromptToOptions() {
-        if(options != null) {
-            options.put(optionsPrefix+".currentPrompt", promptEditor.getText());
+        if (options != null) {
+            options.put(optionsPrefix + ".currentPrompt", promptEditor.getText());
         }
-        if(USE_LOCAL_OPTIONS && SAVE_SKETCH_TO_GLOBAL_OPTIONS) {
+        if (USE_LOCAL_OPTIONS && SAVE_SKETCH_TO_GLOBAL_OPTIONS) {
             try {
-                Wandora.getWandora().getOptions().put(optionsPrefix+".currentPrompt", promptEditor.getText());
+                Wandora.getWandora().getOptions().put(optionsPrefix + ".currentPrompt", promptEditor.getText());
             }
-            catch(Exception e) {
-                
+            catch (Exception e) {
+
             }
         }
     }
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
 
     public String handleInput(final String input) {
-        logger.info("HANDLE INPUT: "+input);
+        logger.info("HANDLE INPUT: " + input);
         capturedOutput = new StringBuilder("");
-        
+
         Runnable handleInputRunnable = new Runnable() {
-        	final StringBuilder runnablesCapturedOutput = capturedOutput;
-        	
-			@Override
-			public void run() {
-				Wandora.getWandora().setAnimated(true, this);
-				if(shouldOutputInput) {
-		        	output(input);
-		        	if(!input.endsWith("\n")) {
-		        		output("\n");
-		        	}
-		        }
-		        try {
-		        	OllamaAsyncResultStreamer resultStreamer =
-		                    ollama.generateAsync(ollamaModel, input, false, ThinkMode.ENABLED);
-		        	while (true) {
-		        		try {
-		        			Thread.sleep(ollamaPollIntervalMilliseconds);
-		        		}
-		        		catch(Exception es) {}
-		        		try {
-		        			if (!resultStreamer.isAlive()) break;
-			                String responseTokens = resultStreamer.getResponseStream().poll();
-			                if(responseTokens != null) {
-			                	runnablesCapturedOutput.append(responseTokens);
-			                	output(responseTokens);
-			                }
-		        		}
-		        		catch(Exception e1) {
-		        			output(ExceptionUtils.getStackTrace(e1));
-		        		}
-		            }
-		        	output("\n> ");
-		        }
-		        catch (Exception e2) {
-		        	output(ExceptionUtils.getStackTrace(e2));
-				}
-		        finally {
-		        	Wandora.getWandora().setAnimated(false, this);
-		        }
-			}
+            final StringBuilder runnablesCapturedOutput = capturedOutput;
+
+            @Override
+            public void run() {
+                Wandora.getWandora().setAnimated(true, this);
+                if (shouldOutputInput) {
+                    output(input);
+                    if (!input.endsWith("\n")) {
+                        output("\n");
+                    }
+                }
+                try {
+                    OllamaAsyncResultStreamer resultStreamer = ollama.generateAsync(ollamaModel, input, false,
+                            ThinkMode.ENABLED);
+                    while (true) {
+                        try {
+                            Thread.sleep(ollamaPollIntervalMilliseconds);
+                        }
+                        catch (Exception es) {
+                        }
+                        try {
+                            if (!resultStreamer.isAlive())
+                                break;
+                            String responseTokens = resultStreamer.getResponseStream().poll();
+                            if (responseTokens != null) {
+                                runnablesCapturedOutput.append(responseTokens);
+                                output(responseTokens);
+                            }
+                        }
+                        catch (Exception e1) {
+                            output(ExceptionUtils.getStackTrace(e1));
+                        }
+                    }
+                    output("\n> ");
+                }
+                catch (Exception e2) {
+                    output(ExceptionUtils.getStackTrace(e2));
+                }
+                finally {
+                    Wandora.getWandora().setAnimated(false, this);
+                }
+            }
         };
-        
+
         new Thread(handleInputRunnable).start();
 
         logger.info("EXITING HANDLE INPUT");
         return "";
     }
 
-    
 
-    
-    
-    
+
     public void output(String output) {
-    	logger.info("OUTPUT: "+output);
+        logger.info("OUTPUT: " + output);
         ((SimpleTextConsole) ollamaConsoleTextPane).output(output);
         ((SimpleTextConsole) ollamaConsoleTextPane).refresh();
     }
 
-    
-    
 
-    
-    
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
 
     @Override
     public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
-        
+
     }
+
 
     @Override
     public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
-        
+
     }
+
 
     @Override
     public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
-        
+
     }
 
-    @Override
-    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName) throws TopicMapException {
-        
-    }
 
     @Override
-    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue) throws TopicMapException {
-        
+    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName)
+            throws TopicMapException {
+
     }
+
+
+    @Override
+    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue)
+            throws TopicMapException {
+
+    }
+
 
     @Override
     public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
-        
+
     }
+
 
     @Override
     public void topicRemoved(Topic t) throws TopicMapException {
-        
+
     }
+
 
     @Override
     public void topicChanged(Topic t) throws TopicMapException {
-        
+
     }
+
 
     @Override
     public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
-        
+
     }
 
+
     @Override
-    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer) throws TopicMapException {
-        
+    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer)
+            throws TopicMapException {
+
     }
+
 
     @Override
     public void associationRemoved(Association a) throws TopicMapException {
-        
+
     }
+
 
     @Override
     public void associationChanged(Association a) throws TopicMapException {
-        
-    }
-    
-    // -------------------------------------------------------------------------
-    
-    
 
-    
+    }
+
+    // -------------------------------------------------------------------------
+
+
+
     @Override
     public void componentResized(ComponentEvent e) {
         handleComponentEvent(e);
     }
+
 
     @Override
     public void componentMoved(ComponentEvent e) {
         handleComponentEvent(e);
     }
 
+
     @Override
     public void componentShown(ComponentEvent e) {
         handleComponentEvent(e);
     }
 
+
     @Override
     public void componentHidden(ComponentEvent e) {
         handleComponentEvent(e);
     }
-    
-    
-    
-    
+
+
+
     private void handleComponentEvent(ComponentEvent e) {
         saveCurrentPromptToOptions();
         revalidate();
@@ -1271,16 +1329,9 @@ public class OllamaPanel extends javax.swing.JPanel implements RefreshListener, 
     }
 
 
-    
-    
+
     // -------------------------------------------------------------------------
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
 }

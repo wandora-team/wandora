@@ -63,8 +63,8 @@ import javafx.util.Duration;
 public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, ComponentListener {
     private static final long serialVersionUID = 1L;
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(VideoMp4.class);
-    
-	private String mediaUrlString = null;
+
+    private String mediaUrlString = null;
     private JFXPanel fxPanel;
     private MediaPlayer player;
     private boolean playerReady = false;
@@ -79,8 +79,8 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
         this.mediaUrlString = mediaUrlString;
         initialize();
     }
-    
-    
+
+
 
     private void initialize() {
         fxPanel = new JFXPanel();
@@ -89,7 +89,7 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
         fxPanelContainer.setBackground(java.awt.Color.BLACK);
         fxPanelContainer.setLayout(new BorderLayout());
         fxPanelContainer.add(fxPanel, BorderLayout.CENTER);
-        
+
         progressBar = new SimpleTimeSlider();
         JPanel progressBarContainer = new JPanel();
         progressBarContainer.setLayout(new BorderLayout());
@@ -97,23 +97,23 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
 
         JPanel controllerPanel = new JPanel();
         controllerPanel.add(getJToolBar(), BorderLayout.CENTER);
-        
-        this.setLayout(new BorderLayout(4,4));
+
+        this.setLayout(new BorderLayout(4, 4));
         this.add(fxPanelContainer, BorderLayout.NORTH);
         this.add(progressBarContainer, BorderLayout.CENTER);
         this.add(controllerPanel, BorderLayout.SOUTH);
-        
+
         Platform.runLater(new Runnable() {
-            @Override 
+            @Override
             public void run() {
                 Group root = new Group();
                 scene = new Scene(root);
                 scene.setCursor(Cursor.HAND);
                 scene.setFill(Color.rgb(0, 0, 0, 1.0));
                 media = getMediaFor(mediaUrlString);
-                if(media != null) {
+                if (media != null) {
                     player = getMediaPlayerFor(media);
-                    if(player != null) {
+                    if (player != null) {
                         progressBar.addMouseMotionListener(new MouseMotionAdapter() {
                             public void mouseDragged(java.awt.event.MouseEvent e) {
                                 int mouseValue = progressBar.getValueFor(e);
@@ -137,15 +137,15 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
         });
         this.addComponentListener(this);
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     private Media getMediaFor(String mediaLocator) {
         try {
             final Media m = new Media(mediaLocator);
-            if(m.getError() == null) {
+            if (m.getError() == null) {
                 m.setOnError(new Runnable() {
                     public void run() {
                         processError(m.getError());
@@ -157,22 +157,23 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
                 processError(m.getError());
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             processError(e);
         }
         return null;
     }
-    
-    
+
+
     private MediaPlayer getMediaPlayerFor(Media media) {
         try {
             playerReady = false;
             final MediaPlayer mediaPlayer = new MediaPlayer(media);
-            if(mediaPlayer.getError() == null) {
+            if (mediaPlayer.getError() == null) {
                 mediaPlayer.setAutoPlay(false);
                 mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
                     @Override
-                    public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
+                    public void changed(ObservableValue<? extends Duration> observable, Duration oldValue,
+                            Duration newValue) {
                         progressBar.setValue((int) Math.round(newValue.toSeconds()));
                         updateTimeLabel();
                     }
@@ -197,44 +198,44 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
                 processError(mediaPlayer.getError());
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             processError(e);
         }
         return null;
     }
-    
-    
-    
+
+
+
     private void processError(Exception e) {
-        String message = "Can't view preview for '"+mediaUrlString+"'.";
+        String message = "Can't view preview for '" + mediaUrlString + "'.";
         PreviewUtils.previewError(this, message, e);
     }
-    
-    
-    
+
+
+
     private JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Play", PreviewUtils.ICON_PLAY, this,
-            "Pause", PreviewUtils.ICON_PAUSE, this,
-            "Stop", PreviewUtils.ICON_STOP, this,
-            "Backward", PreviewUtils.ICON_BACKWARD, this,
-            "Forward", PreviewUtils.ICON_FORWARD, this,
-            // "Start", PreviewUtils.ICON_START, this,
-            // "End", PreviewUtils.ICON_END, this,
-            "Restart", PreviewUtils.ICON_RESTART, this,
-            "---",
-            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
-            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
-            "Save as", PreviewUtils.ICON_SAVE, this,
+                "Play", PreviewUtils.ICON_PLAY, this,
+                "Pause", PreviewUtils.ICON_PAUSE, this,
+                "Stop", PreviewUtils.ICON_STOP, this,
+                "Backward", PreviewUtils.ICON_BACKWARD, this,
+                "Forward", PreviewUtils.ICON_FORWARD, this,
+                // "Start", PreviewUtils.ICON_START, this,
+                // "End", PreviewUtils.ICON_END, this,
+                "Restart", PreviewUtils.ICON_RESTART, this,
+                "---",
+                "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+                "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+                "Save as", PreviewUtils.ICON_SAVE, this,
         }, this);
     }
 
-    
-    
+
+
     private void refreshLayout() {
-        if(playerReady) {
-            if(player != null && fxPanel != null && mediaView != null) {
-                if(player.getMedia() != null) {
+        if (playerReady) {
+            if (player != null && fxPanel != null && mediaView != null) {
+                if (player.getMedia() != null) {
                     int w = player.getMedia().getWidth();
                     int h = player.getMedia().getHeight();
 
@@ -244,221 +245,229 @@ public class VideoMp4 extends JPanel implements PreviewPanel, ActionListener, Co
                     fxPanel.setPreferredSize(new Dimension(w, h));
                     fxPanel.revalidate();
 
-                    mediaView.translateXProperty().set(outerWidth/2 - w/2);
+                    mediaView.translateXProperty().set(outerWidth / 2 - w / 2);
 
-                    //progressBar.setPreferredSize(new Dimension(outerWidth, 17));
-                    //progressBar.setMaximumSize(new Dimension(outerWidth, 16));
-                    //progressBar.setMinimumSize(new Dimension(outerWidth, 16));
-                    //progressBar.validate();
                     this.validate();
                 }
             }
         }
     }
-    
-    
+
+
     private void updateTimeLabel() {
         Platform.runLater(new Runnable() {
-            @Override public void run() {
-                if(player != null && progressBar != null) {
+            @Override
+            public void run() {
+                if (player != null && progressBar != null) {
                     Duration currentTime = player.getCurrentTime();
                     progressBar.setValue(currentTime.toSeconds());
                 }
             }
         });
     }
-    
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
 
 
     @Override
     public void finish() {
         Platform.runLater(new Runnable() {
-            @Override public void run() {
-                if(player != null) {
+            @Override
+            public void run() {
+                if (player != null) {
                     player.stop();
                 }
             }
         });
     }
+
 
     @Override
     public Component getGui() {
         return this;
     }
 
+
     @Override
     public boolean isHeavy() {
         return false;
     }
 
+
     @Override
     public void stop() {
         Platform.runLater(new Runnable() {
-            @Override public void run() {
-                if(player != null) {
+            @Override
+            public void run() {
+                if (player != null) {
                     // logger.info("VideoMp4 stopped.");
                     player.stop();
                 }
             }
         });
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     @Override
     public void actionPerformed(java.awt.event.ActionEvent e) {
-        if(e == null) return;
-        
+        if (e == null)
+            return;
+
         String actionCommand = e.getActionCommand();
-        logger.info("Action '"+actionCommand+"' performed at FXMediaPlayer");
-        
-        if("Play".equalsIgnoreCase(actionCommand)) {
+        logger.info("Action '" + actionCommand + "' performed at FXMediaPlayer");
+
+        if ("Play".equalsIgnoreCase(actionCommand)) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     Status status = player.getStatus();
-                    if(!status.equals(Status.PLAYING)) {
+                    if (!status.equals(Status.PLAYING)) {
                         player.play();
                     }
                 }
             });
         }
-        
-        else if("Pause".equalsIgnoreCase(actionCommand)) {
+
+        else if ("Pause".equalsIgnoreCase(actionCommand)) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     Status status = player.getStatus();
-                    if(status.equals(Status.PAUSED) || status.equals(Status.READY) || status.equals(Status.STOPPED)) {
+                    if (status.equals(Status.PAUSED) || status.equals(Status.READY) || status.equals(Status.STOPPED)) {
                         player.play();
                     }
-                    else if(status.equals(Status.PLAYING)) {
+                    else if (status.equals(Status.PLAYING)) {
                         player.pause();
                     }
                 }
             });
         }
-        
-        else if("Stop".equalsIgnoreCase(actionCommand)) {
+
+        else if ("Stop".equalsIgnoreCase(actionCommand)) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     player.seek(player.getStartTime());
                     player.stop();
                 }
             });
         }
-        
-        else if("Backward".equalsIgnoreCase(actionCommand)) {
+
+        else if ("Backward".equalsIgnoreCase(actionCommand)) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     player.seek(player.getCurrentTime().divide(1.5));
                 }
             });
         }
-        
-        else if("Forward".equalsIgnoreCase(actionCommand)) {
+
+        else if ("Forward".equalsIgnoreCase(actionCommand)) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     player.seek(player.getCurrentTime().multiply(1.5));
                 }
             });
         }
 
-        else if("Restart".equalsIgnoreCase(actionCommand)) {
+        else if ("Restart".equalsIgnoreCase(actionCommand)) {
             Platform.runLater(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     player.play();
                     player.seek(player.getStartTime());
                 }
             });
         }
-        
-        else if("Open ext".equalsIgnoreCase(actionCommand)) {
+
+        else if ("Open ext".equalsIgnoreCase(actionCommand)) {
             PreviewUtils.forkExternalPlayer(mediaUrlString);
         }
-        
-        else if("Save".equalsIgnoreCase(actionCommand)) {
+
+        else if ("Save".equalsIgnoreCase(actionCommand)) {
             PreviewUtils.saveToFile(mediaUrlString);
         }
-        
-        else if("Copy location".equalsIgnoreCase(actionCommand)) {
-            if(mediaUrlString != null) {
+
+        else if ("Copy location".equalsIgnoreCase(actionCommand)) {
+            if (mediaUrlString != null) {
                 ClipboardBox.setClipboard(mediaUrlString);
             }
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
 
     @Override
     public void componentResized(ComponentEvent e) {
         Platform.runLater(new Runnable() {
-            @Override 
+            @Override
             public void run() {
                 refreshLayout();
             }
         });
     }
 
+
     @Override
     public void componentMoved(ComponentEvent e) {
 
     }
 
-    
-    
+
+
     @Override
     public void componentShown(ComponentEvent e) {
-        
+
     }
+
 
     @Override
     public void componentHidden(ComponentEvent e) {
 
     }
 
-    
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
+
+
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { 
-                    "video/mp4",
-                    "video/x-flv",
-                    "video/x-javafx",
-                    "application/vnd.apple.mpegurl",
-                    "audio/mpegurl",
-                    "audio/mp3",
-                    "audio/aiff",
-                    "audio/x-aiff",
-                    "audio/wav",
-                    "audio/x-m4a",
-                    "video/x-m4v"
-                }, 
-                new String[] { 
-                    "mp4", 
-                    "flv", 
-                    "fxm", 
-                    "m3u8", 
-                    "mp3",
-                    "m3a",
-                    "aif", 
-                    "aiff", 
-                    "wav",
-                    "m4a", 
-                    "m4v"
-                }
-        );
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "video/mp4",
+                        "video/x-flv",
+                        "video/x-javafx",
+                        "application/vnd.apple.mpegurl",
+                        "audio/mpegurl",
+                        "audio/mp3",
+                        "audio/aiff",
+                        "audio/x-aiff",
+                        "audio/wav",
+                        "audio/x-m4a",
+                        "video/x-m4v"
+                },
+                new String[] {
+                        "mp4",
+                        "flv",
+                        "fxm",
+                        "m3u8",
+                        "mp3",
+                        "m3a",
+                        "aif",
+                        "aiff",
+                        "wav",
+                        "m4a",
+                        "m4v"
+                });
     }
 }

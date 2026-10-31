@@ -36,9 +36,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelListener;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -186,7 +186,9 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
 
     public void addScriptQuery() {
-        String queryName = WandoraOptionPane.showInputDialog(wandora, "Give name for the query script?", "",
+        String queryName = WandoraOptionPane.showInputDialog(
+                wandora, 
+                "Give name for the query script?", "",
                 "Name of the query script");
         if (queryName != null && queryName.length() > 0) {
             String queryEngine = engineComboBox.getSelectedItem().toString();
@@ -225,7 +227,8 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
     }
 
 
-    public MixedTopicTable getTopicsByQuery(Iterator<?> contextTopics)
+    public MixedTopicTable getTopicsByQuery(
+            Iterator<?> contextTopics)
             throws ScriptException, TopicMapException, Exception {
         String engineName = engineComboBox.getSelectedItem().toString();
         String scriptStr = scriptTextPane.getText();
@@ -233,8 +236,12 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
     }
 
 
-    public static MixedTopicTable getTopicsByQuery(Wandora wandora, TopicMap tm, Directive query,
+    public static MixedTopicTable getTopicsByQuery(
+            Wandora wandora, 
+            TopicMap tm, 
+            Directive query,
             Iterator<?> contextTopics) throws QueryException, TopicMapException {
+        
         List<ResultRow> res = new ArrayList<>();
         if (contextTopics != null) {
             while (contextTopics.hasNext()) {
@@ -302,8 +309,12 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
     }
 
 
-    public static MixedTopicTable getTopicsByQuery(Wandora wandora, String engineName, String scriptStr,
+    public static MixedTopicTable getTopicsByQuery(
+            Wandora wandora, 
+            String engineName, 
+            String scriptStr,
             Iterator<?> contextTopics) throws ScriptException, TopicMapException, Exception {
+        
         TopicMap tm = wandora.getTopicMap();
         WandoraScriptManager sm = new WandoraScriptManager();
         ScriptEngine engine = sm.getScriptEngine(engineName);
@@ -317,7 +328,7 @@ public class QueryPanel extends javax.swing.JPanel implements TopicSelector {
 
         if (contextTopics == null || !contextTopics.hasNext()) {
             // if context is empty just add some (root of a tree chooser) topic
-            HashMap<String, TopicTreePanel> trees = wandora.getTopicTreeManager().getTrees();
+            Map<String, TopicTreePanel> trees = wandora.getTopicTreeManager().getTrees();
             TopicTreePanel tree = trees.values().iterator().next();
             Topic t = tm.getTopic(tree.getRootSI());
             ArrayList<Topic> al = new ArrayList<>();

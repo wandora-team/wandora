@@ -27,7 +27,6 @@
 
 
 
-
 package org.wandora.application.gui.topicpanels;
 
 
@@ -87,39 +86,38 @@ import de.sciss.syntaxpane.DefaultSyntaxKit;
 
 
 
-
-
 /**
  *
  * @author akivela
  */
 
 
-public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, TopicPanel, ActionListener, ComponentListener, SimpleTextConsoleListener, RBridgeListener {
+public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, TopicPanel, ActionListener,
+        ComponentListener, SimpleTextConsoleListener, RBridgeListener {
     private static final long serialVersionUID = 1L;
-    
+
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(RTopicPanel.class);
-    
+
     public boolean USE_LOCAL_OPTIONS = true;
     public boolean SAVE_SKETCH_TO_GLOBAL_OPTIONS = true;
-    
+
     public static final int NO_SOURCE = 0;
     public static final int OCCURRENCE_SOURCE = 1;
     public static final int FILE_SOURCE = 2;
-    
+
     public static final int DONT_AUTORUN = 0;
     public static final int AUTORUN_OCCURRENCE = 1;
     public static final int AUTORUN_SCRIPT_IN_EDITOR = 2;
     public static final int AUTORUN_FILE = 4;
-    
+
     private static int autorun = 0;
     private static String autorunScriptFile = "";
     private static boolean autoloadFromOccurrence = false;
-    
+
     private int currentScriptSource = NO_SOURCE;
     private String currentScriptFile = null;
     private String currentScript = null;
-    
+
     private static final String R_OCCURRENCE_TYPE = "http://www.r-project.org";
     private static final String optionsPrefix = "options.rpanel";
     private static final String scriptPath = "resources/r/";
@@ -129,49 +127,46 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
     private Topic rootTopic;
     private boolean isGuiInitialized = false;
     private RBridge rBridge = null;
-    
+
     private JDialog optionsDialog = null;
     private JFileChooser fc = null;
     private JPopupMenu menu = null;
-    
-    private static final String defaultMessage = 
-            "# \n"+
-            "# Welcome to Wandora's R topic panel!\n"+
-            "# \n"+
-            "# R topic panel is used to write and execute R language scripts.\n"+
-            "# R script can access the topic map in Wandora via Wandora's Java API.\n"+
-            "# \n"+
-            "# Learn R language and Wandora API here\n"+
-            "#    http://www.r-project.org/ \n"+
-            "#    https://wandora.org/api/ \n"+
+
+    private static final String defaultMessage = "# \n" +
+            "# Welcome to Wandora's R topic panel!\n" +
+            "# \n" +
+            "# R topic panel is used to write and execute R language scripts.\n" +
+            "# R script can access the topic map in Wandora via Wandora's Java API.\n" +
+            "# \n" +
+            "# Learn R language and Wandora API here\n" +
+            "#    http://www.r-project.org/ \n" +
+            "#    https://wandora.org/api/ \n" +
             "#\n";
-    
-    
-    
-    
-    
+
+
+
     private String[] openScriptMenuStruct = new String[] {
-        "Open script from occurrence",
-        "Open script from file..."
+            "Open script from occurrence",
+            "Open script from file..."
     };
     private String[] saveScriptMenuStruct = new String[] {
-        "Save script to occurrence",
-        "Save script to file..."
+            "Save script to occurrence",
+            "Save script to file..."
     };
-    
-    
+
+
     /** Creates new form RTopicPanel */
     public RTopicPanel() {
     }
 
-    
+
     @Override
     public void init() {
         Wandora wandora = Wandora.getWandora();
         tm = wandora.getTopicMap();
 
-        if(options == null) {
-            if(USE_LOCAL_OPTIONS) {
+        if (options == null) {
+            if (USE_LOCAL_OPTIONS) {
                 options = new Options(wandora.getOptions());
             }
             else {
@@ -181,10 +176,10 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
 
         initComponents();
         this.addComponentListener(this);
-        
+
         DefaultSyntaxKit.initKit();
         rEditor.setContentType("text/plain");
-        
+
         KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK);
         rEditor.getInputMap().put(key, "saveOperation");
         Action saveOperation = new AbstractAction() {
@@ -203,16 +198,16 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
         fc.setCurrentDirectory(new File(scriptPath));
 
         readOptions();
-        if(currentScript != null) {
+        if (currentScript != null) {
             rEditor.setText(currentScript);
         }
         else {
             rEditor.setText(defaultMessage);
         }
     }
-    
-    
-    
+
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -454,6 +449,8 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 openBtnMousePressed(evt);
             }
+
+
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 openBtnMouseReleased(evt);
             }
@@ -471,6 +468,8 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 saveBtnMousePressed(evt);
             }
+
+
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 saveBtnMouseReleased(evt);
             }
@@ -535,62 +534,75 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
         add(tabPanel, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void executeBtnexecuteOnMouseRelease(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_executeBtnexecuteOnMouseRelease
         tabPanel.setSelectedComponent(consolePanel);
         executeScriptInEditor();
-}//GEN-LAST:event_executeBtnexecuteOnMouseRelease
+    }//GEN-LAST:event_executeBtnexecuteOnMouseRelease
+
 
     private void newBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_newBtnMouseReleased
         newScript();
         invalidate();
-}//GEN-LAST:event_newBtnMouseReleased
+    }//GEN-LAST:event_newBtnMouseReleased
+
 
     private void saveBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseReleased
-        
-}//GEN-LAST:event_saveBtnMouseReleased
+
+    }//GEN-LAST:event_saveBtnMouseReleased
+
 
     private void optionsOkButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_optionsOkButtonMouseReleased
-        if(optionsDialog != null) {
+        if (optionsDialog != null) {
             optionsDialog.setVisible(false);
         }
-        if(noAutoRunRadioButton.isSelected()) autorun = DONT_AUTORUN;
-        else if(autoRunOccurrenceRadioButton.isSelected()) autorun = AUTORUN_OCCURRENCE;
-        else if(autoRunScriptInEditorRadioButton.isSelected()) autorun = AUTORUN_SCRIPT_IN_EDITOR;
-        else if(autoRunFileRadioButton.isSelected()) autorun = AUTORUN_FILE;
+        if (noAutoRunRadioButton.isSelected())
+            autorun = DONT_AUTORUN;
+        else if (autoRunOccurrenceRadioButton.isSelected())
+            autorun = AUTORUN_OCCURRENCE;
+        else if (autoRunScriptInEditorRadioButton.isSelected())
+            autorun = AUTORUN_SCRIPT_IN_EDITOR;
+        else if (autoRunFileRadioButton.isSelected())
+            autorun = AUTORUN_FILE;
         autorunScriptFile = autoRunFileTextField.getText();
-        
+
         autoloadFromOccurrence = autoloadCheckBox.isSelected();
-        
-        if(options != null) {
-            options.put(optionsPrefix+".autorun", ""+autorun);
-            options.put(optionsPrefix+".autorunScriptFile", autorunScriptFile);
-            options.put(optionsPrefix+".autoload", Boolean.toString(autoloadFromOccurrence));
+
+        if (options != null) {
+            options.put(optionsPrefix + ".autorun", "" + autorun);
+            options.put(optionsPrefix + ".autorunScriptFile", autorunScriptFile);
+            options.put(optionsPrefix + ".autoload", Boolean.toString(autoloadFromOccurrence));
         }
     }//GEN-LAST:event_optionsOkButtonMouseReleased
+
 
     private void optionsBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_optionsBtnMouseReleased
         openOptionsDialog();
     }//GEN-LAST:event_optionsBtnMouseReleased
 
+
     private void openBtnMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_openBtnMouseReleased
 
     }//GEN-LAST:event_openBtnMouseReleased
+
 
     private void openBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_openBtnMousePressed
         showMenu(openScriptMenuStruct, evt);
     }//GEN-LAST:event_openBtnMousePressed
 
+
     private void saveBtnMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMousePressed
         showMenu(saveScriptMenuStruct, evt);
     }//GEN-LAST:event_saveBtnMousePressed
+
 
     private void autoRunFileBrowseButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_autoRunFileBrowseButtonMouseReleased
         fc.setDialogType(JFileChooser.OPEN_DIALOG);
         fc.setDialogTitle("Select R Script");
         int answer = fc.showDialog(Wandora.getWandora(), "Select");
-        if(answer == JFileChooser.APPROVE_OPTION) {
+        if (answer == JFileChooser.APPROVE_OPTION) {
             File f = fc.getSelectedFile();
-            if(f != null) {
+            if (f != null) {
                 autoRunFileTextField.setText(f.getAbsolutePath());
                 autoRunFileRadioButton.setSelected(true);
             }
@@ -637,317 +649,332 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
     private javax.swing.JTabbedPane tabPanel;
     // End of variables declaration//GEN-END:variables
 
-    
-    
-    
-    
-    
+
+
     private void openOptionsDialog() {
         optionsDialog = new JDialog(Wandora.getWandora(), true);
-        optionsDialog.setSize(500,270);
+        optionsDialog.setSize(500, 270);
         optionsDialog.add(optionsPanel);
         optionsDialog.setTitle("R topic panel options");
         Wandora.getWandora().centerWindow(optionsDialog);
         optionsDialog.setVisible(true);
     }
-    
-    
-    
-    
-    
-    
+
+
+
     public void showMenu(String[] struct, MouseEvent evt) {
         menu = UIBox.makePopupMenu(struct, this);
-        menu.setLocation(evt.getXOnScreen()-2, evt.getYOnScreen()-2);
-        menu.show(evt.getComponent(), evt.getX()-2, evt.getY()-2);
+        menu.setLocation(evt.getXOnScreen() - 2, evt.getYOnScreen() - 2);
+        menu.show(evt.getComponent(), evt.getX() - 2, evt.getY() - 2);
     }
-    
-    
+
+
 
     @Override
     public void doRefresh() throws TopicMapException {
-        
+
     }
 
-    
-    
+
+
     @Override
     public boolean supportsOpenTopic() {
         return true;
     }
-    
-    
-    
+
+
+
     @Override
     public void open(Topic topic) throws TopicMapException {
         rootTopic = topic;
-        
-        if(autoloadFromOccurrence) {
+
+        if (autoloadFromOccurrence) {
             rEditor.setText(getROccurrence());
         }
         autorun();
     }
 
-    
-    private void readOptions() {
-        autoloadFromOccurrence = options.getBoolean(optionsPrefix+".autoload", autoloadFromOccurrence);
-        autoloadCheckBox.setSelected(autoloadFromOccurrence);
-        
-        autorun = options.getInt(optionsPrefix+".autorun", 0);
-        autorunScriptFile = options.get(optionsPrefix+".autorunScriptFile");
-        autoRunFileTextField.setText(autorunScriptFile);
-        
-        currentScript = options.get(optionsPrefix+".currentScript");
 
-        switch(autorun) {
-            case DONT_AUTORUN: { noAutoRunRadioButton.setSelected(true); break; }
-            case AUTORUN_OCCURRENCE: { autoRunOccurrenceRadioButton.setSelected(true); break; }
-            case AUTORUN_SCRIPT_IN_EDITOR: { autoRunScriptInEditorRadioButton.setSelected(true); break; }
-            case AUTORUN_FILE: { autoRunFileRadioButton.setSelected(true); break; }
+    private void readOptions() {
+        autoloadFromOccurrence = options.getBoolean(optionsPrefix + ".autoload", autoloadFromOccurrence);
+        autoloadCheckBox.setSelected(autoloadFromOccurrence);
+
+        autorun = options.getInt(optionsPrefix + ".autorun", 0);
+        autorunScriptFile = options.get(optionsPrefix + ".autorunScriptFile");
+        autoRunFileTextField.setText(autorunScriptFile);
+
+        currentScript = options.get(optionsPrefix + ".currentScript");
+
+        switch (autorun) {
+            case DONT_AUTORUN: {
+                noAutoRunRadioButton.setSelected(true);
+                break;
+            }
+            case AUTORUN_OCCURRENCE: {
+                autoRunOccurrenceRadioButton.setSelected(true);
+                break;
+            }
+            case AUTORUN_SCRIPT_IN_EDITOR: {
+                autoRunScriptInEditorRadioButton.setSelected(true);
+                break;
+            }
+            case AUTORUN_FILE: {
+                autoRunFileRadioButton.setSelected(true);
+                break;
+            }
         }
     }
-    
-    
-    
-    
+
+
+
     private void autorun() {
         String autorunScript = null;
-        switch(autorun) {
+        switch (autorun) {
             case AUTORUN_OCCURRENCE: {
                 autorunScript = getROccurrence();
-                break; 
+                break;
             }
-            case AUTORUN_SCRIPT_IN_EDITOR: { 
+            case AUTORUN_SCRIPT_IN_EDITOR: {
                 autorunScript = rEditor.getText();
-                break; 
+                break;
             }
             case AUTORUN_FILE: {
                 try {
-                    if(autorunScriptFile != null && autorunScriptFile.length() > 0) {
-                       autorunScript = IObox.loadFile(autorunScriptFile);
+                    if (autorunScriptFile != null && autorunScriptFile.length() > 0) {
+                        autorunScript = IObox.loadFile(autorunScriptFile);
                     }
                 }
-                catch(Exception e) {
-                	logger.error(e);
+                catch (Exception e) {
+                    logger.error(e);
                 }
-                break; 
+                break;
             }
         }
-        if(autorunScript != null) {
+        if (autorunScript != null) {
             executeScript(autorunScript);
         }
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     private String getROccurrence() {
         return getROccurrence(rootTopic);
     }
-    
-    
+
+
     private String getROccurrence(Topic t) {
         String o = null;
-        if(t != null) {
+        if (t != null) {
             try {
                 Topic otype = tm.getTopic(R_OCCURRENCE_TYPE);
                 Topic olang = tm.getTopic(TMBox.LANGINDEPENDENT_SI);
-                if(otype != null && olang != null) {
+                if (otype != null && olang != null) {
                     o = t.getData(otype, olang);
                 }
             }
-            catch(Exception e) {
-            	logger.error(e);
+            catch (Exception e) {
+                logger.error(e);
             }
         }
         return o;
     }
-    
-    
-    
+
+
+
     private void setROccurrence(String o) {
         setROccurrence(rootTopic, o);
     }
-    
+
+
     private void setROccurrence(Topic t, String o) {
-        if(t != null) {
+        if (t != null) {
             try {
                 Topic otype = tm.getTopic(R_OCCURRENCE_TYPE);
                 Topic olang = tm.getTopic(TMBox.LANGINDEPENDENT_SI);
-                if(otype != null && olang != null) {
+                if (otype != null && olang != null) {
                     t.setData(otype, olang, o);
                 }
             }
-            catch(Exception e) {
-            	logger.error(e);
+            catch (Exception e) {
+                logger.error(e);
             }
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     @Override
     public void stop() {
         saveCurrentScriptToOptions();
     }
 
+
     @Override
     public LocatorHistory getTopicHistory() {
         return null;
     }
-    
+
 
     @Override
     public void refresh() throws TopicMapException {
 
     }
 
+
     @Override
     public boolean applyChanges() throws CancelledException, TopicMapException {
         saveCurrentScriptToOptions();
         return true;
     }
-    
+
 
     @Override
     public JPanel getGui() {
         return this;
     }
 
+
     @Override
     public Topic getTopic() throws TopicMapException {
         return rootTopic;
     }
+
 
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/topic_panel_r.png");
     }
 
-    
-    
+
 
     @Override
     public JPopupMenu getViewPopupMenu() {
         return UIBox.makePopupMenu(getViewMenuStruct(), this);
     }
-    
+
+
     @Override
     public JMenu getViewMenu() {
         return UIBox.makeMenu(getViewMenuStruct(), this);
     }
 
+
     @Override
     public Object[] getViewMenuStruct() {
         Object[] menuStructure = new Object[] {
-            "New script", this,
-            "Open script", this,
-            new Object[] {
-                "Open script from occurrence", this,
-                "Open script from file...", this,
-            },
-            "Save script", this,
-            new Object[] {
-                "Save script to occurrence", this,
-                "Save script to file...", this,
-            },
-            "Run script", this,
-            "---",
-            "Options...", this,
+                "New script", this,
+                "Open script", this,
+                new Object[] {
+                        "Open script from occurrence", this,
+                        "Open script from file...", this,
+                },
+                "Save script", this,
+                new Object[] {
+                        "Save script to occurrence", this,
+                        "Save script to file...", this,
+                },
+                "Run script", this,
+                "---",
+                "Options...", this,
         };
         return menuStructure;
     }
-    
+
 
 
     @Override
-    public boolean noScroll(){
+    public boolean noScroll() {
         return false;
     }
-  
-    
+
+
     @Override
     public String getName() {
         return "R";
     }
-    
+
+
     @Override
     public String getTitle() {
-        if(rootTopic != null) return TopicToString.toString(rootTopic);
-        else return getName();
+        if (rootTopic != null)
+            return TopicToString.toString(rootTopic);
+        else
+            return getName();
     }
-    
-    
+
+
     @Override
     public int getOrder() {
         return 1000;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String ac = e.getActionCommand();
-        if("New script".equalsIgnoreCase(ac)) {
+        if ("New script".equalsIgnoreCase(ac)) {
             newScript();
         }
-        else if("Open script from occurrence".equalsIgnoreCase(ac)) {
+        else if ("Open script from occurrence".equalsIgnoreCase(ac)) {
             loadScriptFromOccurrence();
         }
-        else if("Open script from file...".equalsIgnoreCase(ac)) {
+        else if ("Open script from file...".equalsIgnoreCase(ac)) {
             loadScriptFromFile();
         }
-        else if("Save script to occurrence".equalsIgnoreCase(ac)) {
+        else if ("Save script to occurrence".equalsIgnoreCase(ac)) {
             saveScriptToOccurrence();
         }
-        else if("Save script to file...".equalsIgnoreCase(ac)) {
+        else if ("Save script to file...".equalsIgnoreCase(ac)) {
             saveScriptToFile();
         }
-        else if("Options...".equalsIgnoreCase(ac)) {
+        else if ("Options...".equalsIgnoreCase(ac)) {
             openOptionsDialog();
         }
-        else if("Run script".equalsIgnoreCase(ac)) {
+        else if ("Run script".equalsIgnoreCase(ac)) {
             executeScriptInEditor();
         }
     }
 
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     private void newScript() {
-        int answer = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Erase current script in editor?", "Erase script in editor?", WandoraOptionPane.YES_NO_OPTION);
-        if(answer == WandoraOptionPane.YES_OPTION) {
+        int answer = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Erase current script in editor?",
+                "Erase script in editor?", WandoraOptionPane.YES_NO_OPTION);
+        if (answer == WandoraOptionPane.YES_OPTION) {
             currentScriptSource = NO_SOURCE;
             currentScriptFile = null;
             rEditor.setText("");
         }
     }
-    
-    
-    
-    
+
+
+
     public void executeScriptInEditor() {
         String script = rEditor.getText();
         executeScript(script);
     }
-    
+
+
     public void executeScript(String script) {
-        if(script != null) {
-            if(script.trim().length() > 0) {
+        if (script != null) {
+            if (script.trim().length() > 0) {
                 String newline = "\n";
                 //String commands[] = script.split(newline);
                 //script = script.replaceAll("(?m)^[ \t]*\r?\n","");
-                script = script.replace("'","\'");
+                script = script.replace("'", "\'");
                 //script = script.replaceAll("\r\n", ";");
                 script = script.replace("\n", "\\n");
                 script = script.replace("\r", "\\r");
@@ -957,266 +984,299 @@ public class RTopicPanel extends javax.swing.JPanel implements RefreshListener, 
                 tabPanel.setSelectedComponent(consolePanel);
                 console.output(console.handleInput(out));
                 //for(int i=0; i<commands.length; i++) {
-                    //console.output(commands[i]+newline);
-                    //console.output(console.handleInput(commands[i].trim()));
+                //console.output(commands[i]+newline);
+                //console.output(console.handleInput(commands[i].trim()));
                 //}
             }
         }
     }
-    
-    
-    
+
+
+
     private void loadScriptFromOccurrence() {
         try {
             Topic otype = tm.getTopic(R_OCCURRENCE_TYPE);
             Topic olang = tm.getTopic(TMBox.LANGINDEPENDENT_SI);
-            if(otype != null && olang != null) {
+            if (otype != null && olang != null) {
                 currentScriptFile = null;
                 String o = rootTopic.getData(otype, olang);
-                if(o != null) {
+                if (o != null) {
                     rEditor.setText(o);
                 }
                 else {
-                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Can't find R occurrence in current topic. Can't restore R script from occurrence.", "Can't restore R occurrence", WandoraOptionPane.INFORMATION_MESSAGE);
+                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                            "Can't find R occurrence in current topic. Can't restore R script from occurrence.",
+                            "Can't restore R occurrence", WandoraOptionPane.INFORMATION_MESSAGE);
                 }
             }
             else {
-                if(otype == null) WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Can't find R occurrence type. Can't restore R script from occurrence.", "Can't find R occurrence type", WandoraOptionPane.INFORMATION_MESSAGE);
-                if(olang == null) WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Can't find Language independent scope topic. Can't restore R script from occurrence.", "Can't find Language independent scope topic", WandoraOptionPane.INFORMATION_MESSAGE);
+                if (otype == null)
+                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                            "Can't find R occurrence type. Can't restore R script from occurrence.",
+                            "Can't find R occurrence type", WandoraOptionPane.INFORMATION_MESSAGE);
+                if (olang == null)
+                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                            "Can't find Language independent scope topic. Can't restore R script from occurrence.",
+                            "Can't find Language independent scope topic", WandoraOptionPane.INFORMATION_MESSAGE);
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
     }
 
-    
+
     private void loadScriptFromFile() {
         fc.setDialogType(JFileChooser.OPEN_DIALOG);
         fc.setDialogTitle("Open R Script");
         int answer = fc.showDialog(Wandora.getWandora(), "Open");
-        if(answer == SimpleFileChooser.APPROVE_OPTION) {
+        if (answer == SimpleFileChooser.APPROVE_OPTION) {
             File scriptFile = fc.getSelectedFile();
             try {
                 String script = IObox.loadFile(scriptFile);
                 currentScriptFile = scriptFile.getAbsolutePath();
-                if(script != null) {
+                if (script != null) {
                     rEditor.setText(script);
                 }
             }
-            catch(Exception e) {
-            	logger.error(e);
-                WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Exception '"+e.getMessage()+"' occurred while restoring R script from file '"+scriptFile.getName()+"'.", "Can't restore R script", WandoraOptionPane.INFORMATION_MESSAGE);
+            catch (Exception e) {
+                logger.error(e);
+                WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                        "Exception '" + e.getMessage() + "' occurred while restoring R script from file '"
+                                + scriptFile.getName() + "'.",
+                        "Can't restore R script", WandoraOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
-    
-    
 
-    
-    
-    
+
+
     private void saveScriptToOccurrence() {
         String script = rEditor.getText();
         try {
             Topic otype = tm.getTopic(R_OCCURRENCE_TYPE);
             Topic olang = tm.getTopic(TMBox.LANGINDEPENDENT_SI);
-            if(otype != null && olang != null) {
+            if (otype != null && olang != null) {
                 boolean storeToOccurrence = true;
                 currentScriptSource = OCCURRENCE_SOURCE;
                 String oldScript = rootTopic.getData(otype, olang);
-                if(oldScript != null) {
-                    int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Current topic contains an R script occurrence already. Storing current script erases older. Do you want to store the script to the occurrence?","Topic already has an R script occurrence", WandoraOptionPane.INFORMATION_MESSAGE);
-                    if(a != WandoraOptionPane.YES_OPTION) storeToOccurrence = false;
+                if (oldScript != null) {
+                    int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(),
+                            "Current topic contains an R script occurrence already. Storing current script erases older. Do you want to store the script to the occurrence?",
+                            "Topic already has an R script occurrence", WandoraOptionPane.INFORMATION_MESSAGE);
+                    if (a != WandoraOptionPane.YES_OPTION)
+                        storeToOccurrence = false;
                 }
-                if(storeToOccurrence) {
+                if (storeToOccurrence) {
                     rootTopic.setData(otype, olang, script);
                 }
             }
             else {
-                if(otype == null) WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Can't find R occurrence type. Can't save R script to occurrence.", "Can't find R occurrence type", WandoraOptionPane.INFORMATION_MESSAGE);
-                if(olang == null) WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Can't find Language independent scope topic. Can't save R script to occurrence.", "Can't find Language independent scope topic", WandoraOptionPane.INFORMATION_MESSAGE);
+                if (otype == null)
+                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                            "Can't find R occurrence type. Can't save R script to occurrence.",
+                            "Can't find R occurrence type", WandoraOptionPane.INFORMATION_MESSAGE);
+                if (olang == null)
+                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                            "Can't find Language independent scope topic. Can't save R script to occurrence.",
+                            "Can't find Language independent scope topic", WandoraOptionPane.INFORMATION_MESSAGE);
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
-            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Exception '"+e.getMessage()+"' occurred while storing the R script to an occurrence to current topic.", "Can't store R script", WandoraOptionPane.INFORMATION_MESSAGE);
+        catch (Exception e) {
+            logger.error(e);
+            WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                    "Exception '" + e.getMessage()
+                            + "' occurred while storing the R script to an occurrence to current topic.",
+                    "Can't store R script", WandoraOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
-    
+
+
     private void saveScriptToFile() {
         File scriptFile = null;
         try {
             fc.setDialogTitle("Save R script");
             fc.setDialogType(JFileChooser.SAVE_DIALOG);
             int answer = fc.showDialog(Wandora.getWandora(), "Save");
-            if(answer == SimpleFileChooser.APPROVE_OPTION) {
+            if (answer == SimpleFileChooser.APPROVE_OPTION) {
                 scriptFile = fc.getSelectedFile();
                 String scriptCode = rEditor.getText();
                 FileUtils.writeStringToFile(scriptFile, scriptCode, "UTF-8");
                 currentScriptSource = FILE_SOURCE;
             }
         }
-        catch(Exception e) {
-            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), "Exception '"+e.getMessage()+"' occurred while storing R script to file '"+scriptFile.getName()+"'.", "Can't save R script", WandoraOptionPane.INFORMATION_MESSAGE);
+        catch (Exception e) {
+            WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                    "Exception '" + e.getMessage() + "' occurred while storing R script to file '"
+                            + scriptFile.getName() + "'.",
+                    "Can't save R script", WandoraOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
-    
-    
-    
+
+
+
     private void saveScript() {
-        if(currentScriptSource == OCCURRENCE_SOURCE) {
+        if (currentScriptSource == OCCURRENCE_SOURCE) {
             saveScriptToOccurrence();
         }
-        else if(currentScriptSource == FILE_SOURCE) {
+        else if (currentScriptSource == FILE_SOURCE) {
             saveScriptToFile();
         }
     }
-    
-    
+
+
     private void saveCurrentScriptToOptions() {
-        if(options != null) {
-            options.put(optionsPrefix+".currentScript", rEditor.getText());
+        if (options != null) {
+            options.put(optionsPrefix + ".currentScript", rEditor.getText());
         }
-        if(USE_LOCAL_OPTIONS && SAVE_SKETCH_TO_GLOBAL_OPTIONS) {
+        if (USE_LOCAL_OPTIONS && SAVE_SKETCH_TO_GLOBAL_OPTIONS) {
             try {
-                Wandora.getWandora().getOptions().put(optionsPrefix+".currentScript", rEditor.getText());
+                Wandora.getWandora().getOptions().put(optionsPrefix + ".currentScript", rEditor.getText());
             }
-            catch(Exception e) {
-                
+            catch (Exception e) {
+
             }
         }
     }
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
 
     @Override
     public String handleInput(String input) {
         return rBridge.handleInput(input);
     }
 
-    
 
-    
-    
+
     @Override
     public void output(String output) {
         ((SimpleTextConsole) rConsoleTextPane).output(output);
         ((SimpleTextConsole) rConsoleTextPane).refresh();
-        
+
     }
 
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
 
     @Override
     public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
-        
+
     }
+
 
     @Override
     public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
-        
+
     }
+
 
     @Override
     public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
-        
+
     }
 
-    @Override
-    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName) throws TopicMapException {
-        
-    }
 
     @Override
-    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue) throws TopicMapException {
-        
+    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName)
+            throws TopicMapException {
+
     }
+
+
+    @Override
+    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue)
+            throws TopicMapException {
+
+    }
+
 
     @Override
     public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
-        
+
     }
+
 
     @Override
     public void topicRemoved(Topic t) throws TopicMapException {
-        
+
     }
+
 
     @Override
     public void topicChanged(Topic t) throws TopicMapException {
-        
+
     }
+
 
     @Override
     public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
-        
+
     }
 
+
     @Override
-    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer) throws TopicMapException {
-        
+    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer)
+            throws TopicMapException {
+
     }
+
 
     @Override
     public void associationRemoved(Association a) throws TopicMapException {
-        
+
     }
+
 
     @Override
     public void associationChanged(Association a) throws TopicMapException {
-        
-    }
-    
-    // -------------------------------------------------------------------------
-    
-    
 
-    
+    }
+
+    // -------------------------------------------------------------------------
+
+
+
     @Override
     public void componentResized(ComponentEvent e) {
         handleComponentEvent(e);
     }
+
 
     @Override
     public void componentMoved(ComponentEvent e) {
         handleComponentEvent(e);
     }
 
+
     @Override
     public void componentShown(ComponentEvent e) {
         handleComponentEvent(e);
     }
 
+
     @Override
     public void componentHidden(ComponentEvent e) {
         handleComponentEvent(e);
     }
-    
-    
-    
-    
+
+
+
     private void handleComponentEvent(ComponentEvent e) {
         saveCurrentScriptToOptions();
 
-	revalidate();
+        revalidate();
         repaint();
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
 }

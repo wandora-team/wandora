@@ -32,7 +32,6 @@ import org.wandora.topicmap.Topic;
 
 
 
-
 /**
  *
  * @author akivela
@@ -45,13 +44,13 @@ public class TopicGridModel extends DefaultTableModel {
     private TopicGrid topicGrid;
     private static final String columnNames = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    
-    
+
+
     public TopicGridModel(TopicGrid tg) {
         topicGrid = tg;
     }
 
-    
+
     @Override
     public Class<?> getColumnClass(int c) {
         return Topic.class;
@@ -60,7 +59,8 @@ public class TopicGridModel extends DefaultTableModel {
 
     @Override
     public int getColumnCount() {
-        if(topicGrid != null) return topicGrid.getGridColumnCount();
+        if (topicGrid != null)
+            return topicGrid.getGridColumnCount();
         return 0;
     }
 
@@ -68,15 +68,16 @@ public class TopicGridModel extends DefaultTableModel {
 
     @Override
     public int getRowCount() {
-        if(topicGrid != null) return topicGrid.getGridRowCount();
+        if (topicGrid != null)
+            return topicGrid.getGridRowCount();
         return 0;
     }
 
-    
-    
+
+
     public Topic getTopicAt(int rowIndex, int columnIndex) {
         try {
-            if(topicGrid != null && rowIndex >= 0 && columnIndex >= 0) {
+            if (topicGrid != null && rowIndex >= 0 && columnIndex >= 0) {
                 return topicGrid.getTopicAt(rowIndex, columnIndex);
             }
         }
@@ -85,14 +86,13 @@ public class TopicGridModel extends DefaultTableModel {
         }
         return null;
     }
-    
 
 
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
-            if(topicGrid != null && rowIndex >= 0 && columnIndex >= 0) {
+            if (topicGrid != null && rowIndex >= 0 && columnIndex >= 0) {
                 return topicGrid._getTopicAt(rowIndex, columnIndex);
             }
         }
@@ -109,15 +109,15 @@ public class TopicGridModel extends DefaultTableModel {
 
 
     @Override
-    public String getColumnName(int columnIndex){
+    public String getColumnName(int columnIndex) {
         try {
             int d1 = (columnIndex) / columnNames.length();
             int d2 = (columnIndex) % columnNames.length();
-            if(d1 == 0) {
-                return ""+columnNames.charAt(d2);
+            if (d1 == 0) {
+                return "" + columnNames.charAt(d2);
             }
             else {
-                return ""+columnNames.charAt(d1)+columnNames.charAt(d2);
+                return "" + columnNames.charAt(d1) + columnNames.charAt(d2);
             }
         }
         catch (Exception e) {
@@ -129,7 +129,7 @@ public class TopicGridModel extends DefaultTableModel {
 
 
     @Override
-    public boolean isCellEditable(int row,int col){
+    public boolean isCellEditable(int row, int col) {
         return false;
     }
 }

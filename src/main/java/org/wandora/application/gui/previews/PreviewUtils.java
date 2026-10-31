@@ -70,20 +70,20 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 public class PreviewUtils {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(PreviewUtils.class);
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(PreviewUtils.class);
+
     public static final Icon ICON_ZOOM_IN = UIBox.getIcon(0xf00e);
     public static final Icon ICON_ZOOM_OUT = UIBox.getIcon(0xf010);
     public static final Icon ICON_ZOOM_RESET = UIBox.getIcon(0xf002);
-    
+
     public static final Icon ICON_COPY_IMAGE = UIBox.getIcon(0xf03e);
     public static final Icon ICON_COPY_LOCATION = UIBox.getIcon(0xf0c5);
     public static final Icon ICON_COPY_SELECTION = UIBox.getIcon(0xf0c5);
-    
+
     public static final Icon ICON_OPEN_EXT = UIBox.getIcon(0xf14c);
     public static final Icon ICON_SAVE = UIBox.getIcon(0xf0c7);
     public static final Icon ICON_PRINT = UIBox.getIcon(0xf02f);
-    
+
     public static final Icon ICON_PLAY = UIBox.getIcon(0xf04b);
     public static final Icon ICON_STOP = UIBox.getIcon(0xf04d);
     public static final Icon ICON_PAUSE = UIBox.getIcon(0xf04c);
@@ -91,44 +91,46 @@ public class PreviewUtils {
     public static final Icon ICON_FORWARD = UIBox.getIcon(0xf04e);
     public static final Icon ICON_START = UIBox.getIcon(0xf048); // In player go to start.
     public static final Icon ICON_END = UIBox.getIcon(0xf051); // In player go to end.
-    
+
     public static final Icon ICON_PREVIOUS = UIBox.getIcon(0xf053);
     public static final Icon ICON_NEXT = UIBox.getIcon(0xf054);
-    
+
     public static final Icon ICON_CONFIGURE = UIBox.getIcon(0xf013);
     public static final Icon ICON_INFO = UIBox.getIcon(0xf129);
     public static final Icon ICON_RESTART = UIBox.getIcon(0xf021);
-    
+
     public static final Icon ICON_RELOAD_LOCATOR = UIBox.getIcon(0xf015);
-    
+
     public static final Icon ICON_SET_BASENAME = UIBox.getIcon(0xf006);
     public static final Icon ICON_SET_DISPLAY_NAME = UIBox.getIcon(0xf006);
     public static final Icon ICON_SET_OCCURRENCE = UIBox.getIcon(0xf006);
-    
-    
-    
+
+
+
     private static final Fn1<SimpleFileChooser, String> makeNamedChooser = new Fn1<SimpleFileChooser, String>() {
-    @Override
-    public SimpleFileChooser invoke(String path) {
-        return new SimpleFileChooser(path);
-    }};
-    
-    
+        @Override
+        public SimpleFileChooser invoke(String path) {
+            return new SimpleFileChooser(path);
+        }
+    };
+
+
     private static final Fn0<SimpleFileChooser> makeChooser = new Fn0<SimpleFileChooser>() {
-    @Override
-    public SimpleFileChooser invoke() {
-        return new SimpleFileChooser();
-    }};
-    
-    
-    public static InputStream makeInputStream(final ByteBuffer buffer)
-    {
+        @Override
+        public SimpleFileChooser invoke() {
+            return new SimpleFileChooser();
+        }
+    };
+
+
+    public static InputStream makeInputStream(final ByteBuffer buffer) {
         return new InputStream() {
             @Override
             public synchronized int read() throws IOException {
                 return buffer.hasRemaining() ? buffer.get() : -1;
             }
-            
+
+
             @Override
             public int read(byte[] b, int off, int len) throws IOException {
                 final int rv = Math.min(len, buffer.remaining());
@@ -138,16 +140,16 @@ public class PreviewUtils {
         };
     }
 
-    
+
     public static Option<String> getOption(final Map<String, String> options, final String key) {
         final String opt = options.get(key);
-        if(opt != null)
+        if (opt != null)
             return some(opt);
-        
+
         return none();
     }
-    
-    
+
+
     // Transforms a string containing a path like "/home/antti/foo.bar"
     // into a URI containing "file:///home/antti/foo.bar".
     // If a conversion isn't possible, returns none()
@@ -155,77 +157,75 @@ public class PreviewUtils {
         @Override
         public Option<URI> invoke(final String path) {
             try {
-                //return some(new URI("file://" + path));
                 return some(new URI(path));
             }
-            catch(URISyntaxException e) {
+            catch (URISyntaxException e) {
                 return none();
             }
         }
     };
-    
-    
-   
+
+
+
     public static boolean startsWithAny(String str, String... args) {
-        if(str != null) {
-            for(String s : args) {
-                if(str.startsWith(s)) {
+        if (str != null) {
+            for (String s : args) {
+                if (str.startsWith(s)) {
                     return true;
                 }
             }
         }
         return false;
     }
-    
-    
+
+
     public static boolean endsWithAny(String str, String... args) {
-        if(str != null) {
-            for(String s : args) {
-                if(str.endsWith(s))
+        if (str != null) {
+            for (String s : args) {
+                if (str.endsWith(s))
                     return true;
             }
         }
         return false;
     }
 
-    
-    public static Option<String> choosePath(
-			final Map<String, String> options,
-			final JComponent dlgParent,
-			final String optionsPrefix)
-    {
-        //try {
-            final SimpleFileChooser chooser = new SimpleFileChooser();
-            if (chooser.open(dlgParent, SimpleFileChooser.SAVE_DIALOG) != SimpleFileChooser.APPROVE_OPTION) {
-                return Option.none();
-            }
-            
-            //final String path = chooser.getSelectedFile().getCanonicalPath();
-            //options.put(optionsPrefix + "currentDirectory", chooser.getCurrentDirectory().getCanonicalPath());
 
-            return Option.some(chooser.getSelectedFile().toURI().toString());
-            /*
+    public static Option<String> choosePath(
+            final Map<String, String> options,
+            final JComponent dlgParent,
+            final String optionsPrefix) {
+        //try {
+        final SimpleFileChooser chooser = new SimpleFileChooser();
+        if (chooser.open(dlgParent, SimpleFileChooser.SAVE_DIALOG) != SimpleFileChooser.APPROVE_OPTION) {
+            return Option.none();
+        }
+
+        //final String path = chooser.getSelectedFile().getCanonicalPath();
+        //options.put(optionsPrefix + "currentDirectory", chooser.getCurrentDirectory().getCanonicalPath());
+
+        return Option.some(chooser.getSelectedFile().toURI().toString());
+        /*
         }
         catch(IOException e) {
-            // TODO: bad uri syntax, should log it;
-            // currently the whole operation will just fail silently
+        // TODO: bad uri syntax, should log it;
+        // currently the whole operation will just fail silently
         }
         return Option.none();
-             */
+         */
     }
     /*
-	{
+    {
         try {
             SimpleFileChooser chooser= new SimpleFileChooser(path);
             if (chooser.open(dlgParent, SimpleFileChooser.SAVE_DIALOG) !=
-					JFileChooser.APPROVE_OPTION)
-			{
+    				JFileChooser.APPROVE_OPTION)
+    		{
                 return Option.none();
             }
             path = chooser.getSelectedFile().getCanonicalPath();
             if(options != null)
                 options.put(optionsPrefix + "currentDirectory", chooser.getCurrentDirectory().getCanonicalPath());
-
+    
             return Option.some(path);
         }
         catch(IOException e) {
@@ -235,83 +235,86 @@ public class PreviewUtils {
         return Option.none();
     }
     */
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
 
-    
-    
+
+
     public static void forkExternalPlayer(String locator) {
-        if(locator != null && locator.length() > 0) {
-            if(!DataURL.isDataURL(locator)) {
-                logger.info("Spawning viewer for \""+locator+"\"");
+        if (locator != null && locator.length() > 0) {
+            if (!DataURL.isDataURL(locator)) {
+                logger.info("Spawning viewer for \"" + locator + "\"");
                 try {
                     Desktop desktop = Desktop.getDesktop();
                     desktop.browse(new URI(locator));
                 }
-                catch(IOException ioe) {
-                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
-                        "Due to Java's security restrictions Wandora can't open some local URLs "+
-                        "in external application. Copy and paste the locator manually to browser's "+
-                        "address field to view the locator.", 
-                        "Can't open the locator in external application",
-                        WandoraOptionPane.WARNING_MESSAGE);
+                catch (IOException ioe) {
+                    WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                            "Due to Java's security restrictions Wandora can't open some local URLs " +
+                                    "in external application. Copy and paste the locator manually to browser's " +
+                                    "address field to view the locator.",
+                            "Can't open the locator in external application",
+                            WandoraOptionPane.WARNING_MESSAGE);
                 }
-                catch(Exception e) {
+                catch (Exception e) {
                     logger.error(e);
                 }
             }
             else {
-                WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
-                        "Due to Java's security restrictions Wandora can't open the DataURI "+
-                        "in external application. Copy and paste the locator manually to browser's "+
-                        "address field to view the locator.", 
+                WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                        "Due to Java's security restrictions Wandora can't open the DataURI " +
+                                "in external application. Copy and paste the locator manually to browser's " +
+                                "address field to view the locator.",
                         "Can't open the locator in external application",
                         WandoraOptionPane.WARNING_MESSAGE);
             }
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
 
     public static void saveToFile(String locator) {
         Wandora wandora = Wandora.getWandora();
         SimpleFileChooser chooser = UIConstants.getFileChooser();
         chooser.setDialogTitle("Save locator to file");
         try {
-            chooser.setSelectedFile(new File(locator.substring(locator.lastIndexOf(File.pathSeparator)+1)));
+            chooser.setSelectedFile(new File(locator.substring(locator.lastIndexOf(File.pathSeparator) + 1)));
         }
-        catch(Exception e) {}
-        if(chooser.open(wandora, SimpleFileChooser.SAVE_DIALOG)==SimpleFileChooser.APPROVE_OPTION) {
+        catch (Exception e) {
+        }
+        if (chooser.open(wandora, SimpleFileChooser.SAVE_DIALOG) == SimpleFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             try {
-                if(DataURL.isDataURL(locator)) {
+                if (DataURL.isDataURL(locator)) {
                     DataURL.saveToFile(locator, file);
                 }
-                else if(locator.startsWith("file:")) {
-                    Files.copy(new File(new URI(URLDecoder.decode(locator, "UTF-8")).toURL().getFile()).toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                else if (locator.startsWith("file:")) {
+                    Files.copy(new File(new URI(URLDecoder.decode(locator, "UTF-8")).toURL().getFile()).toPath(),
+                            file.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 }
                 else {
                     IObox.moveUrl(new URI(locator).toURL(), file);
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 logger.info("Exception '" + e.toString() + "' occurred while saving file '" + file.getPath() + "'.");
             }
         }
     }
-    
-    
+
+
     public static JPanel previewError(JPanel parent, String msg) {
         return previewError(parent, msg, (String) null);
     }
-    
+
+
     public static JPanel previewError(JPanel parent, String msg, Error e) {
-        if(e != null) {
+        if (e != null) {
             logger.error(e);
             return previewError(parent, msg, e.toString());
         }
@@ -319,25 +322,28 @@ public class PreviewUtils {
             return previewError(parent, msg);
         }
     }
-    
+
+
     public static JPanel previewError(JPanel parent, String msg, Exception e) {
-        if(e != null) {
-        	logger.error(e);
+        if (e != null) {
+            logger.error(e);
             return previewError(parent, msg, e.toString());
         }
         else {
             return previewError(parent, msg);
         }
     }
-    
+
+
     public static JPanel previewError(JPanel parent, String msg, String e) {
         JPanel errorPanel = new JPanel();
-        errorPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
+        errorPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         errorPanel.setBorder(BorderFactory.createLineBorder(java.awt.Color.RED, 4));
 
         StringBuilder labelText = new StringBuilder("<html><center>");
-        if(msg != null) labelText.append(msg);
-        if(e != null) {
+        if (msg != null)
+            labelText.append(msg);
+        if (e != null) {
             labelText.append("<br>");
             labelText.append(e);
         }
@@ -348,7 +354,7 @@ public class PreviewUtils {
         label.setHorizontalAlignment(SimpleLabel.CENTER);
         errorPanel.add(label);
 
-        if(parent != null) {
+        if (parent != null) {
             parent.removeAll();
             parent.add(errorPanel, BorderLayout.CENTER);
 
@@ -358,13 +364,12 @@ public class PreviewUtils {
 
         return errorPanel;
     }
-    
-    
-    
-    
+
+
+
     public static JPanel previewLoadingMessage(JPanel parent) {
         JPanel loadingPanel = new JPanel();
-        loadingPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20,20));
+        loadingPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
 
         StringBuilder labelText = new StringBuilder("<html><center>");
         labelText.append("Wait while loading and initializing the preview...");
@@ -376,7 +381,7 @@ public class PreviewUtils {
         label.setIcon(UIBox.getIcon(0xf110));
         loadingPanel.add(label);
 
-        if(parent != null) {
+        if (parent != null) {
             parent.removeAll();
             parent.add(loadingPanel, BorderLayout.CENTER);
 
@@ -385,17 +390,16 @@ public class PreviewUtils {
         }
         return loadingPanel;
     }
-    
-    
-    
+
+
 
     public static JPanel previewNoPreview(final PreviewWrapper previewWrapper, final Locator locator) {
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new BorderLayout());
 
         JPanel labelPanel = new JPanel();
-        labelPanel.setLayout(new FlowLayout(FlowLayout.CENTER,20,20));
-        
+        labelPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+
         StringBuilder labelText = new StringBuilder("<html><center>");
         labelText.append("Don't know how to view the locator.");
         labelText.append("</center></html>");
@@ -404,36 +408,35 @@ public class PreviewUtils {
         label.setText(labelText.toString());
         label.setHorizontalAlignment(SimpleLabel.CENTER);
         label.setIcon(UIBox.getIcon(0xf071));
-        label.setBounds(20,20,20,20);
+        label.setBounds(20, 20, 20, 20);
         labelPanel.add(label);
-        
+
         messagePanel.add(labelPanel, BorderLayout.NORTH);
 
-        if(hasJavaFX()) {
+        if (hasJavaFX()) {
             JPanel buttonPanel = new JPanel();
-            buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER,10,10));
+            buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
             SimpleButton button = new SimpleButton("Try webview any way");
             button.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        try {
-                            mimetypeCache.put(locator.toExternalForm(), "text/html");
-                            previewWrapper.forceSetURL(locator);
+                    new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            try {
+                                mimetypeCache.put(locator.toExternalForm(), "text/html");
+                                previewWrapper.forceSetURL(locator);
+                            }
+                            catch (Exception ex) {
+                                logger.error(ex);
+                            }
                         }
-                        catch(Exception ex) {
-                        	logger.error(ex);
-                        }
-                    }
-                }
-            );
+                    });
             buttonPanel.add(button);
 
             messagePanel.add(buttonPanel, BorderLayout.SOUTH);
         }
-        
-        if(previewWrapper != null) {
+
+        if (previewWrapper != null) {
             previewWrapper.removeAll();
             previewWrapper.add(messagePanel, BorderLayout.CENTER);
 
@@ -442,111 +445,112 @@ public class PreviewUtils {
         }
         return messagePanel;
     }
-    
-    
-    
-    
-    private static Map<String,String> mimetypeCache = new HashMap<>();
+
+
+
+    private static Map<String, String> mimetypeCache = new HashMap<>();
     private static int mimetypeCacheMaxSize = 9999;
-    
+
     public static boolean isOfType(String url, String[] mimeTypes, String[] extensions) {
-        if(url != null) {
-            if(DataURL.isDataURL(url)) {
+        if (url != null) {
+            if (DataURL.isDataURL(url)) {
                 // The url is a data-url and has explicit mimetype.
                 try {
                     DataURL dataURL = new DataURL(url);
                     String mimeType = dataURL.getMimetype();
-                    if(mimeType != null && mimeTypes != null) {
+                    if (mimeType != null && mimeTypes != null) {
                         String lowerCaseMimeType = mimeType.toLowerCase();
-                        for(String testMimeType : mimeTypes) {
-                            if(lowerCaseMimeType.startsWith(testMimeType)) {
+                        for (String testMimeType : mimeTypes) {
+                            if (lowerCaseMimeType.startsWith(testMimeType)) {
                                 return true;
                             }
                         }
                     }
                 }
-                catch(Exception e) {
+                catch (Exception e) {
                     // Ignore --> Can't view
                 }
             }
             else {
-                if(extensions != null && extensions.length > 0) {
+                if (extensions != null && extensions.length > 0) {
                     // Look at the given file extension list and test...
                     String lowerCaseUrl = url.toLowerCase();
-                    for(String extension : extensions) {
-                        if(extension != null) {
-                            if(!extension.startsWith(".")) {
-                                extension = "."+extension;
+                    for (String extension : extensions) {
+                        if (extension != null) {
+                            if (!extension.startsWith(".")) {
+                                extension = "." + extension;
                             }
-                            if(endsWithAny(lowerCaseUrl, extension)) {
+                            if (endsWithAny(lowerCaseUrl, extension)) {
                                 return true;
                             }
                         }
                     }
                 }
-                
+
                 // Extensions didn't work. Now look again the mime types and
                 // deeper inside the url content.
-                if(mimeTypes != null && mimeTypes.length > 0) {
+                if (mimeTypes != null && mimeTypes.length > 0) {
                     try {
                         String urlDecoded = URLDecoder.decode(url, "utf-8");
                         URL realUrl = new URI(urlDecoded).toURL();
-                        if(realUrl != null) {
+                        if (realUrl != null) {
                             String lowerCaseMimeType = null;
-                            if(mimetypeCache.containsKey(url)) {
+                            if (mimetypeCache.containsKey(url)) {
                                 lowerCaseMimeType = mimetypeCache.get(url);
-                                
+
                             }
                             else {
                                 Tika tika = new Tika();
                                 String mimeType = tika.detect(realUrl);
                                 lowerCaseMimeType = mimeType.toLowerCase();
-                                if(mimetypeCache.size() > mimetypeCacheMaxSize) {
+                                if (mimetypeCache.size() > mimetypeCacheMaxSize) {
                                     mimetypeCache.clear();
                                 }
                                 mimetypeCache.put(url, lowerCaseMimeType);
                             }
-                            if(lowerCaseMimeType != null) {
+                            if (lowerCaseMimeType != null) {
                                 // logger.info("Tika detected mimetype: "+lowerCaseMimeType);
-                                for(String testMimeType : mimeTypes) {
-                                    if(lowerCaseMimeType.startsWith(testMimeType)) {
+                                for (String testMimeType : mimeTypes) {
+                                    if (lowerCaseMimeType.startsWith(testMimeType)) {
                                         return true;
                                     }
                                 }
                             }
                         }
                     }
-                    catch(ConnectException ce) {
+                    catch (ConnectException ce) {
                         mimetypeCache.put(url, null);
-                        logger.error("ConnectException occurred while detecting preview's type: "+ce.toString());
+                        logger.error("ConnectException occurred while detecting preview's type: " + ce.toString());
                     }
-                    catch(FileNotFoundException fnfe) {
+                    catch (FileNotFoundException fnfe) {
                         mimetypeCache.put(url, null);
-                        logger.error("FileNotFoundException occurred while detecting preview's type: "+fnfe.toString());
+                        logger.error(
+                                "FileNotFoundException occurred while detecting preview's type: " + fnfe.toString());
                     }
-                    catch(IllegalArgumentException iae) {
+                    catch (IllegalArgumentException iae) {
                         mimetypeCache.put(url, null);
-                        logger.error("IllegalArgumentException occurred while detecting preview's type: "+iae.toString());
+                        logger.error(
+                                "IllegalArgumentException occurred while detecting preview's type: " + iae.toString());
                     }
-                    catch(Exception e) {
-                        logger.error("PreviewUtils.canView fails after an exception: "+e.toString());
+                    catch (Exception e) {
+                        logger.error("PreviewUtils.canView fails after an exception: " + e.toString());
                     }
-                    catch(Error err) {
-                        logger.error("PreviewUtils.canView fails after an error: "+err.toString());
+                    catch (Error err) {
+                        logger.error("PreviewUtils.canView fails after an error: " + err.toString());
                     }
                 }
             }
         }
         return false;
     }
-    
-    
-    
+
+
+
     public static boolean hasJavaFX() {
         try {
             Class.forName("javafx.embed.swing.JFXPanel");
             return true;
-        } 
+        }
         catch (ClassNotFoundException e) {
             return false;
         }

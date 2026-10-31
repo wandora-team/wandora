@@ -41,12 +41,12 @@ import org.wandora.application.gui.simple.SimpleButton;
 
 
 public class TableViewerPanel extends javax.swing.JPanel {
-    
+
     private static final long serialVersionUID = 1L;
 
     private Component component = null;
     private JDialog dialog = null;
-    
+
     /**
      * Creates new form TableViewerPanel
      */
@@ -54,31 +54,31 @@ public class TableViewerPanel extends javax.swing.JPanel {
         initComponents();
     }
 
-    
+
     public void setTable(Component table) {
-        if(table != null) {
+        if (table != null) {
             component = table;
             tableContainer.add(table, BorderLayout.CENTER);
         }
     }
-    
-    
+
+
     public void openInDialog(Component table, String title) {
         setTable(table);
         Wandora wandora = Wandora.getWandora();
-        
+
         dialog = new JDialog(wandora, true);
         dialog.setTitle(title);
         dialog.add(this);
         dialog.setSize(700, 600);
         wandora.centerWindow(dialog);
         dialog.setVisible(true);
-        
+
         // WAIT TILL CLOSED
     }
-    
-    
-    
+
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -125,13 +125,11 @@ public class TableViewerPanel extends javax.swing.JPanel {
         javax.swing.GroupLayout buttonFillerPanelLayout = new javax.swing.GroupLayout(buttonFillerPanel);
         buttonFillerPanel.setLayout(buttonFillerPanelLayout);
         buttonFillerPanelLayout.setHorizontalGroup(
-            buttonFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                buttonFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
         buttonFillerPanelLayout.setVerticalGroup(
-            buttonFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                buttonFillerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -155,12 +153,13 @@ public class TableViewerPanel extends javax.swing.JPanel {
         add(buttonPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        
-        if(dialog != null) {
+
+        if (dialog != null) {
             dialog.setVisible(false);
         }
-        
+
     }//GEN-LAST:event_closeButtonActionPerformed
 
 

@@ -44,38 +44,44 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 public class OperationTableRenderer extends DefaultTableCellRenderer {
-    
+
     private static final long serialVersionUID = 1L;
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(OperationTableRenderer.class);
-    
+
     private OperationTable table;
     private OperationTableModel model;
-    
+
     public OperationTableRenderer(OperationTable t) {
         this.table = t;
         this.model = table.getOperationDataModel();
     }
 
-    
-    
+
+
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+    public Component getTableCellRendererComponent(
+            JTable table, 
+            Object value, 
+            boolean isSelected, 
+            boolean hasFocus,
+            int row, int column) {
+        
         Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
         try {
-            if(model.isMarker(row)) {
+            if (model.isMarker(row)) {
                 c.setBackground(UIConstants.defaultActiveBackground);
             }
             else {
                 c.setBackground(Color.WHITE);
             }
         }
-        catch(Exception e){
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
-        
+
         return c;
     }
-   
-    
+
+
 }

@@ -61,30 +61,26 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 
-
-
 public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener, ComponentListener, MouseListener {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Qaop.class);
-	
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(Qaop.class);
+
     private static final long serialVersionUID = 1L;
-    
-	protected Spectrum spectrum;
-    protected Map<String,String> params;
+
+    protected Spectrum spectrum;
+    protected Map<String, String> params;
     private int screenScaler = 1;
-    
-    
-    public Qaop(Map<String,String> params) {
+
+
+    public Qaop(Map<String, String> params) {
         super();
         this.params = params;
         this.setBackground(new Color(0x222222));
         this.addMouseListener(this);
         init();
     }
-    
-    
-    
-    
-    
+
+
+
     public synchronized void init() {
         showStatus(getAppletInfo(), true);
 
@@ -93,12 +89,6 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
             mask = getImage(a);
         }
 
-        /*		a = param("boxbgcolor");
-         if(a != null) {
-         Color bg = Color.getColor(a);
-         if(bg != null) this.setBackground(bg);
-         }
-         */
         Spectrum s = new Spectrum(this);
         spectrum = s;
         queue = new LinkedList<>();
@@ -108,17 +98,19 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
 
         a = param("rom");
         if (a == null) {
-            InputStream in = resource("/org/wandora/application/gui/previews/formats/applicationz80/roms/spectrum48.rom");
+            InputStream in = resource(
+                    "/org/wandora/application/gui/previews/formats/applicationz80/roms/spectrum48.rom");
             if (in != null) {
                 int l = tomem(s.rom48k, 0, 16384, in);
-                if(l != 0) {
+                if (l != 0) {
                     showStatus("Can't read spectrum.rom (2)", true);
                 }
             }
             else {
                 showStatus("Can't read spectrum.rom", true);
             }
-        } else {
+        }
+        else {
             Loader.add(this, a, Loader.ROM);
         }
 
@@ -154,13 +146,14 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
 
         s.start();
         th = new Thread(this, "Qaop");
-//		th.setPriority(Thread.NORM_PRIORITY-1);
+        //		th.setPriority(Thread.NORM_PRIORITY-1);
         th.start();
 
         if (param("focus", true)) {
             addComponentListener(this);
         }
     }
+
 
     public synchronized void destroy() {
         th.interrupt();
@@ -169,40 +162,41 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         try {
             th.join();
             spectrum.join();
-        } catch (Exception x) {
+        }
+        catch (Exception x) {
         }
     }
+
 
     public String getAppletInfo() {
         return "Qaop - ZX Spectrum emulator by Jan Bobrowski";
     }
 
     static final String info[][] = {
-        {"rom", "filename", "alternative ROM image"},
-        {"if1rom", "filename", "enable Interface1; use this ROM"},
-        {"tape", "filename", "tape file"},
-        {"load", "filename", "snapshot or tape to load"},
-        {"focus", "yes/no", "grab focus on start"},
-        {"arrows", "keys", "define arrow keys"},
-        {"ay", "yes/no", "with AY"},
-        {"muted", "yes/no", "muted to start"},
-        {"volume", "number", "volume 0..100"},
-        {"mask", "filename", "overlay"}
+            { "rom", "filename", "alternative ROM image" },
+            { "if1rom", "filename", "enable Interface1; use this ROM" },
+            { "tape", "filename", "tape file" },
+            { "load", "filename", "snapshot or tape to load" },
+            { "focus", "yes/no", "grab focus on start" },
+            { "arrows", "keys", "define arrow keys" },
+            { "ay", "yes/no", "with AY" },
+            { "muted", "yes/no", "muted to start" },
+            { "volume", "number", "volume 0..100" },
+            { "mask", "filename", "overlay" }
     };
 
     public String[][] getParameterInfo() {
         return info;
     }
 
+
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(spectrum.width, spectrum.height);
     }
 
-    
 
-    
-    
+
     /* javascript interface */
     public void reset() {
         synchronized (queue) {
@@ -211,13 +205,16 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         spectrum.reset();
     }
 
+
     public void load(String name) {
         Loader.add(this, name, 0);
     }
 
+
     public void tape(String name) {
         Loader.add(this, name, Loader.TAP);
     }
+
 
     public String save() {
         try {
@@ -225,20 +222,24 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
             String s = Loader.get_snap(this);
             spectrum.pause(020);
             return s;
-        } catch (InterruptedException x) {
+        }
+        catch (InterruptedException x) {
             intr();
             return null;
         }
     }
 
+
     public boolean pause(boolean v) {
         try {
             spectrum.pause(v ? 044 : 040);
-        } catch (InterruptedException x) {
+        }
+        catch (InterruptedException x) {
             intr();
         }
         return v;
     }
+
 
     public void mask(String name) {
         mask = name != null
@@ -247,24 +248,28 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         repaint();
     }
 
+
     public void mute(boolean y) {
         spectrum.mute(y);
     }
+
 
     public int volume() {
         return spectrum.volumeChg(0);
     }
 
+
     public int volume(int v) {
         return spectrum.volume(v);
     }
 
+
     public void setScreenSize(int scaler) {
         screenScaler = scaler;
-        this.setSize(352*scaler, 272*scaler);
+        this.setSize(352 * scaler, 272 * scaler);
     }
-    
-    
+
+
     private int state;
 
     // bit 0:paused, 1:loading, 2:muted
@@ -276,15 +281,18 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
             if (Spectrum.muted) {
                 v |= 4;
             }
-        } catch (InterruptedException x) {
+        }
+        catch (InterruptedException x) {
             intr();
         }
         return state | v;
     }
 
+
     public void focus() {
         requestFocus();
     }
+
 
     public static void intr() {
         Thread.currentThread().interrupt();
@@ -315,13 +323,13 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         buf_image = null;
     }
 
-    
+
     @Override
     public void paint(Graphics g) {
         update(g);
     }
-    
-    
+
+
 
     @Override
     public synchronized void update(Graphics g) {
@@ -336,7 +344,7 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
             return;
         }
 
-        int sw = spectrum.width; 
+        int sw = spectrum.width;
         int sh = spectrum.height;
         if (dl_text_current == null ? t != null : !dl_text_current.equals(t)) {
             dl_img = dl_mk_image(t, sw);
@@ -361,6 +369,7 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
 
         g.drawImage(buf_image, x, y, null);
     }
+
 
     protected void new_pixels(int x, int y, int w, int h) {
         repaint(posx + x, posy + y, w, h);
@@ -406,6 +415,7 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         g.fillRect(x, y, s, 1);
     }
 
+
     private Image dl_mk_image(String t, int w) {
         Image i = null;
         if (t != null) {
@@ -422,7 +432,8 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
                 g.drawString(t, -dx, -dy);
                 dx -= dy;
                 dy = 1;
-            } while (dx >= -1);
+            }
+            while (dx >= -1);
             g.setColor(new Color(0x111111));
             g.drawString(t, 0, 0);
             g.dispose();
@@ -431,11 +442,13 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         return i;
     }
 
+
     /* KeyListener, FocusListener */
     @Override
     public void keyTyped(KeyEvent e) {
         e.consume();
     }
+
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -445,20 +458,25 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         if (c == KeyEvent.VK_DELETE && e.isControlDown()) {
             spectrum.reset();
             return;
-        } else if (c == KeyEvent.VK_F11) {
+        }
+        else if (c == KeyEvent.VK_F11) {
             spectrum.mute(m = !Spectrum.muted);
             v = spectrum.volumeChg(0);
-        } else if (c == KeyEvent.VK_PAGE_UP || c == KeyEvent.VK_PAGE_DOWN) {
+        }
+        else if (c == KeyEvent.VK_PAGE_UP || c == KeyEvent.VK_PAGE_DOWN) {
             m = Spectrum.muted;
             v = spectrum.volumeChg(c == KeyEvent.VK_PAGE_UP ? +5 : -5);
-        } else if (c == KeyEvent.VK_PAUSE) {
+        }
+        else if (c == KeyEvent.VK_PAUSE) {
             try {
                 spectrum.pause(4);
-            } catch (InterruptedException x) {
+            }
+            catch (InterruptedException x) {
                 intr();
             }
             return;
-        } else {
+        }
+        else {
             keyEvent(e);
             return;
         }
@@ -471,16 +489,18 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
             s += " (muted)";
         }
         showStatus(s, false);
-        
+
         e.consume();
     }
+
 
     @Override
     public void keyReleased(KeyEvent e) {
         keyEvent(e);
-        
+
         e.consume();
     }
+
 
     void keyEvent(KeyEvent e) {
         KeyEvent[] k = spectrum.keys;
@@ -504,10 +524,12 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         }
     }
 
+
     @Override
     public void focusGained(FocusEvent e) {
         showStatus(getAppletInfo(), false);
     }
+
 
     @Override
     public void focusLost(FocusEvent e) {
@@ -519,18 +541,22 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         }
     }
 
+
     /* ComponentListener */
     @Override
     public void componentResized(ComponentEvent e) {
     }
 
+
     @Override
     public void componentMoved(ComponentEvent e) {
     }
 
+
     @Override
     public void componentHidden(ComponentEvent e) {
     }
+
 
     @Override
     public void componentShown(ComponentEvent e) {
@@ -538,10 +564,12 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         requestFocus();
     }
 
+
     /* parameters */
     String param(String n) {
         return params != null ? (String) params.get(n) : null;
     }
+
 
     boolean param(String name, boolean dflt) {
         String p = param(name);
@@ -553,20 +581,24 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         return c != 'N' && c != 'F' && c != '0' && !p.equals("OFF");
     }
 
+
     double param(String name, double dflt) {
         try {
             String p = param(name);
             return Double.parseDouble(p);
-        } catch (Exception x) {
+        }
+        catch (Exception x) {
             return dflt;
         }
     }
+
 
     /* resource */
     private InputStream resource(String name) {
         //return ClassLoader.getResourceAsStream(name);
         return Qaop.class.getResourceAsStream(name);
     }
+
 
     protected static int tomem(int[] m, int p, int l, InputStream in) {
         do {
@@ -576,10 +608,12 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
                     break;
                 }
                 m[p++] = v;
-            } catch (IOException ignored) {
+            }
+            catch (IOException ignored) {
                 break;
             }
-        } while (--l > 0);
+        }
+        while (--l > 0);
         return l;
     }
 
@@ -592,15 +626,17 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         try {
             // TODO
             // super.showStatus(s);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
         }
     }
+
 
     public Image getImage(URL u) {
         try {
             return ImageIO.read(u);
         }
-        catch(Exception e) {
+        catch (Exception e) {
             return null;
         }
     }
@@ -627,10 +663,12 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
                     l = (Loader) queue.remove(0);
                 }
                 l.exec();
-            } catch (InterruptedException x) {
+            }
+            catch (InterruptedException x) {
                 break;
-            } catch (Exception x) {
-            	logger.error(x);
+            }
+            catch (Exception x) {
+                logger.error(x);
             }
         }
     }
@@ -642,29 +680,34 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
         return UIBox.getImage(name);
     }
 
+
     @Override
     public void mouseClicked(MouseEvent e) {
-        
+
     }
+
 
     @Override
     public void mousePressed(MouseEvent e) {
-        
+
     }
+
 
     @Override
     public void mouseReleased(MouseEvent e) {
         this.requestFocus();
     }
 
+
     @Override
     public void mouseEntered(MouseEvent e) {
-        this.requestFocus(); 
+        this.requestFocus();
     }
+
 
     @Override
     public void mouseExited(MouseEvent e) {
-        
+
     }
 }
 
@@ -672,10 +715,9 @@ public class Qaop extends JPanel implements Runnable, KeyListener, FocusListener
 
 
 
-
 class Loader extends Thread {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Loader.class);
-	
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(Loader.class);
+
     Qaop qaop;
     String file;
     int kind;
@@ -701,6 +743,7 @@ class Loader extends Thread {
         return l;
     }
 
+
     protected static void clear(List<Loader> q, int k) {
         int i = q.size();
         while (--i >= 0) {
@@ -711,23 +754,29 @@ class Loader extends Thread {
         }
     }
 
+
     void exec() throws InterruptedException {
         Qaop q = qaop;
         try {
             do_exec();
-        } catch (InterruptedException x) {
+        }
+        catch (InterruptedException x) {
             throw x;
-        } catch (InterruptedIOException x) {
+        }
+        catch (InterruptedIOException x) {
             throw new InterruptedException();
-        } catch (Exception x) {
+        }
+        catch (Exception x) {
             logger.error(x);
             if (q.dl_msg == null) {
                 String m;
                 if (x instanceof FileNotFoundException) {
                     m = "Not found";
-                } else if (x instanceof EOFException) {
+                }
+                else if (x instanceof EOFException) {
                     m = "File truncated";
-                } else {
+                }
+                else {
                     m = x.getMessage();
                     if (m == null) {
                         m = "Error";
@@ -741,19 +790,23 @@ class Loader extends Thread {
             q.repaint(100);
             try {
                 Thread.sleep(1500);
-            } catch (InterruptedException xx) {
+            }
+            catch (InterruptedException xx) {
                 throw xx;
             }
-        } finally {
+        }
+        finally {
             try {
                 interrupt();
                 join();
-            } catch (Exception x) {
+            }
+            catch (Exception x) {
             }
             q.dl_text = q.dl_msg = null;
             q.repaint(200);
         }
     }
+
 
     private void do_exec() throws Exception {
         InputStream s;
@@ -769,21 +822,22 @@ class Loader extends Thread {
         file = null; // now ZIP entry
         if (n.startsWith("data:")) {
             s = data_url(n);
-        } else {
+        }
+        else {
             raw_in = start_download(n);
             pipe = new PipedOutputStream();
-//			setPriority(Thread.NORM_PRIORITY-1);
+            //			setPriority(Thread.NORM_PRIORITY-1);
             s = new PipedInputStream(pipe);
             start();
         }
         if (zip) {
             s = unzip(s);
-        } else if (gz) {
+        }
+        else if (gz) {
             s = new GZIPInputStream(s);
         }
 
-        pb_color:
-        {
+        pb_color: {
             int c;
             switch (kind & 0xF) {
                 case SNA & 0xF:
@@ -831,6 +885,7 @@ class Loader extends Thread {
         }
     }
 
+
     private InputStream start_download(String f) throws IOException, URISyntaxException {
         Qaop a = qaop;
         a.dl_length = a.dl_loaded = 0;
@@ -851,7 +906,8 @@ class Loader extends Thread {
         try {
             c.setConnectTimeout(15000);
             c.setReadTimeout(10000);
-        } catch (Error e) {
+        }
+        catch (Error e) {
         }
 
         if (c instanceof java.net.HttpURLConnection) {
@@ -874,6 +930,7 @@ class Loader extends Thread {
         file = u.getRef();
         return c.getInputStream();
     }
+
 
     private InputStream unzip(InputStream s) throws IOException {
         ZipInputStream zip = new ZipInputStream(s);
@@ -898,7 +955,8 @@ class Loader extends Thread {
                 if (((kind ^ k) & 0xF) == 0) {
                     break;
                 }
-            } else if (n.equals(file)) {
+            }
+            else if (n.equals(file)) {
                 break;
             }
         }
@@ -907,6 +965,7 @@ class Loader extends Thread {
         }
         return zip;
     }
+
 
     private InputStream data_url(String s) throws IOException {
         // data:application/x.zx.tap;base64,EwAAAGJvcm
@@ -970,7 +1029,8 @@ class Loader extends Thread {
             }
             if (mime.startsWith("application/x-spectrum-")) {
                 tk = get_type("." + mime.substring(23));
-            } else if (mime.startsWith(MIME)) {
+            }
+            else if (mime.startsWith(MIME)) {
                 tk = get_type(mime);
             }
         }
@@ -986,6 +1046,7 @@ class Loader extends Thread {
         }
     }
 
+
     private int get_type(String f) {
         int k;
         if (gz = f.endsWith(".gz")) {
@@ -994,11 +1055,14 @@ class Loader extends Thread {
         k = 0;
         if (f.endsWith(".sna")) {
             k = SNA;
-        } else if (f.endsWith(".z80") || f.endsWith(".slt")) {
+        }
+        else if (f.endsWith(".z80") || f.endsWith(".slt")) {
             k = Z80;
-        } else if (f.endsWith(".tap")) {
+        }
+        else if (f.endsWith(".tap")) {
             k = TAP;
-        } else if (f.endsWith(".rom")) {
+        }
+        else if (f.endsWith(".rom")) {
             k = CART;
         }
         return k;
@@ -1020,19 +1084,24 @@ class Loader extends Thread {
                 qaop.repaint(100);
                 try {
                     pipe.write(buf, 0, n);
-                } catch (InterruptedIOException x) {
+                }
+                catch (InterruptedIOException x) {
                     break;
                 }
             }
-        } catch (Exception x) {
-        	logger.error(x);
-        } finally {
+        }
+        catch (Exception x) {
+            logger.error(x);
+        }
+        finally {
             try {
                 pipe.close();
-            } catch (Exception x) {
+            }
+            catch (Exception x) {
             }
         }
     }
+
 
     /* file handlers */
     private void load_rom(int kind) throws Exception {
@@ -1052,6 +1121,7 @@ class Loader extends Thread {
                 spec.rom = m;
         }
     }
+
 
     private void load_tape() {
         byte data[] = null;
@@ -1075,7 +1145,8 @@ class Loader extends Thread {
                 pos += n;
                 qaop.spectrum.tape(data, false);
                 Thread.yield();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 break;
             }
         }
@@ -1084,21 +1155,26 @@ class Loader extends Thread {
         }
     }
 
+
     private int get8() throws IOException {
         return in.readUnsignedByte();
     }
+
 
     private int get16() throws IOException {
         int b = in.readUnsignedByte();
         return b | in.readUnsignedByte() << 8;
     }
 
+
     private void poke_stream(int pos, int len) throws IOException {
         Spectrum s = qaop.spectrum;
         do {
             s.mem(pos++, get8());
-        } while (--len > 0);
+        }
+        while (--len > 0);
     }
+
 
     private void get_regs(Z80 z, String s) throws IOException {
         for (int i = 0; i < s.length(); i++) {
@@ -1144,6 +1220,7 @@ class Loader extends Thread {
         }
     }
 
+
     private void load_sna() throws IOException {
         Spectrum spectrum = qaop.spectrum;
         Z80 cpu = spectrum.cpu;
@@ -1159,13 +1236,15 @@ class Loader extends Thread {
         try {
             cpu.pc(get16());
             logger.info("Is it 128K .SNA?");
-        } catch (EOFException e) {
+        }
+        catch (EOFException e) {
             int sp = cpu.sp();
             cpu.pc(spectrum.mem16(sp));
             cpu.sp((char) (sp + 2));
             spectrum.mem16(sp, 0);
         }
     }
+
 
     private void load_z80() throws IOException {
         Spectrum spectrum = qaop.spectrum;
@@ -1190,7 +1269,8 @@ class Loader extends Thread {
         if (pc != 0) {
             if ((f1 & 0x20) != 0) {
                 uncompress_z80(16384, 49152);
-            } else {
+            }
+            else {
                 poke_stream(16384, 49152);
             }
             return;
@@ -1221,7 +1301,8 @@ class Loader extends Thread {
         for (;;) {
             try {
                 l = get16();
-            } catch (IOException x) {
+            }
+            catch (IOException x) {
                 break;
             }
             int a;
@@ -1241,7 +1322,8 @@ class Loader extends Thread {
             }
             if (l == 0xFFFF) {
                 poke_stream(a, 16384);
-            } else {
+            }
+            else {
                 uncompress_z80(a, 16384);
             }
         }
@@ -1253,12 +1335,12 @@ class Loader extends Thread {
         }
     }
 
+
     private int uncompress_z80(int pos, int count) throws IOException {
         Spectrum spectrum = qaop.spectrum;
         int end = pos + count;
         int n = 0;
-        loop:
-        do {
+        loop: do {
             int v = get8();
             n++;
             if (v != 0xED) {
@@ -1282,9 +1364,11 @@ class Loader extends Thread {
                 }
                 l--;
             }
-        } while (pos < end);
+        }
+        while (pos < end);
         return n;
     }
+
 
     /* make snapshot */
     protected static String get_snap(Qaop q) {
@@ -1292,11 +1376,13 @@ class Loader extends Thread {
         try {
             b = save_z80(q);
             return to_data("z80", b);
-        } catch (Exception x) {
-        	logger.error(x);
+        }
+        catch (Exception x) {
+            logger.error(x);
             return null;
         }
     }
+
 
     private static String to_data(String t, byte[] b) {
         return "data:" + MIME + t + ";base64," + base64encode(b);
@@ -1314,8 +1400,7 @@ class Loader extends Thread {
         for (int i = 1;;) {
             s.append(
                     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-                    .charAt(a >>> k & 63)
-            );
+                            .charAt(a >>> k & 63));
             if ((k -= 6) >= 0) {
                 continue;
             }
@@ -1342,13 +1427,14 @@ class Loader extends Thread {
         return s.toString();
     }
 
-    
-    
+
+
     private static OutputStream put16(OutputStream o, int v) throws IOException {
         o.write(v);
         o.write(v >> 8);
         return o;
     }
+
 
     private static byte[] save_z80(Qaop q) throws IOException {
         Spectrum s = q.spectrum;
@@ -1398,26 +1484,29 @@ class Loader extends Thread {
         return o.toByteArray();
     }
 
+
     private static int compress_z80(byte b[], int m[], int i, int l) {
         int j = 0;
         l += i;
-        loop:
-        do {
+        loop: do {
             int n = i;
             int a = m[i];
             do {
                 i++;
-            } while (i < l && m[i] == a);
+            }
+            while (i < l && m[i] == a);
             n = i - n;
             do {
                 if (a != 0xED) {
                     if (n < 5) {
                         do {
                             b[j++] = (byte) a;
-                        } while (--n != 0);
+                        }
+                        while (--n != 0);
                         continue loop;
                     }
-                } else if (n == 1) {
+                }
+                else if (n == 1) {
                     b[j++] = (byte) a;
                     if (i == l) {
                         break loop;
@@ -1430,14 +1519,16 @@ class Loader extends Thread {
                 b[j + 3] = (byte) a;
                 j += 4;
                 n -= 255;
-            } while (n > 0);
-        } while (i < l);
+            }
+            while (n > 0);
+        }
+        while (i < l);
         return j;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
+
 
 }

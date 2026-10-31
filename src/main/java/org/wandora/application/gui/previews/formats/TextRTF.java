@@ -44,25 +44,25 @@ import org.wandora.utils.DataURL;
  * @author akivela
  */
 public class TextRTF extends Text {
-     
-    
+
+
     public TextRTF(String locator) {
         super(locator);
     }
-    
-    
+
+
     @Override
     protected JComponent getTextComponent(String locator) throws Exception {
         RTFEditorKit rtf = new RTFEditorKit();
         JEditorPane textComponent = new JEditorPane();
         textComponent.setEditorKit(rtf);
         textComponent.setBackground(Color.WHITE);
-        
-        if(locator.startsWith("file:")) {
+
+        if (locator.startsWith("file:")) {
             FileInputStream in = new FileInputStream(Path.of(new URI(locator)).toFile());
             rtf.read(in, textComponent.getDocument(), 0);
         }
-        else if(DataURL.isDataURL(locator)) {
+        else if (DataURL.isDataURL(locator)) {
             DataURL dataUrl = new DataURL(locator);
             ByteArrayInputStream in = new ByteArrayInputStream(dataUrl.getData());
             rtf.read(in, textComponent.getDocument(), 0);
@@ -77,15 +77,14 @@ public class TextRTF extends Text {
         textComponent.setCaretPosition(0);
         return textComponent;
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { "text/rtf", "application/rtf" }, 
-                new String[] { "rtf" }
-        );
+        return PreviewUtils.isOfType(url,
+                new String[] { "text/rtf", "application/rtf" },
+                new String[] { "rtf" });
     }
 }

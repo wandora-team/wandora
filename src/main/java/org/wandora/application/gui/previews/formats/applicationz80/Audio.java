@@ -19,7 +19,7 @@ import javax.sound.sampled.SourceDataLine;
 import org.wandora.utils.logger.Log4j2Logger;
 
 class Audio {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(Audio.class);
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(Audio.class);
 
     byte buf[] = new byte[4096];
     int bufp;
@@ -35,6 +35,7 @@ class Audio {
         idiv = (1 << 30) / hz;
     }
 
+
     void step(int t, int d) {
         t = acct - mul * t;
 
@@ -44,8 +45,7 @@ class Audio {
             buf[p++] = (byte) (v >> 8);
             v = accv1;
             accv1 = level;
-            loop:
-            for (;;) {
+            loop: for (;;) {
                 if (p == buf.length) {
                     p = flush(p);
                 }
@@ -78,7 +78,7 @@ class Audio {
             bufp = p;
         }
 
-		// 0 <= t < div
+        // 0 <= t < div
         acct = t;
         int v = level + d;
         if ((short) v != v) {
@@ -97,27 +97,29 @@ class Audio {
     static final int FREQ = 22050;
     SourceDataLine line;
 
-    
-    
+
+
     Audio() {
         try {
             mul = FREQ;
             AudioFormat fmt = new AudioFormat(FREQ, 16, 1, true, false);
             logger.info(fmt.toString());
             SourceDataLine l = (SourceDataLine) AudioSystem.getLine(
-                    new DataLine.Info(SourceDataLine.class, fmt)
-            );
+                    new DataLine.Info(SourceDataLine.class, fmt));
             l.open(fmt, 4096);
             l.start();
             line = l;
-        } catch (Exception e) {
-        	logger.error(e);
-        } catch (Error e) {
+        }
+        catch (Exception e) {
+            logger.error(e);
+        }
+        catch (Error e) {
             // Java on some Linuces throws an error when sound
             // can't start. Thanks for Ricardo Almeida
-        	logger.error(e);
+            logger.error(e);
         }
     }
+
 
     synchronized int flush(int p) {
         SourceDataLine l = line;
@@ -126,6 +128,7 @@ class Audio {
         }
         return 0;
     }
+
 
     synchronized void close() {
         SourceDataLine l = line;

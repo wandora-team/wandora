@@ -28,7 +28,8 @@
 package org.wandora.application.tools.layers;
 
 
-import java.util.ArrayList;
+
+import java.util.List;
 
 import javax.swing.Icon;
 
@@ -50,31 +51,32 @@ import org.wandora.topicmap.layered.Layer;
 
 public class ViewLayers extends AbstractLayerTool {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final int VIEW_ALL = 1000;
+    public static final int VIEW_ALL = 1000;
     public static final int HIDE_ALL = 1010;
     public static final int HIDE_ALL_BUT_CURRENT = 1020;
     public static final int REVERSE_VISIBILITY = 1030;
 
-    
+
     private int option = VIEW_ALL;
-    
-    
+
+
     /** Creates a new instance of ViewLayers */
     public ViewLayers(int options) {
         this.option = options;
     }
-    
+
+
     @Override
     public Icon getIcon() {
-        if(option == VIEW_ALL) {
+        if (option == VIEW_ALL) {
             return UIBox.getIcon("gui/icons/view.png");
         }
-        if(option == HIDE_ALL || option == HIDE_ALL_BUT_CURRENT) {
+        if (option == HIDE_ALL || option == HIDE_ALL_BUT_CURRENT) {
             return UIBox.getIcon("gui/icons/view_no.png");
         }
-        if(option == REVERSE_VISIBILITY) {
+        if (option == REVERSE_VISIBILITY) {
             return UIBox.getIcon("gui/icons/view_reverse.png");
         }
         return UIBox.getIcon("gui/icons/view.png");
@@ -84,57 +86,60 @@ public class ViewLayers extends AbstractLayerTool {
 
     @Override
     public String getName() {
-        if(option == VIEW_ALL) {
+        if (option == VIEW_ALL) {
             return "View all layers";
         }
-        if(option == HIDE_ALL) {
+        if (option == HIDE_ALL) {
             return "Hide all layers";
         }
-        if(option ==  HIDE_ALL_BUT_CURRENT) {
+        if (option == HIDE_ALL_BUT_CURRENT) {
             return "Hide all but current layer";
         }
-        if(option == REVERSE_VISIBILITY) {
+        if (option == REVERSE_VISIBILITY) {
             return "Reverse layer order";
         }
         return "View layer";
     }
 
+
     @Override
     public String getDescription() {
-        if(option == VIEW_ALL) {
+        if (option == VIEW_ALL) {
             return "Change all layers visible.";
         }
-        if(option == HIDE_ALL) {
+        if (option == HIDE_ALL) {
             return "Change all layers invisible.";
         }
-        if(option ==  HIDE_ALL_BUT_CURRENT) {
+        if (option == HIDE_ALL_BUT_CURRENT) {
             return "Change current layer visible and all other layers invisible.";
         }
-        if(option == REVERSE_VISIBILITY) {
+        if (option == REVERSE_VISIBILITY) {
             return "Change visible layers invisible and invisible layers visible.";
         }
         return "Tool is used to change layer visibility in layer stack.";
     }
-    
-    
+
+
     @Override
     public void execute(Wandora wandora, Context<?> context) {
         try {
             Layer selected = solveContextLayer(wandora, context);
-            if(selected == null) {
-                WandoraOptionPane.showMessageDialog(wandora, "There is no current topic map layer. Create a topic map layer first.", "No layer selected", WandoraOptionPane.WARNING_MESSAGE);
+            if (selected == null) {
+                WandoraOptionPane.showMessageDialog(wandora,
+                        "There is no current topic map layer. Create a topic map layer first.", "No layer selected",
+                        WandoraOptionPane.WARNING_MESSAGE);
                 return;
             }
-            
-            ArrayList<Layer> layers = wandora.layerTree.getAllLayers();
+
+            List<Layer> layers = wandora.layerTree.getAllLayers();
             try {
-            	wandora.getTopicMap().clearTopicMapIndexes();
+                wandora.getTopicMap().clearTopicMapIndexes();
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 log(e);
             }
-            for(Layer layer : layers){
-                switch(option) {
+            for (Layer layer : layers) {
+                switch (option) {
                     case VIEW_ALL: {
                         layer.setVisible(true);
                         break;
@@ -144,24 +149,28 @@ public class ViewLayers extends AbstractLayerTool {
                         break;
                     }
                     case HIDE_ALL_BUT_CURRENT: {
-                        if(selected.equals(layer)) layer.setVisible(true);
-                        else layer.setVisible(false);
+                        if (selected.equals(layer))
+                            layer.setVisible(true);
+                        else
+                            layer.setVisible(false);
                         break;
                     }
                     case REVERSE_VISIBILITY: {
-                        if(layer.isVisible()) layer.setVisible(false);
-                        else layer.setVisible(true);
+                        if (layer.isVisible())
+                            layer.setVisible(false);
+                        else
+                            layer.setVisible(true);
                         break;
                     }
                     default: {
-                        log("Unknown option '"+option+"' used in ViewLayers.");
+                        log("Unknown option '" + option + "' used in ViewLayers.");
                         break;
                     }
                 }
             }
             wandora.layerTree.resetLayers();
         }
-        catch(Exception e) {
+        catch (Exception e) {
             singleLog(e);
         }
     }

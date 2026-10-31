@@ -49,12 +49,12 @@ import com.sun.pdfview.PDFPage;
  */
 public class ApplicationPDFPanel extends JPanel {
     private static final long serialVersionUID = 1L;
-    
-	private Image currentImage;
+
+    private Image currentImage;
     private BufferedImage currentBufferedImage;
     private PDFPage currentPage;
     private double zoom;
-    
+
 
     public ApplicationPDFPanel() {
         super();
@@ -63,7 +63,7 @@ public class ApplicationPDFPanel extends JPanel {
         currentImage = null;
     }
 
-    
+
     public void changePage(PDFPage page) {
         currentPage = page;
         refresh();
@@ -72,103 +72,102 @@ public class ApplicationPDFPanel extends JPanel {
 
 
     public void setZoom(double zoom) {
-        if(zoom > .1 && zoom < 10) {
+        if (zoom > .1 && zoom < 10) {
             this.zoom = zoom;
             refresh();
             repaint();
         }
     }
-    
-    
+
+
     public double getZoom() {
         return zoom;
     }
 
-    
+
     @Override
     public void setSize(int width, int height) {
         super.setSize(width, height);
         repaint();
     }
 
-    
+
     @Override
     public void setSize(Dimension d) {
         super.setSize(d);
         repaint();
     }
 
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         int w = getWidth();
         int h = getHeight();
-        
-        if(g instanceof Graphics2D) {
+
+        if (g instanceof Graphics2D) {
             RenderingHints qualityHints = new RenderingHints(
-                RenderingHints.KEY_RENDERING,
-                RenderingHints.VALUE_RENDER_QUALITY);
+                    RenderingHints.KEY_RENDERING,
+                    RenderingHints.VALUE_RENDER_QUALITY);
             RenderingHints antialiasHints = new RenderingHints(
-                RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+                    RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
 
             ((Graphics2D) g).addRenderingHints(qualityHints);
             ((Graphics2D) g).addRenderingHints(antialiasHints);
         }
-        
-        if(currentBufferedImage == null) {
+
+        if (currentBufferedImage == null) {
             g.setColor(getBackground());
             g.fillRect(0, 0, w, h);
             g.setColor(Color.black);
             g.drawString("No page selected",
-                         getWidth() / 2 - 30,
-                         getHeight() / 2);
+                    getWidth() / 2 - 30,
+                    getHeight() / 2);
         }
         else {
             g.setColor(getBackground());
             g.fillRect(0, 0, w, h);
             g.drawImage(currentBufferedImage,
-                        0,
-                        0, 
-                        currentBufferedImage.getWidth(), 
-                        currentBufferedImage.getHeight(),
-                        null);
+                    0,
+                    0,
+                    currentBufferedImage.getWidth(),
+                    currentBufferedImage.getHeight(),
+                    null);
         }
     }
 
-    
+
     private void refresh() {
-        if(currentPage != null) {
+        if (currentPage != null) {
             int w = (int) (currentPage.getWidth() * zoom);
             int h = (int) (currentPage.getHeight() * zoom);
             Rectangle rect = new Rectangle(0, 0, w, h);
             Rectangle clip = currentPage.getBBox().getBounds();
 
             int rotation = currentPage.getRotation();
-            if(rotation == 90 || rotation == 270) {
+            if (rotation == 90 || rotation == 270) {
                 clip = new Rectangle(
-                        (int) clip.getY(), 
-                        (int) clip.getX(), 
-                        (int) clip.getHeight(), 
-                        (int) clip.getWidth()
-                );
+                        (int) clip.getY(),
+                        (int) clip.getX(),
+                        (int) clip.getHeight(),
+                        (int) clip.getWidth());
             }
-            
+
             Dimension pageSize = new Dimension(rect.width, rect.height);
             setPreferredSize(pageSize);
             setMinimumSize(pageSize);
             setMaximumSize(pageSize);
-            
+
             currentImage = currentPage.getImage(
-                                        rect.width, // lastPageSize.width,
-                                        rect.height, // lastPageSize.height,
-                                        clip,
-                                        null,   /* imageobserver */
-                                        true,  /* draw white bg */
-                                        true); /* block */
-            
+                    rect.width, // lastPageSize.width,
+                    rect.height, // lastPageSize.height,
+                    clip,
+                    null, /* imageobserver */
+                    true, /* draw white bg */
+                    true); /* block */
+
             currentBufferedImage = UIBox.makeBufferedImage(currentImage);
-            
+
             revalidate();
         }
     }

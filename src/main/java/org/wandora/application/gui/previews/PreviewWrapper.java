@@ -48,15 +48,15 @@ import org.wandora.utils.logger.Log4j2Logger;
 public class PreviewWrapper extends JPanel {
     private static final long serialVersionUID = 1L;
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(PreviewWrapper.class);
-    
-    private static Map<Object,PreviewWrapper> previewWrappers = null;
-    
+
+    private static Map<Object, PreviewWrapper> previewWrappers = null;
+
     private PreviewPanel currentPanel = null;
     private Component currentUI = null;
     private Locator currentLocator = null;
     private PreviewWrapperInitializer initializer = null;
 
-    
+
     /**
      * To create a new preview wrapper, call static method getPreviewWrapper
      * with the caller as an argument. Created preview wrapper is caller
@@ -67,126 +67,121 @@ public class PreviewWrapper extends JPanel {
     private PreviewWrapper() {
         this.setLayout(new BorderLayout());
     }
-    
-    
+
+
     public static PreviewWrapper getPreviewWrapper(Object owner) {
-        if(previewWrappers == null) {
+        if (previewWrappers == null) {
             previewWrappers = new HashMap<>();
         }
         PreviewWrapper previewWrapper = previewWrappers.get(owner);
-        if(previewWrapper == null) {
+        if (previewWrapper == null) {
             previewWrapper = new PreviewWrapper();
             previewWrappers.put(owner, previewWrapper);
         }
         return previewWrapper;
     }
-    
-    
+
+
     public static void removePreviewWrapper(Object owner) {
-        if(previewWrappers != null) {
-            if(previewWrappers.containsKey(owner)) {
+        if (previewWrappers != null) {
+            if (previewWrappers.containsKey(owner)) {
                 previewWrappers.remove(owner);
             }
             else {
-                logger.info("Found no preview wrapper "+owner);
+                logger.info("Found no preview wrapper " + owner);
             }
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
-    
-    
+
+
     public void stop() {
-        if(initializer != null) {
-            if(initializer.isAlive()) {
+        if (initializer != null) {
+            if (initializer.isAlive()) {
                 logger.info("Setting the preview initializer aborted.");
                 initializer.setAborted();
             }
         }
-        if(currentPanel != null) {
-            // logger.info("Stopping preview wrapper.");
+        if (currentPanel != null) {
             currentPanel.stop();
         }
         currentPanel = null;
         currentLocator = null;
-        
+
         removeAll();
     }
-    
-    
-    
-    
+
+
+
     public void setURL(final Locator subjectLocator) {
-        if(subjectLocator != null && subjectLocator.equals(currentLocator)) {
+        if (subjectLocator != null && subjectLocator.equals(currentLocator)) {
             return;
         }
         forceSetURL(subjectLocator);
     }
-    
-    
-    
+
+
 
     public void forceSetURL(final Locator subjectLocator) {
-        
-        if(currentPanel != null) {
+
+        if (currentPanel != null) {
             currentPanel.stop();
             currentPanel.finish();
         }
         currentPanel = null;
         currentUI = null;
-        
+
         removeAll();
 
         currentLocator = subjectLocator;
-        if(subjectLocator == null)
+        if (subjectLocator == null)
             return;
 
-        if(subjectLocator.toExternalForm().equals(""))
+        if (subjectLocator.toExternalForm().equals(""))
             return;
 
         currentUI = PreviewUtils.previewLoadingMessage(this);
-        
+
         // All the rest of building the preview happens in a separate class
         // extending a thread. This way the application doesn't freeze
         // if the preview initialization takes longer.
-        
+
         initializer = new PreviewWrapperInitializer(subjectLocator, this);
         initializer.start();
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     @Override
     public Dimension getPreferredSize() {
-        if(currentUI != null) {
+        if (currentUI != null) {
             return currentUI.getPreferredSize();
         }
         else {
-            //return super.getPreferredSize();
-            return new Dimension(0,0);
+            return new Dimension(0, 0);
         }
     }
-    
-    
+
+
     @Override
     public Dimension getMinimumSize() {
-        if(currentUI != null) {
+        if (currentUI != null) {
             return currentUI.getMinimumSize();
         }
         else {
-            //return super.getMinimumSize();
-            return new Dimension(0,0);
+            return new Dimension(0, 0);
         }
     }
-    
-    
-    
+
+
+
     /** ------------------------------------------------------------------------
      * PreviewWrapperInitializer is a Thread that solves the preview viewer class,
      * instantiates preview viewer and initialized it. Downloading and initializing
@@ -197,67 +192,66 @@ public class PreviewWrapper extends JPanel {
      * The thread is never really killed (forced to abort) though. This is because
      * the preview may become unstable if the initialization is stopped carelessly.
      */
-    
+
     protected class PreviewWrapperInitializer extends Thread {
         private final Locator subjectLocator;
         private final PreviewWrapper previewWrapper;
         private boolean isAborted;
-        
-        
+
+
         public PreviewWrapperInitializer(Locator locator, PreviewWrapper wrapper) {
             subjectLocator = locator;
             previewWrapper = wrapper;
             isAborted = false;
         }
-        
-        
+
+
         public void setAborted() {
             isAborted = true;
         }
-        
-        
+
+
         @Override
         public void run() {
-            if(!isAborted) {
+            if (!isAborted) {
                 try {
                     currentPanel = PreviewFactory.create(subjectLocator);
-                    if(!isAborted) {
-                        if(currentPanel != null) {
+                    if (!isAborted) {
+                        if (currentPanel != null) {
                             String locatorString = subjectLocator.toExternalForm();
-                            if(locatorString.length() > 50) locatorString = locatorString.substring(0,50)+"...";
-                            logger.info("Created preview "+currentPanel.getClass()+" for "+locatorString);
+                            if (locatorString.length() > 50)
+                                locatorString = locatorString.substring(0, 50) + "...";
+                            logger.info("Created preview " + currentPanel.getClass() + " for " + locatorString);
                         }
                         else {
                             currentUI = PreviewUtils.previewNoPreview(previewWrapper, subjectLocator);
                         }
                     }
                 }
-                catch(Exception e) {
-                    if(!isAborted) {
+                catch (Exception e) {
+                    if (!isAborted) {
                         currentUI = PreviewUtils.previewError(previewWrapper, "Creating preview failed.", e);
                     }
                 }
-                catch(Error err) {
-                    if(!isAborted) {
+                catch (Error err) {
+                    if (!isAborted) {
                         currentUI = PreviewUtils.previewError(previewWrapper, "Creating preview failed.", err);
                     }
                 }
             }
-            
-            if(currentPanel != null && !isAborted) {
+
+            if (currentPanel != null && !isAborted) {
                 currentUI = currentPanel.getGui();
-                if(currentUI != null && !isAborted) {
+                if (currentUI != null && !isAborted) {
                     removeAll();
                     add(currentUI, BorderLayout.CENTER);
                     setPreferredSize(currentUI.getPreferredSize());
                 }
             }
-            
+
             revalidate();
             repaint();
         }
-    
-        
     }
-    
+
 }

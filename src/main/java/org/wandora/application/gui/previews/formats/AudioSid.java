@@ -39,44 +39,44 @@ import de.quippy.javamod.mixer.Mixer;
  * @author akivela
  */
 public class AudioSid extends AudioAbstract {
-    
-    
+
+
     public AudioSid(String locator) {
         super(locator);
     }
-    
-    
+
+
 
     protected JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Play", PreviewUtils.ICON_PLAY, this,
-            "Pause", PreviewUtils.ICON_PAUSE, this,
-            "Stop", PreviewUtils.ICON_STOP, this,
-            "Previous", PreviewUtils.ICON_PREVIOUS, this,
-            "Next", PreviewUtils.ICON_NEXT, this,
-            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
-            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
-            "Save as", PreviewUtils.ICON_SAVE, this,
+                "Play", PreviewUtils.ICON_PLAY, this,
+                "Pause", PreviewUtils.ICON_PAUSE, this,
+                "Stop", PreviewUtils.ICON_STOP, this,
+                "Previous", PreviewUtils.ICON_PREVIOUS, this,
+                "Next", PreviewUtils.ICON_NEXT, this,
+                "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+                "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+                "Save as", PreviewUtils.ICON_SAVE, this,
         }, this);
     }
-    
-    
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
         Mixer mixer = getMixer();
-        if(startsWithAny(cmd, "Next")) {
-            if(mixer != null) {
-                if(mixer.isNotSeeking() && mixer.isNotPausingNorPaused()) {
+        if (startsWithAny(cmd, "Next")) {
+            if (mixer != null) {
+                if (mixer.isNotSeeking() && mixer.isNotPausingNorPaused()) {
                     long currentTrack = mixer.getMillisecondPosition();
                     long nextTrack = currentTrack + 1;
                     mixer.setMillisecondPosition(Math.min(mixer.getLengthInMilliseconds(), nextTrack));
                 }
             }
         }
-        else if(startsWithAny(cmd, "Previous")) {
-            if(mixer != null) {
-                if(mixer.isNotSeeking() && mixer.isNotPausingNorPaused()) {
+        else if (startsWithAny(cmd, "Previous")) {
+            if (mixer != null) {
+                if (mixer.isNotSeeking() && mixer.isNotPausingNorPaused()) {
                     long currentTrack = mixer.getMillisecondPosition();
                     long previousTrack = currentTrack - 1001;
                     mixer.setMillisecondPosition(Math.max(0, previousTrack));
@@ -87,26 +87,25 @@ public class AudioSid extends AudioAbstract {
             super.actionPerformed(e);
         }
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
+
 
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-            new String[] { 
-                "audio/x-sidtune",
-                "audio/sidtune",
-                "audio/x-psid",
-                "audio/psid",
-                "audio/prs.sid",
-                "audio/x-sid",
-                "application/sid-commodore-64"
-            }, 
-            new String[] { 
-                "sid"
-            }
-        );
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "audio/x-sidtune",
+                        "audio/sidtune",
+                        "audio/x-psid",
+                        "audio/psid",
+                        "audio/prs.sid",
+                        "audio/x-sid",
+                        "application/sid-commodore-64"
+                },
+                new String[] {
+                        "sid"
+                });
     }
 }

@@ -29,7 +29,6 @@ package org.wandora.application.gui.table;
 
 
 
-
 import java.awt.Color;
 import java.awt.Component;
 
@@ -44,49 +43,50 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 
-
 /**
  *
  * @author akivela
  */
 public class LocatorTableCellRenderer extends DefaultTableCellRenderer {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(LocatorTableCellRenderer.class);
-    
+
     private LocatorTable locatorTable;
 
-    
-    
+
+
     public LocatorTableCellRenderer(LocatorTable table) {
         this.locatorTable = table;
     }
 
-    
+
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+            int row, int column) {
         Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-        try {          
+        try {
             Color foregroundColor = locatorTable.getColorFor(row, column);
-            if(foregroundColor != null) {
+            if (foregroundColor != null) {
                 c.setForeground(foregroundColor);
             }
-            
-            if(c instanceof JLabel) {
+
+            if (c instanceof JLabel) {
                 JLabel label = (JLabel) c;
                 label.setBorder(UIConstants.defaultTableCellLabelBorder);
                 Locator l = (Locator) value;
                 String locatorString = l.toExternalForm();
-                if(DataURL.isDataURL(locatorString)) {
-                    String locatorFragment = locatorString.substring(0, Math.min(locatorString.length(), 64)) + "... ("+locatorString.length()+")";
+                if (DataURL.isDataURL(locatorString)) {
+                    String locatorFragment = locatorString.substring(0, Math.min(locatorString.length(), 64)) + "... ("
+                            + locatorString.length() + ")";
                     label.setText(locatorFragment);
                 }
             }
         }
-        catch(Exception e){
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
         return c;
     }

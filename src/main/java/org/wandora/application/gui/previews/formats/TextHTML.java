@@ -96,8 +96,8 @@ import javafx.util.Callback;
  * @author akivela
  */
 public class TextHTML implements MouseListener, ActionListener, PreviewPanel, HyperlinkListener, ComponentListener {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(TextHTML.class);
-	
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(TextHTML.class);
+
     private Wandora wandora;
     private String locator;
     private FXHTML htmlPane;
@@ -105,42 +105,42 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
     private JPopupMenu linkPopup = null;
     private MouseEvent mouseEvent = null;
     private JPanel ui = null;
-    
-    
-    
+
+
+
     /** Creates a new instance of TextHTML */
     public TextHTML(String locator) {
         Platform.setImplicitExit(false);
         this.wandora = Wandora.getWandora();
         this.locator = locator;
     }
-    
-    
+
+
     @Override
     public void stop() {
-        if(htmlPane != null) {
+        if (htmlPane != null) {
             htmlPane.close();
         }
     }
-    
-    
+
+
     @Override
     public void finish() {
-        if(htmlPane != null) {
+        if (htmlPane != null) {
             // htmlPane.close();
-        }  
+        }
     }
-    
-    
+
+
     @Override
     public JPanel getGui() {
         // logger.info("getting ui...");
-        if(ui == null) {
+        if (ui == null) {
             ui = new JPanel();
             // ui.addMouseListener(this);
-            ui.setLayout(new BorderLayout(4,4));
-            ui.setPreferredSize(new Dimension(640, 480+56));
-            ui.setMinimumSize(new Dimension(640, 480+56));
+            ui.setLayout(new BorderLayout(4, 4));
+            ui.setPreferredSize(new Dimension(640, 480 + 56));
+            ui.setMinimumSize(new Dimension(640, 480 + 56));
 
             JPanel htmlWrapper = new JPanel();
             htmlWrapper.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -150,15 +150,15 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
             htmlPane.initialize();
 
             htmlWrapper.add(htmlPane, BorderLayout.CENTER);
-            
-            
+
+
             //htmlPane.addMouseListener(this);
             //htmlPane.setBorder(BorderFactory.createLineBorder(borderColor));
             //updateLinkMenu();
 
             JPanel controllerPanel = new JPanel();
             controllerPanel.add(getJToolBar(), BorderLayout.CENTER);
-            
+
             ui.add(htmlWrapper, BorderLayout.CENTER);
             ui.add(controllerPanel, BorderLayout.SOUTH);
             ui.addComponentListener(this);
@@ -168,83 +168,88 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
         return ui;
     }
 
-    
-    
+
+
     private JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Reload", PreviewUtils.ICON_RELOAD_LOCATOR, this,
-            "---",
-            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
-            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
-            "Copy selection", PreviewUtils.ICON_COPY_SELECTION, this,
-            "Copy as image", PreviewUtils.ICON_COPY_IMAGE, this,
-            "Save as", PreviewUtils.ICON_SAVE, this,
-            "---",
-            "Set basename", PreviewUtils.ICON_SET_BASENAME, this,
-            "Set display name", PreviewUtils.ICON_SET_DISPLAY_NAME, this,
-            "Set occurrence", PreviewUtils.ICON_SET_OCCURRENCE, this,
+                "Reload", PreviewUtils.ICON_RELOAD_LOCATOR, this,
+                "---",
+                "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+                "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+                "Copy selection", PreviewUtils.ICON_COPY_SELECTION, this,
+                "Copy as image", PreviewUtils.ICON_COPY_IMAGE, this,
+                "Save as", PreviewUtils.ICON_SAVE, this,
+                "---",
+                "Set basename", PreviewUtils.ICON_SET_BASENAME, this,
+                "Set display name", PreviewUtils.ICON_SET_DISPLAY_NAME, this,
+                "Set occurrence", PreviewUtils.ICON_SET_OCCURRENCE, this,
         }, this);
     }
 
-    
-    
+
+
     @Override
     public boolean isHeavy() {
         return false;
     }
-    
 
-    
+
+
     @Override
     public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
-        if(mouseEvent.getButton() == MouseEvent.BUTTON1 && mouseEvent.getClickCount() >= 2) {
+        if (mouseEvent.getButton() == MouseEvent.BUTTON1 && mouseEvent.getClickCount() >= 2) {
 
         }
     }
-    
+
+
     @Override
     public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
     }
-    
+
+
     @Override
     public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
     }
-    
+
+
     @Override
     public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
     }
-    
+
+
     @Override
     public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
         this.mouseEvent = mouseEvent;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
 
-    
-    
+
+
     public void updateMenu() {
-        if(locator != null && locator.length() > 0) {
+        if (locator != null && locator.length() > 0) {
             JPopupMenu m = getMenu();
-            if(m != null) {
+            if (m != null) {
                 ui.setComponentPopupMenu(m);
-                if(htmlPane != null) htmlPane.setComponentPopupMenu(m);
+                if (htmlPane != null)
+                    htmlPane.setComponentPopupMenu(m);
             }
         }
         else {
-            if(htmlPane != null) htmlPane.setComponentPopupMenu(null);
+            if (htmlPane != null)
+                htmlPane.setComponentPopupMenu(null);
         }
     }
-    
-    
-    
-    
+
+
+
     public JPopupMenu getMenu() {
         WandoraToolSet extractTools = wandora.toolManager.getToolSet("extract");
         WandoraToolSet.ToolFilter filter = extractTools.new ToolFilter() {
@@ -252,10 +257,13 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
             public boolean acceptTool(WandoraTool tool) {
                 return (tool instanceof DropExtractor);
             }
+
+
             @Override
             public Object[] addAfterTool(final WandoraTool tool) {
                 ActionListener toolListener = new ActionListener() {
                     DropExtractor myTool = (DropExtractor) tool;
+
                     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
                         try {
                             String s = getSelection();
@@ -263,7 +271,7 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                             //logger.info("extracting " + s);
                             //logger.info("extractor " + myTool);
                         }
-                        catch(Exception exx) { 
+                        catch (Exception exx) {
                             wandora.handleError(exx);
                         }
                     }
@@ -271,86 +279,86 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                 return new Object[] { tool.getIcon(), toolListener };
             }
         };
-        
+
         Object[] extractMenu = extractTools.getAsObjectArray(filter);
-        
+
 
         Object[] menuStructure = new Object[] {
-            "Open in external viewer...",
-            "---",
-            "Copy location",
-            "Copy selection",
-            "Copy as image",
-            "Save as...",
-            "---",
-            "For selection", new Object[] {
-                "Make selection basename",
-                "Make selection display name",
-                "Make selection occurrence...",
-            },
-            "Extract selection", extractMenu,
-          
+                "Open in external viewer...",
+                "---",
+                "Copy location",
+                "Copy selection",
+                "Copy as image",
+                "Save as...",
+                "---",
+                "For selection", new Object[] {
+                        "Make selection basename",
+                        "Make selection display name",
+                        "Make selection occurrence...",
+                },
+                "Extract selection", extractMenu,
+
         };
         return UIBox.makePopupMenu(menuStructure, this);
     }
-    
 
-    
-    
-    
+
+
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
-        if(c == null) return;
-        
-        if(PreviewUtils.startsWithAny(c, "Reload")) {
-            if(htmlPane != null) {
+        if (c == null)
+            return;
+
+        if (PreviewUtils.startsWithAny(c, "Reload")) {
+            if (htmlPane != null) {
                 htmlPane.reload();
             }
         }
-        
-        else if(PreviewUtils.startsWithAny(c, "Open in external", "Open ext")) {
+
+        else if (PreviewUtils.startsWithAny(c, "Open in external", "Open ext")) {
             PreviewUtils.forkExternalPlayer(locator);
         }
-        
-        else if(c.equalsIgnoreCase("Copy location")) {
-            if(locator != null) {
+
+        else if (c.equalsIgnoreCase("Copy location")) {
+            if (locator != null) {
                 ClipboardBox.setClipboard(locator);
             }
         }
-        
-        else if(c.equalsIgnoreCase("Copy selection")) {
+
+        else if (c.equalsIgnoreCase("Copy selection")) {
             String s = getSelection();
-            if(s != null && s.length() > 0) {
+            if (s != null && s.length() > 0) {
                 try {
                     ClipboardBox.setClipboard(s);
                 }
-                catch(Exception e) {
+                catch (Exception e) {
                     wandora.handleError(e);
                 }
             }
         }
-        
-        else if(c.equalsIgnoreCase("Copy as image")) {
+
+        else if (c.equalsIgnoreCase("Copy as image")) {
             int w = htmlPane.getWidth();
             int h = htmlPane.getHeight();
-            BufferedImage htmlPaneImage = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR );
+            BufferedImage htmlPaneImage = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
             htmlPane.paint(htmlPaneImage.getGraphics());
             ClipboardBox.setClipboard(htmlPaneImage);
         }
-        
-        else if(c.startsWith("Save as")) {
+
+        else if (c.startsWith("Save as")) {
             PreviewUtils.saveToFile(locator);
         }
-        
-        else if(PreviewUtils.startsWithAny(c, "Make selection display name", "Make display name")) {
+
+        else if (PreviewUtils.startsWithAny(c, "Make selection display name", "Make display name")) {
             String s = getSelection();
-            if(s != null && s.length() > 0) {
+            if (s != null && s.length() > 0) {
                 try {
                     Topic t = wandora.getOpenTopic();
-                    if(t != null) {
+                    if (t != null) {
                         Topic type = wandora.showTopicFinder("Select display name language");
-                        if(type == null) return;
+                        if (type == null)
+                            return;
                         Set<Topic> scope = new HashSet<>();
                         scope.add(type);
                         scope.add(t.getTopicMap().getTopic(XTMPSI.DISPLAY));
@@ -358,66 +366,68 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                         wandora.doRefresh();
                     }
                 }
-                catch(Exception e) {
+                catch (Exception e) {
                     wandora.handleError(e);
                 }
             }
         }
-        
-        else if(PreviewUtils.startsWithAny(c, "Make selection basename", "Set basename")) {
+
+        else if (PreviewUtils.startsWithAny(c, "Make selection basename", "Set basename")) {
             String s = getSelection();
-            if(s != null && s.length() > 0) {
+            if (s != null && s.length() > 0) {
                 try {
                     Topic t = wandora.getOpenTopic();
-                    if(t != null) {
+                    if (t != null) {
                         t.setBaseName(s);
                         wandora.doRefresh();
                     }
                 }
-                catch(Exception e) {
+                catch (Exception e) {
                     wandora.handleError(e);
                 }
             }
         }
-        
-        else if(PreviewUtils.startsWithAny(c, "Make selection occurrence...", "Set occurrence")) {
+
+        else if (PreviewUtils.startsWithAny(c, "Make selection occurrence...", "Set occurrence")) {
             String s = getSelection();
-            if(s != null && s.length() > 0) {
+            if (s != null && s.length() > 0) {
                 try {
                     Topic type = wandora.showTopicFinder("Select occurrence type");
-                    if(type == null) return;
+                    if (type == null)
+                        return;
                     Topic scope = wandora.showTopicFinder("Select occurrence scope");
-                    if(scope == null) return;
+                    if (scope == null)
+                        return;
                     Topic t = wandora.getOpenTopic();
-                    if(t != null) {
+                    if (t != null) {
                         t.setData(type, scope, s);
                         wandora.doRefresh();
                     }
                 }
-                catch(Exception e) {
+                catch (Exception e) {
                     wandora.handleError(e);
                 }
             }
         }
     }
-   
-    
+
+
 
     public String getSelection() {
-        if(htmlPane != null) {
+        if (htmlPane != null) {
             return htmlPane.getSelectedText();
         }
         return "";
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
 
-    
-    
+
+
     public void updateLinkMenu() {
         WandoraToolSet extractTools = wandora.toolManager.getToolSet("extract");
         WandoraToolSet.ToolFilter filter = extractTools.new ToolFilter() {
@@ -425,10 +435,13 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
             public boolean acceptTool(WandoraTool tool) {
                 return (tool instanceof DropExtractor);
             }
+
+
             @Override
             public Object[] addAfterTool(final WandoraTool tool) {
                 ActionListener toolListener = new ActionListener() {
                     DropExtractor myTool = (DropExtractor) tool;
+
                     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
                         try {
                             String url = currentHyperLink.toExternalForm();
@@ -436,7 +449,7 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                             logger.info("extracting url " + url);
                             logger.info("extractor " + myTool);
                         }
-                        catch(Exception exx) { 
+                        catch (Exception exx) {
                             wandora.handleError(exx);
                         }
                     }
@@ -444,42 +457,43 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                 return new Object[] { tool.getIcon(), toolListener };
             }
         };
-        
+
         Object[] linkExtractMenu = extractTools.getAsObjectArray(filter);
 
         Object[] menuStructure = new Object[] {
-            "Open in external viewer...",
-            "---",
-            "Copy location",
-            "Copy as image",
-            "Save as...",
-            "---",
-            "For selection", new Object[] {
-                "Make link url subject identifier",
-                "Make link url subject locator",
-            },
-            "Extract link url", linkExtractMenu,
+                "Open in external viewer...",
+                "---",
+                "Copy location",
+                "Copy as image",
+                "Save as...",
+                "---",
+                "For selection", new Object[] {
+                        "Make link url subject identifier",
+                        "Make link url subject locator",
+                },
+                "Extract link url", linkExtractMenu,
         };
         linkPopup = UIBox.makePopupMenu(menuStructure, this);
-       
+
     }
-    
-    
-    
+
+
+
     public URL currentHyperLink;
+
     @Override
     public void hyperlinkUpdate(HyperlinkEvent e) {
         if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
             JEditorPane pane = (JEditorPane) e.getSource();
             currentHyperLink = e.getURL();
-            
-            if(!linkPopup.isVisible()) {
-                if(mouseEvent != null) {
+
+            if (!linkPopup.isVisible()) {
+                if (mouseEvent != null) {
                     linkPopup.show(ui, mouseEvent.getX(), mouseEvent.getY());
                 }
             }
-             
-            
+
+
             /*
             if (e instanceof HTMLFrameHyperlinkEvent) {
                 HTMLFrameHyperlinkEvent  evt = (HTMLFrameHyperlinkEvent)e;
@@ -496,45 +510,44 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
              **/
         }
     }
-    
 
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { "text/html" }, 
+        return PreviewUtils.isOfType(url,
+                new String[] { "text/html" },
                 new String[] { "html", "htm" });
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     public class FXHTML extends JFXPanel {
-        
+
         private static final long serialVersionUID = 1L;
 
-		private final String locator;
-        
+        private final String locator;
+
         public WebView webView = null;
         private WebEngine webEngine = null;
         private boolean informPopupBlocking = true;
         private boolean informVisibilityChanges = true;
         private String webSource = null;
-        
-        
+
+
         public FXHTML(final String locator) {
             this.locator = locator;
         }
-        
-        
+
+
 
         public void initialize() {
             Platform.runLater(new Runnable() {
@@ -545,7 +558,7 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                 }
             });
         }
-        
+
 
 
         private void initializeFX() {
@@ -573,82 +586,91 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
             // Obtain the webEngine to navigate
             webEngine = webView.getEngine();
 
-            
+
             webEngine.setOnVisibilityChanged(new EventHandler<WebEvent<java.lang.Boolean>>() {
                 @Override
                 public void handle(WebEvent<Boolean> t) {
                     // Nothing here
                 }
             });
-            
+
             webEngine.locationProperty().addListener(new javafx.beans.value.ChangeListener<String>() {
-                    @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
-                        if(newValue == null) return;
-                        if(newValue.endsWith(".pdf")) {
-                            try {
-                                int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), "Open PDF document in external application?", "Open PDF document in external application?", WandoraOptionPane.YES_NO_OPTION);
-                                if(a == WandoraOptionPane.YES_OPTION) {
-                                    Desktop dt = Desktop.getDesktop();
-                                    dt.browse(new URI(newValue));
-                                }
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue,
+                        final String newValue) {
+                    if (newValue == null)
+                        return;
+                    if (newValue.endsWith(".pdf")) {
+                        try {
+                            int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(),
+                                    "Open PDF document in external application?",
+                                    "Open PDF document in external application?", WandoraOptionPane.YES_NO_OPTION);
+                            if (a == WandoraOptionPane.YES_OPTION) {
+                                Desktop dt = Desktop.getDesktop();
+                                dt.browse(new URI(newValue));
                             }
-                            catch(Exception e) {}
                         }
-                        else {
-                            SwingUtilities.invokeLater(new Runnable() {
-                                @Override 
-                                public void run() {
-                                    // Nothing here
-                                }
-                            });
+                        catch (Exception e) {
                         }
                     }
-            });
-            webEngine.titleProperty().addListener(new javafx.beans.value.ChangeListener<String>() {
-                    @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue, final String newValue) {
+                    else {
                         SwingUtilities.invokeLater(new Runnable() {
-                            @Override 
+                            @Override
                             public void run() {
                                 // Nothing here
                             }
                         });
                     }
+                }
+            });
+            webEngine.titleProperty().addListener(new javafx.beans.value.ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue,
+                        final String newValue) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Nothing here
+                        }
+                    });
+                }
             });
             webEngine.setOnAlert(new EventHandler<WebEvent<java.lang.String>>() {
                 @Override
                 public void handle(WebEvent<String> t) {
-                    if(t != null) {
+                    if (t != null) {
                         String str = t.getData();
-                        if(str != null && str.length() > 0) {
-                            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), str, "Javascript Alert", WandoraOptionPane.PLAIN_MESSAGE);
+                        if (str != null && str.length() > 0) {
+                            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), str, "Javascript Alert",
+                                    WandoraOptionPane.PLAIN_MESSAGE);
                         }
                     }
                 }
             });
             webEngine.setConfirmHandler(new Callback<String, Boolean>() {
-                @Override 
+                @Override
                 public Boolean call(String msg) {
-                    int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), msg, "Javascript Alert", WandoraOptionPane.YES_NO_OPTION);
+                    int a = WandoraOptionPane.showConfirmDialog(Wandora.getWandora(), msg, "Javascript Alert",
+                            WandoraOptionPane.YES_NO_OPTION);
                     return (a == WandoraOptionPane.YES_OPTION);
                 }
             });
             webEngine.setPromptHandler(new Callback<PromptData, String>() {
-                @Override 
+                @Override
                 public String call(PromptData data) {
-                    String a = WandoraOptionPane.showInputDialog(Wandora.getWandora(), data.getMessage(), data.getDefaultValue(), "Javascript Alert", WandoraOptionPane.QUESTION_MESSAGE);
+                    String a = WandoraOptionPane.showInputDialog(Wandora.getWandora(), data.getMessage(),
+                            data.getDefaultValue(), "Javascript Alert", WandoraOptionPane.QUESTION_MESSAGE);
                     return a;
                 }
             });
 
-            webEngine.setCreatePopupHandler(new Callback<PopupFeatures,WebEngine>() {
-                @Override 
+            webEngine.setCreatePopupHandler(new Callback<PopupFeatures, WebEngine>() {
+                @Override
                 public WebEngine call(PopupFeatures features) {
-                    if(informPopupBlocking) {
-                        WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
-                                "A javascript popup has been blocked. Wandora doesn't allow javascript popups in Webview topic panel.", 
-                                "Javascript popup blocked", 
+                    if (informPopupBlocking) {
+                        WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                                "A javascript popup has been blocked. Wandora doesn't allow javascript popups in Webview topic panel.",
+                                "Javascript popup blocked",
                                 WandoraOptionPane.PLAIN_MESSAGE);
                     }
                     informPopupBlocking = false;
@@ -658,12 +680,12 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
             webEngine.setOnVisibilityChanged(new EventHandler<WebEvent<Boolean>>() {
                 @Override
                 public void handle(WebEvent<Boolean> t) {
-                    if(t != null) {
+                    if (t != null) {
                         Boolean b = t.getData();
-                        if(informVisibilityChanges) {
-                            WandoraOptionPane.showMessageDialog(Wandora.getWandora(), 
-                                    "A browser window visibility change has been blocked. Wandora doesn't allow visibility changes of windows in Webview topic panel.", 
-                                    "Javascript visibility chnage blocked", 
+                        if (informVisibilityChanges) {
+                            WandoraOptionPane.showMessageDialog(Wandora.getWandora(),
+                                    "A browser window visibility change has been blocked. Wandora doesn't allow visibility changes of windows in Webview topic panel.",
+                                    "Javascript visibility chnage blocked",
                                     WandoraOptionPane.PLAIN_MESSAGE);
                             informVisibilityChanges = false;
                         }
@@ -671,65 +693,63 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                 }
             });
             webEngine.getLoadWorker().stateProperty().addListener(
-                new javafx.beans.value.ChangeListener<Worker.State>() {
-                    @Override
-                    public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
-                        if(newState == Worker.State.SCHEDULED) {
-                            //logger.info("Scheduled!");
-                            
-                        }
-                        if(newState == Worker.State.SUCCEEDED) {
-                            Document doc = webEngine.getDocument();
-                            try {
-                                Transformer transformer = TransformerFactory.newInstance().newTransformer();
-                                //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-                                transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-                                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-                                transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-                                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+                    new javafx.beans.value.ChangeListener<Worker.State>() {
+                        @Override
+                        public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
+                            if (newState == Worker.State.SCHEDULED) {
+                                //logger.info("Scheduled!");
 
-                                // transformer.transform(new DOMSource(doc), new StreamResult(new OutputStreamWriter(System.out, "UTF-8")));
+                            }
+                            if (newState == Worker.State.SUCCEEDED) {
+                                Document doc = webEngine.getDocument();
+                                try {
+                                    Transformer transformer = TransformerFactory.newInstance().newTransformer();
+                                    //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+                                    transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+                                    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                                    transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+                                    transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
-                                StringWriter stringWriter = new StringWriter();
-                                transformer.transform(new DOMSource(doc), new StreamResult(stringWriter));
-                                webSource = stringWriter.toString();
+                                    // transformer.transform(new DOMSource(doc), new StreamResult(new OutputStreamWriter(System.out, "UTF-8")));
+
+                                    StringWriter stringWriter = new StringWriter();
+                                    transformer.transform(new DOMSource(doc), new StreamResult(stringWriter));
+                                    webSource = stringWriter.toString();
+                                }
+                                catch (Exception ex) {
+                                    logger.error(ex);
+                                }
                             }
-                            catch (Exception ex) {
-                            	logger.error(ex);
+                            else if (newState == Worker.State.CANCELLED) {
+                                //logger.info("Cancelled!");
+                            }
+                            else if (newState == Worker.State.FAILED) {
+                                String failedToOpenMessage = "<h1>Failed to open URL</h1>";
+                                webEngine.loadContent(failedToOpenMessage);
                             }
                         }
-                        else if(newState == Worker.State.CANCELLED) {
-                            //logger.info("Cancelled!");
-                        }
-                        else if(newState == Worker.State.FAILED) {
-                            String failedToOpenMessage = "<h1>Failed to open URL</h1>";
-                            webEngine.loadContent(failedToOpenMessage);
-                        }
-                    }
-                }
-            );
+                    });
 
         }
-        
-        
 
-        
+
+
         public void open(final String locator) {
             try {
-                if(DataURL.isDataURL(locator)) {
+                if (DataURL.isDataURL(locator)) {
                     DataURL dataUrl = new DataURL(locator);
-                    String data = new String( dataUrl.getData() );
+                    String data = new String(dataUrl.getData());
                     webEngine.loadContent(data);
                 }
-                else if(locator != null && locator.startsWith("file:")) {
+                else if (locator != null && locator.startsWith("file:")) {
 
                 }
                 else {
                     webEngine.load(locator);
                 }
-                
+
                 Component c = TextHTML.this.ui.getParent();
-                if(c != null) {
+                if (c != null) {
                     int w = c.getWidth();
                     webView.setMinSize(w, 480);
                     webView.setMaxSize(w, 480);
@@ -741,23 +761,23 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                     webView.setPrefSize(640, 480);
                 }
             }
-            catch(Exception e) {
-            	logger.error(e);
+            catch (Exception e) {
+                logger.error(e);
             }
         }
-        
-        
+
+
         public void close() {
             Thread runner = new Thread() {
                 @Override
                 public void run() {
                     try {
-                        if(webEngine != null) {
+                        if (webEngine != null) {
                             webEngine.load(null);
                         }
                     }
-                    catch(Exception e) {
-                    	logger.error(e);
+                    catch (Exception e) {
+                        logger.error(e);
                     }
                 }
             };
@@ -767,15 +787,15 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                 try {
                     Thread.sleep(100);
                 }
-                catch(Exception ex) {
+                catch (Exception ex) {
 
                 }
             }
-            while(runner.isAlive());
+            while (runner.isAlive());
         }
-    
-        
-        
+
+
+
         public void reload() {
             Platform.runLater(new Runnable() {
                 @Override
@@ -784,25 +804,26 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                 }
             });
         }
-        
-        
-        
+
+
+
         public String getSelectedText() {
             //logger.info("get selected text");
             String selection = (String) executeSynchronizedScript("window.getSelection().toString()");
             //logger.info("  and the selection is "+selection);
             return selection;
         }
-        
-        
+
+
         private Object scriptReturn = null;
+
         public Object executeSynchronizedScript(final String script) {
             scriptReturn = null;
-            if(script != null && script.length()>0) {
+            if (script != null && script.length() > 0) {
                 Thread runner = new Thread() {
                     @Override
                     public void run() {
-                        if(webEngine != null) {
+                        if (webEngine != null) {
                             scriptReturn = webEngine.executeScript(script);
                         }
                     }
@@ -813,68 +834,72 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                     try {
                         Thread.sleep(100);
                     }
-                    catch(Exception ex) {
+                    catch (Exception ex) {
 
                     }
                 }
-                while(runner.isAlive());
+                while (runner.isAlive());
             }
             return scriptReturn;
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
     // --------------------------------------------------- ComponentListener ---
     // -------------------------------------------------------------------------
-    
-    
+
+
     @Override
     public void componentShown(ComponentEvent e) {
         handleComponentEvent(e);
     }
+
 
     @Override
     public void componentResized(ComponentEvent e) {
         handleComponentEvent(e);
     }
 
+
     @Override
     public void componentHidden(ComponentEvent e) {
         //handleComponentEvent(e);
     }
 
+
     @Override
     public void componentMoved(ComponentEvent e) {
         handleComponentEvent(e);
     }
-   
-    
+
+
     private void handleComponentEvent(ComponentEvent e) {
-        try {           
-            if(ui != null) {
-                if(ui.getParent() != null) {
-                    Dimension d = new Dimension(640, 480+56);
+        try {
+            if (ui != null) {
+                if (ui.getParent() != null) {
+                    Dimension d = new Dimension(640, 480 + 56);
                     ui.setPreferredSize(d);
                     ui.setMinimumSize(d);
                     ui.setMaximumSize(d);
                 }
 
-                if(htmlPane != null) {
-                    if(htmlPane.webView != null) {
+                if (htmlPane != null) {
+                    if (htmlPane.webView != null) {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                if(ui != null && htmlPane != null && htmlPane.webView != null) {
+                                if (ui != null && htmlPane != null && htmlPane.webView != null) {
                                     Component c = ui;
-                                    if(ui.getParent() != null) c = ui.getParent();
-                                    if(c != null) {
+                                    if (ui.getParent() != null)
+                                        c = ui.getParent();
+                                    if (c != null) {
                                         int w = c.getWidth();
                                         int h = c.getHeight();
-                                        if(w > 1 && h > 1) {
-                                            htmlPane.webView.setMinSize(w, h-56);
-                                            htmlPane.webView.setMaxSize(w, h-56);
-                                            htmlPane.webView.setPrefSize(w, h-56);
+                                        if (w > 1 && h > 1) {
+                                            htmlPane.webView.setMinSize(w, h - 56);
+                                            htmlPane.webView.setMaxSize(w, h - 56);
+                                            htmlPane.webView.setPrefSize(w, h - 56);
                                         }
                                     }
                                 }
@@ -886,6 +911,7 @@ public class TextHTML implements MouseListener, ActionListener, PreviewPanel, Hy
                 ui.repaint();
             }
         }
-        catch(Exception ex) {}
+        catch (Exception ex) {
+        }
     }
 }

@@ -42,28 +42,30 @@ public class LocatorTableRowSorter extends TableRowSorter<LocatorTableModel> {
     }
 
 
-    
+
     @Override
     public Comparator<?> getComparator(int column) {
         return new Comparator<>() {
             public int compare(Object o1, Object o2) {
-                if(o1 == null || o2 == null) return 0;
-                if(o1 instanceof Locator && o2 instanceof Locator) {
+                if (o1 == null || o2 == null)
+                    return 0;
+                if (o1 instanceof Locator && o2 instanceof Locator) {
                     try {
                         String l1 = ((Locator) o1).toExternalForm();
                         String l2 = ((Locator) o2).toExternalForm();
                         return l1.compareTo(l2);
                     }
-                    catch(Exception e) {
+                    catch (Exception e) {
                         return 0;
                     }
                 }
-                else if(o1 instanceof String && o2 instanceof String) {
+                else if (o1 instanceof String && o2 instanceof String) {
                     try {
                         int d = ((String) o1).compareTo((String) o2);
                         return d;
                     }
-                    catch(Exception e) {}
+                    catch (Exception e) {
+                    }
                     return 0;
                 }
                 else {
@@ -73,8 +75,8 @@ public class LocatorTableRowSorter extends TableRowSorter<LocatorTableModel> {
         };
     }
 
-    
-    
+
+
     @Override
     public boolean useToString(int column) {
         return false;

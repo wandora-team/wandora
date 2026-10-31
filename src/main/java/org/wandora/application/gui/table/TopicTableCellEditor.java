@@ -44,29 +44,37 @@ import org.wandora.topicmap.Topic;
  *
  * @author olli,akivela
  */
-public class TopicTableCellEditor extends AbstractCellEditor implements TableCellEditor {   
-    
+public class TopicTableCellEditor extends AbstractCellEditor implements TableCellEditor {
+
     private static final long serialVersionUID = 1L;
-    
+
     private Topic topic;
     private SimpleLabel label;
     private TopicTable table;
-            
-    
+
+
     public TopicTableCellEditor(TopicTable table) {
         this.table = table;
         label = new SimpleLabel();
         Font f = label.getFont();
-        label.setFont(new Font(f.getName(),Font.PLAIN,f.getSize()));
+        label.setFont(new Font(f.getName(), Font.PLAIN, f.getSize()));
     }
+
 
     public Object getCellEditorValue() {
         return TopicToString.toString(topic);
     }
 
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        if(value instanceof TopicGuiWrapper) {
-            topic=((TopicGuiWrapper) value).topic;
+
+    public Component getTableCellEditorComponent(
+            JTable table,
+            Object value,
+            boolean isSelected,
+            int row,
+            int column) {
+
+        if (value instanceof TopicGuiWrapper) {
+            topic = ((TopicGuiWrapper) value).topic;
         }
         label.setText(TopicToString.toString(topic));
         return label;

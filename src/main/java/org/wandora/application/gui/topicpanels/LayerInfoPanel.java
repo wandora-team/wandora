@@ -69,8 +69,8 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(LayerInfoPanel.class);
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(LayerInfoPanel.class);
+
     private SimpleButton copyButton = null;
     private SimpleToggleButton trackChangesButton = null;
     private JPanel infoPanel = null;
@@ -83,12 +83,12 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
     private Map<Integer, String> originalValues = null;
     private boolean requiresRefresh = false;
     private Thread refresher = null;
-    
+
     public LayerInfoPanel() {
-        
+
     }
-    
-    
+
+
     @Override
     public void init() {
         wandora = Wandora.getWandora();
@@ -96,29 +96,29 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
         infoPanel.setLayout(new GridBagLayout());
         fieldLabels = new HashMap<>();
         initInfo();
-        
+
         refresher = new Thread(this);
         refresher.start();
     }
-    
-    
-    
+
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
-        if(cmd != null) {
-            if("Refresh".equalsIgnoreCase(cmd)) {
-                if(infoPanel != null) {
+        if (cmd != null) {
+            if ("Refresh".equalsIgnoreCase(cmd)) {
+                if (infoPanel != null) {
                     infoPanel.removeAll();
                     initInfo();
                     infoPanel.revalidate();
                     infoPanel.repaint();
                 }
             }
-            else if("Copy info".equalsIgnoreCase(cmd)) {
+            else if ("Copy info".equalsIgnoreCase(cmd)) {
                 copyActionPerformed();
             }
-            else if("Track changes".equalsIgnoreCase(cmd)) {
+            else if ("Track changes".equalsIgnoreCase(cmd)) {
                 trackChangesActionPerformed();
                 trackChangesButton.setSelected(trackChanges);
                 trackChangesButton.revalidate();
@@ -126,60 +126,58 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
             }
         }
     }
-    
-    
-    
+
+
+
     public void trackChangesActionPerformed() {
         trackChanges = !trackChanges;
-        if(trackChanges) {
+        if (trackChanges) {
             originalValues = null;
         }
-        if(infoPanel != null) {
+        if (infoPanel != null) {
             initInfo();
             infoPanel.revalidate();
             infoPanel.repaint();
         }
     }
-    
-    
-    
-    
+
+
+
     public void copyActionPerformed() {
-        if(stats != null) {
+        if (stats != null) {
             ClipboardBox.setClipboard(stats.toString());
         }
         else {
             ClipboardBox.setClipboard("n.a.");
         }
     }
-    
-    
+
+
 
     @Override
     public boolean supportsOpenTopic() {
         return false;
     }
-    
-    
+
+
     @Override
     public void open(Topic topic) throws TopicMapException, OpenTopicNotSupportedException {
 
     }
 
-    
-    
+
+
     @Override
     public void stop() {
         refresher.interrupt();
     }
 
-    
-    
-    
+
+
     public void initInfo() {
 
         map = getCurrentTopicMap();
-        
+
         int[] statOptions = TopicMapStatOptions.getAvailableOptions();
         int bagCount = 0;
         stats = new StringBuilder();
@@ -189,205 +187,211 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
         String statDescriptionString = null;
         String statString = "n.a.";
         String originalStatString = "n.a.";
-        gbc=new GridBagConstraints();
+        gbc = new GridBagConstraints();
         Insets rowInsets = new Insets(0, 9, 0, 9);
         gbc.insets = new Insets(9, 9, 0, 9);
         infoPanel.removeAll();
-        
-        gbc.gridy=bagCount++;
-        gbc.gridx=0;
-        gbc.weightx=1;
-        gbc.fill=GridBagConstraints.HORIZONTAL;
+
+        gbc.gridy = bagCount++;
+        gbc.gridx = 0;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         String layerName = getCurrentLayerName();
         SimpleLabel layerNameLabel = new SimpleLabel(layerName);
         layerNameLabel.setFont(UIConstants.largeLabelFont);
         fieldLabels.put("title", layerNameLabel);
         infoPanel.add(layerNameLabel, gbc);
         stats.append(layerName).append("\n");
-        
+
         boolean fillOriginalValues = false;
-        if(originalValues == null) {
+        if (originalValues == null) {
             originalValues = new HashMap<>();
             fillOriginalValues = true;
         }
-        
-        for(int i=0; i<statOptions.length; i++) {
+
+        for (int i = 0; i < statOptions.length; i++) {
             try {
-                gbc.gridy=bagCount++;
-                gbc.gridx=0;
-                gbc.weightx=0.5;
-                gbc.gridwidth=1;
-                gbc.fill=GridBagConstraints.HORIZONTAL;
+                gbc.gridy = bagCount++;
+                gbc.gridx = 0;
+                gbc.weightx = 0.5;
+                gbc.gridwidth = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
 
                 statDescriptionString = TopicMapStatOptions.describeStatOption(statOptions[i]);
                 stats.append(statDescriptionString);
                 statDescription = new SimpleLabel(statDescriptionString);
                 infoPanel.add(statDescription, gbc);
-               
-                gbc.gridx=1;
+
+                gbc.gridx = 1;
                 statString = "n.a.";
                 try {
-                    if(map != null) {
+                    if (map != null) {
                         statString = map.getStatistics(new TopicMapStatOptions(statOptions[i])).toString();
-                        if(fillOriginalValues) {
+                        if (fillOriginalValues) {
                             originalValues.put(statOptions[i], statString);
                         }
                     }
                 }
-                catch(Exception e) {
-                	logger.error(e);
+                catch (Exception e) {
+                    logger.error(e);
                 }
-                
-                if(trackChanges) {
+
+                if (trackChanges) {
                     originalStatString = originalValues.get(statOptions[i]).toString();
                     stats.append("\t").append(originalStatString);
                     SimpleLabel originalValue = new SimpleLabel(originalStatString);
                     originalValue.setHorizontalAlignment(SimpleLabel.RIGHT);
-                    fieldLabels.put("o"+statOptions[i], originalValue);
+                    fieldLabels.put("o" + statOptions[i], originalValue);
                     infoPanel.add(originalValue, gbc);
-                    gbc.gridx=2;
+                    gbc.gridx = 2;
                 }
-                
+
                 Color statValueColor = Color.BLACK;
-                if(trackChanges) {
+                if (trackChanges) {
                     try {
                         int statInt = Integer.parseInt(statString);
                         int originalInt = Integer.parseInt(originalStatString);
 
                         int delta = statInt - originalInt;
-                        statString = (delta > 0 ? "+"+delta : ""+delta);
-                        
-                        if(delta > 0) statValueColor = Color.green.darker();
-                        else if(delta < 0) statValueColor = Color.red.darker();
+                        statString = (delta > 0 ? "+" + delta : "" + delta);
+
+                        if (delta > 0)
+                            statValueColor = Color.green.darker();
+                        else if (delta < 0)
+                            statValueColor = Color.red.darker();
                     }
-                    catch(Exception e) {}
+                    catch (Exception e) {
+                    }
                 }
-                
+
                 stats.append("\t").append(statString);
                 statValue = new SimpleLabel(statString);
                 statValue.setForeground(statValueColor);
                 statValue.setHorizontalAlignment(SimpleLabel.RIGHT);
                 fieldLabels.put(statOptions[i], statValue);
                 infoPanel.add(statValue, gbc);
-                
+
                 stats.append("\n");
-                gbc.gridy=bagCount++;
-                gbc.gridx=0;
-                gbc.weightx=1;
-                gbc.gridwidth=trackChanges ? 3 : 2;
+                gbc.gridy = bagCount++;
+                gbc.gridx = 0;
+                gbc.weightx = 1;
+                gbc.gridwidth = trackChanges ? 3 : 2;
                 gbc.insets = rowInsets;
                 JSeparator js = new JSeparator(JSeparator.HORIZONTAL);
                 js.setForeground(new Color(0x909090));
                 infoPanel.add(js, gbc);
             }
-            catch(Exception e) {
-            	logger.error(e);
+            catch (Exception e) {
+                logger.error(e);
             }
         }
-        
-        gbc.gridx=0;
-        gbc.gridy=bagCount++;
-        gbc.weightx=0;
-        gbc.weightx=0;
-        gbc.fill=GridBagConstraints.NONE;
+
+        gbc.gridx = 0;
+        gbc.gridy = bagCount++;
+        gbc.weightx = 0;
+        gbc.weightx = 0;
+        gbc.fill = GridBagConstraints.NONE;
         gbc.insets = new Insets(9, 9, 9, 9);
-        
+
         JPanel buttonPanel = getButtonPanel();
         infoPanel.add(buttonPanel, gbc);
-      
-        
-        gbc.gridy=bagCount++;
-        gbc.weightx=1;
-        gbc.weighty=1;
-        gbc.fill=GridBagConstraints.BOTH;
+
+
+        gbc.gridy = bagCount++;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
         infoPanel.add(new JPanel(), gbc); // Filler
     }
-    
-    
-    
+
+
+
     public void refreshInfo() {
         map = getCurrentTopicMap();
-        
+
         int[] statOptions = TopicMapStatOptions.getAvailableOptions();
         stats = new StringBuilder();
         SimpleLabel statValue = null;
         String statString = "n.a.";
         String originalStatString = "n.a.";
-        
+
         String layerName = getCurrentLayerName();
         SimpleLabel layerNameLabel = fieldLabels.get("title");
-        if(layerNameLabel != null) {
+        if (layerNameLabel != null) {
             layerNameLabel.setText(layerName);
         }
 
         stats.append(layerName).append("\n");
-        
+
         boolean fillOriginalValues = false;
-        if(originalValues == null) {
+        if (originalValues == null) {
             originalValues = new HashMap<>();
             fillOriginalValues = true;
         }
-        
-        for(int i=0; i<statOptions.length; i++) {
+
+        for (int i = 0; i < statOptions.length; i++) {
             try {
                 String statDescriptionString = TopicMapStatOptions.describeStatOption(statOptions[i]);
                 stats.append(statDescriptionString);
-                
+
                 statString = "n.a.";
                 try {
-                    if(map != null) {
+                    if (map != null) {
                         statString = map.getStatistics(new TopicMapStatOptions(statOptions[i])) + "";
-                        if(fillOriginalValues) {
+                        if (fillOriginalValues) {
                             originalValues.put(statOptions[i], statString);
                         }
                     }
                 }
-                catch(Exception e) {
-                	logger.error(e);
+                catch (Exception e) {
+                    logger.error(e);
                 }
-                
-                if(trackChanges) {
+
+                if (trackChanges) {
                     originalStatString = originalValues.get(statOptions[i]) + "";
                     stats.append("\t").append(originalStatString);
-                    SimpleLabel originalValue = fieldLabels.get("o"+statOptions[i]);
-                    if(originalValue != null) {
+                    SimpleLabel originalValue = fieldLabels.get("o" + statOptions[i]);
+                    if (originalValue != null) {
                         originalValue.setText(originalStatString);
                     }
                 }
-                
+
                 Color statValueColor = Color.BLACK;
-                if(trackChanges) {
+                if (trackChanges) {
                     try {
                         int statInt = Integer.parseInt(statString);
                         int originalInt = Integer.parseInt(originalStatString);
 
                         int delta = statInt - originalInt;
-                        statString = (delta > 0 ? "+"+delta : ""+delta);
-                        
-                        if(delta > 0) statValueColor = Color.green.darker();
-                        else if(delta < 0) statValueColor = Color.red.darker();
+                        statString = (delta > 0 ? "+" + delta : "" + delta);
+
+                        if (delta > 0)
+                            statValueColor = Color.green.darker();
+                        else if (delta < 0)
+                            statValueColor = Color.red.darker();
                     }
-                    catch(Exception e) {}
+                    catch (Exception e) {
+                    }
                 }
-                
+
                 stats.append("\t").append(statString);
                 statValue = fieldLabels.get(statOptions[i]);
-                if(statValue != null) {
+                if (statValue != null) {
                     statValue.setForeground(statValueColor);
                     statValue.setText(statString);
                 }
 
                 stats.append("\n");
-             }
-            catch(Exception e) {
-            	logger.error(e);
+            }
+            catch (Exception e) {
+                logger.error(e);
             }
         }
     }
-    
-    
+
+
     private JPanel getButtonPanel() {
-        if(buttonPanel != null) {
+        if (buttonPanel != null) {
             return buttonPanel;
         }
         else {
@@ -420,47 +424,47 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
             return buttonPanel;
         }
     }
-    
-    
-    
+
+
+
     private TopicMap getCurrentTopicMap() {
         LayerTree layerTree = wandora.layerTree;
-        if(layerTree != null) {
+        if (layerTree != null) {
             Layer layer = layerTree.getSelectedLayer();
-            if(layer != null) {
+            if (layer != null) {
                 return layer.getTopicMap();
             }
         }
         return null;
     }
-    
+
+
     private String getCurrentLayerName() {
         LayerTree layerTree = wandora.layerTree;
-        if(layerTree != null) {
+        if (layerTree != null) {
             Layer layer = layerTree.getSelectedLayer();
-            if(layer != null) {
+            if (layer != null) {
                 return layer.getName();
             }
         }
         return "n.a.";
     }
-    
-    
-    
+
+
+
     @Override
     public void refresh() throws TopicMapException {
-        if(infoPanel != null) {
+        if (infoPanel != null) {
             requiresRefresh = true;
         }
     }
-    
-    
-    
-    
+
+
+
     @Override
     public void run() {
-        while(!refresher.isInterrupted()) {
-            if(requiresRefresh) {
+        while (!refresher.isInterrupted()) {
+            if (requiresRefresh) {
                 requiresRefresh = false;
                 refreshInfo();
                 infoPanel.revalidate();
@@ -469,75 +473,87 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
             try {
                 Thread.sleep(300);
             }
-            catch(InterruptedException e) {}
+            catch (InterruptedException e) {
+            }
         }
         try {
             refresher.join();
         }
-        catch(InterruptedException e) {}
+        catch (InterruptedException e) {
+        }
     }
-    
 
-    
-    
+
+
     @Override
     public boolean applyChanges() throws CancelledException, TopicMapException {
         return true;
     }
+
 
     @Override
     public JPanel getGui() {
         return infoPanel;
     }
 
+
     @Override
     public Topic getTopic() throws TopicMapException {
         return null;
     }
-    
+
+
     @Override
-    public String getName(){
+    public String getName() {
         return "Layer info";
     }
-    
+
+
     @Override
     public String getTitle() {
         return "Layer info";
     }
+
 
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/topic_panel_layer_info.png");
     }
 
+
     @Override
-    public boolean noScroll(){
+    public boolean noScroll() {
         return false;
     }
-    
+
+
     @Override
     public int getOrder() {
         return 9996;
     }
 
+
     @Override
     public Object[] getViewMenuStruct() {
         return new Object[] {
-            //"Refresh", (ActionListener) this,
-            "Copy info", (ActionListener) this,
-            "Track changes", (ActionListener) this,
+                //"Refresh", (ActionListener) this,
+                "Copy info", (ActionListener) this,
+                "Track changes", (ActionListener) this,
         };
     }
+
 
     @Override
     public JMenu getViewMenu() {
         return UIBox.makeMenu(getViewMenuStruct(), this);
     }
 
+
     @Override
     public JPopupMenu getViewPopupMenu() {
         return UIBox.makePopupMenu(getViewMenuStruct(), this);
     }
+
 
     @Override
     public LocatorHistory getTopicHistory() {
@@ -545,64 +561,78 @@ public class LayerInfoPanel implements ActionListener, TopicPanel, Runnable {
     }
 
 
-    
+
     // ---------------------------------------------------- TopicMapListener ---
-    
+
 
     @Override
     public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
         refresh();
     }
 
+
     @Override
     public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
         refresh();
     }
+
 
     @Override
     public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
         refresh();
     }
 
+
     @Override
-    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName) throws TopicMapException {
+    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName)
+            throws TopicMapException {
         refresh();
     }
 
+
     @Override
-    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue) throws TopicMapException {
+    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue)
+            throws TopicMapException {
         refresh();
     }
+
 
     @Override
     public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
         refresh();
     }
 
+
     @Override
     public void topicRemoved(Topic t) throws TopicMapException {
         refresh();
     }
+
 
     @Override
     public void topicChanged(Topic t) throws TopicMapException {
         refresh();
     }
 
+
     @Override
     public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
         refresh();
     }
 
+
     @Override
-    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer) throws TopicMapException {
+    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer)
+            throws TopicMapException {
         refresh();
     }
+
 
     @Override
     public void associationRemoved(Association a) throws TopicMapException {
         refresh();
     }
+
 
     @Override
     public void associationChanged(Association a) throws TopicMapException {

@@ -52,7 +52,7 @@ import org.wandora.topicmap.Locator;
  * @author anttirt, akivela
  */
 public class PreviewFactory {
-    
+
 
     /**
      * Creates a PreviewPanel used to show a preview for a locator, usually the
@@ -67,69 +67,69 @@ public class PreviewFactory {
         final String urlString = locator.toExternalForm();
         PreviewPanel previewPanel = null;
 
-        if(AudioMidi.canView(urlString)) {
-            previewPanel = new AudioMidi(urlString); 
+        if (AudioMidi.canView(urlString)) {
+            previewPanel = new AudioMidi(urlString);
         }
-        else if(AudioFlac.canView(urlString)) {
-            previewPanel = new AudioFlac(urlString); 
+        else if (AudioFlac.canView(urlString)) {
+            previewPanel = new AudioFlac(urlString);
         }
-        else if(AudioOgg.canView(urlString)) {
-            previewPanel = new AudioOgg(urlString); 
+        else if (AudioOgg.canView(urlString)) {
+            previewPanel = new AudioOgg(urlString);
         }
-        else if(AudioSid.canView(urlString)) {
-            previewPanel = new AudioSid(urlString); 
+        else if (AudioSid.canView(urlString)) {
+            previewPanel = new AudioSid(urlString);
         }
-        else if(AudioMod.canView(urlString)) {
-            previewPanel = new AudioMod(urlString); 
+        else if (AudioMod.canView(urlString)) {
+            previewPanel = new AudioMod(urlString);
         }
-        else if(AudioWav.canView(urlString)) {
-            previewPanel = new AudioWav(urlString); 
+        else if (AudioWav.canView(urlString)) {
+            previewPanel = new AudioWav(urlString);
         }
-        else if(AudioMP3v2.canView(urlString)) {
+        else if (AudioMP3v2.canView(urlString)) {
             previewPanel = new AudioMP3v2(urlString);
         }
-        else if(PreviewUtils.hasJavaFX() && VideoMp4.canView(urlString)) {
+        else if (PreviewUtils.hasJavaFX() && VideoMp4.canView(urlString)) {
             previewPanel = new VideoMp4(urlString);
         }
-        else if(Image.canView(urlString)) {
+        else if (Image.canView(urlString)) {
             previewPanel = new Image(urlString);
         }
-        else if(ApplicationZMachine.canView(urlString)) {
-            previewPanel = new ApplicationZMachine(urlString); 
+        else if (ApplicationZMachine.canView(urlString)) {
+            previewPanel = new ApplicationZMachine(urlString);
         }
-        else if(ApplicationPDF.canView(urlString)) {
+        else if (ApplicationPDF.canView(urlString)) {
             previewPanel = new ApplicationPDF(urlString);
         }
-        else if(ApplicationZ80.canView(urlString)) {
+        else if (ApplicationZ80.canView(urlString)) {
             previewPanel = new ApplicationZ80(urlString);
         }
-        else if(ApplicationC64.canView(urlString)) {
+        else if (ApplicationC64.canView(urlString)) {
             previewPanel = new ApplicationC64(urlString);
         }
-        else if(TextRTF.canView(urlString)) {
-            previewPanel = new TextRTF(urlString); 
+        else if (TextRTF.canView(urlString)) {
+            previewPanel = new TextRTF(urlString);
         }
-        else if(TextHTML.canView(urlString)) {
+        else if (TextHTML.canView(urlString)) {
             previewPanel = new TextHTML(urlString);
         }
-        else if(ApplicationXML.canView(urlString)) {
+        else if (ApplicationXML.canView(urlString)) {
             previewPanel = new ApplicationXML(urlString);
         }
-        else if(Text.canView(urlString)) {
-            previewPanel = new Text(urlString); 
+        else if (Text.canView(urlString)) {
+            previewPanel = new Text(urlString);
         }
-        else if(ApplicationZip.canView(urlString)) {
+        else if (ApplicationZip.canView(urlString)) {
             previewPanel = new ApplicationZip(urlString);
         }
-        
-        
+
+
         // If created panel is heavy-weight, wrap it into an AWRWrapper.
-        if(previewPanel != null && previewPanel.isHeavy()) {
+        if (previewPanel != null && previewPanel.isHeavy()) {
             return new AWTWrapper(previewPanel);
         }
         else {
             return previewPanel;
         }
     }
-    
+
 }

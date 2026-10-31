@@ -37,28 +37,31 @@ import javax.swing.event.ChangeListener;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.topicpanels.traditional.AbstractTraditionalTopicPanel;
+import org.wandora.utils.logger.Log4j2Logger;
 
 /**
  *
  * @author anttirt
  */
 public class AWTWrapper extends JPanel implements PreviewPanel {
-    
     private static final long serialVersionUID = 1L;
-    
-    
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AWTWrapper.class);
+
+
     private Panel heavyContainer;
     private PreviewPanel innerPanel;
     private Dimension prefSize;
     private Wandora wandora;
+    private final ChangeListener cl;
     
     
+
     public AWTWrapper(PreviewPanel inner) {
         innerPanel = inner;
         setLayout(null);
         heavyContainer = new java.awt.Panel();
         add(heavyContainer);
-        heavyContainer.add((Component)innerPanel);
+        heavyContainer.add((Component) innerPanel);
         setSize(innerPanel.getGui().getPreferredSize());
         heavyContainer.setSize(getSize());
         heavyContainer.repaint();
@@ -68,17 +71,16 @@ public class AWTWrapper extends JPanel implements PreviewPanel {
             @Override
             public void stateChanged(ChangeEvent e) {
                 Rectangle viewRec = vp.getViewRect();
-                
-                try
-                {
+
+                try {
                     Point p = getTopDistance();
                     viewRec.x -= p.x;
                     viewRec.y -= p.y;
-                    
+
                     resizeHeavy(viewRec);
                 }
-                catch(Exception ex) {
-                    System.err.println(ex.toString());
+                catch (Exception ex) {
+                    logger.error(ex);
                 }
             }
         };
@@ -91,15 +93,17 @@ public class AWTWrapper extends JPanel implements PreviewPanel {
         heavyContainer.repaint();
         wandora.getViewPort().addChangeListener(cl);
     }
-    
+
+
     @Override
     public boolean isHeavy() {
         return true;
     }
-    
+
+
     private void resizeHeavy(Rectangle newRec) {
         final Rectangle myBounds = new Rectangle(0, 0, prefSize.width, prefSize.height);
-        if(newRec.contains(myBounds)) {
+        if (newRec.contains(myBounds)) {
             heavyContainer.setBounds(myBounds);
         }
         else {
@@ -108,34 +112,37 @@ public class AWTWrapper extends JPanel implements PreviewPanel {
             innerPanel.getGui().setLocation(-heavyBounds.x, -heavyBounds.y);
         }
     }
-    
+
+
     private Point getTopDistance() throws Exception {
         Component c = this;
         Point ret = new Point();
-        while(!AbstractTraditionalTopicPanel.class.isInstance(c)) {
+        while (!AbstractTraditionalTopicPanel.class.isInstance(c)) {
             ret.x += c.getX();
             ret.y += c.getY();
             c = c.getParent();
-            if(c == null)
+            if (c == null)
                 throw new Exception("Couldn't find a topic panel in the parent chain!");
         }
         return ret;
     }
+
     
-    private final ChangeListener cl;
 
     @Override
     public void stop() {
         innerPanel.stop();
     }
 
+
     @Override
     public void finish() {
         innerPanel.finish();
-        heavyContainer.remove((Component)innerPanel);
+        heavyContainer.remove((Component) innerPanel);
         wandora.getViewPort().removeChangeListener(cl);
         innerPanel = null;
     }
+
 
     @Override
     public Component getGui() {

@@ -78,113 +78,113 @@ import org.wandora.utils.logger.Log4j2Logger;
 public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel implements ActionListener, TopicPanel {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(TraditionalTopicPanel.class);
 
     public static final boolean MAKE_LOCAL_SETTINGS_GLOBAL = false;
 
     public Topic topic;
     public String topicSI;
-    
+
     private Wandora wandora;
     protected Options options;
     private Object[][] panelStruct;
-    
+
     private String originalBN;
     private String originalSL;
-    
+
     private JComponent buttonContainer = null;
     private PreviewWrapper previewWrapper = null;
 
-    
-    
+
+
     /** Creates new form TraditionalTopicPanel */
     public TraditionalTopicPanel(Topic topic, Wandora wandora) {
         open(topic);
         this.setTransferHandler(new TopicPanelTransferHandler(this));
     }
-    
-    
+
+
     public TraditionalTopicPanel() {
         this.options = new Options(Wandora.getWandora().getOptions());
         this.setTransferHandler(new TopicPanelTransferHandler(this));
     }
-    
-    
+
+
     @Override
     public void init() {
         this.wandora = Wandora.getWandora();
-        if(this.options == null) {
+        if (this.options == null) {
             // Notice, a copy of global options is created for local use.
             // Thus, local adjustments have no global effect.
             this.options = new Options(wandora.getOptions());
         }
         try {
-            if(options != null) {
+            if (options != null) {
                 variantGUIType = options.get(VARIANT_GUITYPE_OPTIONS_KEY);
-                if(variantGUIType == null || variantGUIType.length() == 0) {
+                if (variantGUIType == null || variantGUIType.length() == 0) {
                     variantGUIType = VARIANT_GUITYPE_SCHEMA;
                 }
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
 
         Object[] buttonStruct = {
-            "Open topic",
-            new OpenTopic(OpenTopic.ASK_USER),
-            
-            "New topic",
-            UIBox.getIcon("gui/icons/new_topic.png"),
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    NewTopicPanelExtended newTopicPanel = new NewTopicPanelExtended(null); // TODO: Should pass a context to the constructor.
-                    if(newTopicPanel.getAccepted()) {
-                        try {
-                            Topic newTopic = newTopicPanel.createTopic();
-                            if(newTopic != null) {
-                                Wandora.getWandora().openTopic(newTopic);
+                "Open topic",
+                new OpenTopic(OpenTopic.ASK_USER),
+
+                "New topic",
+                UIBox.getIcon("gui/icons/new_topic.png"),
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        NewTopicPanelExtended newTopicPanel = new NewTopicPanelExtended(null); // TODO: Should pass a context to the constructor.
+                        if (newTopicPanel.getAccepted()) {
+                            try {
+                                Topic newTopic = newTopicPanel.createTopic();
+                                if (newTopic != null) {
+                                    Wandora.getWandora().openTopic(newTopic);
+                                }
+                            }
+                            catch (Exception ex) {
+                                logger.error(ex);
                             }
                         }
-                        catch(Exception ex) {
-                        	logger.error(ex);
-                        }
                     }
-                }
-            },
+                },
         };
         buttonContainer = UIBox.makeButtonContainer(buttonStruct, Wandora.getWandora());
     }
-    
-    
+
+
     @Override
-    public void open(Topic topic) {       
+    public void open(Topic topic) {
         this.topic = topic;
         this.topicSI = null;
-        
+
         try {
-            if(topic != null && !topic.isRemoved()) {
+            if (topic != null && !topic.isRemoved()) {
                 this.topicSI = topic.getOneSubjectIdentifier().toExternalForm();
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
         this.removeAll();
         initComponents();
         previewWrapper = (PreviewWrapper) previewPanel;
         buttonWrapperPanel.add(buttonContainer);
-        
+
         panelStruct = new Object[][] {
-            { variantRootPanel,             "View names",           "variantRootPanel"  },
-            { classesRootPanel,             "View classes",         "classesRootPanel" },
-            { occurrencesRootPanel,         "View occurrences",         "occurrencesRootPanel"},
-            { associationRootPanel,         "View associations",    "associationRootPanel" },
-            { typedAssociationsRootPanel,   "View associations where type", "typedAssociationsRootPanel" },
-            { instancesRootPanel,           "View instances",       "instancesRootPanel"  },
-            { previewPanel,                 "View subject locators", "previewPanel" },
+                { variantRootPanel, "View names", "variantRootPanel" },
+                { classesRootPanel, "View classes", "classesRootPanel" },
+                { occurrencesRootPanel, "View occurrences", "occurrencesRootPanel" },
+                { associationRootPanel, "View associations", "associationRootPanel" },
+                { typedAssociationsRootPanel, "View associations where type", "typedAssociationsRootPanel" },
+                { instancesRootPanel, "View instances", "instancesRootPanel" },
+                { previewPanel, "View subject locators", "previewPanel" },
         };
 
         associationRootPanel.setTransferHandler(new AssociationTableTransferHandler(this));
@@ -194,121 +194,128 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
 
         refresh();
     }
-   
-    
-    
+
+
+
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/topic_panel_traditional.png");
     }
-    
-    
+
+
     @Override
     public String getName() {
         return "Traditional";
     }
 
+
     @Override
     public String getTitle() {
-        if(topic != null) return TopicToString.toString(topic);
-        else return "";
+        if (topic != null)
+            return TopicToString.toString(topic);
+        else
+            return "";
     }
-    
-    
+
+
     @Override
     public int getOrder() {
         return 0;
     }
-    
-    
+
+
     @Override
     public Topic getTopic() {
         try {
-            if((topic == null || topic.isRemoved()) && topicSI != null) {
+            if ((topic == null || topic.isRemoved()) && topicSI != null) {
                 topic = wandora.getTopicMap().getTopic(topicSI);
             }
             return topic;
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
             return null;
         }
     }
-    
+
+
     @Override
     public LocatorHistory getTopicHistory() {
         return null;
     }
-    
-    
-    
+
+
+
     @Override
     public JPanel getGui() {
         return this;
     }
 
+
     @Override
-    public boolean noScroll(){
+    public boolean noScroll() {
         return false;
     }
-    
+
     // -------------------------------------------------------------------------
     // ----------------------------------------------------------- VIEW MENU ---
     // -------------------------------------------------------------------------
-    
-    
+
+
 
     @Override
     public JPopupMenu getViewPopupMenu() {
         return UIBox.makePopupMenu(getViewMenuStruct(), this);
     }
+
+
     @Override
     public JMenu getViewMenu() {
         return UIBox.makeMenu(getViewMenuStruct(), this);
     }
-    
-    
-    
+
+
+
     @Override
     public Object[] getViewMenuStruct() {
         Icon viewIcon = UIBox.getIcon("gui/icons/view2.png");
         Icon hideIcon = UIBox.getIcon("gui/icons/view2_no.png");
 
         List<Object> menuVector = new ArrayList<>();
-        for(int i=0; i<panelStruct.length; i++) {
+        for (int i = 0; i < panelStruct.length; i++) {
             Object[] panelData = panelStruct[i];
             String panelName = ((JPanel) panelData[0]).getName();
-            menuVector.add( panelData[1] );
-            menuVector.add( options.isFalse(OPTIONS_VIEW_PREFIX + panelName) ? hideIcon : viewIcon );
-            menuVector.add( this );
+            menuVector.add(panelData[1]);
+            menuVector.add(options.isFalse(OPTIONS_VIEW_PREFIX + panelName) ? hideIcon : viewIcon);
+            menuVector.add(this);
         }
-        menuVector.add( "---" );
-        menuVector.add( "View all" );
-        menuVector.add( this );
-        menuVector.add( "Hide all" );
-        menuVector.add( this );
-               
+        menuVector.add("---");
+        menuVector.add("View all");
+        menuVector.add(this);
+        menuVector.add("Hide all");
+        menuVector.add(this);
+
         return menuVector.toArray();
     }
-    
+
 
     // -------------------------------------------------------------------------
     // --------------------------------------------------- TOGGLE VISIBILITY ---
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     @Override
     public void toggleVisibility(String componentName) {
         boolean iDidIt = false;
         try {
             refresh();
         }
-        catch(Exception e) {
+        catch (Exception e) {
             return;
         }
-        
-        if("View All".equalsIgnoreCase(componentName)) {
+
+        if ("View All".equalsIgnoreCase(componentName)) {
             JPanel panel;
             for (Object[] panelStruct1 : panelStruct) {
                 panel = (JPanel) panelStruct1[0];
@@ -318,8 +325,8 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
             setVisibitilityOption("subjectLocatorIcons", true);
             iDidIt = true;
         }
-        
-        if("Hide All".equalsIgnoreCase(componentName)) {
+
+        if ("Hide All".equalsIgnoreCase(componentName)) {
             JPanel panel;
             for (Object[] panelStruct1 : panelStruct) {
                 panel = (JPanel) panelStruct1[0];
@@ -332,80 +339,78 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
 
         else {
             int panelIndex = solvePanelIndex(componentName);
-            if(panelIndex >= 0) {
+            if (panelIndex >= 0) {
                 String optionName = panelStruct[panelIndex][2].toString();
                 JPanel panel = (JPanel) panelStruct[panelIndex][0];
                 toggleVisibility(panel, optionName);
                 iDidIt = true;
             }
         }
-        
-        if(iDidIt) {
+
+        if (iDidIt) {
             // refresh();
             wandora.topicPanelsChanged();
         }
     }
-    
-    
-    
+
+
+
     private int solvePanelIndex(String componentName) {
-        if(componentName == null) return -1;
-        for(int i=0; i<panelStruct.length; i++) {
-            if(componentName.equals(panelStruct[i][1])) return i;
+        if (componentName == null)
+            return -1;
+        for (int i = 0; i < panelStruct.length; i++) {
+            if (componentName.equals(panelStruct[i][1]))
+                return i;
         }
         return -1;
     }
-    
-    
+
+
     private void toggleVisibility(Component component, String optionName) {
         boolean currentValue = options.isFalse(OPTIONS_VIEW_PREFIX + optionName);
         setVisibitilityOption(optionName, currentValue);
-        if(component != null) {
+        if (component != null) {
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     try {
                         refresh();
                     }
-                    catch(Exception e) {
-                    	logger.error(e);
+                    catch (Exception e) {
+                        logger.error(e);
                     }
                 }
             });
         }
     }
-    
-    
+
+
     private void setVisibitilityOption(String key, boolean value) {
         options.put(OPTIONS_VIEW_PREFIX + key, value ? "true" : "false");
-        if(MAKE_LOCAL_SETTINGS_GLOBAL) {
+        if (MAKE_LOCAL_SETTINGS_GLOBAL) {
             Options wandoraOptions = wandora.getOptions();
-            if(wandoraOptions != null) {
+            if (wandoraOptions != null) {
                 wandoraOptions.put(OPTIONS_VIEW_PREFIX + key, value ? "true" : "false");
             }
         }
     }
-    
-    
-    
-    
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
-    
-    
-    
 
-    
-    
+
+
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+
+
+
     @Override
     public void refresh() {
         //Thread.dumpStack();
 
         try {
-            if(topicSI != null) {
+            if (topicSI != null) {
                 topic = wandora.getTopicMap().getTopic(topicSI);
             }
-            if(topic==null || topic.isRemoved()) {
+            if (topic == null || topic.isRemoved()) {
                 containerPanel.setVisible(false);
                 removedTopicMessage.setVisible(true);
                 return;
@@ -415,47 +420,55 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
                 removedTopicMessage.setVisible(false);
             }
         }
-        catch(Exception e){
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
             containerPanel.setVisible(false);
             removedTopicMessage.setVisible(true);
             return;
         }
 
         super.refresh();
-        
+
         // First update visibility of panels!!
-        for(int i=0; i<panelStruct.length; i++) {
+        for (int i = 0; i < panelStruct.length; i++) {
             JPanel panel = (JPanel) panelStruct[i][0];
             String panelOptionName = (String) panelStruct[i][2];
-            panel.setVisible( !options.isFalse(OPTIONS_VIEW_PREFIX + panelOptionName) );
+            panel.setVisible(!options.isFalse(OPTIONS_VIEW_PREFIX + panelOptionName));
         }
 
         try {
-            boolean viewPreview = options.getBoolean(OPTIONS_VIEW_PREFIX+"previewPanel", false);
+            boolean viewPreview = options.getBoolean(OPTIONS_VIEW_PREFIX + "previewPanel", false);
             subjectLocatorViewButton.setSelected(viewPreview);
-            if(viewPreview && previewWrapper != null) {
+            if (viewPreview && previewWrapper != null) {
                 previewWrapper.setURL(topic.getSubjectLocator());
             }
             else {
                 previewWrapper.stop();
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
-            
-        if(associationRootPanel.isVisible())        buildAssociationsPanel(associationPanel, associationsNumber, topic, ASSOCIATIONS_WHERE_PLAYER, options, wandora);
-        if(typedAssociationsRootPanel.isVisible())  buildAssociationsPanel(typedAssociationsPanel, typedAssociationNumber, topic, ASSOCIATIONS_WHERE_TYPE, options, wandora);
-        if(classesRootPanel.isVisible())            buildClassesPanel(classesPanel, classesNumber, topic, options, wandora);
-        if(subjectIdentifierRootPanel.isVisible())  buildSubjectIdentifierPanel(subjectIdentifierPanel, topic, options, wandora);
-        if(instancesRootPanel.isVisible())          buildInstancesPanel(instancesPanel, instancesNumber, topic, options, wandora);
-         
+
+        if (associationRootPanel.isVisible())
+            buildAssociationsPanel(associationPanel, associationsNumber, topic, ASSOCIATIONS_WHERE_PLAYER, options,
+                    wandora);
+        if (typedAssociationsRootPanel.isVisible())
+            buildAssociationsPanel(typedAssociationsPanel, typedAssociationNumber, topic, ASSOCIATIONS_WHERE_TYPE,
+                    options, wandora);
+        if (classesRootPanel.isVisible())
+            buildClassesPanel(classesPanel, classesNumber, topic, options, wandora);
+        if (subjectIdentifierRootPanel.isVisible())
+            buildSubjectIdentifierPanel(subjectIdentifierPanel, topic, options, wandora);
+        if (instancesRootPanel.isVisible())
+            buildInstancesPanel(instancesPanel, instancesNumber, topic, options, wandora);
+
 
         variantGUIType = options.get(VARIANT_GUITYPE_OPTIONS_KEY);
-        if(variantGUIType == null || variantGUIType.length() == 0) variantGUIType = VARIANT_GUITYPE_SCHEMA;
-        if(VARIANT_GUITYPE_SCHEMA.equalsIgnoreCase(variantGUIType)) {
-            if("vertical".equals(options.get(OPTIONS_PREFIX + "namePanelOrientation"))) {
+        if (variantGUIType == null || variantGUIType.length() == 0)
+            variantGUIType = VARIANT_GUITYPE_SCHEMA;
+        if (VARIANT_GUITYPE_SCHEMA.equalsIgnoreCase(variantGUIType)) {
+            if ("vertical".equals(options.get(OPTIONS_PREFIX + "namePanelOrientation"))) {
                 buildVerticalNamePanel(variantPanel, variantNumber, topic, this, options, wandora);
             }
             else {
@@ -465,138 +478,132 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         else {
             buildAllNamesPanel(variantPanel, variantNumber, topic, this, options, wandora);
         }
-        
-        
+
+
         // Always create occurrences panel as data in the panel is updated to topic map
         // in apply changes. See applyChanges below.
         buildOccurrencesPanel(dataPanel, dataNumber, topic, options, wandora);
 
         try {
-            if(topic.getBaseName()!=null) {
+            if (topic.getBaseName() != null) {
                 baseNameField.setText(topic.getBaseName());
                 baseNameField.setCaretPosition(0);
-                Color c=wandora.topicHilights.getBaseNameColor(topic);
-                if(c!=null) baseNameField.setForeground(c);
-                else baseNameField.setForeground(Color.BLACK);
+                Color c = wandora.topicHilights.getBaseNameColor(topic);
+                if (c != null)
+                    baseNameField.setForeground(c);
+                else
+                    baseNameField.setForeground(Color.BLACK);
             }
             else {
                 baseNameField.setText("");
                 baseNameField.setForeground(Color.BLACK);
             }
-            originalBN=topic.getBaseName();
-            if(topic.getSubjectLocator()!=null) {
+            originalBN = topic.getBaseName();
+            if (topic.getSubjectLocator() != null) {
                 subjectLocatorField.setText(topic.getSubjectLocator().toString());
                 subjectLocatorField.setCaretPosition(0);
-                Color c=wandora.topicHilights.getSubjectLocatorColor(topic);
-                if(c!=null) subjectLocatorField.setForeground(c);
-                else subjectLocatorField.setForeground(Color.BLACK);
-                originalSL=topic.getSubjectLocator().toString();
+                Color c = wandora.topicHilights.getSubjectLocatorColor(topic);
+                if (c != null)
+                    subjectLocatorField.setForeground(c);
+                else
+                    subjectLocatorField.setForeground(Color.BLACK);
+                originalSL = topic.getSubjectLocator().toString();
             }
             else {
                 subjectLocatorField.setText("");
                 subjectLocatorField.setForeground(Color.BLACK);
-                originalSL=null;
+                originalSL = null;
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error("Failed to initialize base or/and sl!");
             logger.error(e);
         }
         this.setComponentPopupMenu(getViewPopupMenu());
         variantRootPanel.setComponentPopupMenu(getNamesMenu());
         occurrencesRootPanel.setComponentPopupMenu(getOccurrencesMenu());
-        
+
         this.revalidate();
         this.repaint();
     }
-    
-    
-    
-    
-    
-    
+
+
+
     @Override
     public boolean applyChanges() throws CancelledException, TopicMapException {
         // First check if user has somehow removed current topic. 
         // Then there is no need for apply changes!
         try {
-            if(topic==null || topic.isRemoved()) {
+            if (topic == null || topic.isRemoved()) {
                 return false;
             }
         }
-        catch(Exception e){
+        catch (Exception e) {
             return false;
         }
-        
+
         // Ok, topic is still around and we have to check if it has changed.
-        
-        boolean changed=false;
-        
+
+        boolean changed = false;
+
         String fieldTextSL = subjectLocatorField.getText().trim();
         String origSL = originalSL;
-        
+
         // ------- basenames -------
         final String fieldTextBN = baseNameField.getText().trim();
         String origBN = originalBN;
-        if((origBN==null && fieldTextBN.length()>0) || (origBN!=null && !origBN.equals(fieldTextBN))) {
-            if(TMBox.checkBaseNameChange(wandora, topic, fieldTextBN) != ConfirmResult.yes) {
+        if ((origBN == null && fieldTextBN.length() > 0) || (origBN != null && !origBN.equals(fieldTextBN))) {
+            if (TMBox.checkBaseNameChange(wandora, topic, fieldTextBN) != ConfirmResult.yes) {
                 baseNameField.setText(origBN);
                 throw new CancelledException();
             }
-            if(fieldTextBN.length() > 0) {
-                logger.debug("set basename to "+fieldTextBN);
+            if (fieldTextBN.length() > 0) {
+                logger.debug("set basename to " + fieldTextBN);
                 topic.setBaseName(fieldTextBN);
             }
             else {
                 topic.setBaseName(null);
             }
-            changed=true;
+            changed = true;
         }
-        
+
         // ------ subject locator -------
-        if((origSL==null && fieldTextSL.length()>0) || (origSL!=null && !origSL.equals(fieldTextSL))) {
-            if(TMBox.checkSubjectLocatorChange(wandora,topic,fieldTextSL)!=ConfirmResult.yes) {
+        if ((origSL == null && fieldTextSL.length() > 0) || (origSL != null && !origSL.equals(fieldTextSL))) {
+            if (TMBox.checkSubjectLocatorChange(wandora, topic, fieldTextSL) != ConfirmResult.yes) {
                 subjectLocatorField.setText(originalSL);
                 throw new CancelledException();
             }
-            if(origSL!=null && !origSL.equals(fieldTextSL)) {
+            if (origSL != null && !origSL.equals(fieldTextSL)) {
                 topic.setSubjectLocator(null);
             }
-            if(fieldTextSL.length()>0) {
+            if (fieldTextSL.length() > 0) {
                 topic.setSubjectLocator(topic.getTopicMap().createLocator(fieldTextSL));
             }
-            changed=true;
+            changed = true;
         }
 
         // ------ everything else -------
         changed = super.applyChanges(topic, wandora) | changed;
 
 
-        if(changed) {
+        if (changed) {
             wandora.doRefresh();
         }
         return changed;
     }
-    
-    
-    
-    
+
+
+
     @Override
     public void stop() {
-        if(previewWrapper != null) {
+        if (previewWrapper != null) {
             previewWrapper.stop();
         }
         PreviewWrapper.removePreviewWrapper(this);
     }
-        
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -613,7 +620,7 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         baseNameLabel = new org.wandora.application.gui.simple.SimpleLabel();
         baseNameField = new SimpleField();
         subjectLocatorLabel = new org.wandora.application.gui.simple.SimpleLabel();
-        subjectLocatorViewButton = new SimpleToggleButton("gui/icons/view2.png","gui/icons/view2_no.png",false);
+        subjectLocatorViewButton = new SimpleToggleButton("gui/icons/view2.png", "gui/icons/view2_no.png", false);
         subjectLocatorField = new SimpleURIField();
         subjectIdentifierLabel = new org.wandora.application.gui.simple.SimpleLabel();
         subjectIdentifierRootPanel = new org.wandora.application.gui.simple.SimplePanel();
@@ -1143,7 +1150,8 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         removedTopicMessage.setLayout(new java.awt.GridBagLayout());
 
         removedTopicMessageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        removedTopicMessageLabel.setText("<html><p align=\"center\">No topic to view.<br>Maybe the topic has been merged or removed.<br>Please, open another topic.</p><html>");
+        removedTopicMessageLabel.setText(
+                "<html><p align=\"center\">No topic to view.<br>Maybe the topic has been merged or removed.<br>Please, open another topic.</p><html>");
         removedTopicMessage.add(removedTopicMessageLabel, new java.awt.GridBagConstraints());
 
         buttonWrapperPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -1159,24 +1167,29 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
         add(removedTopicMessage, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void baseNameFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_baseNameFieldKeyReleased
         try {
-            if(evt.getKeyCode()==KeyEvent.VK_ENTER) {
+            if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
                 logger.debug("Applying changes called at keyReleased");
                 applyChanges();
             }
         }
-        catch(Exception e) {}
+        catch (Exception e) {
+        }
     }//GEN-LAST:event_baseNameFieldKeyReleased
+
 
     private void subjectLocatorFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_subjectLocatorFieldKeyReleased
         try {
-            if(evt.getKeyCode()==KeyEvent.VK_ENTER) {
+            if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
                 applyChanges();
             }
         }
-        catch(Exception e) {}
+        catch (Exception e) {
+        }
     }//GEN-LAST:event_subjectLocatorFieldKeyReleased
+
 
     private void subjectLocatorFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_subjectLocatorFieldFocusLost
         SwingUtilities.invokeLater(new Runnable() {
@@ -1184,10 +1197,12 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
                 try {
                     applyChanges();
                 }
-                catch(Exception e) {}
+                catch (Exception e) {
+                }
             }
         });
     }//GEN-LAST:event_subjectLocatorFieldFocusLost
+
 
     private void baseNameFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_baseNameFieldFocusLost
         SwingUtilities.invokeLater(new Runnable() {
@@ -1195,112 +1210,110 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
                 try {
                     applyChanges();
                 }
-                catch(Exception e) {}
+                catch (Exception e) {
+                }
             }
         });
     }//GEN-LAST:event_baseNameFieldFocusLost
+
 
     private void subjectLocatorViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subjectLocatorViewButtonActionPerformed
         toggleVisibility("View subject locators");
     }//GEN-LAST:event_subjectLocatorViewButtonActionPerformed
 
-    
-    
 
-    
-    
-    
-    
+
     @Override
-    public int print(java.awt.Graphics graphics, java.awt.print.PageFormat pageFormat, int param) throws java.awt.print.PrinterException {
+    public int print(java.awt.Graphics graphics, java.awt.print.PageFormat pageFormat, int param)
+            throws java.awt.print.PrinterException {
         if (param > 0) {
-            return(NO_SUCH_PAGE);
-        } 
+            return (NO_SUCH_PAGE);
+        }
         else {
-            Graphics2D g2d = (Graphics2D)graphics;
+            Graphics2D g2d = (Graphics2D) graphics;
             g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
             // Turn off double buffering
             this.paint(g2d);
             // Turn double buffering back on
-            return(PAGE_EXISTS);
+            return (PAGE_EXISTS);
         }
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     @Override
     public JPopupMenu getNamesMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getVariantsLabelPopupStruct(options), wandora);
     }
-    
+
 
     @Override
     public JPopupMenu getClassesMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getClassesTablePopupStruct(), wandora);
     }
-    
-    
+
+
     @Override
     public JPopupMenu getInstancesMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getInstancesTablePopupStruct(), wandora);
     }
-    
-    
+
+
     @Override
     public JPopupMenu getSIMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getSubjectIdentifierLabelPopupStruct(), wandora);
     }
 
-    
+
     @Override
     public JPopupMenu getOccurrencesMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getOccurrencesLabelPopupStruct(options), wandora);
     }
-    
-    
+
+
     @Override
     public JPopupMenu getOccurrenceTypeMenu(Topic occurrenceType) {
-         return UIBox.makePopupMenu(WandoraMenuManager.getOccurrenceTypeLabelPopupStruct(occurrenceType, topic), wandora);
+        return UIBox.makePopupMenu(WandoraMenuManager.getOccurrenceTypeLabelPopupStruct(occurrenceType, topic),
+                wandora);
     }
-    
-    
+
+
     public JPopupMenu getSLMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getSubjectLocatorLabelPopupStruct(), wandora);
     }
-    
-    
+
+
     @Override
     public JPopupMenu getAssociationsMenu() {
-         return UIBox.makePopupMenu(WandoraMenuManager.getAssociationTableLabelPopupStruct(), wandora);
+        return UIBox.makePopupMenu(WandoraMenuManager.getAssociationTableLabelPopupStruct(), wandora);
     }
 
-    
+
     @Override
     public JPopupMenu getAssociationTypeMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getAssociationTypeLabelPopupStruct(), wandora);
     }
 
-    
+
     @Override
     public JPopupMenu getSubjectMenu() {
         return null;
     }
-    
-    
-    
+
+
+
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
         logger.info("TraditionalTopicPanel catched action command '" + c + "'.");
-        toggleVisibility(c);       
+        toggleVisibility(c);
     }
-    
-    
 
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel associationPanel;
     private javax.swing.JPanel associationPanelMargin;
@@ -1370,6 +1383,5 @@ public class TraditionalTopicPanel extends AbstractTraditionalTopicPanel impleme
 
 
 
-    
 }
 

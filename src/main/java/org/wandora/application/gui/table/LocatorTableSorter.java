@@ -40,18 +40,20 @@ import org.wandora.utils.swing.TableSorter;
 public class LocatorTableSorter extends TableSorter {
 
     private static final long serialVersionUID = 1L;
-    
-    
+
+
     public LocatorTableSorter() {
         super();
     }
-    
+
+
     public LocatorTableSorter(TableModel tableModel) {
         super(tableModel);
     }
 
+
     public LocatorTableSorter(TableModel tableModel, JTableHeader tableHeader) {
         super(tableModel, tableHeader);
     }
-    
+
 }

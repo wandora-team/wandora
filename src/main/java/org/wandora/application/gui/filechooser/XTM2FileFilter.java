@@ -36,34 +36,34 @@ import java.io.File;
 
 
 public class XTM2FileFilter extends javax.swing.filechooser.FileFilter {
-    
+
     /** Creates a new instance of XTM2FileFilter */
     public XTM2FileFilter() {
     }
-    
+
 
 
     @Override
     public boolean accept(File f) {
-        if(f != null) {
+        if (f != null) {
             if (f.isDirectory()) {
                 return true;
             }
             String uppercaseName = f.getName().toUpperCase();
-            if(uppercaseName.endsWith(".XTM20") ||
-               uppercaseName.endsWith(".XTM2") ||
-               uppercaseName.endsWith(".XTM")) {
-                    return true;
+            if (uppercaseName.endsWith(".XTM20") ||
+                    uppercaseName.endsWith(".XTM2") ||
+                    uppercaseName.endsWith(".XTM")) {
+                return true;
             }
         }
         return false;
     }
-    
+
 
     //The description of this filter
     @Override
     public String getDescription() {
         return "XTM 2.0 topic map";
     }
-    
+
 }

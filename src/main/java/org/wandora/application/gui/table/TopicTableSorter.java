@@ -40,17 +40,19 @@ import org.wandora.utils.swing.TableSorter;
 public class TopicTableSorter extends TableSorter {
 
     private static final long serialVersionUID = 1L;
-    
+
     public TopicTableSorter() {
         super();
     }
-    
+
+
     public TopicTableSorter(TableModel tableModel) {
         super(tableModel);
     }
 
+
     public TopicTableSorter(TableModel tableModel, JTableHeader tableHeader) {
         super(tableModel, tableHeader);
     }
-    
+
 }

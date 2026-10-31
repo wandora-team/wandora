@@ -29,7 +29,6 @@ package org.wandora.application.gui.table;
 
 
 
-
 import java.awt.Color;
 import java.awt.Component;
 
@@ -46,8 +45,6 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 
-
-
 /**
  *
  * @author akivela
@@ -55,49 +52,59 @@ import org.wandora.utils.logger.Log4j2Logger;
 public class TopicGridCellRenderer extends DefaultTableCellRenderer {
     private static final long serialVersionUID = 1L;
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(TopicGridCellRenderer.class);
-    
+
     private Wandora wandora = null;
     private Topic topic;
     private TopicGrid topicGrid;
 
-    
+
     public TopicGridCellRenderer(TopicGrid grid) {
         topicGrid = grid;
         wandora = Wandora.getWandora();
     }
-    
-    
-    
+
+
+
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+    public Component getTableCellRendererComponent(
+            JTable table,
+            Object value,
+            boolean isSelected,
+            boolean hasFocus,
+            int row,
+            int column) {
+
         Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
- 
+
         try {
-            if(value == null || value instanceof Topic) {
+            if (value == null || value instanceof Topic) {
                 topic = (Topic) value;
             }
-            else if(value instanceof TopicGuiWrapper) {
+            else if (value instanceof TopicGuiWrapper) {
                 TopicGuiWrapper topicWrapper = (TopicGuiWrapper) value;
                 topic = topicWrapper.topic;
             }
 
-            if(!isSelected && !hasFocus) {
+            if (!isSelected && !hasFocus) {
                 Color hilight = wandora.topicHilights.get(topic);
-                if(hilight != null) c.setForeground(hilight);
+                if (hilight != null)
+                    c.setForeground(hilight);
                 else {
                     Color layerColor = wandora.topicHilights.getLayerColor(topic);
-                    if(layerColor != null) c.setForeground(layerColor);
-                    else c.setForeground(Color.BLACK);
+                    if (layerColor != null)
+                        c.setForeground(layerColor);
+                    else
+                        c.setForeground(Color.BLACK);
                 }
             }
-            else if(topic != null && topic.isRemoved()) {
+            else if (topic != null && topic.isRemoved()) {
                 c.setForeground(Color.RED);
             }
 
-            if(c instanceof JLabel) {
+            if (c instanceof JLabel) {
                 JLabel label = (JLabel) c;
                 label.setBorder(UIConstants.defaultTableCellLabelBorder);
-                if(topic != null) {
+                if (topic != null) {
                     String topicName = TopicToString.toString(topic);
                     label.setText(topicName);
                 }
@@ -106,16 +113,13 @@ public class TopicGridCellRenderer extends DefaultTableCellRenderer {
                 }
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
-        
+
         return c;
     }
 
-    
 
-
-    
 
 }

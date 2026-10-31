@@ -54,11 +54,17 @@ public class MixedTopicTableHeaderRenderer extends DefaultTableCellRenderer {
 
 
     @Override
-    public Component getTableCellRendererComponent(JTable table,Object value,boolean isSelected,boolean hasFocus, int row, int column){
-        Component c = oldRenderer.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
+    public Component getTableCellRendererComponent(
+            JTable table, 
+            Object value, 
+            boolean isSelected, 
+            boolean hasFocus,
+            int row, int column) {
+        
+        Component c = oldRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-        column=table.convertColumnIndexToModel(column);
-        if(columnColors != null && columnColors[column]!=null) {
+        column = table.convertColumnIndexToModel(column);
+        if (columnColors != null && columnColors[column] != null) {
             c.setForeground(columnColors[column]);
         }
         return c;

@@ -43,75 +43,82 @@ import org.wandora.topicmap.TopicMapException;
 public class SITable extends LocatorTable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private Topic topic;
     private Locator[] sis;
     private Color[] colors;
 
-    
-    
+
+
     /** Creates a new instance of SITable */
     public SITable(Topic topic, Wandora w) throws TopicMapException {
         super(w);
-        this.topic=topic;
-        sis=(Locator[])topic.getSubjectIdentifiers().toArray(new Locator[0]);
-        colors=new Color[sis.length];
-        for(int i=0;i<colors.length;i++){
-            colors[i]=w.topicHilights.getSIColor(topic,sis[i]);
+        this.topic = topic;
+        sis = (Locator[]) topic.getSubjectIdentifiers().toArray(new Locator[0]);
+        colors = new Color[sis.length];
+        for (int i = 0; i < colors.length; i++) {
+            colors[i] = w.topicHilights.getSIColor(topic, sis[i]);
         }
         initialize(sis, "Subject identifiers", colors);
     }
-    
-    
+
+
 
     @Override
     public Object[] getHeaderPopupStruct() {
         return WandoraMenuManager.getSubjectIdentifierTablePopupStruct();
     }
-    
-    
+
+
     @Override
     public Object[] getPopupStruct() {
         return WandoraMenuManager.getSubjectIdentifierTablePopupStruct();
     }
-    
+
 
     @Override
     public void processDrop(String data) {
         boolean siAdded = false;
-        if(data.startsWith("file:")) {
+        if (data.startsWith("file:")) {
             try {
                 topic.addSubjectIdentifier(new Locator(data));
                 siAdded = true;
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 wandora.handleError(e);
             }
         }
-        else if(data.startsWith("data:")) {
+        else if (data.startsWith("data:")) {
             try {
                 topic.addSubjectIdentifier(new Locator(data));
                 siAdded = true;
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 wandora.handleError(e);
             }
         }
         else {
-            while(data.length() > 0) {
+            while (data.length() > 0) {
                 int l = data.indexOf("http:");
-                if(l == -1) l = data.indexOf("https:");
-                if(l == -1) l = data.indexOf("ftp:");
-                if(l == -1) l = data.indexOf("ftps:");
-                if(l == -1) l = data.indexOf("mailto:");
-                if(l == -1) l = data.indexOf("gopher:");
-                if(l == -1) l = data.indexOf("file:");
-                if(l > -1) {
+                if (l == -1)
+                    l = data.indexOf("https:");
+                if (l == -1)
+                    l = data.indexOf("ftp:");
+                if (l == -1)
+                    l = data.indexOf("ftps:");
+                if (l == -1)
+                    l = data.indexOf("mailto:");
+                if (l == -1)
+                    l = data.indexOf("gopher:");
+                if (l == -1)
+                    l = data.indexOf("file:");
+                if (l > -1) {
                     String url = data.substring(l);
                     data = "";
                     int j = url.indexOf(' ');
-                    if(j == -1) j = url.indexOf('\n');
-                    if(j > -1) {
+                    if (j == -1)
+                        j = url.indexOf('\n');
+                    if (j > -1) {
                         data = url.substring(j);
                         url = url.substring(0, j);
                     }
@@ -119,7 +126,7 @@ public class SITable extends LocatorTable {
                         topic.addSubjectIdentifier(new Locator(url.trim()));
                         siAdded = true;
                     }
-                    catch(Exception e) {
+                    catch (Exception e) {
                         wandora.handleError(e);
                     }
                 }
@@ -128,7 +135,7 @@ public class SITable extends LocatorTable {
                 }
             }
         }
-        if(siAdded) {
+        if (siAdded) {
             wandora.reopenTopic();
         }
     }

@@ -30,28 +30,27 @@ import org.wandora.application.gui.previews.PreviewUtils;
  * @author akivela
  */
 public class AudioMP3v2 extends AudioAbstract {
-    
-    
+
+
     public AudioMP3v2(String locator) {
         super(locator);
     }
-    
-    
-    
-    // -------------------------------------------------------------------------
-    
 
-    
+
+
+    // -------------------------------------------------------------------------
+
+
+
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { 
-                    "audio/mpeg",
-                    "audio/x-mpeg-3",
-                    "audio/mpeg3"
-                }, 
-                new String[] { 
-                    "mp3"
-                }
-        );
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "audio/mpeg",
+                        "audio/x-mpeg-3",
+                        "audio/mpeg3"
+                },
+                new String[] {
+                        "mp3"
+                });
     }
 }

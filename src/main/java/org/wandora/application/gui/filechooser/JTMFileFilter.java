@@ -35,32 +35,32 @@ import java.io.File;
 
 
 public class JTMFileFilter extends javax.swing.filechooser.FileFilter {
-    
+
     /** Creates a new instance of JTMFileFilter */
     public JTMFileFilter() {
     }
-    
+
 
 
     @Override
     public boolean accept(File f) {
-        if(f != null) {
+        if (f != null) {
             if (f.isDirectory()) {
                 return true;
             }
             String uppercaseName = f.getName().toUpperCase();
-            if(uppercaseName.endsWith(".JTM")) {
-                    return true;
+            if (uppercaseName.endsWith(".JTM")) {
+                return true;
             }
         }
         return false;
     }
-    
+
 
     //The description of this filter
     @Override
     public String getDescription() {
         return "JTM topic map";
     }
-    
+
 }

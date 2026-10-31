@@ -100,7 +100,6 @@ import bibliothek.gui.dock.title.DockTitle;
 
 
 
-
 /**
  * DockingFramePanel is a base topic panel of the Wandora application.
  * It is a topic panel container and can hold several different topic panels.
@@ -110,16 +109,17 @@ import bibliothek.gui.dock.title.DockTitle;
  */
 
 
-public class DockingFramePanel extends JPanel implements TopicPanel, ActionListener, RefreshListener, DockableFocusListener, ComponentListener, DockableListener, DropTargetListener, DragGestureListener {
+public class DockingFramePanel extends JPanel implements TopicPanel, ActionListener, RefreshListener,
+        DockableFocusListener, ComponentListener, DockableListener, DropTargetListener, DragGestureListener {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(DockingFramePanel.class);
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(DockingFramePanel.class);
 
-	private String OPTIONS_PREFIX = "gui.dockingFramePanel.";
-    
+    private String OPTIONS_PREFIX = "gui.dockingFramePanel.";
 
-    private Map<Dockable,TopicPanel> dockedTopicPanels;
+
+    private Map<Dockable, TopicPanel> dockedTopicPanels;
     private Dockable currentDockable = null;
     private WandoraSplitDockStation station = null;
     private WandoraDockController control = null;
@@ -128,21 +128,20 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     private BufferedImage backgroundImage = null;
     private int backgroundImageWidth = 0;
     private int backgroundImageHeight = 0;
-    
+
     private DropTarget dropTarget = null;
-    
-    private Map<TopicPanel,TopicPanel> chainedTopicPanels = null;
-    
+
+    private Map<TopicPanel, TopicPanel> chainedTopicPanels = null;
+
     private Topic openedTopic = null;
-    
-    
-    
-    
+
+
+
     public DockingFramePanel() {
     }
-    
-    
-    
+
+
+
     @Override
     public void init() {
         backgroundImage = UIBox.getImage("gui/startup_image.gif");
@@ -151,30 +150,30 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
 
         wandora = Wandora.getWandora();
         dockedTopicPanels = new HashMap<>();
-        chainedTopicPanels = new HashMap<>(); 
+        chainedTopicPanels = new HashMap<>();
         control = new WandoraDockController();
         control.addDockableFocusListener(this);
         station = new WandoraSplitDockStation();
         control.add(station);
-        
-        this.setLayout(new BorderLayout () );
-        this.add( station.getComponent() );
+
+        this.setLayout(new BorderLayout());
+        this.add(station.getComponent());
         this.addComponentListener(this);
-        
+
         dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this);
     }
-    
+
     // -------------------------------------------------------------------------
-    
+
     private int x = 0;
     private int y = 0;
     private int w = 0;
     private int h = 0;
-    
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if(dockedTopicPanels.isEmpty() && backgroundImage != null) {
+        if (dockedTopicPanels.isEmpty() && backgroundImage != null) {
             w = this.getWidth();
             h = this.getHeight();
             x = (w - backgroundImageWidth) / 2;
@@ -182,7 +181,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             g.setColor(Color.WHITE);
             g.fillRect(0, 0, w, h);
             g.drawImage(backgroundImage, x, y, this);
-            
+
             String versionInfoText = Wandora.getVersionInfo();
             g.setColor(UIConstants.wandoraBlueColorAlt);
             g.setFont(UIConstants.wandoraVersionInfoFont);
@@ -192,94 +191,92 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             g.drawString(versionInfoText, vix, viy);
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     public Dockable getDockableFor(TopicPanel topicPanel) {
-        if(topicPanel != null) {
-            for(Dockable dockable : dockedTopicPanels.keySet()) {
+        if (topicPanel != null) {
+            for (Dockable dockable : dockedTopicPanels.keySet()) {
                 TopicPanel dockedTopicPanel = dockedTopicPanels.get(dockable);
-                if(dockedTopicPanel.equals(topicPanel)) {
+                if (dockedTopicPanel.equals(topicPanel)) {
                     return dockable;
                 }
             }
         }
         return null;
     }
-    
-    
+
+
     public void updateDockableTitle(TopicPanel topicPanel) {
-        if(topicPanel != null) {
+        if (topicPanel != null) {
             Dockable dockable = getDockableFor(topicPanel);
-            if(dockable != null) {
-                if(dockable instanceof AbstractDockable) {
+            if (dockable != null) {
+                if (dockable instanceof AbstractDockable) {
                     AbstractDockable abstractDockable = (AbstractDockable) dockable;
                     abstractDockable.setTitleText(topicPanel.getTitle());
                 }
             }
         }
     }
-    
-    
-    
-    
+
+
+
     public void openTo(Topic topic, TopicPanel topicPanel) throws TopicMapException, OpenTopicNotSupportedException {
-        for(Dockable dockable : dockedTopicPanels.keySet()) {
+        for (Dockable dockable : dockedTopicPanels.keySet()) {
             TopicPanel dockedTopicPanel = dockedTopicPanels.get(dockable);
-            if(dockedTopicPanel.equals(topicPanel)) {
+            if (dockedTopicPanel.equals(topicPanel)) {
                 currentDockable = dockable;
                 open(topic);
             }
         }
     }
-    
-    
+
+
     @Override
     public boolean supportsOpenTopic() {
         return true;
     }
-    
-    
-    
-    
+
+
+
     @Override
     public void open(Topic topic) throws TopicMapException, OpenTopicNotSupportedException {
         openedTopic = topic;
-        
-        if(currentDockable == null) {
-            if(!dockedTopicPanels.isEmpty()) {
+
+        if (currentDockable == null) {
+            if (!dockedTopicPanels.isEmpty()) {
                 currentDockable = dockedTopicPanels.keySet().iterator().next();
             }
         }
-        if(currentDockable == null) {
+        if (currentDockable == null) {
             // Ensure there is at least one dockable when topic is opened.
             addDockable(getDefaultPanel(), topic);
         }
         else {
             control.setFocusedDockable(currentDockable, true);
             TopicPanel currentTopicPanel = dockedTopicPanels.get(currentDockable);
-            if(currentTopicPanel != null) {
-                if(currentTopicPanel.supportsOpenTopic()) {
+            if (currentTopicPanel != null) {
+                if (currentTopicPanel.supportsOpenTopic()) {
                     currentTopicPanel.open(topic);
                     updateDockableTitle(currentTopicPanel);
                 }
                 else {
                     // We are going to ask the user where the topic will be opened.
                     List<TopicPanel> availableTopicPanels = new ArrayList<>();
-                    for(Dockable dockable : dockedTopicPanels.keySet()) {
+                    for (Dockable dockable : dockedTopicPanels.keySet()) {
                         TopicPanel availableTopicPanel = dockedTopicPanels.get(dockable);
-                        if(availableTopicPanel != null && availableTopicPanel.supportsOpenTopic()) {
-                            availableTopicPanels.add( availableTopicPanel );
+                        if (availableTopicPanel != null && availableTopicPanel.supportsOpenTopic()) {
+                            availableTopicPanels.add(availableTopicPanel);
                         }
                     }
                     // Easy. No suitable topic panels available. Create one.
-                    if(availableTopicPanels.isEmpty()) {
+                    if (availableTopicPanels.isEmpty()) {
                         addDockable(getDefaultPanel(), topic);
                     }
                     // Easy. Only one suitable topic panel available. Use it.
-                    else if(availableTopicPanels.size() == 1) {
+                    else if (availableTopicPanels.size() == 1) {
                         TopicPanel alternativeTopicPanel = availableTopicPanels.get(0);
                         alternativeTopicPanel.open(topic);
                         updateDockableTitle(alternativeTopicPanel);
@@ -288,9 +285,9 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                     else {
                         boolean askForATopicPanel = true;
                         TopicPanel rememberedTargetTopicPanel = chainedTopicPanels.get(currentTopicPanel);
-                        if(rememberedTargetTopicPanel != null) {
+                        if (rememberedTargetTopicPanel != null) {
                             Dockable dockable = this.getDockableFor(rememberedTargetTopicPanel);
-                            if(dockable != null) {
+                            if (dockable != null) {
                                 rememberedTargetTopicPanel.open(topic);
                                 updateDockableTitle(rememberedTargetTopicPanel);
                                 askForATopicPanel = false;
@@ -299,16 +296,16 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                                 chainedTopicPanels.remove(currentTopicPanel);
                             }
                         }
-                        if(askForATopicPanel) {
+                        if (askForATopicPanel) {
                             SelectTopicPanelPanel topicPanelSelector = new SelectTopicPanelPanel();
                             topicPanelSelector.openInDialog(availableTopicPanels, wandora);
                             // WAIT TILL CLOSED
-                            if(topicPanelSelector.wasAccepted()) {
+                            if (topicPanelSelector.wasAccepted()) {
                                 TopicPanel userSelectedTopicPanel = topicPanelSelector.getSelectedTopicPanel();
-                                if(userSelectedTopicPanel != null) {
+                                if (userSelectedTopicPanel != null) {
                                     userSelectedTopicPanel.open(topic);
                                     updateDockableTitle(userSelectedTopicPanel);
-                                    if(topicPanelSelector.getRememberSelection()) {
+                                    if (topicPanelSelector.getRememberSelection()) {
                                         chainedTopicPanels.put(currentTopicPanel, userSelectedTopicPanel);
                                     }
                                 }
@@ -323,19 +320,18 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         repaint();
     }
 
-    
-    
-    
+
+
     @Override
     public void stop() {
-        if(dockedTopicPanels != null && dockedTopicPanels.isEmpty()) {
-            for(TopicPanel tp : dockedTopicPanels.values()) {
-                if(tp != null) {
+        if (dockedTopicPanels != null && dockedTopicPanels.isEmpty()) {
+            for (TopicPanel tp : dockedTopicPanels.values()) {
+                if (tp != null) {
                     tp.stop();
                 }
             }
         }
-        if(control != null) {
+        if (control != null) {
             control.kill();
         }
         openedTopic = null;
@@ -343,16 +339,14 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         chainedTopicPanels.clear();
     }
 
-    
-    
 
 
     @Override
     public void refresh() throws TopicMapException {
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(Dockable dockable : dockedTopicPanels.keySet()) {
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (Dockable dockable : dockedTopicPanels.keySet()) {
                 TopicPanel topicPanel = dockedTopicPanels.get(dockable);
-                if(topicPanel != null) {
+                if (topicPanel != null) {
                     topicPanel.refresh();
                     updateDockableTitle(topicPanel);
                 }
@@ -362,138 +356,137 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         repaint();
     }
 
-    
-    
+
+
     @Override
     public LocatorHistory getTopicHistory() {
         return null;
     }
-    
-    
-    
-    
-    
+
+
+
     public TopicPanel getCurrentTopicPanel() {
-        if(currentDockable != null) {
+        if (currentDockable != null) {
             TopicPanel tp = dockedTopicPanels.get(currentDockable);
             return tp;
         }
         return null;
     }
-    
-    
-    
-    
+
+
+
     @Override
     public boolean applyChanges() throws CancelledException, TopicMapException {
         boolean reply = false;
-         if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(TopicPanel tp : dockedTopicPanels.values()) {
-                if(tp != null) {
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (TopicPanel tp : dockedTopicPanels.values()) {
+                if (tp != null) {
                     reply = tp.applyChanges() || reply;
                 }
             }
         }
-        //revalidate();
-        //repaint();
         return reply;
     }
-    
-    
+
+
 
     @Override
     public JPanel getGui() {
         return this;
     }
 
-    
-    
+
+
     @Override
     public Topic getTopic() throws TopicMapException {
-        if(currentDockable != null) {
+        if (currentDockable != null) {
             TopicPanel tp = dockedTopicPanels.get(currentDockable);
-            if(tp != null) {
+            if (tp != null) {
                 return tp.getTopic();
             }
         }
         return openedTopic;
     }
-    
-    
+
+
     @Override
     public String getName() {
         return "Dockable frame panel";
     }
 
+
     @Override
     public String getTitle() {
         return getName();
     }
-    
-    
+
+
     @Override
     public Icon getIcon() {
-        if(currentDockable != null) {
+        if (currentDockable != null) {
             TopicPanel tp = dockedTopicPanels.get(currentDockable);
-            if(tp != null) {
+            if (tp != null) {
                 return tp.getIcon();
             }
         }
         return null;
     }
-    
-    
-    
+
+
 
     @Override
     public int getOrder() {
         return 1;
     }
 
+
     @Override
-    public boolean noScroll(){
+    public boolean noScroll() {
         return false;
     }
+
     
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     @Override
     public JPopupMenu getViewPopupMenu() {
         return UIBox.makePopupMenu(getViewMenuStruct(), this);
     }
-    
+
+
     @Override
     public JMenu getViewMenu() {
         return UIBox.makeMenu(getViewMenuStruct(), this);
     }
-    
+
 
 
     @Override
     public Object[] getViewMenuStruct() {
-        JMenu addMenu =  new SimpleMenu("New panel", UIBox.getIcon("gui/icons/topic_panel_add.png"));
+        JMenu addMenu = new SimpleMenu("New panel", UIBox.getIcon("gui/icons/topic_panel_add.png"));
         List<List<Object>> availableTopicPanels = wandora.topicPanelManager.getAvailableTopicPanels();
         List<Object> addTopicPanelMenuStruct = new ArrayList<>();
-        for(List<Object> panelData : availableTopicPanels) {
+        for (List<Object> panelData : availableTopicPanels) {
             try {
                 Class<?> panelClass = Class.forName((String) panelData.get(0));
-                if(!this.getClass().equals(panelClass)) {
-                    addTopicPanelMenuStruct.add( (String) panelData.get(1) );
-                    addTopicPanelMenuStruct.add( (Icon) panelData.get(2) );
-                    addTopicPanelMenuStruct.add( new AddDockable( panelClass ) );
+                if (!this.getClass().equals(panelClass)) {
+                    addTopicPanelMenuStruct.add((String) panelData.get(1));
+                    addTopicPanelMenuStruct.add((Icon) panelData.get(2));
+                    addTopicPanelMenuStruct.add(new AddDockable(panelClass));
                 }
             }
-            catch(Exception e) {}
-            
+            catch (Exception e) {
+            }
+
         }
 
-        UIBox.attachMenu(addMenu, addTopicPanelMenuStruct.toArray(new Object[] {} ), wandora);
-        
+        UIBox.attachMenu(addMenu, addTopicPanelMenuStruct.toArray(new Object[] {}), wandora);
+
         //JMenu selectMenu =  new SimpleMenu("Select", UIBox.getIcon("gui/icons/topic_panel_select.png"));
         //UIBox.attachMenu(selectMenu, getSelectMenuStruct(), wandora);
-        
+
         //JMenu closeMenu =  new SimpleMenu("Close", UIBox.getIcon("gui/icons/topic_panel_close.png"));
         //UIBox.attachMenu(closeMenu, getCloseMenuStruct(), wandora);
 
@@ -501,51 +494,51 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         //UIBox.attachMenu(optionsMenu, getOptionsMenuStruct(), wandora);
 
         List<Object> struct = new ArrayList<>();
-        
+
         struct.add(addMenu);
-               
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
             struct.add("---");
-            for(Dockable dockable : dockedTopicPanels.keySet()) {
+            for (Dockable dockable : dockedTopicPanels.keySet()) {
                 TopicPanel tp = dockedTopicPanels.get(dockable);
-                if(tp != null) {
+                if (tp != null) {
                     String label = tp.getName();
                     label = label + getAdditionalLabel(tp);
-                    JMenu topicPanelMenu =  new SimpleMenu(label, tp.getIcon());
-                    
+                    JMenu topicPanelMenu = new SimpleMenu(label, tp.getIcon());
+
                     List<Object> subStruct = new ArrayList<>();
-                    
+
                     Object[] subMenuStruct = tp.getViewMenuStruct();
-                    if(subMenuStruct != null) {
-                        if(subMenuStruct.length > 0) {
-                            for( Object subMenuItem : subMenuStruct ) {
+                    if (subMenuStruct != null) {
+                        if (subMenuStruct.length > 0) {
+                            for (Object subMenuItem : subMenuStruct) {
                                 subStruct.add(subMenuItem);
                             }
                             subStruct.add("---");
                         }
                     }
-                    
-                    subStruct.add( "Select" );
-                    subStruct.add( UIBox.getIcon( "gui/icons/select_dockable.png" ) );
-                    subStruct.add( new SelectDockable(dockable) );
-                    
-                    if(dockable.equals(station.getFullScreen())) {
-                        subStruct.add( "Demaximize" );
-                        subStruct.add( UIBox.getIcon( "gui/icons/demaximize_dockable.png" ) );
+
+                    subStruct.add("Select");
+                    subStruct.add(UIBox.getIcon("gui/icons/select_dockable.png"));
+                    subStruct.add(new SelectDockable(dockable));
+
+                    if (dockable.equals(station.getFullScreen())) {
+                        subStruct.add("Demaximize");
+                        subStruct.add(UIBox.getIcon("gui/icons/demaximize_dockable.png"));
                     }
                     else {
-                        subStruct.add( "Maximize" );
-                        subStruct.add( UIBox.getIcon( "gui/icons/maximize_dockable.png" ) );
+                        subStruct.add("Maximize");
+                        subStruct.add(UIBox.getIcon("gui/icons/maximize_dockable.png"));
                     }
-                    subStruct.add( new MaximizeDockable(dockable) );
+                    subStruct.add(new MaximizeDockable(dockable));
 
-                    subStruct.add( "Close" );
-                    subStruct.add( UIBox.getIcon("gui/icons/close_dockable.png") );
-                    subStruct.add( new DeleteDockable(dockable) );
-                    
+                    subStruct.add("Close");
+                    subStruct.add(UIBox.getIcon("gui/icons/close_dockable.png"));
+                    subStruct.add(new DeleteDockable(dockable));
+
                     UIBox.attachMenu(topicPanelMenu, subStruct.toArray(), wandora);
-                    
-                    struct.add( topicPanelMenu );
+
+                    struct.add(topicPanelMenu);
                 }
             }
             struct.add("---");
@@ -554,151 +547,149 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             struct.add("Close all");
             struct.add(new DeleteAllDockables());
         }
-        
+
         return struct.toArray();
     }
-    
-    
 
-    
-    
-    public Map<Dockable,TopicPanel> getDockedTopicPanels() {
+
+
+    public Map<Dockable, TopicPanel> getDockedTopicPanels() {
         return new HashMap<>(dockedTopicPanels);
     }
-    
-    
-    
-    
+
+
+
     private Object[] getCloseMenuStruct() {
         List<Object> struct = new ArrayList<>();
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(Dockable dockable : dockedTopicPanels.keySet()) {
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (Dockable dockable : dockedTopicPanels.keySet()) {
                 TopicPanel tp = dockedTopicPanels.get(dockable);
-                if(tp != null) {
-                    String label = "Close "+tp.getName();
+                if (tp != null) {
+                    String label = "Close " + tp.getName();
                     label = label + getAdditionalLabel(tp);
                     struct.add(label);
-                    struct.add( tp.getIcon() );
-                    struct.add( new DeleteDockable(dockable) );
+                    struct.add(tp.getIcon());
+                    struct.add(new DeleteDockable(dockable));
                 }
             }
         }
         else {
             struct.add("[Nothing to close]");
         }
-        return struct.toArray( new Object[] {} );
+        return struct.toArray(new Object[] {});
     }
-    
-    
+
+
     private Object[] getSelectMenuStruct() {
         List<Object> struct = new ArrayList<>();
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(Dockable dockable : dockedTopicPanels.keySet()) {
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (Dockable dockable : dockedTopicPanels.keySet()) {
                 TopicPanel tp = dockedTopicPanels.get(dockable);
-                if(tp != null) {
-                    String label = "Select "+tp.getName();
+                if (tp != null) {
+                    String label = "Select " + tp.getName();
                     label = label + getAdditionalLabel(tp);
                     struct.add(label);
-                    struct.add( tp.getIcon() );
-                    struct.add( new SelectDockable(dockable) );
+                    struct.add(tp.getIcon());
+                    struct.add(new SelectDockable(dockable));
                 }
             }
         }
         else {
             struct.add("[Nothing to select]");
         }
-        return struct.toArray( new Object[] {} );
+        return struct.toArray(new Object[] {});
     }
-    
-    
-    
-    
+
+
+
     private Object[] getOptionsMenuStruct() {
         List<Object> struct = new ArrayList<>();
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(Dockable dockable : dockedTopicPanels.keySet()) {
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (Dockable dockable : dockedTopicPanels.keySet()) {
                 TopicPanel tp = dockedTopicPanels.get(dockable);
-                if(tp != null) {
-                    String label = "Configure "+tp.getName();
+                if (tp != null) {
+                    String label = "Configure " + tp.getName();
                     label = label + getAdditionalLabel(tp);
                     SimpleMenu confMenu = new SimpleMenu(label);
                     confMenu.setIcon(tp.getIcon());
                     UIBox.attachMenu(confMenu, tp.getViewMenuStruct(), wandora);
-                    struct.add( confMenu );
+                    struct.add(confMenu);
                 }
             }
         }
         else {
             struct.add("[Nothing to configure]");
         }
-        return struct.toArray( new Object[] {} );
+        return struct.toArray(new Object[] {});
     }
-    
 
-    
+
+
     public static String getAdditionalLabel(TopicPanel tp) {
         String additionalLabel = "";
         try {
             Topic t = tp.getTopic();
-            if(t != null) {
+            if (t != null) {
                 additionalLabel = TopicToString.toString(t);
-                if(additionalLabel.length() > 30) {
-                    additionalLabel = additionalLabel.substring(0,27) + "...";
+                if (additionalLabel.length() > 30) {
+                    additionalLabel = additionalLabel.substring(0, 27) + "...";
                 }
                 additionalLabel = " w " + additionalLabel;
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             // IGNORE
         }
         return additionalLabel;
     }
 
-    
-    
+
 
     // -------------------------------------------------------------------------
 
-    
-    
+
+
     public void toggleVisibility(String componentName) {
-        
+
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
-    
-    
-    
+
+
+
     public void addDockable(Object c, Topic topic) {
         addDockable((TopicPanel) c, topic);
     }
-    
-    
+
+
     public void addDockable(TopicPanel tp, Topic topic) {
         //System.out.append("Adding dockable "+tp);
-        
-        if(tp == null) return;
-        
+
+        if (tp == null)
+            return;
+
         Icon icon = tp.getIcon();
 
         try {
             tp.init();
-            if(tp.supportsOpenTopic()) {
-                if(topic == null) topic = openedTopic;
+            if (tp.supportsOpenTopic()) {
+                if (topic == null)
+                    topic = openedTopic;
                 tp.open(topic);
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
 
         JPanel wrapper = new JPanel();
         wrapper.setLayout(new BorderLayout());
-        if(tp.noScroll()) {
-            wrapper.add(tp.getGui(), BorderLayout.CENTER);            
+        if (tp.noScroll()) {
+            wrapper.add(tp.getGui(), BorderLayout.CENTER);
         }
         else {
             JScrollPane wrapperScroll = new SimpleScrollPane(tp.getGui());
@@ -707,28 +698,28 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
 
         WandoraDockable d = new WandoraDockable(wrapper, tp, tp.getTitle(), icon);
         d.setActionOffers(new WandoraDockActionSource(tp, this, control));
-        
+
         station.addDockable(d);
         dockedTopicPanels.put(d, tp);
         currentDockable = d;
-        
+
         control.setFocusedDockable(currentDockable, true);
-        
+
         wandora.topicPanelsChanged();
     }
 
-    
-    
+
+
     public void deleteCurrentDockable() {
-        if(currentDockable != null) {
+        if (currentDockable != null) {
             TopicPanel tp = dockedTopicPanels.get(currentDockable);
-            if(tp != null) {
+            if (tp != null) {
                 tp.stop();
             }
             dockedTopicPanels.remove(currentDockable);
             station.removeDockable(currentDockable);
-            
-            if(!dockedTopicPanels.isEmpty()) {
+
+            if (!dockedTopicPanels.isEmpty()) {
                 currentDockable = dockedTopicPanels.keySet().iterator().next();
             }
             else {
@@ -737,16 +728,14 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             wandora.topicPanelsChanged();
         }
     }
-    
-    
-    
-    
-    
+
+
+
     public void deleteAllDockables() {
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(Dockable dockable : dockedTopicPanels.keySet()) {
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (Dockable dockable : dockedTopicPanels.keySet()) {
                 TopicPanel tp = dockedTopicPanels.get(dockable);
-                if(tp != null) {
+                if (tp != null) {
                     tp.stop();
                 }
                 station.removeDockable(dockable);
@@ -757,18 +746,17 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             wandora.topicPanelsChanged();
         }
     }
-    
-    
-    
-    
+
+
+
     public void deleteDockable(Dockable dockable) {
         TopicPanel tp = dockedTopicPanels.get(dockable);
-        if(tp != null) {
+        if (tp != null) {
             tp.stop();
         }
         dockedTopicPanels.remove(dockable);
         station.removeDockable(dockable);
-        if(!dockedTopicPanels.isEmpty()) {
+        if (!dockedTopicPanels.isEmpty()) {
             currentDockable = dockedTopicPanels.keySet().iterator().next();
         }
         else {
@@ -776,55 +764,53 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         }
         wandora.topicPanelsChanged();
     }
-    
-    
-    
-    
+
+
+
     public void selectDockable(Dockable dockable) {
         control.setFocusedDockable(dockable, true);
     }
-    
-    
-    
-    
-    
+
+
+
     public void maximizeDockable(Dockable dockable) {
-        if(dockable != null) {
-            if(dockable.equals(station.getFullScreen())) {
+        if (dockable != null) {
+            if (dockable.equals(station.getFullScreen())) {
                 station.setFullScreen(null);
                 try {
-                    if(currentDockable != null) {
+                    if (currentDockable != null) {
                         TopicPanel tp = dockedTopicPanels.get(dockable);
-                        if(tp != null) {
+                        if (tp != null) {
                             tp.refresh();
                         }
                     }
                 }
-                catch(Exception e) {}
+                catch (Exception e) {
+                }
             }
             else {
                 station.setFullScreen(dockable);
             }
         }
     }
-    
-    
-    
-    
+
+
+
     public void changeTopicPanelInCurrentDockable(TopicPanel tp, Topic topic) {
         //System.out.append("changeTopicPanelInDockable "+tp);
-        
-        if(tp == null || currentDockable == null) return;
+
+        if (tp == null || currentDockable == null)
+            return;
 
         try {
-            if(currentDockable instanceof WandoraDockable) {
-                try { 
-                    if(tp.supportsOpenTopic()) {
-                        tp.open(topic); 
+            if (currentDockable instanceof WandoraDockable) {
+                try {
+                    if (tp.supportsOpenTopic()) {
+                        tp.open(topic);
                     }
                 }
-                catch(Exception e) { 
-                	logger.error(e);
+                catch (Exception e) {
+                    logger.error(e);
                 }
                 WandoraDockable currentWandoraDockable = (WandoraDockable) currentDockable;
                 TopicPanel oldTopicPanel = currentWandoraDockable.getInnerTopicPanel();
@@ -837,7 +823,7 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                 wrapper.removeAll();
                 JScrollPane wrapperScroll = new SimpleScrollPane(tp.getGui());
                 wrapper.add(wrapperScroll, BorderLayout.CENTER);
-                
+
                 dockedTopicPanels.put(currentDockable, tp);
             }
 
@@ -845,198 +831,225 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             wandora.topicPanelsChanged();
             wandora.refreshTopicPanelIcon();
         }
-        catch(CancelledException ce) {
+        catch (CancelledException ce) {
             // PASS
         }
-        catch(TopicMapException te) {
-        	logger.error(te);
+        catch (TopicMapException te) {
+            logger.error(te);
         }
     }
 
-    
-    
-    
+
+
     // ----------------------------------------------- DockableFocusListener ---
-    
-    
+
+
     @Override
     public void dockableFocused(DockableFocusEvent dfe) {
-        if(!dockedTopicPanels.isEmpty()) {
-            if(dfe.getNewFocusOwner() != null) {
+        if (!dockedTopicPanels.isEmpty()) {
+            if (dfe.getNewFocusOwner() != null) {
                 currentDockable = dfe.getNewFocusOwner();
-                if(wandora != null) {
+                if (wandora != null) {
                     wandora.refreshInfoFields();
                 }
             }
         }
     }
 
-    
-    
-    
+
+
     // ----------------------------------------------------- RefreshListener ---
+
 
     @Override
     public void doRefresh() throws TopicMapException {
         refresh();
     }
 
-    
+
     // -------------------------------------------------- Topic map listener ---
-    
-    
+
+
     private boolean skipTopicMapActions = false;
-    
-    
+
+
     @Override
     public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
-        if(skipTopicMapActions) return;
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(TopicPanel tp : dockedTopicPanels.values()) {
+        if (skipTopicMapActions)
+            return;
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (TopicPanel tp : dockedTopicPanels.values()) {
                 tp.topicSubjectIdentifierChanged(t, added, removed);
             }
         }
     }
 
+
     @Override
     public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
-        if(skipTopicMapActions) return;
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(TopicPanel tp : dockedTopicPanels.values()) {
+        if (skipTopicMapActions)
+            return;
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (TopicPanel tp : dockedTopicPanels.values()) {
                 tp.topicBaseNameChanged(t, newName, oldName);
             }
         }
     }
 
+
     @Override
     public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
-        if(skipTopicMapActions) return;
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(TopicPanel tp : dockedTopicPanels.values()) {
+        if (skipTopicMapActions)
+            return;
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (TopicPanel tp : dockedTopicPanels.values()) {
                 tp.topicTypeChanged(t, added, removed);
             }
         }
     }
 
+
     @Override
-    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName) throws TopicMapException {
-        if(skipTopicMapActions) return;
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(TopicPanel tp : dockedTopicPanels.values()) {
+    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName)
+            throws TopicMapException {
+        if (skipTopicMapActions)
+            return;
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (TopicPanel tp : dockedTopicPanels.values()) {
                 tp.topicVariantChanged(t, scope, newName, oldName);
             }
         }
     }
 
+
     @Override
-    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue) throws TopicMapException {
-        if(skipTopicMapActions) return;
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(TopicPanel tp : dockedTopicPanels.values()) {
+    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue)
+            throws TopicMapException {
+        if (skipTopicMapActions)
+            return;
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (TopicPanel tp : dockedTopicPanels.values()) {
                 tp.topicDataChanged(t, type, version, newValue, oldValue);
             }
         }
     }
 
+
     @Override
     public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
-        if(skipTopicMapActions) return;
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(TopicPanel tp : dockedTopicPanels.values()) {
+        if (skipTopicMapActions)
+            return;
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (TopicPanel tp : dockedTopicPanels.values()) {
                 tp.topicSubjectLocatorChanged(t, newLocator, oldLocator);
             }
         }
     }
 
+
     @Override
     public void topicRemoved(Topic t) throws TopicMapException {
-        if(skipTopicMapActions) return;
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(TopicPanel tp : dockedTopicPanels.values()) {
+        if (skipTopicMapActions)
+            return;
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (TopicPanel tp : dockedTopicPanels.values()) {
                 tp.topicRemoved(t);
             }
         }
     }
 
+
     @Override
     public void topicChanged(Topic t) throws TopicMapException {
-        if(skipTopicMapActions) return;
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(TopicPanel tp : dockedTopicPanels.values()) {
+        if (skipTopicMapActions)
+            return;
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (TopicPanel tp : dockedTopicPanels.values()) {
                 tp.topicChanged(t);
             }
         }
     }
 
+
     @Override
     public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
-        if(skipTopicMapActions) return;
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(TopicPanel tp : dockedTopicPanels.values()) {
+        if (skipTopicMapActions)
+            return;
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (TopicPanel tp : dockedTopicPanels.values()) {
                 tp.associationTypeChanged(a, newType, oldType);
             }
         }
     }
 
+
     @Override
-    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer) throws TopicMapException {
-        if(skipTopicMapActions) return;
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(TopicPanel tp : dockedTopicPanels.values()) {
+    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer)
+            throws TopicMapException {
+        if (skipTopicMapActions)
+            return;
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (TopicPanel tp : dockedTopicPanels.values()) {
                 tp.associationPlayerChanged(a, role, newPlayer, oldPlayer);
             }
         }
     }
 
+
     @Override
     public void associationRemoved(Association a) throws TopicMapException {
-        if(skipTopicMapActions) return;
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(TopicPanel tp : dockedTopicPanels.values()) {
+        if (skipTopicMapActions)
+            return;
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (TopicPanel tp : dockedTopicPanels.values()) {
                 tp.associationRemoved(a);
             }
         }
     }
 
+
     @Override
     public void associationChanged(Association a) throws TopicMapException {
-        if(skipTopicMapActions) return;
-        if(dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
-            for(TopicPanel tp : dockedTopicPanels.values()) {
+        if (skipTopicMapActions)
+            return;
+        if (dockedTopicPanels != null && !dockedTopicPanels.isEmpty()) {
+            for (TopicPanel tp : dockedTopicPanels.values()) {
                 tp.associationChanged(a);
             }
         }
     }
-    
-    
-    
-    
+
+
+
     // -------------------------------------------------- Component listener ---
-    
-    
+
+
 
     @Override
     public void componentResized(ComponentEvent e) {
         handleComponentEvent(e);
     }
 
+
     @Override
     public void componentMoved(ComponentEvent e) {
         handleComponentEvent(e);
     }
+
 
     @Override
     public void componentShown(ComponentEvent e) {
         handleComponentEvent(e);
     }
 
+
     @Override
     public void componentHidden(ComponentEvent e) {
         handleComponentEvent(e);
     }
-    
-    
-    
+
+
+
     private void handleComponentEvent(ComponentEvent e) {
         try {
             Dimension size = this.getParent().getParent().getSize();
@@ -1046,40 +1059,45 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
             //revalidate();
             //repaint();
         }
-        catch(Exception ex) {
+        catch (Exception ex) {
             // SKIP
         }
     }
 
-    
-    
+
+
     // --------------------------------------------------- DockableListener ----
-    
-    
+
+
     @Override
     public void titleBound(Dockable dckbl, DockTitle dt) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 
     @Override
     public void titleUnbound(Dockable dckbl, DockTitle dt) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+
     @Override
     public void titleTextChanged(Dockable dckbl, String string, String string1) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 
     @Override
     public void titleIconChanged(Dockable dckbl, Icon icon, Icon icon1) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+
     @Override
     public void titleToolTipChanged(Dockable dckbl, String string, String string1) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 
     @Override
     public void titleExchanged(Dockable dckbl, DockTitle dt) {
@@ -1087,75 +1105,74 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
     }
 
 
-    
-    
+
     // -------------------------------------------------------------------------
     // ------------------------------------------------------ DRAG AND DROP ----
     // -------------------------------------------------------------------------
-    
-    
+
+
     private int orders = 0;
-    
-    
+
+
     @Override
     public void dragEnter(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
-        
+
     }
-    
-    
+
+
     @Override
     public void dragExit(java.awt.dnd.DropTargetEvent dropTargetEvent) {
-        
+
     }
-    
-    
+
+
     @Override
     public void dragOver(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
-        
+
     }
-    
-    
-    
+
+
+
     private void processImage(Image image) throws Exception {
         SimpleFileExtractor extractor = new SimpleFileExtractor();
         DataURL dataUrl = new DataURL(image);
-        extractor.setForceContent( dataUrl.toExternalForm(Base64.DONT_BREAK_LINES) );
+        extractor.setForceContent(dataUrl.toExternalForm(Base64.DONT_BREAK_LINES));
         ActionEvent fakeEvent = new ActionEvent(wandora, 0, "merge");
         extractor.execute(wandora, fakeEvent);
     }
-    
-    
+
+
     private void processFileList(java.util.List<File> files) throws Exception {
         List<WandoraTool> importTools = new ArrayList<>();
         boolean yesToAll = false;
-        
-        for(File file : files) {
+
+        for (File file : files) {
             List<WandoraTool> importToolsForFile = WandoraToolManager.getImportTools(file, orders);
-            if(importToolsForFile != null && !importToolsForFile.isEmpty()) {
+            if (importToolsForFile != null && !importToolsForFile.isEmpty()) {
                 importTools.addAll(importToolsForFile);
             }
             else {
-                if(yesToAll) {
+                if (yesToAll) {
                     SimpleFileExtractor extractor = new SimpleFileExtractor();
-                    extractor.setForceFiles(new File[] { file } );
+                    extractor.setForceFiles(new File[] { file });
                     importTools.add(extractor);
                 }
                 else {
-                    int a = WandoraOptionPane.showConfirmDialog(wandora, 
-                        "Extract the dropped file with Simple File Extractor?",
-                        "Extract instead of import?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
-                    if(a == WandoraOptionPane.YES_OPTION || a == WandoraOptionPane.YES_TO_ALL_OPTION) {
+                    int a = WandoraOptionPane.showConfirmDialog(wandora,
+                            "Extract the dropped file with Simple File Extractor?",
+                            "Extract instead of import?", WandoraOptionPane.YES_TO_ALL_NO_CANCEL_OPTION);
+                    if (a == WandoraOptionPane.YES_OPTION || a == WandoraOptionPane.YES_TO_ALL_OPTION) {
                         SimpleFileExtractor extractor = new SimpleFileExtractor();
-                        extractor.setForceFiles(new File[] { file } );
+                        extractor.setForceFiles(new File[] { file });
                         importTools.add(extractor);
                     }
-                    if(a == WandoraOptionPane.YES_TO_ALL_OPTION) {
+                    if (a == WandoraOptionPane.YES_TO_ALL_OPTION) {
                         yesToAll = true;
                     }
-                    if(a == WandoraOptionPane.CANCEL_OPTION || a == WandoraOptionPane.CLOSED_OPTION) {
+                    if (a == WandoraOptionPane.CANCEL_OPTION || a == WandoraOptionPane.CLOSED_OPTION) {
                         return;
                     }
-                }               
+                }
             }
         }
         ActionEvent fakeEvent = new ActionEvent(wandora, 0, "merge");
@@ -1163,43 +1180,43 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
         chainExecuter.execute(wandora, fakeEvent);
     }
 
-    
+
     @Override
     public void drop(java.awt.dnd.DropTargetDropEvent e) {
 
         try {
             final Image image = DnDBox.acceptImage(e);
-            if(image != null) {
+            if (image != null) {
                 Thread dropThread = new Thread() {
                     public void run() {
                         try {
                             processImage(image);
                         }
-                        catch(Exception e) {
-                        	logger.error(e);
+                        catch (Exception e) {
+                            logger.error(e);
                         }
-                        catch(Error err) {
-                        	logger.error(err);
+                        catch (Error err) {
+                            logger.error(err);
                         }
                     }
                 };
-                dropThread.start(); 
+                dropThread.start();
             }
 
             else {
                 final java.util.List<File> files = DnDBox.acceptFileList(e);
-                if(files != null) {
-                    if(!files.isEmpty()) {
+                if (files != null) {
+                    if (!files.isEmpty()) {
                         Thread dropThread = new Thread() {
                             public void run() {
                                 try {
                                     processFileList(files);
                                 }
-                                catch(Exception e) {
-                                	logger.error(e);
+                                catch (Exception e) {
+                                    logger.error(e);
                                 }
-                                catch(Error err) {
-                                	logger.error(err);
+                                catch (Error err) {
+                                    logger.error(err);
                                 }
                             }
                         };
@@ -1212,48 +1229,50 @@ public class DockingFramePanel extends JPanel implements TopicPanel, ActionListe
                 }
             }
         }
-        catch(Exception ex){
-        	logger.error(ex);
+        catch (Exception ex) {
+            logger.error(ex);
         }
-        catch(Error err) {
-        	logger.error(err);
+        catch (Error err) {
+            logger.error(err);
         }
 
         this.setBorder(null);
     }
-    
+
+
     @Override
     public void dropActionChanged(java.awt.dnd.DropTargetDragEvent dropTargetDragEvent) {
     }
 
+
     @Override
     public void dragGestureRecognized(java.awt.dnd.DragGestureEvent dragGestureEvent) {
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     protected TopicPanel getDefaultPanel() {
         try {
             Options options = wandora.getOptions();
             String defaultPanelClassName = options.get("gui.topicPanels.defaultPanel");
-            if(defaultPanelClassName != null) {
+            if (defaultPanelClassName != null) {
                 Class<?> topicPanelClass = Class.forName(defaultPanelClassName);
-                if(TopicPanel.class.isAssignableFrom(topicPanelClass) &&
+                if (TopicPanel.class.isAssignableFrom(topicPanelClass) &&
                         !Modifier.isAbstract(topicPanelClass.getModifiers()) &&
-                        !Modifier.isInterface(topicPanelClass.getModifiers()) ){
+                        !Modifier.isInterface(topicPanelClass.getModifiers())) {
                     return (TopicPanel) topicPanelClass.getDeclaredConstructor().newInstance();
                 }
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
-        
+
         // Backup plan if default panel fails.
         return new TraditionalTopicPanel();
     }
-    
+
 }

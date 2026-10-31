@@ -54,7 +54,7 @@ public class TopicLinkBasename extends SimpleLabel {
 
 
 
-    /** Creates a new instance of TopicLink */
+    /** Creates a new instance of TopicLinkBasename */
     public TopicLinkBasename(Topic t, Wandora wandora) {
         super();
         try {

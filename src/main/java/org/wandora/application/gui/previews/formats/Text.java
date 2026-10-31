@@ -55,31 +55,32 @@ public class Text implements ActionListener, PreviewPanel {
     String locator = null;
     JPanel ui = null;
     JEditorPane textPane = null;
-    
-    
+
+
     public Text(String locator) {
         this.locator = locator;
     }
-    
-    
+
+
 
     @Override
     public void finish() {
 
     }
 
+
     @Override
     public void stop() {
 
     }
-    
-    
+
+
     @Override
     public boolean isHeavy() {
         return false;
     }
-    
-    
+
+
     protected JComponent getTextComponent(String locator) throws Exception {
         JTextPane textComponent = new JTextPane();
         textComponent.setText(getContent(locator));
@@ -88,27 +89,27 @@ public class Text implements ActionListener, PreviewPanel {
         textComponent.setCaretPosition(0);
         return textComponent;
     }
-    
-    
-    
+
+
+
     @Override
     public JPanel getGui() {
-        if(ui == null) {
+        if (ui == null) {
             ui = new JPanel();
-            ui.setLayout(new BorderLayout(8,8));
-            
+            ui.setLayout(new BorderLayout(8, 8));
+
             JPanel textPaneWrapper = new JPanel();
             textPaneWrapper.setLayout(new BorderLayout());
-        
+
             textPaneWrapper.setPreferredSize(new Dimension(640, 400));
             textPaneWrapper.setMaximumSize(new Dimension(640, 400));
             textPaneWrapper.setSize(new Dimension(640, 400));
-            
+
             try {
                 textPane = (JEditorPane) getTextComponent(locator);
                 JScrollPane scrollPane = new SimpleScrollPane(textPane);
                 TextLineNumber tln = new TextLineNumber(textPane);
-                scrollPane.setRowHeaderView( tln );
+                scrollPane.setRowHeaderView(tln);
                 textPaneWrapper.add(scrollPane);
 
                 JPanel toolbarWrapper = new JPanel();
@@ -117,25 +118,25 @@ public class Text implements ActionListener, PreviewPanel {
                 ui.add(textPaneWrapper, BorderLayout.CENTER);
                 ui.add(toolbarWrapper, BorderLayout.SOUTH);
             }
-            catch(FileNotFoundException fnfe) {
+            catch (FileNotFoundException fnfe) {
                 PreviewUtils.previewError(ui, "Can't find locator resource.", fnfe);
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 PreviewUtils.previewError(ui, "Can't initialize text viewer. Exception occurred.", e);
             }
 
         }
         return ui;
     }
-    
-    
-    
+
+
+
     protected String getContent(String locator) throws Exception {
         try {
-            if(locator.startsWith("file:")) {
+            if (locator.startsWith("file:")) {
                 return IObox.loadFile(Path.of(new URI(locator)).toFile());
             }
-            else if(DataURL.isDataURL(locator)) {
+            else if (DataURL.isDataURL(locator)) {
                 DataURL dataUrl = new DataURL(locator);
                 byte[] dataBytes = dataUrl.getData();
                 String dataString = new String(dataBytes);
@@ -145,96 +146,97 @@ public class Text implements ActionListener, PreviewPanel {
                 return IObox.doUrl(new URI(locator).toURL());
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             // PreviewUtils.previewError(ui, "Unable to read locator content.", e);
             throw e;
         }
     }
-    
-    
-    
+
+
+
     protected JComponent getJToolBar() {
         return UIBox.makeButtonContainer(new Object[] {
-            "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
-            "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
-            "Save", PreviewUtils.ICON_SAVE, this,
+                "Open ext", PreviewUtils.ICON_OPEN_EXT, this,
+                "Copy location", PreviewUtils.ICON_COPY_LOCATION, this,
+                "Save", PreviewUtils.ICON_SAVE, this,
         }, this);
     }
-    
-    
-    
+
+
+
     @Override
     public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
         String c = actionEvent.getActionCommand();
-        if(c == null) return;
-        
-        
-        if(c.startsWith("Open ext")) {
+        if (c == null)
+            return;
+
+
+        if (c.startsWith("Open ext")) {
             PreviewUtils.forkExternalPlayer(locator);
         }
-        else if(c.equalsIgnoreCase("Copy location")) {
-            if(locator != null) {
+        else if (c.equalsIgnoreCase("Copy location")) {
+            if (locator != null) {
                 ClipboardBox.setClipboard(locator);
             }
         }
-        else if(c.startsWith("Save")) {
+        else if (c.startsWith("Save")) {
             PreviewUtils.saveToFile(locator);
         }
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
+
+
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { 
-                    "text",
-                    "application/x-sh"
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "text",
+                        "application/x-sh"
                 },
-                new String[] { 
-                    "txt", 
-                    "text",
-                    
-                    "asm",
-                    "asp",
-                    "bat",
-                    "c",
-                    "c++",
-                    "cc",
-                    "com",
-                    "conf",
-                    "cpp",
-                    "csh",
-                    "ccs",
-                    "cxx",
-                    "def",
-                    "g",
-                    "h",
-                    "hh",
-                    "idc",
-                    "jav",
-                    "java",
-                    "js",
-                    "ksh",
-                    "list",
-                    "log",
-                    "lst",
-                    "m",
-                    "mar",
-                    "p",
-                    "pas",
-                    "pl",
-                    "py",
-                    "r",
-                    "sdml",
-                    "sgml",
-                    "sh",
-                    "sketch",
-                    "uri",
-                    "uni",
-                    "unis",
-                    "zhs"
-                }
-        );
+                new String[] {
+                        "txt",
+                        "text",
+
+                        "asm",
+                        "asp",
+                        "bat",
+                        "c",
+                        "c++",
+                        "cc",
+                        "com",
+                        "conf",
+                        "cpp",
+                        "csh",
+                        "ccs",
+                        "cxx",
+                        "def",
+                        "g",
+                        "h",
+                        "hh",
+                        "idc",
+                        "jav",
+                        "java",
+                        "js",
+                        "ksh",
+                        "list",
+                        "log",
+                        "lst",
+                        "m",
+                        "mar",
+                        "p",
+                        "pas",
+                        "pl",
+                        "py",
+                        "r",
+                        "sdml",
+                        "sgml",
+                        "sh",
+                        "sketch",
+                        "uri",
+                        "uni",
+                        "unis",
+                        "zhs"
+                });
     }
 }

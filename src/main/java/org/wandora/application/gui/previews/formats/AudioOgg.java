@@ -32,27 +32,26 @@ import org.wandora.application.gui.previews.PreviewUtils;
  * @author akivela
  */
 public class AudioOgg extends AudioAbstract {
-    
-    
+
+
     public AudioOgg(String locator) {
         super(locator);
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
+
 
     public static boolean canView(String url) {
-        return PreviewUtils.isOfType(url, 
-                new String[] { 
-                    "audio/ogg",
-                    "application/ogg",
-                }, 
-                new String[] { 
-                    "ogg",
-                    "ogx"
-                }
-        );
+        return PreviewUtils.isOfType(url,
+                new String[] {
+                        "audio/ogg",
+                        "application/ogg",
+                },
+                new String[] {
+                        "ogg",
+                        "ogx"
+                });
     }
 }

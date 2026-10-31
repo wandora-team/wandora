@@ -63,8 +63,8 @@ import org.wandora.utils.logger.Log4j2Logger;
 public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener, TopicPanel {
     private static final long serialVersionUID = 1L;
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(TreeTopicPanel.class);
-    
-    
+
+
     private String title = "Tree";
     private Options options = null;
     private TopicTreePanel topicTreePanel = null;
@@ -72,10 +72,9 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
     private Set<String> selectedRelations = null;
     private TopicTreeRelation[] allRelations = null;
     private Topic openedTopic = null;
-    
-    
-    
-    
+
+
+
     /**
      * Creates new form TreeTopicPanel
      */
@@ -84,31 +83,30 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
         this.options = wandora.getOptions();
         initComponents();
     }
-    
-    
-    
+
+
+
     @Override
     public void init() {
         try {
             allRelations = TopicTreeRelationsEditor.readRelationTypes();
             selectedRelations = new HashSet<>();
-            for(TopicTreeRelation allRelation : allRelations) {
+            for (TopicTreeRelation allRelation : allRelations) {
                 selectedRelations.add(allRelation.name);
             }
-            
+
             treeContainerPanel.removeAll();
             Wandora wandora = Wandora.getWandora();
             topicTreePanel = new TopicTreePanel(rootSubject, wandora, selectedRelations, allRelations);
             treeContainerPanel.add(topicTreePanel, BorderLayout.CENTER);
             revalidate();
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
-    
-    
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -138,249 +136,275 @@ public class TreeTopicPanel extends javax.swing.JPanel implements ActionListener
 
 
 
-    
     @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
-        if(cmd != null) {
-            if("Set root topic...".equalsIgnoreCase(cmd)) {
+        if (cmd != null) {
+            if ("Set root topic...".equalsIgnoreCase(cmd)) {
                 try {
                     Wandora wandora = Wandora.getWandora();
-                    Topic t = wandora.showTopicFinder();                
-                    if(t != null) {
+                    Topic t = wandora.showTopicFinder();
+                    if (t != null) {
                         setRootTopic(t);
                     }
                 }
-                catch(Exception ex) {
-                	logger.error(ex);
+                catch (Exception ex) {
+                    logger.error(ex);
                 }
             }
-            else if("Configure...".equalsIgnoreCase(cmd)) {
+            else if ("Configure...".equalsIgnoreCase(cmd)) {
                 configure();
             }
             else {
-                logger.warn("Unprosessed action captured '"+cmd+"' in TreeTopicPanel.");
+                logger.warn("Unprosessed action captured '" + cmd + "' in TreeTopicPanel.");
             }
         }
     }
 
-    
+
     public void configure() {
         try {
             Wandora wandora = Wandora.getWandora();
-            JDialog jd=new JDialog(wandora, true);
+            JDialog jd = new JDialog(wandora, true);
             jd.setTitle("Configure topic tree");
             allRelations = TopicTreeRelationsEditor.readRelationTypes();
 
-            TopicTreeConfigPanel configurationPanel = new TopicTreeConfigPanel(allRelations, selectedRelations, rootSubject, getTitle(), jd, wandora);
+            TopicTreeConfigPanel configurationPanel = new TopicTreeConfigPanel(allRelations, selectedRelations,
+                    rootSubject, getTitle(), jd, wandora);
             jd.add(configurationPanel);
-            jd.setSize(500,400);
+            jd.setSize(500, 400);
             wandora.centerWindow(jd);
 
             jd.setVisible(true);
-            
-            if(configurationPanel.wasCancelled()) return;
+
+            if (configurationPanel.wasCancelled())
+                return;
 
             title = configurationPanel.getTreeName();
             rootSubject = configurationPanel.getRoot();
             selectedRelations = configurationPanel.getSelectedRelations();
             allRelations = TopicTreeRelationsEditor.readRelationTypes(); // Important, may have been altered by the configurationPanel. 
-            
+
             topicTreePanel.setModel(rootSubject, selectedRelations, allRelations);
-            
+
             topicTreePanel.refresh();
             revalidate();
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
-    
-    
-    
+
+
+
     @Override
     public boolean supportsOpenTopic() {
         return false;
     }
-    
-    
+
+
     @Override
     public void open(Topic topic) throws TopicMapException, OpenTopicNotSupportedException {
         // Notice, this TopicPanel doesn't support open topic.
         openedTopic = topic;
     }
 
-    
-    
+
+
     @Override
     public void stop() {
         treeContainerPanel.removeAll();
         topicTreePanel = null;
     }
 
-    
-    
+
+
     @Override
     public void refresh() throws TopicMapException {
-        if(topicTreePanel != null) {
+        if (topicTreePanel != null) {
             topicTreePanel.refresh();
             topicTreePanel.repaint();
         }
         revalidate();
     }
 
-    
-    
+
+
     @Override
     public boolean applyChanges() throws CancelledException, TopicMapException {
         return true;
     }
+
 
     @Override
     public JPanel getGui() {
         return this;
     }
 
+
     @Override
     public Topic getTopic() throws TopicMapException {
-        if(topicTreePanel != null) {
+        if (topicTreePanel != null) {
             TopicTree tree = topicTreePanel.getTopicTree();
-            if(tree != null && !tree.isBroken()) {
+            if (tree != null && !tree.isBroken()) {
                 Topic t = tree.getSelection();
                 return t;
             }
         }
         return openedTopic;
     }
-    
+
+
     @Override
-    public String getName(){
+    public String getName() {
         return title;
     }
-    
+
+
     @Override
     public String getTitle() {
         return title;
     }
+
 
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/topic_panel_tree.png");
     }
 
+
     @Override
-    public boolean noScroll(){
+    public boolean noScroll() {
         return false;
     }
-    
+
+
     @Override
     public int getOrder() {
         return 30;
     }
 
+
     @Override
     public Object[] getViewMenuStruct() {
         return new Object[] {
-            // If you change these, update method actionPerformed too
-            "Set root topic...", this /* as an ActionListener */,
-            "Configure...", this /* as an ActionListener */,
+                // If you change these, update method actionPerformed too
+                "Set root topic...", this /* as an ActionListener */,
+                "Configure...", this /* as an ActionListener */,
         };
     }
+
 
     @Override
     public JMenu getViewMenu() {
         return UIBox.makeMenu(getViewMenuStruct(), this);
     }
 
+
     @Override
     public JPopupMenu getViewPopupMenu() {
         return UIBox.makePopupMenu(getViewMenuStruct(), this);
     }
+
 
     @Override
     public LocatorHistory getTopicHistory() {
         return null;
     }
 
+
     public void setRootTopic(Topic newRoot) {
         try {
-            if(newRoot != null && !newRoot.isRemoved()) {
+            if (newRoot != null && !newRoot.isRemoved()) {
                 rootSubject = newRoot.getOneSubjectIdentifier().toExternalForm();
                 init();
             }
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
     }
-    
 
-    
+
+
     // ---------------------------------------------------- TopicMapListener ---
-    
-    
+
+
     @Override
-    public void topicSubjectIdentifierChanged(Topic t,Locator added,Locator removed) throws TopicMapException {
-        topicTreePanel.topicSubjectIdentifierChanged(t,added,removed);
+    public void topicSubjectIdentifierChanged(Topic t, Locator added, Locator removed) throws TopicMapException {
+        topicTreePanel.topicSubjectIdentifierChanged(t, added, removed);
     }
-    
+
+
     @Override
-    public void topicBaseNameChanged(Topic t,String newName,String oldName) throws TopicMapException {
-        topicTreePanel.topicBaseNameChanged(t,newName,oldName);
+    public void topicBaseNameChanged(Topic t, String newName, String oldName) throws TopicMapException {
+        topicTreePanel.topicBaseNameChanged(t, newName, oldName);
     }
-    
+
+
     @Override
-    public void topicTypeChanged(Topic t,Topic added,Topic removed) throws TopicMapException {
-        topicTreePanel.topicTypeChanged(t,added,removed);
+    public void topicTypeChanged(Topic t, Topic added, Topic removed) throws TopicMapException {
+        topicTreePanel.topicTypeChanged(t, added, removed);
     }
-    
+
+
     @Override
-    public void topicVariantChanged(Topic t,Collection<Topic> scope,String newName,String oldName) throws TopicMapException {
-        topicTreePanel.topicVariantChanged(t,scope,newName,oldName);
+    public void topicVariantChanged(Topic t, Collection<Topic> scope, String newName, String oldName)
+            throws TopicMapException {
+        topicTreePanel.topicVariantChanged(t, scope, newName, oldName);
     }
-    
+
+
     @Override
-    public void topicDataChanged(Topic t,Topic type,Topic version,String newValue,String oldValue) throws TopicMapException {
-        topicTreePanel.topicDataChanged(t,type,version,newValue,oldValue);
+    public void topicDataChanged(Topic t, Topic type, Topic version, String newValue, String oldValue)
+            throws TopicMapException {
+        topicTreePanel.topicDataChanged(t, type, version, newValue, oldValue);
     }
-    
+
+
     @Override
-    public void topicSubjectLocatorChanged(Topic t,Locator newLocator,Locator oldLocator) throws TopicMapException {
-        topicTreePanel.topicSubjectLocatorChanged(t,newLocator,oldLocator);
+    public void topicSubjectLocatorChanged(Topic t, Locator newLocator, Locator oldLocator) throws TopicMapException {
+        topicTreePanel.topicSubjectLocatorChanged(t, newLocator, oldLocator);
     }
-    
+
+
     @Override
     public void topicRemoved(Topic t) throws TopicMapException {
         topicTreePanel.topicRemoved(t);
     }
-    
+
+
     @Override
     public void topicChanged(Topic t) throws TopicMapException {
         topicTreePanel.topicChanged(t);
     }
-    
+
+
     @Override
-    public void associationTypeChanged(Association a,Topic newType,Topic oldType) throws TopicMapException {
-        topicTreePanel.associationTypeChanged(a,newType,oldType);
+    public void associationTypeChanged(Association a, Topic newType, Topic oldType) throws TopicMapException {
+        topicTreePanel.associationTypeChanged(a, newType, oldType);
     }
-    
+
+
     @Override
-    public void associationPlayerChanged(Association a,Topic role,Topic newPlayer,Topic oldPlayer) throws TopicMapException {
-        topicTreePanel.associationPlayerChanged(a,role,newPlayer,oldPlayer);
+    public void associationPlayerChanged(Association a, Topic role, Topic newPlayer, Topic oldPlayer)
+            throws TopicMapException {
+        topicTreePanel.associationPlayerChanged(a, role, newPlayer, oldPlayer);
     }
-    
+
+
     @Override
     public void associationRemoved(Association a) throws TopicMapException {
         topicTreePanel.associationRemoved(a);
     }
-    
+
+
     @Override
     public void associationChanged(Association a) throws TopicMapException {
         topicTreePanel.associationChanged(a);
     }
-    
-    
+
+
 
     // --------------------------------------------------- /TopicMapListener ---
 

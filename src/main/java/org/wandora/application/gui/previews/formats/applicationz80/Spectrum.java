@@ -43,13 +43,16 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         audio.open(3500000);
     }
 
+
     public void run() {
         try {
             frames();
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e) {
         }
         audio.close();
     }
+
 
     private void end_frame() {
         refresh_screen();
@@ -127,11 +130,13 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                 int t = cpu.time = cpu.time_limit;
                 audio.step(t - au_time, 0);
                 au_time = t;
-            } else {
+            }
+            else {
                 if (loading) {
                     loading = do_load(tap, tend);
                     cpu.time = cpu.time_limit;
-                } else {
+                }
+                else {
                     cpu.interrupt(0xFF);
                     cpu.execute();
                 }
@@ -152,14 +157,16 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
             if (t < time) {
                 t = time - t;
                 sleep(t);
-            } else {
+            }
+            else {
                 // yield();
                 t -= 100;
                 if (t > time) {
                     time = t;
                 }
             }
-        } while (!interrupted());
+        }
+        while (!interrupted());
     }
 
     boolean paused = true;
@@ -169,10 +176,12 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         if ((want_pause = want_pause & ~m >> 3 ^ m & 7) != 0 && !paused) {
             do {
                 wait();
-            } while (!paused);
+            }
+            while (!paused);
         }
         return want_pause;
     }
+
 
     public synchronized void reset() {
         stop_loading();
@@ -180,6 +189,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         au_reset();
         rom = rom48k;
     }
+
 
     /* Z80.Env */
     public final int m1(int addr, int ir) {
@@ -205,7 +215,8 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                 if (rom == rom48k) {
                     rom = if1rom;
                 }
-            } else if (addr == 0x0700) {
+            }
+            else if (addr == 0x0700) {
                 if (rom == if1rom) {
                     rom = rom48k;
                 }
@@ -213,6 +224,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         }
         return n;
     }
+
 
     public final int mem(int addr) {
         int n = cpu.time - ctime;
@@ -231,6 +243,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         }
         return rom[addr + 0x4000];
     }
+
 
     public final int mem16(int addr) {
         int n = cpu.time - ctime;
@@ -265,6 +278,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         }
     }
 
+
     public final void mem(int addr, int v) {
         int n = cpu.time - ctime;
         if (n > 0) {
@@ -288,6 +302,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         }
         ram[addr] = v;
     }
+
 
     public final void mem16(int addr, int v) {
 
@@ -336,7 +351,8 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         if ((port & 0x8002) == 0x8000 && ay_enabled) {
             if ((port & 0x4000) != 0) {
                 ay_idx = (byte) (v & 15);
-            } else {
+            }
+            else {
                 au_update();
                 ay_write(ay_idx, v);
             }
@@ -365,7 +381,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                 }
             }
             int e = 0;
-			// Apply tape noise only when SPK==0 and MIC==1.
+            // Apply tape noise only when SPK==0 and MIC==1.
             // thanks Jose Luis for bug report
             if ((ula28 & 0x18) == 8) {
                 e = ear - 0x100000;
@@ -375,7 +391,8 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                 ear = e;
             }
             v &= ula28 << 2 | e | 0xBF;
-        } else if (cpu.time >= 0) {
+        }
+        else if (cpu.time >= 0) {
             int t = cpu.time;
             int y = t / 224;
             t %= 224;
@@ -383,7 +400,8 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                 int x = t >> 1 & 1 | t >> 2;
                 if ((t & 1) == 0) {
                     x += y & 0x1800 | y << 2 & 0xE0 | y << 8 & 0x700;
-                } else {
+                }
+                else {
                     x += 6144 | y << 2 & 0x3E0;
                 }
                 v = ram[x];
@@ -392,12 +410,13 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         return v;
     }
 
+
     public int halt(int n, int ir) {
         return n;
     }
 
     /* contention */
-	// according to scratchpad.wikia.com/wiki/Contended_memory
+    // according to scratchpad.wikia.com/wiki/Contended_memory
     static final int NOCONT = 99999;
     int ctime;
 
@@ -413,6 +432,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
             cpu.time += 6 - (t & 7);
         }
     }
+
 
     private final void cont(int n) {
         int s, k;
@@ -432,7 +452,8 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
             }
             t = 6;
             k = 15;
-        } else {
+        }
+        else {
             k = s >>> 3;
             s &= 7;
             if (s == 7) {
@@ -450,6 +471,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         cpu.time += t + 6 * n;
     }
 
+
     private void cont_port(int port) {
         int n = cpu.time - ctime;
         if (n > 0) {
@@ -461,7 +483,8 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                 cont1(1);
             }
             ctime = NOCONT;
-        } else {
+        }
+        else {
             ctime = cpu.time;
             cont(2 + ((port & 1) << 1));
             ctime = cpu.time + 4;
@@ -469,12 +492,10 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
     }
 
     /* ImageProducer */
-    static final String pal1
-            = "\0\0\0\25\25\311\312\41\41\313\46\313\54\313\54\57\314\314\315\315\65\315\315\315"
+    static final String pal1 = "\0\0\0\25\25\311\312\41\41\313\46\313\54\313\54\57\314\314\315\315\65\315\315\315"
             + "\0\0\0\33\33\373\374\51\51\374\57\374\67\375\67\73\376\376\377\377\101\377\377\377";
 
-    static final String pal2
-            = "\1\1\1\27\27\320\321\43\43\322\50\322\56\323\56\62\323\323\324\324\67\324\324\324"
+    static final String pal2 = "\1\1\1\27\27\320\321\43\43\322\50\322\56\323\56\62\323\323\324\324\67\324\324\324"
             + "\1\1\1\34\34\377\377\53\53\377\61\377\71\377\71\76\377\377\377\377\104\377\377\377"
             + "\0\0\0\24\24\302\303\37\37\303\43\303\51\304\51\55\305\305\305\305\62\306\306\306"
             + "\0\0\0\31\31\364\367\46\46\370\54\370\64\372\64\70\373\373\375\375\76\376\376\376";
@@ -507,27 +528,33 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                 ic.setColorModel(cm);
             }
             force_refresh();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             if (isConsumer(ic)) {
                 ic.imageComplete(ImageConsumer.IMAGEERROR);
             }
         }
     }
 
+
     public boolean isConsumer(ImageConsumer ic) {
         return consumers.contains(ic);
     }
+
 
     public synchronized void removeConsumer(ImageConsumer ic) {
         consumers.removeElement(ic);
     }
 
+
     public void startProduction(ImageConsumer ic) {
         addConsumer(ic);
     }
 
+
     public void requestTopDownLeftRightResend(ImageConsumer ic) {
     }
+
 
     private void abort_consumers() {
         for (;;) {
@@ -557,15 +584,18 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                 while (scale != m) {
                     wait();
                 }
-            } catch (InterruptedException e) {
+            }
+            catch (InterruptedException e) {
                 currentThread().interrupt();
             }
         }
     }
 
+
     public int scale() {
         return scale;
     }
+
 
     private void force_refresh() {
         bordchg = (1L << Mv + 24 + Mv) - 1;
@@ -574,13 +604,13 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         }
     }
 
-    final int screen[] = new int[W / 8 * H];	// canonicalized scr. content
+    final int screen[] = new int[W / 8 * H]; // canonicalized scr. content
     int flash_count = 16;
     int flash = 0x8000;
 
     /* screen refresh */
     private static final int REFRESH_END = 99999;
-    final int scrchg[] = new int[24];	// where the picture changed
+    final int scrchg[] = new int[24]; // where the picture changed
     private int refrs_t, refrs_a, refrs_b, refrs_s;
 
     private final void refresh_new() {
@@ -592,6 +622,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         refrb_y = -8 * Mv;
         refrb_t = BORDER_START;
     }
+
 
     private final void refresh_screen() {
         int ft = cpu.time;
@@ -654,7 +685,8 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                 t = REFRESH_END;
                 break;
             }
-        } while (ft >= t);
+        }
+        while (ft >= t);
         refrs_a = a;
         refrs_b = b;
         refrs_t = t;
@@ -669,7 +701,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
     private final void refresh_border() {
         int ft = cpu.time;
         int t = refrb_t;
-//		if(t == BORDER_END) XXX only if within screen
+        //		if(t == BORDER_END) XXX only if within screen
         if (ft < t) {
             return;
         }
@@ -711,7 +743,8 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                 chg = false;
             }
             m <<= 1;
-        } while (t <= ft);
+        }
+        while (t <= ft);
 
         if (chg) {
             bordchg |= m;
@@ -721,6 +754,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         refrb_y = y;
         refrb_t = t;
     }
+
 
     /* image */
     private final void update_box(ImageConsumer ic,
@@ -742,12 +776,14 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                     m &= 0xFF;
                     do {
                         buf[p++] = (m & 1) == 0 ? c0 : c1;
-                    } while ((m >>>= 1) != 0);
+                    }
+                    while ((m >>>= 1) != 0);
                 }
                 si += (W / 8) - w;
             }
             h = 8;
-        } else {
+        }
+        else {
             h = scale << 3;
             s = w * h;
             for (int n = 0; n < 8; n++) {
@@ -757,10 +793,10 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                     byte c1 = (byte) (m >>> 12);
                     m &= 0xFF;
                     do {
-                        buf[p + s] = buf[p + s + 1] = (byte) ((buf[p] = buf[p + 1]
-                                = (m & 1) == 0 ? c0 : c1) + 16);
+                        buf[p + s] = buf[p + s + 1] = (byte) ((buf[p] = buf[p + 1] = (m & 1) == 0 ? c0 : c1) + 16);
                         p += 2;
-                    } while ((m >>>= 1) != 0);
+                    }
+                    while ((m >>>= 1) != 0);
                 }
                 p += s;
                 si += (W / 8) - w;
@@ -798,11 +834,11 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         }
     }
 
+
     private void send_change() {
         int y1, y2, s;
         long vv;
-        loop:
-        for (int i = 0;;) {
+        loop: for (int i = 0;;) {
             s = scrchg[i];
             if (s != 0) {
                 y1 = i;
@@ -812,7 +848,8 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                         if (++i == 24) {
                             break loop;
                         }
-                    } while (scrchg[i] == 0);
+                    }
+                    while (scrchg[i] == 0);
                     s |= scrchg[i];
                 }
             }
@@ -845,7 +882,8 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
             }
             x = 0;
             w = Mh + 32 + Mh;
-        } else {
+        }
+        else {
             x = max_bit(s ^ s - 1) + Mh;
             w = max_bit(s) + (Mh + 1) - x;
         }
@@ -853,10 +891,12 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         qaop.new_pixels(x * sc8, y1 * sc8, w * sc8, (y2 - y1 + 1) * sc8);
     }
 
+
     static final int max_bit(long vv) {
         int v = (int) (vv >>> 32);
         return (v != 0 ? 32 : 0) + max_bit(v != 0 ? v : (int) vv);
     }
+
 
     static final int max_bit(int v) {
         int b = 0;
@@ -897,16 +937,16 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                     xm = xm >>> 1 & 0x55 | xm << 1 & 0xAA;
                     canonic[a | m] = i << 4 | p | xm;
                     canonic[a | m ^ 0xFF] = p << 4 | i | xm;
-                } else {
-                    canonic[a | m] = canonic[a | m ^ 0xFF]
-                            = p << 4 | 0xFF;
+                }
+                else {
+                    canonic[a | m] = canonic[a | m ^ 0xFF] = p << 4 | 0xFF;
                 }
             }
         }
     }
 
-    byte border = (byte) 7;		// border color
-    byte border_solid = -1;		// nonnegative: solid border color
+    byte border = (byte) 7; // border color
+    byte border_solid = -1; // nonnegative: solid border color
 
     /* audio */
     static final int CHANNEL_VOLUME = 26000;
@@ -968,14 +1008,16 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
             case 9:
             case 10:
                 int a = v &= 31,
-                 x = 011 << (n - 8);
+                        x = 011 << (n - 8);
                 if (v == 0) {
                     ay_dis |= x;
                     ay_ech &= ~x;
-                } else if (v < 16) {
+                }
+                else if (v < 16) {
                     ay_dis &= (x = ~x);
                     ay_ech &= x;
-                } else {
+                }
+                else {
                     ay_dis &= ~x;
                     ay_ech |= x;
                     a = ay_estep ^ ay_eattack;
@@ -1007,6 +1049,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         ay_reg[n] = (byte) v;
     }
 
+
     private void ay_eshape(int v) {
         if (v < 8) {
             v = v < 4 ? 1 : 7;
@@ -1021,6 +1064,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         ay_echanged();
     }
 
+
     private void ay_echanged() {
         int v = ay_volt[ay_estep ^ ay_eattack];
         int x = ay_ech;
@@ -1034,6 +1078,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
             ay_cvol = v;
         }
     }
+
 
     private int ay_tick() {
         int x = 0;
@@ -1083,6 +1128,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         return x & ay_mix;
     }
 
+
     private int au_value() {
         int g = ay_mix & ay_gen;
         int v = speaker;
@@ -1128,6 +1174,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         audio.step(t, 0);
     }
 
+
     void au_reset() {
         /* XXX */
         speaker = 0;
@@ -1145,16 +1192,19 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         setvol();
     }
 
+
     int volume(int v) {
         if (v < 0) {
             v = 0;
-        } else if (v > 100) {
+        }
+        else if (v > 100) {
             v = 100;
         }
         volume = v;
         setvol();
         return v;
     }
+
 
     int volumeChg(int chg) {
         return volume(volume + chg);
@@ -1178,14 +1228,15 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         ay_volt[n = 15] = (int) a;
         do {
             ay_volt[--n] = (int) (a *= 0.7071);
-        } while (n > 1);
+        }
+        while (n > 1);
     }
 
     /* keyboard & joystick */
     public final int keyboard[] = new int[8];
     public int kempston = 0;
     public final KeyEvent keys[] = new KeyEvent[8];
-    static final int arrowsDefault[] = {0143, 0124, 0134, 0144};
+    static final int arrowsDefault[] = { 0143, 0124, 0134, 0144 };
     int arrows[] = arrowsDefault;
 
     void update_keyboard() {
@@ -1194,7 +1245,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         }
         kempston = 0;
 
-        int m[] = new int[]{-1, -1, -1, -1, -1};
+        int m[] = new int[] { -1, -1, -1, -1, -1 };
         int s = 0;
         synchronized (keys) {
             for (int i = 0; i < keys.length; i++) {
@@ -1203,7 +1254,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
                     if (k < 0) {
                         continue;
                     }
-				// .......xxx row
+                    // .......xxx row
                     // ....xxx... column
                     // ...x...... caps shift
                     // ..x....... symbol shift
@@ -1227,6 +1278,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         }
     }
 
+
     private final void pressed(int k, int m[]) {
         int a = k & 7, b = k >>> 3 & 7;
         int v = keyboard[a] & ~(1 << b);
@@ -1243,13 +1295,13 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         }
     }
 
+
     private int key(KeyEvent e) {
         int c = e.getKeyCode();
         int a = e.getKeyChar();
         int i = "[AQ10P\n ZSW29OL]XDE38IKMCFR47UJNVGT56YHB".indexOf((char) c);
         if (i >= 0) {
-            simple:
-            {
+            simple: {
                 int s = 0;
                 if (c >= KeyEvent.VK_0 && c <= KeyEvent.VK_9) {
                     if (c != (int) a) {
@@ -1304,6 +1356,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         return e.isAltDown() ? arrowsDefault[i] : arrows[i];
     }
 
+
     public void setArrows(String s) {
         arrows = new int[4];
         for (int i = 0; i < 4; i++) {
@@ -1318,6 +1371,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
             arrows[i] = c;
         }
     }
+
 
     /* tape */
     private boolean check_load() {
@@ -1361,10 +1415,12 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
             while (loading) {
                 wait();
             }
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e) {
             currentThread().interrupt();
         }
     }
+
 
     public synchronized void tape(byte[] tape, boolean end) {
         if (tape == null) {
@@ -1373,6 +1429,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         tape_ready = end;
         this.tape = tape;
     }
+
 
     private final boolean do_load(byte[] tape, boolean ready) {
         if (tape_changed || (keyboard[7] & 1) == 0) {
@@ -1436,7 +1493,8 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
             }
             if ((f & Z80.FC) != 0) {
                 mem(ix, l);
-            } else {
+            }
+            else {
                 a = mem(ix) ^ l;
                 if (a != 0) {
                     rf = 0;
@@ -1460,6 +1518,7 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         return rf < 0;
     }
 
+
     /* LOAD "" */
     public final void basic_exec(String cmd) {
         rom = rom48k;
@@ -1468,13 +1527,16 @@ public class Spectrum extends Thread implements Z80.Env, ImageProducer {
         int p = 16384;
         do {
             mem(p++, 0);
-        } while (p < 22528);
+        }
+        while (p < 22528);
         do {
             mem(p++, 070);
-        } while (p < 23296);
+        }
+        while (p < 23296);
         do {
             mem(p++, 0);
-        } while (p < 65536);
+        }
+        while (p < 65536);
         mem16(23732, --p); // P-RAMT
         p -= 0xA7;
         System.arraycopy(rom48k, 0x3E08, ram, p - 16384, 0xA8);

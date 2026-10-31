@@ -83,98 +83,107 @@ import org.wandora.utils.logger.Log4j2Logger;
  */
 public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements ActionListener, TopicPanel {
     private static final long serialVersionUID = 1L;
-    
+
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(CustomTopicPanel.class);
 
     public static boolean USE_GLOBAL_OPTIONS = true;
-    
+
     private boolean viewSubjectLocatorResources = false;
-    
+
     protected Topic topic;
     protected String topicSI;
-    
+
     protected Wandora wandora;
     protected String originalBN;
     protected String originalSL;
     protected Options options;
     protected Options globalOptions;
-    
+
     protected SimplePanel customPanel;
-    
+
     protected List<QueryGroupInfo> queryGroups;
 
     private String OPTIONS_PREFIX = "gui.customTopicPanel.";
     private String OPTIONS_VIEW_PREFIX = OPTIONS_PREFIX + "view.";
-    
-    
-    
-    
+
+
+
     /** Creates new form CustomTopicPanel */
     public CustomTopicPanel() {
     }
 
-    
+
     @Override
     public void init() {
     }
-    
-    
+
+
     @Override
     public Topic getTopic() throws TopicMapException {
         return topic;
     }
+
 
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/topic_panel_custom.png");
     }
 
+
     @Override
     public String getName() {
         return "Custom";
     }
-    
+
+
     @Override
     public String getTitle() {
-        if(topic != null) return TopicToString.toString(topic);
-        else return "";
+        if (topic != null)
+            return TopicToString.toString(topic);
+        else
+            return "";
     }
-    
+
+
     @Override
     public int getOrder() {
         return 20;
     }
-    
+
+
     @Override
     public JPanel getGui() {
         return this;
     }
+
 
     @Override
     public boolean applyChanges() throws CancelledException, TopicMapException {
         return false;
     }
 
+
     public JMenu getViewMenu(JMenu baseMenu) {
         UIBox.attachMenu(baseMenu, new Object[] { "---" }, this);
         UIBox.attachMenu(baseMenu, getViewMenuStruct(), this);
         return baseMenu;
     }
-    
-    
-    
+
+
+
     @Override
     public JPopupMenu getViewPopupMenu() {
         return UIBox.makePopupMenu(getViewMenuStruct(), this);
     }
-    
+
+
     @Override
     public JMenu getViewMenu() {
         return UIBox.makeMenu(getViewMenuStruct(), this);
     }
-    
-    
-    
+
+
+
     @Override
     public Object[] getViewMenuStruct() {
         Icon viewIcon = UIBox.getIcon("gui/icons/view2.png");
@@ -182,360 +191,354 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         Icon configureIcon = UIBox.getIcon("gui/icons/topic_panel_custom_configure.png");
 
         List<Object> menuVector = new ArrayList<>();
-        for(int i=0;i<queryGroups.size();i++){
-            QueryGroupInfo groupInfo=queryGroups.get(i);
+        for (int i = 0; i < queryGroups.size(); i++) {
+            QueryGroupInfo groupInfo = queryGroups.get(i);
             menuVector.add(groupInfo.name);
-            menuVector.add( options.isFalse(getGroupOptionsKey(groupInfo.name)) ? hideIcon : viewIcon );
-            menuVector.add( this );
+            menuVector.add(options.isFalse(getGroupOptionsKey(groupInfo.name)) ? hideIcon : viewIcon);
+            menuVector.add(this);
         }
 
-        menuVector.add( "---" );
+        menuVector.add("---");
         menuVector.add("View subject locator resources");
-        menuVector.add( viewSubjectLocatorResources ? viewIcon : hideIcon );
-        menuVector.add( this );
-        
-        menuVector.add( "---" );
-        menuVector.add( "Configure..." );
-        menuVector.add( configureIcon );
-        menuVector.add( this );
-        
+        menuVector.add(viewSubjectLocatorResources ? viewIcon : hideIcon);
+        menuVector.add(this);
+
+        menuVector.add("---");
+        menuVector.add("Configure...");
+        menuVector.add(configureIcon);
+        menuVector.add(this);
+
         return menuVector.toArray();
     }
-    
-    
-    
+
+
+
     @Override
     public void open(Topic topic) throws TopicMapException {
         try {
             this.topic = topic;
             this.topicSI = topic.getOneSubjectIdentifier().toExternalForm();
         }
-        catch(Exception e) {
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
         }
-        
+
         this.wandora = Wandora.getWandora();
-        if(globalOptions == null) {
+        if (globalOptions == null) {
             globalOptions = wandora.getOptions();
         }
-        if(options == null) {
-            if(USE_GLOBAL_OPTIONS) {
+        if (options == null) {
+            if (USE_GLOBAL_OPTIONS) {
                 options = globalOptions;
             }
             else {
                 options = new Options(globalOptions);
             }
         }
-        
+
         this.removeAll();
         this.setTransferHandler(new TopicPanelTransferHandler());
         initComponents();
         refresh();
     }
-    
-    
-    
-    public String getGroupOptionsKey(String name){
-        StringBuilder sb=new StringBuilder(name);
-        for(int i=0;i<sb.length();i++){
-            char c=sb.charAt(i);
-            if( (c>='A' && c<='Z') || (c>='a' && c<='z') || (i>0 && c>='0' && c<='9') || c=='_'){}
+
+
+
+    public String getGroupOptionsKey(String name) {
+        StringBuilder sb = new StringBuilder(name);
+        for (int i = 0; i < sb.length(); i++) {
+            char c = sb.charAt(i);
+            if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (i > 0 && c >= '0' && c <= '9') || c == '_') {
+            }
             else {
-                sb.setCharAt(i,'_');
+                sb.setCharAt(i, '_');
             }
         }
-        return OPTIONS_VIEW_PREFIX+sb.toString();
+        return OPTIONS_VIEW_PREFIX + sb.toString();
     }
 
-    
-    
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        if(command == null) return;
-            
-        if(command.startsWith("Configure")){
-            showConfigureDialog();            
+        if (command == null)
+            return;
+
+        if (command.startsWith("Configure")) {
+            showConfigureDialog();
         }
-        else if(command.equals("View subject locator resources")) {
+        else if (command.equals("View subject locator resources")) {
             viewSubjectLocatorResources = !viewSubjectLocatorResources;
             refresh();
             wandora.topicPanelsChanged();
         }
-        else{
-            boolean found=false;
-            for(QueryGroupInfo queryGroup : queryGroups) {
-                if(queryGroup.name.equals(command)) {
-                    found=true;
+        else {
+            boolean found = false;
+            for (QueryGroupInfo queryGroup : queryGroups) {
+                if (queryGroup.name.equals(command)) {
+                    found = true;
                 }
             }
-            if(found){
-                boolean old=options.isFalse(getGroupOptionsKey(command));
+            if (found) {
+                boolean old = options.isFalse(getGroupOptionsKey(command));
                 options.put(getGroupOptionsKey(command), old ? "true" : "false");
                 refresh();
                 wandora.topicPanelsChanged();
             }
         }
     }
-    
-    
-    
-    
-    public void parseOptions(){
-        queryGroups=new ArrayList<QueryGroupInfo>();
-        
-        for(int i=0;true;i++){
-            String groupName=options.get(OPTIONS_PREFIX+"group["+i+"].name");
-            if(groupName==null) break;
-            QueryGroupInfo group=new QueryGroupInfo();
-            group.name=groupName;
-            
-            for(int j=0;true;j++){
-                String queryName=options.get(OPTIONS_PREFIX+"group["+i+"].query["+j+"].name");
-                if(queryName==null) break;
-                String engine=options.get(OPTIONS_PREFIX+"group["+i+"].query["+j+"].engine");
-                String script=options.get(OPTIONS_PREFIX+"group["+i+"].query["+j+"].script");
-                QueryInfo info=new QueryInfo(queryName,engine,script);
+
+
+
+    public void parseOptions() {
+        queryGroups = new ArrayList<QueryGroupInfo>();
+
+        for (int i = 0; true; i++) {
+            String groupName = options.get(OPTIONS_PREFIX + "group[" + i + "].name");
+            if (groupName == null)
+                break;
+            QueryGroupInfo group = new QueryGroupInfo();
+            group.name = groupName;
+
+            for (int j = 0; true; j++) {
+                String queryName = options.get(OPTIONS_PREFIX + "group[" + i + "].query[" + j + "].name");
+                if (queryName == null)
+                    break;
+                String engine = options.get(OPTIONS_PREFIX + "group[" + i + "].query[" + j + "].engine");
+                String script = options.get(OPTIONS_PREFIX + "group[" + i + "].query[" + j + "].script");
+                QueryInfo info = new QueryInfo(queryName, engine, script);
                 group.queries.add(info);
             }
             queryGroups.add(group);
         }
     }
-    
-    
 
-    
-    
-    
+
+
     public void writeOptions() {
-        
+
         // If user adds new custom topic panel script, it is saved to global
         // options instead of local. Therefore we hide class level variable
         // with another:
         Options options = globalOptions;
-        
-        for(int i=0;true;i++) {
-            String groupName=options.get(OPTIONS_PREFIX+"group["+i+"].name");
-            if(groupName==null) break;
-            options.put(OPTIONS_PREFIX+"group["+i+"].name",null);
-            for(int j=0;true;j++) {
-                String queryName=options.get(OPTIONS_PREFIX+"group["+i+"].query["+j+"].name");
-                if(queryName==null) break;
-                options.put(OPTIONS_PREFIX+"group["+i+"].query["+j+"].name",null);
-                options.put(OPTIONS_PREFIX+"group["+i+"].query["+j+"].engine",null);
-                options.put(OPTIONS_PREFIX+"group["+i+"].query["+j+"].script",null);
+
+        for (int i = 0; true; i++) {
+            String groupName = options.get(OPTIONS_PREFIX + "group[" + i + "].name");
+            if (groupName == null)
+                break;
+            options.put(OPTIONS_PREFIX + "group[" + i + "].name", null);
+            for (int j = 0; true; j++) {
+                String queryName = options.get(OPTIONS_PREFIX + "group[" + i + "].query[" + j + "].name");
+                if (queryName == null)
+                    break;
+                options.put(OPTIONS_PREFIX + "group[" + i + "].query[" + j + "].name", null);
+                options.put(OPTIONS_PREFIX + "group[" + i + "].query[" + j + "].engine", null);
+                options.put(OPTIONS_PREFIX + "group[" + i + "].query[" + j + "].script", null);
             }
         }
-        for(int i=0;i<queryGroups.size();i++) {
-            QueryGroupInfo groupInfo=queryGroups.get(i);
-            options.put(OPTIONS_PREFIX+"group["+i+"].name",groupInfo.name);
-            for(int j=0;j<groupInfo.queries.size();j++) {
-                QueryInfo info=groupInfo.queries.get(j);
-                options.put(OPTIONS_PREFIX+"group["+i+"].query["+j+"].name",info.name);
-                options.put(OPTIONS_PREFIX+"group["+i+"].query["+j+"].engine",info.scriptEngine);
-                options.put(OPTIONS_PREFIX+"group["+i+"].query["+j+"].script",info.script);                
+        for (int i = 0; i < queryGroups.size(); i++) {
+            QueryGroupInfo groupInfo = queryGroups.get(i);
+            options.put(OPTIONS_PREFIX + "group[" + i + "].name", groupInfo.name);
+            for (int j = 0; j < groupInfo.queries.size(); j++) {
+                QueryInfo info = groupInfo.queries.get(j);
+                options.put(OPTIONS_PREFIX + "group[" + i + "].query[" + j + "].name", info.name);
+                options.put(OPTIONS_PREFIX + "group[" + i + "].query[" + j + "].engine", info.scriptEngine);
+                options.put(OPTIONS_PREFIX + "group[" + i + "].query[" + j + "].script", info.script);
             }
         }
     }
-    
-    
-    
-    
-    protected void evalQuery(QueryInfo info){
-        WandoraScriptManager sm=new WandoraScriptManager();
-        ScriptEngine engine=sm.getScriptEngine(info.scriptEngine);
-        info.directive=null;
+
+
+
+    protected void evalQuery(QueryInfo info) {
+        WandoraScriptManager sm = new WandoraScriptManager();
+        ScriptEngine engine = sm.getScriptEngine(info.scriptEngine);
+        info.directive = null;
         try {
-            Object o=engine.eval(info.script);
-            if(o!=null && o instanceof Directive) info.directive=(Directive)o;
+            Object o = engine.eval(info.script);
+            if (o != null && o instanceof Directive)
+                info.directive = (Directive) o;
         }
-        catch(ScriptException se){
-//            sm.showScriptExceptionDialog("custom dialog script "+info.name,se);
-            info.evalException=se;
+        catch (ScriptException se) {
+            info.evalException = se;
         }
-        catch(Exception e){
+        catch (Exception e) {
             wandora.handleError(e);
         }
-//        if(info.directive==null){
-//            WandoraOptionPane.showMessageDialog(parent, "Error evaluating custom topic panel script.<br>Use Configure panel in view menu for details.", "Custom panel script", WandoraOptionPane.ERROR_MESSAGE);        
-//        }
     }
-    
-    
-    
-    
-    public SimplePanel buildCustomPanel(){
-        SimplePanel ret=new SimplePanel();
+
+
+
+    public SimplePanel buildCustomPanel() {
+        SimplePanel ret = new SimplePanel();
         ret.setLayout(new java.awt.GridBagLayout());
         parseOptions();
-        int bcounter=0;
-        for(QueryGroupInfo groupInfo : queryGroups){
-            boolean disabled=options.isFalse(getGroupOptionsKey(groupInfo.name));
-            if(disabled) continue;
-            
-            SimplePanel groupPanel=new SimplePanel();
+        int bcounter = 0;
+        for (QueryGroupInfo groupInfo : queryGroups) {
+            boolean disabled = options.isFalse(getGroupOptionsKey(groupInfo.name));
+            if (disabled)
+                continue;
+
+            SimplePanel groupPanel = new SimplePanel();
             groupPanel.setLayout(new java.awt.GridBagLayout());
             groupPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(groupInfo.name));
-//            groupPanel.setComponentPopupMenu(getAssociationsMenu());
-            groupPanel.setName(groupInfo.name+"GroupPanel");
+            groupPanel.setName(groupInfo.name + "GroupPanel");
             groupPanel.addMouseListener(wandora);
-            
-            GridBagConstraints gbc=new GridBagConstraints();
-            int acounter=0;
-            
-            for(QueryInfo info : groupInfo.queries){
-                
-                if(info.directive==null) {
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            int acounter = 0;
+
+            for (QueryInfo info : groupInfo.queries) {
+
+                if (info.directive == null) {
                     evalQuery(info);
-                    if(info.directive==null) {
-                        if(info.evalException!=null)
-                            WandoraOptionPane.showMessageDialog(wandora, "Error evaluating custom topic panel script "+groupInfo.name+"/"+info.name+"<br>"+info.evalException.getMessage(), "Custom panel script", WandoraOptionPane.ERROR_MESSAGE);        
+                    if (info.directive == null) {
+                        if (info.evalException != null)
+                            WandoraOptionPane.showMessageDialog(wandora,
+                                    "Error evaluating custom topic panel script " + groupInfo.name + "/" + info.name
+                                            + "<br>" + info.evalException.getMessage(),
+                                    "Custom panel script", WandoraOptionPane.ERROR_MESSAGE);
                         else
-                            WandoraOptionPane.showMessageDialog(wandora, "Error evaluating custom topic panel script "+groupInfo.name+"/"+info.name+"<br>Script did not return a Directive object.", "Custom panel script", WandoraOptionPane.ERROR_MESSAGE);        
+                            WandoraOptionPane.showMessageDialog(wandora,
+                                    "Error evaluating custom topic panel script " + groupInfo.name + "/" + info.name
+                                            + "<br>Script did not return a Directive object.",
+                                    "Custom panel script", WandoraOptionPane.ERROR_MESSAGE);
                         continue;
                     }
                 }
-                MixedTopicTable table=buildCustomQuery(info.directive,topic);
-                if(table==null) continue;
-                
-                gbc=new java.awt.GridBagConstraints();
-                gbc.gridy=acounter++;
-                gbc.gridx=0;
-                gbc.anchor=GridBagConstraints.WEST;
-                if(acounter!=1) gbc.insets=new java.awt.Insets(10,0,0,0);
-                SimpleLabel label=new SimpleLabel(info.name);
-//                JPopupMenu popup = this.getAssociationTypeMenu();
-//                label.setComponentPopupMenu(popup);
-                groupPanel.add(label,gbc);
-                gbc=new java.awt.GridBagConstraints();
-                gbc.gridy=acounter++;
-                gbc.gridx=0;
-                gbc.weightx=1.0;
-                gbc.fill=GridBagConstraints.HORIZONTAL;
-                groupPanel.add(table.getTableHeader(),gbc);
-                gbc=new java.awt.GridBagConstraints();
-                gbc.gridy=acounter++;
-                gbc.gridx=0;
-                gbc.weightx=1.0;
-                gbc.fill=GridBagConstraints.HORIZONTAL;
-                groupPanel.add(table,gbc);
+                MixedTopicTable table = buildCustomQuery(info.directive, topic);
+                if (table == null)
+                    continue;
+
+                gbc = new java.awt.GridBagConstraints();
+                gbc.gridy = acounter++;
+                gbc.gridx = 0;
+                gbc.anchor = GridBagConstraints.WEST;
+                if (acounter != 1)
+                    gbc.insets = new java.awt.Insets(10, 0, 0, 0);
+                SimpleLabel label = new SimpleLabel(info.name);
+                groupPanel.add(label, gbc);
+                gbc = new java.awt.GridBagConstraints();
+                gbc.gridy = acounter++;
+                gbc.gridx = 0;
+                gbc.weightx = 1.0;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                groupPanel.add(table.getTableHeader(), gbc);
+                gbc = new java.awt.GridBagConstraints();
+                gbc.gridy = acounter++;
+                gbc.gridx = 0;
+                gbc.weightx = 1.0;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                groupPanel.add(table, gbc);
             }
-            
-            if(acounter>0){
-                gbc=new java.awt.GridBagConstraints();
-                gbc.gridy=bcounter++;
-                gbc.gridx=0;
-                gbc.weightx=1.0;
-                gbc.fill=GridBagConstraints.HORIZONTAL;
+
+            if (acounter > 0) {
+                gbc = new java.awt.GridBagConstraints();
+                gbc.gridy = bcounter++;
+                gbc.gridx = 0;
+                gbc.weightx = 1.0;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
                 gbc.insets = new java.awt.Insets(7, 0, 7, 0);
-                ret.add(groupPanel, gbc);        
+                ret.add(groupPanel, gbc);
             }
-            
+
         }
         return ret;
     }
-    
-    
-    
-    
-    public MixedTopicTable buildCustomQuery(Directive query, Topic context){
-        
+
+
+
+    public MixedTopicTable buildCustomQuery(Directive query, Topic context) {
+
         try {
-            TopicMap tm=wandora.getTopicMap();
-            List<ResultRow> res=query.doQuery(new QueryContext(tm,wandora.getLang()),new ResultRow(context));
-            List<String> columns=new ArrayList<>();
-            for(ResultRow row : res){
-                for(int i=0;i<row.getNumValues();i++){
-                    String r=row.getRole(i);
-                    if(!columns.contains(r)) columns.add(r);
+            TopicMap tm = wandora.getTopicMap();
+            List<ResultRow> res = query.doQuery(new QueryContext(tm, wandora.getLang()), new ResultRow(context));
+            List<String> columns = new ArrayList<>();
+            for (ResultRow row : res) {
+                for (int i = 0; i < row.getNumValues(); i++) {
+                    String r = row.getRole(i);
+                    if (!columns.contains(r))
+                        columns.add(r);
                 }
             }
             List<Object> columnLabelsA = new ArrayList<>();
-            for(int i=0;i<columns.size();i++){
-                String r=columns.get(i);
-                if(r.startsWith("~")) {
+            for (int i = 0; i < columns.size(); i++) {
+                String r = columns.get(i);
+                if (r.startsWith("~")) {
                     columns.remove(i);
                     i--;
                 }
                 else {
                     String locator = r;
-                    if(locator.startsWith("#")) locator = Directive.DEFAULT_NS+locator;
+                    if (locator.startsWith("#"))
+                        locator = Directive.DEFAULT_NS + locator;
                     Topic t = tm.getTopic(locator);
-                    if(t != null) columnLabelsA.add(t);
-                    else columnLabelsA.add(r);
+                    if (t != null)
+                        columnLabelsA.add(t);
+                    else
+                        columnLabelsA.add(r);
                 }
             }
             Object[] columnLabels = columnLabelsA.toArray(new Object[columnLabelsA.size()]);
-            if(res.size()>0) {
-                Object[][] data=new Object[res.size()][columns.size()];
-                for(int i=0; i<res.size(); i++){
-                    ResultRow row=res.get(i);
-                    for(int j=0; j<columns.size(); j++) {
-                        String r=columns.get(j);
-                        Object v=row.getValue(r);
+            if (res.size() > 0) {
+                Object[][] data = new Object[res.size()][columns.size()];
+                for (int i = 0; i < res.size(); i++) {
+                    ResultRow row = res.get(i);
+                    for (int j = 0; j < columns.size(); j++) {
+                        String r = columns.get(j);
+                        Object v = row.getValue(r);
 
-                        if(v != null) {
-                            if(v instanceof Topic) {
+                        if (v != null) {
+                            if (v instanceof Topic) {
                                 Locator l = ((Topic) v).getOneSubjectIdentifier();
-                                if(l != null) {
-                                    Topic t = tm.getTopic((Locator)l);
-                                    data[i][j]=t;
+                                if (l != null) {
+                                    Topic t = tm.getTopic((Locator) l);
+                                    data[i][j] = t;
                                 }
                                 else {
-                                    data[i][j]=l.toExternalForm();
+                                    data[i][j] = l.toExternalForm();
                                 }
                             }
-                            else if(v instanceof Locator) {
-                                data[i][j]=((Locator) v).toExternalForm();
+                            else if (v instanceof Locator) {
+                                data[i][j] = ((Locator) v).toExternalForm();
                             }
-                            else if(v instanceof String) {
-                                data[i][j]=((String) v);
+                            else if (v instanceof String) {
+                                data[i][j] = ((String) v);
                             }
                             else {
                                 data[i][j] = v.toString();
                             }
                         }
-                        
-                        /*
-                        Locator l=new Locator(r);
-                        if(v instanceof Topic) v=((Topic)v).getOneSubjectIdentifier();
-                        else if(v instanceof String) v=new Locator((String)v);
-                        else if(v instanceof Locator){}
-                        else v=null;
-                        Topic t=null;
-                        if(v!=null) t=tm.getTopic((Locator)v);
-                        data[i][j]=t;
-                        */
                     }
                 }
-                
-                MixedTopicTable table=new MixedTopicTable(wandora);
+
+                MixedTopicTable table = new MixedTopicTable(wandora);
                 table.initialize(data, columnLabels);
-                
+
                 return table;
             }
         }
-        catch(QueryException qe) {
-        	logger.error(qe);
+        catch (QueryException qe) {
+            logger.error(qe);
         }
-        catch(TopicMapException tme) {
-        	logger.error(tme);
+        catch (TopicMapException tme) {
+            logger.error(tme);
         }
-        catch(Exception ex) {
-        	logger.error(ex);
+        catch (Exception ex) {
+            logger.error(ex);
         }
         return null;
     }
-    
-    
-    
-    
+
+
+
     @Override
     public void refresh() {
-        
+
         try {
-            topic=wandora.getTopicMap().getTopic(topicSI);
-            if(topic==null || topic.isRemoved()) {
+            topic = wandora.getTopicMap().getTopic(topicSI);
+            if (topic == null || topic.isRemoved()) {
                 logger.warn("Topic is null or removed!");
                 panelContainer.setVisible(false);
                 removedTopicMessage.setVisible(true);
@@ -546,181 +549,189 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
                 removedTopicMessage.setVisible(false);
             }
         }
-        catch(Exception e){
-        	logger.error(e);
+        catch (Exception e) {
+            logger.error(e);
             logger.error("Topic is null or removed!");
             panelContainer.setVisible(false);
             removedTopicMessage.setVisible(true);
             return;
         }
-        
+
         super.refresh();
 
         try {
-            if(viewSubjectLocatorResources && topic.getSubjectLocator() != null) {
+            if (viewSubjectLocatorResources && topic.getSubjectLocator() != null) {
                 ((PreviewWrapper) previewPanel).setURL(topic.getSubjectLocator());
             }
             else {
                 ((PreviewWrapper) previewPanel).setURL(null);
             }
         }
-        catch(Exception e) {}
-        
-        if(subjectIdentifierRootPanel.isVisible()) {
+        catch (Exception e) {
+        }
+
+        if (subjectIdentifierRootPanel.isVisible()) {
             buildSubjectIdentifierPanel(subjectIdentifierPanel, topic, options, wandora);
         }
-        
-        if(customPanel!=null) panelContainer.remove(customPanel);
-        customPanel=buildCustomPanel();
+
+        if (customPanel != null)
+            panelContainer.remove(customPanel);
+        customPanel = buildCustomPanel();
         GridBagConstraints gbc = new java.awt.GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
         gbc.insets = new java.awt.Insets(0, 10, 0, 10);
-        panelContainer.add(customPanel, gbc);        
+        panelContainer.add(customPanel, gbc);
         panelContainer.revalidate();
         try {
-            if(topic.getBaseName()!=null) {
+            if (topic.getBaseName() != null) {
                 baseNameField.setText(topic.getBaseName());
                 baseNameField.setCaretPosition(0);
-                Color c=wandora.topicHilights.getBaseNameColor(topic);
-                if(c!=null) baseNameField.setForeground(c);
-                else baseNameField.setForeground(Color.BLACK);
+                Color c = wandora.topicHilights.getBaseNameColor(topic);
+                if (c != null)
+                    baseNameField.setForeground(c);
+                else
+                    baseNameField.setForeground(Color.BLACK);
             }
             else {
                 baseNameField.setText("");
                 baseNameField.setForeground(Color.BLACK);
             }
-            originalBN=topic.getBaseName();
-            if(topic.getSubjectLocator()!=null) {
+            originalBN = topic.getBaseName();
+            if (topic.getSubjectLocator() != null) {
                 subjectLocatorField.setText(topic.getSubjectLocator().toString());
                 subjectLocatorField.setCaretPosition(0);
-                Color c=wandora.topicHilights.getSubjectLocatorColor(topic);
-                if(c!=null) subjectLocatorField.setForeground(c);
-                else subjectLocatorField.setForeground(Color.BLACK);
-                originalSL=topic.getSubjectLocator().toString();
+                Color c = wandora.topicHilights.getSubjectLocatorColor(topic);
+                if (c != null)
+                    subjectLocatorField.setForeground(c);
+                else
+                    subjectLocatorField.setForeground(Color.BLACK);
+                originalSL = topic.getSubjectLocator().toString();
             }
             else {
                 subjectLocatorField.setText("");
                 subjectLocatorField.setForeground(Color.BLACK);
-                originalSL=null;
+                originalSL = null;
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             logger.error("Failed to initialize base or/and sl!");
             logger.error(e);
         }
-        
-        this.setComponentPopupMenu(this.getViewPopupMenu());
-    }    
 
-    
-    
+        this.setComponentPopupMenu(this.getViewPopupMenu());
+    }
+
+
+
     @Override
     public LocatorHistory getTopicHistory() {
         return null;
     }
-    
-    
-    
-    
+
+
+
     @Override
     public void stop() {
-        if(previewPanel != null && previewPanel instanceof PreviewWrapper) {
+        if (previewPanel != null && previewPanel instanceof PreviewWrapper) {
             ((PreviewWrapper) previewPanel).stop();
         }
     }
-    
-    
-    
+
+
+
     @Override
     public int print(Graphics graphics, PageFormat pageFormat, int param) throws PrinterException {
         if (param > 0) {
-            return(NO_SUCH_PAGE);
-        } else {
-            Graphics2D g2d = (Graphics2D)graphics;
+            return (NO_SUCH_PAGE);
+        }
+        else {
+            Graphics2D g2d = (Graphics2D) graphics;
             g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
             // Turn off double buffering
             this.paint(g2d);
             // Turn double buffering back on
-            return(PAGE_EXISTS);
+            return (PAGE_EXISTS);
         }
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
 
     @Override
     public JPopupMenu getNamesMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getVariantsLabelPopupStruct(options), wandora);
     }
-    
+
 
     @Override
     public JPopupMenu getClassesMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getClassesTablePopupStruct(), wandora);
     }
-    
-    
+
+
     @Override
     public JPopupMenu getInstancesMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getInstancesTablePopupStruct(), wandora);
     }
-    
-    
+
+
     @Override
     public JPopupMenu getSIMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getSubjectIdentifierLabelPopupStruct(), wandora);
     }
 
-    
+
     @Override
     public JPopupMenu getOccurrencesMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getOccurrencesLabelPopupStruct(options), wandora);
     }
-    
-    
+
+
     @Override
     public JPopupMenu getOccurrenceTypeMenu(Topic occurrenceType) {
-         return UIBox.makePopupMenu(WandoraMenuManager.getOccurrenceTypeLabelPopupStruct(occurrenceType, topic), wandora);
+        return UIBox.makePopupMenu(WandoraMenuManager.getOccurrenceTypeLabelPopupStruct(occurrenceType, topic),
+                wandora);
     }
-    
-    
+
+
     public JPopupMenu getSLMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getSubjectLocatorLabelPopupStruct(), wandora);
     }
-    
-    
+
+
     @Override
     public JPopupMenu getAssociationsMenu() {
-         return UIBox.makePopupMenu(WandoraMenuManager.getAssociationTableLabelPopupStruct(), wandora);
+        return UIBox.makePopupMenu(WandoraMenuManager.getAssociationTableLabelPopupStruct(), wandora);
     }
 
-    
+
     @Override
     public JPopupMenu getAssociationTypeMenu() {
         return UIBox.makePopupMenu(WandoraMenuManager.getAssociationTypeLabelPopupStruct(), wandora);
     }
 
-    
+
     @Override
     public JPopupMenu getSubjectMenu() {
         return null;
     }
-    
+
+
     @Override
-    public boolean noScroll(){
+    public boolean noScroll() {
         return false;
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -938,92 +949,90 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
         add(removedTopicMessage, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-    public static String checkScript(Component parent,String engineString,String script){
-        WandoraScriptManager sm=new WandoraScriptManager();
-        ScriptEngine engine=sm.getScriptEngine(engineString);
-        if(engine==null){
+
+    public static String checkScript(Component parent, String engineString, String script) {
+        WandoraScriptManager sm = new WandoraScriptManager();
+        ScriptEngine engine = sm.getScriptEngine(engineString);
+        if (engine == null) {
             return "Couldn't find script engine";
         }
         try {
-            Object o=engine.eval(script);
-            if(o==null){
+            Object o = engine.eval(script);
+            if (o == null) {
                 return "Script returned null.";
             }
-            else if(!(o instanceof org.wandora.query2.Directive)){
-                return "Script didn't return an instance of Directive.<br>"+
-                       "Class of return value is "+o.getClass().getName();
+            else if (!(o instanceof org.wandora.query2.Directive)) {
+                return "Script didn't return an instance of Directive.<br>" +
+                        "Class of return value is " + o.getClass().getName();
             }
         }
-        catch(ScriptException se){
-            return "ScriptException at line "+se.getLineNumber()+" column "+se.getColumnNumber()+"<br>"+se.getMessage();
+        catch (ScriptException se) {
+            return "ScriptException at line " + se.getLineNumber() + " column " + se.getColumnNumber() + "<br>"
+                    + se.getMessage();
         }
-        catch(Exception e){
-        	logger.error(e);
-            return "Exception occurred during execution: "+e.getClass().getName()+" "+e.getMessage();
+        catch (Exception e) {
+            logger.error(e);
+            return "Exception occurred during execution: " + e.getClass().getName() + " " + e.getMessage();
         }
-        return null;        
+        return null;
     }
-    
+
+
     private void configOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configOkButtonActionPerformed
-        if(configDialog.isVisible()){
-            
-            List<QueryGroupInfo> newGroups=((CustomTopicPanelConfiguration)configurationPanel).getQueryGroups();
-/*            boolean error=false;
-            for(QueryGroupInfo group : newGroups){
-                for(QueryInfo query : group.queries){
-                    String message=checkScript(this,query.scriptEngine,query.script);
-                    if(message!=null){
-                        error=true;
-                        WandoraOptionPane.showMessageDialog(configDialog, "Error in group "+group.name+", query "+query.name+"<br>"+message, "Check syntax", WandoraOptionPane.ERROR_MESSAGE);        
-                    }
-                }
-            }
-            if(!error){*/
-                queryGroups=newGroups;
-                writeOptions();
-                refresh();
-                configDialog.setVisible(false);
-//            }
-        }        
+        if (configDialog.isVisible()) {
+            List<QueryGroupInfo> newGroups = ((CustomTopicPanelConfiguration) configurationPanel).getQueryGroups();
+            queryGroups = newGroups;
+            writeOptions();
+            refresh();
+            configDialog.setVisible(false);
+        }
     }//GEN-LAST:event_configOkButtonActionPerformed
 
+
     private void configCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configCancelButtonActionPerformed
-        if(configDialog.isVisible()){
+        if (configDialog.isVisible()) {
             configDialog.setVisible(false);
         }
     }//GEN-LAST:event_configCancelButtonActionPerformed
 
-    protected void showConfigureDialog(){
-        ((CustomTopicPanelConfiguration)configurationPanel).readQueryGroups(queryGroups);
-        configDialog.setSize(400,500);
+
+    protected void showConfigureDialog() {
+        ((CustomTopicPanelConfiguration) configurationPanel).readQueryGroups(queryGroups);
+        configDialog.setSize(400, 500);
         wandora.centerWindow(configDialog);
-        configDialog.setVisible(true);        
+        configDialog.setVisible(true);
         wandora.topicPanelsChanged();
     }
-    
+
+
     private void configureButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureButtonActionPerformed
         showConfigureDialog();
     }//GEN-LAST:event_configureButtonActionPerformed
 
+
     private void subjectLocatorFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_subjectLocatorFieldKeyReleased
         try {
-            if(evt.getKeyCode()==KeyEvent.VK_ENTER) {
+            if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
                 applyChanges();
             }
-        } catch(Exception e) {}
+        }
+        catch (Exception e) {
+        }
     }//GEN-LAST:event_subjectLocatorFieldKeyReleased
+
 
     private void baseNameFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_baseNameFieldKeyReleased
         try {
-            if(evt.getKeyCode()==KeyEvent.VK_ENTER) {
+            if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
                 applyChanges();
             }
-        } catch(Exception e) {}
+        }
+        catch (Exception e) {
+        }
     }//GEN-LAST:event_baseNameFieldKeyReleased
-    
-    
-    
-    
+
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField baseNameField;
     private javax.swing.JLabel baseNameLabel;
@@ -1046,71 +1055,82 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
     private javax.swing.JTextField subjectLocatorField;
     private javax.swing.JLabel subjectLocatorLabel;
     // End of variables declaration//GEN-END:variables
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
+
     public static class QueryGroupInfo {
         public String name;
-        public ArrayList<QueryInfo> queries;
-        public QueryGroupInfo(){
-            queries=new ArrayList<QueryInfo>();
+        public List<QueryInfo> queries;
+
+        public QueryGroupInfo() {
+            queries = new ArrayList<QueryInfo>();
         }
-        public QueryGroupInfo deepCopy(){
-            QueryGroupInfo g=new QueryGroupInfo();
-            g.name=this.name;
-            for(QueryInfo q : queries){
+
+
+        public QueryGroupInfo deepCopy() {
+            QueryGroupInfo g = new QueryGroupInfo();
+            g.name = this.name;
+            for (QueryInfo q : queries) {
                 g.queries.add(q.copy());
             }
             return g;
         }
-        
-        
-        
+
+
+
         @Override
-        public String toString(){ return name; }
+        public String toString() {
+            return name;
+        }
     }
 
-    
-    
-    
-    
+
+
     // -------------------------------------------------------------------------
 
     public static class QueryInfo {
         public String name;
         public String scriptEngine;
         public String script;
-        
+
         public Directive directive;
         public ScriptException evalException;
-        public QueryInfo(){}
-        public QueryInfo(String name,String scriptEngine,String script){
-            this.name=name;
-            this.scriptEngine=scriptEngine;
-            this.script=script;
+
+        public QueryInfo() {
         }
-        public QueryInfo copy(){
-            return new QueryInfo(name,scriptEngine,script);
+
+
+        public QueryInfo(String name, String scriptEngine, String script) {
+            this.name = name;
+            this.scriptEngine = scriptEngine;
+            this.script = script;
         }
-        public String toString(){ return name; }
+
+
+        public QueryInfo copy() {
+            return new QueryInfo(name, scriptEngine, script);
+        }
+
+
+        public String toString() {
+            return name;
+        }
     }
 
 
 
-
-
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
 
 
-    
+
     private class TopicPanelTransferHandler extends TransferHandler {
 
         private static final long serialVersionUID = 1L;
 
-		@Override
+        @Override
         public boolean canImport(TransferSupport support) {
             return false;
             //if(!support.isDrop()) return false;
@@ -1118,20 +1138,24 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
             //       support.isDataFlavorSupported(DataFlavor.stringFlavor);
         }
 
+
         @Override
         protected Transferable createTransferable(JComponent c) {
-//            return DnDHelper.makeTopicTableTransferable(data,getSelectedRows(),getSelectedColumns());
+            //            return DnDHelper.makeTopicTableTransferable(data,getSelectedRows(),getSelectedColumns());
             return null;
         }
+
 
         @Override
         public int getSourceActions(JComponent c) {
             return TransferHandler.COPY_OR_MOVE;
         }
 
+
         @Override
         public boolean importData(TransferSupport support) {
-            if(!support.isDrop()) return false;
+            if (!support.isDrop())
+                return false;
             try {
                 /*
                 TopicMap tm=parent.getTopicMap();
@@ -1139,23 +1163,23 @@ public class CustomTopicPanel extends AbstractTraditionalTopicPanel implements A
                 if(topics==null) return false;
                 Topic base=topic;
                 if(base==null) return false;
-
+                
                 for(Topic t : topics) {
                     if(t != null && !t.isRemoved()) {
                         base.addType(t);
                     }
                 }
-                */ 
+                */
                 wandora.doRefresh();
             }
-            catch(Exception ce){
+            catch (Exception ce) {
                 Wandora.getWandora().handleError(ce);
             }
             return false;
         }
 
     }
-    
+
 
 }
 

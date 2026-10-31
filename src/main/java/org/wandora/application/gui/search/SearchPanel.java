@@ -119,7 +119,6 @@ public class SearchPanel extends javax.swing.JPanel implements TopicSelector {
                 refresh();
 
                 TopicMap topicMap = wandora.getTopicMap();
-                //this.searchWords.setSelectedIndex(0);
                 searchWords.addItem(query);
                 if (searchWords.getItemCount() > HISTORYMAXSIZE)
                     searchWords.removeItemAt(1);
