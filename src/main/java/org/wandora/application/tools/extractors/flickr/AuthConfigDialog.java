@@ -33,53 +33,52 @@ import javax.swing.JLabel;
 import org.wandora.application.Wandora;
 import org.wandora.application.gui.WandoraOptionPane;
 
+
 /**
  *
  * @author  anttirt
  */
 public class AuthConfigDialog extends javax.swing.JDialog {
-    
-	private static final long serialVersionUID = 1L;
-	
-	private Wandora admin;
+
+    private static final long serialVersionUID = 1L;
+
+    private Wandora admin;
     private FlickrState flickrState;
     private JLabel[] curLabels;
-    
+    private boolean cancelled;
+
+
     /** Creates new form AuthConfigDialog */
     public AuthConfigDialog(java.awt.Frame parent, boolean modal, FlickrState state) {
         super(parent, modal);
         flickrState = state;
         initComponents();
         curLabels = new JLabel[] { gotNone, gotRead, gotWrite, gotDelete };
-        
+
         int currentAuthLevel = FlickrState.getAuthLevel(state.PermissionLevel);
         Color validGreen = new Color(30, 220, 30);
-        
-        for(int i = 0; i <= currentAuthLevel; ++i)
-        {
-           curLabels[i].setForeground(validGreen);
+
+        for (int i = 0; i <= currentAuthLevel; ++i) {
+            curLabels[i].setForeground(validGreen);
         }
-        
+
         fldUsername.setText(state.LastUserName);
         fldFrob.setText(state.Frob);
         fldToken.setText(state.Token);
-        
+
         this.setSize(650, 280);
-        
-        
-        if(parent instanceof Wandora)
-        {
-            admin = (Wandora)parent;
+
+        if (parent instanceof Wandora admin) {
             admin.centerWindow(this);
         }
     }
-    
-    private boolean cancelled;
-    
+
+
     public boolean wasCancelled() {
         return cancelled;
     }
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -120,7 +119,8 @@ public class AuthConfigDialog extends javax.swing.JDialog {
 
         authPanel.setLayout(new java.awt.GridBagLayout());
 
-        wandoraLabel3.setText("<html><body><p>This dialog lets you inspect and modify the Flickr authentication status of the current running Wandora instance. If you have saved the frob and token from a previous session, you can enter them here to avoid having to re-authenticate at the Flickr website.</p></body></html>");
+        wandoraLabel3.setText(
+                "<html><body><p>This dialog lets you inspect and modify the Flickr authentication status of the current running Wandora instance. If you have saved the frob and token from a previous session, you can enter them here to avoid having to re-authenticate at the Flickr website.</p></body></html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -257,14 +257,10 @@ public class AuthConfigDialog extends javax.swing.JDialog {
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        jPanel5Layout.setHorizontalGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 0, Short.MAX_VALUE));
+        jPanel5Layout.setVerticalGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 0, Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -290,39 +286,37 @@ public class AuthConfigDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void btnValidateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidateActionPerformed
         flickrState.Frob = fldFrob.getText();
         flickrState.Token = fldToken.getText();
-        try
-        {
+        try {
             //WandoraOptionPane.showMessageDialog(admin, "Validating...", "Validating...", WandoraOptionPane.INFORMATION_MESSAGE);
-            if(flickrState.validToken(FlickrState.PermRead))
-            {
-                WandoraOptionPane.showMessageDialog(admin, "Validating done", "Successfully validated", WandoraOptionPane.INFORMATION_MESSAGE);
-                                
+            if (flickrState.validToken(FlickrState.PermRead)) {
+                WandoraOptionPane.showMessageDialog(admin, "Validating done", "Successfully validated",
+                        WandoraOptionPane.INFORMATION_MESSAGE);
+
                 fldUsername.setText(flickrState.LastUserName);
                 fldFrob.setText(flickrState.Frob);
                 fldToken.setText(flickrState.Token);
                 int currentAuthLevel = FlickrState.getAuthLevel(flickrState.PermissionLevel);
                 Color validGreen = new Color(30, 220, 30);
 
-                for(int i = 0; i <= currentAuthLevel; ++i)
-                {
-                   curLabels[i].setForeground(validGreen);
+                for (int i = 0; i <= currentAuthLevel; ++i) {
+                    curLabels[i].setForeground(validGreen);
                 }
-            }
-            else
-            {
-                WandoraOptionPane.showMessageDialog(this, "Validating failed", "Validating failed!", WandoraOptionPane.INFORMATION_MESSAGE);
+            } else {
+                WandoraOptionPane.showMessageDialog(this, "Validating failed", "Validating failed!",
+                        WandoraOptionPane.INFORMATION_MESSAGE);
                 flickrState.Frob = null;
                 flickrState.Token = null;
             }
-        }
-        catch(FlickrExtractor.RequestFailure e)
-        {
-            WandoraOptionPane.showMessageDialog(this, e.getMessage(), "Validating failed!", WandoraOptionPane.INFORMATION_MESSAGE);
+        } catch (FlickrExtractor.RequestFailure e) {
+            WandoraOptionPane.showMessageDialog(this, e.getMessage(), "Validating failed!",
+                    WandoraOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnValidateActionPerformed
+
 
     private void btnClearInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearInfoActionPerformed
         fldUsername.setText("");
@@ -332,36 +326,20 @@ public class AuthConfigDialog extends javax.swing.JDialog {
         flickrState.Token = null;
         flickrState.LastUserName = null;
         // 212 208 200
-        
+
         curLabels[0].setForeground(new Color(30, 220, 30));
-        for(int i = 1; i < 4; ++i)
+        for (int i = 1; i < 4; ++i)
             curLabels[i].setForeground(new Color(102, 102, 102));
     }//GEN-LAST:event_btnClearInfoActionPerformed
+
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         cancelled = true;
         setVisible(false);
-}//GEN-LAST:event_btnCloseActionPerformed
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /*
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                AuthConfigDialog dialog = new AuthConfigDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-        */
-    }
-    
+    }//GEN-LAST:event_btnCloseActionPerformed
+
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel authPanel;
     private org.wandora.application.gui.simple.SimpleButton btnClearInfo;
@@ -386,5 +364,28 @@ public class AuthConfigDialog extends javax.swing.JDialog {
     private org.wandora.application.gui.simple.SimpleLabel wandoraLabel6;
     private org.wandora.application.gui.simple.SimpleLabel wandoraLabel7;
     // End of variables declaration//GEN-END:variables
-    
+
+
+
+    // ------------------
+
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /*
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                AuthConfigDialog dialog = new AuthConfigDialog(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+            }
+        });
+        */
+    }
 }

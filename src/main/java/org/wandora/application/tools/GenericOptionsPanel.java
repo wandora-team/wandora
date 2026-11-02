@@ -50,6 +50,7 @@ import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 import org.wandora.utils.Textbox;
 
+
 /**
  *
  * @author olli
@@ -57,32 +58,38 @@ import org.wandora.utils.Textbox;
 public class GenericOptionsPanel extends JPanel {
 
 
-	private static final long serialVersionUID = 1L;
-	
-	protected HashMap<String,Component> components;
+    private static final long serialVersionUID = 1L;
+
+    protected HashMap<String, Component> components;
     protected Wandora admin;
     protected JPanel paddingPanel;
     protected boolean padding;
 
-    public GenericOptionsPanel(String[][] fields,Wandora wandora){
-        this(fields,wandora,true);
+
+    public GenericOptionsPanel(String[][] fields, Wandora wandora) {
+        this(fields, wandora, true);
     }
-    public GenericOptionsPanel(String[][] fields,Wandora wandora,boolean padding){
-        this.admin=wandora;
-        this.padding=padding;
+
+
+    public GenericOptionsPanel(String[][] fields, Wandora wandora, boolean padding) {
+        this.admin = wandora;
+        this.padding = padding;
         initFields(fields);
     }
 
-    public static GridBagConstraints makeGBC(){
-        GridBagConstraints gbc=new GridBagConstraints();
-        gbc.insets=new Insets(5,5,0,5);
-        gbc.fill=GridBagConstraints.HORIZONTAL;
+
+    public static GridBagConstraints makeGBC() {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 0, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         return gbc;
     }
 
+
     @Override
-    public void setLayout(java.awt.LayoutManager layout){
+    public void setLayout(java.awt.LayoutManager layout) {
     }
+
 
     /**
      * Init fields in the options panel. Fields are given in an array of arrays.
@@ -95,109 +102,107 @@ public class GenericOptionsPanel extends JPanel {
      * boolean fields will have check boxes. New types may be added in the future.
      * The id is also used as the user visible label of the field.
      */
-    public void initFields(String[][] fields){
-        components=new HashMap<String,Component>();
+    public void initFields(String[][] fields) {
+        components = new HashMap<String, Component>();
         this.removeAll();
         super.setLayout(new GridBagLayout());
-        GridBagConstraints gbc=makeGBC();
+        GridBagConstraints gbc = makeGBC();
 
-        Icon icon=UIBox.getIcon("gui/icons/help2.png");
+        Icon icon = UIBox.getIcon("gui/icons/help2.png");
 
-        for(int i=0;i<fields.length;i++){
-            gbc.gridy=i;
-            gbc.gridx=0;
-            gbc.weightx=0.0;
-            gbc.gridwidth=1;
-            gbc.insets=new Insets(5,5,0,5);
-            String id=fields[i][0];
-            String type=fields[i][1];
-            String value="";
-            if(fields[i].length>2) value=fields[i][2];
-            if(!type.equalsIgnoreCase("separator")){
-                this.add(new SimpleLabel(id),gbc);
+        for (int i = 0; i < fields.length; i++) {
+            gbc.gridy = i;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            gbc.gridwidth = 1;
+            gbc.insets = new Insets(5, 5, 0, 5);
+            String id = fields[i][0];
+            String type = fields[i][1];
+            String value = "";
+            if (fields[i].length > 2)
+                value = fields[i][2];
+            if (!type.equalsIgnoreCase("separator")) {
+                this.add(new SimpleLabel(id), gbc);
             }
-            Component c=null;
-            if(type.equalsIgnoreCase("string")){
-                c=new SimpleField();
-                ((SimpleField)c).setText(value);
-            }
-            else if(type.equalsIgnoreCase("password")){
-                c=new SimpleField();
-                ((SimpleField)c).setText(value);
-            }
-            else if(type.equalsIgnoreCase("boolean")){
-                c=new SimpleCheckBox();
-                if(value.equalsIgnoreCase("true")) ((SimpleCheckBox)c).setSelected(true);
-                else ((SimpleCheckBox)c).setSelected(false);
-            }
-            else if(type.equalsIgnoreCase("separator")){
-                c=new JSeparator();
+            Component c = null;
+            if (type.equalsIgnoreCase("string")) {
+                c = new SimpleField();
+                ((SimpleField) c).setText(value);
+            } else if (type.equalsIgnoreCase("password")) {
+                c = new SimpleField();
+                ((SimpleField) c).setText(value);
+            } else if (type.equalsIgnoreCase("boolean")) {
+                c = new SimpleCheckBox();
+                if (value.equalsIgnoreCase("true"))
+                    ((SimpleCheckBox) c).setSelected(true);
+                else
+                    ((SimpleCheckBox) c).setSelected(false);
+            } else if (type.equalsIgnoreCase("separator")) {
+                c = new JSeparator();
                 ((JSeparator) c).setOrientation(JSeparator.HORIZONTAL);
-            }
-            else if(type.equalsIgnoreCase("topic")){
-                try{
-                    if(value == null || value.length()==0) {
-                        c=new GetTopicButton((Topic)null,admin,admin,true);
+            } else if (type.equalsIgnoreCase("topic")) {
+                try {
+                    if (value == null || value.length() == 0) {
+                        c = new GetTopicButton((Topic) null, admin, admin, true);
+                    } else {
+                        c = new GetTopicButton(admin.getTopicMap().getTopic(value), admin, admin, true);
                     }
-                    else {
-                        c=new GetTopicButton(admin.getTopicMap().getTopic(value),admin,admin,true);
-                    }
-                }
-                catch(TopicMapException tme){
+                } catch (TopicMapException tme) {
                     admin.handleError(tme);
-                    c=new SimpleLabel("Topic map exception");
+                    c = new SimpleLabel("Topic map exception");
                 }
-            }
-            else if(type.toLowerCase().startsWith("combo:")) {
-                String[] options=type.substring("combo:".length()).split(";");
-                SimpleComboBox<String> combo =new SimpleComboBox<>(options);
+            } else if (type.toLowerCase().startsWith("combo:")) {
+                String[] options = type.substring("combo:".length()).split(";");
+                SimpleComboBox<String> combo = new SimpleComboBox<>(options);
                 combo.setEditable(false);
                 combo.setSelectedItem(value);
                 c = combo;
             }
-            if(type.equalsIgnoreCase("separator")){
-                gbc.gridx=0;
+            if (type.equalsIgnoreCase("separator")) {
+                gbc.gridx = 0;
                 gbc.gridwidth = 2;
-                gbc.insets=new Insets(12,5,7,5);
+                gbc.insets = new Insets(12, 5, 7, 5);
+            } else {
+                gbc.gridx = 1;
+                gbc.gridwidth = 1;
+                gbc.insets = new Insets(5, 5, 0, 5);
             }
-            else {
-                gbc.gridx=1;
-                gbc.gridwidth=1;
-                gbc.insets=new Insets(5,5,0,5);
-            }
-            gbc.weightx=1.0;
-            this.add(c,gbc);
-            components.put(id,c);
-            if(fields[i].length>3) {
-                gbc.gridx=2;
-                gbc.weightx=0.0;
-                JLabel label=new JLabel(icon);
-                label.setToolTipText(Textbox.makeHTMLParagraph( fields[i][3], 40 ) );
-                this.add(label,gbc);
+            gbc.weightx = 1.0;
+            this.add(c, gbc);
+            components.put(id, c);
+            if (fields[i].length > 3) {
+                gbc.gridx = 2;
+                gbc.weightx = 0.0;
+                JLabel label = new JLabel(icon);
+                label.setToolTipText(Textbox.makeHTMLParagraph(fields[i][3], 40));
+                this.add(label, gbc);
             }
         }
-        if(padding){
+        if (padding) {
             addPadding(fields.length);
-        }
-        else this.invalidate();
+        } else
+            this.invalidate();
     }
 
-    public void removePadding(){
-        if(paddingPanel!=null){
+
+    public void removePadding() {
+        if (paddingPanel != null) {
             this.remove(paddingPanel);
         }
     }
 
-    public void addPadding(int pos){
-        paddingPanel=new JPanel();
-        GridBagConstraints gbc=new GridBagConstraints();
-        gbc.gridy=pos;
-        gbc.gridx=0;
-        gbc.weighty=1.0;
-        gbc.weightx=0.0;
-        this.add(paddingPanel,gbc);
+
+    public void addPadding(int pos) {
+        paddingPanel = new JPanel();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridy = pos;
+        gbc.gridx = 0;
+        gbc.weighty = 1.0;
+        gbc.weightx = 0.0;
+        this.add(paddingPanel, gbc);
         this.invalidate();
     }
+
 
     /**
      * Gets the values from this options panel. Return value is a map that
@@ -205,41 +210,35 @@ public class GenericOptionsPanel extends JPanel {
      * string regardless of the field type. Boolean fields are converted to
      * "true" or "false".
      */
-    public Map<String,String> getValues(){
-        Map<String,String> ret=new LinkedHashMap<>();
-        for(Map.Entry<String,Component> e : components.entrySet()){
-            String id=e.getKey();
-            Component c=e.getValue();
-            if(c instanceof SimpleField field){
-                ret.put(id,field.getText());
-            }
-            else if(c instanceof SimpleCheckBox checkbox){
-                if(checkbox.isSelected()) {
-                	ret.put(id,"true");
+    public Map<String, String> getValues() {
+        Map<String, String> ret = new LinkedHashMap<>();
+        for (Map.Entry<String, Component> e : components.entrySet()) {
+            String id = e.getKey();
+            Component c = e.getValue();
+            if (c instanceof SimpleField field) {
+                ret.put(id, field.getText());
+            } else if (c instanceof SimpleCheckBox checkbox) {
+                if (checkbox.isSelected()) {
+                    ret.put(id, "true");
+                } else {
+                    ret.put(id, "false");
                 }
-                else {
-                	ret.put(id,"false");
-                }
-            }
-            else if(c instanceof GetTopicButton topicbutton){
-                try{
-                    String si=topicbutton.getTopicSI();
-                    if(si==null) {
-                    	ret.put(id,"");
+            } else if (c instanceof GetTopicButton topicbutton) {
+                try {
+                    String si = topicbutton.getTopicSI();
+                    if (si == null) {
+                        ret.put(id, "");
+                    } else {
+                        ret.put(id, si);
                     }
-                    else {
-                    	ret.put(id,si);
-                    }
-                }catch(TopicMapException tme){
+                } catch (TopicMapException tme) {
                     admin.handleError(tme);
-                    ret.put(id,"");
+                    ret.put(id, "");
                 }
-            }
-            else if(c instanceof SimpleComboBox combo){
-                ret.put(id,combo.getSelectedItem().toString());
-            }
-            else{
-                ret.put(id,"");
+            } else if (c instanceof SimpleComboBox combo) {
+                ret.put(id, combo.getSelectedItem().toString());
+            } else {
+                ret.put(id, "");
             }
         }
         return ret;

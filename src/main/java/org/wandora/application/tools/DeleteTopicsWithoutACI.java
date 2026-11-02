@@ -40,46 +40,49 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class DeleteTopicsWithoutACI extends DeleteTopics {
 
-	
-	private static final long serialVersionUID = 1L;
 
-	/** Creates a new instance of DeleteTopicsWithoutACI */
+    private static final long serialVersionUID = 1L;
+
+
+    /** Creates a new instance of DeleteTopicsWithoutACI */
     public DeleteTopicsWithoutACI() {
     }
-    
-    
-    
+
+
 
     @Override
     public String getName() {
         return "Delete topics without associations, instances and classes";
     }
 
+
     @Override
     public String getDescription() {
         return "Tool is used delete such context topics that have no associations, classes and instances.";
     }
-    
+
+
     @Override
-    public boolean shouldDelete(Topic topic)  throws TopicMapException {
+    public boolean shouldDelete(Topic topic) throws TopicMapException {
         try {
-            if(topic != null && !topic.isRemoved()) {
-                if(topic.getAssociations().isEmpty() && topic.getTypes().isEmpty() && topic.getTopicMap().getTopicsOfType(topic).isEmpty()) {
-                    if(confirm) {
+            if (topic != null && !topic.isRemoved()) {
+                if (topic.getAssociations().isEmpty() 
+                        && topic.getTypes().isEmpty()
+                        && topic.getTopicMap().getTopicsOfType(topic).isEmpty()) {
+                    
+                    if (confirm) {
                         return confirmDelete(topic);
-                    }
-                    else {
+                    } else {
                         return true;
                     }
                 }
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             log(e);
         }
         return false;
     }
-    
-    
-    
+
+
+
 }

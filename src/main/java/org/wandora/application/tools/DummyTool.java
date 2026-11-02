@@ -39,25 +39,27 @@ import org.wandora.application.contexts.Context;
 public class DummyTool extends AbstractWandoraTool {
 
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 
-	@Override
+    @Override
     public String getName() {
         return "Dummy tool";
     }
+
 
     @Override
     public String getDescription() {
         return "This tool does nothing! It is used as a empty tool.";
     }
 
+
     @Override
     public void execute(Wandora wandora, Context<?> context) {
         // NOTHING HERE!
     }
-    
-    
+
+
     @Override
     public boolean requiresRefresh() {
         return false;

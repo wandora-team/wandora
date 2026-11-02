@@ -43,59 +43,62 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class DeleteTopicsWithBasenameRegex extends DeleteTopics {
 
-	
-	private static final long serialVersionUID = 1L;
-	
-	
-	RegularExpressionEditor editor = null;
-    
-    
+
+    private static final long serialVersionUID = 1L;
+
+
+    RegularExpressionEditor editor = null;
+
+
     /** Creates a new instance of DeleteTopicsWithBasenameRegex */
     public DeleteTopicsWithBasenameRegex() {
     }
+
+
     public DeleteTopicsWithBasenameRegex(Context<?> preferredContext) {
         setContext(preferredContext);
     }
-    
-        
+
+
     @Override
-    public void execute(Wandora admin, Context<?> context) throws TopicMapException  {
+    public void execute(Wandora admin, Context<?> context) throws TopicMapException {
         editor = RegularExpressionEditor.getMatchExpressionEditor(admin);
         editor.approve = false;
         editor.setVisible(true);
-        if(editor.approve == true) {
+        if (editor.approve == true) {
             super.execute(admin, context);
         }
     }
-    
+
 
     @Override
     public String getName() {
         return "Delete topics with base name regex";
     }
 
+
     @Override
     public String getDescription() {
         return "Delete topics with base name matching to given regular expression.";
     }
-    
+
+
     @Override
-    public boolean shouldDelete(Topic topic)  throws TopicMapException {
+    public boolean shouldDelete(Topic topic) throws TopicMapException {
         try {
-            if(topic != null && !topic.isRemoved()) {
-                if(topic.getBaseName() != null) {
-                    if(editor.matches(topic.getBaseName())) {
+            if (topic != null && !topic.isRemoved()) {
+                if (topic.getBaseName() != null) {
+                    if (editor.matches(topic.getBaseName())) {
                         return true;
                     }
                 }
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             log(e);
         }
         return false;
     }
-    
-    
-    
+
+
+
 }

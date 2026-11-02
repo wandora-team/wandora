@@ -33,37 +33,40 @@ import org.wandora.application.gui.filechooser.TopicMapFileChooser;
 import org.wandora.application.gui.simple.SimpleFileChooser;
 import org.wandora.topicmap.layered.Layer;
 
+
 /**
  *
  * @author  olli
  */
 public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final int MODE_FILE=1;
-    public static final int MODE_LAYER=2;
-    public static final int MODE_PROJECT=3;
-    public static final int MODE_NONE=99;
-    
+    public static final int MODE_FILE = 1;
+    public static final int MODE_LAYER = 2;
+    public static final int MODE_PROJECT = 3;
+    public static final int MODE_NONE = 99;
+
     protected Wandora wandora;
-    
+
     protected JDialog parentDialog;
-    
-    protected boolean cancelled=true;
-    
+
+    protected boolean cancelled = true;
+
+
     /** Creates new form ApplyPatchToolConfigPanel */
     public ApplyPatchToolConfigPanel(Wandora wandora, JDialog parentDialog) {
         initComponents();
-        this.wandora=wandora;
-        this.parentDialog=parentDialog;
-        List<Layer> layers=wandora.getTopicMap().getLayers();
-        for(Layer l : layers){
+        this.wandora = wandora;
+        this.parentDialog = parentDialog;
+        List<Layer> layers = wandora.getTopicMap().getLayers();
+        for (Layer l : layers) {
             layerComboBox1.addItem(l.getName());
         }
         mapGroupChanged();
     }
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -101,7 +104,9 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
 
         setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Topic map", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, UIConstants.plainFont));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Topic map",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                UIConstants.plainFont));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         mapGroup.add(map1FileButton);
@@ -165,7 +170,9 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 3, 5);
         add(jPanel1, gridBagConstraints);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Patch", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, UIConstants.plainFont));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Patch",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                UIConstants.plainFont));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         patchTextField.setPreferredSize(new java.awt.Dimension(6, 25));
@@ -251,88 +258,119 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
         add(buttonsPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-    public int getMapMode(){
-        if(map1FileButton.isSelected()) return MODE_FILE;
-        else if(map1LayerButton.isSelected()) return MODE_LAYER;
-        else if(map1ProjectButton.isSelected()) return MODE_PROJECT;
-        else return MODE_NONE;
+
+    public int getMapMode() {
+        if (map1FileButton.isSelected())
+            return MODE_FILE;
+        else if (map1LayerButton.isSelected())
+            return MODE_LAYER;
+        else if (map1ProjectButton.isSelected())
+            return MODE_PROJECT;
+        else
+            return MODE_NONE;
     }
-    public String getMapValue(){
-        if(map1FileButton.isSelected()) return fileTextField1.getText();
-        else if(map1LayerButton.isSelected()) return layerComboBox1.getSelectedItem().toString();
-        else return null;
+
+
+    public String getMapValue() {
+        if (map1FileButton.isSelected())
+            return fileTextField1.getText();
+        else if (map1LayerButton.isSelected())
+            return layerComboBox1.getSelectedItem().toString();
+        else
+            return null;
     }
-    
-    public String getPatchFile(){
+
+
+    public String getPatchFile() {
         return patchTextField.getText();
     }
-    public boolean getPatchReverse(){
+
+
+    public boolean getPatchReverse() {
         return reverseCheckBox.isSelected();
     }
-    
-    private void mapGroupChanged(){
+
+
+    private void mapGroupChanged() {
         fileTextField1.setEnabled(map1FileButton.isSelected());
         fileButton1.setEnabled(map1FileButton.isSelected());
         layerComboBox1.setEnabled(map1LayerButton.isSelected());
     }
 
-    private String browseTopicMap(){
+
+    private String browseTopicMap() {
         TopicMapFileChooser chooser;
         String currentDirectory = wandora.options.get("current.directory");
-        if(currentDirectory != null) chooser = new TopicMapFileChooser(currentDirectory);
-        else chooser=new TopicMapFileChooser();
-        if(chooser.open(wandora, "Select")==TopicMapFileChooser.APPROVE_OPTION){
-            File file = chooser.getSelectedFile();        
+        if (currentDirectory != null)
+            chooser = new TopicMapFileChooser(currentDirectory);
+        else
+            chooser = new TopicMapFileChooser();
+        if (chooser.open(wandora, "Select") == TopicMapFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
             return file.getAbsolutePath();
-        }
-        else return null;
-    }
-    private String browseFile(){
-        SimpleFileChooser chooser=UIConstants.getFileChooser();
-        if(chooser.showDialog(wandora, "Select")==SimpleFileChooser.APPROVE_OPTION){
-            File file = chooser.getSelectedFile();        
-            return file.getAbsolutePath();
-        }
-        else return null;
+        } else
+            return null;
     }
 
-    public boolean wasCancelled(){
+
+    private String browseFile() {
+        SimpleFileChooser chooser = UIConstants.getFileChooser();
+        if (chooser.showDialog(wandora, "Select") == SimpleFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            return file.getAbsolutePath();
+        } else
+            return null;
+    }
+
+
+    public boolean wasCancelled() {
         return cancelled;
     }
+
 
     private void map1FileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_map1FileButtonActionPerformed
         mapGroupChanged();
     }//GEN-LAST:event_map1FileButtonActionPerformed
 
+
     private void map1LayerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_map1LayerButtonActionPerformed
         mapGroupChanged();
     }//GEN-LAST:event_map1LayerButtonActionPerformed
+
 
     private void map1ProjectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_map1ProjectButtonActionPerformed
         mapGroupChanged();
     }//GEN-LAST:event_map1ProjectButtonActionPerformed
 
+
     private void fileButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileButton1ActionPerformed
-        String f=browseTopicMap();
-        if(f!=null) fileTextField1.setText(f);
+        String f = browseTopicMap();
+        if (f != null)
+            fileTextField1.setText(f);
     }//GEN-LAST:event_fileButton1ActionPerformed
 
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        cancelled=false;
-        if(parentDialog!=null) parentDialog.setVisible(false);
+        cancelled = false;
+        if (parentDialog != null)
+            parentDialog.setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
 
+
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        cancelled=true;
-        if(parentDialog!=null) parentDialog.setVisible(false);
+        cancelled = true;
+        if (parentDialog != null)
+            parentDialog.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+
     private void patchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patchButtonActionPerformed
-        String f=browseFile();
-        if(f!=null) patchTextField.setText(f);
-}//GEN-LAST:event_patchButtonActionPerformed
-    
-    
+        String f = browseFile();
+        if (f != null)
+            patchTextField.setText(f);
+    }//GEN-LAST:event_patchButtonActionPerformed
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonsPanel;
     private javax.swing.JButton cancelButton;
@@ -351,5 +389,5 @@ public class ApplyPatchToolConfigPanel extends javax.swing.JPanel {
     private javax.swing.JTextField patchTextField;
     private javax.swing.JCheckBox reverseCheckBox;
     // End of variables declaration//GEN-END:variables
-    
+
 }

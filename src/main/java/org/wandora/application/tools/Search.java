@@ -46,50 +46,53 @@ public class Search extends AbstractWandoraTool {
     private static final Log4j2Logger logger = Log4j2Logger.getLogger(Search.class);
 
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	
-	private static SearchTopicsFrame searchFrame = null;
 
-    
-    
+    private static SearchTopicsFrame searchFrame = null;
+
+
+
     @Override
     public void execute(Wandora wandora, Context<?> context) {
-        if(searchFrame == null) {
+        if (searchFrame == null) {
             searchFrame = new SearchTopicsFrame();
         }
-        if(searchFrame != null) {
+        if (searchFrame != null) {
             searchFrame.setVisible(true);
-        }
-        else {
+        } else {
             logger.warn("Unable in instantiate SearchTopicsFrame.");
         }
     }
 
-    
-    
+
+
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/find_topics.png");
     }
-    
+
+
     @Override
     public String getName() {
         return "Search";
     }
 
+
     @Override
     public String getDescription() {
         return "Search for topics.";
     }
-    
+
+
     public boolean useDefaultGui() {
         return false;
     }
-    
+
+
     @Override
     public boolean requiresRefresh() {
         return false;
     }
-    
+
 }

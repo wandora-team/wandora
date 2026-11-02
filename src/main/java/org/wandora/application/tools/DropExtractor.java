@@ -49,7 +49,9 @@ import org.wandora.topicmap.TopicMapException;
 
 public interface DropExtractor {
     public void dropExtract(File[] files) throws TopicMapException;
+
     public void dropExtract(String[] urls) throws TopicMapException;
+
     public void dropExtract(String content) throws TopicMapException;
-    
+
 }

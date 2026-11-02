@@ -38,26 +38,30 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class CopyTopicAssociationTypes extends CopyTopics {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public CopyTopicAssociationTypes()  throws TopicMapException {
+
+    public CopyTopicAssociationTypes() throws TopicMapException {
     }
+
 
     @Override
     public String getName() {
         return "Copy topic association types";
     }
 
+
     @Override
     public String getDescription() {
         return "Tool copies association type topics of selected topics to clipboard.";
     }
-    
+
+
     @Override
     public void initialize(int copyOrders, int includeOrders) {
         super.initialize(copyOrders, includeOrders);
-        setContext( new AssociationTypeContext() );
+        setContext(new AssociationTypeContext());
     }
-    
-    
+
+
 }

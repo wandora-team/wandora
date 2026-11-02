@@ -42,26 +42,30 @@ import org.wandora.topicmap.TopicMapException;
 
 public class CopyTopicInstances extends CopyTopics {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/** Creates a new instance of CopyTopicInstances */
-    public CopyTopicInstances()  throws TopicMapException {
+
+    /** Creates a new instance of CopyTopicInstances */
+    public CopyTopicInstances() throws TopicMapException {
     }
-    
+
+
     @Override
     public String getName() {
         return "Copy topic instances";
     }
+
 
     @Override
     public String getDescription() {
         return "Copies instance topics of selected topics to clipboard.";
     }
 
+
     @Override
     public void initialize(int copyOrders, int includeOrders) {
         super.initialize(copyOrders, includeOrders);
         setContext(new InstanceContext());
     }
-    
+
 }

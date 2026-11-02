@@ -47,16 +47,19 @@ import org.wandora.topicmap.Topic;
 public class MakeInstancesWithAssociations extends AbstractWandoraTool {
 
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 
-	/** Creates a new instance of MakeInstancesWithAssociations */
+    /** Creates a new instance of MakeInstancesWithAssociations */
     public MakeInstancesWithAssociations() {
         this(new AssociationContext());
     }
+
+
     public MakeInstancesWithAssociations(Context<?> preferredContext) {
         setContext(preferredContext);
     }
+
 
     @Override
     public String getName() {
@@ -69,45 +72,47 @@ public class MakeInstancesWithAssociations extends AbstractWandoraTool {
         return "Makes players of one role of association instances to players of another role in the association.";
     }
 
-    
+
     @Override
     public void execute(Wandora wandora, Context<?> context) {
-        Iterator<?> associations=null;
-        if(context instanceof AssociationContext) {
+        Iterator<?> associations = null;
+        if (context instanceof AssociationContext) {
             associations = context.getContextObjects();
-        }
-        else return;
+        } else
+            return;
 
-        Topic classRole=null;
-        Topic instanceRole=null;
-        
-        try{
-            while(associations.hasNext()){
-                Association a=(Association)associations.next();
-                
-                if(classRole==null){
-                    Object[] roles=a.getRoles().toArray();
-                    classRole=(Topic)WandoraOptionPane.showOptionDialog(wandora,"Select role topic for classes","Select topic",WandoraOptionPane.YES_NO_OPTION,roles,roles[0]);
-                    //classRole=admin.showTopicFinder("Select role of class topic");                
-                    if(classRole==null) return;
+        Topic classRole = null;
+        Topic instanceRole = null;
+
+        try {
+            while (associations.hasNext()) {
+                Association a = (Association) associations.next();
+
+                if (classRole == null) {
+                    Object[] roles = a.getRoles().toArray();
+                    classRole = (Topic) WandoraOptionPane.showOptionDialog(wandora, "Select role topic for classes",
+                            "Select topic", WandoraOptionPane.YES_NO_OPTION, roles, roles[0]);
+                    if (classRole == null)
+                        return;
                 }
-                if(instanceRole==null){
-                    Object[] roles=a.getRoles().toArray();
-                    instanceRole=(Topic)WandoraOptionPane.showOptionDialog(wandora,"Select role topic for instances","Select topic",WandoraOptionPane.YES_NO_OPTION,roles,roles[0]);
-                    //instanceRole=admin.showTopicFinder("Select role of instance topic");                
-                    if(instanceRole==null) return;
+                if (instanceRole == null) {
+                    Object[] roles = a.getRoles().toArray();
+                    instanceRole = (Topic) WandoraOptionPane.showOptionDialog(wandora,
+                            "Select role topic for instances", "Select topic", WandoraOptionPane.YES_NO_OPTION, roles,
+                            roles[0]);
+                    if (instanceRole == null)
+                        return;
                 }
-                
-                Topic c=a.getPlayer(classRole);
-                Topic i=a.getPlayer(instanceRole);
-                if(c!=null && i!=null){
+
+                Topic c = a.getPlayer(classRole);
+                Topic i = a.getPlayer(instanceRole);
+                if (c != null && i != null) {
                     i.addType(c);
                 }
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             log(e);
         }
-        
-    }    
+
+    }
 }

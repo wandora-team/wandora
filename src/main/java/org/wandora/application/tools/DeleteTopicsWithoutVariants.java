@@ -41,12 +41,12 @@ import org.wandora.topicmap.TopicMapException;
 public class DeleteTopicsWithoutVariants extends DeleteTopics {
 
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/** Creates a new instance of DeleteTopicsWithoutVariants */
+
+    /** Creates a new instance of DeleteTopicsWithoutVariants */
     public DeleteTopicsWithoutVariants() {
     }
-
 
 
 
@@ -55,27 +55,27 @@ public class DeleteTopicsWithoutVariants extends DeleteTopics {
         return "Delete topics without variant names";
     }
 
+
     @Override
     public String getDescription() {
         return "Delete context topics without variant names.";
     }
 
+
     @Override
-    public boolean shouldDelete(Topic topic)  throws TopicMapException {
+    public boolean shouldDelete(Topic topic) throws TopicMapException {
         try {
-            if(topic != null && !topic.isRemoved()) {
+            if (topic != null && !topic.isRemoved()) {
                 Set<Set<Topic>> variantScopes = topic.getVariantScopes();
-                if(variantScopes == null || variantScopes.isEmpty()) {
-                    if(confirm) {
+                if (variantScopes == null || variantScopes.isEmpty()) {
+                    if (confirm) {
                         return confirmDelete(topic);
-                    }
-                    else {
+                    } else {
                         return true;
                     }
                 }
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             log(e);
         }
         return false;

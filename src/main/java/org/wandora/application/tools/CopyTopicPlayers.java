@@ -41,27 +41,31 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class CopyTopicPlayers extends CopyTopics {
-    
 
-	private static final long serialVersionUID = 1L;
 
-	public CopyTopicPlayers() throws TopicMapException {
+    private static final long serialVersionUID = 1L;
+
+
+    public CopyTopicPlayers() throws TopicMapException {
     }
-    
+
+
     @Override
     public String getName() {
         return "Copy topic players";
     }
 
+
     @Override
     public String getDescription() {
         return "Copies association player topics of associations in selected topics to clipboard.";
     }
-    
+
+
     @Override
     public void initialize(int copyOrders, int includeOrders) {
         super.initialize(copyOrders, includeOrders);
         setContext(new PlayerContext());
     }
-    
+
 }

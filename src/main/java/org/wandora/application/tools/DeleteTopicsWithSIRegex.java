@@ -44,58 +44,63 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class DeleteTopicsWithSIRegex extends DeleteTopics {
-    
-     private static final long serialVersionUID = 1L;
-     
-	 RegularExpressionEditor editor = null;
-    
-    
+
+    private static final long serialVersionUID = 1L;
+
+    RegularExpressionEditor editor = null;
+
+
     /** Creates a new instance of DeleteTopicsWithSIRegex */
     public DeleteTopicsWithSIRegex() {
     }
+
+
     public DeleteTopicsWithSIRegex(Context<?> preferredContext) {
         setContext(preferredContext);
     }
-    
+
+
     @Override
-    public void execute(Wandora admin, Context<?> context) throws TopicMapException  {
+    public void execute(Wandora admin, Context<?> context) throws TopicMapException {
         editor = RegularExpressionEditor.getMatchExpressionEditor(admin);
         editor.approve = false;
         editor.setVisible(true);
-        if(editor.approve == true) {
+        if (editor.approve == true) {
             super.execute(admin, context);
         }
     }
-    
+
+
     @Override
     public String getName() {
         return "Delete topics with SI regex";
     }
 
+
     @Override
     public String getDescription() {
         return "Delete topics with subject identifier matching to given regular expression.";
     }
-    
+
+
     @Override
-    public boolean shouldDelete(Topic topic)  throws TopicMapException {
+    public boolean shouldDelete(Topic topic) throws TopicMapException {
         try {
-            if(topic != null && !topic.isRemoved()) {
+            if (topic != null && !topic.isRemoved()) {
                 Iterator<Locator> sii = topic.getSubjectIdentifiers().iterator();
                 Locator l = null;
-                while(sii.hasNext()) {
+                while (sii.hasNext()) {
                     l = sii.next();
-                    if(editor.matches(l.toExternalForm())) {
+                    if (editor.matches(l.toExternalForm())) {
                         return true;
                     }
                 }
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             log(e);
         }
         return false;
     }
-    
-    
+
+
 }

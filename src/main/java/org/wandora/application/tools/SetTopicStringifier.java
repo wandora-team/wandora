@@ -36,6 +36,7 @@ import org.wandora.application.gui.topicstringify.TopicStringifier;
 import org.wandora.application.gui.topicstringify.TopicToString;
 import org.wandora.topicmap.TopicMapException;
 
+
 /**
  *
  * @author akivela
@@ -44,50 +45,52 @@ import org.wandora.topicmap.TopicMapException;
 
 public class SetTopicStringifier extends AbstractWandoraTool {
 
-	private static final long serialVersionUID = 1L;
-	
-	
-	private TopicStringifier topicStringifier = null;
-    
-    
+    private static final long serialVersionUID = 1L;
+
+
+    private TopicStringifier topicStringifier = null;
+
+
     public SetTopicStringifier(TopicStringifier r) {
         topicStringifier = r;
     }
 
-    
+
 
     @Override
     public String getName() {
         return "Topic renders";
     }
 
+
     @Override
     public String getDescription() {
-        if(topicStringifier == null) {
+        if (topicStringifier == null) {
             return "Topic renders";
-        }
-        else {
+        } else {
             return topicStringifier.getDescription();
         }
     }
-    
+
+
     @Override
     public boolean requiresRefresh() {
         return true;
     }
-    
+
+
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/view_topic_as.png");
     }
-    
-    
+
+
     @Override
     public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         boolean success = topicStringifier.initialize(wandora, context);
-        if(success) {
+        if (success) {
             TopicToString.setStringifier(topicStringifier);
         }
     }
-  
+
 }

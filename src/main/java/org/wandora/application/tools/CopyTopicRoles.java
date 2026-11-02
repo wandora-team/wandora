@@ -39,29 +39,32 @@ import org.wandora.topicmap.TopicMapException;
 
 
 
-
 public class CopyTopicRoles extends CopyTopics {
-    
 
-	private static final long serialVersionUID = 1L;
 
-	public CopyTopicRoles() throws TopicMapException {
+    private static final long serialVersionUID = 1L;
+
+
+    public CopyTopicRoles() throws TopicMapException {
     }
-    
+
+
     @Override
     public String getName() {
         return "Copy topic roles";
     }
 
+
     @Override
     public String getDescription() {
         return "Copies association role topics of associations in selected topics to clipboard.";
     }
-    
+
+
     @Override
     public void initialize(int copyOrders, int includeOrders) {
         super.initialize(copyOrders, includeOrders);
         setContext(new RoleContext());
     }
-    
+
 }

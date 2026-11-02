@@ -30,7 +30,6 @@ package org.wandora.application.tools;
 
 
 
-
 import org.wandora.topicmap.Topic;
 
 
@@ -40,17 +39,18 @@ import org.wandora.topicmap.Topic;
  */
 public class DeleteTopicsWithoutAssociations extends DeleteTopics {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 
-	public DeleteTopicsWithoutAssociations() {
+    public DeleteTopicsWithoutAssociations() {
     }
-    
+
 
     @Override
     public String getName() {
         return "Delete topic(s) without associations";
     }
+
 
     @Override
     public String getDescription() {
@@ -61,21 +61,19 @@ public class DeleteTopicsWithoutAssociations extends DeleteTopics {
     @Override
     public boolean shouldDelete(Topic topic) {
         try {
-            if(topic != null && !topic.isRemoved()) {
-                if(topic.getAssociations().isEmpty()) {
-                    if(confirm) {
+            if (topic != null && !topic.isRemoved()) {
+                if (topic.getAssociations().isEmpty()) {
+                    if (confirm) {
                         return confirmDelete(topic);
-                    }
-                    else {
+                    } else {
                         return true;
                     }
                 }
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             log(e);
         }
         return false;
     }
-    
+
 }

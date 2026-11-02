@@ -35,64 +35,68 @@ import org.wandora.application.contexts.Context;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 
+
 /**
  *
  * @author akivela
  */
 public class AddClass extends AbstractWandoraTool {
-    
 
-	private static final long serialVersionUID = 1L;
 
-	private boolean shouldRefresh = false;
-    
-    
+    private static final long serialVersionUID = 1L;
+
+    private boolean shouldRefresh = false;
+
+
     /** Creates a new instance of AddClass */
     public AddClass() {
     }
+
+
     public AddClass(Context<?> preferredContext) {
         setContext(preferredContext);
     }
-    
+
+
     @Override
     public String getName() {
         return "Add class";
     }
 
+
     @Override
     public String getDescription() {
         return "Add a class topic to selected topics.";
     }
-    
+
+
     @Override
     public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         shouldRefresh = false;
         Iterator<?> topics = context.getContextObjects();
-        if(topics != null && topics.hasNext()) {
-            Topic classTopic=wandora.showTopicFinder();
-            
+        if (topics != null && topics.hasNext()) {
+            Topic classTopic = wandora.showTopicFinder();
             Topic topic = null;
-            if(classTopic != null) {
-                while(topics.hasNext() && !forceStop()) {
+            if (classTopic != null) {
+                while (topics.hasNext() && !forceStop()) {
                     try {
                         topic = (Topic) topics.next();
-                        if(topic != null && !topic.isRemoved()) {
+                        if (topic != null && !topic.isRemoved()) {
                             shouldRefresh = true;
                             topic.addType(classTopic);
                         }
-                    }
-                    catch(Exception e) {
+                    } catch (Exception e) {
                         log(e);
                     }
                 }
             }
         }
     }
-    
-    
+
+
     @Override
     public boolean requiresRefresh() {
         return shouldRefresh;
     }
-    
+
 }

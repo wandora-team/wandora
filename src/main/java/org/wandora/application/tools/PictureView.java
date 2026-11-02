@@ -30,37 +30,41 @@ package org.wandora.application.tools;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+
 /**
  *
  * @author  olli
  */
 public class PictureView extends javax.swing.JDialog {
     private static final long serialVersionUID = 1L;
-    
-	private BufferedImage image;
+
+    private BufferedImage image;
+
+
     /** Creates new form PictureView */
-    public PictureView(java.awt.Dialog parent, boolean modal,BufferedImage image) {
+    public PictureView(java.awt.Dialog parent, boolean modal, BufferedImage image) {
         super(parent, modal);
-        this.image=image;
+        this.image = image;
         initComponents();
-        this.picturePanel.setMinimumSize(new java.awt.Dimension(image.getWidth(),image.getHeight()));
-        this.picturePanel.setPreferredSize(new java.awt.Dimension(image.getWidth(),image.getHeight()));
-//        this.picturePanel.setSize(image.getWidth(),image.getHeight());
-        org.wandora.utils.swing.GuiTools.centerWindow(this,parent);
-        this.invalidate();        
-    }
-    public PictureView(java.awt.Frame parent, boolean modal,BufferedImage image) {
-        super(parent, modal);
-        this.image=image;
-        initComponents();
-        this.picturePanel.setMinimumSize(new java.awt.Dimension(image.getWidth(),image.getHeight()));
-        this.picturePanel.setPreferredSize(new java.awt.Dimension(image.getWidth(),image.getHeight()));
-//        this.picturePanel.setSize(image.getWidth(),image.getHeight());
-        this.setLocation(parent.getLocation().x+parent.getWidth()/2-this.getWidth()/2, 
-                         parent.getLocation().y+parent.getHeight()/2-this.getHeight()/2);
+        this.picturePanel.setMinimumSize(new java.awt.Dimension(image.getWidth(), image.getHeight()));
+        this.picturePanel.setPreferredSize(new java.awt.Dimension(image.getWidth(), image.getHeight()));
+        org.wandora.utils.swing.GuiTools.centerWindow(this, parent);
         this.invalidate();
     }
-    
+
+
+    public PictureView(java.awt.Frame parent, boolean modal, BufferedImage image) {
+        super(parent, modal);
+        this.image = image;
+        initComponents();
+        this.picturePanel.setMinimumSize(new java.awt.Dimension(image.getWidth(), image.getHeight()));
+        this.picturePanel.setPreferredSize(new java.awt.Dimension(image.getWidth(), image.getHeight()));
+        this.setLocation(parent.getLocation().x + parent.getWidth() / 2 - this.getWidth() / 2,
+                parent.getLocation().y + parent.getHeight() / 2 - this.getHeight() / 2);
+        this.invalidate();
+    }
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -72,9 +76,9 @@ public class PictureView extends javax.swing.JDialog {
         jButton = new javax.swing.JButton();
         jScrollPane = new javax.swing.JScrollPane();
         picturePanel = new javax.swing.JPanel() {
-            public void paint(Graphics g){
+            public void paint(Graphics g) {
                 super.paint(g);
-                g.drawImage(image,0,0,image.getWidth(),image.getHeight(),null);
+                g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
             }
         };
 
@@ -105,14 +109,16 @@ public class PictureView extends javax.swing.JDialog {
         setBounds(0, 0, 567, 560);
     }//GEN-END:initComponents
 
+
     private void jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_jButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton;
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JPanel picturePanel;
     // End of variables declaration//GEN-END:variables
-    
+
 }

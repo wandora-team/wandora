@@ -30,7 +30,6 @@ package org.wandora.application.tools;
 
 
 
-
 import java.util.Collection;
 
 import org.wandora.topicmap.Topic;
@@ -42,12 +41,12 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class DeleteTopicsWithoutOccurrences extends DeleteTopics {
-    
-
-	private static final long serialVersionUID = 1L;
 
 
-	@Override
+    private static final long serialVersionUID = 1L;
+
+
+    @Override
     public String getName() {
         return "Delete topics without occurrences";
     }
@@ -57,26 +56,24 @@ public class DeleteTopicsWithoutOccurrences extends DeleteTopics {
     public String getDescription() {
         return "Delete context topics without occurrences.";
     }
-    
+
 
     @Override
-    public boolean shouldDelete(Topic topic)  throws TopicMapException {
+    public boolean shouldDelete(Topic topic) throws TopicMapException {
         try {
             Collection<Topic> dataTypes = topic.getDataTypes();
-            if(dataTypes == null || dataTypes.isEmpty()) {
-                if(confirm) {
+            if (dataTypes == null || dataTypes.isEmpty()) {
+                if (confirm) {
                     return confirmDelete(topic);
-                }
-                else {
+                } else {
                     return true;
                 }
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             log(e);
         }
         return false;
     }
-    
-    
+
+
 }

@@ -82,31 +82,31 @@ import org.wandora.utils.logger.Log4j2Logger;
 
 
 public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
-	private static final long serialVersionUID = 1L;
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractWandoraTool.class);
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(AbstractWandoraTool.class);
 
     private WandoraToolLogger lastToolLogger = null;
     private WandoraToolLogger toolLogger = null;
     private boolean internalForceStop;
-    
+
     private Wandora runWandora = null;
     private Context<?> runContext = null;
-    
-    private static final Set<Class<? extends AbstractWandoraTool>> toolLocks = new LinkedHashSet<>();
-    private static final Map<Thread,T2<Class<? extends AbstractWandoraTool>,Long>> toolThreads = new LinkedHashMap<>();
 
-    
-    
+    private static final Set<Class<? extends AbstractWandoraTool>> toolLocks = new LinkedHashSet<>();
+    private static final Map<Thread, T2<Class<? extends AbstractWandoraTool>, Long>> toolThreads = new LinkedHashMap<>();
+
+
+
     public AbstractWandoraTool() {
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
     // ------------------------------------------------------ EXECUTING TOOL ---
     // -------------------------------------------------------------------------
-    
-    
+
+
     /**
      * This is first entry point to execute the tool. Use this entry point when
      * you wish to execute the tool from your own code. Method just fills the 
@@ -116,111 +116,115 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     public void execute(Wandora wandora) throws TopicMapException {
         execute(wandora, (ActionEvent) null);
     }
-    
+
+
     @Override
     public abstract void execute(Wandora wandora, Context<?> context) throws TopicMapException;
 
-    
-    
+
+
     /**
      * This is the primary entry point to execute the tool. All UI 
      * actions should enter the tool here. Usually this method is called 
      * from the <code>WandoraToolActionListener</code>.
      */
     @Override
-    public void execute(Wandora wandora, ActionEvent event)  throws TopicMapException {
+    public void execute(Wandora wandora, ActionEvent event) throws TopicMapException {
         internalForceStop = false;
-        
-        if(event != null) {
-            int modifiers=event.getModifiers();
-            if((modifiers&ActionEvent.SHIFT_MASK)!=0 && (modifiers&ActionEvent.CTRL_MASK)!=0 && (modifiers&ActionEvent.MOUSE_EVENT_MASK)!=0 ) {
+
+        if (event != null) {
+            int modifiers = event.getModifiers();
+            if ((modifiers & ActionEvent.SHIFT_MASK) != 0 && (modifiers & ActionEvent.CTRL_MASK) != 0
+                    && (modifiers & ActionEvent.MOUSE_EVENT_MASK) != 0) {
                 try {
-                    if(wandora != null) {
+                    if (wandora != null) {
                         String className = this.getClass().getName();
-                        String helpName = className.substring(className.lastIndexOf('.')+1);
+                        String helpName = className.substring(className.lastIndexOf('.') + 1);
                         String helpUrl = wandora.getOptions().get("helpviewer");
-                        if(helpUrl != null) helpUrl = helpUrl.replaceAll("__HELP__", helpName);
-                        
+                        if (helpUrl != null)
+                            helpUrl = helpUrl.replaceAll("__HELP__", helpName);
+
                         Desktop desktop = Desktop.getDesktop();
                         desktop.browse(new URI(helpUrl));
-                        
-                        try { Thread.sleep(200); } 
-                        catch(Exception e) {} // WAKEUP!
+
+                        try {
+                            Thread.sleep(200);
+                        } catch (Exception e) {
+                        } // WAKEUP!
                     }
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     logger.error(e);
                 }
                 return;
             }
-            if((modifiers&ActionEvent.CTRL_MASK)!=0 && (modifiers&ActionEvent.MOUSE_EVENT_MASK)!=0 ) {
+            if ((modifiers & ActionEvent.CTRL_MASK) != 0 && (modifiers & ActionEvent.MOUSE_EVENT_MASK) != 0) {
                 try {
-                    boolean configured=false;
-                    if(isConfigurable()){
-                        String prefix=wandora.getToolManager().getOptionsPrefix(this);
-                        if(prefix == null) {
-                            prefix = "options."+this.getClass().getCanonicalName();
+                    boolean configured = false;
+                    if (isConfigurable()) {
+                        String prefix = wandora.getToolManager().getOptionsPrefix(this);
+                        if (prefix == null) {
+                            prefix = "options." + this.getClass().getCanonicalName();
                         }
-                        configured=true;
-                        configure(wandora,wandora.getOptions(),prefix);
+                        configured = true;
+                        configure(wandora, wandora.getOptions(), prefix);
                     }
-                    if(!configured) WandoraOptionPane.showMessageDialog(wandora,"Tool is not configurable","Tool is not configurable");
-                    if(!allowMultipleInvocations()){
-                        synchronized(toolLocks){
+                    if (!configured)
+                        WandoraOptionPane.showMessageDialog(
+                                wandora, 
+                                "Tool is not configurable",
+                                "Tool is not configurable");
+                    if (!allowMultipleInvocations()) {
+                        synchronized (toolLocks) {
                             toolLocks.remove(this.getClass());
                         }
                     }
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     logger.error(e);
                 }
                 return;
             }
-            if((modifiers&ActionEvent.ALT_MASK)!=0 && (modifiers&ActionEvent.MOUSE_EVENT_MASK)!=0 ) {
+            if ((modifiers & ActionEvent.ALT_MASK) != 0 && (modifiers & ActionEvent.MOUSE_EVENT_MASK) != 0) {
                 try {
-                    synchronized(toolLocks){
+                    synchronized (toolLocks) {
                         toolLocks.remove(this.getClass());
                     }
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     logger.error(e);
                 }
             }
         }
 
-        if(!allowMultipleInvocations()){
-            synchronized(toolLocks){
-                if(toolLocks.contains(this.getClass())){
-                    singleLog("Tool '"+this.getName()+"' already running!\nWait or use clear tool locks.");
+        if (!allowMultipleInvocations()) {
+            synchronized (toolLocks) {
+                if (toolLocks.contains(this.getClass())) {
+                    singleLog("Tool '" + this.getName() + "' already running!\nWait or use clear tool locks.");
                     return;
                 }
                 toolLocks.add(this.getClass());
             }
         }
-        
+
         this.runWandora = wandora;
-        if(runContext == null) { 
-        	runContext = new LayeredTopicContext(); 
-    	}
-        
+        if (runContext == null) {
+            runContext = new LayeredTopicContext();
+        }
+
         // TODO: runContext is overwritten if the same instance of a tool  
         // is executed again.
         runContext.initialize(wandora, event, this);
 
-        if(runInOwnThread()) {
+        if (runInOwnThread()) {
             Thread worker = new Thread(this, getName());
-            synchronized(toolThreads) {
+            synchronized (toolThreads) {
                 toolThreads.put(worker, new T2<>(this.getClass(), Long.valueOf(System.currentTimeMillis())));
             }
-            //SwingUtilities.invokeLater(worker);
             worker.start();
-        }
-        else {
+        } else {
             run();
         }
     }
-    
-   
+
+
     /**
      * Runs the tool. If <code>runInOwnThread</code> returns false,
      * this method is called directly instead of creating a new <code>Thread</code>.
@@ -230,83 +234,75 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     @Override
     public void run() {
         try {
-            if(runWandora != null) {
+            if (runWandora != null) {
                 runWandora.setAnimated(true, this);
             }
             execute(runWandora, runContext);
-        }
-        catch(Exception e) {
-            if(runWandora != null) {
+        } catch (Exception e) {
+            if (runWandora != null) {
                 runWandora.displayException(ErrorMessages.getMessage(e, this), e);
+            } else {
+                logger.error(e);
             }
-            else {
-            	logger.error(e);
-            }
-        }
-        catch(Error er) {
-            if(runWandora != null) {
+        } catch (Error er) {
+            if (runWandora != null) {
                 runWandora.displayException(ErrorMessages.getMessage(er, this), er);
-            }
-            else {
-            	logger.error(er);
+            } else {
+                logger.error(er);
             }
         }
-        if(!allowMultipleInvocations()) {
-            synchronized(toolLocks){
+        if (!allowMultipleInvocations()) {
+            synchronized (toolLocks) {
                 toolLocks.remove(this.getClass());
             }
         }
-        if(runInOwnThread()) {
-            synchronized(toolThreads) {
+        if (runInOwnThread()) {
+            synchronized (toolThreads) {
                 try {
                     toolThreads.remove(Thread.currentThread());
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     logger.error(e);
                 }
             }
         }
-                
+
         try {
-            if(runWandora != null) {
-                if(requiresRefresh()) {
+            if (runWandora != null) {
+                if (requiresRefresh()) {
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
                             try {
                                 runWandora.doRefresh();
-                            }
-                            catch(Exception e) {
+                            } catch (Exception e) {
                                 // SKIPPING
                             }
                         }
                     });
-                }
-                else {
+                } else {
                     // requiresRefresh() == false --> Do nothing
                 }
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             logger.error("Refresh failed in AbstractWandoraTool!");
             logger.error(e);
         }
-        
-        if(runWandora != null) {
+
+        if (runWandora != null) {
             runWandora.setAnimated(false, this);
         }
-        if(toolLogger != null && toolLogger.getState() == EXECUTE) {
-        	logger.warn("Warning! Logger still running when leaving tool! Closing logger!");
+        if (toolLogger != null && toolLogger.getState() == EXECUTE) {
+            logger.warn("Warning! Logger still running when leaving tool! Closing logger!");
             toolLogger.setState(CLOSE);
         }
-        if(toolLogger != null) {
+        if (toolLogger != null) {
             lastToolLogger = toolLogger;
             toolLogger = null;
         }
     }
-    
-    
-    
+
+
+
     /**
      * Checks if this (extended) tool is running. 
      * 
@@ -316,8 +312,8 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     public boolean isRunning() {
         return isRunning(this.getClass());
     }
-    
-    
+
+
     /**
      * Checks if given tool is already running and
      * locked.
@@ -325,14 +321,15 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * @return boolean true if the tool is running.
      */
     public boolean isRunning(Class<? extends AbstractWandoraTool> c) {
-        synchronized(toolLocks){
-            if(toolLocks.contains(c)){
+        synchronized (toolLocks) {
+            if (toolLocks.contains(c)) {
                 return true;
             }
         }
         return false;
     }
-    
+
+
     /**
      * Releases a tool lock for this (extending) tool class.
      * 
@@ -341,7 +338,8 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     public boolean clearToolLock() {
         return clearToolLock(this.getClass());
     }
-    
+
+
     /**
      * Releases a tool lock for a given tool class. Tool lock prevents tool execution
      * while previous execution is unfinished. Doesn't stop nor kill the thread
@@ -351,9 +349,9 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * @return boolean true if a lock was released.
      */
     public static boolean clearToolLock(Class<? extends AbstractWandoraTool> c) {
-        if(c != null) {
-            synchronized(toolLocks){
-                if(toolLocks.contains(c)) {
+        if (c != null) {
+            synchronized (toolLocks) {
+                if (toolLocks.contains(c)) {
                     toolLocks.remove(c);
                     return true;
                 }
@@ -361,8 +359,8 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
         }
         return false;
     }
-    
-    
+
+
     /**
      * Releases all locks that prevent tools to be executed again.
      * Notice the method doesn't kill any threads. Threads must be interrupted
@@ -372,132 +370,132 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      */
     public static int clearToolLocks() {
         int n = 0;
-        synchronized(toolLocks){
+        synchronized (toolLocks) {
             n = toolLocks.size();
             toolLocks.clear();
         }
         Wandora w = Wandora.getWandora();
-        if(w != null) {
+        if (w != null) {
             w.forceStopAnimation();
         }
         return n;
     }
-    
-    
+
+
     public void interruptThreads() {
         interruptThreads(this.getClass());
     }
-    
+
+
     public static void interruptThreads(Class<? extends AbstractWandoraTool> c) {
-        if(c == null) return;
-        synchronized(toolThreads) {
+        if (c == null)
+            return;
+        synchronized (toolThreads) {
             try {
                 T2<Class<? extends AbstractWandoraTool>, Long> timedClass = null;
-                for( Thread toolThread : toolThreads.keySet() ) {
+                for (Thread toolThread : toolThreads.keySet()) {
                     timedClass = toolThreads.get(toolThread);
-                    if(c.equals(timedClass.e1)) {
+                    if (c.equals(timedClass.e1)) {
                         toolThread.interrupt();
                     }
                 }
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 logger.error(e);
             }
         }
     }
-    
-    
+
+
     public static void interruptAllThreads() {
-        synchronized(toolThreads) {
+        synchronized (toolThreads) {
             try {
-                for( Thread toolThread : toolThreads.keySet() ) {
+                for (Thread toolThread : toolThreads.keySet()) {
                     toolThread.interrupt();
                 }
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 logger.error(e);
             }
         }
     }
-    
-    
-    
+
+
+
     public void clearThreads() {
         clearThreads(this.getClass());
     }
-    
-    
+
+
     public static void clearThreads(Class<? extends AbstractWandoraTool> c) {
-        if(c == null) return;
-        synchronized(toolThreads) {
+        if (c == null)
+            return;
+        synchronized (toolThreads) {
             List<Thread> threadList = new ArrayList<>();
             try {
                 T2<Class<? extends AbstractWandoraTool>, Long> timedClass = null;
-                for( Thread toolThread : toolThreads.keySet() ) {
+                for (Thread toolThread : toolThreads.keySet()) {
                     timedClass = toolThreads.get(toolThread);
-                    if(c.equals(timedClass.e1)) {
+                    if (c.equals(timedClass.e1)) {
                         threadList.add(toolThread);
                     }
                 }
-                for( Thread toolThread : threadList ) {
+                for (Thread toolThread : threadList) {
                     toolThreads.remove(toolThread);
                 }
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 logger.error(e);
             }
         }
     }
-    
-    
+
+
     public static void clearAllThreads() {
-        synchronized(toolThreads) {
+        synchronized (toolThreads) {
             List<Thread> threadList = new ArrayList<>();
             try {
-                for( Thread toolThread : toolThreads.keySet() ) {
+                for (Thread toolThread : toolThreads.keySet()) {
                     threadList.add(toolThread);
                 }
-                for( Thread toolThread : threadList ) {
+                for (Thread toolThread : threadList) {
                     toolThreads.remove(toolThread);
                 }
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 logger.error(e);
             }
         }
     }
-    
-    public List<T2<Thread,Long>> getThreads() {
+
+
+    public List<T2<Thread, Long>> getThreads() {
         return getThreads(this.getClass());
     }
-            
-    public static List<T2<Thread,Long>> getThreads(Class<? extends AbstractWandoraTool> c) {
+
+
+    public static List<T2<Thread, Long>> getThreads(Class<? extends AbstractWandoraTool> c) {
         List<T2<Thread, Long>> threadList = new ArrayList<>();
-        if(c != null) {
-            synchronized(toolThreads) {
+        if (c != null) {
+            synchronized (toolThreads) {
                 try {
                     T2<Class<? extends AbstractWandoraTool>, Long> timedClass = null;
-                    for( Thread toolThread : toolThreads.keySet() ) {
+                    for (Thread toolThread : toolThreads.keySet()) {
                         timedClass = toolThreads.get(toolThread);
-                        if(c.equals(timedClass.e1)) {
-                            threadList.add( new T2<>(toolThread, timedClass.e2) );
+                        if (c.equals(timedClass.e1)) {
+                            threadList.add(new T2<>(toolThread, timedClass.e2));
                         }
                     }
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     logger.error(e);
                 }
             }
         }
         return threadList;
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
     // -------------------------------------------------------- TOOL FLAVOUR ---
     // -------------------------------------------------------------------------
-    
-           
+
+
     /**
      * Whether or not this tool should fork own thread. If own thread is allowed,
      * the execution of the tool return immediately. If own thread is not allowed
@@ -509,7 +507,8 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     public boolean runInOwnThread() {
         return true;
     }
-    
+
+
     /**
      * <p>
      * Tool type is used to categorize tools. Tool type has no real effect today,
@@ -517,10 +516,11 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * </p>
      */
     @Override
-    public WandoraToolType getType(){
+    public WandoraToolType getType() {
         return WandoraToolType.createGenericType();
     }
-    
+
+
     /**
      * Tools name represent the tool in UI unless the tool has been given
      * explicitly another GUI name. All tools should override this method and
@@ -530,7 +530,8 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     public String getName() {
         return "Abstract Tool";
     }
-    
+
+
     /**
      * WandoraToolManager views tool descriptions while user browses available
      * tools and build user customizable GUI elements such as Tools menu.
@@ -541,8 +542,8 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     public String getDescription() {
         return getName();
     }
-    
-    
+
+
     /**
      * <p>
      * If any visible topic has been changed during tool execution GUI is
@@ -556,8 +557,8 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     public boolean requiresRefresh() {
         return true;
     }
-    
-    
+
+
 
     /**
      * Should the tool allow more than one running occurrence of same tool class.
@@ -572,8 +573,8 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     public boolean allowMultipleInvocations() {
         return false;
     }
-    
-    
+
+
     /**
      * <code>WandoraTool</code> should be GUI independent allowing tool
      * to be inserted into various type of GUI elements such as menus.
@@ -582,25 +583,27 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     @Override
     public SimpleMenuItem getToolMenuItem(Wandora wandora, String instanceName) {
         SimpleMenuItem manageMenuItem = new SimpleMenuItem(instanceName, new WandoraToolActionListener(wandora, this));
-        Icon icon=getIcon();
-        if(icon!=null) {
+        Icon icon = getIcon();
+        if (icon != null) {
             manageMenuItem.setIcon(icon);
         }
         String description = getDescription();
-        if(description != null && description.length() > 0) {
+        if (description != null && description.length() > 0) {
             manageMenuItem.setToolTipText(Textbox.makeHTMLParagraph(description, 30));
         }
         return manageMenuItem;
     }
+
+
     public SimpleMenuItem getToolMenuItem(Wandora wandora, String instanceName, KeyStroke keyStroke) {
-        SimpleMenuItem menuItem = getToolMenuItem(wandora,instanceName);
-        if(keyStroke != null) {
+        SimpleMenuItem menuItem = getToolMenuItem(wandora, instanceName);
+        if (keyStroke != null) {
             menuItem.setAccelerator(keyStroke);
         }
         return menuItem;
     }
-    
-    
+
+
     /**
      * All tools may have identifying graphic icon used within tool GUI elements.
      * <code>getIcon</code> should return <code>Icon</code> object of
@@ -610,14 +613,14 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/generic_tool.png");
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
     // ---------------------------------------------------- CONFIGURING TOOL ---
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     /**
      * Initializes a tool with options saved in the options. Options for
      * this tool start with the given prefix. What options the tool saves
@@ -626,6 +629,8 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     @Override
     public void initialize(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
     }
+
+
     /**
      * Whether this tool is configurable. Configurable tools will provide an interface
      * to configure themselves. To make a configurable tool you will need to:
@@ -638,9 +643,11 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * </ul>
      */
     @Override
-    public boolean isConfigurable(){
+    public boolean isConfigurable() {
         return false;
     }
+
+
     /**
      * If the tool is configurable, shows an user interface to configure the tool. The user
      * may edit tool options which this method also need to save. Options specific
@@ -649,23 +656,23 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
     @Override
     public void configure(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
     }
+
+
     /**
      * If the tool is configurable, saves all current tool options. Options specific
      * to this tool should be saved with keys starting with the given prefix.
      */
     @Override
-    public void writeOptions(Wandora wandora, org.wandora.utils.Options options, String prefix){
-    }    
+    public void writeOptions(Wandora wandora, org.wandora.utils.Options options, String prefix) {
+    }
 
-    
 
-    
-    
+
     // -------------------------------------------------------------------------
     // --------------------------------------------------- ACCESSING CONTEXT ---
     // -------------------------------------------------------------------------
-    
-    
+
+
     /**
      * Each executed tool has <code>Context</code> containing context source and
      * context objects. Context source is a GUI element that originates the
@@ -676,9 +683,11 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * no explicitly set context <code>AbstractWandoraTool</code> uses <code>LayeredTopicContext</code>.
      */
     @Override
-    public void setContext(Context<?> context) { runContext = context; }
-    
-    
+    public void setContext(Context<?> context) {
+        runContext = context;
+    }
+
+
     /**
      * Return tools <code>Context</code>. If tool uses default context ie.
      * <code>setContext</code> has not been called with valid <code>Context</code>
@@ -688,11 +697,12 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * execution, not before.
      */
     @Override
-    public Context<?> getContext() { return runContext; }
-    
-   
-    
-    
+    public Context<?> getContext() {
+        return runContext;
+    }
+
+
+
     // -------------------------------------------------------------------------
     // ---------------------------------------------------- ACCESSING LOGGER ---
     // -------------------------------------------------------------------------
@@ -714,231 +724,241 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
         setToolLogger(getDefaultLogger());
         setLogTitle(getName());
     }
-    
+
+
     public WandoraToolLogger getDefaultLogger() {
-        if(toolLogger != null) {
-        	return toolLogger;
+        if (toolLogger != null) {
+            return toolLogger;
         }
-        if(runWandora != null) {
+        if (runWandora != null) {
             InfoDialog infoDialog = new InfoDialog(runWandora);
             infoDialog.setState(InfoDialog.EXECUTE);
             return infoDialog;
         }
         return null;
     }
-    
+
+
     public WandoraToolLogger getCurrentLogger() {
         return toolLogger;
     }
-    
+
+
     public WandoraToolLogger getLastLogger() {
         return lastToolLogger;
     }
 
-    
+
     public void singleLog(String message) {
         setDefaultLogger();
         log(message);
         setState(WandoraToolLogger.WAIT);
     }
-    
+
+
     public void singleLog(Exception e) {
         setDefaultLogger();
         log(e);
         setState(WandoraToolLogger.WAIT);
     }
-    
+
+
     public void singleLog(String message, Exception e) {
         setDefaultLogger();
         log(message, e);
         setState(WandoraToolLogger.WAIT);
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
-    
-    
+
+
     @Override
     public void setToolLogger(WandoraToolLogger toolLogger) {
         this.toolLogger = toolLogger;
     }
-    
-    
+
+
     // -------------------------------------------------------------------------
 
-    
+
     @Override
     public void hlog(String message) {
-        if(toolLogger != null) {
+        if (toolLogger != null) {
             toolLogger.hlog(message);
-        }
-        else if(runWandora != null) {
+        } else if (runWandora != null) {
             WandoraOptionPane.showMessageDialog(runWandora, message);
-        }
-        else logger.info(message);
+        } else
+            logger.info(message);
     }
-    
-    
+
+
     @Override
     public void log(String message) {
-        if(toolLogger != null) {
+        if (toolLogger != null) {
             toolLogger.log(message);
-        }
-        else if(runWandora != null) {
+        } else if (runWandora != null) {
             WandoraOptionPane.showMessageDialog(runWandora, message);
-        }
-        else logger.info(message);
+        } else
+            logger.info(message);
     }
-    
-    
+
+
     @Override
     public void log(String message, Exception e) {
-        if(toolLogger != null) {
+        if (toolLogger != null) {
             toolLogger.log(message, e);
-        }
-        else if(runWandora != null) {
+        } else if (runWandora != null) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
-            WandoraOptionPane.showMessageDialog(runWandora, message + "\n" + sw.toString(), WandoraOptionPane.ERROR_MESSAGE);
+            WandoraOptionPane.showMessageDialog(
+                    runWandora, 
+                    message + "\n" + sw.toString(),
+                    WandoraOptionPane.ERROR_MESSAGE);
             internalForceStop = true;
-        }
-        else {
+        } else {
             logger.error(message);
             logger.error(e);
         }
     }
-    
-    
+
+
     @Override
     public void log(Exception e) {
-        if(toolLogger != null) {
+        if (toolLogger != null) {
             toolLogger.log(e);
-        }
-        else if(runWandora != null) {
+        } else if (runWandora != null) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
-            WandoraOptionPane.showMessageDialog(runWandora, sw.toString(), WandoraOptionPane.ERROR_MESSAGE);
+            WandoraOptionPane.showMessageDialog(
+                    runWandora, 
+                    sw.toString(), 
+                    WandoraOptionPane.ERROR_MESSAGE);
             internalForceStop = true;
-        }
-        else {
+        } else {
             logger.error(e);
         }
     }
-    
-    
+
+
     @Override
     public void log(Error e) {
-        if(toolLogger != null) {
+        if (toolLogger != null) {
             toolLogger.log(e);
-        }
-        else if(runWandora != null) {
+        } else if (runWandora != null) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
-            WandoraOptionPane.showMessageDialog(runWandora, sw.toString(), WandoraOptionPane.ERROR_MESSAGE);
+            WandoraOptionPane.showMessageDialog(
+                    runWandora, 
+                    sw.toString(), 
+                    WandoraOptionPane.ERROR_MESSAGE);
             internalForceStop = true;
-        }
-        else {
+        } else {
             logger.error(e);
         }
     }
-    
-    
+
+
     @Override
     public void setProgress(int n) {
-        if(toolLogger != null) toolLogger.setProgress(n);
+        if (toolLogger != null)
+            toolLogger.setProgress(n);
     }
-    
-    
+
+
     @Override
     public void setProgressMax(int maxn) {
-        if(toolLogger != null) {
+        if (toolLogger != null) {
             toolLogger.setProgressMax(maxn);
         }
     }
-    
-    
+
+
     @Override
     public void setLogTitle(String title) {
-        if(toolLogger != null) {
+        if (toolLogger != null) {
             toolLogger.setLogTitle(title);
-        }
-        else logger.info(title);
+        } else
+            logger.info(title);
     }
-    
+
+
     @Override
     public void lockLog(boolean lock) {
-        if(toolLogger != null) {
+        if (toolLogger != null) {
             toolLogger.lockLog(lock);
         }
     }
-    
-    
+
+
     @Override
     public String getHistory() {
-        if(toolLogger != null) {
+        if (toolLogger != null) {
             return toolLogger.getHistory();
-        }
-        else {
+        } else {
             return "";
         }
     }
-    
+
+
     @Override
     public void setState(int state) {
-        if(toolLogger != null) {
+        if (toolLogger != null) {
             toolLogger.setState(state);
         }
     }
+
+
     @Override
     public int getState() {
-        if(toolLogger != null) {
+        if (toolLogger != null) {
             return toolLogger.getState();
-        }
-        else {
+        } else {
             return 0;
         }
     }
-    
+
+
     @Override
     public boolean forceStop() {
-        if(toolLogger != null) {
+        if (toolLogger != null) {
             return toolLogger.forceStop();
-        }
-        else {
+        } else {
             return internalForceStop;
         }
     }
-    
+
+
     public boolean forceStop(ConfirmResult result) {
-        if(result == notoall || result == cancel) return true;
-        if(toolLogger != null) return toolLogger.forceStop();
-        else return internalForceStop;
+        if (result == notoall || result == cancel)
+            return true;
+        if (toolLogger != null)
+            return toolLogger.forceStop();
+        else
+            return internalForceStop;
     }
-    
-    
-    
+
+
+
     // -------------------------------------------------------------------------
-    
-    
-    
+
+
+
     public TopicMap solveContextTopicMap(Wandora wandora, Context<?> context) {
-        if(context != null) {
+        if (context != null) {
             Object contextSource = context.getContextSource();
-            if(contextSource != null) {
-                if(contextSource instanceof TopicMap) {
-                    return (TopicMap) contextSource;
-                }
-                else if(contextSource instanceof Layer){
-                    return ((Layer)contextSource).getTopicMap();
-                }
-                else if(context.getContextSource() instanceof LayerTree){
-                    return ((LayerTree)context.getContextSource()).getLastClickedLayer().getTopicMap();
-                }
-                else if(contextSource instanceof Wandora) {
-                    return ((Wandora) contextSource).getTopicMap();
+            if (contextSource != null) {
+                if (contextSource instanceof TopicMap topicmap) {
+                    return topicmap;
+                } else if (contextSource instanceof Layer layer) {
+                    return layer.getTopicMap();
+                } else if (context.getContextSource() instanceof LayerTree layertree) {
+                    return layertree.getLastClickedLayer().getTopicMap();
+                } else if (contextSource instanceof Wandora w) {
+                    return w.getTopicMap();
                 }
             }
         }
@@ -946,35 +966,26 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
         return wandora.getTopicMap();
     }
 
-    
+
     protected String solveNameForTopicMap(Wandora wandora, TopicMap topicMap) {
-        if(wandora != null) {
-            Layer l=wandora.layerTree.findLayerFor(topicMap);
-            if(l!=null) {
+        if (wandora != null) {
+            Layer l = wandora.layerTree.findLayerFor(topicMap);
+            if (l != null) {
                 return l.getName();
             }
-            if(topicMap != null && topicMap.equals(wandora.getTopicMap())) {
+            if (topicMap != null && topicMap.equals(wandora.getTopicMap())) {
                 return "Layer stack";
             }
         }
         return "Unknown";
     }
-    
-    
-    
-    /*
-    protected Topic getTopicForSelectedLayer(Topic topic) {
-        if(topic instanceof LayeredTopic) {
-            topic = ((LayeredTopic) topic).getTopicForSelectedLayer();
-        }
-        return topic;
-    }
-     **/
-    
-    
-    
+
+
+
+
     // -------------------------------------------------------------------------
-    
+
+
     /*
      * Tools need topic names very often, for logging for example. 
      * This shortcut method gives an easy way to get topic's name.
@@ -983,43 +994,42 @@ public abstract class AbstractWandoraTool implements WandoraTool, Runnable {
      * of it's own name resolution code?? Yes, it should!</p>
      */
     public static String getTopicName(Topic t) {
-        if(t == null) {
+        if (t == null) {
             return "[null]";
         }
         try {
-            if(t.isRemoved()) {
+            if (t.isRemoved()) {
                 return "[removed]";
             }
-            if(t.getBaseName() == null) {
+            if (t.getBaseName() == null) {
                 return t.getOneSubjectIdentifier().toExternalForm();
             }
             return t.getBaseName();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             logger.error(e);
         }
         return "[error]";
     }
-    
+
     // --------------------------------------------------------- UNDO / REDO ---
-    
-    
+
+
     protected void addUndoMarker() {
         addUndoMarker(this.getName());
     }
-    
-    
-    
+
+
+
     protected void addUndoMarker(String label) {
-        if(runWandora != null) {
+        if (runWandora != null) {
             String cn = this.getClass().getName();
-            if(!"org.wandora.application.tools.Undo".equals(cn) && !"org.wandora.application.tools.Redo".equals(cn)) {
+            if (!"org.wandora.application.tools.Undo".equals(cn) && !"org.wandora.application.tools.Redo".equals(cn)) {
                 runWandora.addUndoMarker(label);
             }
         }
     }
 
-    
-    
+
+
 }
 

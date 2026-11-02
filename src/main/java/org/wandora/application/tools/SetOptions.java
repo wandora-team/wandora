@@ -47,31 +47,37 @@ import org.wandora.utils.Options;
 public class SetOptions extends AbstractWandoraTool {
 
 
-	private static final long serialVersionUID = 1L;
-	private Map<String,String> options = new LinkedHashMap<>();
+    private static final long serialVersionUID = 1L;
+    private Map<String, String> options = new LinkedHashMap<>();
     private boolean requiresRefresh = false;
-    
-    
-    
+
+
+
     public SetOptions() {
     }
+
+
     public SetOptions(String key, int value, boolean rf) {
         requiresRefresh = rf;
         options.put(key, "" + value);
     }
+
+
     public SetOptions(String key, String value, boolean rf) {
         requiresRefresh = rf;
         options.put(key, value);
     }
-    
-    
+
+
     public void setOption(String key, String value) {
-        if(key != null && value != null) {
+        if (key != null && value != null) {
             options.put(key, value);
         }
     }
-    public void setOptions(Map<String,String> subOptions) {
-        if(subOptions != null) {
+
+
+    public void setOptions(Map<String, String> subOptions) {
+        if (subOptions != null) {
             options.putAll(subOptions);
         }
     }
@@ -81,21 +87,20 @@ public class SetOptions extends AbstractWandoraTool {
     public String getName() {
         return "Set options";
     }
-    
-    
+
+
     @Override
     public void execute(Wandora wandora, Context<?> context) {
         Options globalOptions = wandora.getOptions();
-        if(globalOptions != null) {
+        if (globalOptions != null) {
             String key = null;
             String value = null;
-            for(Iterator<String> keys = options.keySet().iterator(); keys.hasNext(); ) {
+            for (Iterator<String> keys = options.keySet().iterator(); keys.hasNext();) {
                 try {
                     key = (String) keys.next();
                     value = (String) options.get(key);
                     globalOptions.put(key, value);
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     log(e);
                 }
             }
@@ -107,5 +112,5 @@ public class SetOptions extends AbstractWandoraTool {
     public boolean requiresRefresh() {
         return requiresRefresh;
     }
-    
+
 }

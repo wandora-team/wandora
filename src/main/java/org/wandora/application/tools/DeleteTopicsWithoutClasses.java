@@ -42,39 +42,40 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class DeleteTopicsWithoutClasses extends DeleteTopics {
-    
 
-	private static final long serialVersionUID = 1L;
 
-	@Override
+    private static final long serialVersionUID = 1L;
+
+
+    @Override
     public String getName() {
         return "Delete topics without classes";
     }
+
 
     @Override
     public String getDescription() {
         return "Delete context topics without classes (i.e. types).";
     }
-    
+
+
     @Override
-    public boolean shouldDelete(Topic topic)  throws TopicMapException {
+    public boolean shouldDelete(Topic topic) throws TopicMapException {
         try {
-            if(topic != null && !topic.isRemoved()) {
+            if (topic != null && !topic.isRemoved()) {
                 Collection<Topic> types = topic.getTypes();
-                if(types == null || types.isEmpty()) {
-                    if(confirm) {
+                if (types == null || types.isEmpty()) {
+                    if (confirm) {
                         return confirmDelete(topic);
-                    }
-                    else {
+                    } else {
                         return true;
                     }
                 }
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             log(e);
         }
         return false;
     }
-    
+
 }

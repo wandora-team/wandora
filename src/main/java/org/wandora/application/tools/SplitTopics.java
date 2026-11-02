@@ -32,6 +32,7 @@ package org.wandora.application.tools;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.Icon;
 
@@ -56,28 +57,30 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class SplitTopics extends AbstractWandoraTool {
-    
 
-	private static final long serialVersionUID = 1L;
-	
-	public boolean duplicateAssociations = true;
+
+    private static final long serialVersionUID = 1L;
+
+    public boolean duplicateAssociations = true;
     public boolean copyInstances = true;
-    
-    public boolean askName=false;
-    
+
+    public boolean askName = false;
+
 
     public SplitTopics() {
     }
-    
+
+
     public SplitTopics(Context<?> preferredContext) {
         setContext(preferredContext);
     }
-    
+
 
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/topic_split.png");
     }
+
 
     @Override
     public String getName() {
@@ -89,86 +92,97 @@ public class SplitTopics extends AbstractWandoraTool {
     public String getDescription() {
         return "Splits topic using subject identifiers.";
     }
-    
-    
-    
+
+
+
     @Override
     public void execute(Wandora w, Context<?> context) {
         duplicateAssociations = true;
         copyInstances = true;
-        askName=false;
-        
+        askName = false;
+
         Iterator<?> topics = getContext().getContextObjects();
-        if(topics == null || !topics.hasNext()) return;
-        
+        if (topics == null || !topics.hasNext()) {
+            return;
+        }
+
         TopicMap tm = w.getTopicMap();
         Topic topic = null;
         setDefaultLogger();
-        while(topics.hasNext() && !forceStop()) {
+        while (topics.hasNext() && !forceStop()) {
             try {
                 topic = (Topic) topics.next();
-                if(topic != null) {
-                    if(!topic.isRemoved()) {
+                if (topic != null) {
+                    if (!topic.isRemoved()) {
                         Topic ltopic = tm.getTopic(topic.getOneSubjectIdentifier());
                         splitTopic(ltopic, tm, w);
                     }
                 }
-            } 
-            catch(Exception e) {
+            } catch (Exception e) {
                 log(e);
             }
         }
     }
-    
 
-    
-    public void splitTopic(Topic original, TopicMap topicMap, Wandora w)  throws TopicMapException {
+
+
+    public void splitTopic(Topic original, TopicMap topicMap, Wandora w) throws TopicMapException {
         Collection<Locator> originalSIs = original.getSubjectIdentifiers();
-        if(originalSIs == null || originalSIs.isEmpty() || originalSIs.size() == 1) {
-            log("Topic '"+ getTopicName(original) +"' has only one subject identifier. Can't split.");
+        if (originalSIs == null 
+                || originalSIs.isEmpty() 
+                || originalSIs.size() == 1) {
+            
+            log("Topic '" + getTopicName(original) + "' has only one subject identifier. Can't split.");
             return;
         }
-        
-        ArrayList<Locator> SIParts = new ArrayList<Locator>();
+
+        List<Locator> SIParts = new ArrayList<>();
         SIParts.addAll(originalSIs);
-        
+
         Topic split = null;
-        
-        for(Locator splitSI : SIParts) {
+
+        for (Locator splitSI : SIParts) {
             String osplitSI = splitSI.toExternalForm();
             // --- copy topic and associations ---
             TopicMap splitMap = new org.wandora.topicmap.memory.TopicMapImpl();
 
             split = splitMap.copyTopicIn(original, false);
-            if(duplicateAssociations) {
+            if (duplicateAssociations) {
                 Collection<Association> associations = original.getAssociations();
-                if(associations != null && !associations.isEmpty()) {
-                    for(Association association : associations) {
+                if (associations != null && !associations.isEmpty()) {
+                    for (Association association : associations) {
                         splitMap.copyAssociationIn(association);
                     }
                 }
             }
 
             // --- resolve new subject base name ---
-            if(original.getBaseName() != null) {
+            if (original.getBaseName() != null) {
                 String newBaseName = original.getBaseName() + " (split)";
                 int c = 2;
-                while(topicMap.getTopicWithBaseName(newBaseName) != null && c<10000) {
+                while (topicMap.getTopicWithBaseName(newBaseName) != null && c < 10000) {
                     newBaseName = original.getBaseName() + " (split " + c + ")";
                     c++;
                 }
 
-                if(askName){
-                    while(true){
-                        String input=WandoraOptionPane.showInputDialog(w,"Enter new base name for the topic", newBaseName);
-                        if(input==null) return;
-                        newBaseName=input;
-                        if(topicMap.getTopicWithBaseName(input)!=null){
-                            int a=WandoraOptionPane.showConfirmDialog(w,"Topic with base name '"+input+"' already exists and will be merged with new topic. Do you want to continue?");
-                            if(a==WandoraOptionPane.CANCEL_OPTION) return;
-                            else if(a==WandoraOptionPane.YES_OPTION) break;
-                        }
-                        else break;
+                if (askName) {
+                    while (true) {
+                        String input = WandoraOptionPane.showInputDialog(w, 
+                                "Enter new base name for the topic",
+                                newBaseName);
+                        if (input == null)
+                            return;
+                        newBaseName = input;
+                        if (topicMap.getTopicWithBaseName(input) != null) {
+                            int a = WandoraOptionPane.showConfirmDialog(w, 
+                                    "Topic with base name '" + input
+                                    + "' already exists and will be merged with new topic. Do you want to continue?");
+                            if (a == WandoraOptionPane.CANCEL_OPTION)
+                                return;
+                            else if (a == WandoraOptionPane.YES_OPTION)
+                                break;
+                        } else
+                            break;
                     }
                 }
 
@@ -176,38 +190,36 @@ public class SplitTopics extends AbstractWandoraTool {
             }
 
             // --- resolve new subject locator ---
-            if(original.getSubjectLocator() != null) {
+            if (original.getSubjectLocator() != null) {
                 int c = 2;
                 Locator newSubjectLocator = new Locator(original.getSubjectLocator().toExternalForm() + "_copy");
-                while(topicMap.getTopicBySubjectLocator(newSubjectLocator) != null && c<10000) {
+                while (topicMap.getTopicBySubjectLocator(newSubjectLocator) != null && c < 10000) {
                     newSubjectLocator = new Locator(original.getSubjectLocator().toExternalForm() + "_copy" + c);
                     c++;
                 }
                 split.setSubjectLocator(newSubjectLocator);
             }
-           
+
             // --- resolve new subject identifiers ---
-            for(Locator si : SIParts) {
-                if(!si.equals(splitSI)) {
+            for (Locator si : SIParts) {
+                if (!si.equals(splitSI)) {
                     split.removeSubjectIdentifier(si);
                 }
             }
             original.removeSubjectIdentifier(splitSI);
-            
-            //log("Merging splitted topic to original map...");
             topicMap.mergeIn(splitMap);
             split = topicMap.getTopic(splitSI);
 
             // --- attach instances ---
-            if(split != null && copyInstances) {
+            if (split != null && copyInstances) {
                 Collection<Topic> instances = topicMap.getTopicsOfType(original);
-                if(instances != null && !instances.isEmpty()) {
-                    for(Topic instance : instances) {
+                if (instances != null && !instances.isEmpty()) {
+                    for (Topic instance : instances) {
                         instance.addType(split);
                     }
                 }
             }
         }
     }
-    
+
 }

@@ -42,34 +42,44 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class PasteClasses extends PasteTopics {
-    
-    
-	private static final long serialVersionUID = 1L;
+
+
+    private static final long serialVersionUID = 1L;
 
 
 
-	public PasteClasses() {
+    public PasteClasses() {
         super();
     }
+
+
     public PasteClasses(int includeOrders) {
         super(includeOrders);
     }
+
+
     public PasteClasses(int includeOrders, int pasteOrders) {
         super(includeOrders, pasteOrders);
     }
+
+
     public PasteClasses(Context<?> preferredContext) {
-        setContext(preferredContext);        
+        setContext(preferredContext);
     }
+
+
     public PasteClasses(Context<?> preferredContext, int includeOrders) {
         super(includeOrders);
-        setContext(preferredContext);        
+        setContext(preferredContext);
     }
+
+
     public PasteClasses(Context<?> preferredContext, int includeOrders, int pasteOrders) {
         super(includeOrders, pasteOrders);
-        setContext(preferredContext);        
+        setContext(preferredContext);
     }
-    
-    
+
+
     @Override
     public String getName() {
         return "Paste classes";
@@ -78,31 +88,29 @@ public class PasteClasses extends PasteTopics {
 
     @Override
     public String getDescription() {
-        return "Inject clipboard topics i.e. basenames "+
-               "to current topic as classes.";
+        return "Inject clipboard topics i.e. basenames " + "to current topic as classes.";
     }
-    
+
 
     @Override
     public void initialize(Wandora wandora) {
         super.initialize(wandora);
         ACCEPT_UNKNOWN_TOPICS = true;
     }
-    
-    
-    
+
+
+
     @Override
     public void topicPrologue(Topic topic) {
-        if(topic != null && currentTopic != null) {
-            try{
+        if (topic != null && currentTopic != null) {
+            try {
                 currentTopic.addType(topic);
-            }
-            catch(TopicMapException tme){
+            } catch (TopicMapException tme) {
                 log(tme);
             }
         }
     }
-    
-    
-    
+
+
+
 }

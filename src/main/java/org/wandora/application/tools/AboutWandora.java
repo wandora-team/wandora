@@ -48,56 +48,57 @@ import org.wandora.utils.swing.MultiLineLabel;
  */
 public class AboutWandora extends AbstractWandoraTool {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private javax.swing.JDialog aboutDialog;
+    private javax.swing.JDialog aboutDialog;
     private MultiLineLabel textLabel;
+
 
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/info.png");
     }
 
+
     @Override
     public String getName() {
         return "About Wandora";
     }
 
+
     @Override
     public String getDescription() {
         return "Views general information about Wandora software application.";
     }
-    
+
+
     @Override
     public void execute(Wandora wandora, Context<?> context) {
         try {
-            aboutDialog=new javax.swing.JDialog(wandora,"About Wandora",true);
-            aboutDialog.getContentPane().setLayout(new java.awt.BorderLayout(20,0));
+            aboutDialog = new javax.swing.JDialog(wandora, "About Wandora", true);
+            aboutDialog.getContentPane().setLayout(new java.awt.BorderLayout(20, 0));
             ImagePanel titleLabel = new ImagePanel("gui/label_about_wandora.png");
-            aboutDialog.getContentPane().add(titleLabel,java.awt.BorderLayout.NORTH);
+            aboutDialog.getContentPane().add(titleLabel, java.awt.BorderLayout.NORTH);
             int yearNow = LocalDate.now().getYear();
 
-            String text =
-            		"Build "+Wandora.getVersion()+"\n"+
-                    "Wandora is a general purpose knowledge editor application.\n"+
-                    "Copyright (C) 2004-"+yearNow+" Wandora Team\n \n"+
+            String text = "Build " + Wandora.getVersion() + "\n"
+                    + "Wandora is a general purpose knowledge editor application.\n" + "Copyright (C) 2004-" + yearNow
+                    + " Wandora Team\n \n" +
 
-                    "This program is free software: you can redistribute it\n" +
-                    "and/or modify it under the terms of the GNU General Public\n"+
-                    "License as published by the Free Software Foundation,\n"+
-                    "either version 3 of the License, or (at your option) any\n"+
-                    "later version.\n \n"+
+                    "This program is free software: you can redistribute it\n"
+                    + "and/or modify it under the terms of the GNU General Public\n"
+                    + "License as published by the Free Software Foundation,\n"
+                    + "either version 3 of the License, or (at your option) any\n" + "later version.\n \n" +
 
-                    "This program is distributed in the hope that it will be useful,\n"+
-                    "but WITHOUT ANY WARRANTY; without even the implied warranty\n"+
-                    "of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"+
-                    "PURPOSE. See the GNU General Public License for\n"+
-                    "more details.\n \n"+
-                    "For more information see https://wandora.org\n";
-            
-            textLabel=new MultiLineLabel(text);
+                    "This program is distributed in the hope that it will be useful,\n"
+                    + "but WITHOUT ANY WARRANTY; without even the implied warranty\n"
+                    + "of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"
+                    + "PURPOSE. See the GNU General Public License for\n" + "more details.\n \n"
+                    + "For more information see https://wandora.org\n";
+
+            textLabel = new MultiLineLabel(text);
             textLabel.setVisible(true);
-            textLabel.setForeground(new java.awt.Color(50,50,50));
+            textLabel.setForeground(new java.awt.Color(50, 50, 50));
             textLabel.setBackground(wandora.getBackground());
             textLabel.setAlignment(textLabel.CENTER);
             textLabel.setMaximumSize(new Dimension(370, 50));
@@ -123,20 +124,20 @@ public class AboutWandora extends AbstractWandoraTool {
             aboutDialog.setDefaultCloseOperation(javax.swing.JDialog.DISPOSE_ON_CLOSE);
             aboutDialog.setResizable(false);
             aboutDialog.pack();
-            if(wandora != null) wandora.centerWindow(aboutDialog);
+            if (wandora != null)
+                wandora.centerWindow(aboutDialog);
             aboutDialog.setVisible(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log(e);
         }
     }
-    
-    
+
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {
         aboutDialog.setVisible(false);
     }
-    
-    
+
+
     @Override
     public boolean requiresRefresh() {
         return false;

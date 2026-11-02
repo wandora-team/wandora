@@ -46,9 +46,10 @@ import org.wandora.application.gui.UIBox;
 
 public class ClearToolLocks extends AbstractWandoraTool {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/** Creates a new instance of ClearToolLocks */
+
+    /** Creates a new instance of ClearToolLocks */
     public ClearToolLocks() {
     }
 
@@ -56,37 +57,40 @@ public class ClearToolLocks extends AbstractWandoraTool {
     @Override
     public void execute(Wandora wandora, Context<?> context) {
         int n = clearToolLocks();
-        if(n > 0) {
-            log("There exists "+n+" tool(s) locked. All tool locks released. "+
-                "Unlocked tools may be executed once again but they may fail "+
-                "depending on the execution history of the tool.");
-        }
-        else {
+        if (n > 0) {
+            log("There exists " + n + " tool(s) locked. All tool locks released. "
+                    + "Unlocked tools may be executed once again but they may fail "
+                    + "depending on the execution history of the tool.");
+        } else {
             log("There is no tools locked at the moment. No locks released.");
         }
     }
-    
-    
+
+
     @Override
     public boolean runInOwnThread() {
         return false;
     }
-    
+
+
     @Override
-    public boolean allowMultipleInvocations(){
+    public boolean allowMultipleInvocations() {
         return true;
     }
-    
+
+
     @Override
     public String getName() {
         return "Clear tool locks";
     }
-    
+
+
     @Override
     public String getDescription() {
         return "Clears all tool locks and enable sequential tool executions. Notice that clearing locks doesn't stop threads in tools.";
     }
-    
+
+
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/clear_tool_locks.png");

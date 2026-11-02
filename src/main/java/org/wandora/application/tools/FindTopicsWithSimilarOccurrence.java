@@ -47,145 +47,165 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
  */
 public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool {
 
-	
-	private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L;
 
 
-	public static final String OPTIONS_PREFIX = "options.occurrence.similarity.";
-    
-    
+    public static final String OPTIONS_PREFIX = "options.occurrence.similarity.";
+
+
     private InterfaceStringMetric stringMetric = null;
     private float similarityThreshold = 0.5f;
     private boolean allowOverride = true;
-    
-    
+
+
     public FindTopicsWithSimilarOccurrence() {
         stringMetric = new Levenshtein();
     }
+
+
     public FindTopicsWithSimilarOccurrence(Context<?> preferredContext) {
         stringMetric = new Levenshtein();
         this.setContext(preferredContext);
     }
-    public FindTopicsWithSimilarOccurrence(Context<?> preferredContext, InterfaceStringMetric stringMetric, float threshold) {
+
+
+    public FindTopicsWithSimilarOccurrence(Context<?> preferredContext, InterfaceStringMetric stringMetric,
+            float threshold) {
         this.setContext(preferredContext);
         this.stringMetric = stringMetric;
         this.similarityThreshold = threshold;
         allowOverride = false;
     }
+
+
     public FindTopicsWithSimilarOccurrence(InterfaceStringMetric stringMetric, float threshold) {
         this.stringMetric = stringMetric;
         this.similarityThreshold = threshold;
         allowOverride = false;
     }
-    
-    
-    
+
+
 
     @Override
-    public void initialize(Wandora wandora, org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        if(allowOverride) {
+    public void initialize(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
+        if (allowOverride) {
             try {
-                String metric=options.get(OPTIONS_PREFIX+"metric");
-                if(metric != null){
+                String metric = options.get(OPTIONS_PREFIX + "metric");
+                if (metric != null) {
                     setMetricByClassName(metric);
                 }
-                similarityThreshold=options.getFloat(OPTIONS_PREFIX+"threshold", 0.75f);
-            }
-            catch(Exception e) {
+                similarityThreshold = options.getFloat(OPTIONS_PREFIX + "threshold", 0.75f);
+            } catch (Exception e) {
                 wandora.handleError(e);
             }
         }
     }
 
+
     @Override
-    public boolean isConfigurable(){
+    public boolean isConfigurable() {
         return true;
     }
 
+
     @Override
     public void configure(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
-        if(allowOverride) {
+        if (allowOverride) {
             try {
                 initialize(wandora, options, prefix);
-                GenericOptionsDialog god=new GenericOptionsDialog(wandora,"Configurable options for similar occurrence topic finder","Find topic with similar occurrence options",true,new String[][]{
-                    new String[]{"Similarity metric","string",stringMetric.getClass().getCanonicalName(),"Class name for similarity metric."},
-                    new String[]{"Similarity threshold","string", ""+similarityThreshold, "0.0 - 1.0"},
-                },wandora);
+                GenericOptionsDialog god = new GenericOptionsDialog(wandora,
+                        "Configurable options for similar occurrence topic finder",
+                        "Find topic with similar occurrence options", true,
+                        new String[][] { 
+                                new String[] { "Similarity metric", "string", stringMetric.getClass().getCanonicalName(), "Class name for similarity metric." },
+                                new String[] { "Similarity threshold", "string", "" + similarityThreshold, "0.0 - 1.0" }, 
+                        },
+                        wandora);
                 god.setVisible(true);
-                if(god.wasCancelled()) return;
+                if (god.wasCancelled()) {
+                    return;
+                }
+                
                 // ---- ok ----
-                Map<String,String> values=god.getValues();
+                Map<String, String> values = god.getValues();
                 setMetricByClassName(values.get("Similarity metric"));
                 String thresholdString = values.get("Similarity threshold");
                 similarityThreshold = Float.parseFloat(thresholdString);
                 writeOptions(wandora, options, prefix);
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 wandora.handleError(e);
             }
         }
     }
 
+
     @Override
-    public void writeOptions(Wandora wandora, org.wandora.utils.Options options, String prefix){
-        if(allowOverride) {
-            options.put(OPTIONS_PREFIX+"metric", stringMetric.getClass().getCanonicalName());
-            options.put(OPTIONS_PREFIX+"threshold", ""+similarityThreshold);
+    public void writeOptions(Wandora wandora, org.wandora.utils.Options options, String prefix) {
+        if (allowOverride) {
+            options.put(OPTIONS_PREFIX + "metric", stringMetric.getClass().getCanonicalName());
+            options.put(OPTIONS_PREFIX + "threshold", "" + similarityThreshold);
         }
     }
-    
+
+
     private void setMetricByClassName(String metric) throws Exception {
-        if(metric != null){
+        if (metric != null) {
             Class<?> metricClass = Class.forName(metric);
-            if(metricClass != null) {
+            if (metricClass != null) {
                 stringMetric = (InterfaceStringMetric) metricClass.getConstructor().newInstance();
             }
         }
     }
-    
-    
-    
+
+
+
     @Override
     public String getName() {
         return "Find topics with similar occurrence";
     }
 
+
     @Override
     public String getDescription() {
         return "Find topics with similar occurrence.";
     }
-    
+
 
     @Override
     public void execute(Wandora wandora, Context<?> context) {
         Iterator<?> topics = context.getContextObjects();
-        if(topics == null || !topics.hasNext()) return;
+        if (topics == null || !topics.hasNext()) {
+            return;
+        }
         String o1 = null;
         Topic o1Type = null;
         Topic o1Scope = null;
 
         try {
             Object source = getContext().getContextSource();
-            if(source instanceof OccurrenceTextEditor) {
+            if (source instanceof OccurrenceTextEditor) {
                 OccurrenceTextEditor editor = (OccurrenceTextEditor) source;
                 o1Type = editor.getOccurrenceType();
                 o1Scope = editor.getOccurrenceVersion();
                 o1 = editor.getSelectedText();
-                if(o1 == null || o1.length() == 0) {
+                if (o1 == null || o1.length() == 0) {
                     o1 = editor.getText();
                 }
             }
 
             // Ensure occurrence type and scope are really ok...
-            if(o1Type == null) {
-                o1Type=wandora.showTopicFinder("Select occurrence type...");                
-                if(o1Type == null) return;
+            if (o1Type == null) {
+                o1Type = wandora.showTopicFinder("Select occurrence type...");
+                if (o1Type == null)
+                    return;
             }
-            if(o1Scope == null) {
-                o1Scope=wandora.showTopicFinder("Select occurrence scope...");                
-                if(o1Scope == null) return;
+            if (o1Scope == null) {
+                o1Scope = wandora.showTopicFinder("Select occurrence scope...");
+                if (o1Scope == null)
+                    return;
             }
-            if(o1 == null) {
+            if (o1 == null) {
                 Topic o1Topic = (Topic) topics.next();
                 o1 = o1Topic.getData(o1Type, o1Scope);
             }
@@ -195,10 +215,9 @@ public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool {
             setLogTitle("Find topics with similar occurrences");
             log("Searching for topics with similar occurrences");
 
-            if(o1 == null || o1.length() == 0) {
+            if (o1 == null || o1.length() == 0) {
                 log("Found no reference occurrence or reference occurrence length is zero.");
-            }
-            else {
+            } else {
                 HashSet<Topic> results = new HashSet<Topic>();
                 TopicMap tm = wandora.getTopicMap();
                 Iterator<Topic> allTopics = tm.getTopics();
@@ -207,40 +226,38 @@ public class FindTopicsWithSimilarOccurrence extends AbstractWandoraTool {
                 float similarity = 0.0f;
                 int progress = 0;
 
-                while(allTopics.hasNext() && !forceStop()) {
+                while (allTopics.hasNext() && !forceStop()) {
                     t = allTopics.next();
-                    if(t != null && !t.isRemoved()) {
+                    if (t != null && !t.isRemoved()) {
                         o2 = t.getData(o1Type, o1Scope);
-                        if(o2 != null && o2.length() > 0) {
+                        if (o2 != null && o2.length() > 0) {
                             similarity = stringMetric.getSimilarity(o1, o2);
-                            if(similarity > similarityThreshold) {
+                            if (similarity > similarityThreshold) {
                                 results.add(t);
-                                log("Found '"+getTopicName(t)+"'");
+                                log("Found '" + getTopicName(t) + "'");
                             }
                         }
                     }
                     setProgress(progress++);
                 }
 
-                if(results.size() > 0) {
+                if (results.size() > 0) {
                     SearchTopicsResults resultDialog = new SearchTopicsResults(wandora, results);
                     resultDialog.hideAgainButton();
                     setState(INVISIBLE);
                     resultDialog.setVisible(true);
                     return;
-                }
-                else {
+                } else {
                     log("Found no topics with similar occurrences.");
                 }
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             log(e);
         }
         setState(WAIT);
     }
 
-    
+
     @Override
     public boolean requiresRefresh() {
         return false;

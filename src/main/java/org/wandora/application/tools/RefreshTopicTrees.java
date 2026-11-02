@@ -40,27 +40,29 @@ import org.wandora.topicmap.TopicMapException;
  */
 public class RefreshTopicTrees extends AbstractWandoraTool {
 
-	
-	private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L;
 
 
-	/** Creates a new instance of RefreshTopicTrees */
+    /** Creates a new instance of RefreshTopicTrees */
     public RefreshTopicTrees() {
     }
+
 
     @Override
     public String getName() {
         return "Refresh topic trees";
     }
 
+
     @Override
     public String getDescription() {
         return "Refresh topic trees.";
-    } 
-    
-   
+    }
+
+
     @Override
-    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {      
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         wandora.refreshTopicTrees();
     }
 

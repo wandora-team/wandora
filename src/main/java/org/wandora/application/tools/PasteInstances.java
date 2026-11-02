@@ -35,69 +35,81 @@ import org.wandora.topicmap.TopicMapException;
 
 
 
-
 /**
  * Inject clipboard topics i.e. base names to current topic as instances.
  *
  * @author  akivela
  */
 public class PasteInstances extends PasteTopics {
-    
-
-	private static final long serialVersionUID = 1L;
 
 
+    private static final long serialVersionUID = 1L;
 
-	public PasteInstances() {}
+
+
+    public PasteInstances() {
+    }
+
+
     public PasteInstances(int includeOrders) {
         super(includeOrders);
     }
+
+
     public PasteInstances(int includeOrders, int pasteOrders) {
         super(includeOrders, pasteOrders);
     }
+
+
     public PasteInstances(Context<?> preferredContext) {
-        setContext(preferredContext);        
+        setContext(preferredContext);
     }
+
+
     public PasteInstances(Context<?> preferredContext, int includeOrders) {
         super(includeOrders);
-        setContext(preferredContext);        
+        setContext(preferredContext);
     }
+
+
     public PasteInstances(Context<?> preferredContext, int includeOrders, int pasteOrders) {
         super(includeOrders, pasteOrders);
-        setContext(preferredContext);        
+        setContext(preferredContext);
     }
-    
-    
-    
+
+
+
     @Override
     public String getName() {
         return "Paste instances";
     }
+
 
     @Override
     public String getDescription() {
         return "Inject clipboard topics to selected topic as instances.";
     }
 
+
     @Override
     public void initialize(Wandora admin) {
         super.initialize(admin);
         ACCEPT_UNKNOWN_TOPICS = true;
     }
-    
-    
-    
+
+
+
     @Override
     public void topicPrologue(Topic topic) {
-        if(topic != null && currentTopic != null) {
+        if (topic != null && currentTopic != null) {
             try {
                 topic.addType(currentTopic);
-            } catch(TopicMapException tme){
+            } catch (TopicMapException tme) {
                 log(tme);
             }
         }
     }
-    
-    
+
+
 
 }

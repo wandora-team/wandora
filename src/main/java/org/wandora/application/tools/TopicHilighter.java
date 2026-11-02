@@ -45,78 +45,74 @@ import org.wandora.topicmap.Topic;
  * @author akivela
  */
 public class TopicHilighter extends AbstractWandoraTool {
-    
 
-	private static final long serialVersionUID = 1L;
-	
-	public static final int ADD_HILIGHT = 1000;
+
+    private static final long serialVersionUID = 1L;
+
+    public static final int ADD_HILIGHT = 1000;
     public static final int REMOVE_HILIGHT = 1010;
     public static final int REMOVE_ALL_HILIGHTS = 1020;
-    
+
     public int hilightOrders = ADD_HILIGHT;
-    
-    
+
+
 
     public TopicHilighter(int hilightOrders) {
         this.hilightOrders = hilightOrders;
     }
-    
-    
+
+
     public void execute(Wandora wandora, Context<?> context) {
         try {
             TopicTable table = (TopicTable) getContext().getContextSource();
-            switch(hilightOrders) {
+            switch (hilightOrders) {
                 case ADD_HILIGHT: {
                     Topic[] topics = table.getSelectedTopics();
-                    Color newColor = JColorChooser.showDialog(
-                    		wandora,
-                             "Choose topic hilight color",
-                             Color.BLUE);
-                    if(newColor != null) {
-                    	wandora.topicHilights.add(topics, newColor);
+                    Color newColor = JColorChooser.showDialog(wandora, "Choose topic hilight color", Color.BLUE);
+                    if (newColor != null) {
+                        wandora.topicHilights.add(topics, newColor);
                         table.refreshGUI();
                     }
                     break;
                 }
-                
+    
                 case REMOVE_HILIGHT: {
                     Topic[] topics = table.getSelectedTopics();
                     wandora.topicHilights.remove(topics);
                     table.refreshGUI();
                     break;
                 }
-                
+    
                 case REMOVE_ALL_HILIGHTS: {
                     String message = "Remove all topic hilights?";
-                    int r = WandoraOptionPane.showConfirmDialog(
-                    		wandora, 
-                    		message, 
-                    		"Confirm hilight remove", 
-                    		WandoraOptionPane.YES_NO_OPTION);
-                    
-                    if(r == WandoraOptionPane.YES_OPTION) {
-                    	wandora.topicHilights.removeAll();
+                    int r = WandoraOptionPane.showConfirmDialog(wandora, message, "Confirm hilight remove",
+                            WandoraOptionPane.YES_NO_OPTION);
+    
+                    if (r == WandoraOptionPane.YES_OPTION) {
+                        wandora.topicHilights.removeAll();
                         table.refreshGUI();
                     }
                     break;
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log(e);
         }
     }
-    
+
+
     @Override
     public String getName() {
         return "Topic Hilighter";
     }
 
+
     @Override
     public String getDescription() {
         return "Set hilight color for context topics.";
     }
-    
+
+
     @Override
     public boolean requiresRefresh() {
         return false;

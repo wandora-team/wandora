@@ -48,54 +48,52 @@ import org.wandora.utils.swing.MultiLineLabel;
  */
 public class AboutCredits extends AbstractWandoraTool {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private javax.swing.JDialog aboutDialog;
+    private javax.swing.JDialog aboutDialog;
     private MultiLineLabel textLabel;
-    
-    
+
+
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/info.png");
     }
+
 
     @Override
     public String getName() {
         return "About Wandora authors";
     }
 
+
     @Override
     public String getDescription() {
         return "Views credits of Wandora software application.";
     }
-    
+
+
     @Override
     public void execute(Wandora wandora, Context<?> context) {
         try {
-            aboutDialog=new javax.swing.JDialog(wandora,"Wandora credits",true);
-            aboutDialog.getContentPane().setLayout(new java.awt.BorderLayout(20,0));
+            aboutDialog = new javax.swing.JDialog(wandora, "Wandora credits", true);
+            aboutDialog.getContentPane().setLayout(new java.awt.BorderLayout(20, 0));
             ImagePanel titleLabel = new ImagePanel("gui/label_about_wandora.png");
-            aboutDialog.getContentPane().add(titleLabel,java.awt.BorderLayout.NORTH);
+            aboutDialog.getContentPane().add(titleLabel, java.awt.BorderLayout.NORTH);
             int yearNow = LocalDate.now().getYear();
-            
-            String text =
-                    "Copyright \u00a9 2004-"+yearNow+" Wandora Team\n"+
-                    " \n"+
-                    "Wandora Team would like to thank Olli Lyytinen, \n" +
-                    "Eero Lehtonen, Elias Tertsunen, Niko Laitinen, \n"+
-                    "Antti Tuppurainen, Pasi Hytönen, Marko Wallgren, \n"+
-                    "Jaakko Lyytinen and Jarno Wallgren for their contribution \n"+
-                    "to the Wandora project.\n"+
-                    " \n"+
-                    "Wandora uses numerous third party libraries made by \n"+
-                    "talented people around the world. Wandora Team would like to\n"+
-                    "express gratitude to all contributing open source projects.\n"+
-                    " \n"+
-                    "For more information see https://wandora.org\n";
-            
-            textLabel=new MultiLineLabel(text);
+
+            String text = "Copyright \u00a9 2004-" + yearNow + " Wandora Team\n" + " \n"
+                    + "Wandora Team would like to thank Olli Lyytinen, \n"
+                    + "Eero Lehtonen, Elias Tertsunen, Niko Laitinen, \n"
+                    + "Antti Tuppurainen, Pasi Hytönen, Marko Wallgren, \n"
+                    + "Jaakko Lyytinen and Jarno Wallgren for their contribution \n" + "to the Wandora project.\n"
+                    + " \n" + "Wandora uses numerous third party libraries made by \n"
+                    + "talented people around the world. Wandora Team would like to\n"
+                    + "express gratitude to all contributing open source projects.\n" + " \n"
+                    + "For more information see https://wandora.org\n";
+
+            textLabel = new MultiLineLabel(text);
             textLabel.setVisible(true);
-            textLabel.setForeground(new java.awt.Color(50,50,50));
+            textLabel.setForeground(new java.awt.Color(50, 50, 50));
             textLabel.setBackground(wandora.getBackground());
             textLabel.setAlignment(textLabel.CENTER);
             textLabel.setMaximumSize(new Dimension(370, 50));
@@ -121,20 +119,20 @@ public class AboutCredits extends AbstractWandoraTool {
             aboutDialog.setDefaultCloseOperation(javax.swing.JDialog.DISPOSE_ON_CLOSE);
             aboutDialog.setResizable(false);
             aboutDialog.pack();
-            if(wandora != null) wandora.centerWindow(aboutDialog);
+            if (wandora != null)
+                wandora.centerWindow(aboutDialog);
             aboutDialog.setVisible(true);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log(e);
         }
     }
-    
-    
+
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {
         aboutDialog.setVisible(false);
     }
-    
-    
+
+
     @Override
     public boolean requiresRefresh() {
         return false;

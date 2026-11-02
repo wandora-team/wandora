@@ -44,9 +44,9 @@ import org.wandora.utils.Options;
  */
 public class ActivateButtonToolSet extends AbstractWandoraTool {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String toolSetName = null;
+    private String toolSetName = null;
 
 
     public ActivateButtonToolSet() {
@@ -58,6 +58,7 @@ public class ActivateButtonToolSet extends AbstractWandoraTool {
         toolSetName = setName;
     }
 
+
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/button_set.png");
@@ -66,11 +67,13 @@ public class ActivateButtonToolSet extends AbstractWandoraTool {
 
     @Override
     public String getName() {
-        return "Activate set '"+toolSetName+"'";
+        return "Activate set '" + toolSetName + "'";
     }
+
+
     @Override
     public String getDescription() {
-        return "Activates button tool set named '"+toolSetName+"'";
+        return "Activates button tool set named '" + toolSetName + "'";
     }
 
 
@@ -78,13 +81,12 @@ public class ActivateButtonToolSet extends AbstractWandoraTool {
     public void execute(Wandora wandora, Context<?> context) {
         try {
             Options options = wandora.getOptions();
-            if(options != null) {
+            if (options != null) {
                 options.put("gui.toolPanel.currentToolSet", toolSetName);
                 wandora.refreshToolPanel();
                 wandora.refresh();
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             log(e);
         }
     }

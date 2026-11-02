@@ -48,62 +48,66 @@ import org.wandora.application.gui.UIBox;
 
 
 public class ExecBrowser extends AbstractWandoraTool {
-    
 
-	private static final long serialVersionUID = 1L;
 
-	
-	private String uri = null;
-    
-    public ExecBrowser(){
+    private static final long serialVersionUID = 1L;
+
+
+    private String uri = null;
+
+
+    public ExecBrowser() {
     }
-    
+
+
     public ExecBrowser(String uri) {
-        this.uri=uri;
+        this.uri = uri;
     }
-    
-    
+
+
     @Override
     public void execute(Wandora wandora, Context<?> context) {
-        if(uri != null) {
+        if (uri != null) {
             try {
                 Desktop desktop = Desktop.getDesktop();
                 desktop.browse(new URI(uri));
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 log(e);
             }
-        }
-        else {
+        } else {
             singleLog("No uri set!");
         }
     }
-    
-    
+
+
     @Override
     public boolean allowMultipleInvocations() {
         return true;
     }
+
 
     @Override
     public String getName() {
         return "Open WWW browser";
     }
 
+
     @Override
     public String getDescription() {
-        return "Open WWW browser with address "+uri;
+        return "Open WWW browser with address " + uri;
     }
-    
+
+
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/open_browser.png");
     }
-    
+
+
     @Override
     public boolean requiresRefresh() {
         return false;
     }
 }
-    
+
 

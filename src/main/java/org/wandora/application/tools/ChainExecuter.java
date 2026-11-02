@@ -30,6 +30,7 @@ package org.wandora.application.tools;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.Icon;
 
@@ -46,69 +47,78 @@ import org.wandora.application.gui.UIBox;
  */
 public class ChainExecuter extends AbstractWandoraTool {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private ArrayList<WandoraTool> tools = new ArrayList<WandoraTool>();
-    
-    
-    
+    private List<WandoraTool> tools = new ArrayList<>();
+
+
+
     public ChainExecuter() {
     }
+
+
     public ChainExecuter(WandoraTool tool) {
         tools.add(tool);
     }
+
+
     public ChainExecuter(WandoraTool tool1, WandoraTool tool2) {
         tools.add(tool1);
         tools.add(tool2);
     }
+
+
     public ChainExecuter(WandoraTool tool1, WandoraTool tool2, WandoraTool tool3) {
         tools.add(tool1);
         tools.add(tool2);
         tools.add(tool3);
     }
+
+
     public ChainExecuter(Collection<WandoraTool> mytools) {
-        for(Iterator<WandoraTool> toolIterator = mytools.iterator(); toolIterator.hasNext();) {
+        for (Iterator<WandoraTool> toolIterator = mytools.iterator(); toolIterator.hasNext();) {
             tools.add(toolIterator.next());
         }
     }
-    
-    
+
+
     @Override
     public void execute(Wandora wandora, Context<?> context) {
-        for(WandoraTool tool : tools) {
+        for (WandoraTool tool : tools) {
             try {
-                if(tool != null) {
+                if (tool != null) {
                     tool.setContext(context);
                     tool.execute(wandora, context.getContextEvent());
-                    while(tool.isRunning() && !forceStop()) {
+                    while (tool.isRunning() && !forceStop()) {
                         try {
                             Thread.sleep(250);
+                        } catch (Exception e) {
                         }
-                        catch(Exception e) {}
                     }
                 }
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 log(e);
             }
         }
     }
-    
+
+
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/chain_executer.png");
     }
-    
-    
+
+
     @Override
     public String getName() {
         return "Chain executer";
     }
 
+
     @Override
     public String getDescription() {
         return "Executes multiple tools in sequential order.";
     }
-    
-    
+
+
 }

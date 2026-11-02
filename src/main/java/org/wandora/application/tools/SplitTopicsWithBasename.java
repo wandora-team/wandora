@@ -65,26 +65,27 @@ import org.wandora.utils.logger.Log4j2Logger;
  * @author akivela
  */
 public class SplitTopicsWithBasename extends AbstractWandoraTool {
-	private static final long serialVersionUID = 1L;
-	private static final Log4j2Logger logger = Log4j2Logger.getLogger(SplitTopicsWithBasename.class);
+    private static final long serialVersionUID = 1L;
+    private static final Log4j2Logger logger = Log4j2Logger.getLogger(SplitTopicsWithBasename.class);
 
 
-	public static boolean SKIP_WHITE_SPACE_SPLIT_PARTS = true;
-    
+    public static boolean SKIP_WHITE_SPACE_SPLIT_PARTS = true;
+
 
     public boolean duplicateAssociations = true;
     public boolean copyInstances = true;
-    
-    public boolean askName=false;
+
+    public boolean askName = false;
     public static String splitString = "";
     private int topicCounter = 0;
     private int splitCounter = 0;
-            
-            
-    
-    
+
+
+
     public SplitTopicsWithBasename() {
     }
+
+
     public SplitTopicsWithBasename(Context<?> preferredContext) {
         setContext(preferredContext);
     }
@@ -102,103 +103,111 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool {
         return "Split topics with base name";
     }
 
+
     @Override
     public String getDescription() {
         return "Tool splits topics with base name.";
     }
-    
-    
-    
+
+
+
     @Override
-    public void execute(Wandora w, Context<?> context) {       
+    public void execute(Wandora w, Context<?> context) {
         Iterator<?> topics = getContext().getContextObjects();
-        if(topics == null || !topics.hasNext()) return;
+        if (topics == null || !topics.hasNext())
+            return;
         TopicMap tm = w.getTopicMap();
-        
+
         splitString = WandoraOptionPane.showInputDialog(w, "Enter regular expression string used to split base name:", splitString);
-        
-        if(splitString == null || splitString.length() == 0) return;
+
+        if (splitString == null || splitString.length() == 0)
+            return;
 
         String splitStringCopy = splitString;
         Topic topic = null;
         duplicateAssociations = true;
         copyInstances = true;
-        askName=false;
+        askName = false;
         splitCounter = 0;
         topicCounter = 0;
         setDefaultLogger();
-        
-        while(topics.hasNext() && !forceStop()) {
+
+        while (topics.hasNext() && !forceStop()) {
             try {
                 topic = (Topic) topics.next();
-                if(topic != null) {
-                    if(!topic.isRemoved()) {
+                if (topic != null) {
+                    if (!topic.isRemoved()) {
                         Topic ltopic = tm.getTopic(topic.getOneSubjectIdentifier());
                         splitTopic(ltopic, splitStringCopy, tm, w);
                     }
                 }
-            }
-            catch(TopicMapReadOnlyException tmroe) {
-                log("Selected topic map is read only and can't be written. Can't split topic '"+TopicToString.toString(topic)+"'");
-            }
-            catch(TopicMapException tme) {
+            } catch (TopicMapReadOnlyException tmroe) {
+                log("Selected topic map is read only and can't be written. Can't split topic '"
+                        + TopicToString.toString(topic) + "'");
+            } catch (TopicMapException tme) {
                 log(tme);
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 log(e);
             }
         }
-        if(topicCounter == 0) log("No topics splitted.");
-        else if(topicCounter == 1) log("One topic splitted.");
-        else log("Total "+topicCounter+" topics splitted.");
-        
-        if(splitCounter == 0) log("Created no splitted topics.");
-        else if(splitCounter == 1) log("Created one splitted topic.");
-        else log("Created total "+splitCounter+" splitted topics.");
+        if (topicCounter == 0)
+            log("No topics splitted.");
+        else if (topicCounter == 1)
+            log("One topic splitted.");
+        else
+            log("Total " + topicCounter + " topics splitted.");
+
+        if (splitCounter == 0)
+            log("Created no splitted topics.");
+        else if (splitCounter == 1)
+            log("Created one splitted topic.");
+        else
+            log("Created total " + splitCounter + " splitted topics.");
         setState(WAIT);
     }
-    
 
-    
-    public void splitTopic(Topic original, String splitString, TopicMap topicMap, Wandora w)  throws TopicMapException {
-        if(original == null) return;
-        if(original.getBaseName() == null) {
+
+
+    public void splitTopic(Topic original, String splitString, TopicMap topicMap, Wandora w) throws TopicMapException {
+        if (original == null)
+            return;
+        if (original.getBaseName() == null) {
             log("Topic has no basename. Can't split.");
             return;
         }
-        if(original.getBaseName().length() == 0) {
+        if (original.getBaseName().length() == 0) {
             log("Topic's basename length is zero. Can't split.");
         }
         String[] splitParts = original.getBaseName().split(splitString);
-        if(splitParts.length < 2) {
-            log("No split parts found for topic '"+ getTopicName(original) +"'.");
+        if (splitParts.length < 2) {
+            log("No split parts found for topic '" + getTopicName(original) + "'.");
             return;
         }
-        
+
         Topic split = null;
         String splitBasename = null;
 
-        for(int i=1; i<splitParts.length; i++) {
+        for (int i = 1; i < splitParts.length; i++) {
             splitBasename = splitParts[i];
-            if(splitBasename == null || splitBasename.length() == 0) {
-                log("Zero length split part found for topic '"+ getTopicName(original) +"'.");
+            if (splitBasename == null || splitBasename.length() == 0) {
+                log("Zero length split part found for topic '" + getTopicName(original) + "'.");
                 continue;
             }
-            if(SKIP_WHITE_SPACE_SPLIT_PARTS) {
-                if(splitBasename.trim().length() == 0) {
-                    log("White space split part found for topic '"+ getTopicName(original) +"'.");
+            if (SKIP_WHITE_SPACE_SPLIT_PARTS) {
+                if (splitBasename.trim().length() == 0) {
+                    log("White space split part found for topic '" + getTopicName(original) + "'.");
                     continue;
                 }
             }
 
             // --- copy topic and associations ---
             TopicMap splitMap = new org.wandora.topicmap.memory.TopicMapImpl();
-            
+
             split = splitMap.copyTopicIn(original, false);
-            if(duplicateAssociations) {
+            if (duplicateAssociations) {
                 Collection<Association> associations = original.getAssociations();
-                if(associations != null && !associations.isEmpty()) {
-                    for(Association association : associations) {
+                if (associations != null && !associations.isEmpty()) {
+                    for (Association association : associations) {
                         splitMap.copyAssociationIn(association);
                     }
                 }
@@ -206,44 +215,48 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool {
 
             // --- resolve new subject base name ---
             String newBaseName = splitBasename;
-            
-            if(askName){
-                while(true){
-                    String input=WandoraOptionPane.showInputDialog(w, "Enter new base name for the topic", newBaseName);
-                    if(input==null) return;
-                    newBaseName=input;
-                    if(topicMap.getTopicWithBaseName(input)!=null){
-                        int a=WandoraOptionPane.showConfirmDialog(w, "Topic with base name '"+input+"' already exists and will be merged with new topic. Do you want to continue?");
-                        if(a==WandoraOptionPane.CANCEL_OPTION) return;
-                        else if(a==WandoraOptionPane.YES_OPTION) break;
-                    }
-                    else break;
+
+            if (askName) {
+                while (true) {
+                    String input = WandoraOptionPane.showInputDialog(w, "Enter new base name for the topic", newBaseName);
+                    if (input == null)
+                        return;
+                    newBaseName = input;
+                    if (topicMap.getTopicWithBaseName(input) != null) {
+                        int a = WandoraOptionPane.showConfirmDialog(w, "Topic with base name '" + input
+                                + "' already exists and will be merged with new topic. Do you want to continue?");
+                        if (a == WandoraOptionPane.CANCEL_OPTION)
+                            return;
+                        else if (a == WandoraOptionPane.YES_OPTION)
+                            break;
+                    } else
+                        break;
                 }
             }
 
             split.setBaseName(newBaseName);
 
             // --- resolve new subject locator ---
-            if(original.getSubjectLocator() != null) {
+            if (original.getSubjectLocator() != null) {
                 int c = 2;
                 Locator newSubjectLocator = new Locator(original.getSubjectLocator().toExternalForm() + "_split");
-                while(topicMap.getTopicBySubjectLocator(newSubjectLocator) != null && c<10000) {
+                while (topicMap.getTopicBySubjectLocator(newSubjectLocator) != null && c < 10000) {
                     newSubjectLocator = new Locator(original.getSubjectLocator().toExternalForm() + "_split" + c);
                     c++;
                 }
                 split.setSubjectLocator(newSubjectLocator);
             }
-           
+
             // --- resolve new subject identifiers ---
             Collection<Locator> sis = split.getSubjectIdentifiers();
             List<Locator> siv = new ArrayList<>();
             siv.addAll(sis);
 
             Locator l = null;
-            for(Locator lo : siv) {
+            for (Locator lo : siv) {
                 l = new Locator(lo.toExternalForm() + "_split");
                 int c = 2;
-                while((topicMap.getTopic(l) != null || splitMap.getTopic(l) != null) && c<10000) {
+                while ((topicMap.getTopic(l) != null || splitMap.getTopic(l) != null) && c < 10000) {
                     l = new Locator(lo.toExternalForm() + "_split" + c);
                     c++;
                 }
@@ -251,114 +264,26 @@ public class SplitTopicsWithBasename extends AbstractWandoraTool {
                 split.removeSubjectIdentifier(lo);
             }
 
-            //log("Merging splitted topic to original map...");
             topicMap.mergeIn(splitMap);
             split = topicMap.getTopicWithBaseName(newBaseName);
-            
+
             // --- attach instances ---
-            if(split != null && copyInstances) {
+            if (split != null && copyInstances) {
                 Collection<Topic> instances = topicMap.getTopicsOfType(original);
-                if(instances != null && !instances.isEmpty()) {
-                    for(Topic instance : instances) {
+                if (instances != null && !instances.isEmpty()) {
+                    for (Topic instance : instances) {
                         instance.addType(split);
                     }
                 }
             }
-            
+
             splitCounter++;
         }
-        
+
         // Change base name of the original topic....
         original.setBaseName(splitParts[0]);
         topicCounter++;
     }
-    
-    
-    
-    
-    // -------------------------------------------------------------------------
 
-    
-    public static void main(String[] args) {
-        String originalFilename = "F:\\projects\\kokoelmat\\update150615\\asiasanat\\original.txt";
-        String modsFilename = "F:\\projects\\kokoelmat\\update150615\\asiasanat\\mods.txt";
-        
-        FileInputStream fstream = null;
-        BufferedReader br = null;
-        FileInputStream fstream2 = null;
-        BufferedReader br2 = null;
-        
-        try {
-            fstream = new FileInputStream(originalFilename);
-            br = new BufferedReader(new InputStreamReader(fstream));
-            String str = null;
-            Map<String,String> originals = new LinkedHashMap<>();
-
-            while ((str = br.readLine()) != null)   {
-                String[] keyValue = str.split("\t");
-                if(keyValue.length == 2) {
-                    String key = keyValue[1].trim();
-                    String value = keyValue[0];
-                    if(!originals.containsKey(key)) {
-                        originals.put(key, value);
-                    }
-                    else {
-                        logger.warn("Originals already contains key: "+key);
-                        originals.put(key, originals.get(key) + " ; " + value);
-                    }
-                }
-                else {
-                    logger.warn("Illegal number of elements in original line: "+str);
-                }
-            }
-            logger.info("Originals has "+originals.size()+" values.");
-            
-            br.close();
-            
-            fstream2 = new FileInputStream(modsFilename);
-            br2 = new BufferedReader(new InputStreamReader(fstream2));
-            
-            while ((str = br2.readLine()) != null)   {
-                String[] keyValue = str.split("\t");
-                if(keyValue.length == 2) {
-                    String key = keyValue[1].trim();
-                    String value = keyValue[0];
-                    if(originals.containsKey(key)) {
-                        String originalValue = (String) originals.get(key);
-                        if(originalValue.contains(value)) {
-                            // OK!
-                        }
-                        else {
-                            logger.info("Original key "+keyValue[1]+ " contains no '"+keyValue[0]+"'");
-                        }
-                    }
-                    else {
-                        logger.info("Originals has no key: "+keyValue[1]);
-                    }
-                }
-                else {
-                    logger.info("Illegal number of elements in original line: "+str);
-                }
-            }
-
-        }
-        catch(Exception e) {
-            logger.error(e);
-        }
-        finally {
-        	if(br != null) {
-        		try { br.close(); } catch(Exception e) {}
-        	}
-        	if(fstream != null) {
-        		try { fstream.close(); } catch(Exception e) {}
-        	}
-        	if(br2 != null) {
-        		try { br2.close(); } catch(Exception e ) {}
-        	}
-        	if(fstream2 != null) {
-        		try { fstream2.close(); } catch(Exception e) {}
-        	}
-        }
-    }
 
 }

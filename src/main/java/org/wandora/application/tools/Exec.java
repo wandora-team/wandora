@@ -29,10 +29,8 @@ package org.wandora.application.tools;
 
 
 
-
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
-
 
 
 
@@ -42,33 +40,33 @@ import org.wandora.application.contexts.Context;
  * @author akivela
  */
 public class Exec extends AbstractWandoraTool {
-    
 
-	private static final long serialVersionUID = 1L;
-	
-	
-	private String command = null;
-    
-    public Exec(){
+
+    private static final long serialVersionUID = 1L;
+
+
+    private String command = null;
+
+
+    public Exec() {
     }
-    
-    public Exec(String command){
-        this.command=command;
+
+
+    public Exec(String command) {
+        this.command = command;
     }
-    
-    
-   @Override
+
+
+    @Override
     public void execute(Wandora admin, Context<?> context) {
-        Process process=null;
+        Process process = null;
         try {
-            if(command != null) {
-                process=Runtime.getRuntime().exec(command,new String[]{"HOME=/home/"});
-            }
-            else {
+            if (command != null) {
+                process = Runtime.getRuntime().exec(command, new String[] { "HOME=/home/" });
+            } else {
                 singleLog("No external command defined!");
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return;
         }
         /*
@@ -97,27 +95,30 @@ public class Exec extends AbstractWandoraTool {
         }
          **/
     }
-    
-    
+
+
     @Override
     public boolean allowMultipleInvocations() {
         return true;
     }
+
 
     @Override
     public String getName() {
         return "Exec";
     }
 
+
     @Override
     public String getDescription() {
         return "Execute external applications such as WWW browser.";
     }
-    
+
+
     @Override
     public boolean requiresRefresh() {
         return false;
     }
 }
-    
-    
+
+

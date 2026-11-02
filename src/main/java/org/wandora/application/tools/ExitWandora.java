@@ -45,40 +45,46 @@ import org.wandora.application.gui.UIBox;
 
 
 public class ExitWandora extends AbstractWandoraTool {
-    
 
-	private static final long serialVersionUID = 1L;
 
-	/** Creates a new instance of ExitWandora */
+    private static final long serialVersionUID = 1L;
+
+
+    /** Creates a new instance of ExitWandora */
     public ExitWandora() {
     }
+
 
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/exit.png");
     }
 
+
     @Override
     public String getName() {
         return "Exit Wandora";
     }
 
+
     @Override
     public String getDescription() {
         return "Exit Wandora application.";
     }
-    
-    
+
+
     @Override
     public void execute(Wandora wandora, Context<?> context) {
         wandora.tryExit();
     }
 
+
     @Override
     public boolean runInOwnThread() {
         return false;
     }
-    
+
+
     @Override
     public boolean requiresRefresh() {
         return false;

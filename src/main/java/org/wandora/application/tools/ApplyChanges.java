@@ -39,25 +39,29 @@ import org.wandora.topicmap.TopicMapException;
 @Deprecated
 public class ApplyChanges extends AbstractWandoraTool {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/** Creates a new instance of ApplyChanges */
+
+    /** Creates a new instance of ApplyChanges */
     public ApplyChanges() {
     }
+
 
     @Override
     public String getName() {
         return "Apply changes";
     }
 
+
     @Override
     public String getDescription() {
         return "Deprecated. Applies current changes to the opened topic";
     }
-    
+
+
     @Override
-    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         // Deprecated tool.
         // Apply changes is actually done by default in AbstractWandoraTool.
-    }    
+    }
 }

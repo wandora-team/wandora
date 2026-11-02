@@ -46,32 +46,34 @@ import org.wandora.application.gui.UIBox;
  * @author akivela
  */
 public class SystemClipboard extends AbstractWandoraTool {
-    
 
-	private static final long serialVersionUID = 1L;
-	
-	public static final int PASTE = 1;
+
+    private static final long serialVersionUID = 1L;
+
+    public static final int PASTE = 1;
     public static final int COPY = 2;
     public static final int CUT = 4;
-    
+
     private int operation = COPY;
-    
+
 
     public SystemClipboard() {
     }
+
+
     public SystemClipboard(int operation) {
         this.operation = operation;
     }
-    
-    
-    
+
+
+
     @Override
     public void execute(Wandora wandora, Context<?> context) {
         Object focusOwner = wandora.getFocusOwner();
-        if(focusOwner != null) {
-            if(focusOwner instanceof Clipboardable) {
+        if (focusOwner != null) {
+            if (focusOwner instanceof Clipboardable) {
                 Clipboardable clipboardable = (Clipboardable) focusOwner;
-                switch(operation) {
+                switch (operation) {
                     case COPY: {
                         clipboardable.copy();
                         break;
@@ -92,7 +94,7 @@ public class SystemClipboard extends AbstractWandoraTool {
 
     @Override
     public Icon getIcon() {
-        switch(operation) {
+        switch (operation) {
             case COPY: {
                 return UIBox.getIcon("gui/icons/copy.png");
             }
@@ -110,7 +112,7 @@ public class SystemClipboard extends AbstractWandoraTool {
 
     @Override
     public String getName() {
-        switch(operation) {
+        switch (operation) {
             case COPY: {
                 return "Copy";
             }
@@ -124,9 +126,10 @@ public class SystemClipboard extends AbstractWandoraTool {
         return "System clipboard";
     }
 
+
     @Override
     public String getDescription() {
-        switch(operation) {
+        switch (operation) {
             case COPY: {
                 return "Copy selection of current UI element to the system clipboard.";
             }
@@ -140,9 +143,10 @@ public class SystemClipboard extends AbstractWandoraTool {
         return "Transfers Wandora application originated data to system clipboard and vice versa.";
     }
 
+
     @Override
     public boolean requiresRefresh() {
-        switch(operation) {
+        switch (operation) {
             case COPY: {
                 return false;
             }

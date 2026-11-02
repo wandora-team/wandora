@@ -42,68 +42,75 @@ import org.wandora.utils.Options;
  * @author akivela
  */
 public class FlipNameMatrix extends AbstractWandoraTool {
-    
-	private static final long serialVersionUID = 1L;
-	
-	private Options localOptions = null;
+
+    private static final long serialVersionUID = 1L;
+
+    private Options localOptions = null;
     public String optionsPrefix = "gui.";
-    
+
+
     /**
      * Creates a new instance of FlipNameMatrix
      */
     public FlipNameMatrix() {
     }
-    
+
+
     public FlipNameMatrix(String optionsPrefix) {
         this.optionsPrefix = optionsPrefix;
     }
+
+
     public FlipNameMatrix(Options localOpts) {
         this.localOptions = localOpts;
     }
-    
+
+
     public FlipNameMatrix(String optionsPrefix, Options localOpts) {
         this.optionsPrefix = optionsPrefix;
         this.localOptions = localOpts;
     }
-    
-    
-    
+
+
+
     public void execute(Wandora wandora, Context<?> context) {
         setFlipOptions(localOptions);
         setFlipOptions(wandora.getOptions());
     }
-    
-    
+
+
     private void setFlipOptions(Options options) {
-        if(options != null) {
-            if("vertical".equals(options.get(optionsPrefix + "namePanelOrientation"))) {
+        if (options != null) {
+            if ("vertical".equals(options.get(optionsPrefix + "namePanelOrientation"))) {
                 options.put(optionsPrefix + "namePanelOrientation", "horizontal");
-            }
-            else {
+            } else {
                 options.put(optionsPrefix + "namePanelOrientation", "vertical");
             }
         }
     }
-    
+
 
     @Override
     public String getName() {
         return "Flip name matrix";
     }
 
+
     @Override
     public String getDescription() {
         return "Change the orientation of name matrix in topic panel. Affects only the orientation of schema name matrix.";
     }
 
+
     @Override
-    public boolean runInOwnThread(){
+    public boolean runInOwnThread() {
         return false;
     }
-    
+
+
     @Override
     public boolean requiresRefresh() {
         return true;
     }
-    
+
 }

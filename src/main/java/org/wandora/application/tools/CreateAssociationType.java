@@ -28,8 +28,9 @@
 package org.wandora.application.tools;
 
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -39,54 +40,69 @@ import org.wandora.topicmap.Association;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 
+
 /**
  *
  * @author olli
  */
 public class CreateAssociationType extends AbstractWandoraTool {
-    
 
-	private static final long serialVersionUID = 1L;
 
-	/** Creates a new instance of CreateAssociationType */
+    private static final long serialVersionUID = 1L;
+
+
+    /** Creates a new instance of CreateAssociationType */
     public CreateAssociationType(Context<?> preferredContext) {
         setContext(preferredContext);
     }
+
+
     public CreateAssociationType() {
-        setContext(new TopicContext());        
+        setContext(new TopicContext());
     }
+
 
     @Override
     public String getName() {
         return "Create association type";
     }
 
+
     @Override
     public String getDescription() {
         return "Opens an editor used to create a new association type. ";
     }
-    
+
+
     @Override
-    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         Iterator<?> contextObjects = context.getContextObjects();
-        Vector<Topic> objects=new Vector<Topic>();
-        Association a=null;
-        if(contextObjects!=null && contextObjects.hasNext()){
-            Object o=contextObjects.next();
-            if(o instanceof Association) a=(Association)o;
-            else if(o instanceof Topic){
-                objects.add((Topic)o);
-                while(contextObjects.hasNext()){
-                    objects.add((Topic)contextObjects.next());
+        List<Topic> objects = new ArrayList<>();
+        Association a = null;
+        if (contextObjects != null && contextObjects.hasNext()) {
+            Object o = contextObjects.next();
+            if (o instanceof Association) {
+                a = (Association) o;
+            }
+            else if (o instanceof Topic topic) {
+                objects.add(topic);
+                while (contextObjects.hasNext()) {
+                    objects.add((Topic) contextObjects.next());
                 }
             }
         }
-        CreateAssociationTypePrompt d=null;
-        if(a!=null) d=new CreateAssociationTypePrompt(wandora,a);
-        else if(objects.size()>0) d=new CreateAssociationTypePrompt(wandora,objects);
-        else d=new CreateAssociationTypePrompt(wandora);
+        CreateAssociationTypePrompt d = null;
+        if (a != null) {
+            d = new CreateAssociationTypePrompt(wandora, a);
+        }
+        else if (objects.size() > 0) {
+            d = new CreateAssociationTypePrompt(wandora, objects);
+        }
+        else {
+            d = new CreateAssociationTypePrompt(wandora);
+        }
         d.setVisible(true);
     }
-  
-    
+
+
 }

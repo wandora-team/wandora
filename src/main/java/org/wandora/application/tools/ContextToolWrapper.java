@@ -40,160 +40,208 @@ import org.wandora.application.contexts.Context;
 import org.wandora.application.contexts.LayeredTopicContext;
 import org.wandora.application.gui.simple.SimpleMenuItem;
 import org.wandora.topicmap.TopicMapException;
+
+
 /**
  *
  * @author olli
  */
 public class ContextToolWrapper implements WandoraTool {
-    
 
-	private static final long serialVersionUID = 1L;
-	
-	private WandoraTool wrapped;
+
+    private static final long serialVersionUID = 1L;
+
+    private WandoraTool wrapped;
     private Context<?> context;
-    
+
+
     /** Creates a new instance of ContextToolWrapper */
     public ContextToolWrapper(WandoraTool wrapped) {
-        this(wrapped,new LayeredTopicContext());
+        this(wrapped, new LayeredTopicContext());
     }
-    public ContextToolWrapper(WandoraTool wrapped,Context<?> context) {
-        this.wrapped=wrapped;
-        this.context=context;
+
+
+    public ContextToolWrapper(WandoraTool wrapped, Context<?> context) {
+        this.wrapped = wrapped;
+        this.context = context;
     }
-    
+
+
     @Override
-    public WandoraToolType getType(){
+    public WandoraToolType getType() {
         return wrapped.getType();
     }
 
+
     @Override
-    public Context<?> getContext(){
+    public Context<?> getContext() {
         return context;
     }
+
+
     @Override
-    public void setContext(Context<?> context){
-        this.context=context;
+    public void setContext(Context<?> context) {
+        this.context = context;
     }
-    
+
+
     @Override
-    public boolean forceStop(){
+    public boolean forceStop() {
         return wrapped.forceStop();
     }
+
+
     @Override
-    public int getState(){
+    public int getState() {
         return wrapped.getState();
     }
+
+
     @Override
-    public void setState(int state){
+    public void setState(int state) {
         wrapped.setState(state);
     }
+
+
     @Override
     public void setToolLogger(WandoraToolLogger logger) {
         wrapped.setToolLogger(logger);
     }
+
+
     @Override
-    public void hlog(String message){
+    public void hlog(String message) {
         wrapped.hlog(message);
     }
+
+
     @Override
-    public void log(String message){
+    public void log(String message) {
         wrapped.log(message);
     }
+
+
     @Override
-    public void log(String message, Exception e){
-        wrapped.log(message,e);
+    public void log(String message, Exception e) {
+        wrapped.log(message, e);
     }
+
+
     @Override
-    public void log(Exception e){
-        wrapped.log(e);
-    }
-    @Override
-    public void log(Error e){
+    public void log(Exception e) {
         wrapped.log(e);
     }
 
-    
+
     @Override
-    public void setProgress(int n){
+    public void log(Error e) {
+        wrapped.log(e);
+    }
+
+
+    @Override
+    public void setProgress(int n) {
         wrapped.setProgress(n);
     }
+
+
     @Override
-    public void setProgressMax(int maxn){
+    public void setProgressMax(int maxn) {
         wrapped.setProgressMax(maxn);
     }
-    
+
+
     @Override
-    public void setLogTitle(String title){
+    public void setLogTitle(String title) {
         wrapped.setLogTitle(title);
     }
-   
+
+
     @Override
-    public void lockLog(boolean lock){
+    public void lockLog(boolean lock) {
         wrapped.lockLog(lock);
     }
+
+
     @Override
-    public String getHistory(){
+    public String getHistory() {
         return wrapped.getHistory();
     }
-    
-    
+
+
     @Override
     public String getName() {
         return wrapped.getName();
     }
+
+
     @Override
     public String getDescription() {
         return wrapped.getDescription();
     }
-    
+
+
     @Override
-    public void initialize(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        wrapped.initialize(wandora,options,prefix);
+    public void initialize(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
+        wrapped.initialize(wandora, options, prefix);
     }
+
+
     @Override
-    public boolean isConfigurable(){
+    public boolean isConfigurable() {
         return wrapped.isConfigurable();
     }
+
+
     @Override
-    public void configure(Wandora wandora,org.wandora.utils.Options options,String prefix) throws TopicMapException {
-        wrapped.configure(wandora,options,prefix);
+    public void configure(Wandora wandora, org.wandora.utils.Options options, String prefix) throws TopicMapException {
+        wrapped.configure(wandora, options, prefix);
     }
+
+
     @Override
-    public void writeOptions(Wandora wandora,org.wandora.utils.Options options,String prefix){
-        wrapped.writeOptions(wandora,options,prefix);
-    }    
-    
+    public void writeOptions(Wandora wandora, org.wandora.utils.Options options, String prefix) {
+        wrapped.writeOptions(wandora, options, prefix);
+    }
+
+
     @Override
     public void execute(Wandora wandora) throws TopicMapException {
         execute(wandora, (ActionEvent) null);
     }
-    
+
+
     @Override
-    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
-        wrapped.execute(wandora,context);
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
+        wrapped.execute(wandora, context);
     }
-    
+
+
     @Override
-    public void execute(Wandora wandora, ActionEvent event)  throws TopicMapException {
+    public void execute(Wandora wandora, ActionEvent event) throws TopicMapException {
         wrapped.setContext(context);
-        wrapped.execute(wandora,event);
-    }    
-    
+        wrapped.execute(wandora, event);
+    }
+
+
     @Override
     public boolean isRunning() {
         return wrapped.isRunning();
     }
 
+
     @Override
-    public boolean requiresRefresh(){
+    public boolean requiresRefresh() {
         return wrapped.requiresRefresh();
     }
-    
+
+
     @Override
-    public SimpleMenuItem getToolMenuItem(Wandora wandora,String instanceName){
-        return wrapped.getToolMenuItem(wandora,instanceName);
-    }   
-    
+    public SimpleMenuItem getToolMenuItem(Wandora wandora, String instanceName) {
+        return wrapped.getToolMenuItem(wandora, instanceName);
+    }
+
+
     @Override
     public Icon getIcon() {
         return wrapped.getIcon();

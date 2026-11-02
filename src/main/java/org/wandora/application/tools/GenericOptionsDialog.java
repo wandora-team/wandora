@@ -37,6 +37,7 @@ import org.wandora.application.Wandora;
 import org.wandora.application.gui.simple.SimpleScrollPane;
 import org.wandora.utils.swing.GuiTools;
 
+
 /**
  * <p>
  * This is a class to display a customizable options dialog. You can choose how
@@ -49,14 +50,15 @@ import org.wandora.utils.swing.GuiTools;
  * @author  olli
  */
 public class GenericOptionsDialog extends javax.swing.JDialog {
-    
 
-	private static final long serialVersionUID = 1L;
-	
-	protected String[][] fieldData;
-    protected boolean wasCancelled=true;
+
+    private static final long serialVersionUID = 1L;
+
+    protected String[][] fieldData;
+    protected boolean wasCancelled = true;
     protected Wandora admin;
     protected JPanel paddingPanel;
+
 
     /** 
      * Creates and initializes an options dialog. You need to give a string for
@@ -65,21 +67,24 @@ public class GenericOptionsDialog extends javax.swing.JDialog {
      * description about the data structure. Wandora is needed if field type
      * "topic" is used.
      */
-    public GenericOptionsDialog(java.awt.Frame parent, String title,String info,boolean modal,String[][] fields,Wandora admin) {
+    public GenericOptionsDialog(java.awt.Frame parent, String title, String info, boolean modal, String[][] fields,
+            Wandora admin) {
         super(parent, modal);
-        this.admin=admin;
-        this.fieldData=fields;
+        this.admin = admin;
+        this.fieldData = fields;
         initComponents();
-        
+
         this.setTitle(title);
-        infoLabel.setText("<html>"+info+"</html>");
-        
-        GuiTools.centerWindow(this,parent);
+        infoLabel.setText("<html>" + info + "</html>");
+
+        GuiTools.centerWindow(this, parent);
     }
 
-    public GenericOptionsDialog(java.awt.Frame parent, String title,String info,boolean modal,String[][] fields) {
-        this(parent,title,info,modal,fields,null);
+
+    public GenericOptionsDialog(java.awt.Frame parent, String title, String info, boolean modal, String[][] fields) {
+        this(parent, title, info, modal, fields, null);
     }
+
 
     /**
      * Gets the values from this options dialog. Return value is a map that
@@ -87,14 +92,16 @@ public class GenericOptionsDialog extends javax.swing.JDialog {
      * string regardless of the field type. Boolean fields are converted to
      * "true" or "false".
      */
-    public Map<String,String> getValues(){
-        return ((GenericOptionsPanel)contentPanel).getValues();
+    public Map<String, String> getValues() {
+        return ((GenericOptionsPanel) contentPanel).getValues();
     }
-    
-    
-    public GenericOptionsPanel getContentPanel(){
-        return (GenericOptionsPanel)contentPanel;
+
+
+    public GenericOptionsPanel getContentPanel() {
+        return (GenericOptionsPanel) contentPanel;
     }
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -105,7 +112,7 @@ public class GenericOptionsDialog extends javax.swing.JDialog {
         java.awt.GridBagConstraints gridBagConstraints;
 
         scrollPane = new SimpleScrollPane();
-        contentPanel = new GenericOptionsPanel(fieldData,admin);
+        contentPanel = new GenericOptionsPanel(fieldData, admin);
         jPanel1 = new javax.swing.JPanel();
         okButton = new org.wandora.application.gui.simple.SimpleButton();
         cancelButton = new org.wandora.application.gui.simple.SimpleButton();
@@ -170,23 +177,26 @@ public class GenericOptionsDialog extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        wasCancelled=true;
+        wasCancelled = true;
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        wasCancelled=false;
+        wasCancelled = false;
         this.setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
-    
+
+
     /**
      * Checks if user closed the dialog with the cancel button.
      */
-    public boolean wasCancelled(){
+    public boolean wasCancelled() {
         return wasCancelled;
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
@@ -196,5 +206,5 @@ public class GenericOptionsDialog extends javax.swing.JDialog {
     private javax.swing.JButton okButton;
     private javax.swing.JScrollPane scrollPane;
     // End of variables declaration//GEN-END:variables
-    
+
 }

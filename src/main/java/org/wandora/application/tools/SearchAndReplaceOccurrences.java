@@ -43,54 +43,58 @@ import org.wandora.topicmap.TopicMapException;
 
 
 
-
 public class SearchAndReplaceOccurrences extends AbstractWandoraTool {
-    
-	private static final long serialVersionUID = 1L;
 
-	public SearchAndReplaceOccurrences() {
+    private static final long serialVersionUID = 1L;
+
+
+    public SearchAndReplaceOccurrences() {
         this.setContext(new TopicContext());
     }
-    
+
+
     @Override
     public void execute(final Wandora wandora, Context<?> context) {
-        String search=WandoraOptionPane.showInputDialog(wandora,"Enter search string","","Search and replace");
-        if(search==null || search.length()==0) return;
-        String replace=WandoraOptionPane.showInputDialog(wandora,"Enter replace string","","Search and replace");
-        if(replace==null) return;
-        Iterator<?> iter=context.getContextObjects();
+        String search = WandoraOptionPane.showInputDialog(wandora, "Enter search string", "", "Search and replace");
+        if (search == null || search.length() == 0)
+            return;
+        String replace = WandoraOptionPane.showInputDialog(wandora, "Enter replace string", "", "Search and replace");
+        if (replace == null)
+            return;
+        Iterator<?> iter = context.getContextObjects();
         Pattern pattern;
-        try{
-            pattern=Pattern.compile(search);
-        }catch(PatternSyntaxException pse){
+        try {
+            pattern = Pattern.compile(search);
+        } catch (PatternSyntaxException pse) {
             singleLog(pse);
             return;
         }
-        int counter=0;
-        while(iter.hasNext()){
+        int counter = 0;
+        while (iter.hasNext()) {
             counter++;
-            if((counter%100)==0){
-                if(forceStop()){
+            if ((counter % 100) == 0) {
+                if (forceStop()) {
                     singleLog("Aborting execute");
                     return;
                 }
             }
-            
-            Object cObject=iter.next();
-            if(!(cObject instanceof Topic)) continue;
-            Topic cTopic=(Topic)cObject;
-            try{
-                for(Topic type : cTopic.getDataTypes()){
-                    Hashtable<Topic,String> data=cTopic.getData(type);
-                    for(Topic version : data.keySet()){
-                        String occurrence=data.get(version);
-                        Matcher matcher=pattern.matcher(occurrence);
-                        occurrence=matcher.replaceAll(replace);
-                        cTopic.setData(type,version,occurrence);
+
+            Object cObject = iter.next();
+            if (!(cObject instanceof Topic)) {
+                continue;
+            }
+            Topic cTopic = (Topic) cObject;
+            try {
+                for (Topic type : cTopic.getDataTypes()) {
+                    Hashtable<Topic, String> data = cTopic.getData(type);
+                    for (Topic version : data.keySet()) {
+                        String occurrence = data.get(version);
+                        Matcher matcher = pattern.matcher(occurrence);
+                        occurrence = matcher.replaceAll(replace);
+                        cTopic.setData(type, version, occurrence);
                     }
                 }
-            }
-            catch(TopicMapException tme){
+            } catch (TopicMapException tme) {
                 singleLog(tme);
                 return;
             }
@@ -103,13 +107,14 @@ public class SearchAndReplaceOccurrences extends AbstractWandoraTool {
         return "Search and replace in occurrences";
     }
 
+
     @Override
     public String getDescription() {
-        return "Tool searches for matches of a regular expression in topic occurrences and replaces them with another string. "+
-               "Replacement is done with the Java java.util.regex.Matcher.replaceAll method which allows you to refer to mathed "+
-               "subsequences with with a dollar sign ($). Backslash (\\) can be used to escape literal characters, especially the "+
-               "dollar sign and backslash itself.";
+        return "Tool searches for matches of a regular expression in topic occurrences and replaces them with another string. "
+                + "Replacement is done with the Java java.util.regex.Matcher.replaceAll method which allows you to refer to mathed "
+                + "subsequences with with a dollar sign ($). Backslash (\\) can be used to escape literal characters, especially the "
+                + "dollar sign and backslash itself.";
     }
-    
+
 }
 

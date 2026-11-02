@@ -41,14 +41,13 @@ import org.wandora.topicmap.TopicMapException;
 public class DeleteTopicsExceptSelected extends AbstractWandoraTool {
 
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 
 
-	/** Creates a new instance of DeleteTopicsExceptSelected */
+    /** Creates a new instance of DeleteTopicsExceptSelected */
     public DeleteTopicsExceptSelected() {
     }
-
 
 
 
@@ -57,58 +56,59 @@ public class DeleteTopicsExceptSelected extends AbstractWandoraTool {
         return "Delete all topics except selected";
     }
 
+
     @Override
     public String getDescription() {
         return "Deleted all topics except selected ones in current layer.";
     }
 
 
-    
+
     @Override
-    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         Iterator<?> selectedTopics = getContext().getContextObjects();
         Topic selectedTopic = null;
         int count = 0;
 
-        int answer = WandoraOptionPane.showConfirmDialog(wandora,"This tool deletes all topics in selected layer except selected topics! Are you sure you want to continue?", "Delete all topics except selected?", WandoraOptionPane.YES_NO_OPTION);
+        int answer = WandoraOptionPane.showConfirmDialog(wandora,
+                "This tool deletes all topics in selected layer except selected topics! Are you sure you want to continue?",
+                "Delete all topics except selected?", WandoraOptionPane.YES_NO_OPTION);
 
-        if(answer == WandoraOptionPane.YES_OPTION) {
+        if (answer == WandoraOptionPane.YES_OPTION) {
 
             setDefaultLogger();
             TopicMap contextTopicMap = wandora.getTopicMap();
             Iterator<Topic> allTopics = contextTopicMap.getTopics();
 
             Topic atopic = null;
-            while(allTopics.hasNext() && !forceStop()) {
+            while (allTopics.hasNext() && !forceStop()) {
                 atopic = allTopics.next();
                 try {
-                    if(atopic != null && !atopic.isRemoved() && !atopic.isDeleteAllowed()) {
+                    if (atopic != null && !atopic.isRemoved() && !atopic.isDeleteAllowed()) {
                         boolean deleteATopic = true;
                         selectedTopics = getContext().getContextObjects();
-                        if(selectedTopics != null && selectedTopics.hasNext()) {
-                            while(selectedTopics.hasNext() && !forceStop()) {
+                        if (selectedTopics != null && selectedTopics.hasNext()) {
+                            while (selectedTopics.hasNext() && !forceStop()) {
                                 selectedTopic = (Topic) selectedTopics.next();
-                                if(selectedTopic != null) {
-                                    if(selectedTopic.mergesWithTopic(atopic)) {
+                                if (selectedTopic != null) {
+                                    if (selectedTopic.mergesWithTopic(atopic)) {
                                         deleteATopic = false;
                                         break;
                                     }
                                 }
                             }
                         }
-                        if(deleteATopic) {
+                        if (deleteATopic) {
                             try {
                                 hlog("Deleting topic '" + getTopicName(atopic) + "'.");
                                 atopic.remove();
                                 count++;
-                            }
-                            catch(Exception e) {
+                            } catch (Exception e) {
                                 log(e);
                             }
                         }
                     }
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     log(e);
                 }
             }

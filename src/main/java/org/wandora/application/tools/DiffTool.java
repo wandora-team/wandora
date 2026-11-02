@@ -60,75 +60,76 @@ import org.wandora.utils.swing.GuiTools;
  *
  * @author olli
  */
-public class DiffTool extends AbstractWandoraTool  {
+public class DiffTool extends AbstractWandoraTool {
 
 
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 
-	@Override
+    @Override
     public String getName() {
         return "Topic map diff";
     }
-    
+
+
     @Override
     public String getDescription() {
         return "Finds differences between two topic maps";
     }
+
 
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/compare_topicmaps.png");
     }
 
-    
+
     @Override
     public boolean requiresRefresh() {
         return false;
     }
-    
-    
-    
-    public TopicMap openFile(String f,Wandora admin) throws IOException, TopicMapException {
-        String extension="";
-        int ind=f.lastIndexOf(".");
-        if(ind>-1) extension=f.substring(ind+1);
-        if(extension.equalsIgnoreCase("wpr")){
-            PackageInput in=new ZipPackageInput(f);
-            TopicMapType type=TopicMapTypeManager.getType(LayerStack.class);
+
+
+
+    public TopicMap openFile(String f, Wandora admin) throws IOException, TopicMapException {
+        String extension = "";
+        int ind = f.lastIndexOf(".");
+        if (ind > -1) {
+            extension = f.substring(ind + 1);
+        }
+        if (extension.equalsIgnoreCase("wpr")) {
+            PackageInput in = new ZipPackageInput(f);
+            TopicMapType type = TopicMapTypeManager.getType(LayerStack.class);
             log("Loading Wandora project file");
-            TopicMap tm=type.unpackageTopicMap(in,"",getCurrentLogger(),admin);
+            TopicMap tm = type.unpackageTopicMap(in, "", getCurrentLogger(), admin);
             in.close();
             return tm;
-        }
-        else if(extension.equalsIgnoreCase("ltm")){
-            TopicMap tm=new TopicMapImpl();
+        } else if (extension.equalsIgnoreCase("ltm")) {
+            TopicMap tm = new TopicMapImpl();
             log("Loading LTM topic map");
             tm.importLTM(f);
             return tm;
-        }
-        else if(extension.equalsIgnoreCase("jtm")){
-            TopicMap tm=new TopicMapImpl();
+        } else if (extension.equalsIgnoreCase("jtm")) {
+            TopicMap tm = new TopicMapImpl();
             log("Loading JTM topic map");
             tm.importJTM(f);
             return tm;
-        }
-        else{ // xtm
-            TopicMap tm=new TopicMapImpl();
+        } else { // xtm
+            TopicMap tm = new TopicMapImpl();
             log("Loading XTM topic map");
             tm.importXTM(f);
             return tm;
         }
     }
-    
-    
-    
+
+
+
     @Override
-    public void execute(Wandora wandora, Context<?> context) throws TopicMapException  {
-        
-        JDialog dialog=new JDialog(wandora,"Compare topic maps",true);
-        DiffToolConfigPanel configPanel=new DiffToolConfigPanel(wandora,dialog);
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
+
+        JDialog dialog = new JDialog(wandora, "Compare topic maps", true);
+        DiffToolConfigPanel configPanel = new DiffToolConfigPanel(wandora, dialog);
         dialog.getContentPane().add(configPanel);
         dialog.setSize(500, 350);
         configPanel.addFormat("Plain text format");
@@ -136,97 +137,88 @@ public class DiffTool extends AbstractWandoraTool  {
         configPanel.addFormat("Patch format");
         GuiTools.centerWindow(dialog, wandora);
         dialog.setVisible(true);
-        
-        if(configPanel.wasCancelled()) return;
-        
+
+        if (configPanel.wasCancelled())
+            return;
+
         setDefaultLogger();
         setProgressMax(10000);
-        
-        String filename=null;
-        try{
-            TopicMap tm1=null;
-            TopicMap tm2=null;
-            int mode1=configPanel.getMap1Mode();
-            if(mode1==DiffToolConfigPanel.MODE_FILE){
+
+        String filename = null;
+        try {
+            TopicMap tm1 = null;
+            TopicMap tm2 = null;
+            int mode1 = configPanel.getMap1Mode();
+            if (mode1 == DiffToolConfigPanel.MODE_FILE) {
                 filename = configPanel.getMap1Value();
-                if(filename != null && !"".equals(filename)) {
-                    tm1=openFile(filename,wandora);
-                }
-                else {
+                if (filename != null && !"".equals(filename)) {
+                    tm1 = openFile(filename, wandora);
+                } else {
                     log("Filename not specified for topic map 1!");
                     log("Cancelling compare.");
                     setState(WAIT);
                     return;
                 }
-            }
-            else if(mode1==DiffToolConfigPanel.MODE_LAYER){
-                Layer l=wandora.getTopicMap().getLayer(configPanel.getMap1Value());
-                if(l==null) {
+            } else if (mode1 == DiffToolConfigPanel.MODE_LAYER) {
+                Layer l = wandora.getTopicMap().getLayer(configPanel.getMap1Value());
+                if (l == null) {
                     log("Layer not found");
                     log("Cancelling compare.");
                     setState(WAIT);
                     return;
                 }
-                tm1=l.getTopicMap();
-            }
-            else if(mode1==DiffToolConfigPanel.MODE_PROJECT){
-                tm1=wandora.getTopicMap();
+                tm1 = l.getTopicMap();
+            } else if (mode1 == DiffToolConfigPanel.MODE_PROJECT) {
+                tm1 = wandora.getTopicMap();
             }
 
-            int mode2=configPanel.getMap2Mode();
+            int mode2 = configPanel.getMap2Mode();
             filename = null;
-            if(mode2==DiffToolConfigPanel.MODE_FILE){
+            if (mode2 == DiffToolConfigPanel.MODE_FILE) {
                 filename = configPanel.getMap2Value();
-                if(filename != null && !"".equals(filename)) {
-                    tm2=openFile(filename,wandora);
-                }
-                else {
+                if (filename != null && !"".equals(filename)) {
+                    tm2 = openFile(filename, wandora);
+                } else {
                     log("Filename not specified for topic map 2!");
                     log("Cancelling compare.");
                     setState(WAIT);
                     return;
                 }
-            }
-            else if(mode2==DiffToolConfigPanel.MODE_LAYER){
-                Layer l=wandora.getTopicMap().getLayer(configPanel.getMap2Value());
-                if(l==null) {
+            } else if (mode2 == DiffToolConfigPanel.MODE_LAYER) {
+                Layer l = wandora.getTopicMap().getLayer(configPanel.getMap2Value());
+                if (l == null) {
                     log("Layer not found");
                     log("Cancelling compare.");
                     setState(WAIT);
                     return;
                 }
-                tm2=l.getTopicMap();
+                tm2 = l.getTopicMap();
+            } else if (mode2 == DiffToolConfigPanel.MODE_PROJECT) {
+                tm2 = wandora.getTopicMap();
             }
-            else if(mode2==DiffToolConfigPanel.MODE_PROJECT){
-                tm2=wandora.getTopicMap();
-            }
-        
-            TopicMapDiff diffMaker=new TopicMapDiff();
-            ToolDiffOutput output=null;
-            String format=configPanel.getFormat();
-            boolean html=true;
-            if(format.equalsIgnoreCase("Patch format")){
-                html=false;
-                output=new ToolDiffOutput(new PatchDiffEntryFormatter());
-            }
-            else if(format.equalsIgnoreCase("Plain text format")){
-                html=false;
-                output=new ToolDiffOutput(new PlainTextDiffEntryFormatter());
-            }
-            else{
-                output=new ToolDiffOutput(new HTMLDiffEntryFormatter());
+
+            TopicMapDiff diffMaker = new TopicMapDiff();
+            ToolDiffOutput output = null;
+            String format = configPanel.getFormat();
+            boolean html = true;
+            if (format.equalsIgnoreCase("Patch format")) {
+                html = false;
+                output = new ToolDiffOutput(new PatchDiffEntryFormatter());
+            } else if (format.equalsIgnoreCase("Plain text format")) {
+                html = false;
+                output = new ToolDiffOutput(new PlainTextDiffEntryFormatter());
+            } else {
+                output = new ToolDiffOutput(new HTMLDiffEntryFormatter());
             }
             log("Comparing topic maps.");
-            if(diffMaker.makeDiff(tm1,tm2,output)){
+            if (diffMaker.makeDiff(tm1, tm2, output)) {
                 log("Comparison ready. Opening results...");
                 TextEditor e = new TextEditor(wandora, true);
                 String result = output.getResult();
-                if(html) {
+                if (html) {
                     e.setContentType("text/html");
-                    e.setSuperText("<html>"+result+"</html>");
-                    //=new TextEditor(admin,true,"<html>"+result+"</html>","text/html");
-                }
-                else {
+                    e.setSuperText("<html>" + result + "</html>");
+                } else {
                     e.setSuperText(result);
                 }
                 e.setCancelButtonVisible(false);
@@ -234,62 +226,72 @@ public class DiffTool extends AbstractWandoraTool  {
                 e.setVisible(true);
                 setState(VISIBLE);
                 setState(CLOSE);
-            }
-            else{
+            } else {
                 setState(WAIT);
             }
-        } catch(FileNotFoundException fnfe) {
-            log("File not found exception occurred while opening file '"+filename+"'.");
+        } catch (FileNotFoundException fnfe) {
+            log("File not found exception occurred while opening file '" + filename + "'.");
             setState(WAIT);
-        } catch(IOException ioe){
+        } catch (IOException ioe) {
             log(ioe);
             setState(WAIT);
         }
-    }    
+    }
+
+
     
     
     private class ToolDiffOutput extends BasicDiffOutput {
-        private int counter=0;
+        private int counter = 0;
         private StringWriter sw;
-        
-        public ToolDiffOutput(DiffEntryFormatter formatter){
-            super(formatter,new StringWriter());
-            this.sw=(StringWriter)writer;
+
+
+        public ToolDiffOutput(DiffEntryFormatter formatter) {
+            super(formatter, new StringWriter());
+            this.sw = (StringWriter) writer;
         }
-        
-        private void increaseCounter(){
+
+
+        private void increaseCounter() {
             counter++;
             setProgress(counter);
         }
-        
+
+
         @Override
-        public boolean outputDiffEntry(TopicMapDiff.DiffEntry d){
-            if(forceStop()) return false;
+        public boolean outputDiffEntry(TopicMapDiff.DiffEntry d) {
+            if (forceStop())
+                return false;
             increaseCounter();
-            try{
+            try {
                 doOutput(d);
-            }catch(Exception e){
+            } catch (Exception e) {
                 log(e);
                 return false;
             }
             return true;
         }
-        
+
+
         @Override
-        public boolean noDifferences(Topic t){
-            if(forceStop()) return false;
+        public boolean noDifferences(Topic t) {
+            if (forceStop())
+                return false;
             increaseCounter();
             return true;
         }
-        
+
+
         @Override
-        public boolean noDifferences(Association a){
-            if(forceStop()) return false;
+        public boolean noDifferences(Association a) {
+            if (forceStop())
+                return false;
             increaseCounter();
             return true;
         }
-        
-        public String getResult(){
+
+
+        public String getResult() {
             return sw.toString();
         }
     }

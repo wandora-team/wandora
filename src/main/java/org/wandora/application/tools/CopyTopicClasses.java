@@ -40,18 +40,20 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class CopyTopicClasses extends CopyTopics {
-    
-
-	private static final long serialVersionUID = 1L;
 
 
-	public CopyTopicClasses()  throws TopicMapException {
+    private static final long serialVersionUID = 1L;
+
+
+    public CopyTopicClasses() throws TopicMapException {
     }
+
 
     @Override
     public String getName() {
         return "Copy topic classes";
     }
+
 
     @Override
     public String getDescription() {
@@ -64,5 +66,5 @@ public class CopyTopicClasses extends CopyTopics {
         super.initialize(copyOrders, includeOrders);
         setContext(new ClassContext());
     }
-    
+
 }

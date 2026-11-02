@@ -40,6 +40,7 @@ import org.wandora.application.gui.topicpanels.graphpanel.TopicMapGraphPanel;
 import org.wandora.topicmap.Topic;
 import org.wandora.topicmap.TopicMapException;
 
+
 /**
  *
  * @author akivela
@@ -48,62 +49,62 @@ import org.wandora.topicmap.TopicMapException;
 
 public class NewTopicExtended extends AbstractWandoraTool {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/** Creates a new instance of NewTopicExtended */
+
+    /** Creates a new instance of NewTopicExtended */
     public NewTopicExtended() {
     }
-    
+
+
     @Override
-    public void execute(Wandora wandora, Context<?> context)  throws TopicMapException {
+    public void execute(Wandora wandora, Context<?> context) throws TopicMapException {
         NewTopicPanelExtended newTopicPanel = new NewTopicPanelExtended(context);
-        if(newTopicPanel.getAccepted()) {
+        if (newTopicPanel.getAccepted()) {
             Topic newTopic = newTopicPanel.createTopic();
             postExecute(newTopic, context);
         }
     }
-    
-    
-    
+
+
+
     private void postExecute(Topic newTopic, Context<?> context) {
         try {
-            if(newTopic != null) {
+            if (newTopic != null) {
                 Object contextSource = context.getContextSource();
-                if(contextSource != null) {
-                    if(contextSource instanceof TopicGrid) {
-                        ((TopicGrid) contextSource).setCurrentTopic(newTopic);
-                    }
-                    else if(contextSource instanceof TopicMapGraphPanel) {
-                        ((TopicMapGraphPanel) contextSource).setRootTopic(newTopic);
-                    }
-                    else if(contextSource instanceof GraphTopicPanel) {
-                        ((GraphTopicPanel) contextSource).open(newTopic);
+                if (contextSource != null) {
+                    if (contextSource instanceof TopicGrid topicGrid) {
+                        topicGrid.setCurrentTopic(newTopic);
+                    } else if (contextSource instanceof TopicMapGraphPanel topicMapGraphPanel) {
+                        topicMapGraphPanel.setRootTopic(newTopic);
+                    } else if (contextSource instanceof GraphTopicPanel graphTopicPanel) {
+                        graphTopicPanel.open(newTopic);
                     }
                 }
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             // SKIP SILENTLY...
         }
     }
-    
-    
-    
-    
-    
+
+
+
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/new_topic.png");
     }
+
+
     @Override
     public String getName() {
         return "New Topic";
     }
 
+
     @Override
     public String getDescription() {
         return "Creates new topic.";
     }
-    
+
 
 }

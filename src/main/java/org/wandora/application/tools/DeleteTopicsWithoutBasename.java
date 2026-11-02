@@ -37,43 +37,42 @@ import org.wandora.topicmap.TopicMapException;
  * @author akivela
  */
 public class DeleteTopicsWithoutBasename extends DeleteTopics {
-    
-    
-	private static final long serialVersionUID = 1L;
 
 
-	@Override
+    private static final long serialVersionUID = 1L;
+
+
+    @Override
     public String getName() {
         return "Delete topics without base name";
     }
+
 
     @Override
     public String getDescription() {
         return "Delete context topics that have no base name or base name length is zero.";
     }
-    
+
 
     @Override
-    public boolean shouldDelete(Topic topic)  throws TopicMapException {
+    public boolean shouldDelete(Topic topic) throws TopicMapException {
         try {
-            if(topic != null && !topic.isRemoved()) {
+            if (topic != null && !topic.isRemoved()) {
                 String basename = topic.getBaseName();
-                if(basename == null || basename.length() == 0) {
-                    if(confirm) {
+                if (basename == null || basename.length() == 0) {
+                    if (confirm) {
                         return confirmDelete(topic);
-                    }
-                    else {
+                    } else {
                         return true;
                     }
                 }
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             log(e);
         }
         return false;
     }
-    
-    
-    
+
+
+
 }

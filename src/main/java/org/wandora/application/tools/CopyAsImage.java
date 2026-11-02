@@ -48,66 +48,72 @@ import org.wandora.utils.ClipboardBox;
  */
 
 
-
 public class CopyAsImage extends AbstractWandoraTool {
-    
 
-	private static final long serialVersionUID = 1L;
 
-	/** Creates a new instance of CopyAsImage */
+    private static final long serialVersionUID = 1L;
+
+
+    /** Creates a new instance of CopyAsImage */
     public CopyAsImage() {
     }
+
+
     public CopyAsImage(Context<?> proposedContext) {
         setContext(proposedContext);
     }
-    
-    
+
+
     @Override
     public void execute(Wandora wandora, Context<?> context) {
         Object o = context.getContextSource();
-        if(o instanceof Component) {
+        if (o instanceof Component) {
             try {
                 Component c = (Component) o;
-                if(c instanceof GraphTopicPanel) {
-                    c = ((GraphTopicPanel) c).getGraphPanel();
+                if (c instanceof GraphTopicPanel graphTopicPanel) {
+                    c = graphTopicPanel.getGraphPanel();
                 }
                 BufferedImage image = new BufferedImage(c.getWidth(), c.getHeight(), BufferedImage.TYPE_INT_RGB);
                 c.print(image.getGraphics());
                 ClipboardBox.setClipboard(image);
                 log("Copied context component to system clipboard as an image. Ready.");
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 log(e);
             }
         }
     }
-    
-    
+
+
     @Override
     public boolean runInOwnThread() {
         return false;
     }
 
+
     @Override
-    public boolean allowMultipleInvocations(){
+    public boolean allowMultipleInvocations() {
         return true;
     }
+
 
     @Override
     public String getName() {
         return "Copy as image";
     }
 
+
     @Override
     public String getDescription() {
         return "Copies current UI element to system clipboard as a bitmap image.";
     }
-    
+
+
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/copy_as_image.png");
     }
-    
+
+
     @Override
     public boolean requiresRefresh() {
         return false;

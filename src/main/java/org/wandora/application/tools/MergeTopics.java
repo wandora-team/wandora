@@ -30,9 +30,9 @@ package org.wandora.application.tools;
 
 
 
-
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.wandora.application.Wandora;
 import org.wandora.application.contexts.Context;
@@ -51,68 +51,71 @@ import org.wandora.topicmap.Topic;
  * @author akivela
  */
 public class MergeTopics extends AbstractWandoraTool {
-    
-
-	private static final long serialVersionUID = 1L;
 
 
-	/** Creates a new instance of MergeTopics */
+    private static final long serialVersionUID = 1L;
+
+
+    /** Creates a new instance of MergeTopics */
     public MergeTopics() {
     }
+
 
     @Override
     public String getName() {
         return "Merge topics";
     }
 
+
     @Override
     public String getDescription() {
         return "Inserts same subject identifier to all selected topics. All selected topics are merged.";
     }
-    
+
 
     @Override
     public void execute(Wandora wandora, Context<?> context) {
         Iterator<?> topics = context.getContextObjects();
-        
+
         int progress = 0;
 
-        ArrayList<Topic> mergeList = new ArrayList<Topic>();
+        List<Topic> mergeList = new ArrayList<>();
         Topic t = null;
-        while(topics.hasNext()) {
+        while (topics.hasNext()) {
             try {
                 t = (Topic) topics.next();
-                if(t != null && !t.isRemoved()) {
-                    if(!mergeList.contains(t)) mergeList.add(t);
+                if (t != null && !t.isRemoved()) {
+                    if (!mergeList.contains(t))
+                        mergeList.add(t);
                 }
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 log(e);
             }
         }
-        
+
         topics = mergeList.iterator();
 
-        if(topics != null && topics.hasNext()) {
-            int a = WandoraOptionPane.showConfirmDialog(wandora, "Are you sure you want to merge selected topics? Restoring topics may be very difficult!", "Confirm Merge", WandoraOptionPane.YES_NO_OPTION);
-            if(a == WandoraOptionPane.YES_OPTION) {
+        if (topics != null && topics.hasNext()) {
+            int a = WandoraOptionPane.showConfirmDialog(wandora,
+                    "Are you sure you want to merge selected topics? Restoring topics may be very difficult!",
+                    "Confirm Merge", WandoraOptionPane.YES_NO_OPTION);
+            if (a == WandoraOptionPane.YES_OPTION) {
                 Topic topic = null;
                 String si = null;
-                while(topics.hasNext() && !forceStop()) {
+                while (topics.hasNext() && !forceStop()) {
                     try {
                         topic = (Topic) topics.next();
-                        if(topic != null && !topic.isRemoved()) {
-                            if(si == null) {
+                        if (topic != null && !topic.isRemoved()) {
+                            if (si == null) {
                                 si = topic.getOneSubjectIdentifier().toExternalForm();
                                 continue;
                             }
                             setProgress(progress++);
-                            if(si != null) {
+                            if (si != null) {
                                 topic.addSubjectIdentifier(new Locator(si));
                             }
                         }
-                    }
-                    catch(Exception e) {
+                    } catch (Exception e) {
                         log(e);
                     }
                 }

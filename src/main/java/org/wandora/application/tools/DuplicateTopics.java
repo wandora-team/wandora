@@ -58,98 +58,111 @@ import org.wandora.topicmap.TopicMapException;
 
 
 public class DuplicateTopics extends AbstractWandoraTool {
-    
-	private static final long serialVersionUID = 1L;
-	
-	public boolean duplicateAssociations = true;
+
+    private static final long serialVersionUID = 1L;
+
+    public boolean duplicateAssociations = true;
     public boolean copyInstances = true;
-    
-    public boolean askName=true;
-    
+
+    public boolean askName = true;
+
 
     public DuplicateTopics() {
     }
+
+
     public DuplicateTopics(Context<?> preferredContext) {
         setContext(preferredContext);
     }
-    
-    
+
+
     @Override
     public Icon getIcon() {
         return UIBox.getIcon("gui/icons/topic_duplicate.png");
     }
+
 
     @Override
     public String getName() {
         return "Duplicate Topics";
     }
 
+
     @Override
     public String getDescription() {
-        return "Duplicate context topics. "+
-               "Duplicated topic is modified in order to prevent instant merge. "+
-               "Duplicated topic base name is attached string '(copy n)' and SIs string '_copyn' "+
-               "where n is first unused number.";
+        return "Duplicate context topics. " + "Duplicated topic is modified in order to prevent instant merge. "
+                + "Duplicated topic base name is attached string '(copy n)' and SIs string '_copyn' "
+                + "where n is first unused number.";
     }
-    
-    
-    
+
+
+
     @Override
     public void execute(Wandora w, Context<?> context) {
         Iterator<?> topics = getContext().getContextObjects();
-        if(topics == null || !topics.hasNext()) return;
+        if (topics == null || !topics.hasNext()) {
+            return;
+        }
         TopicMap tm = w.getTopicMap();
-        
+
         Topic topic = null;
-        while(topics.hasNext() && !forceStop()) {
+        while (topics.hasNext() && !forceStop()) {
             try {
                 topic = (Topic) topics.next();
-                if(topic != null && !topic.isRemoved()) {
+                if (topic != null && !topic.isRemoved()) {
                     Topic ltopic = tm.getTopic(topic.getOneSubjectIdentifier());
                     duplicateTopic(ltopic, tm, w);
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 log(e);
             }
         }
     }
-    
 
-    
-    public Topic duplicateTopic(Topic original, TopicMap tm, Wandora w)  throws TopicMapException {
+
+
+    public Topic duplicateTopic(Topic original, TopicMap tm, Wandora w) throws TopicMapException {
         // --- copy topic and associations
         TopicMap copyMap = new org.wandora.topicmap.memory.TopicMapImpl();
-        
+
         Topic copy = copyMap.copyTopicIn(original, false);
-        if(duplicateAssociations) {
+        if (duplicateAssociations) {
             Collection<Association> assocs = original.getAssociations();
             Association a;
-            for(Iterator<Association> iter = assocs.iterator(); iter.hasNext();) {
+            for (Iterator<Association> iter = assocs.iterator(); iter.hasNext();) {
                 a = (Association) iter.next();
                 copyMap.copyAssociationIn(a);
             }
         }
-       
+
         // --- resolve new subject base name
-        if(original.getBaseName() != null) {
+        if (original.getBaseName() != null) {
             String newBaseName = original.getBaseName() + " (copy)";
             int c = 2;
-            while(tm.getTopicWithBaseName(newBaseName) != null && c<10000) {
+            while (tm.getTopicWithBaseName(newBaseName) != null && c < 10000) {
                 newBaseName = original.getBaseName() + " (copy " + c + ")";
                 c++;
             }
 
-            if(askName){
-                while(true){
-                    String input=WandoraOptionPane.showInputDialog(w, "Enter new base name for the topic", newBaseName);
-                    if(input==null) return null;
-                    newBaseName=input;
-                    if(tm.getTopicWithBaseName(input)!=null){
-                        int a=WandoraOptionPane.showConfirmDialog(w,"Topic with base name '"+input+"' already exists and will be merged with new topic. Do you want to continue?");
-                        if(a==WandoraOptionPane.CANCEL_OPTION) return null;
-                        else if(a==WandoraOptionPane.YES_OPTION) break;
+            if (askName) {
+                while (true) {
+                    String input = WandoraOptionPane.showInputDialog(w, "Enter new base name for the topic", newBaseName);
+                    if (input == null) {
+                        return null;
                     }
-                    else break;
+                    newBaseName = input;
+                    if (tm.getTopicWithBaseName(input) != null) {
+                        int a = WandoraOptionPane.showConfirmDialog(w, "Topic with base name '" + input
+                                + "' already exists and will be merged with new topic. Do you want to continue?");
+                        if (a == WandoraOptionPane.CANCEL_OPTION) {
+                            return null;
+                        }
+                        else if (a == WandoraOptionPane.YES_OPTION) {
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
                 }
             }
 
@@ -157,10 +170,10 @@ public class DuplicateTopics extends AbstractWandoraTool {
         }
 
         // --- resolve new subject locator
-        if(original.getSubjectLocator() != null) {
+        if (original.getSubjectLocator() != null) {
             int c = 2;
             Locator newSubjectLocator = new Locator(original.getSubjectLocator().toExternalForm() + "_copy");
-            while(tm.getTopicBySubjectLocator(newSubjectLocator) != null && c<10000) {
+            while (tm.getTopicBySubjectLocator(newSubjectLocator) != null && c < 10000) {
                 newSubjectLocator = new Locator(original.getSubjectLocator().toExternalForm() + "_copy" + c);
                 c++;
             }
@@ -170,35 +183,33 @@ public class DuplicateTopics extends AbstractWandoraTool {
         // --- resolve new subject identifiers
         Collection<Locator> sis = copy.getSubjectIdentifiers();
         List<Locator> siv = new ArrayList<>();
-        for(Iterator<Locator> iter = sis.iterator(); iter.hasNext(); ) {
+        for (Iterator<Locator> iter = sis.iterator(); iter.hasNext();) {
             siv.add(iter.next());
         }
         Locator lo = null;
         Locator l = null;
-        for(int i=0; i<siv.size(); i++) {
-            lo = (Locator) siv.get(i);
+        for (int i = 0; i < siv.size(); i++) {
+            lo = siv.get(i);
             copy.removeSubjectIdentifier(lo);
-            l = (Locator) new Locator(lo.toExternalForm() + "_copy");
+            l = new Locator(lo.toExternalForm() + "_copy");
             int c = 2;
-            while(tm.getTopic(l) != null && c<10000) {
-                l = (Locator) new Locator(lo.toExternalForm() + "_copy" + c);
+            while (tm.getTopic(l) != null && c < 10000) {
+                l = new Locator(lo.toExternalForm() + "_copy" + c);
                 c++;
             }
             copy.addSubjectIdentifier(l);
         }
-
-        //log("Merging duplicated topic to topic map...");
         tm.mergeIn(copyMap);
         copy = tm.getTopic(l);
 
         // --- attach instances
-        if(copy != null && copyInstances) {
+        if (copy != null && copyInstances) {
             Collection<Topic> col = tm.getTopicsOfType(original);
-            Iterator<Topic> iter=col.iterator();
+            Iterator<Topic> iter = col.iterator();
             Topic t = null;
-            while(iter.hasNext()) {
-                t=(Topic)iter.next();
-                if(t.isOfType(original)) {
+            while (iter.hasNext()) {
+                t = (Topic) iter.next();
+                if (t.isOfType(original)) {
                     t.addType(copy);
                 }
             }
